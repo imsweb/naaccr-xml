@@ -64,7 +64,7 @@ package org.naaccr.xml.compression;
 public class CompressionUtils {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("TODO")
+        System.out.println("Will come back to this later...");
     }
 
 }

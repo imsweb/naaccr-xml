@@ -51,8 +51,5 @@ task generateXmlEntities << {
         }
     }
 
-    //runXjc('src/main/resources/isaac/data6.xsd', 'com.imsweb.naaccr.xml.entities.naaccr6')
+    runXjc('src/main/resources/isaac/data6.xsd', 'com.imsweb.naaccr.xml.entities.naaccr6')
 }
-
-
-
