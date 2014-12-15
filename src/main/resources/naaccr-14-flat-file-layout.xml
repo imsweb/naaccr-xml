@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<fixed-column-layout id="naaccr-14" name="NAACCR 14" version="140" description="Latest version of NAACCR 14 (14.0)" length="22824">
+    <field name="recordType" start="1" end="1" short-label="Rec Type" long-label="Record Type" naaccr-item-num="10" default-value="A" section="Record ID"/>
+    <field name="registryType" start="2" end="2" short-label="Reg Type" long-label="Registry Type" naaccr-item-num="30" section="Record ID"/>
+    <field name="naaccrRecordVersion" start="17" end="19" short-label="NAACCR Rec Ver" long-label="NAACCR Record Version" naaccr-item-num="50" default-value="140" section="Record ID"/>
+    <field name="registryIdNpi" start="20" end="29" short-label="NPI Reg ID" long-label="NPI--Registry ID" naaccr-item-num="45" section="Record ID"/>
+    <field name="registryId" start="30" end="39" short-label="Reg ID" long-label="Registry ID" naaccr-item-num="40" align="right" pad-char="0" section="Record ID"/>
+    <field name="tumorRecordNumber" start="40" end="41" short-label="Tum Rec#" long-label="Tumor Record Number" naaccr-item-num="60" align="right" pad-char="0" section="Record ID"/>
+    <field name="patientIdNumber" start="42" end="49" short-label="Pat ID #" long-label="Patient ID Number" naaccr-item-num="20" align="right" pad-char="0" section="Record ID"/>
+    <field name="patientSysIdHospital" start="50" end="57" short-label="Sys ID Hosp" long-label="Patient System ID-Hosp" naaccr-item-num="21" align="right" pad-char="0" section="Record ID"/>
+    <field name="addressAtDxCity" start="95" end="144" short-label="DX City" long-label="Addr at DX--City" naaccr-item-num="70" align="left" pad-char=" " section="Demographic"/>
+    <field name="addressAtDxState" start="145" end="146" short-label="DX State" long-label="Addr at DX--State" naaccr-item-num="80" section="Demographic"/>
+    <field name="addressAtDxPostalCode" start="147" end="155" short-label="DX Zip" long-label="Addr at DX--Postal Code" naaccr-item-num="100" align="left" pad-char=" " section="Demographic"/>
+    <field name="addressAtDxCounty" start="156" end="158" short-label="DX Cty Code" long-label="County at DX" naaccr-item-num="90" align="right" pad-char="0" section="Demographic"/>
+    <field name="censusTract708090" start="159" end="164" short-label="Cens 708090" long-label="Census Tract 1970/80/90" naaccr-item-num="110" align="right" pad-char="0" section="Demographic"/>
+    <field name="censusBlockGroup708090" start="165" end="165" short-label="Bk Grp 1970-90" long-label="Census Block Grp 1970-90" naaccr-item-num="368" section="Demographic"/>
+    <field name="censusCodingSys708090" start="166" end="166" short-label="Cens Cod Sys 70/80/90" long-label="Census Cod Sys 1970/80/90" naaccr-item-num="120" section="Demographic"/>
+    <field name="censusCertainty708090" start="167" end="167" short-label="Cens Cert 70/80/90" long-label="Census Tr Cert 1970/80/90" naaccr-item-num="364" section="Demographic"/>
+    <field name="censusTract2000" start="168" end="173" short-label="Cens 2000" long-label="Census Tract 2000" naaccr-item-num="130" align="right" pad-char="0" section="Demographic"/>
+    <field name="censusBlockGroup2000" start="174" end="174" short-label="Bk Grp 2000" long-label="Census Block Group 2000" naaccr-item-num="362" section="Demographic"/>
+    <field name="censusCertainty2000" start="175" end="175" short-label="Cens Cert 2000" long-label="Census Tr Certainty 2000" naaccr-item-num="365" section="Demographic"/>
+    <field name="maritalStatusAtDx" start="176" end="176" short-label="Marital DX" long-label="Marital Status at DX" naaccr-item-num="150" section="Demographic"/>
+    <field name="race1" start="177" end="178" short-label="Race 1" long-label="Race 1" naaccr-item-num="160" align="right" pad-char="0" section="Demographic"/>
+    <field name="race2" start="179" end="180" short-label="Race 2" long-label="Race 2" naaccr-item-num="161" align="right" pad-char="0" section="Demographic"/>
+    <field name="race3" start="181" end="182" short-label="Race 3" long-label="Race 3" naaccr-item-num="162" align="right" pad-char="0" section="Demographic"/>
+    <field name="race4" start="183" end="184" short-label="Race 4" long-label="Race 4" naaccr-item-num="163" align="right" pad-char="0" section="Demographic"/>
+    <field name="race5" start="185" end="186" short-label="Race 5" long-label="Race 5" naaccr-item-num="164" align="right" pad-char="0" section="Demographic"/>
+    <field name="raceCodingSysCurrent" start="187" end="187" short-label="Race Cod Curr" long-label="Race Coding Sys--Current" naaccr-item-num="170" section="Demographic"/>
+    <field name="raceCodingSysOriginal" start="188" end="188" short-label="Race Cod Orig" long-label="Race Coding Sys--Original" naaccr-item-num="180" section="Demographic"/>
+    <field name="spanishHispanicOrigin" start="189" end="189" short-label="Hisp Orig" long-label="Spanish/Hispanic Origin" naaccr-item-num="190" section="Demographic"/>
+    <field name="computedEthnicity" start="190" end="190" short-label="Cmptd Eth" long-label="Computed Ethnicity" naaccr-item-num="200" section="Demographic"/>
+    <field name="computedEthnicitySource" start="191" end="191" short-label="Cmptd Eth Src" long-label="Computed Ethnicity Source" naaccr-item-num="210" section="Demographic"/>
+    <field name="sex" start="192" end="192" short-label="Sex" long-label="Sex" naaccr-item-num="220" section="Demographic"/>
+    <field name="ageAtDx" start="193" end="195" short-label="Age DX" long-label="Age at Diagnosis" naaccr-item-num="230" align="right" pad-char="0" section="Demographic"/>
+    <field name="birthDate" start="196" end="203" short-label="Birth Dt" long-label="Date of Birth" naaccr-item-num="240" section="Demographic">
+        <field name="birthDateYear" start="196" end="199" short-label="Birth Yr" long-label="Date of Birth (Year)" align="right" pad-char="0" section="Demographic"/>
+        <field name="birthDateMonth" start="200" end="201" short-label="Birth Mth" long-label="Date of Birth (Month)" align="right" pad-char="0" section="Demographic"/>
+        <field name="birthDateDay" start="202" end="203" short-label="Birth Day" long-label="Date of Birth (Day)" align="right" pad-char="0" section="Demographic"/>
+    </field>
+    <field name="birthDateFlag" start="204" end="205" short-label="Birth Dt Fg" long-label="Date of Birth Flag" naaccr-item-num="241" section="Demographic"/>
+    <field name="birthPlace" start="206" end="208" short-label="Birth Place" long-label="Birthplace" naaccr-item-num="250" align="right" pad-char="0" section="Demographic"/>
+    <field name="occupationCodeCensus" start="209" end="211" short-label="Occupation" long-label="Census Occ Code 1970-2000" naaccr-item-num="270" align="right" pad-char="0" section="Demographic"/>
+    <field name="industryCodeCensus" start="212" end="214" short-label="Industry" long-label="Census Ind Code 1970-2000" naaccr-item-num="280" align="right" pad-char="0" section="Demographic"/>
+    <field name="occupationSource" start="215" end="215" short-label="Occupation Src" long-label="Occupation Source" naaccr-item-num="290" section="Demographic"/>
+    <field name="industrySource" start="216" end="216" short-label="Src" long-label="Industry Source" naaccr-item-num="300" section="Demographic"/>
+    <field name="textUsualOccupation" start="217" end="316" short-label="Usual Occup" long-label="Text--Usual Occupation" naaccr-item-num="310" section="Demographic"/>
+    <field name="textUsualIndustry" start="317" end="416" short-label="Usual Industry" long-label="Text--Usual Industry" naaccr-item-num="320" section="Demographic"/>
+    <field name="occupationIndustryCodingSys" start="417" end="417" short-label="Coding System" long-label="Census Occ/Ind Sys 70-00" naaccr-item-num="330" section="Demographic"/>
+    <field name="nhia" start="418" end="418" short-label="NHIA" long-label="NHIA Derived Hisp Origin" naaccr-item-num="191" section="Demographic"/>
+    <field name="napiia" start="419" end="420" short-label="NAPIIA" long-label="Race--NAPIIA(derived API)" naaccr-item-num="193" align="right" pad-char="0" section="Demographic"/>
+    <field name="ihs" start="421" end="421" short-label="IHS" long-label="IHS Link" naaccr-item-num="192" section="Demographic"/>
+    <field name="gisQuality" start="422" end="423" short-label="GIS Qual" long-label="GIS Coordinate Quality" naaccr-item-num="366" section="Demographic"/>
+    <field name="ruralUrbanContinuum1993" start="424" end="425" short-label="Rural Urban Continuum 1993" long-label="RuralUrban Continuum 1993" naaccr-item-num="3300" align="right" pad-char="0" section="Demographic"/>
+    <field name="ruralUrbanContinuum2003" start="426" end="427" short-label="Rural Urban Continuum 2003" long-label="RuralUrban Continuum 2003" naaccr-item-num="3310" align="right" pad-char="0" section="Demographic"/>
+    <field name="censusTract2010" start="428" end="433" short-label="Cens 2010" long-label="Census Tract 2010" naaccr-item-num="135" section="Demographic"/>
+    <field name="censusBlockGroup2010" start="434" end="434" short-label="Bk Grp 2010" long-label="Census Block Group 2010" naaccr-item-num="363" section="Demographic"/>
+    <field name="censusCertainty2010" start="435" end="435" short-label="Cens Cert 2010" long-label="Census Tr Certainty 2010" naaccr-item-num="367" section="Demographic"/>
+    <field name="addressAtDxCountry" start="436" end="438" short-label="DX Country Code" long-label="Addr at DX--Country" naaccr-item-num="102" section="Demographic"/>
+    <field name="addressCurrentCountry" start="439" end="441" short-label="Cur Country Code" long-label="Addr Current--Country" naaccr-item-num="1832" section="Demographic"/>
+    <field name="birthplaceState" start="442" end="443" short-label="Birth State" long-label="Birthplace--State" naaccr-item-num="252" section="Demographic"/>
+    <field name="birthplaceCountry" start="444" end="446" short-label="Birth Country" long-label="Birthplace--Country" naaccr-item-num="254" section="Demographic"/>
+    <field name="followupContactCountry" start="447" end="449" short-label="FU Contact Country" long-label="FollowUp Contact--Country" naaccr-item-num="1847" section="Demographic"/>
+    <field name="placeOfDeathState" start="450" end="451" short-label="POD State" long-label="Place of Death--State" naaccr-item-num="1942" section="Demographic"/>
+    <field name="placeOfDeathCountry" start="452" end="454" short-label="POD Country" long-label="Place of Death--Country" naaccr-item-num="1944" section="Demographic"/>
+    <field name="censusIndCode2010" start="455" end="458" short-label="Cens Ind 2010" long-label="Census Ind Code 2010" naaccr-item-num="272" section="Demographic"/>
+    <field name="censusOccCode2010" start="459" end="462" short-label="Cens Occ 2010" long-label="Census Occ Code 2010" naaccr-item-num="282" section="Demographic"/>
+    <field name="censusPovertyIndictr" start="463" end="463" short-label="Cens Pov" long-label="Census Tr Poverty Indictr" naaccr-item-num="145" section="Demographic"/>
+    <field name="sequenceNumberCentral" start="528" end="529" short-label="Ctrl Seq#" long-label="Sequence Number--Central" naaccr-item-num="380" align="right" pad-char="0" section="Cancer Identification"/>
+    <field name="dateOfDiagnosis" start="530" end="537" short-label="DX Dt" long-label="Date of Diagnosis" naaccr-item-num="390" section="Cancer Identification">
+        <field name="dateOfDiagnosisYear" start="530" end="533" short-label="DX Yr" long-label="Date of Diagnosis (Year)" align="right" pad-char="0" section="Cancer Identification"/>
+        <field name="dateOfDiagnosisMonth" start="534" end="535" short-label="DX Mth" long-label="Date of Diagnosis (Month)" align="right" pad-char="0" section="Cancer Identification"/>
+        <field name="dateOfDiagnosisDay" start="536" end="537" short-label="DX Day" long-label="Date of Diagnosis (Day)" align="right" pad-char="0" section="Cancer Identification"/>
+    </field>
+    <field name="dateOfDiagnosisFlag" start="538" end="539" short-label="DX Dt Fg" long-label="Date of Diagnosis Flag" naaccr-item-num="391" section="Cancer Identification"/>
+    <field name="primarySite" start="540" end="543" short-label="Site" long-label="Primary Site" naaccr-item-num="400" section="Cancer Identification"/>
+    <field name="laterality" start="544" end="544" short-label="Lat" long-label="Laterality" naaccr-item-num="410" section="Cancer Identification"/>
+    <field name="morphologyIcdO2" start="545" end="549" short-label="Morph(O2)" long-label="Morph--Type&amp;Behav ICD-O-2" naaccr-item-num="419" section="Cancer Identification">
+        <field name="histologyIcdO2" start="545" end="548" short-label="Hist(O2)" long-label="Histology (92-00) ICD-O-2" naaccr-item-num="420" section="Cancer Identification"/>
+        <field name="behaviorIcdO2" start="549" end="549" short-label="Behav(O2)" long-label="Behavior (92-00) ICD-O-2" naaccr-item-num="430" section="Cancer Identification"/>
+    </field>
+    <field name="morphologyIcdO3" start="550" end="554" short-label="Morph(O3)" long-label="Morph--Type&amp;Behav ICD-O-3" naaccr-item-num="521" section="Cancer Identification">
+        <field name="histologyIcdO3" start="550" end="553" short-label="Hist(O3)" long-label="Histologic Type ICD-O-3" naaccr-item-num="522" section="Cancer Identification"/>
+        <field name="behaviorIcdO3" start="554" end="554" short-label="Behav(O3)" long-label="Behavior Code ICD-O-3" naaccr-item-num="523" section="Cancer Identification"/>
+    </field>
+    <field name="grade" start="555" end="555" short-label="Grade" long-label="Grade" naaccr-item-num="440" section="Cancer Identification"/>
+    <field name="gradePathValue" start="556" end="556" short-label="Grade Path Val" long-label="Grade Path Value" naaccr-item-num="441" section="Cancer Identification"/>
+    <field name="gradePathSys" start="557" end="557" short-label="Grade Path Sys" long-label="Grade Path System" naaccr-item-num="449" section="Cancer Identification"/>
+    <field name="siteCodingSysCurrent" start="558" end="558" short-label="Site Cod Curr" long-label="Site Coding Sys--Current" naaccr-item-num="450" section="Cancer Identification"/>
+    <field name="siteCodingSysOriginal" start="559" end="559" short-label="Site Cod Orig" long-label="Site Coding Sys--Original" naaccr-item-num="460" section="Cancer Identification"/>
+    <field name="morphCodingSysCurrent" start="560" end="560" short-label="Morph Cod Curr" long-label="Morph Coding Sys--Current" naaccr-item-num="470" section="Cancer Identification"/>
+    <field name="morphCodingSysOriginal" start="561" end="561" short-label="Morph Cod Orig" long-label="Morph Coding Sys--Originl" naaccr-item-num="480" section="Cancer Identification"/>
+    <field name="diagnosticConfirmation" start="562" end="562" short-label="DX Conf" long-label="Diagnostic Confirmation" naaccr-item-num="490" section="Cancer Identification"/>
+    <field name="typeOfReportingSource" start="563" end="563" short-label="Rpt Src" long-label="Type of Reporting Source" naaccr-item-num="500" section="Cancer Identification"/>
+    <field name="casefindingSource" start="564" end="565" short-label="CF Src" long-label="Casefinding Source" naaccr-item-num="501" section="Cancer Identification"/>
+    <field name="ambiguousTerminologyDx" start="566" end="566" short-label="Ambig DX" long-label="Ambiguous Terminology DX" naaccr-item-num="442" section="Cancer Identification"/>
+    <field name="dateConclusiveDx" start="567" end="574" short-label="Conclsv Dt" long-label="Date Conclusive DX" naaccr-item-num="443" section="Cancer Identification">
+        <field name="dateConclusiveDxYear" start="567" end="570" short-label="Conclsv Dt Yr" long-label="Date Conclusive DX (Year)" align="right" pad-char="0" section="Cancer Identification"/>
+        <field name="dateConclusiveDxMonth" start="571" end="572" short-label="Conclsv Dt Mth" long-label="Date Conclusive DX (Month)" align="right" pad-char="0" section="Cancer Identification"/>
+        <field name="dateConclusiveDxDay" start="573" end="574" short-label="Conclsv Dt Day" long-label="Date Conclusive DX (Day)" align="right" pad-char="0" section="Cancer Identification"/>
+    </field>
+    <field name="dateConclusiveDxFlag" start="575" end="576" short-label="Conclsv Dt Fg" long-label="Date Conclusive DX Flag" naaccr-item-num="448" section="Cancer Identification"/>
+    <field name="multiTumorRptAsOnePrim" start="577" end="578" short-label="Multi as 1" long-label="Mult Tum Rpt as One Prim" naaccr-item-num="444" section="Cancer Identification"/>
+    <field name="dateOfMultipleTumors" start="579" end="586" short-label="Multi Dt" long-label="Date of Mult Tumors" naaccr-item-num="445" section="Cancer Identification">
+        <field name="dateOfMultipleTumorsYear" start="579" end="582" short-label="Multi Dt Yr" long-label="Date of Mult Tumors (Year)" align="right" pad-char="0" section="Cancer Identification"/>
+        <field name="dateOfMultipleTumorsMonth" start="583" end="584" short-label="Multi Dt Mth" long-label="Date of Mult Tumors (Month)" align="right" pad-char="0" section="Cancer Identification"/>
+        <field name="dateOfMultipleTumorsDay" start="585" end="586" short-label="Multi Dt Day" long-label="Date of Mult Tumors (Day)" align="right" pad-char="0" section="Cancer Identification"/>
+    </field>
+    <field name="dateOfMultipleTumorsFlag" start="587" end="588" short-label="Multi Dt Fg" long-label="Date of Mult Tumors Flag" naaccr-item-num="439" section="Cancer Identification"/>
+    <field name="multiplicityCounter" start="589" end="590" short-label="Multi Cntr" long-label="Multiplicity Counter" naaccr-item-num="446" section="Cancer Identification"/>
+    <field name="reportingFacilityNpi" start="691" end="700" short-label="Rpt Fac NPI" long-label="NPI--Reporting Facility" naaccr-item-num="545" section="Hospital-Specific"/>
+    <field name="reportingFacility" start="701" end="710" short-label="Rpt Fac FIN" long-label="Reporting Facility" naaccr-item-num="540" section="Hospital-Specific"/>
+    <field name="archiveFinNpi" start="711" end="720" short-label="NPI Arch FIN" long-label="NPI--Archive FIN" naaccr-item-num="3105" section="Hospital-Specific"/>
+    <field name="archiveFin" start="721" end="730" short-label="Arch FIN" long-label="Archive FIN" naaccr-item-num="3100" align="right" pad-char="0" section="Hospital-Specific"/>
+    <field name="accessionNumberHosp" start="731" end="739" short-label="Acc# Hosp" long-label="Accession Number--Hosp" naaccr-item-num="550" section="Hospital-Specific"/>
+    <field name="sequenceNumberHosp" start="740" end="741" short-label="Hosp Seq#" long-label="Sequence Number--Hospital" naaccr-item-num="560" align="right" pad-char="0" section="Hospital-Specific"/>
+    <field name="abstractedBy" start="742" end="744" short-label="Abstd By" long-label="Abstracted By" naaccr-item-num="570" section="Hospital-Specific"/>
+    <field name="dateOf1stContact" start="745" end="752" short-label="1st Cont Dt" long-label="Date of 1st Contact" naaccr-item-num="580" section="Hospital-Specific">
+        <field name="dateOf1stContactYear" start="745" end="748" short-label="1st Cont Yr" long-label="Date of 1st Contact (Year)" align="right" pad-char="0" section="Hospital-Specific"/>
+        <field name="dateOf1stContactMonth" start="749" end="750" short-label="1st Cont Mth" long-label="Date of 1st Contact (Month)" align="right" pad-char="0" section="Hospital-Specific"/>
+        <field name="dateOf1stContactDay" start="751" end="752" short-label="1st Cont Day" long-label="Date of 1st Contact (Day)" align="right" pad-char="0" section="Hospital-Specific"/>
+    </field>
+    <field name="dateOf1stContactFlag" start="753" end="754" short-label="1st Cont Dt Fg" long-label="Date of 1st Contact Flag" naaccr-item-num="581" section="Hospital-Specific"/>
+    <field name="dateOfInptAdm" start="755" end="762" short-label="Admit Dt" long-label="Date of Inpt Adm" naaccr-item-num="590" section="Hospital-Specific">
+        <field name="dateOfInptAdmYear" start="755" end="758" short-label="Admit Yr" long-label="Date of Inpt Adm (Year)" align="right" pad-char="0" section="Hospital-Specific"/>
+        <field name="dateOfInptAdmMonth" start="759" end="760" short-label="Admit Mth" long-label="Date of Inpt Adm (Month)" align="right" pad-char="0" section="Hospital-Specific"/>
+        <field name="dateOfInptAdmDay" start="761" end="762" short-label="Admit Day" long-label="Date of Inpt Adm (Day)" align="right" pad-char="0" section="Hospital-Specific"/>
+    </field>
+    <field name="dateOfInptAdmFlag" start="763" end="764" short-label="Admit Dt Fg" long-label="Date of Inpt Adm Flag" naaccr-item-num="591" section="Hospital-Specific"/>
+    <field name="dateOfInptDisch" start="765" end="772" short-label="Dschrg Dt" long-label="Date of Inpt Disch" naaccr-item-num="600" section="Hospital-Specific">
+        <field name="dateOfInptDischYear" start="765" end="768" short-label="Dschrg Yr" long-label="Date of Inpt Disch (Year)" align="right" pad-char="0" section="Hospital-Specific"/>
+        <field name="dateOfInptDischMonth" start="769" end="770" short-label="Dschrg Mth" long-label="Date of Inpt Disch (Month)" align="right" pad-char="0" section="Hospital-Specific"/>
+        <field name="dateOfInptDischDay" start="771" end="772" short-label="Dschrg Day" long-label="Date of Inpt Disch (Day)" align="right" pad-char="0" section="Hospital-Specific"/>
+    </field>
+    <field name="dateOfInptDischFlag" start="773" end="774" short-label="Disch Dt Fg" long-label="Date of Inpt Disch Flag" naaccr-item-num="601" section="Hospital-Specific"/>
+    <field name="inpatientStatus" start="775" end="775" short-label="Inpat Stat" long-label="Inpatient Status" naaccr-item-num="605" section="Hospital-Specific"/>
+    <field name="classOfCase" start="776" end="777" short-label="CoC" long-label="Class of Case" naaccr-item-num="610" section="Hospital-Specific"/>
+    <field name="primaryPayerAtDx" start="778" end="779" short-label="Payer DX" long-label="Primary Payer at DX" naaccr-item-num="630" align="right" pad-char="0" section="Hospital-Specific"/>
+    <field name="rxHospSurgApp2010" start="781" end="781" short-label="Surg App 2010" long-label="RX Hosp--Surg App 2010" naaccr-item-num="668" section="Hospital-Specific"/>
+    <field name="rxHospSurgPrimSite" start="782" end="783" short-label="Surg 03+" long-label="RX Hosp--Surg Prim Site" naaccr-item-num="670" align="right" pad-char="0" section="Hospital-Specific"/>
+    <field name="rxHospScopeRegLnSur" start="784" end="784" short-label="Scope 03+" long-label="RX Hosp--Scope Reg LN Sur" naaccr-item-num="672" section="Hospital-Specific"/>
+    <field name="rxHospSurgOthRegDis" start="785" end="785" short-label="Oth 03+" long-label="RX Hosp--Surg Oth Reg/Dis" naaccr-item-num="674" section="Hospital-Specific"/>
+    <field name="rxHospRegLnRemoved" start="786" end="787" short-label="LN Exm 98-02" long-label="RX Hosp--Reg LN Removed" naaccr-item-num="676" section="Hospital-Specific"/>
+    <field name="rxHospRadiation" start="789" end="789" short-label="Radtn" long-label="RX Hosp--Radiation" naaccr-item-num="690" section="Hospital-Specific"/>
+    <field name="rxHospChemo" start="790" end="791" short-label="Chemo" long-label="RX Hosp--Chemo" naaccr-item-num="700" align="right" pad-char="0" section="Hospital-Specific"/>
+    <field name="rxHospHormone" start="792" end="793" short-label="Hormone" long-label="RX Hosp--Hormone" naaccr-item-num="710" align="right" pad-char="0" section="Hospital-Specific"/>
+    <field name="rxHospBrm" start="794" end="795" short-label="BRM" long-label="RX Hosp--BRM" naaccr-item-num="720" align="right" pad-char="0" section="Hospital-Specific"/>
+    <field name="rxHospOther" start="796" end="796" short-label="Other" long-label="RX Hosp--Other" naaccr-item-num="730" section="Hospital-Specific"/>
+    <field name="rxHospDxStgProc" start="797" end="798" short-label="DX/Stg (NonCa)" long-label="RX Hosp--DX/Stg Proc" naaccr-item-num="740" align="right" pad-char="0" section="Hospital-Specific"/>
+    <field name="rxHospPalliativeProc" start="799" end="799" short-label="Pall Proc" long-label="RX Hosp--Palliative Proc" naaccr-item-num="3280" section="Hospital-Specific"/>
+    <field name="rxHospSurgSite9802" start="800" end="801" short-label="Surg 98-02" long-label="RX Hosp--Surg Site 98-02" naaccr-item-num="746" align="right" pad-char="0" section="Hospital-Specific"/>
+    <field name="rxHospScopeReg9802" start="802" end="802" short-label="Scope 98-02" long-label="RX Hosp--Scope Reg 98-02" naaccr-item-num="747" section="Hospital-Specific"/>
+    <field name="rxHospSurgOth9802" start="803" end="803" short-label="Oth 98-02" long-label="RX Hosp--Surg Oth 98-02" naaccr-item-num="748" section="Hospital-Specific"/>
+    <field name="seerSummaryStage2000" start="904" end="904" short-label="Sum Stg 2000" long-label="SEER Summary Stage 2000" naaccr-item-num="759" section="Stage/Prognostic Factors"/>
+    <field name="seerSummaryStage1977" start="905" end="905" short-label="Sum Stg 1977" long-label="SEER Summary Stage 1977" naaccr-item-num="760" section="Stage/Prognostic Factors"/>
+    <field name="extentOfDisease10Digit" start="906" end="917" short-label="EOD10" long-label="Extent of Disease 10-Dig" naaccr-item-num="779" section="Stage/Prognostic Factors">
+        <field name="eodTumorSize" start="906" end="908" short-label="EOD Size" long-label="EOD--Tumor Size" naaccr-item-num="780" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+        <field name="eodExtension" start="909" end="910" short-label="EOD Ext" long-label="EOD--Extension" naaccr-item-num="790" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+        <field name="eodExtensionProstPath" start="911" end="912" short-label="EOD Prost" long-label="EOD--Extension Prost Path" naaccr-item-num="800" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+        <field name="eodLymphNodeInvolv" start="913" end="913" short-label="EOD LN" long-label="EOD--Lymph Node Involv" naaccr-item-num="810" section="Stage/Prognostic Factors"/>
+        <field name="regionalNodesPositive" start="914" end="915" short-label="Reg Nd Pos" long-label="Regional Nodes Positive" naaccr-item-num="820" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+        <field name="regionalNodesExamined" start="916" end="917" short-label="Reg Nd Exm" long-label="Regional Nodes Examined" naaccr-item-num="830" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    </field>
+    <field name="eodOld13Digit" start="918" end="930" short-label="EOD13(73-82)" long-label="EOD--Old 13 Digit" naaccr-item-num="840" section="Stage/Prognostic Factors"/>
+    <field name="eodOld2Digit" start="931" end="932" short-label="EOD2(73-82)" long-label="EOD--Old 2 Digit" naaccr-item-num="850" section="Stage/Prognostic Factors"/>
+    <field name="eodOld4Digit" start="933" end="936" short-label="EOD4(83-87)" long-label="EOD--Old 4 Digit" naaccr-item-num="860" section="Stage/Prognostic Factors">
+        <field name="eodOld4DigitSize" start="933" end="934" short-label="EOD4(83-87) Size" long-label="EOD--Old 4 Digit Size" section="Stage/Prognostic Factors"/>
+        <field name="eodOld4DigitExtent" start="935" end="935" short-label="EOD4(83-87) Ext" long-label="EOD--Old 4 Digit Extent" section="Stage/Prognostic Factors"/>
+        <field name="eodOld4DigitNodes" start="936" end="936" short-label="EOD4(83-87) Nodes" long-label="EOD--Old 4 Digit Nodes" section="Stage/Prognostic Factors"/>
+    </field>
+    <field name="eodCodingSys" start="937" end="937" short-label="EOD Cod Sys" long-label="Coding System for EOD" naaccr-item-num="870" section="Stage/Prognostic Factors"/>
+    <field name="tnmEditionNumber" start="938" end="939" short-label="TNM Edit #" long-label="TNM Edition Number" naaccr-item-num="1060" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="tnmPathT" start="940" end="943" short-label="Path T" long-label="TNM Path T" naaccr-item-num="880" section="Stage/Prognostic Factors"/>
+    <field name="tnmPathN" start="944" end="947" short-label="Path N" long-label="TNM Path N" naaccr-item-num="890" section="Stage/Prognostic Factors"/>
+    <field name="tnmPathM" start="948" end="951" short-label="Path M" long-label="TNM Path M" naaccr-item-num="900" section="Stage/Prognostic Factors"/>
+    <field name="tnmPathStageGroup" start="952" end="955" short-label="Path Stg Group" long-label="TNM Path Stage Group" naaccr-item-num="910" section="Stage/Prognostic Factors"/>
+    <field name="tnmPathDescriptor" start="956" end="956" short-label="Path Desc" long-label="TNM Path Descriptor" naaccr-item-num="920" section="Stage/Prognostic Factors"/>
+    <field name="tnmPathStagedBy" start="957" end="957" short-label="Path Stg By" long-label="TNM Path Staged By" naaccr-item-num="930" section="Stage/Prognostic Factors"/>
+    <field name="tnmClinT" start="958" end="961" short-label="Clin T" long-label="TNM Clin T" naaccr-item-num="940" section="Stage/Prognostic Factors"/>
+    <field name="tnmClinN" start="962" end="965" short-label="Clin N" long-label="TNM Clin N" naaccr-item-num="950" section="Stage/Prognostic Factors"/>
+    <field name="tnmClinM" start="966" end="969" short-label="Clin M" long-label="TNM Clin M" naaccr-item-num="960" section="Stage/Prognostic Factors"/>
+    <field name="tnmClinStageGroup" start="970" end="973" short-label="Clin Stg Group" long-label="TNM Clin Stage Group" naaccr-item-num="970" section="Stage/Prognostic Factors"/>
+    <field name="tnmClinDescriptor" start="974" end="974" short-label="Clin Desc" long-label="TNM Clin Descriptor" naaccr-item-num="980" section="Stage/Prognostic Factors"/>
+    <field name="tnmClinStagedBy" start="975" end="975" short-label="Clin Stg By" long-label="TNM Clin Staged By" naaccr-item-num="990" section="Stage/Prognostic Factors"/>
+    <field name="pediatricStage" start="976" end="977" short-label="Pediatric Stg" long-label="Pediatric Stage" naaccr-item-num="1120"  section="Stage/Prognostic Factors"/>
+    <field name="pediatricStagingSys" start="978" end="979" short-label="Pediatric Stg Sys" long-label="Pediatric Staging System" naaccr-item-num="1130" section="Stage/Prognostic Factors"/>
+    <field name="pediatricStagedBy" start="980" end="980" short-label="Pediatric Stg By" long-label="Pediatric Staged By" naaccr-item-num="1140" section="Stage/Prognostic Factors"/>
+    <field name="tumorMarker1" start="981" end="981" short-label="Mark 1" long-label="Tumor Marker 1" naaccr-item-num="1150" section="Stage/Prognostic Factors"/>
+    <field name="tumorMarker2" start="982" end="982" short-label="Mark 2" long-label="Tumor Marker 2" naaccr-item-num="1160" section="Stage/Prognostic Factors"/>
+    <field name="tumorMarker3" start="983" end="983" short-label="Mark 3" long-label="Tumor Marker 3" naaccr-item-num="1170" section="Stage/Prognostic Factors"/>
+    <field name="lymphVascularInvasion" start="984" end="984" short-label="LVI" long-label="Lymph-vascular Invasion" naaccr-item-num="1182" section="Stage/Prognostic Factors"/>
+    <field name="csTumorSize" start="985" end="987" short-label="CS Size" long-label="CS Tumor Size" naaccr-item-num="2800" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csExtension" start="988" end="990" short-label="CS Ext" long-label="CS Extension" naaccr-item-num="2810" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csTumorSizeExtEval" start="991" end="991" short-label="CS Eval" long-label="CS Tumor Size/Ext Eval" naaccr-item-num="2820" section="Stage/Prognostic Factors"/>
+    <field name="csLymphNodes" start="992" end="994" short-label="CS LN" long-label="CS Lymph Nodes" naaccr-item-num="2830" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csLymphNodesEval" start="995" end="995" short-label="CS LN Eval" long-label="CS Lymph Nodes Eval" naaccr-item-num="2840" section="Stage/Prognostic Factors"/>
+    <field name="csMetsAtDx" start="996" end="997" short-label="CS Mets" long-label="CS Mets at DX" naaccr-item-num="2850" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csMetsEval" start="998" end="998" short-label="CS Mets Eval" long-label="CS Mets Eval" naaccr-item-num="2860" section="Stage/Prognostic Factors"/>
+    <field name="csMetsAtDxBone" start="999" end="999" short-label="Bone" long-label="CS Mets at Dx-Bone" naaccr-item-num="2851" section="Stage/Prognostic Factors"/>
+    <field name="csMetsAtDxBrain" start="1000" end="1000" short-label="Brain" long-label="CS Mets at Dx-Brain" naaccr-item-num="2852" section="Stage/Prognostic Factors"/>
+    <field name="csMetsAtDxLiver" start="1001" end="1001" short-label="Liver" long-label="CS Mets at Dx-Liver" naaccr-item-num="2853" section="Stage/Prognostic Factors"/>
+    <field name="csMetsAtDxLung" start="1002" end="1002" short-label="Lung" long-label="CS Mets at Dx-Lung" naaccr-item-num="2854" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor1" start="1003" end="1005" short-label="SSF 1" long-label="CS Site-Specific Factor 1" naaccr-item-num="2880" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor2" start="1006" end="1008" short-label="SSF 2" long-label="CS Site-Specific Factor 2" naaccr-item-num="2890" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor3" start="1009" end="1011" short-label="SSF 3" long-label="CS Site-Specific Factor 3" naaccr-item-num="2900" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor4" start="1012" end="1014" short-label="SSF 4" long-label="CS Site-Specific Factor 4" naaccr-item-num="2910" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor5" start="1015" end="1017" short-label="SSF 5" long-label="CS Site-Specific Factor 5" naaccr-item-num="2920" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor6" start="1018" end="1020" short-label="SSF 6" long-label="CS Site-Specific Factor 6" naaccr-item-num="2930" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor7" start="1021" end="1023" short-label="SSF 7" long-label="CS Site-Specific Factor 7" naaccr-item-num="2861" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor8" start="1024" end="1026" short-label="SSF 8" long-label="CS Site-Specific Factor 8" naaccr-item-num="2862" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor9" start="1027" end="1029" short-label="SSF 9" long-label="CS Site-Specific Factor 9" naaccr-item-num="2863" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor10" start="1030" end="1032" short-label="SSF 10" long-label="CS Site-Specific Factor10" naaccr-item-num="2864" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor11" start="1033" end="1035" short-label="SSF 11" long-label="CS Site-Specific Factor11" naaccr-item-num="2865" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor12" start="1036" end="1038" short-label="SSF 12" long-label="CS Site-Specific Factor12" naaccr-item-num="2866" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor13" start="1039" end="1041" short-label="SSF 13" long-label="CS Site-Specific Factor13" naaccr-item-num="2867" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor14" start="1042" end="1044" short-label="SSF 14" long-label="CS Site-Specific Factor14" naaccr-item-num="2868" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor15" start="1045" end="1047" short-label="SSF 15" long-label="CS Site-Specific Factor15" naaccr-item-num="2869" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor16" start="1048" end="1050" short-label="SSF 16" long-label="CS Site-Specific Factor16" naaccr-item-num="2870" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor17" start="1051" end="1053" short-label="SSF 17" long-label="CS Site-Specific Factor17" naaccr-item-num="2871" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor18" start="1054" end="1056" short-label="SSF 18" long-label="CS Site-Specific Factor18" naaccr-item-num="2872" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor19" start="1057" end="1059" short-label="SSF 19" long-label="CS Site-Specific Factor19" naaccr-item-num="2873" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor20" start="1060" end="1062" short-label="SSF 20" long-label="CS Site-Specific Factor20" naaccr-item-num="2874" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor21" start="1063" end="1065" short-label="SSF 21" long-label="CS Site-Specific Factor21" naaccr-item-num="2875" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor22" start="1066" end="1068" short-label="SSF 22" long-label="CS Site-Specific Factor22" naaccr-item-num="2876" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor23" start="1069" end="1071" short-label="SSF 23" long-label="CS Site-Specific Factor23" naaccr-item-num="2877" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor24" start="1072" end="1074" short-label="SSF 24" long-label="CS Site-Specific Factor24" naaccr-item-num="2878" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csSiteSpecificFactor25" start="1075" end="1077" short-label="SSF 25" long-label="CS Site-Specific Factor25" naaccr-item-num="2879" align="right" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="csPreRxTumorSize" start="1078" end="1080" short-label="CS Pre RX Size" long-label="CS PreRx Tumor Size" naaccr-item-num="2730" section="Stage/Prognostic Factors"/>
+    <field name="csPreRxExt" start="1081" end="1083" short-label="CS Pre RX Ext" long-label="CS PreRx Extension" naaccr-item-num="2735" section="Stage/Prognostic Factors"/>
+    <field name="csPreRxSizeExtEval" start="1084" end="1084" short-label="CS Pre RX Eval" long-label="CS PreRx Tum Sz/Ext Eval" naaccr-item-num="2740" section="Stage/Prognostic Factors"/>
+    <field name="csPreRxLymphNodes" start="1085" end="1087" short-label="CS Pre RX LN" long-label="CS PreRx Lymph Nodes" naaccr-item-num="2750" section="Stage/Prognostic Factors"/>
+    <field name="csPreRxRegNodesEval" start="1088" end="1088" short-label="CS Pre RX LN Eval" long-label="CS PreRx Reg Nodes Eval" naaccr-item-num="2755" section="Stage/Prognostic Factors"/>
+    <field name="csPreRxMetsAtDx" start="1089" end="1090" short-label="CS Pre RX Mets" long-label="CS PreRx Mets at DX" naaccr-item-num="2760" section="Stage/Prognostic Factors"/>
+    <field name="csPreRxMetsEval" start="1091" end="1091" short-label="CS Pre RX Mets Eval" long-label="CS PreRx Mets Eval" naaccr-item-num="2765" section="Stage/Prognostic Factors"/>
+    <field name="csPostRxTumorSize" start="1092" end="1094" short-label="CS Post RX Size" long-label="CS PostRx Tumor Size" naaccr-item-num="2770" section="Stage/Prognostic Factors"/>
+    <field name="csPostRxExt" start="1095" end="1097" short-label="CS Post RXExt" long-label="CS PostRx Extension" naaccr-item-num="2775" section="Stage/Prognostic Factors"/>
+    <field name="csPostRxLymphNodes" start="1098" end="1100" short-label="CS Post RXLN" long-label="CS PostRx Lymph Nodes" naaccr-item-num="2780" section="Stage/Prognostic Factors"/>
+    <field name="csPostRxMetsAtDx" start="1101" end="1102" short-label="CS Post RX Mets" long-label="CS PostRx Mets at DX" naaccr-item-num="2785" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc6T" start="1103" end="1104" short-label="AJCC 6 T" long-label="Derived AJCC-6 T" naaccr-item-num="2940" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc6TDescriptor" start="1105" end="1105" short-label="AJCC 6 T Desc" long-label="Derived AJCC-6 T Descript" naaccr-item-num="2950" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc6N" start="1106" end="1107" short-label="Der N" long-label="Derived AJCC-6 N" naaccr-item-num="2960" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc6NDescriptor" start="1108" end="1108" short-label="AJCC 6 N Desc" long-label="Derived AJCC-6 N Descript" naaccr-item-num="2970" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc6M" start="1109" end="1110" short-label="AJCC 6 M" long-label="Derived AJCC-6 M" naaccr-item-num="2980" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc6MDescriptor" start="1111" end="1111" short-label="AJCC 6 M Desc" long-label="Derived AJCC-6 M Descript" naaccr-item-num="2990" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc6StageGroup" start="1112" end="1113" short-label="AJCC 6 Stg Grp" long-label="Derived AJCC-6 Stage Grp" naaccr-item-num="3000" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc7T" start="1114" end="1116" short-label="AJCC 7 T" long-label="Derived AJCC-7 T" naaccr-item-num="3400" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc7TDescriptor" start="1117" end="1117" short-label="AJCC 7 T Desc" long-label="Derived AJCC-7 T Descript" naaccr-item-num="3402" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc7N" start="1118" end="1120" short-label="AJCC 7 N" long-label="Derived AJCC-7 N" naaccr-item-num="3410" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc7NDescriptor" start="1121" end="1121" short-label="AJCC 7 N Desc" long-label="Derived AJCC-7 N Descript" naaccr-item-num="3412" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc7M" start="1122" end="1124" short-label="AJCC 7 M" long-label="Derived AJCC-7 M" naaccr-item-num="3420" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc7MDescriptor" start="1125" end="1125" short-label="AJCC 7 M Desc" long-label="Derived AJCC-7 M Descript" naaccr-item-num="3422" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjcc7StageGroup" start="1126" end="1128" short-label="AJCC 7 Stg Grp" long-label="Derived AJCC-7 Stage Grp" naaccr-item-num="3430" section="Stage/Prognostic Factors"/>
+    <field name="derivedPreRx7T" start="1129" end="1131" short-label="Der PreRX 7 T" long-label="Derived PreRx-7 T" naaccr-item-num="3440" section="Stage/Prognostic Factors"/>
+    <field name="derivedPreRx7TDescriptor" start="1132" end="1132" short-label="Der PreRX 7 T Desc" long-label="Derived PreRx-7 T Descrip" naaccr-item-num="3442" section="Stage/Prognostic Factors"/>
+    <field name="derivedPreRx7N" start="1133" end="1135" short-label="Der PreRX 7 N" long-label="Derived PreRx-7 N" naaccr-item-num="3450" section="Stage/Prognostic Factors"/>
+    <field name="derivedPreRx7NDescriptor" start="1136" end="1136" short-label="Der PreRX 7 N Desc" long-label="Derived PreRx-7 N Descrip" naaccr-item-num="3452" section="Stage/Prognostic Factors"/>
+    <field name="derivedPreRx7M" start="1137" end="1139" short-label="Der PreRX 7 M" long-label="Derived PreRx-7 M" naaccr-item-num="3460" section="Stage/Prognostic Factors"/>
+    <field name="derivedPreRx7MDescriptor" start="1140" end="1140" short-label="Der PreRX 7 M Desc" long-label="Derived PreRx-7 M Descrip" naaccr-item-num="3462" section="Stage/Prognostic Factors"/>
+    <field name="derivedPreRx7StageGroup" start="1141" end="1143" short-label="Der PreRX 7 Stg Grp" long-label="Derived PreRx-7 Stage Grp" naaccr-item-num="3470" section="Stage/Prognostic Factors"/>
+    <field name="derivedPostRx7T" start="1144" end="1146" short-label="Der PostRX 7 T" long-label="Derived PostRx-7 T" naaccr-item-num="3480" section="Stage/Prognostic Factors"/>
+    <field name="derivedPostRx7N" start="1147" end="1149" short-label="Der PostRX 7 N" long-label="Derived PostRx-7 N" naaccr-item-num="3482" section="Stage/Prognostic Factors"/>
+    <field name="derivedPostRx7M" start="1150" end="1151" short-label="Der PostRX 7 M" long-label="Derived PostRx-7 M" naaccr-item-num="3490" section="Stage/Prognostic Factors"/>
+    <field name="derivedPostRx7StageGroup" start="1152" end="1154" short-label="Der PostRX 7 Stg Grp" long-label="Derived PostRx-7 Stge Grp" naaccr-item-num="3492" section="Stage/Prognostic Factors"/>
+    <field name="derivedSs1977" start="1155" end="1155" short-label="Der SS1977" long-label="Derived SS1977" naaccr-item-num="3010" section="Stage/Prognostic Factors"/>
+    <field name="derivedSs2000" start="1156" end="1156" short-label="Der SS2000" long-label="Derived SS2000" naaccr-item-num="3020" section="Stage/Prognostic Factors"/>
+    <field name="derivedNeoAdJuvRxFlag" start="1157" end="1157" short-label="Der Neoadjuv Rx Fg" long-label="Derived Neoadjuv Rx Flag" naaccr-item-num="3600" section="Stage/Prognostic Factors"/>
+    <field name="derivedAjccFlag" start="1158" end="1158" short-label="Der AJCC Fg" long-label="Derived AJCC--Flag" naaccr-item-num="3030" section="Stage/Prognostic Factors"/>
+    <field name="derivedSs1977Flag" start="1159" end="1159" short-label="Der SS 1977 Fg" long-label="Derived SS1977--Flag" naaccr-item-num="3040" section="Stage/Prognostic Factors"/>
+    <field name="derivedSs2000Flag" start="1160" end="1160" short-label="Der Sum Stg 2000 Fg" long-label="Derived SS2000--Flag" naaccr-item-num="3050" section="Stage/Prognostic Factors"/>
+    <field name="csVersionInputCurrent" start="1161" end="1166" short-label="Ver Input" long-label="CS Version Input Current" naaccr-item-num="2937" section="Stage/Prognostic Factors"/>
+    <field name="csVersionOriginal" start="1167" end="1172" short-label="Ver 1st" long-label="CS Version Input Original" naaccr-item-num="2935" section="Stage/Prognostic Factors"/>
+    <field name="csVersionDerived" start="1173" end="1178" short-label="Ver Last" long-label="CS Version Derived" naaccr-item-num="2936" section="Stage/Prognostic Factors"/>
+    <field name="seerSiteSpecificFactor1" start="1179" end="1179" short-label="SEER SSF 1" long-label="SEER Site-Specific Fact 1" naaccr-item-num="3700" section="Stage/Prognostic Factors"/>
+    <field name="seerSiteSpecificFactor2" start="1180" end="1180" short-label="SEER SSF 2" long-label="SEER Site-Specific Fact 2" naaccr-item-num="3702" section="Stage/Prognostic Factors"/>
+    <field name="seerSiteSpecificFactor3" start="1181" end="1181" short-label="SEER SSF 3" long-label="SEER Site-Specific Fact 3" naaccr-item-num="3704" section="Stage/Prognostic Factors"/>
+    <field name="seerSiteSpecificFactor4" start="1182" end="1182" short-label="SEER SSF 4" long-label="SEER Site-Specific Fact 4" naaccr-item-num="3706" section="Stage/Prognostic Factors"/>
+    <field name="seerSiteSpecificFactor5" start="1183" end="1183" short-label="SEER SSF 5" long-label="SEER Site-Specific Fact 5" naaccr-item-num="3708" section="Stage/Prognostic Factors"/>
+    <field name="seerSiteSpecificFactor6" start="1184" end="1184" short-label="SEER SSF 6" long-label="SEER Site-Specific Fact 6" naaccr-item-num="3710" section="Stage/Prognostic Factors"/>
+    <field name="icdRevisionComorbid" start="1185" end="1185" short-label="ICD Rev Comorb" long-label="ICD Revision Comorbid" naaccr-item-num="3165" section="Stage/Prognostic Factors"/>
+    <field name="comorbidComplication1" start="1186" end="1190" short-label="Comorb 1" long-label="Comorbid/Complication 1" naaccr-item-num="3110" align="left" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="comorbidComplication2" start="1191" end="1195" short-label="Comorb 2" long-label="Comorbid/Complication 2" naaccr-item-num="3120" align="left" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="comorbidComplication3" start="1196" end="1200" short-label="Comorb 3" long-label="Comorbid/Complication 3" naaccr-item-num="3130" align="left" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="comorbidComplication4" start="1201" end="1205" short-label="Comorb 4" long-label="Comorbid/Complication 4" naaccr-item-num="3140" align="left" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="comorbidComplication5" start="1206" end="1210" short-label="Comorb 5" long-label="Comorbid/Complication 5" naaccr-item-num="3150" align="left" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="comorbidComplication6" start="1211" end="1215" short-label="Comorb 6" long-label="Comorbid/Complication 6" naaccr-item-num="3160" align="left" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="comorbidComplication7" start="1216" end="1220" short-label="Comorb 7" long-label="Comorbid/Complication 7" naaccr-item-num="3161" align="left" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="comorbidComplication8" start="1221" end="1225" short-label="Comorb 8" long-label="Comorbid/Complication 8" naaccr-item-num="3162" align="left" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="comorbidComplication9" start="1226" end="1230" short-label="Comorb 9" long-label="Comorbid/Complication 9" naaccr-item-num="3163" align="left" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="comorbidComplication10" start="1231" end="1235" short-label="Comorb 10" long-label="Comorbid/Complication 10" naaccr-item-num="3164" align="left" pad-char="0" section="Stage/Prognostic Factors"/>
+    <field name="secondaryDiagnosis1" start="1236" end="1242" short-label="Sec Dx 1" long-label="Secondary Diagnosis 1" naaccr-item-num="3780" section="Stage/Prognostic Factors"/>
+    <field name="secondaryDiagnosis2" start="1243" end="1249" short-label="Sec Dx 2" long-label="Secondary Diagnosis 2" naaccr-item-num="3782" section="Stage/Prognostic Factors"/>
+    <field name="secondaryDiagnosis3" start="1250" end="1256" short-label="Sec Dx 3" long-label="Secondary Diagnosis 3" naaccr-item-num="3784" section="Stage/Prognostic Factors"/>
+    <field name="secondaryDiagnosis4" start="1257" end="1263" short-label="Sec Dx 4" long-label="Secondary Diagnosis 4" naaccr-item-num="3786" section="Stage/Prognostic Factors"/>
+    <field name="secondaryDiagnosis5" start="1264" end="1270" short-label="Sec Dx 5" long-label="Secondary Diagnosis 5" naaccr-item-num="3788" section="Stage/Prognostic Factors"/>
+    <field name="secondaryDiagnosis6" start="1271" end="1277" short-label="Sec Dx 6" long-label="Secondary Diagnosis 6" naaccr-item-num="3790" section="Stage/Prognostic Factors"/>
+    <field name="secondaryDiagnosis7" start="1278" end="1284" short-label="Sec Dx 7" long-label="Secondary Diagnosis 7" naaccr-item-num="3792" section="Stage/Prognostic Factors"/>
+    <field name="secondaryDiagnosis8" start="1285" end="1291" short-label="Sec Dx 8" long-label="Secondary Diagnosis 8" naaccr-item-num="3794" section="Stage/Prognostic Factors"/>
+    <field name="secondaryDiagnosis9" start="1292" end="1298" short-label="Sec Dx 9" long-label="Secondary Diagnosis 9" naaccr-item-num="3796" section="Stage/Prognostic Factors"/>
+    <field name="secondaryDiagnosis10" start="1299" end="1305" short-label="Sec Dx 10" long-label="Secondary Diagnosis 10" naaccr-item-num="3798" section="Stage/Prognostic Factors"/>
+    <field name="npcrSpecificField" start="1306" end="1380" short-label="NPCR Spec Fld" long-label="NPCR Specific Field" naaccr-item-num="3720" section="Stage/Prognostic Factors"/>
+    <field name="dateOfInitialRx" start="1436" end="1443" short-label="Init RX Dt" long-label="Date Initial RX SEER" naaccr-item-num="1260" section="Treatment-1st Course">
+        <field name="dateOfInitialRxYear" start="1436" end="1439" short-label="Init RX Yr" long-label="Date Initial RX SEER (Year)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="dateOfInitialRxMonth" start="1440" end="1441" short-label="Init RX Mth" long-label="Date Initial RX SEER (Month)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="dateOfInitialRxDay" start="1442" end="1443" short-label="Init RX Day" long-label="Date Initial RX SEER (Day)" align="right" pad-char="0" section="Treatment-1st Course"/>
+    </field>
+    <field name="dateOfInitialRxFlag" start="1444" end="1445" short-label="Init RX Dt Fg" long-label="Date Initial RX SEER Flag" naaccr-item-num="1261" section="Treatment-1st Course"/>
+    <field name="dateOf1stCrsRxCoc" start="1446" end="1453" short-label="1st CRS COC Dt" long-label="Date 1st Crs RX CoC" naaccr-item-num="1270" section="Treatment-1st Course">
+        <field name="dateOf1stCrsRxCocYear" start="1446" end="1449" short-label="1st CRS COC Yr" long-label="Date of 1st Crs RX--CoC (Year)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="dateOf1stCrsRxCocMonth" start="1450" end="1451" short-label="1st CRS COC Mth" long-label="Date of 1st Crs RX--CoC (Month)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="dateOf1stCrsRxCocDay" start="1452" end="1453" short-label="1st CRS COC Day" long-label="Date of 1st Crs RX--CoC (Day)" align="right" pad-char="0" section="Treatment-1st Course"/>
+    </field>
+    <field name="dateOf1stCrsRxCocFlag" start="1454" end="1455" short-label="1st CRS COC Dt Fg" long-label="Date 1st Crs RX CoC Flag" naaccr-item-num="1271" section="Treatment-1st Course"/>
+    <field name="rxDateSurgery" start="1456" end="1463" short-label="Surg Dt" long-label="RX Date Surgery" naaccr-item-num="1200" section="Treatment-1st Course">
+        <field name="rxDateSurgeryYear" start="1456" end="1459" short-label="Surg Yr" long-label="RX Date Surgery (Year)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateSurgeryMonth" start="1460" end="1461" short-label="Surg Mth" long-label="RX Date Surgery (Month)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateSurgeryDay" start="1462" end="1463" short-label="Surg Day" long-label="RX Date Surgery (Day)" align="right" pad-char="0" section="Treatment-1st Course"/>
+    </field>
+    <field name="rxDateSurgeryFlag" start="1464" end="1465" short-label="Surg Dt Fg" long-label="RX Date Surgery Flag" naaccr-item-num="1201" section="Treatment-1st Course"/>
+    <field name="rxDateMostDefinSurg" start="1466" end="1473" short-label="Most Defin Surg Dt" long-label="RX Date Most Defin Surg" naaccr-item-num="3170" section="Treatment-1st Course">
+        <field name="rxDateMostDefinSurgYear" start="1466" end="1469" short-label="Most Defin Surg Yr" long-label="RX Date Most Defin Surg (Year)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateMostDefinSurgMonth" start="1470" end="1471" short-label="Most Defin Surg Mth" long-label="RX Date Most Defin Surg (Month)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateMostDefinSurgDay" start="1472" end="1473" short-label="Most Defin Surg Day" long-label="RX Date Most Defin Surg (Day)" align="right" pad-char="0" section="Treatment-1st Course"/>
+    </field>
+    <field name="rxDateMostDefinSurgFlag" start="1474" end="1475" short-label="Most Defin Surg Dt Fg" long-label="RX Date Most Defin Surg Flag" naaccr-item-num="3171" section="Treatment-1st Course"/>
+    <field name="rxDateSurgicalDisch" start="1476" end="1483" short-label="Surg Disch Dt" long-label="RX Date Surgical Disch" naaccr-item-num="3180" section="Treatment-1st Course">
+        <field name="rxDateSurgicalDischYear" start="1476" end="1479" short-label="Surg Disch Yr" long-label="RX Date Surgical Disch (Year)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateSurgicalDischMonth" start="1480" end="1481" short-label="Surg Disch Month" long-label="RX Date Surgical Disch (Month)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateSurgicalDischDay" start="1482" end="1483" short-label="Surg Disch Day" long-label="RX Date Surgical Disch (Day)" align="right" pad-char="0" section="Treatment-1st Course"/>
+    </field>
+    <field name="rxDateSurgicalDischFlag" start="1484" end="1485" short-label="Surg Disch Dt Fg" long-label="RX Date Surgical Disch Flag" naaccr-item-num="3181" section="Treatment-1st Course"/>
+    <field name="rxDateRadiation" start="1486" end="1493" short-label="Rad Dt" long-label="RX Date Radiation" naaccr-item-num="1210" section="Treatment-1st Course">
+        <field name="rxDateRadiationYear" start="1486" end="1489" short-label="Rad Yr" long-label="RX Date Radiation (Year)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateRadiationMonth" start="1490" end="1491" short-label="Rad Mth" long-label="RX Date Radiation (Month)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateRadiationDay" start="1492" end="1493" short-label="Rad Day" long-label="RX Date Radiation (Day)" align="right" pad-char="0" section="Treatment-1st Course"/>
+    </field>
+    <field name="rxDateRadiationFlag" start="1494" end="1495" short-label="Rad Dt Fg" long-label="RX Date Radiation Flag" naaccr-item-num="1211" section="Treatment-1st Course"/>
+    <field name="rxDateRadiationEnded" start="1496" end="1503" short-label="Rad End Dt" long-label="RX Date Radiation Ended" naaccr-item-num="3220" section="Treatment-1st Course">
+        <field name="rxDateRadiationEndedYear" start="1496" end="1499" short-label="Rad End Yr" long-label="RX Date Radiation Ended (Year)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateRadiationEndedMonth" start="1500" end="1501" short-label="Rad End Mth" long-label="RX Date Radiation Ended (Month)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateRadiationEndedDay" start="1502" end="1503" short-label="Rad End Day" long-label="RX Date Radiation Ended (Day)" align="right" pad-char="0" section="Treatment-1st Course"/>
+    </field>
+    <field name="rxDateRadiationEndedFlag" start="1504" end="1505" short-label="Rad End Dt Fg" long-label="RX Date Radiation Ended Flag" naaccr-item-num="3221" section="Treatment-1st Course"/>
+    <field name="rxDateSystemic" start="1506" end="1513" short-label="Syst Dt" long-label="RX Date Systemic" naaccr-item-num="3230" section="Treatment-1st Course">
+        <field name="rxDateSystemicYear" start="1506" end="1509" short-label="Syst Yr" long-label="RX Date Systemic (Year)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateSystemicMonth" start="1510" end="1511" short-label="Syst Month" long-label="RX Date Systemic (Month)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateSystemicDay" start="1512" end="1513" short-label="Syst Day" long-label="RX Date Systemic (Day)" align="right" pad-char="0" section="Treatment-1st Course"/>
+    </field>
+    <field name="rxDateSystemicFlag" start="1514" end="1515" short-label="Systemic Dt Fg" long-label="RX Date Systemic Flag" naaccr-item-num="3231" section="Treatment-1st Course"/>
+    <field name="rxDateChemo" start="1516" end="1523" short-label="Chemo Dt" long-label="RX Date Chemo" naaccr-item-num="1220" section="Treatment-1st Course">
+        <field name="rxDateChemoYear" start="1516" end="1519" short-label="Chemo Yr" long-label="RX Date Chemo (Year)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateChemoMonth" start="1520" end="1521" short-label="Chemo Mth" long-label="RX Date Chemo (Month)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateChemoDay" start="1522" end="1523" short-label="Chemo Day" long-label="RX Date Chemo (Day)" align="right" pad-char="0" section="Treatment-1st Course"/>
+    </field>
+    <field name="rxDateChemoFlag" start="1524" end="1525" short-label="Chemo Dt Fg" long-label="RX Date Chemo Flag" naaccr-item-num="1221" section="Treatment-1st Course"/>
+    <field name="rxDateHormone" start="1526" end="1533" short-label="Horm Dt" long-label="RX Date Hormone" naaccr-item-num="1230" section="Treatment-1st Course">
+        <field name="rxDateHormoneYear" start="1526" end="1529" short-label="Horm Yr" long-label="RX Date Hormone (Year)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateHormoneMonth" start="1530" end="1531" short-label="Horm Mth" long-label="RX Date Hormone (Month)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateHormoneDay" start="1532" end="1533" short-label="Horm Day" long-label="RX Date Hormone (Day)" align="right" pad-char="0" section="Treatment-1st Course"/>
+    </field>
+    <field name="rxDateHormoneFlag" start="1534" end="1535" short-label="Hormone Dt Fg" long-label="RX Date Hormone Flag" naaccr-item-num="1231" section="Treatment-1st Course"/>
+    <field name="rxDateBrm" start="1536" end="1543" short-label="BRM Dt" long-label="RX Date BRM" naaccr-item-num="1240" section="Treatment-1st Course">
+        <field name="rxDateBrmYear" start="1536" end="1539" short-label="BRM Yr" long-label="RX Date BRM (Year)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateBrmMonth" start="1540" end="1541" short-label="BRM Mth" long-label="RX Date BRM (Month)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateBrmDay" start="1542" end="1543" short-label="BRM Day" long-label="RX Date BRM (Day)" align="right" pad-char="0" section="Treatment-1st Course"/>
+    </field>
+    <field name="rxDateBrmFlag" start="1544" end="1545" short-label="BRM Dt Fg" long-label="RX Date BRM Flag" naaccr-item-num="1241" section="Treatment-1st Course"/>
+    <field name="rxDateOther" start="1546" end="1553" short-label="Other Dt" long-label="RX Date Other" naaccr-item-num="1250" section="Treatment-1st Course">
+        <field name="rxDateOtherYear" start="1546" end="1549" short-label="Other Yr" long-label="RX Date Other (Year)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateOtherMonth" start="1550" end="1551" short-label="Other Mth" long-label="RX Date Other (Month)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateOtherDay" start="1552" end="1553" short-label="Other Day" long-label="RX Dat Other (Day)" align="right" pad-char="0" section="Treatment-1st Course"/>
+    </field>
+    <field name="rxDateOtherFlag" start="1554" end="1555" short-label="Other Dt Fg" long-label="RX Date Other Flag" naaccr-item-num="1251" section="Treatment-1st Course"/>
+    <field name="rxDateDxStgProc" start="1556" end="1563" short-label="DX/Stg Dt" long-label="RX Date DX/Stg Proc" naaccr-item-num="1280" section="Treatment-1st Course">
+        <field name="rxDateDxStgProcYear" start="1556" end="1559" short-label="DX/Stg Yr" long-label="RX Date DX/Stg Proc (Year)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateDxStgProcMonth" start="1560" end="1561" short-label="DX/Stg Mth" long-label="RX Date DX/Stg Proc (Month)" align="right" pad-char="0" section="Treatment-1st Course"/>
+        <field name="rxDateDxStgProcDay" start="1562" end="1563" short-label="DX/Stg Day" long-label="RX Date DX/Stg Proc (Day)" align="right" pad-char="0" section="Treatment-1st Course"/>
+    </field>
+    <field name="rxDateDxStgProcFlag" start="1564" end="1565" short-label="DX/Stg Dt Fg" long-label="RX Date DX/Stg Proc Flag" naaccr-item-num="1281" section="Treatment-1st Course"/>
+    <field name="rxSummTreatmentStatus" start="1566" end="1566" short-label="Tx Status" long-label="RX Summ--Treatment Status" naaccr-item-num="1285" section="Treatment-1st Course"/>
+    <field name="rxSummSurgPrimSite" start="1567" end="1568" short-label="Summ Surg(03+)" long-label="RX Summ--Surg Prim Site" naaccr-item-num="1290" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="rxSummScopeRegLnSur" start="1569" end="1569" short-label="Summ Scope(03+)" long-label="RX Summ--Scope Reg LN Sur" naaccr-item-num="1292" section="Treatment-1st Course"/>
+    <field name="rxSummSurgOthRegDis" start="1570" end="1570" short-label="Summ Oth(03+)" long-label="RX Summ--Surg Oth Reg/Dis" naaccr-item-num="1294" section="Treatment-1st Course"/>
+    <field name="rxSummRegLnExamined" start="1571" end="1572" short-label="Summ Reg LN Exam(98-02)" long-label="RX Summ--Reg LN Examined" naaccr-item-num="1296" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="rxSummSurgicalApproach" start="1573" end="1573" short-label="Summ Surg Appr" long-label="RX Summ--Surgical Approch" naaccr-item-num="1310" section="Treatment-1st Course"/>
+    <field name="rxSummSurgicalMargins" start="1574" end="1574" short-label="Summ Surg Marg" long-label="RX Summ--Surgical Margins" naaccr-item-num="1320" section="Treatment-1st Course"/>
+    <field name="rxSummReconstruct1st" start="1575" end="1575" short-label="Summ 1st Reconst" long-label="RX Summ--Reconstruct 1st" naaccr-item-num="1330" section="Treatment-1st Course"/>
+    <field name="reasonForNoSurgery" start="1576" end="1576" short-label="Rs No Surg" long-label="Reason for No Surgery" naaccr-item-num="1340" section="Treatment-1st Course"/>
+    <field name="rxSummDxStgProc" start="1577" end="1578" short-label="Summ DX/Stg (NonCa)" long-label="RX Summ--DX/Stg Proc" naaccr-item-num="1350" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="rxSummPalliativeProc" start="1579" end="1579" short-label="Summ Pall Proc" long-label="RX Summ--Palliative Proc" naaccr-item-num="3270" section="Treatment-1st Course"/>
+    <field name="rxSummRadiation" start="1580" end="1580" short-label="Summ Radtn" long-label="RX Summ--Radiation" naaccr-item-num="1360" section="Treatment-1st Course"/>
+    <field name="rxSummRadToCns" start="1581" end="1581" short-label="Summ Radtn CNS" long-label="RX Summ--Rad to CNS" naaccr-item-num="1370" section="Treatment-1st Course"/>
+    <field name="rxSummSurgRadSeq" start="1582" end="1582" short-label="Summ Radtn Seq" long-label="RX Summ--Surg/Rad Seq" naaccr-item-num="1380" section="Treatment-1st Course"/>
+    <field name="rxSummTransplntEndocr" start="1583" end="1584" short-label="Summ HemoEndo" long-label="RX Summ--Transplnt/Endocr" naaccr-item-num="3250" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="rxSummChemo" start="1585" end="1586" short-label="Summ Chemo" long-label="RX Summ--Chemo" naaccr-item-num="1390" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="rxSummHormone" start="1587" end="1588" short-label="SummHormone" long-label="RX Summ--Hormone" naaccr-item-num="1400" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="rxSummBrm" start="1589" end="1590" short-label="Summ BRM" long-label="RX Summ--BRM" naaccr-item-num="1410" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="rxSummOther" start="1591" end="1591" short-label="Summ Other" long-label="RX Summ--Other" naaccr-item-num="1420" section="Treatment-1st Course"/>
+    <field name="reasonForNoRadiation" start="1592" end="1592" short-label="Rs No Radtn" long-label="Reason for No Radiation" naaccr-item-num="1430" section="Treatment-1st Course"/>
+    <field name="rxCodingSysCurrent" start="1593" end="1594" short-label="RX Cod Curr" long-label="RX Coding System--Current" naaccr-item-num="1460" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="radRegionalDoseCgy" start="1596" end="1600" short-label="Reg Dose" long-label="Rad--Regional Dose: cGy" naaccr-item-num="1510" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="radNoOfTreatmentVol" start="1601" end="1603" short-label="Num TX" long-label="Rad--No of Treatment Vol" naaccr-item-num="1520" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="radTreatmentVolume" start="1604" end="1605" short-label="TX Vol" long-label="Rad--Treatment Volume" naaccr-item-num="1540" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="radLocationOfRx" start="1606" end="1606" short-label="Radtn Loc" long-label="Rad--Location of RX" naaccr-item-num="1550" section="Treatment-1st Course"/>
+    <field name="radRegionalRxModality" start="1607" end="1608" short-label="Reg Mod" long-label="Rad--Regional RX Modality" naaccr-item-num="1570" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="radBoostRxModality" start="1609" end="1610" short-label="Boost Mod" long-label="Rad--Boost RX Modality" naaccr-item-num="3200" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="radBoostDoseCgy" start="1611" end="1615" short-label="Boost Dose" long-label="Rad--Boost Dose cGy" naaccr-item-num="3210" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="rxSummSystemicSurgSeq" start="1616" end="1616" short-label="Syst Seq" long-label="RX Summ--Systemic/Sur Seq" naaccr-item-num="1639" section="Treatment-1st Course"/>
+    <field name="rxSummSurgeryType" start="1617" end="1618" short-label="Summ Surg(73-97)" long-label="RX Summ--Surgery Type" naaccr-item-num="1640" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="readmSameHosp30Days" start="1619" end="1619" short-label="Readm &lt;30" long-label="Readm Same Hosp 30 Days" naaccr-item-num="3190" section="Treatment-1st Course"/>
+    <field name="rxSummSurgSite9802" start="1620" end="1621" short-label="Summ Surg(98-02)" long-label="RX Summ--Surg Site 98-02" naaccr-item-num="1646" align="right" pad-char="0" section="Treatment-1st Course"/>
+    <field name="rxSummScopeReg9802" start="1622" end="1622" short-label="Summ Scope(98-02)" long-label="RX Summ--Scope Reg 98-02" naaccr-item-num="1647" section="Treatment-1st Course"/>
+    <field name="rxSummSurgOth9802" start="1623" end="1623" short-label="Summ Oth(98-02)" long-label="RX Summ--Surg Oth 98-02" naaccr-item-num="1648" section="Treatment-1st Course"/>
+    <field name="subsqRx2ndCourseDate" start="1724" end="1731" short-label="Subsq RX 2nd Course Dt" long-label="Subsq RX 2nd Course Date" naaccr-item-num="1660" section="Treatment-Subsequent &amp; Other">
+        <field name="subsqRx2ndCourseDateYear" start="1724" end="1727" short-label="Subsq RX 2nd Course Yr" long-label="Subsq RX 2nd Course Date (Year)" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx2ndCourseDateMonth" start="1728" end="1729" short-label="Subsq RX 2nd Course Mth" long-label="Subsq RX 2nd Course Date (Month)" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx2ndCourseDateDay" start="1730" end="1731" short-label="Subsq RX 2nd Course Day" long-label="Subsq RX 2nd Course Date (Day)" section="Treatment-Subsequent &amp; Other"/>
+    </field>
+    <field name="subsqRx2ndCourseDateFlag" start="1732" end="1733" short-label="Subsq RX 2nd Course Dt Fg" long-label="Subsq RX 2ndCrs Date Flag" naaccr-item-num="1661" section="Treatment-Subsequent &amp; Other"/>
+    <field name="subsqRx2ndCourseCodes" start="1734" end="1744" short-label="Subsq Rx 2nd Course Codes" long-label="Subsq RX 2nd Course Codes" naaccr-item-num="1670" section="Treatment-Subsequent &amp; Other">
+        <field name="subsqRx2ndCourseSurg" start="1734" end="1735" short-label="Subsq RX 2nd Course Surg" long-label="Subsq RX 2nd Course Surg" naaccr-item-num="1671" align="right" pad-char="0" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx2ndScopeLnSu" start="1736" end="1736" short-label="Subsq RX 2nd--Scope LN SU" long-label="Subsq RX 2nd--Scope LN SU" naaccr-item-num="1677" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx2ndSurgOth" start="1737" end="1737" short-label="Subsq RX 2nd--Surg Oth" long-label="Subsq RX 2nd--Surg Oth" naaccr-item-num="1678" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx2ndRegLnRem" start="1738" end="1739" short-label="Subsq RX 2nd--Reg LN Rem" long-label="Subsq RX 2nd--Reg LN Rem" naaccr-item-num="1679" align="right" pad-char="0" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx2ndCourseRad" start="1740" end="1740" short-label="Subsq RX 2nd Course Rad" long-label="Subsq RX 2nd Course Rad" naaccr-item-num="1672" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx2ndCourseChemo" start="1741" end="1741" short-label="Subsq RX 2nd Course Chemo" long-label="Subsq RX 2nd Course Chemo" naaccr-item-num="1673" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx2ndCourseHorm" start="1742" end="1742" short-label="Subsq RX 2nd Course Horm" long-label="Subsq RX 2nd Course Horm" naaccr-item-num="1674" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx2ndCourseBrm" start="1743" end="1743" short-label="Subsq RX 2nd Course BRM" long-label="Subsq RX 2nd Course BRM" naaccr-item-num="1675" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx2ndCourseOth" start="1744" end="1744" short-label="Subsq RX 2nd Course Oth" long-label="Subsq RX 2nd Course Oth" naaccr-item-num="1676" section="Treatment-Subsequent &amp; Other"/>
+    </field>
+    <field name="subsqRx3rdCourseDate" start="1745" end="1752" short-label="Subsq RX 3rd Course Dt" long-label="Subsq RX 3rd Course Date" naaccr-item-num="1680" section="Treatment-Subsequent &amp; Other">
+        <field name="subsqRx3rdCourseDateYear" start="1745" end="1748" short-label="Subsq RX 3rd Course Yr" long-label="Subsq RX 3rd Course Date (Year)" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx3rdCourseDateMonth" start="1749" end="1750" short-label="Subsq RX 3rd Course Mth" long-label="Subsq RX 3rd Course Date (Month)" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx3rdCourseDateDay" start="1751" end="1752" short-label="Subsq RX 3rd Course Day" long-label="Subsq RX 3rd Course Date (Day)" section="Treatment-Subsequent &amp; Other"/>
+    </field>
+    <field name="subsqRx3rdCourseDateFlag" start="1753" end="1754" short-label="Subsq RX 3rd Course Dt Fg" long-label="Subsq RX 3rdCrs Date Flag" naaccr-item-num="1681" section="Treatment-Subsequent &amp; Other"/>
+    <field name="subsqRx3rdCourseCodes" start="1755" end="1765" short-label="Subsq Rx 3rd Course Codes" long-label="Subsq RX 3rd Course Codes" naaccr-item-num="1690" section="Treatment-Subsequent &amp; Other">
+        <field name="subsqRx3rdCourseSurg" start="1755" end="1756" short-label="Subsq RX 3rd Course Surg" long-label="Subsq RX 3rd Course Surg" naaccr-item-num="1691" align="right" pad-char="0" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx3rdScopeLnSu" start="1757" end="1757" short-label="Subsq RX 3rd--Scope LN Su" long-label="Subsq RX 3rd--Scope LN Su" naaccr-item-num="1697" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx3rdSurgOth" start="1758" end="1758" short-label="Subsq RX 3rd--Surg Oth" long-label="Subsq RX 3rd--Surg Oth" naaccr-item-num="1698" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx3rdRegLnRem" start="1759" end="1760" short-label="Subsq RX 3rd--Reg LN Rem" long-label="Subsq RX 3rd--Reg LN Rem" naaccr-item-num="1699" align="right" pad-char="0" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx3rdCourseRad" start="1761" end="1761" short-label="Subsq RX 3rd Course Rad" long-label="Subsq RX 3rd Course Rad" naaccr-item-num="1692" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx3rdCourseChemo" start="1762" end="1762" short-label="Subsq RX 3rd Course Chemo" long-label="Subsq RX 3rd Course Chemo" naaccr-item-num="1693" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx3rdCourseHorm" start="1763" end="1763" short-label="Subsq RX 3rd Course Horm" long-label="Subsq RX 3rd Course Horm" naaccr-item-num="1694" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx3rdCourseBrm" start="1764" end="1764" short-label="Subsq RX 3rd Course BRM" long-label="Subsq RX 3rd Course BRM" naaccr-item-num="1695" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx3rdCourseOth" start="1765" end="1765" short-label="Subsq RX 3rd Course Oth" long-label="Subsq RX 3rd Course Oth" naaccr-item-num="1696" section="Treatment-Subsequent &amp; Other"/>
+    </field>
+    <field name="subsqRx4thCourseDate" start="1766" end="1773" short-label="Subsq RX 4th Course Dt" long-label="Subsq RX 4th Course Date" naaccr-item-num="1700" section="Treatment-Subsequent &amp; Other">
+        <field name="subsqRx4thCourseDateYear" start="1766" end="1769" short-label="Subsq RX 4th Course Yr" long-label="Subsq RX 4th Course Date (Year)" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx4thCourseDateMonth" start="1770" end="1771" short-label="Subsq RX 4th Course Mth" long-label="Subsq RX 4th Course Date (Month)" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx4thCourseDateDay" start="1772" end="1773" short-label="Subsq RX 4th Course Day" long-label="Subsq RX 4th Course Date (Day)" section="Treatment-Subsequent &amp; Other"/>
+    </field>
+    <field name="subsqRx4thCourseDateFlag" start="1774" end="1775" short-label="Subsq RX 4th Course Dt Fg" long-label="Subsq RX 4thCrs Date Flag" naaccr-item-num="1701" section="Treatment-Subsequent &amp; Other"/>
+    <field name="subsqRx4thCourseCodes" start="1776" end="1786" short-label="Subsq Rx 4th Course Codes" long-label="Subsq RX 4th Course Codes" naaccr-item-num="1710" section="Treatment-Subsequent &amp; Other">
+        <field name="subsqRx4thCourseSurg" start="1776" end="1777" short-label="Subsq RX 4th Course Surg" long-label="Subsq RX 4th Course Surg" naaccr-item-num="1711" align="right" pad-char="0" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx4thScopeLnSu" start="1778" end="1778" short-label="Subsq RX 4th--Scope LN Su" long-label="Subsq RX 4th--Scope LN Su" naaccr-item-num="1717" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx4thSurgOth" start="1779" end="1779" short-label="Subsq RX 4th--Surg Oth" long-label="Subsq RX 4th--Surg Oth" naaccr-item-num="1718" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx4thRegLnRem" start="1780" end="1781" short-label="Subsq RX 4th--Reg LN Rem" long-label="Subsq RX 4th--Reg LN Rem" naaccr-item-num="1719" align="right" pad-char="0" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx4thCourseRad" start="1782" end="1782" short-label="Subsq RX 4th Course Rad" long-label="Subsq RX 4th Course Rad" naaccr-item-num="1712" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx4thCourseChemo" start="1783" end="1783" short-label="Subsq RX 4th Course Chemo" long-label="Subsq RX 4th Course Chemo" naaccr-item-num="1713" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx4thCourseHorm" start="1784" end="1784" short-label="Subsq RX 4th Course Horm" long-label="Subsq RX 4th Course Horm" naaccr-item-num="1714" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx4thCourseBrm" start="1785" end="1785" short-label="Subsq RX 4th Course BRM" long-label="Subsq RX 4th Course BRM" naaccr-item-num="1715" section="Treatment-Subsequent &amp; Other"/>
+        <field name="subsqRx4thCourseOth" start="1786" end="1786" short-label="Subsq RX 4th Course Oth" long-label="Subsq RX 4th Course Oth" naaccr-item-num="1716" section="Treatment-Subsequent &amp; Other"/>
+     </field>
+    <field name="subsqRxReconstructDel" start="1787" end="1787" short-label="Subsq Recon Del" long-label="Subsq RX--Reconstruct Del" naaccr-item-num="1741" section="Treatment-Subsequent &amp; Other"/>
+    <field name="overRideSsNodesPos" start="1888" end="1888" short-label="SS/NP" long-label="Over-ride SS/NodesPos" naaccr-item-num="1981" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideSsTnmN" start="1889" end="1889" short-label="SS/TN" long-label="Over-ride SS/TNM-N" naaccr-item-num="1982" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideSsTnmM" start="1890" end="1890" short-label="SS/TM" long-label="Over-ride SS/TNM-M" naaccr-item-num="1983" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideAcsnClassSeq" start="1891" end="1891" short-label="A#/Cl/S#" long-label="Over-ride Acsn/Class/Seq" naaccr-item-num="1985" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideHospSeqDxConf" start="1892" end="1892" short-label="HpS#/DC" long-label="Over-ride HospSeq/DxConf" naaccr-item-num="1986" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideCocSiteType" start="1893" end="1893" short-label="CS/Ty" long-label="Over-ride CoC-Site/Type" naaccr-item-num="1987" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideHospSeqSite" start="1894" end="1894" short-label="HpS#/S" long-label="Over-ride HospSeq/Site" naaccr-item-num="1988" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideSiteTnmStgGrp" start="1895" end="1895" short-label="S/TSt" long-label="Over-ride Site/TNM-StgGrp" naaccr-item-num="1989" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideAgeSiteMorph" start="1896" end="1896" short-label="A/S/M" long-label="Over-ride Age/Site/Morph" naaccr-item-num="1990" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideSeqNoDxConf" start="1897" end="1897" short-label="S#/DC" long-label="Over-ride SeqNo/DxConf" naaccr-item-num="2000" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideSiteLatSeqNo" start="1898" end="1898" short-label="S/L/S#" long-label="Over-ride Site/Lat/SeqNo" naaccr-item-num="2010" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideSurgDxConf" start="1899" end="1899" short-label="Sg/DC" long-label="Over-ride Surg/DxConf" naaccr-item-num="2020" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideSiteType" start="1900" end="1900" short-label="S/Ty" long-label="Over-ride Site/Type" naaccr-item-num="2030" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideHistology" start="1901" end="1901" short-label="H" long-label="Over-ride Histology" naaccr-item-num="2040" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideReportSource" start="1902" end="1902" short-label="RSr" long-label="Over-ride Report Source" naaccr-item-num="2050" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideIllDefineSite" start="1903" end="1903" short-label="IS" long-label="Over-ride Ill-define Site" naaccr-item-num="2060" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideLeukLymphoma" start="1904" end="1904" short-label="LeLy" long-label="Over-ride Leuk,  Lymphoma" naaccr-item-num="2070" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideSiteBehavior" start="1905" end="1905" short-label="S/B" long-label="Over-ride Site/Behavior" naaccr-item-num="2071" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideSiteEodDxDate" start="1906" end="1906" short-label="S/E/DDt" long-label="Over-ride Site/EOD/DX Dt" naaccr-item-num="2072" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideSiteLatEod" start="1907" end="1907" short-label="S/L/E" long-label="Over-ride Site/Lat/EOD" naaccr-item-num="2073" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overRideSiteLatMorph" start="1908" end="1908" short-label="S/L/M" long-label="Over-ride Site/Lat/Morph" naaccr-item-num="2074" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="primarySiteIcdO1" start="1909" end="1912" short-label="Site(O1)" long-label="Site (73-91) ICD-O-1" naaccr-item-num="1960" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="morphologyIcdO1" start="1913" end="1918" short-label="Morph(O1)" long-label="Morph (73-91) ICD-O-1" naaccr-item-num="1970" section="Edit Overrides/Conversion History/System Admin">
+        <field name="histologyIcdO1" start="1913" end="1916" short-label="Hist(O1)" long-label="Histology (73-91) ICD-O-1" naaccr-item-num="1971" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="behaviorIcdO1" start="1917" end="1917" short-label="Behav(O1)" long-label="Behavior (73-91) ICD-O-1" naaccr-item-num="1972" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="gradeIcdO1" start="1918" end="1918" short-label="Grade(O1)" long-label="Grade (73-91) ICD-O-1" naaccr-item-num="1973" section="Edit Overrides/Conversion History/System Admin"/>
+    </field>
+    <field name="icdO2ConversionFlag" start="1919" end="1919" short-label="Conv Rev(02)" long-label="ICD-O-2 Conversion Flag" naaccr-item-num="1980" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="crcChecksum" start="1920" end="1929" short-label="CRC Checksum" long-label="CRC CHECKSUM" naaccr-item-num="2081" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="seerCodingSysCurrent" start="1930" end="1930" short-label="SEER Cod Curr" long-label="SEER Coding Sys--Current" naaccr-item-num="2120" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="seerCodingSysOriginal" start="1931" end="1931" short-label="SEER Cod Orig" long-label="SEER Coding Sys--Original" naaccr-item-num="2130" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="cocCodingSysCurrent" start="1932" end="1933" short-label="COC Cod Curr" long-label="CoC Coding Sys--Current" naaccr-item-num="2140" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="cocCodingSysOriginal" start="1934" end="1935" short-label="COC Cod Orig" long-label="CoC Coding Sys--Original" naaccr-item-num="2150" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="vendorName" start="1936" end="1945" short-label="Vendor" long-label="Vendor Name" naaccr-item-num="2170" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="seerTypeOfFollowUp" start="1946" end="1946" short-label="SEER Type FU" long-label="SEER Type of Follow-Up" naaccr-item-num="2180" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="seerRecordNumber" start="1947" end="1948" short-label="SEER Rec #" long-label="SEER Record Number" naaccr-item-num="2190" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="diagnosticProc7387" start="1949" end="1950" short-label="DX Proc 73-87" long-label="Diagnostic Proc 73-87" naaccr-item-num="2200" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="dateCaseInitiated" start="1951" end="1958" short-label="Initiated Dt" long-label="Date Case Initiated" naaccr-item-num="2085" section="Edit Overrides/Conversion History/System Admin">
+        <field name="dateCaseInitiatedYear" start="1951" end="1954" short-label="Initiated Yr" long-label="Date Case Initiated (Year)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateCaseInitiatedMonth" start="1955" end="1956" short-label="Initiated Mth" long-label="Date Case Initiated (Month)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateCaseInitiatedDay" start="1957" end="1958" short-label="Initiated Day" long-label="Date Case Initiated (Day)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+    </field>
+    <field name="dateCaseCompleted" start="1959" end="1966" short-label="Case Cplt Date" long-label="Date Case Completed" naaccr-item-num="2090" section="Edit Overrides/Conversion History/System Admin">
+        <field name="dateCaseCompletedYear" start="1959" end="1962" short-label="Case Cplt Yr" long-label="Date Case Completed (Year)" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateCaseCompletedMonth" start="1963" end="1964" short-label="Case Cplt Mth" long-label="Date Case Completed (Month)" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateCaseCompletedDay" start="1965" end="1966" short-label="Case Cplt Day" long-label="Date Case Completed (Day)" section="Edit Overrides/Conversion History/System Admin"/>
+    </field>
+    <field name="dateCaseCompletedCoc" start="1967" end="1974" short-label="COC Dt Comp" long-label="Date Case Completed--CoC" naaccr-item-num="2092" section="Edit Overrides/Conversion History/System Admin">
+        <field name="dateCaseCompletedCocYear" start="1967" end="1970" short-label="COC Dt Comp Yr" long-label="Date Case Completed--CoC (Year)" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateCaseCompletedCocMonth" start="1971" end="1972" short-label="COC Dt Comp Mth" long-label="Date Case Completed--CoC (Month)" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateCaseCompletedCocDay" start="1973" end="1974" short-label="COC Dt Comp Day" long-label="Date Case Completed--CoC (Day)" section="Edit Overrides/Conversion History/System Admin"/>
+    </field>
+    <field name="dateCaseLastChanged" start="1975" end="1982" short-label="Last Changed Dt" long-label="Date Case Last Changed" naaccr-item-num="2100" section="Edit Overrides/Conversion History/System Admin">
+        <field name="dateCaseLastChangedYear" start="1975" end="1978" short-label="Last Changed Yr" long-label="Date Case Last Changed (Year)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateCaseLastChangedMonth" start="1979" end="1980" short-label="Last Changed Mth" long-label="Date Case Last Changed (Month)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateCaseLastChangedDay" start="1981" end="1982" short-label="Last Changed Day" long-label="Date Case Last Changed (Day)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+    </field>
+    <field name="dateCaseReportExported" start="1983" end="1990" short-label="Case Expt Dt" long-label="Date Case Report Exported" naaccr-item-num="2110" section="Edit Overrides/Conversion History/System Admin">
+        <field name="dateCaseReportExportedYear" start="1983" end="1986" short-label="Case Expt Yr" long-label="Date Case Report Exported (Year)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateCaseReportExportedMonth" start="1987" end="1988" short-label="Case Expt Mth" long-label="Date Case Report Exported (Month)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateCaseReportExportedDay" start="1989" end="1990" short-label="Case Expt Day" long-label="Date Case Report Exported (Day)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+    </field>
+    <field name="dateCaseReportReceived" start="1991" end="1998" short-label="Received Dt" long-label="Date Case Report Received" naaccr-item-num="2111" section="Edit Overrides/Conversion History/System Admin">
+        <field name="dateCaseReportReceivedYear" start="1991" end="1994" short-label="Received Yr" long-label="Date Case Received (Year)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateCaseReportReceivedMonth" start="1995" end="1996" short-label="Received Mth" long-label="Date Case Received (Month)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateCaseReportReceivedDay" start="1997" end="1998" short-label="Received Day" long-label="Date Case Received (Day)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+    </field>
+    <field name="dateCaseReportLoaded" start="1999" end="2006" short-label="Loaded Dt" long-label="Date Case Report Loaded" naaccr-item-num="2112" section="Edit Overrides/Conversion History/System Admin">
+        <field name="dateCaseReportLoadedYear" start="1999" end="2002" short-label="Loaded Yr" long-label="Date Case Report Loaded (Year)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="ddateCaseReportLoadedMonth" start="2003" end="2004" short-label="Loaded Mth" long-label="Date Case Report Loaded (Month)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateCaseReportLoadedDay" start="2005" end="2006" short-label="Loaded Day" long-label="Date Case Report Loaded (Day)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+    </field>
+    <field name="dateTumorRecordAvailbl" start="2007" end="2014" short-label="Dt Tum Rec Avlbl" long-label="Date Tumor Record Availbl" naaccr-item-num="2113" section="Edit Overrides/Conversion History/System Admin">
+        <field name="dateTumorRecordAvailblYear" start="2007" end="2010" short-label="Dt Tum Rec Avlbl Yr" long-label="Date Tumor Record Availbl (Year)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="ddateTumorRecordAvailblMonth" start="2011" end="2012" short-label="Dt Tum Rec Avlbl Mth" long-label="Date Tumor Record Availbl (Month)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+        <field name="dateTumorRecordAvailblDay" start="2013" end="2014" short-label="Dt Tum Rec Avlbl Day" long-label="Date Tumor Record Availbl (Day)" align="right" pad-char="0" section="Edit Overrides/Conversion History/System Admin"/>
+    </field>
+    <field name="icdO3ConversionFlag" start="2015" end="2015" short-label="Conv Rev(03)" long-label="ICD-O-3 Conversion Flag" naaccr-item-num="2116" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs1" start="2016" end="2016" short-label="Over CS 1" long-label="Over-ride CS 1" naaccr-item-num="3750" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs2" start="2017" end="2017" short-label="Over CS 2" long-label="Over-ride CS 2" naaccr-item-num="3751" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs3" start="2018" end="2018" short-label="Over CS 3" long-label="Over-ride CS 3" naaccr-item-num="3752" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs4" start="2019" end="2019" short-label="Over CS 4" long-label="Over-ride CS 4" naaccr-item-num="3753" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs5" start="2020" end="2020" short-label="Over CS 5" long-label="Over-ride CS 5" naaccr-item-num="3754" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs6" start="2021" end="2021" short-label="Over CS 6" long-label="Over-ride CS 6" naaccr-item-num="3755" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs7" start="2022" end="2022" short-label="Over CS 7" long-label="Over-ride CS 7" naaccr-item-num="3756" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs8" start="2023" end="2023" short-label="Over CS 8" long-label="Over-ride CS 8" naaccr-item-num="3757" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs9" start="2024" end="2024" short-label="Over CS 9" long-label="Over-ride CS 9" naaccr-item-num="3758" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs10" start="2025" end="2025" short-label="Over CS 10" long-label="Over-ride CS 10" naaccr-item-num="3759" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs11" start="2026" end="2026" short-label="Over CS 11" long-label="Over-ride CS 11" naaccr-item-num="3760" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs12" start="2027" end="2027" short-label="Over CS 12" long-label="Over-ride CS 12" naaccr-item-num="3761" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs13" start="2028" end="2028" short-label="Over CS 13" long-label="Over-ride CS 13" naaccr-item-num="3762" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs14" start="2029" end="2029" short-label="Over CS 14" long-label="Over-ride CS 14" naaccr-item-num="3763" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs15" start="2030" end="2030" short-label="Over CS 15" long-label="Over-ride CS 15" naaccr-item-num="3764" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs16" start="2031" end="2031" short-label="Over CS 16" long-label="Over-ride CS 16" naaccr-item-num="3765" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs17" start="2032" end="2032" short-label="Over CS 17" long-label="Over-ride CS 17" naaccr-item-num="3766" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs18" start="2033" end="2033" short-label="Over CS 18" long-label="Over-ride CS 18" naaccr-item-num="3767" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs19" start="2034" end="2034" short-label="Over CS 19" long-label="Over-ride CS 19" naaccr-item-num="3768" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="overrideCs20" start="2035" end="2035" short-label="Over CS 20" long-label="Over-ride CS 20" naaccr-item-num="3769" section="Edit Overrides/Conversion History/System Admin"/>
+    <field name="dateOfLastContact" start="2116" end="2123" short-label="DOLC" long-label="Date of Last Contact" naaccr-item-num="1750" section="Follow-up/Recurrence/Death">
+        <field name="dateOfLastContactYear" start="2116" end="2119" short-label="DOLC Yr" long-label="Date of Last Contact (Year)" align="right" pad-char="0" section="Follow-up/Recurrence/Death"/>
+        <field name="dateOfLastContactMonth" start="2120" end="2121" short-label="DOLC Mth" long-label="Date of Last Contact (Month)" align="right" pad-char="0" section="Follow-up/Recurrence/Death"/>
+        <field name="dateOfLastContactDay" start="2122" end="2123" short-label="DOLC Day" long-label="Date of Last Contact (Day)" align="right" pad-char="0" section="Follow-up/Recurrence/Death"/>
+    </field>
+    <field name="dateOfLastContactFlag" start="2124" end="2125" short-label="DOLC Fg" long-label="Date of Last Contact Flag" naaccr-item-num="1751" section="Follow-up/Recurrence/Death"/>
+    <field name="vitalStatus" start="2126" end="2126" short-label="VS" long-label="Vital Status" naaccr-item-num="1760" section="Follow-up/Recurrence/Death"/>
+    <field name="cancerStatus" start="2127" end="2127" short-label="Cancer Stat" long-label="Cancer Status" naaccr-item-num="1770" section="Follow-up/Recurrence/Death"/>
+    <field name="qualityOfSurvival" start="2128" end="2128" short-label="Surv Qual" long-label="Quality of Survival" naaccr-item-num="1780" section="Follow-up/Recurrence/Death"/>
+    <field name="followUpSource" start="2129" end="2129" short-label="Fup Src" long-label="Follow-Up Source" naaccr-item-num="1790" section="Follow-up/Recurrence/Death"/>
+    <field name="nextFollowUpSource" start="2130" end="2130" short-label="Next Fup Src" long-label="Next Follow-Up Source" naaccr-item-num="1800" section="Follow-up/Recurrence/Death"/>
+    <field name="addressCurrentCity" start="2131" end="2180" short-label="Curr City" long-label="Addr Current--City" naaccr-item-num="1810" section="Follow-up/Recurrence/Death"/>
+    <field name="addressCurrentState" start="2181" end="2182" short-label="Curr State" long-label="Addr Current--State" naaccr-item-num="1820" section="Follow-up/Recurrence/Death"/>
+    <field name="addressCurrentPostalCode" start="2183" end="2191" short-label="Curr Zip" long-label="Addr Current--Postal Code" naaccr-item-num="1830" section="Follow-up/Recurrence/Death"/>
+    <field name="addressCurrentCounty" start="2192" end="2194" short-label="Curr Cty" long-label="County--Current" naaccr-item-num="1840" align="right" pad-char="0" section="Follow-up/Recurrence/Death"/>
+    <field name="recurrenceDate1st" start="2196" end="2203" short-label="Recur 1st Dt" long-label="Recurrence Date--1st" naaccr-item-num="1860" section="Follow-up/Recurrence/Death">
+        <field name="recurrenceDate1stYear" start="2196" end="2199" short-label="Recur 1st Yr" long-label="Recurrence Date--1st (Year)" align="right" pad-char="0" section="Follow-up/Recurrence/Death"/>
+        <field name="recurrenceDate1stMonth" start="2200" end="2201" short-label="Recur 1st Mth" long-label="Recurrence Date--1st (Month)" align="right" pad-char="0" section="Follow-up/Recurrence/Death"/>
+        <field name="recurrenceDate1stDay" start="2202" end="2203" short-label="Recur 1st Day" long-label="Recurrence Date--1st (Day)" align="right" pad-char="0" section="Follow-up/Recurrence/Death"/>
+    </field>
+    <field name="recurrenceDate1stFlag" start="2204" end="2205" short-label="Recur 1st Dt Fg" long-label="Recurrence Date--1st Flag" naaccr-item-num="1861" section="Follow-up/Recurrence/Death"/>
+    <field name="recurrenceType1st" start="2206" end="2207" short-label="Recur Type 1st" long-label="Recurrence Type--1st" naaccr-item-num="1880" align="right" pad-char="0" section="Follow-up/Recurrence/Death"/>
+    <field name="followUpContactCity" start="2208" end="2257" short-label="Fup Cont City" long-label="Follow-Up Contact--City" naaccr-item-num="1842" section="Follow-up/Recurrence/Death"/>
+    <field name="followUpContactState" start="2258" end="2259" short-label="Fup Cont State" long-label="Follow-Up Contact--State" naaccr-item-num="1844" section="Follow-up/Recurrence/Death"/>
+    <field name="followUpContactPostal" start="2260" end="2268" short-label="Fup Cont Zip" long-label="Follow-Up Contact--Postal" naaccr-item-num="1846" section="Follow-up/Recurrence/Death"/>
+    <field name="causeOfDeath" start="2269" end="2272" short-label="COD" long-label="Cause of Death" naaccr-item-num="1910" section="Follow-up/Recurrence/Death"/>
+    <field name="icdRevisionNumber" start="2273" end="2273" short-label="COD Rev#" long-label="ICD Revision Number" naaccr-item-num="1920" section="Follow-up/Recurrence/Death"/>
+    <field name="autopsy" start="2274" end="2274" short-label="Autopsy" long-label="Autopsy" naaccr-item-num="1930" section="Follow-up/Recurrence/Death"/>
+    <field name="placeOfDeath" start="2275" end="2277" short-label="Death Place" long-label="Place of Death" naaccr-item-num="1940" align="right" pad-char="0" section="Follow-up/Recurrence/Death"/>
+    <field name="followUpSourceCentral" start="2278" end="2279" short-label="Fup Src Cntl" long-label="Follow-up Source Central" naaccr-item-num="1791" section="Follow-up/Recurrence/Death"/>
+    <field name="dateOfDeathCanada" start="2280" end="2287" short-label="Canada Death Dt" long-label="Date of Death--Canada" naaccr-item-num="1755" section="Follow-up/Recurrence/Death">
+        <field name="dateOfDeathCanadaYear" start="2280" end="2283" short-label="Canada Death Yr" long-label="Date of Death--Canada (Year)" align="right" pad-char="0" section="Follow-up/Recurrence/Death"/>
+        <field name="dateOfDeathCanadaMonth" start="2284" end="2285" short-label="Canada Death Mth" long-label="Date of Death--Canada (Month)" align="right" pad-char="0" section="Follow-up/Recurrence/Death"/>
+        <field name="dateOfDeathCanadaDay" start="2286" end="2287" short-label="Canada Death Day" long-label="Date of Death--Canada (Day)" align="right" pad-char="0" section="Follow-up/Recurrence/Death"/>
+    </field>
+    <field name="dateOfDeathCanadaFlag" start="2288" end="2289" short-label="Canada Death Dt Fg" long-label="Date of Death--Canada Flag" naaccr-item-num="1756" section="Follow-up/Recurrence/Death"/>
+    <field name="unusualFollowUpMethod" start="2290" end="2291" short-label="Unusual FU Meth" long-label="Unusual Follow-Up Method" naaccr-item-num="1850" section="Follow-up/Recurrence/Death"/>
+    <field name="stateRequestorItems" start="2340" end="3339" short-label="State Req Item" long-label="State/Requestor Items" naaccr-item-num="2220" trim="false" section="Special Use"/>
+    <field name="nameLast" start="3340" end="3379" short-label="Last" long-label="Name--Last" naaccr-item-num="2230" section="Patient-Confidential"/>
+    <field name="nameFirst" start="3380" end="3419" short-label="First" long-label="Name--First" naaccr-item-num="2240" section="Patient-Confidential"/>
+    <field name="nameMiddle" start="3420" end="3459" short-label="Mid" long-label="Name--Middle" naaccr-item-num="2250" section="Patient-Confidential"/>
+    <field name="namePrefix" start="3460" end="3462" short-label="Pre" long-label="Name--Prefix" naaccr-item-num="2260" section="Patient-Confidential"/>
+    <field name="nameSuffix" start="3463" end="3465" short-label="Suf" long-label="Name--Suffix" naaccr-item-num="2270" section="Patient-Confidential"/>
+    <field name="nameAlias" start="3466" end="3505" short-label="Alias" long-label="Name--Alias" naaccr-item-num="2280" section="Patient-Confidential"/>
+    <field name="nameMaiden" start="3506" end="3545" short-label="Maiden" long-label="Name--Maiden" naaccr-item-num="2390" section="Patient-Confidential"/>
+    <field name="nameSpouseParent" start="3546" end="3605" short-label="Spouse/Prnt" long-label="Name--Spouse/Parent" naaccr-item-num="2290" section="Patient-Confidential"/>
+    <field name="medicalRecordNumber" start="3606" end="3616" short-label="Med Rec#" long-label="Medical Record Number" naaccr-item-num="2300" align="right" pad-char=" " section="Patient-Confidential"/>
+    <field name="militaryRecordNoSuffix" start="3617" end="3618" short-label="Milit Rec Suffix" long-label="Military Record No Suffix" naaccr-item-num="2310" align="right" pad-char="0" section="Patient-Confidential"/>
+    <field name="socialSecurityNumber" start="3619" end="3627" short-label="SSN" long-label="Social Security Number" naaccr-item-num="2320" section="Patient-Confidential"/>
+    <field name="addressAtDxStreetName" start="3628" end="3687" short-label="Street DX" long-label="Addr at DX--No &amp; Street" naaccr-item-num="2330" section="Patient-Confidential"/>
+    <field name="addressAtDxSupplementl" start="3688" end="3747" short-label="Suppl DX" long-label="Addr at DX--Supplementl" naaccr-item-num="2335" section="Patient-Confidential"/>
+    <field name="addressCurrentStreetName" start="3748" end="3807" short-label="Street Curr" long-label="Addr Current--No &amp; Street" naaccr-item-num="2350" section="Patient-Confidential"/>
+    <field name="addressCurrentSupplementl" start="3808" end="3867" short-label="Suppl Curr" long-label="Addr Current--Supplementl" naaccr-item-num="2355" section="Patient-Confidential"/>
+    <field name="telephone" start="3868" end="3877" short-label="Phone" long-label="Telephone" naaccr-item-num="2360" section="Patient-Confidential"/>
+    <field name="dcStateFileNumber" start="3878" end="3883" short-label="DC File#" long-label="DC State File Number" naaccr-item-num="2380" section="Patient-Confidential"/>
+    <field name="followUpContactName" start="3884" end="3943" short-label="Fup Contact" long-label="Follow-Up Contact--Name" naaccr-item-num="2394" section="Patient-Confidential"/>
+    <field name="followUpContactNoAndStreet" start="3944" end="4003" short-label="Fup Contact Add" long-label="Follow-Up Contact--No&amp;St" naaccr-item-num="2392" section="Patient-Confidential"/>
+    <field name="followUpContactSuppl" start="4004" end="4063" short-label="Fup Contact Suppl" long-label="Follow-Up Contact--Suppl" naaccr-item-num="2393" section="Patient-Confidential"/>
+    <field name="latitude" start="4064" end="4073" short-label="Latitude" long-label="Latitude" naaccr-item-num="2352" align="right" pad-char=" " section="Patient-Confidential"/>
+    <field name="longitude" start="4074" end="4084" short-label="Longitude" long-label="Longitude" naaccr-item-num="2354" align="right" pad-char=" " section="Patient-Confidential"/>
+    <field name="followingRegistryNpi" start="4285" end="4294" short-label="NPI Follow Reg" long-label="NPI--Following Registry" naaccr-item-num="2445" section="Hospital-Confidential"/>
+    <field name="followingRegistry" start="4295" end="4304" short-label="Follow Reg" long-label="Following Registry" naaccr-item-num="2440" align="right" pad-char="0" section="Hospital-Confidential"/>
+    <field name="institutionReferredFromNpi" start="4305" end="4314" short-label="NPI Inst Ref From" long-label="NPI--Inst Referred From" naaccr-item-num="2415" section="Hospital-Confidential"/>
+    <field name="institutionReferredFrom" start="4315" end="4324" short-label="Inst Ref From" long-label="Institution Referred From" naaccr-item-num="2410" align="right" pad-char="0" section="Hospital-Confidential"/>
+    <field name="institutionReferredToNpi" start="4325" end="4334" short-label="NPI Inst Ref To" long-label="NPI--Inst Referred To" naaccr-item-num="2425" section="Hospital-Confidential"/>
+    <field name="institutionReferredTo" start="4335" end="4344" short-label="Inst Ref To" long-label="Institution Referred To" naaccr-item-num="2420" align="right" pad-char="0" section="Hospital-Confidential"/>
+    <field name="physicianManagingNpi" start="4395" end="4404" short-label="Manag Phys NPI" long-label="NPI--Physician--Managing" naaccr-item-num="2465" section="Other-Confidential"/>
+    <field name="physicianManaging" start="4405" end="4412" short-label="Manag Phys ID" long-label="Physician--Managing" naaccr-item-num="2460" section="Other-Confidential"/>
+    <field name="physicianFollowUpNpi" start="4413" end="4422" short-label="FU Phys NPI" long-label="NPI--Physician--Follow-Up" naaccr-item-num="2475" section="Other-Confidential"/>
+    <field name="physicianFollowUp" start="4423" end="4430" short-label="FU Phys ID" long-label="Physician--Follow-Up" naaccr-item-num="2470" section="Other-Confidential"/>
+    <field name="physicianPrimarySurgNpi" start="4431" end="4440" short-label="Surgeon NPI" long-label="NPI--Physician--Primary Surg" naaccr-item-num="2485" section="Other-Confidential"/>
+    <field name="physicianPrimarySurg" start="4441" end="4448" short-label="Surgeon ID" long-label="Physician--Primary Surg" naaccr-item-num="2480" section="Other-Confidential"/>
+    <field name="physician3Npi" start="4449" end="4458" short-label="Phys3 NPI" long-label="NPI--Physician 3" naaccr-item-num="2495" section="Other-Confidential"/>
+    <field name="physician3" start="4459" end="4466" short-label="Phys3 ID" long-label="Physician 3" naaccr-item-num="2490" section="Other-Confidential"/>
+    <field name="physician4Npi" start="4467" end="4476" short-label="Phys4 NPI" long-label="NPI--Physician 4" naaccr-item-num="2505" section="Other-Confidential"/>
+    <field name="physician4" start="4477" end="4484" short-label="Phys4 ID" long-label="Physician 4" naaccr-item-num="2500" section="Other-Confidential"/>
+    <field name="pathReportFacId1" start="4535" end="4559" short-label="Path Rpt Fac ID 1" long-label="Path Reporting Fac ID 1" naaccr-item-num="7010" section="Pathology"/>
+    <field name="pathReportNumber1" start="4560" end="4579" short-label="Path Rpt# 1" long-label="Path Report Number 1" naaccr-item-num="7090" section="Pathology"/>
+    <field name="pathDateSpecCollect1" start="4580" end="4593" short-label="Dt Spec Collected 1" long-label="Path Date Spec Collect 1" naaccr-item-num="7320" section="Pathology"/>
+    <field name="pathReportType1" start="4594" end="4595" short-label="Path Rpt Type 1" long-label="Path Report Type 1" naaccr-item-num="7480" align="right" pad-char="0" section="Pathology"/>
+    <field name="pathOrderingFacNo1" start="4596" end="4620" short-label="Order Fac# 1" long-label="Path Ordering Fac No 1" naaccr-item-num="7190" section="Pathology"/>
+    <field name="pathOrderPhysLicNo1" start="4621" end="4640" short-label="Order Phys Lic# 1" long-label="Path Order Phys Lic No 1" naaccr-item-num="7100" section="Pathology"/>
+    <field name="pathReportFacId2" start="4641" end="4665" short-label="Path Rpt Fac ID 2" long-label="Path Reporting Fac ID 2" naaccr-item-num="7011" section="Pathology"/>
+    <field name="pathReportNumber2" start="4666" end="4685" short-label="Path Rpt# 2" long-label="Path Report Number 2" naaccr-item-num="7091" section="Pathology"/>
+    <field name="pathDateSpecCollect2" start="4686" end="4699" short-label="Dt Spec Collected 2" long-label="Path Date Spec Collect 2" naaccr-item-num="7321" section="Pathology"/>
+    <field name="pathReportType2" start="4700" end="4701" short-label="Path Rpt Type 2" long-label="Path Report Type 2" naaccr-item-num="7481" align="right" pad-char="0" section="Pathology"/>
+    <field name="pathOrderingFacNo2" start="4702" end="4726" short-label="Order Fac# 2" long-label="Path Ordering Fac No 2" naaccr-item-num="7191" section="Pathology"/>
+    <field name="pathOrderPhysLicNo2" start="4727" end="4746" short-label="Order Phys Lic# 2" long-label="Path Order Phys Lic No 2" naaccr-item-num="7101" section="Pathology"/>
+    <field name="pathReportFacId3" start="4747" end="4771" short-label="Path Rpt Fac ID 3" long-label="Path Reporting Fac ID 3" naaccr-item-num="7012" section="Pathology"/>
+    <field name="pathReportNumber3" start="4772" end="4791" short-label="Path Rpt# 3" long-label="Path Report Number 3" naaccr-item-num="7092" section="Pathology"/>
+    <field name="pathDateSpecCollect3" start="4792" end="4805" short-label="Dt Spec Collected 3" long-label="Path Date Spec Collect 3" naaccr-item-num="7322" section="Pathology"/>
+    <field name="pathReportType3" start="4806" end="4807" short-label="Path Rpt Type 3" long-label="Path Report Type 3" naaccr-item-num="7482" align="right" pad-char="0" section="Pathology"/>
+    <field name="pathOrderingFacNo3" start="4808" end="4832" short-label="Order Fac# 3" long-label="Path Ordering Fac No 3" naaccr-item-num="7192" section="Pathology"/>
+    <field name="pathOrderPhysLicNo3" start="4833" end="4852" short-label="Order Phys Lic# 3" long-label="Path Order Phys Lic No 3" naaccr-item-num="7102" section="Pathology"/>
+    <field name="pathReportFacId4" start="4853" end="4877" short-label="Path Rpt Fac ID 4" long-label="Path Reporting Fac ID 4" naaccr-item-num="7013" section="Pathology"/>
+    <field name="pathReportNumber4" start="4878" end="4897" short-label="Path Rpt# 4" long-label="Path Report Number 4" naaccr-item-num="7093" section="Pathology"/>
+    <field name="pathDateSpecCollect4" start="4898" end="4911" short-label="Dt Spec Collected 4" long-label="Path Date Spec Collect 4" naaccr-item-num="7323" section="Pathology"/>
+    <field name="pathReportType4" start="4912" end="4913" short-label="Path Rpt Type 4" long-label="Path Report Type 4" naaccr-item-num="7483" align="right" pad-char="0" section="Pathology"/>
+    <field name="pathOrderingFacNo4" start="4914" end="4938" short-label="Order Fac# 4" long-label="Path Ordering Fac No 4" naaccr-item-num="7193" section="Pathology"/>
+    <field name="pathOrderPhysLicNo4" start="4939" end="4958" short-label="Order Phys Lic# 4" long-label="Path Order Phys Lic No 4" naaccr-item-num="7103" section="Pathology"/>
+    <field name="pathReportFacId5" start="4959" end="4983" short-label="Path Rpt Fac ID 5" long-label="Path Reporting Fac ID 5" naaccr-item-num="7014" section="Pathology"/>
+    <field name="pathReportNumber5" start="4984" end="5003" short-label="Path Rpt# 5" long-label="Path Report Number 5" naaccr-item-num="7094" section="Pathology"/>
+    <field name="pathDateSpecCollect5" start="5004" end="5017" short-label="Dt Spec Collected 5" long-label="Path Date Spec Collect 5" naaccr-item-num="7324" section="Pathology"/>
+    <field name="pathReportType5" start="5018" end="5019" short-label="Path Rpt Type 5" long-label="Path Report Type 5" naaccr-item-num="7484" align="right" pad-char="0" section="Pathology"/>
+    <field name="pathOrderingFacNo5" start="5020" end="5044" short-label="Order Fac# 5" long-label="Path Ordering Fac No 5" naaccr-item-num="7194" section="Pathology"/>
+    <field name="pathOrderPhysLicNo5" start="5045" end="5064" short-label="Order Phys Lic# 5" long-label="Path Order Phys Lic No 5" naaccr-item-num="7104" section="Pathology"/>
+    <field name="textDxProcPe" start="5565" end="6564" short-label="DX Proc PE" long-label="Text--DX Proc--PE" naaccr-item-num="2520" section="Text-Diagnosis"/>
+    <field name="textDxProcXRayScan" start="6565" end="7564" short-label="XRay/Scan" long-label="Text--DX Proc--X-ray/Scan" naaccr-item-num="2530" section="Text-Diagnosis"/>
+    <field name="textDxProcScopes" start="7565" end="8564" short-label="DX Proc Scp" long-label="Text--DX Proc--Scopes" naaccr-item-num="2540" section="Text-Diagnosis"/>
+    <field name="textDxProcLabTests" start="8565" end="9564" short-label="Proc Lab Test" long-label="Text--DX Proc--Lab Tests" naaccr-item-num="2550" section="Text-Diagnosis"/>
+    <field name="textDxProcOp" start="9565" end="10564" short-label="DX Proc OP" long-label="Text--DX Proc--Op" naaccr-item-num="2560" section="Text-Diagnosis"/>
+    <field name="textDxProcPath" start="10565" end="11564" short-label="DX Proc Path" long-label="Text--DX Proc--Path" naaccr-item-num="2570" section="Text-Diagnosis"/>
+    <field name="textPrimarySiteTitle" start="11565" end="11664" short-label="Site Title" long-label="Text--Primary Site Title" naaccr-item-num="2580" section="Text-Diagnosis"/>
+    <field name="textHistologyTitle" start="11665" end="11764" short-label="Hist Title" long-label="Text--Histology Title" naaccr-item-num="2590" section="Text-Diagnosis"/>
+    <field name="textStaging" start="11765" end="12764" short-label="Staging" long-label="Text--Staging" naaccr-item-num="2600" section="Text-Diagnosis"/>
+    <field name="rxTextSurgery" start="12765" end="13764" short-label="Surg Txt" long-label="RX Text--Surgery" naaccr-item-num="2610" section="Text-Treatment"/>
+    <field name="rxTextRadiationBeam" start="13765" end="14764" short-label="Radtn Beam" long-label="RX Text--Radiation (Beam)" naaccr-item-num="2620" section="Text-Treatment"/>
+    <field name="rxTextRadiationOther" start="14765" end="15764" short-label="Radtn Other" long-label="RX Text--Radiation Other" naaccr-item-num="2630" section="Text-Treatment"/>
+    <field name="rxTextChemo" start="15765" end="16764" short-label="Chemo Txt" long-label="RX Text--Chemo" naaccr-item-num="2640" section="Text-Treatment"/>
+    <field name="rxTextHormone" start="16765" end="17764" short-label="Horm Txt" long-label="RX Text--Hormone" naaccr-item-num="2650" section="Text-Treatment"/>
+    <field name="rxTextBrm" start="17765" end="18764" short-label="BRM Txt" long-label="RX Text--BRM" naaccr-item-num="2660" section="Text-Treatment"/>
+    <field name="rxTextOther" start="18765" end="19764" short-label="Other Txt" long-label="RX Text--Other" naaccr-item-num="2670" section="Text-Treatment"/>
+    <field name="textRemarks" start="19765" end="20764" short-label="Remarks" long-label="Text--Remarks" naaccr-item-num="2680" section="Text-Miscellaneous"/>
+    <field name="placeOfDiagnosis" start="20765" end="20824" short-label="Place Of DX" long-label="Text--Place of Diagnosis" naaccr-item-num="2690" section="Text-Miscellaneous"/>
+</fixed-column-layout>

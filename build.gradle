@@ -1,0 +1,58 @@
+
+// apply the script plugins
+plugins {
+    id 'java'
+}
+
+// project information
+group = 'org.naaccr'
+version = file('VERSION').text
+description = 'Attempt from the NAACCR XML Task Force to map the NAACCR flat-file format to an XML one.'
+
+// repository for the dependencies
+repositories {
+    mavenCentral()
+}
+
+// project dependencies
+dependencies {
+    compile 'com.thoughtworks.xstream:xstream:1.4.7'
+    compile 'org.tukaani:xz:1.5'
+    testCompile 'junit:junit:4.11'
+}
+
+// Gradle wrapper, this allows to build the project without having to install Gradle...
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2'
+}
+
+// **************************************************************************
+//    Rest of the script is used to create classes from xsd using JAXB...
+// **************************************************************************
+
+// used to generate JAXB entities
+configurations {
+    xjc
+}
+
+// JAXB dependencies
+dependencies {
+    xjc group: 'com.sun.xml.bind', name: 'jaxb-xjc', version: '2.2.7'
+    xjc group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.2.7'
+}
+
+// JAXB xjc task
+task generateXmlEntities << {
+    ant.taskdef(name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.xjc.asPath)
+
+    def runXjc = { schema, pkg ->
+        ant.xjc(destdir: 'src/main/java', schema: schema, binding: 'src/main/resources/stuff/binding.xml', package: pkg, extension: 'true') {
+            arg(line: '-no-header')
+        }
+    }
+
+    //runXjc('src/main/resources/isaac/data6.xsd', 'com.imsweb.naaccr.xml.entities.naaccr6')
+}
+
+
+

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="NaaccrDictionary" type="NaaccrDictionaryXmlDto" />
+    <xsd:complexType name="NaaccrDictionaryXmlDto">
+        <xsd:sequence>
+            <xsd:element name="ItemDef" type="ItemDefXmlDto" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="version" type="xsd:string" use="required"/>
+    </xsd:complexType>
+    
+    <xsd:complexType name="ItemDefXmlDto">
+        <xsd:sequence>
+            <xsd:element name="XmlDef" type="XmlDefXmlDto" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="FlatFileDef" type="FlatFileDefXmlDto" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+        <xsd:attribute name="number" type="xsd:int" use="required"/>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="length" type="xsd:int" use="required"/>
+        <xsd:attribute name="applicableDataType" type="xsd:string" use="optional"/> <!-- TODO use a restriction to specify the correct values -->
+        <xsd:attribute name="retired" type="xsd:boolean" use="optional" default="false"/>
+    </xsd:complexType>
+    
+    <xsd:complexType name="XmlDefXmlDto">
+        <xsd:attribute name="tag" type="xsd:string" use="required"/>
+        <xsd:attribute name="parentTag" type="xsd:string" use="required"/>
+    </xsd:complexType>
+    
+    <xsd:complexType name="FlatFileDefXmlDto">
+        <xsd:attribute name="start" type="xsd:int" use="required"/>
+        <xsd:attribute name="end" type="xsd:int" use="required"/>
+        <xsd:attribute name="section" type="xsd:string" use="required"/>
+    </xsd:complexType>
+</xsd:schema>
