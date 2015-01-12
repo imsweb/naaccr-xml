@@ -16,6 +16,7 @@ repositories {
 
 // project dependencies
 dependencies {
+    compile 'au.com.bytecode:opencsv:2.4'
     compile 'com.thoughtworks.xstream:xstream:1.4.7'
     compile 'org.tukaani:xz:1.5'
     testCompile 'junit:junit:4.11'
