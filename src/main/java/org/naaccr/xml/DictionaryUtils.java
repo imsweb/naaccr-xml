@@ -12,8 +12,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.naaccr.xml.entity.NaaccrDictionary;
-import org.naaccr.xml.entity.NaaccrDictionaryItem;
+import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
+import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -62,7 +62,7 @@ public class DictionaryUtils {
         try (CSVReader csvReader = new CSVReader(reader)) {
             for (String[] line : csvReader.readAll()) {
                 if (line.length != 11)
-                    throw new IOException("Wrong number of fields, expected 11, go " + line.length + " (Item Number #" + line[0] + ")");
+                    throw new IOException("Wrong number of fields, expected 11, got " + line.length + " (Item Number #" + line[0] + ")");
                 
                 if (!line[0].matches("\\d+"))
                     continue;
