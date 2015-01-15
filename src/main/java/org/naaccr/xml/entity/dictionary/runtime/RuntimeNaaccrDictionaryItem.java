@@ -1,34 +1,50 @@
 /*
  * Copyright (C) 2015 Information Management Services, Inc.
  */
-package org.naaccr.xml.entity.dictionary;
+package org.naaccr.xml.entity.dictionary.runtime;
 
-public class NaaccrDictionaryItem {
-    
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
+
+public class RuntimeNaaccrDictionaryItem {
+
     private String id;
-    
+
     private Integer number;
     
-    private String name;
-    
     private Integer startColumn;
-    
+
     private Integer length;
-    
-    private String section;
-    
-    private String recordTypes;
-    
-    private String sourceOfStandard;
-    
+
+    private Set<String> recordTypes;
+
     private String parentXmlElement;
-    
+
     private String regexValidation;
-    
+
     private String dataType;
-    
+
     private String parentItemId;
     
+    private List<RuntimeNaaccrDictionaryItem> subItems;
+    
+    public RuntimeNaaccrDictionaryItem(NaaccrDictionaryItem item) {
+        id = item.getId();
+        number = item.getNumber();
+        startColumn = item.getStartColumn();
+        length = item.getLength();
+        recordTypes = item.getRecordTypes() == null ? null : new HashSet<>(Arrays.asList(item.getRecordTypes().split(",")));
+        parentXmlElement = item.getParentXmlElement();
+        regexValidation = item.getRegexValidation();
+        dataType = item.getDataType();
+        parentItemId = item.getParentItemId();
+    }
+
     public String getId() {
         return id;
     }
@@ -36,21 +52,13 @@ public class NaaccrDictionaryItem {
     public void setId(String val) {
         id = val;
     }
-    
+
     public Integer getNumber() {
         return number;
     }
 
     public void setNumber(Integer val) {
         number = val;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String val) {
-        name = val;
     }
 
     public Integer getStartColumn() {
@@ -69,28 +77,10 @@ public class NaaccrDictionaryItem {
         length = val;
     }
 
-    public String getSection() {
-        return section;
-    }
-
-    public void setSection(String val) {
-        section = val;
-    }
-
-    public String getRecordTypes() {
+    public Set<String> getRecordTypes() {
+        if (recordTypes == null)
+            recordTypes = new HashSet<>();
         return recordTypes;
-    }
-
-    public void setRecordTypes(String val) {
-        recordTypes = val;
-    }
-
-    public String getSourceOfStandard() {
-        return sourceOfStandard;
-    }
-
-    public void setSourceOfStandard(String val) {
-        sourceOfStandard = val;
     }
 
     public String getParentXmlElement() {
@@ -124,4 +114,11 @@ public class NaaccrDictionaryItem {
     public void setParentItemId(String val) {
         parentItemId = val;
     }
+
+    public List<RuntimeNaaccrDictionaryItem> getSubItems() {
+        if (subItems == null)
+            subItems = new ArrayList<>();
+        return subItems;
+    }
+
 }

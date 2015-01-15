@@ -10,16 +10,38 @@ import java.util.Map;
 
 public class NaaccrDictionary {
 
+    private String version;
+    
     private List<NaaccrDictionaryItem> items;
     
     // caches to improve lookup performances
+    private Map<String, NaaccrDictionaryItem> _cachedById;
     private Map<Integer, NaaccrDictionaryItem> _cachedByNumber;
-    private Map<String, NaaccrDictionaryItem> _cachedByElementName;
 
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String val) {
+        version = val;
+    }
+    
     public List<NaaccrDictionaryItem> getItems() {
         if (items == null)
             items = new ArrayList<>();
         return items;
+    }
+
+    public NaaccrDictionaryItem getItemById(String id) {
+        if (_cachedById == null) {
+            Map<String, NaaccrDictionaryItem> cache = new HashMap<>();
+            for (NaaccrDictionaryItem item : items)
+                if (item.getId() != null)
+                    cache.put(item.getId(), item);
+            _cachedById = cache;
+        }
+        return _cachedById.get(id);
     }
     
     public NaaccrDictionaryItem getItemByNumber(Integer number) {
@@ -32,23 +54,12 @@ public class NaaccrDictionary {
         }
         return _cachedByNumber.get(number);
     }
-
-    public NaaccrDictionaryItem getItemByElementName(String name) {
-        if (_cachedByElementName == null) {
-            Map<String, NaaccrDictionaryItem> cache = new HashMap<>();
-            for (NaaccrDictionaryItem item : items)
-                if (item.getElementName() != null)
-                    cache.put(item.getElementName(), item);
-            _cachedByElementName = cache;
-        }
-        return _cachedByElementName.get(name);
-    }
     
     public NaaccrDictionaryItem getItem(Object key) {
+        if (key instanceof String)
+            return getItemById((String)key);
         if (key instanceof Integer)
             return getItemByNumber((Integer)key);
-        if (key instanceof String)
-            return getItemByElementName((String)key);
         return null;
     }
 }
