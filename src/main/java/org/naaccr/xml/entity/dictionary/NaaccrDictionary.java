@@ -3,22 +3,52 @@
  */
 package org.naaccr.xml.entity.dictionary;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class NaaccrDictionary {
 
-    // items, keyed by their NAACCR Item Number
-    private Map<Integer, NaaccrDictionaryItem> _items;
+    private List<NaaccrDictionaryItem> items;
+    
+    // caches to improve lookup performances
+    private Map<Integer, NaaccrDictionaryItem> _cachedByNumber;
+    private Map<String, NaaccrDictionaryItem> _cachedByElementName;
 
-    public Map<Integer, NaaccrDictionaryItem> getItems() {
-        return _items;
-    }
-
-    public void setItems(Map<Integer, NaaccrDictionaryItem> items) {
-        _items = items;
+    public List<NaaccrDictionaryItem> getItems() {
+        if (items == null)
+            items = new ArrayList<>();
+        return items;
     }
     
     public NaaccrDictionaryItem getItemByNumber(Integer number) {
-        return _items.get(number);
+        if (_cachedByNumber == null) {
+            Map<Integer, NaaccrDictionaryItem> cache = new HashMap<>();
+            for (NaaccrDictionaryItem item : items)
+                if (item.getNumber() != null)
+                    cache.put(item.getNumber(), item);
+            _cachedByNumber = cache;
+        }
+        return _cachedByNumber.get(number);
+    }
+
+    public NaaccrDictionaryItem getItemByElementName(String name) {
+        if (_cachedByElementName == null) {
+            Map<String, NaaccrDictionaryItem> cache = new HashMap<>();
+            for (NaaccrDictionaryItem item : items)
+                if (item.getElementName() != null)
+                    cache.put(item.getElementName(), item);
+            _cachedByElementName = cache;
+        }
+        return _cachedByElementName.get(name);
+    }
+    
+    public NaaccrDictionaryItem getItem(Object key) {
+        if (key instanceof Integer)
+            return getItemByNumber((Integer)key);
+        if (key instanceof String)
+            return getItemByElementName((String)key);
+        return null;
     }
 }

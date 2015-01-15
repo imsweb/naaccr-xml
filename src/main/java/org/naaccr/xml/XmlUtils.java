@@ -3,6 +3,7 @@
  */
 package org.naaccr.xml;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,21 +13,12 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
 import java.net.URL;
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
@@ -43,9 +35,9 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
+// TODO have to add support for "deprecated items"
 // TODO add data schema, maybe generate the entiteis from JAXB, not sure it's necessary though...
 // TODO how about using the XStream.toXML() and XStream.fromXML()?
 
@@ -77,35 +69,19 @@ public class XmlUtils {
             throw new IOException("Source flat file must exist");
         if (format == null)
             throw new IOException("Expected NAACCR format is required");
-
-        // build the list of items for each XML level
-        Map<String, List<NaaccrDictionaryItem>> items = buildItemLists(format);
         
-        // TODO FPD change this to use the PatientWriter
-
-        // convert the input stream into the outputstream...
-        try (Writer writer = new OutputStreamWriter(createOutputStream(xmlFile))) {
-            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n\r\n");
-            PrettyPrintWriter xmlWriter = new PrettyPrintWriter(writer); // same as SaxWriter, but handles the indentation and new lines...
-            xmlWriter.startNode("NaaccrDataExchange");
+        // get the standard dictionary 
+        NaaccrDictionary dictionary = getStandardDictionary();
+        
+        // create the reader and writer and translates the incoming lines into patient objects before writting those...
+        try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(createOutputStream(xmlFile), StandardCharsets.UTF_8))) {
             try (LineNumberReader reader = new LineNumberReader(new InputStreamReader(createInputStream(flatFile)))) {
                 String line = reader.readLine();
-                boolean wroteRoot = false; // root is actually based on the first line...
                 while (line != null) {
-                    if (!wroteRoot) {
-                        writeXmlBlock(items.get(NAACCR_XML_TAG_ROOT), line, xmlWriter);
-                        wroteRoot = true;
-                    }
-                    xmlWriter.startNode("Patient");
-                    writeXmlBlock(items.get(NAACCR_XML_TAG_PATIENT), line, xmlWriter);
-                    xmlWriter.startNode("Tumor");
-                    writeXmlBlock(items.get(NAACCR_XML_TAG_TUMOR), line, xmlWriter);
-                    xmlWriter.endNode();
-                    xmlWriter.endNode();
+                    writer.writePatient(createPatientFromLine(line, format, dictionary));
                     line = reader.readLine();
                 }
             }
-            xmlWriter.endNode();
         }
     }
 
@@ -124,32 +100,39 @@ public class XmlUtils {
         if (format == null)
             throw new IOException("Expected NAACCR format is required");
 
-        // build the list of items for each XML level
-        Map<String, List<NaaccrDictionaryItem>> items = buildItemLists(format);
+        // get the standard dictionary
+        NaaccrDictionary dictionary = getStandardDictionary();
 
-        // TODO FPD change this to use the PatientReader
-        
-        // convert the input stream into the outputstream...
-        try (Writer writer = new OutputStreamWriter(createOutputStream(flatFile))) {
-            try (Reader reader = new InputStreamReader(createInputStream(xmlFile))) {
-
-                Map<Integer, String> values = new HashMap<>();
-                XMLStreamReader xmlReader = XMLInputFactory.newInstance().createXMLStreamReader(reader);
-                while (xmlReader.hasNext()) {
-                    xmlReader.next();
-                    if (xmlReader.getEventType() == XMLStreamReader.START_ELEMENT) {
-                        //if (NAACCR_XML_TAG_ITEM.equals(xmlReader.getLocalName())) {
-                        //    NAACCR_XML_TAG_ITEM
-                        //}
-                    }
+        // create the reader and writer and translates the incoming lines into patient objects before writting those...
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(createOutputStream(flatFile)))) {
+            try (PatientXmlReader reader = new PatientXmlReader(new InputStreamReader(createInputStream(xmlFile), StandardCharsets.UTF_8))) {
+                Patient patient = reader.readPatient();
+                while (patient != null) {
+                    writer.write(createLineFromPatient(patient, format, dictionary));
+                    writer.newLine();
+                    patient = reader.readPatient();
                 }
-            }
-            catch (XMLStreamException e) {
-                throw new IOException("Unable to create XML reader", e);
             }
         }
     }
 
+    public static NaaccrDictionary getStandardDictionary(){
+        try {
+            URL standardDiciontaryUrl = Thread.currentThread().getContextClassLoader().getResource("fabian/naaccr-dictionary-v14.csv");
+            NaaccrDictionary dictionary =  DictionaryUtils.readDictionary(standardDiciontaryUrl, DictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
+            Collections.sort(dictionary.getItems(), new Comparator<NaaccrDictionaryItem>() {
+                @Override
+                public int compare(NaaccrDictionaryItem o1, NaaccrDictionaryItem o2) {
+                    return o1.getStartColumn().compareTo(o2.getStartColumn());
+                }
+            });
+            return dictionary;
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Unable to get standard dictionary!", e);
+        }
+    }
+    
     private static String getRecordTypeFromFormat(String format) throws IOException {
         String recordType;
         if (format.endsWith("-abstract"))
@@ -164,46 +147,83 @@ public class XmlUtils {
             throw new IOException("Invalid file format: " + format);
         return recordType;
     }
-
-    private static Map<String, List<NaaccrDictionaryItem>> buildItemLists(String format) throws IOException {
-
-        // get the dictionary 
-        URL standardDiciontaryUrl = Thread.currentThread().getContextClassLoader().getResource("fabian/naaccr-dictionary-v14.csv");
-        NaaccrDictionary dictionary = DictionaryUtils.readDictionary(standardDiciontaryUrl, DictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
-
-        // split the items by XML level
-        List<NaaccrDictionaryItem> rootItems = new ArrayList<>(), patItems = new ArrayList<>(), tumorItems = new ArrayList<>();
-        for (NaaccrDictionaryItem item : dictionary.getItems().values()) {
-            if (item.getRecordType().contains(getRecordTypeFromFormat(format))) {
-                if (NAACCR_XML_TAG_ROOT.equals(item.getParentElement()))
-                    rootItems.add(item);
-                else if (NAACCR_XML_TAG_PATIENT.equals(item.getParentElement()))
-                    patItems.add(item);
-                else if (NAACCR_XML_TAG_TUMOR.equals(item.getParentElement()))
-                    tumorItems.add(item);
-                else
-                    throw new IOException("Unsupported parent element: " + item.getParentElement());
+    
+    public static Patient createPatientFromLine(String line, String format, NaaccrDictionary dictionary) throws IOException {
+        Patient patient = new Patient();
+        Tumor tumor = new Tumor();
+        patient.getTumors().add(tumor);
+        
+        String recType = getRecordTypeFromFormat(format);
+        
+        for (NaaccrDictionaryItem itemDef : dictionary.getItems()) {
+            if (itemDef.getRecordTypes().contains(recType)) {
+                int start = itemDef.getStartColumn();
+                int end = start + itemDef.getLength() - 1;
+                if (end <= line.length()) {
+                    String value = line.substring(start, end).trim();
+                    if (!value.isEmpty()) {
+                        Item item = new Item();
+                        item.setNum(itemDef.getNumber());
+                        item.setValue(value);
+                        if (NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentElement()))
+                            patient.getItems().add(item);
+                        else if (NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentElement()))
+                            tumor.getItems().add(item);
+                        else
+                            throw new IOException("Unsupported parent element: " + itemDef.getParentElement());
+                    }
+                }
             }
         }
+        
+        return patient;
+    }
 
-        // sort the list of items by their starting columns
-        Comparator<NaaccrDictionaryItem> comparator = new Comparator<NaaccrDictionaryItem>() {
-            @Override
-            public int compare(NaaccrDictionaryItem o1, NaaccrDictionaryItem o2) {
-                return o1.getStartColumn().compareTo(o2.getStartColumn());
+    public static String createLineFromPatient(Patient patient, String format, NaaccrDictionary dictionary) throws IOException {
+        StringBuilder line = new StringBuilder();
+        
+        String recType = getRecordTypeFromFormat(format);
+
+        int currentIndex = 1;
+        for (NaaccrDictionaryItem itemDef : dictionary.getItems()) {
+            if (itemDef.getStartColumn() != null && itemDef.getLength() != null && itemDef.getRecordTypes().contains(recType)) {
+                int start = itemDef.getStartColumn();
+                int length = itemDef.getLength();
+                int end = start + length - 1;
+
+                // adjust for the "leading" gap
+                if (start > currentIndex)
+                    for (int i = 0; i < start - currentIndex; i++)
+                        line.append(' ');
+                currentIndex = start;
+                
+                Item item;
+                if (NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentElement()))
+                    item = patient.getItemByNumber(itemDef.getNumber());
+                else if (NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentElement()))
+                    item = patient.getTumors().get(0).getItemByNumber(itemDef.getNumber());
+                else
+                    throw new IOException("Unsupported parent element: " + itemDef.getParentElement());
+                
+                if (item != null) {
+                    String value = item.getValue();
+                    if (value != null) {
+                        if (value.length() > length)
+                            value = value.substring(0, length);
+                        // TODO add more validation here
+                        line.append(value);
+                        currentIndex = start + value.length();
+                    }
+                }
+
+                // adjust for the "trailing" gap
+                if (currentIndex <= end)
+                    for (int i = 0; i < end - currentIndex + 1; i++)
+                        line.append(' ');
+                currentIndex = end + 1;
             }
-        };
-        Collections.sort(rootItems, comparator);
-        Collections.sort(patItems, comparator);
-        Collections.sort(tumorItems, comparator);
-
-        // crate final data structure
-        Map<String, List<NaaccrDictionaryItem>> result = new HashMap<>();
-        result.put(NAACCR_XML_TAG_ROOT, rootItems);
-        result.put(NAACCR_XML_TAG_PATIENT, patItems);
-        result.put(NAACCR_XML_TAG_TUMOR, tumorItems);
-
-        return result;
+        }
+        return line.toString();
     }
 
     private static InputStream createInputStream(File file) throws IOException {
@@ -224,28 +244,11 @@ public class XmlUtils {
             os = new GZIPOutputStream(os);
         else if (file.getName().endsWith(".xz")) {
             LZMA2Options options = new LZMA2Options();
-            options.setPreset(1); // this makes a huge difference in terms of time vs size, I think it should be exposed to the user...
+            options.setPreset(3); // this makes a huge difference in terms of time vs size, I think it should be exposed to the user...
             os = new XZOutputStream(os, options);
         }
 
         return os;
-    }
-
-    // TODO FPD don't think this will actually be needed...
-    private static void writeXmlBlock(List<NaaccrDictionaryItem> items, String line, PrettyPrintWriter writer) {
-        for (NaaccrDictionaryItem item : items) {
-            int start = item.getStartColumn();
-            int end = start + item.getLength() - 1;
-            if (end <= line.length()) {
-                String value = line.substring(start, end).trim();
-                if (!value.isEmpty()) {
-                    writer.startNode("Item");
-                    writer.addAttribute("num", item.getNumber().toString());
-                    writer.setValue(value);
-                    writer.endNode();
-                }
-            }
-        }
     }
 
     public static XStream getXStream() {
@@ -290,9 +293,15 @@ public class XmlUtils {
     // testing method, will be removed eventually...
     public static void main(String[] args) throws Exception {
         File inputFile = new File(System.getProperty("user.dir") + "/src/main/resources/data/fake-naaccr14inc-10000-rec.txt.gz");
-        File outputFile = new File(System.getProperty("user.dir") + "/build/test.xml.xz");
+        File outputFile = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
         long start = System.currentTimeMillis();
         flatToXml(inputFile, outputFile, NAACCR_FILE_FORMAT_14_INCIDENCE);
-        System.out.println("Done in " + (System.currentTimeMillis() - start) + "ms");
+        System.out.println("Done flat to XML in " + (System.currentTimeMillis() - start) + "ms");
+
+        inputFile = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
+        outputFile = new File(System.getProperty("user.dir") + "/build/test.txt.gz");
+        start = System.currentTimeMillis();
+        xmlToFlat(inputFile, outputFile, NAACCR_FILE_FORMAT_14_INCIDENCE);
+        System.out.println("Done XML to flat in " + (System.currentTimeMillis() - start) + "ms");        
     }
 }

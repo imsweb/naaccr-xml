@@ -11,18 +11,20 @@ import org.naaccr.xml.entity.Patient;
 
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
-public class PatientWriter {
+public class PatientXmlWriter implements AutoCloseable {
 
     private ObjectOutputStream _oos;
 
-    public PatientWriter(Writer writer) throws IOException {
+    public PatientXmlWriter(Writer writer) throws IOException {
         _oos = XmlUtils.getXStream().createObjectOutputStream(new PrettyPrintWriter(writer), "NaaccrDataExchange");
+        writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));
     }
 
     public void writePatient(Patient patient) throws IOException {
         _oos.writeObject(patient);
     }
 
+    @Override
     public void close() throws IOException {
         _oos.close();
     }

@@ -3,117 +3,117 @@
  */
 package org.naaccr.xml.entity.dictionary;
 
-import java.util.List;
+import java.util.Set;
 
 public class NaaccrDictionaryItem {
 
-    private Integer _number;
+    private Integer number;
     
-    private String _name;
+    private String name;
     
-    private Integer _startColumn;
+    private Integer startColumn;
     
-    private Integer _length;
+    private Integer length;
     
-    private String _section;
+    private String section;
     
-    private List<String> _recordType;
+    private Set<String> recordTypes;
     
-    private String _sourceOfStandard;
+    private String sourceOfStandard;
     
-    private String _elementName;
+    private String elementName;
     
-    private String _parentElement;
+    private String parentElement;
     
-    private String _regexValidation;
+    private String regexValidation;
     
-    private String _dataType;
+    private String dataType;
 
     public Integer getNumber() {
-        return _number;
+        return number;
     }
 
-    public void setNumber(Integer number) {
-        _number = number;
+    public void setNumber(Integer val) {
+        number = val;
     }
 
     public String getName() {
-        return _name;
+        return name;
     }
 
-    public void setName(String name) {
-        _name = name;
+    public void setName(String val) {
+        name = val;
     }
 
     public Integer getStartColumn() {
-        return _startColumn;
+        return startColumn;
     }
 
-    public void setStartColumn(Integer startColumn) {
-        _startColumn = startColumn;
+    public void setStartColumn(Integer val) {
+        startColumn = val;
     }
 
     public Integer getLength() {
-        return _length;
+        return length;
     }
 
-    public void setLength(Integer length) {
-        _length = length;
+    public void setLength(Integer val) {
+        length = val;
     }
 
     public String getSection() {
-        return _section;
+        return section;
     }
 
-    public void setSection(String section) {
-        _section = section;
+    public void setSection(String val) {
+        section = val;
     }
 
-    public List<String> getRecordType() {
-        return _recordType;
+    public Set<String> getRecordTypes() {
+        return recordTypes;
     }
 
-    public void setRecordType(List<String> recordType) {
-        _recordType = recordType;
+    public void setRecordTypes(Set<String> val) {
+        recordTypes = val;
     }
 
     public String getSourceOfStandard() {
-        return _sourceOfStandard;
+        return sourceOfStandard;
     }
 
-    public void setSourceOfStandard(String sourceOfStandard) {
-        _sourceOfStandard = sourceOfStandard;
+    public void setSourceOfStandard(String val) {
+        sourceOfStandard = val;
     }
 
     public String getElementName() {
-        return _elementName;
+        return elementName;
     }
 
-    public void setElementName(String elementName) {
-        _elementName = elementName;
+    public void setElementName(String val) {
+        elementName = val;
     }
 
     public String getParentElement() {
-        return _parentElement;
+        return parentElement;
     }
 
-    public void setParentElement(String parentElement) {
-        _parentElement = parentElement;
+    public void setParentElement(String val) {
+        parentElement = val;
     }
 
     public String getRegexValidation() {
-        return _regexValidation;
+        return regexValidation;
     }
 
-    public void setRegexValidation(String regexValidation) {
-        _regexValidation = regexValidation;
+    public void setRegexValidation(String val) {
+        regexValidation = val;
     }
 
     public String getDataType() {
-        return _dataType;
+        return dataType;
     }
 
-    public void setDataType(String dataType) {
-        _dataType = dataType;
+    public void setDataType(String val) {
+        dataType = val;
     }
 }

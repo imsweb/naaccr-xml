@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.HashSet;
 
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
@@ -57,7 +57,6 @@ public class DictionaryUtils {
     
     private static NaaccrDictionary readDictionaryFromCsv(Reader reader) throws IOException {
         NaaccrDictionary dictionary = new NaaccrDictionary();
-        dictionary.setItems(new HashMap<Integer, NaaccrDictionaryItem>());
 
         try (CSVReader csvReader = new CSVReader(reader)) {
             for (String[] line : csvReader.readAll()) {
@@ -74,14 +73,14 @@ public class DictionaryUtils {
                 item.setStartColumn(Integer.valueOf(line[2]));
                 item.setLength(Integer.valueOf(line[3]));
                 item.setSection(line[4]);
-                item.setRecordType(Arrays.asList(line[5].split(",")));
+                item.setRecordTypes(new HashSet<>(Arrays.asList(line[5].split(","))));
                 item.setSourceOfStandard(line[6]);
                 item.setElementName(line[7]);
                 item.setParentElement(line[8]);
                 item.setRegexValidation(line[9]);
                 item.setDataType(line[10]);
                 
-                dictionary.getItems().put(item.getNumber(), item);
+                dictionary.getItems().add(item);
             }
         }
         
