@@ -62,7 +62,7 @@ public class XmlUtils {
      * @param flatFile source flat data file, must exists
      * @param xmlFile target XML data file
      * @param format expected NAACCR format
-     * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary) 
+     * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
      * @throws IOException
      */
     public static void flatToXml(File flatFile, File xmlFile, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
@@ -93,7 +93,7 @@ public class XmlUtils {
      * @param xmlFile source XML data file, must exists
      * @param flatFile target flat data file
      * @param format expected NAACCR format
-     * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary) 
+     * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
      * @throws IOException
      */
     public static void xmlToFlat(File xmlFile, File flatFile, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
@@ -198,7 +198,7 @@ public class XmlUtils {
                 int start = itemDef.getStartColumn();
                 int length = itemDef.getLength();
                 int end = start + length - 1;
-                
+
                 // adjust for the "leading" gap
                 if (start > currentIndex)
                     for (int i = 0; i < start - currentIndex; i++)
@@ -258,7 +258,7 @@ public class XmlUtils {
         if (currentIndex <= dictionary.getLineLength())
             for (int i = 0; i < dictionary.getLineLength() - currentIndex + 1; i++)
                 line.append(' ');
-        
+
         return line.toString();
     }
 
@@ -348,23 +348,19 @@ public class XmlUtils {
 
         URL myDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("fabian/fab-dictionary.csv");
         NaaccrDictionary myDictionary = DictionaryUtils.readDictionary(myDictionaryUrl, DictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
-        
-        /**
+
         File inputFile = new File(System.getProperty("user.dir") + "/src/main/resources/data/fake-naaccr14inc-10000-rec.txt.gz");
         File outputFile = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
         long start = System.currentTimeMillis();
-        flatToXml(inputFile, outputFile, NAACCR_FILE_FORMAT_14_INCIDENCE);
-        System.out.println("Done flat to XML in " + (System.currentTimeMillis() - start) + "ms");
-         */
+        flatToXml(inputFile, outputFile, NAACCR_FILE_FORMAT_14_INCIDENCE, null);
+        System.out.println("Done translating flat-file to XML (10,000 records) using standard dictionary in " + (System.currentTimeMillis() - start) + "ms - see 'test.xml.gz'");
 
-        /**
-         File inputFile2 = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
-         File outputFile2 = new File(System.getProperty("user.dir") + "/build/test.txt.gz");
-         long start2 = System.currentTimeMillis();
-         xmlToFlat(inputFile2, outputFile2, NAACCR_FILE_FORMAT_14_INCIDENCE, null);
-         System.out.println("Done XML to flat in " + (System.currentTimeMillis() - start2) + "ms");
-         */
-        
+        File inputFile2 = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
+        File outputFile2 = new File(System.getProperty("user.dir") + "/build/test.txt.gz");
+        long start2 = System.currentTimeMillis();
+        xmlToFlat(inputFile2, outputFile2, NAACCR_FILE_FORMAT_14_INCIDENCE, null);
+        System.out.println("Done translation XML back to flat-file (10,000 records) using standard dictionary in " + (System.currentTimeMillis() - start2) + "ms - see 'test.txt.gz'");
+
         Patient patient = new Patient();
         patient.getItems().add(new Item("nameLast", "DEPRY"));
         patient.getItems().add(new Item("nameFirst", "FABIAN"));
@@ -375,6 +371,8 @@ public class XmlUtils {
         PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(outputFile3), NAACCR_FILE_FORMAT_14_ABSTRACT, myDictionary);
         writer.writePatient(patient);
         writer.close();
+        System.out.println("Done creating XML file using non-standard items (item referenced by ID) - see 'user-dictionary-test-names.xml'");
+        
         patient = new Patient();
         patient.getItems().add(new Item(2230, "DEPRY"));
         patient.getItems().add(new Item(2240, "FABIAN"));
@@ -385,6 +383,8 @@ public class XmlUtils {
         writer = new PatientXmlWriter(new FileWriter(outputFile3), NAACCR_FILE_FORMAT_14_ABSTRACT, myDictionary);
         writer.writePatient(patient);
         writer.close();
+        System.out.println("Done creating XML file using non-standard items (item referenced by number) - see 'user-dictionary-test-numbers.xml'");
+        
         patient.getItems().add(new Item("recordType", "A"));
         patient.getItems().add(new Item("naaccrRecordVersion", "140"));
         outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test.txt");
@@ -393,6 +393,6 @@ public class XmlUtils {
         writer3.write(createLineFromPatient(patient, dictionary));
         writer3.newLine();
         writer3.close();
-        
+        System.out.println("Done creating flat-file using non-standard items in State Requestor Items - see 'user-dictionary-test.txt'");
     }
 }
