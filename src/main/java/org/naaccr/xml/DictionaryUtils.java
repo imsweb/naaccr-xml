@@ -86,6 +86,9 @@ public class DictionaryUtils {
                     item.setSection(line[10]);
                 if (line.length > 11 && line[11] != null && !line[11].isEmpty())
                     item.setSourceOfStandard(line[11]);
+                
+                if (item.getRecordTypes() == null)
+                    item.setRecordTypes("A,M,C,I");
 
                 dictionary.getItems().add(item);
             }

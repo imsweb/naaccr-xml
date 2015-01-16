@@ -14,22 +14,39 @@ import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
 public class RuntimeNaaccrDictionary {
-
-
+    
     private List<RuntimeNaaccrDictionaryItem> items;
+    
+    private String recordType;
+    
+    private String naaccrVersion;
+    
+    private int lineLength;
 
     public RuntimeNaaccrDictionary(String format, NaaccrDictionary standardDictionary, NaaccrDictionary userDictionary) {
         
         // get the record type from the format
-        String recordType;
-        if (format.endsWith("-abstract"))
+        if (format.endsWith("-abstract")) {
             recordType = "A";
-        else if (format.endsWith("-modified"))
+            lineLength = 22824; // this will have to change when we start supporting more formats
+        }
+        else if (format.endsWith("-modified")) {
             recordType = "M";
-        else if (format.endsWith("-confidential"))
+            lineLength = 22824;
+        }
+        else if (format.endsWith("-confidential")) {
             recordType = "C";
-        else if (format.endsWith("-incidence"))
+            lineLength = 5564;
+        }
+        else if (format.endsWith("-incidence")) {
             recordType = "I";
+            lineLength = 3339;
+        }
+        else
+            throw new RuntimeException("Invalid file format: " + format);
+        
+        if (format.startsWith("naaccr-14"))
+            naaccrVersion = "140";
         else
             throw new RuntimeException("Invalid file format: " + format);
 
@@ -74,6 +91,18 @@ public class RuntimeNaaccrDictionary {
         if (items == null)
             items = new ArrayList<>();
         return items;
+    }
+    
+    public String getRecordType() {
+        return recordType;
+    }
+    
+    public String getNaaccrVersion() {
+        return naaccrVersion;
+    }
+    
+    public int getLineLength() {
+        return lineLength;
     }
     
 }

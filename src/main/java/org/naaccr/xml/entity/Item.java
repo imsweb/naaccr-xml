@@ -10,6 +10,19 @@ public class Item {
     private Integer num;
     
     private String value;
+    
+    public Item() {
+    }
+
+    public Item(String idVal, String val) {
+        id = idVal;
+        value = val;
+    }
+    
+    public Item(Integer numVal, String val) {
+        num = numVal;
+        value = val;
+    }
 
     public String getId() {
         return id;
