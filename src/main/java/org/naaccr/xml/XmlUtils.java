@@ -112,6 +112,7 @@ public class XmlUtils {
                     writer.write(createLineFromPatient(patient, dictionary));
                     writer.newLine();
                     patient = reader.readPatient();
+                    break;
                 }
             }
         }
@@ -196,6 +197,8 @@ public class XmlUtils {
                 int length = itemDef.getLength();
                 int end = start + length - 1;
 
+                System.out.println("Start: " + start + "; end: " + end + "; length: " + length);
+                
                 // adjust for the "leading" gap
                 if (start > currentIndex)
                     for (int i = 0; i < start - currentIndex; i++)
@@ -220,9 +223,9 @@ public class XmlUtils {
                             if (value == null)
                                 value = "";
                             if (value.length() > subLength)
-                                throw new IOException("value too long for field '" + subItemDef.getId() + "'");
+                                value = value.substring(0, subLength);
                             line.append(value);
-                            currentIndex = subEnd + 1;
+                            currentIndex = subStart + value.length();
                         }
                     }
 
@@ -256,9 +259,9 @@ public class XmlUtils {
     private static String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, Patient patient, Tumor tumor) throws IOException {
         Item item;
         if (NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
-            item = patient.getItemById(itemDef.getId());
+            item = patient.getItem(itemDef.getId(), itemDef.getNumber());
         else if (NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
-            item = tumor.getItemById(itemDef.getId()); // TODO don't use just the first tumor, create one line per
+            item = tumor.getItem(itemDef.getId(), itemDef.getNumber()); // TODO don't use just the first tumor, create one line per
         else
             throw new IOException("Unsupported parent element: " + itemDef.getParentXmlElement());
 
@@ -336,15 +339,17 @@ public class XmlUtils {
 
     // testing method, will be removed eventually...
     public static void main(String[] args) throws Exception {
+        /**
         File inputFile = new File(System.getProperty("user.dir") + "/src/main/resources/data/fake-naaccr14inc-10000-rec.txt.gz");
         File outputFile = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
         long start = System.currentTimeMillis();
         flatToXml(inputFile, outputFile, NAACCR_FILE_FORMAT_14_INCIDENCE);
         System.out.println("Done flat to XML in " + (System.currentTimeMillis() - start) + "ms");
+         */
 
-         inputFile = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
-         outputFile = new File(System.getProperty("user.dir") + "/build/test.txt.gz");
-         start = System.currentTimeMillis();
+         File inputFile = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
+         File outputFile = new File(System.getProperty("user.dir") + "/build/test.txt.gz");
+         long start = System.currentTimeMillis();
          xmlToFlat(inputFile, outputFile, NAACCR_FILE_FORMAT_14_INCIDENCE);
          System.out.println("Done XML to flat in " + (System.currentTimeMillis() - start) + "ms");
     }

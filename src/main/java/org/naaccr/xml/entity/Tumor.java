@@ -44,11 +44,10 @@ public class Tumor {
         return _cachedByNumber.get(number);
     }
 
-    public Item getItem(Object key) {
-        if (key instanceof String)
-            return getItemById((String)key);
-        if (key instanceof Integer)
-            return getItemByNumber((Integer)key);
-        return null;
+    public Item getItem(String id, Integer number) {
+        Item item = getItemById(id);
+        if (item == null)
+            item = getItemByNumber(number);
+        return item;
     }
 }
