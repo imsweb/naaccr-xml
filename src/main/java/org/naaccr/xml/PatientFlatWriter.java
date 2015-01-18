@@ -26,7 +26,7 @@ public class PatientFlatWriter implements AutoCloseable {
 
     public PatientFlatWriter(Writer writer, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
         _writer = new BufferedWriter(writer);
-        _dictionary = new RuntimeNaaccrDictionary(format, XmlUtils.getStandardDictionary(), nonStandardDictionary);
+        _dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), nonStandardDictionary);
     }
 
     public void writePatient(Patient patient) throws IOException {
@@ -113,8 +113,8 @@ public class PatientFlatWriter implements AutoCloseable {
             }
 
             // adjust for the final "trailing" gap
-            if (currentIndex <= _dictionary.getLineLength())
-                for (int i = 0; i < _dictionary.getLineLength() - currentIndex + 1; i++)
+            if (currentIndex <= _dictionary.getFormat().getLineLength())
+                for (int i = 0; i < _dictionary.getFormat().getLineLength() - currentIndex + 1; i++)
                     line.append(' ');
             
             lines.add(line.toString());
@@ -126,9 +126,9 @@ public class PatientFlatWriter implements AutoCloseable {
     protected String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, Patient patient, Tumor tumor) throws IOException {
         Item item;
         
-        if (XmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
+        if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
             item = patient.getItem(itemDef.getId(), itemDef.getNumber());
-        else if (XmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
+        else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
             item = tumor.getItem(itemDef.getId(), itemDef.getNumber());
         else
             throw new IOException("Unsupported parent element: " + itemDef.getParentXmlElement());
@@ -147,7 +147,7 @@ public class PatientFlatWriter implements AutoCloseable {
         patient.getTumors().add(new Tumor());
         patient.getTumors().get(1).getItems().add(new Item("primarySite", "C447"));
         File outputFile = new File(System.getProperty("user.dir") + "/build/write-flat-test.txt");
-        PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(outputFile), XmlUtils.NAACCR_FILE_FORMAT_14_INCIDENCE, null);
+        PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(outputFile), NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
         writer.writePatient(patient);
         writer.close();
     }

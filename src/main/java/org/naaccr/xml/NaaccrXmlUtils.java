@@ -35,13 +35,7 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
 // TODO add data schema, maybe generate the entiteis from JAXB, not sure it's necessary though...
 // TODO how about using the XStream.toXML() and XStream.fromXML()?
 
-public class XmlUtils {
-
-    // supported NAACCR formats
-    public static String NAACCR_FILE_FORMAT_14_ABSTRACT = "naaccr-14-abstract";
-    public static String NAACCR_FILE_FORMAT_14_MODIFIED = "naaccr-14-modified";
-    public static String NAACCR_FILE_FORMAT_14_CONFIDENTIAL = "naaccr-14-confidential";
-    public static String NAACCR_FILE_FORMAT_14_INCIDENCE = "naaccr-14-incidence";
+public class NaaccrXmlUtils {
 
     // structure tags in the XML
     public static String NAACCR_XML_TAG_ROOT = "NaaccrDataExchange";
@@ -112,7 +106,7 @@ public class XmlUtils {
     public static NaaccrDictionary getStandardDictionary() {
         try {
             URL standardDiciontaryUrl = Thread.currentThread().getContextClassLoader().getResource("fabian/naaccr-dictionary-v14.csv");
-            return DictionaryUtils.readDictionary(standardDiciontaryUrl, DictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
+            return NaaccrDictionaryUtils.readDictionary(standardDiciontaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
         }
         catch (IOException e) {
             throw new RuntimeException("Unable to get standard dictionary!", e);
@@ -139,9 +133,9 @@ public class XmlUtils {
 
     public static XStream getXStream() {
         XStream xstream = new XStream(new StaxDriver());
-        xstream.alias("Patient", Patient.class);
-        xstream.alias("Tumor", Tumor.class);
-        xstream.alias("Item", Item.class);
+        xstream.alias(NAACCR_XML_TAG_PATIENT, Patient.class);
+        xstream.alias(NAACCR_XML_TAG_TUMOR, Tumor.class);
+        xstream.alias(NAACCR_XML_TAG_ITEM, Item.class);
         xstream.addImplicitCollection(Patient.class, "items", Item.class);
         xstream.addImplicitCollection(Patient.class, "tumors", Tumor.class);
         xstream.addImplicitCollection(Tumor.class, "items", Item.class);
@@ -185,18 +179,18 @@ public class XmlUtils {
     public static void main(String[] args) throws Exception {
 
         URL myDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("fabian/fab-dictionary.csv");
-        NaaccrDictionary myDictionary = DictionaryUtils.readDictionary(myDictionaryUrl, DictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
+        NaaccrDictionary myDictionary = NaaccrDictionaryUtils.readDictionary(myDictionaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
 
         File inputFile = new File(System.getProperty("user.dir") + "/src/main/resources/data/fake-naaccr14inc-10000-rec.txt.gz");
         File outputFile = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
         long start = System.currentTimeMillis();
-        flatToXml(inputFile, outputFile, NAACCR_FILE_FORMAT_14_INCIDENCE, null);
+        flatToXml(inputFile, outputFile, NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
         System.out.println("Done translating flat-file to XML (10,000 records) using standard dictionary in " + (System.currentTimeMillis() - start) + "ms - see 'test.xml.gz'");
 
         File inputFile2 = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
         File outputFile2 = new File(System.getProperty("user.dir") + "/build/test.txt.gz");
         long start2 = System.currentTimeMillis();
-        xmlToFlat(inputFile2, outputFile2, NAACCR_FILE_FORMAT_14_INCIDENCE, null);
+        xmlToFlat(inputFile2, outputFile2, NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
         System.out.println("Done translation XML back to flat-file (10,000 records) using standard dictionary in " + (System.currentTimeMillis() - start2) + "ms - see 'test.txt.gz'");
 
         Patient patient = new Patient();
@@ -206,7 +200,7 @@ public class XmlUtils {
         patient.getTumors().get(0).getItems().add(new Item("primarySite", "C619"));
         patient.getTumors().get(0).getItems().add(new Item("hosptialAbstractorId", "FDEPRY"));
         File outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test-names.xml");
-        PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(outputFile3), NAACCR_FILE_FORMAT_14_ABSTRACT, myDictionary);
+        PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(outputFile3), NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, myDictionary);
         writer.writePatient(patient);
         writer.close();
         System.out.println("Done creating XML file using non-standard items (item referenced by ID) - see 'user-dictionary-test-names.xml'");
@@ -218,7 +212,7 @@ public class XmlUtils {
         patient.getTumors().get(0).getItems().add(new Item(400, "C619"));
         patient.getTumors().get(0).getItems().add(new Item(10001, "FDEPRY"));
         outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test-numbers.xml");
-        writer = new PatientXmlWriter(new FileWriter(outputFile3), NAACCR_FILE_FORMAT_14_ABSTRACT, myDictionary);
+        writer = new PatientXmlWriter(new FileWriter(outputFile3), NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, myDictionary);
         writer.writePatient(patient);
         writer.close();
         System.out.println("Done creating XML file using non-standard items (item referenced by number) - see 'user-dictionary-test-numbers.xml'");
@@ -226,7 +220,7 @@ public class XmlUtils {
         patient.getItems().add(new Item("recordType", "A"));
         patient.getItems().add(new Item("naaccrRecordVersion", "140"));
         outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test.txt");
-        PatientFlatWriter writer3 = new PatientFlatWriter(new FileWriter(outputFile3), NAACCR_FILE_FORMAT_14_ABSTRACT, myDictionary);
+        PatientFlatWriter writer3 = new PatientFlatWriter(new FileWriter(outputFile3), NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, myDictionary);
         writer3.writePatient(patient);
         writer3.close();
         System.out.println("Done creating flat-file using non-standard items in State Requestor Items - see 'user-dictionary-test.txt'");

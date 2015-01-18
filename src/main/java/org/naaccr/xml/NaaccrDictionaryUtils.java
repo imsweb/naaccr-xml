@@ -15,7 +15,7 @@ import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class DictionaryUtils {
+public class NaaccrDictionaryUtils {
 
     public static final String NAACCR_DICTIONARY_FORMAT_CSV = "csv";
 

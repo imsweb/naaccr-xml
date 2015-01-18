@@ -10,61 +10,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.naaccr.xml.NaaccrFormat;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
 public class RuntimeNaaccrDictionary {
+
+    private NaaccrFormat _format;
     
     private List<RuntimeNaaccrDictionaryItem> items;
-    
-    private String recordType;
-    
-    private String naaccrVersion;
-    
-    private int lineLength;
 
     public RuntimeNaaccrDictionary(String format, NaaccrDictionary standardDictionary, NaaccrDictionary userDictionary) {
-        
-        // get the record type from the format
-        if (format.endsWith("-abstract")) {
-            recordType = "A";
-            lineLength = 22824; // this will have to change when we start supporting more formats
-        }
-        else if (format.endsWith("-modified")) {
-            recordType = "M";
-            lineLength = 22824;
-        }
-        else if (format.endsWith("-confidential")) {
-            recordType = "C";
-            lineLength = 5564;
-        }
-        else if (format.endsWith("-incidence")) {
-            recordType = "I";
-            lineLength = 3339;
-        }
-        else
-            throw new RuntimeException("Invalid file format: " + format);
-        
-        if (format.startsWith("naaccr-14"))
-            naaccrVersion = "140";
-        else
-            throw new RuntimeException("Invalid file format: " + format);
+
+        _format = new NaaccrFormat(format);
 
         Map<String, RuntimeNaaccrDictionaryItem> runtimeItems = new HashMap<>();
         for (NaaccrDictionaryItem item : standardDictionary.getItems())
-            if (item.getRecordTypes().contains(recordType) && item.getParentItemId() == null) 
+            if (item.getRecordTypes().contains(_format.getRecordType()) && item.getParentItemId() == null) 
                 runtimeItems.put(item.getId(), new RuntimeNaaccrDictionaryItem(item));
         for (NaaccrDictionaryItem item : standardDictionary.getItems())
-            if (item.getRecordTypes().contains(recordType) && item.getParentItemId() != null)
+            if (item.getRecordTypes().contains(_format.getRecordType()) && item.getParentItemId() != null)
                 runtimeItems.get(item.getParentItemId()).getSubItems().add(new RuntimeNaaccrDictionaryItem(item));
         
-        // TODO a user-defined field should never have the same id or number as a standard item...
+        // TODO a user-defined field should never have the same id or number as a standard item; there is all kind of validation we should be doing here...
         if (userDictionary != null) {
             for (NaaccrDictionaryItem item : userDictionary.getItems())
-                if (item.getRecordTypes().contains(recordType) && item.getParentItemId() == null)
+                if (item.getRecordTypes().contains(_format.getRecordType()) && item.getParentItemId() == null)
                     runtimeItems.put(item.getId(), new RuntimeNaaccrDictionaryItem(item));
             for (NaaccrDictionaryItem item : userDictionary.getItems())
-                if (item.getRecordTypes().contains(recordType) && item.getParentItemId() != null)
+                if (item.getRecordTypes().contains(_format.getRecordType()) && item.getParentItemId() != null)
                     runtimeItems.get(item.getParentItemId()).getSubItems().add(new RuntimeNaaccrDictionaryItem(item));
         }
         
@@ -87,22 +61,13 @@ public class RuntimeNaaccrDictionary {
             Collections.sort(item.getSubItems(), comparator);
     }
 
+    public NaaccrFormat getFormat() {
+        return _format;
+    }
+
     public List<RuntimeNaaccrDictionaryItem> getItems() {
         if (items == null)
             items = new ArrayList<>();
         return items;
     }
-    
-    public String getRecordType() {
-        return recordType;
-    }
-    
-    public String getNaaccrVersion() {
-        return naaccrVersion;
-    }
-    
-    public int getLineLength() {
-        return lineLength;
-    }
-    
 }

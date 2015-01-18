@@ -30,7 +30,7 @@ public class PatientFlatReader implements AutoCloseable {
 
     public PatientFlatReader(Reader reader, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
         _reader = new LineNumberReader(reader);
-        _dictionary = new RuntimeNaaccrDictionary(format, XmlUtils.getStandardDictionary(), nonStandardDictionary);
+        _dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), nonStandardDictionary);
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
             if (item.getNumber() != null && item.getNumber().equals(20)) {
                 _patientIdNumberItem = item;
@@ -92,14 +92,14 @@ public class PatientFlatReader implements AutoCloseable {
         // create the patient using the first line only (other lines are supposed to be identical for patient items)
         Patient patient = new Patient();
         for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
-            if (XmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
+            if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
                 patient.getItems().addAll(createItemsFromLine(lines.get(0), itemDef));
 
         // create the tumors, one per line
         for (String line : lines) {
             Tumor tumor = new Tumor();
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
-                if (XmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
                     tumor.getItems().addAll(createItemsFromLine(lines.get(0), itemDef));
             patient.getTumors().add(tumor);
         }
@@ -153,7 +153,7 @@ public class PatientFlatReader implements AutoCloseable {
     // TODO remove this testing method
     public static void main(String[] args) throws IOException {
         File inputFile = new File(System.getProperty("user.dir") + "/src/main/resources/data/fake-naaccr14inc-2-rec.txt");
-        PatientFlatReader reader = new PatientFlatReader(new FileReader(inputFile), XmlUtils.NAACCR_FILE_FORMAT_14_INCIDENCE, null);
+        PatientFlatReader reader = new PatientFlatReader(new FileReader(inputFile), NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
         int count = 0;
         Patient patient = reader.readPatient();
         while (patient != null) {

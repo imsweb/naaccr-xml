@@ -19,8 +19,8 @@ public class PatientXmlReader implements AutoCloseable {
     private RuntimeNaaccrDictionary _dictionary;
 
     public PatientXmlReader(Reader reader, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
-        _ois = XmlUtils.getXStream().createObjectInputStream(reader);
-        _dictionary = new RuntimeNaaccrDictionary(format, XmlUtils.getStandardDictionary(), nonStandardDictionary);
+        _ois = NaaccrXmlUtils.getXStream().createObjectInputStream(reader);
+        _dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), nonStandardDictionary);
     }
 
     public Patient readPatient() throws IOException {
