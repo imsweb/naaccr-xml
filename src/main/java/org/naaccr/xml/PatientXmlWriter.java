@@ -37,7 +37,7 @@ public class PatientXmlWriter implements AutoCloseable {
                 }
             }
         };
-        _oos = NaaccrXmlUtils.getXStream().createObjectOutputStream(prettyWriter, "NaaccrDataExchange");
+        _oos = NaaccrXmlUtils.getStandardXStream().createObjectOutputStream(prettyWriter, "NaaccrDataExchange");
         
         // it's a bit manual, but I am not sure how else to do this...
         writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));

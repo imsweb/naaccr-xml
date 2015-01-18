@@ -6,13 +6,14 @@ package org.naaccr.xml;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
@@ -31,12 +32,8 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-import com.thoughtworks.xstream.io.xml.StaxDriver;
 
 // TODO have to add support for "deprecated items"
-// TODO patient should correspond to several lines and vice-versa; this is not supported right now...
-// TODO add data schema, maybe generate the entiteis from JAXB, not sure it's necessary though...
-// TODO how about using the XStream.toXML() and XStream.fromXML()?
 
 public class NaaccrXmlUtils {
 
@@ -65,8 +62,8 @@ public class NaaccrXmlUtils {
             throw new IOException("Target folder must exist");
 
         // create the reader and writer and let them do all the work!
-        try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(createOutputStream(xmlFile), StandardCharsets.UTF_8), format, nonStandardDictionary)) {
-            try (PatientFlatReader reader = new PatientFlatReader(new InputStreamReader(createInputStream(flatFile), StandardCharsets.UTF_8), format, nonStandardDictionary)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlFile), format, nonStandardDictionary)) {
+            try (PatientFlatReader reader = new PatientFlatReader(createReader(flatFile), format, nonStandardDictionary)) {
                 Patient patient = reader.readPatient();
                 while (patient != null) {
                     writer.writePatient(patient);
@@ -95,8 +92,8 @@ public class NaaccrXmlUtils {
             throw new IOException("Target folder must exist");
 
         // create the reader and writer and let them do all the work!
-        try (PatientFlatWriter writer = new PatientFlatWriter(new OutputStreamWriter(createOutputStream(flatFile), StandardCharsets.UTF_8), format, nonStandardDictionary)) {
-            try (PatientXmlReader reader = new PatientXmlReader(new InputStreamReader(createInputStream(xmlFile), StandardCharsets.UTF_8), format, nonStandardDictionary)) {
+        try (PatientFlatWriter writer = new PatientFlatWriter(createWriter(flatFile), format, nonStandardDictionary)) {
+            try (PatientXmlReader reader = new PatientXmlReader(createReader(xmlFile), format, nonStandardDictionary)) {
                 Patient patient = reader.readPatient();
                 while (patient != null) {
                     writer.writePatient(patient);
@@ -104,6 +101,26 @@ public class NaaccrXmlUtils {
                 }
             }
         }
+    }
+
+    // takes care of the file encoding and compression...
+    private static Reader createReader(File file) throws IOException {
+        InputStream is = new FileInputStream(file);
+
+        if (file.getName().endsWith(".gz"))
+            is = new GZIPInputStream(is);
+
+        return new InputStreamReader(is, StandardCharsets.UTF_8);
+    }
+
+    // takes care of the file encoding and compression...
+    private static Writer createWriter(File file) throws IOException {
+        OutputStream os = new FileOutputStream(file);
+
+        if (file.getName().endsWith(".gz"))
+            os = new GZIPOutputStream(os);
+
+        return new OutputStreamWriter(os, StandardCharsets.UTF_8);
     }
 
     /**
@@ -116,7 +133,7 @@ public class NaaccrXmlUtils {
      * @returns a <code>NaaccrDataExchange</code> object, never null
      * @throws IOException
      */
-    public static NaaccrDataExchange readerXmlFile(File xmlFile, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
+    public static NaaccrDataExchange readXmlFile(File xmlFile, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
         if (xmlFile == null)
             throw new IOException("Source XML file is required");
         if (!xmlFile.exists())
@@ -125,8 +142,8 @@ public class NaaccrXmlUtils {
             throw new IOException("File format is required");
 
         NaaccrDataExchange data;
-        try (FileReader reader = new FileReader(xmlFile)) {
-            data = (NaaccrDataExchange)getXStream().fromXML(reader);
+        try (Reader reader = createReader(xmlFile)) {
+            data = (NaaccrDataExchange)getStandardXStream().fromXML(reader);
         }
         
         // TODO use the dictionary and validate the patients
@@ -154,10 +171,10 @@ public class NaaccrXmlUtils {
         
         // TODO use the dictionary and validate the patients
         
-        try (FileWriter writer = new FileWriter(xmlFile)) {
+        try (Writer writer = createWriter(xmlFile)) {
             PrettyPrintWriter prettyWriter = new PrettyPrintWriter(writer);
             try {
-                getXStream().marshal(data, prettyWriter); // can't use xstream.toXML because it doesn't use a pretty formatting...
+                getStandardXStream().marshal(data, prettyWriter); // can't use xstream.toXML because it doesn't use a pretty formatting...
             }
             finally {
                 prettyWriter.flush();
@@ -167,6 +184,7 @@ public class NaaccrXmlUtils {
 
     public static NaaccrDictionary getStandardDictionary() {
         try {
+            // TODO finalize standard dictionary format and location...
             URL standardDiciontaryUrl = Thread.currentThread().getContextClassLoader().getResource("fabian/naaccr-dictionary-v14.csv");
             return NaaccrDictionaryUtils.readDictionary(standardDiciontaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
         }
@@ -174,36 +192,25 @@ public class NaaccrXmlUtils {
             throw new RuntimeException("Unable to get standard dictionary!", e);
         }
     }
+    
+    public static XStream getStandardXStream() {
+        XStream xstream = new XStream();
 
-    private static InputStream createInputStream(File file) throws IOException {
-        InputStream is = new FileInputStream(file);
-
-        if (file.getName().endsWith(".gz"))
-            is = new GZIPInputStream(is);
-
-        return is;
-    }
-
-    private static OutputStream createOutputStream(File file) throws IOException {
-        OutputStream os = new FileOutputStream(file);
-
-        if (file.getName().endsWith(".gz"))
-            os = new GZIPOutputStream(os);
-
-        return os;
-    }
-
-    public static XStream getXStream() {
-        XStream xstream = new XStream(new StaxDriver());
+        // tell XStream how to read/write our main entities
         xstream.alias(NAACCR_XML_TAG_ROOT, NaaccrDataExchange.class);
         xstream.alias(NAACCR_XML_TAG_PATIENT, Patient.class);
         xstream.alias(NAACCR_XML_TAG_TUMOR, Tumor.class);
         xstream.alias(NAACCR_XML_TAG_ITEM, Item.class);
+
+        // all collections should be wrap into collection tags, but it's nicer to omit them in the XML; we have to tell XStream though
         xstream.addImplicitCollection(NaaccrDataExchange.class, "patients", Patient.class);
         xstream.addImplicitCollection(Patient.class, "items", Item.class);
         xstream.addImplicitCollection(Patient.class, "tumors", Tumor.class);
         xstream.addImplicitCollection(Tumor.class, "items", Item.class);
+
+        // the item object is a bit harder to read/write, so we have to use a specific converter
         xstream.registerConverter(new ItemConverter());
+
         return xstream;
     }
 
@@ -245,7 +252,6 @@ public class NaaccrXmlUtils {
         URL myDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("fabian/fab-dictionary.csv");
         NaaccrDictionary myDictionary = NaaccrDictionaryUtils.readDictionary(myDictionaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
 
-        /**
         File inputFile = new File(System.getProperty("user.dir") + "/src/main/resources/data/fake-naaccr14inc-10000-rec.txt.gz");
         File outputFile = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
         long start = System.currentTimeMillis();
@@ -257,7 +263,6 @@ public class NaaccrXmlUtils {
         long start2 = System.currentTimeMillis();
         xmlToFlat(inputFile2, outputFile2, NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
         System.out.println("Done translation XML back to flat-file (10,000 records) using standard dictionary in " + (System.currentTimeMillis() - start2) + "ms - see 'test.txt.gz'");
-         */
 
         Patient patient = new Patient();
         patient.getItems().add(new Item("nameLast", "DEPRY"));
@@ -292,7 +297,7 @@ public class NaaccrXmlUtils {
         System.out.println("Done creating flat-file using non-standard items in State Requestor Items - see 'user-dictionary-test.txt'");
 
         File inputFile4 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test-numbers.xml");
-        NaaccrDataExchange data = readerXmlFile(inputFile4, NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, null);
+        NaaccrDataExchange data = readXmlFile(inputFile4, NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, null);
         System.out.println("Done reading 'user-dictionary-test-numbers.xml', got " + data.getPatients().size() + " patient(s)...");
         
         File outputFile5 = new File(System.getProperty("user.dir") + "/build/another-xml-test.xml");

@@ -12,6 +12,8 @@ import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 
+import com.thoughtworks.xstream.XStream;
+
 public class PatientXmlReader implements AutoCloseable {
 
     private ObjectInputStream _ois;
@@ -19,8 +21,12 @@ public class PatientXmlReader implements AutoCloseable {
     private RuntimeNaaccrDictionary _dictionary;
 
     public PatientXmlReader(Reader reader, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
+        this(NaaccrXmlUtils.getStandardXStream(), reader, format, nonStandardDictionary);
+    }
+
+    public PatientXmlReader(XStream xstream, Reader reader, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
         _dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), nonStandardDictionary);
-        _ois = NaaccrXmlUtils.getXStream().createObjectInputStream(reader);
+        _ois = xstream.createObjectInputStream(reader);
     }
 
     public Patient readPatient() throws IOException {
