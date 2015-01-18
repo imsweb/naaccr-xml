@@ -24,9 +24,9 @@ public class PatientXmlWriter implements AutoCloseable {
     private RuntimeNaaccrDictionary _dictionary;
 
     public PatientXmlWriter(Writer writer, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
-        
         _dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), nonStandardDictionary);
 
+        // by default, XStream will write the root tag, but there is no easy way to add attributes to it; this is what this code does...
         PrettyPrintWriter prettyWriter = new PrettyPrintWriter(writer) {
             @Override
             public void startNode(String name) {
@@ -39,6 +39,7 @@ public class PatientXmlWriter implements AutoCloseable {
         };
         _oos = NaaccrXmlUtils.getXStream().createObjectOutputStream(prettyWriter, "NaaccrDataExchange");
         
+        // it's a bit manual, but I am not sure how else to do this...
         writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));
     }
 
