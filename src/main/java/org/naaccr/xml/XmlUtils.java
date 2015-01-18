@@ -21,9 +21,6 @@ import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
-import org.tukaani.xz.LZMA2Options;
-import org.tukaani.xz.XZInputStream;
-import org.tukaani.xz.XZOutputStream;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
@@ -127,8 +124,6 @@ public class XmlUtils {
 
         if (file.getName().endsWith(".gz"))
             is = new GZIPInputStream(is);
-        else if (file.getName().endsWith(".xz"))
-            is = new XZInputStream(is);
 
         return is;
     }
@@ -138,11 +133,6 @@ public class XmlUtils {
 
         if (file.getName().endsWith(".gz"))
             os = new GZIPOutputStream(os);
-        else if (file.getName().endsWith(".xz")) {
-            LZMA2Options options = new LZMA2Options();
-            options.setPreset(0); // this makes a huge difference in terms of time vs size, I think it should be exposed to the user...
-            os = new XZOutputStream(os, options);
-        }
 
         return os;
     }
