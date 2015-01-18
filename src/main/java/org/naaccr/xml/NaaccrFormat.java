@@ -12,10 +12,10 @@ import java.util.List;
 public class NaaccrFormat {
 
     // format constants
-    public static String NAACCR_FORMAT_14_ABSTRACT = "naaccr-14-abstract";
-    public static String NAACCR_FORMAT_14_MODIFIED = "naaccr-14-modified";
-    public static String NAACCR_FORMAT_14_CONFIDENTIAL = "naaccr-14-confidential";
-    public static String NAACCR_FORMAT_14_INCIDENCE = "naaccr-14-incidence";
+    public static String NAACCR_FORMAT_14_ABSTRACT = "naaccr-140-abstract";
+    public static String NAACCR_FORMAT_14_MODIFIED = "naaccr-140-modified";
+    public static String NAACCR_FORMAT_14_CONFIDENTIAL = "naaccr-140-confidential";
+    public static String NAACCR_FORMAT_14_INCIDENCE = "naaccr-140-incidence";
 
     // list of supported formats
     private static final List<String> _SUPPORTED_FORMATS = new ArrayList<>();
@@ -97,7 +97,7 @@ public class NaaccrFormat {
             default:
                 formattedType = "?";
         }
-        return "NAACCR " + _naaccrVersion + " " + formattedType;
+        return "NAACCR " + _naaccrVersion.substring(0, 2) + "." + _naaccrVersion.substring(2) + " " + formattedType;
     }
 
     @Override

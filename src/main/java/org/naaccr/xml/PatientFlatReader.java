@@ -37,7 +37,6 @@ public class PatientFlatReader implements AutoCloseable {
                 break;
             }
         }
-
     }
 
     public Patient readPatient() throws IOException {

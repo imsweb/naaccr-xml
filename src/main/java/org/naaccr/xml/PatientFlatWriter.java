@@ -24,9 +24,21 @@ public class PatientFlatWriter implements AutoCloseable {
 
     protected RuntimeNaaccrDictionary _dictionary;
 
+    protected RuntimeNaaccrDictionaryItem _naaccrVersionItem, _recordTypeItem;
+
     public PatientFlatWriter(Writer writer, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
         _writer = new BufferedWriter(writer);
         _dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), nonStandardDictionary);
+        for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
+            if (item.getNumber() != null) {
+                if (item.getNumber().equals(10))
+                    _recordTypeItem = item;
+                if (item.getNumber().equals(50))
+                    _naaccrVersionItem = item;
+                if (_recordTypeItem != null && _naaccrVersionItem != null)
+                    break;
+            }
+        }
     }
 
     public void writePatient(Patient patient) throws IOException {
@@ -43,13 +55,13 @@ public class PatientFlatWriter implements AutoCloseable {
 
     protected List<String> createLinesFromPatient(Patient patient) throws IOException {
         List<String> lines = new ArrayList<>();
-        
+
         // it's possible to have a patient without any tumor; in that case, we will want to output a line...
         List<Tumor> tumors = new ArrayList<>(patient.getTumors());
         if (tumors.isEmpty())
             tumors.add(new Tumor());
-        
-        for (Tumor tumor :tumors) {
+
+        for (Tumor tumor : tumors) {
             int currentIndex = 1;
             StringBuilder line = new StringBuilder();
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
@@ -116,6 +128,12 @@ public class PatientFlatWriter implements AutoCloseable {
             if (currentIndex <= _dictionary.getFormat().getLineLength())
                 for (int i = 0; i < _dictionary.getFormat().getLineLength() - currentIndex + 1; i++)
                     line.append(' ');
+
+            // always use the format to write the NAACCR version and record type
+            if (_dictionary.getFormat().getRecordType() != null && _recordTypeItem != null)
+                line.replace(_recordTypeItem.getStartColumn() - 1, _recordTypeItem.getStartColumn() + _recordTypeItem.getLength() - 1, _dictionary.getFormat().getRecordType());
+            if (_dictionary.getFormat().getNaaccrVersion() != null && _naaccrVersionItem != null)
+                line.replace(_naaccrVersionItem.getStartColumn() - 1, _naaccrVersionItem.getStartColumn() + _naaccrVersionItem.getLength() - 1, _dictionary.getFormat().getNaaccrVersion());
             
             lines.add(line.toString());
         }
@@ -125,7 +143,7 @@ public class PatientFlatWriter implements AutoCloseable {
 
     protected String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, Patient patient, Tumor tumor) throws IOException {
         Item item;
-        
+
         if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
             item = patient.getItem(itemDef.getId(), itemDef.getNumber());
         else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
