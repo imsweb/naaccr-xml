@@ -3,7 +3,6 @@
  */
 package org.naaccr.xml;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,12 +10,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -24,8 +21,6 @@ import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
-import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
-import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
 import org.tukaani.xz.LZMA2Options;
 import org.tukaani.xz.XZInputStream;
 import org.tukaani.xz.XZOutputStream;
@@ -71,18 +66,17 @@ public class XmlUtils {
         if (!flatFile.exists())
             throw new IOException("Source flat file must exist");
         if (format == null)
-            throw new IOException("Expected NAACCR format is required");
+            throw new IOException("File format is required");
+        if (!xmlFile.getParentFile().exists())
+            throw new IOException("Target folder must exist");
 
-        // create the dictionary
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, getStandardDictionary(), nonStandardDictionary);
-
-        // create the reader and writer and translates the incoming lines into patient objects before writting those...
+        // create the reader and writer and let them do all the work!
         try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(createOutputStream(xmlFile), StandardCharsets.UTF_8), format, nonStandardDictionary)) {
-            try (LineNumberReader reader = new LineNumberReader(new InputStreamReader(createInputStream(flatFile)))) {
-                String line = reader.readLine();
-                while (line != null) {
-                    writer.writePatient(createPatientFromLine(line, dictionary));
-                    line = reader.readLine();
+            try (PatientFlatReader reader = new PatientFlatReader(new InputStreamReader(createInputStream(flatFile), StandardCharsets.UTF_8), format, nonStandardDictionary)) {
+                Patient patient = reader.readPatient();
+                while (patient != null) {
+                    writer.writePatient(patient);
+                    patient = reader.readPatient();
                 }
             }
         }
@@ -102,18 +96,16 @@ public class XmlUtils {
         if (!xmlFile.exists())
             throw new IOException("Source XML file must exist");
         if (format == null)
-            throw new IOException("Expected NAACCR format is required");
+            throw new IOException("File format is required");
+        if (!flatFile.getParentFile().exists())
+            throw new IOException("Target folder must exist");
 
-        // create the dictionary
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, getStandardDictionary(), nonStandardDictionary);
-
-        // create the reader and writer and translates the incoming lines into patient objects before writting those...
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(createOutputStream(flatFile)))) {
+        // create the reader and writer and let them do all the work!
+        try (PatientFlatWriter writer = new PatientFlatWriter(new OutputStreamWriter(createOutputStream(flatFile), StandardCharsets.UTF_8), format, nonStandardDictionary)) {
             try (PatientXmlReader reader = new PatientXmlReader(new InputStreamReader(createInputStream(xmlFile), StandardCharsets.UTF_8), format, nonStandardDictionary)) {
                 Patient patient = reader.readPatient();
                 while (patient != null) {
-                    writer.write(createLineFromPatient(patient, dictionary));
-                    writer.newLine();
+                    writer.writePatient(patient);
                     patient = reader.readPatient();
                 }
             }
@@ -128,150 +120,6 @@ public class XmlUtils {
         catch (IOException e) {
             throw new RuntimeException("Unable to get standard dictionary!", e);
         }
-    }
-
-    public static Patient createPatientFromLine(String line, RuntimeNaaccrDictionary dictionary) throws IOException {
-        Patient patient = new Patient();
-        Tumor tumor = new Tumor();
-        patient.getTumors().add(tumor);
-
-        for (RuntimeNaaccrDictionaryItem itemDef : dictionary.getItems()) {
-            if (itemDef.getParentXmlElement() != null) {
-
-                // check where the item needs to go in the patient structure
-                List<Item> targetList;
-                if (NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
-                    targetList = patient.getItems();
-                else if (NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
-                    targetList = tumor.getItems();
-                else
-                    throw new IOException("Unsupported parent element: " + itemDef.getParentXmlElement());
-
-                int start = itemDef.getStartColumn();
-                int end = start + itemDef.getLength() - 1;
-
-                if (end <= line.length()) {
-                    String value = line.substring(start, end);
-                    String trimmedValue = value.trim();
-
-                    // never trim a group field unless it's completely empty (or we would lose the info of which child value is which)
-                    if (itemDef.getSubItems().isEmpty() || trimmedValue.isEmpty())
-                        value = trimmedValue;
-
-                    if (!value.isEmpty()) {
-                        Item item = new Item();
-                        item.setId(itemDef.getId());
-                        item.setNum(itemDef.getNumber());
-                        item.setValue(value);
-                        targetList.add(item);
-
-                        // handle the sub-items if any
-                        if (!itemDef.getSubItems().isEmpty()) {
-                            for (RuntimeNaaccrDictionaryItem subItemDef : itemDef.getSubItems()) {
-                                start = subItemDef.getStartColumn();
-                                end = start + subItemDef.getLength() - 1;
-
-                                value = line.substring(start - 1, end).trim();
-                                if (!value.isEmpty()) {
-                                    Item subItem = new Item();
-                                    subItem.setId(itemDef.getId());
-                                    subItem.setNum(itemDef.getNumber());
-                                    subItem.setValue(value);
-                                    targetList.add(subItem);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return patient;
-    }
-
-    public static String createLineFromPatient(Patient patient, RuntimeNaaccrDictionary dictionary) throws IOException {
-        StringBuilder line = new StringBuilder();
-
-        int currentIndex = 1;
-        for (RuntimeNaaccrDictionaryItem itemDef : dictionary.getItems()) {
-            if (itemDef.getParentXmlElement() != null && itemDef.getStartColumn() != null && itemDef.getLength() != null) {
-                int start = itemDef.getStartColumn();
-                int length = itemDef.getLength();
-                int end = start + length - 1;
-
-                // adjust for the "leading" gap
-                if (start > currentIndex)
-                    for (int i = 0; i < start - currentIndex; i++)
-                        line.append(' ');
-                currentIndex = start;
-
-                // get value; if the item defines sub-items, always use the sub-items
-                if (!itemDef.getSubItems().isEmpty()) {
-                    for (RuntimeNaaccrDictionaryItem subItemDef : itemDef.getSubItems()) {
-                        int subStart = subItemDef.getStartColumn();
-                        int subLength = subItemDef.getLength();
-                        int subEnd = start + length - 1;
-
-                        // adjust for the "leading" gap within the sub-items
-                        if (subStart > currentIndex)
-                            for (int i = 0; i < subStart - currentIndex; i++)
-                                line.append(' ');
-                        currentIndex = subStart;
-
-                        if (subEnd <= end) { // do not write the current sub-item out if it can potentially go out of the space
-                            String value = getValueForItem(subItemDef, patient, patient.getTumors().get(0));
-                            if (value == null)
-                                value = "";
-                            if (value.length() > subLength)
-                                value = value.substring(0, subLength);
-                            line.append(value);
-                            currentIndex = subStart + value.length();
-                        }
-                    }
-
-                    // adjust for the "trailing" gap within the sub-items
-                    if (currentIndex <= end)
-                        for (int i = 0; i < end - currentIndex + 1; i++)
-                            line.append(' ');
-                    currentIndex = end + 1;
-                }
-                else {
-                    String value = getValueForItem(itemDef, patient, patient.getTumors().get(0)); // TODO don't just use the first tumor, create several lines instead...
-                    if (value != null) {
-                        if (value.length() > length)
-                            value = value.substring(0, length);
-                        // TODO add more validation here
-                        line.append(value);
-                        currentIndex = start + value.length();
-                    }
-
-                    // adjust for the "trailing" gap
-                    if (currentIndex <= end)
-                        for (int i = 0; i < end - currentIndex + 1; i++)
-                            line.append(' ');
-                    currentIndex = end + 1;
-                }
-            }
-        }
-
-        // adjust for the final "trailing" gap
-        if (currentIndex <= dictionary.getLineLength())
-            for (int i = 0; i < dictionary.getLineLength() - currentIndex + 1; i++)
-                line.append(' ');
-
-        return line.toString();
-    }
-
-    private static String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, Patient patient, Tumor tumor) throws IOException {
-        Item item;
-        if (NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
-            item = patient.getItem(itemDef.getId(), itemDef.getNumber());
-        else if (NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
-            item = tumor.getItem(itemDef.getId(), itemDef.getNumber()); // TODO don't use just the first tumor, create one line per
-        else
-            throw new IOException("Unsupported parent element: " + itemDef.getParentXmlElement());
-
-        return item == null ? null : item.getValue();
     }
 
     private static InputStream createInputStream(File file) throws IOException {
@@ -372,7 +220,7 @@ public class XmlUtils {
         writer.writePatient(patient);
         writer.close();
         System.out.println("Done creating XML file using non-standard items (item referenced by ID) - see 'user-dictionary-test-names.xml'");
-        
+
         patient = new Patient();
         patient.getItems().add(new Item(2230, "DEPRY"));
         patient.getItems().add(new Item(2240, "FABIAN"));
@@ -384,14 +232,12 @@ public class XmlUtils {
         writer.writePatient(patient);
         writer.close();
         System.out.println("Done creating XML file using non-standard items (item referenced by number) - see 'user-dictionary-test-numbers.xml'");
-        
+
         patient.getItems().add(new Item("recordType", "A"));
         patient.getItems().add(new Item("naaccrRecordVersion", "140"));
         outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test.txt");
-        BufferedWriter writer3 = new BufferedWriter(new FileWriter(outputFile3));
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NAACCR_FILE_FORMAT_14_ABSTRACT, getStandardDictionary(), myDictionary);
-        writer3.write(createLineFromPatient(patient, dictionary));
-        writer3.newLine();
+        PatientFlatWriter writer3 = new PatientFlatWriter(new FileWriter(outputFile3), NAACCR_FILE_FORMAT_14_ABSTRACT, myDictionary);
+        writer3.writePatient(patient);
         writer3.close();
         System.out.println("Done creating flat-file using non-standard items in State Requestor Items - see 'user-dictionary-test.txt'");
     }
