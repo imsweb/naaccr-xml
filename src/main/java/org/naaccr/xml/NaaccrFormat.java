@@ -11,6 +11,20 @@ import java.util.List;
  */
 public class NaaccrFormat {
 
+    // version constants
+    public static String NAACCR_VERSION_140 = "140";
+
+    // list of supported versions
+    private static final List<String> _SUPPORTED_VERSIONS = new ArrayList<>();
+
+    static {
+        _SUPPORTED_VERSIONS.add(NAACCR_VERSION_140);
+    }
+
+    public static boolean isVersionSupported(String version) {
+        return _SUPPORTED_VERSIONS.contains(version);
+    }
+    
     // format constants
     public static String NAACCR_FORMAT_14_ABSTRACT = "naaccr-140-abstract";
     public static String NAACCR_FORMAT_14_MODIFIED = "naaccr-140-modified";
@@ -30,6 +44,10 @@ public class NaaccrFormat {
     public static boolean isFormatSupported(String format) {
         return _SUPPORTED_FORMATS.contains(format);
     }
+    
+    public static NaaccrFormat getInstance(String format) {
+        return new NaaccrFormat(format);
+    }
 
     private String _naaccrVersion;
 
@@ -37,11 +55,13 @@ public class NaaccrFormat {
     
     private int _lineLength;
 
-    public NaaccrFormat(String format) {
+    private NaaccrFormat(String format) {
         if (!isFormatSupported(format))
             throw new RuntimeException("Unsupported format: " + format);
 
         String[] parts = format.split("\\-");
+        if (!isVersionSupported(parts[1]))
+            throw new RuntimeException("Unsupported version: " + parts[1]);
         _naaccrVersion = parts[1];
         
         switch (parts[2]) {

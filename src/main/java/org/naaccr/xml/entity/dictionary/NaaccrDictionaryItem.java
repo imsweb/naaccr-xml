@@ -4,31 +4,33 @@
 package org.naaccr.xml.entity.dictionary;
 
 public class NaaccrDictionaryItem {
-    
+
     private String id;
-    
+
     private Integer number;
-    
+
     private String name;
-    
+
     private Integer startColumn;
-    
+
     private Integer length;
-    
+
     private String section;
-    
+
     private String recordTypes;
-    
+
     private String sourceOfStandard;
-    
+
     private String parentXmlElement;
-    
+
     private String regexValidation;
-    
+
     private String dataType;
-    
+
     private String parentItemId;
-    
+
+    private String retiredVersion;
+
     public String getId() {
         return id;
     }
@@ -36,7 +38,7 @@ public class NaaccrDictionaryItem {
     public void setId(String val) {
         id = val;
     }
-    
+
     public Integer getNumber() {
         return number;
     }
@@ -123,5 +125,13 @@ public class NaaccrDictionaryItem {
 
     public void setParentItemId(String val) {
         parentItemId = val;
+    }
+
+    public String getRetiredVersion() {
+        return retiredVersion;
+    }
+
+    public void setRetiredVersion(String val) {
+        this.retiredVersion = val;
     }
 }

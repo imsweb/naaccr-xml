@@ -58,6 +58,8 @@ public class NaaccrXmlUtils {
             throw new IOException("Source flat file must exist");
         if (format == null)
             throw new IOException("File format is required");
+        if (!NaaccrFormat.isFormatSupported(format))
+            throw new IOException("Invalid file format");
         if (!xmlFile.getParentFile().exists())
             throw new IOException("Target folder must exist");
 
@@ -88,6 +90,8 @@ public class NaaccrXmlUtils {
             throw new IOException("Source XML file must exist");
         if (format == null)
             throw new IOException("File format is required");
+        if (!NaaccrFormat.isFormatSupported(format))
+            throw new IOException("Invalid file format");
         if (!flatFile.getParentFile().exists())
             throw new IOException("Target folder must exist");
 
@@ -140,6 +144,8 @@ public class NaaccrXmlUtils {
             throw new IOException("Source XML file must exist");
         if (format == null)
             throw new IOException("File format is required");
+        if (!NaaccrFormat.isFormatSupported(format))
+            throw new IOException("Invalid file format");
 
         NaaccrDataExchange data;
         try (Reader reader = createReader(xmlFile)) {
@@ -168,6 +174,8 @@ public class NaaccrXmlUtils {
             throw new IOException("File format is required");
         if (!xmlFile.getParentFile().exists())
             throw new IOException("Target folder must exist");
+        if (!NaaccrFormat.isFormatSupported(format))
+            throw new IOException("Invalid file format");
         
         // TODO use the dictionary and validate the patients
         
