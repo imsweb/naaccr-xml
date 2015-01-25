@@ -3,6 +3,7 @@
  */
 package org.naaccr.xml;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -33,8 +34,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
-// TODO have to add support for "deprecated items"
-
 public class NaaccrXmlUtils {
 
     // structure tags in the XML
@@ -49,9 +48,10 @@ public class NaaccrXmlUtils {
      * @param xmlFile target XML data file
      * @param format expected NAACCR format
      * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
+     * @return the number of written patients
      * @throws IOException
      */
-    public static void flatToXml(File flatFile, File xmlFile, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
+    public static int flatToXml(File flatFile, File xmlFile, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
         if (flatFile == null)
             throw new IOException("Source flat file is required");
         if (!flatFile.exists())
@@ -64,15 +64,19 @@ public class NaaccrXmlUtils {
             throw new IOException("Target folder must exist");
 
         // create the reader and writer and let them do all the work!
+        int processedCount = 0;
         try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlFile), format, nonStandardDictionary)) {
             try (PatientFlatReader reader = new PatientFlatReader(createReader(flatFile), format, nonStandardDictionary)) {
                 Patient patient = reader.readPatient();
                 while (patient != null) {
                     writer.writePatient(patient);
+                    processedCount++;
                     patient = reader.readPatient();
                 }
             }
         }
+
+        return processedCount;
     }
 
     /**
@@ -81,9 +85,10 @@ public class NaaccrXmlUtils {
      * @param flatFile target flat data file
      * @param format expected NAACCR format
      * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
+     * @return the number of written records
      * @throws IOException
      */
-    public static void xmlToFlat(File xmlFile, File flatFile, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
+    public static int xmlToFlat(File xmlFile, File flatFile, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
         if (xmlFile == null)
             throw new IOException("Source XML file is required");
         if (!xmlFile.exists())
@@ -96,15 +101,19 @@ public class NaaccrXmlUtils {
             throw new IOException("Target folder must exist");
 
         // create the reader and writer and let them do all the work!
+        int processedCount = 0;
         try (PatientFlatWriter writer = new PatientFlatWriter(createWriter(flatFile), format, nonStandardDictionary)) {
             try (PatientXmlReader reader = new PatientXmlReader(createReader(xmlFile), format, nonStandardDictionary)) {
                 Patient patient = reader.readPatient();
                 while (patient != null) {
                     writer.writePatient(patient);
+                    processedCount += patient.getTumors().size();
                     patient = reader.readPatient();
                 }
             }
         }
+
+        return processedCount;
     }
 
     // takes care of the file encoding and compression...
@@ -134,8 +143,8 @@ public class NaaccrXmlUtils {
      * @param xmlFile source XML data file, must exists
      * @param format expected NAACCR format
      * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
-     * @returns a <code>NaaccrDataExchange</code> object, never null
      * @throws IOException
+     * @returns a <code>NaaccrDataExchange</code> object, never null
      */
     public static NaaccrDataExchange readXmlFile(File xmlFile, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
         if (xmlFile == null)
@@ -151,9 +160,9 @@ public class NaaccrXmlUtils {
         try (Reader reader = createReader(xmlFile)) {
             data = (NaaccrDataExchange)getStandardXStream().fromXML(reader);
         }
-        
+
         // TODO use the dictionary and validate the patients
-        
+
         return data;
     }
 
@@ -176,9 +185,9 @@ public class NaaccrXmlUtils {
             throw new IOException("Target folder must exist");
         if (!NaaccrFormat.isFormatSupported(format))
             throw new IOException("Invalid file format");
-        
+
         // TODO use the dictionary and validate the patients
-        
+
         try (Writer writer = createWriter(xmlFile)) {
             PrettyPrintWriter prettyWriter = new PrettyPrintWriter(writer);
             try {
@@ -190,17 +199,61 @@ public class NaaccrXmlUtils {
         }
     }
 
+    /**
+     * Returns the NAACCR format of the given file.
+     * @param flatFile provided data file
+     * @return the NAACCR format, null if it cannot be determined
+     * @throws IOException
+     */
+    public static String getFormatFromFlatFile(File flatFile) {
+        if (flatFile == null || !flatFile.exists())
+            return null;
+
+        String result = null;
+        try (BufferedReader reader = new BufferedReader(createReader(flatFile))) {
+            String line = reader.readLine();
+            if (line != null && line.length() > 19) {
+                String naaccrVersion = line.substring(16, 19).trim();
+                String recordType = line.substring(0, 1).trim();
+                switch (recordType) {
+                    case "A":
+                        result = "naaccr-" + naaccrVersion + "-abstract";
+                        break;
+                    case "M":
+                        result = "naaccr-" + naaccrVersion + "-modified";
+                        break;
+                    case "C":
+                        result = "naaccr-" + naaccrVersion + "-confidential";
+                        break;
+                    case "I":
+                        result = "naaccr-" + naaccrVersion + "-incidence";
+                        break;
+                    default:
+                        // ignored
+                }
+            }
+        }
+        catch (IOException e) {
+            result = null;
+        }
+
+        if (result != null && !NaaccrFormat.isFormatSupported(result))
+            result = null;
+
+        return result;
+    }
+
     public static NaaccrDictionary getStandardDictionary() {
         try {
             // TODO finalize standard dictionary format and location...
-            URL standardDiciontaryUrl = Thread.currentThread().getContextClassLoader().getResource("fabian/naaccr-dictionary-v14.csv");
+            URL standardDiciontaryUrl = Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-v14.csv");
             return NaaccrDictionaryUtils.readDictionary(standardDiciontaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
         }
         catch (IOException e) {
             throw new RuntimeException("Unable to get standard dictionary!", e);
         }
     }
-    
+
     public static XStream getStandardXStream() {
         XStream xstream = new XStream();
 
@@ -307,7 +360,7 @@ public class NaaccrXmlUtils {
         File inputFile4 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test-numbers.xml");
         NaaccrDataExchange data = readXmlFile(inputFile4, NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, null);
         System.out.println("Done reading 'user-dictionary-test-numbers.xml', got " + data.getPatients().size() + " patient(s)...");
-        
+
         File outputFile5 = new File(System.getProperty("user.dir") + "/build/another-xml-test.xml");
         writeXmlFile(data, outputFile5, NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, null);
         System.out.println("Done writing 'another-xml-test.xml'");

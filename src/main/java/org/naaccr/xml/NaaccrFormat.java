@@ -4,7 +4,9 @@
 package org.naaccr.xml;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A format encapsulates a NAACCR version and a record type.
@@ -43,6 +45,10 @@ public class NaaccrFormat {
 
     public static boolean isFormatSupported(String format) {
         return _SUPPORTED_FORMATS.contains(format);
+    }
+    
+    public static Set<String> getSupportedFormats() {
+        return new HashSet<>(_SUPPORTED_FORMATS);
     }
     
     public static NaaccrFormat getInstance(String format) {

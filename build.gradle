@@ -2,6 +2,7 @@
 // apply the script plugins
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '1.2.0'
 }
 
 // project information
@@ -19,6 +20,16 @@ dependencies {
     compile 'au.com.bytecode:opencsv:2.4'
     compile 'com.thoughtworks.xstream:xstream:1.4.7'
     testCompile 'junit:junit:4.11'
+}
+
+// customize the manifest
+jar {
+    manifest {
+        attributes('Implementation-Title': project.name,
+                'Implementation-Version': version,
+                'Main-Class': 'org.naaccr.xml.Standalone',
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '))
+    }
 }
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
