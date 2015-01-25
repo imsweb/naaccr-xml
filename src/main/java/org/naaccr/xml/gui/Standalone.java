@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2015 Information Management Services, Inc.
  */
-package org.naaccr.xml;
+package org.naaccr.xml.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -33,6 +33,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import org.naaccr.xml.NaaccrFormat;
+import org.naaccr.xml.NaaccrXmlUtils;
 
 @SuppressWarnings("unchecked")
 public class Standalone {
