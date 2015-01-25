@@ -25,18 +25,7 @@ public class RuntimeNaaccrDictionary {
         _format = NaaccrFormat.getInstance(format);
 
         Map<String, RuntimeNaaccrDictionaryItem> runtimeItems = new HashMap<>();
-        
-        /**
-        for (NaaccrDictionaryItem item : standardDictionary.getItems()) {
-            // always ignore the items that aren't applicable to the requested NAACCR format
-            if (item.getRecordTypes().contains(_format.getRecordType())) {
-                // arg, we have a retiredVersion; do we need a "introducedVersion"???
-            }
-        }
-         */
-        
-        
-        
+
         for (NaaccrDictionaryItem item : standardDictionary.getItems())
             if (item.getRecordTypes().contains(_format.getRecordType()) && item.getParentItemId() == null) 
                 runtimeItems.put(item.getId(), new RuntimeNaaccrDictionaryItem(item));
@@ -45,6 +34,7 @@ public class RuntimeNaaccrDictionary {
                 runtimeItems.get(item.getParentItemId()).getSubItems().add(new RuntimeNaaccrDictionaryItem(item));
         
         // TODO a user-defined field should never have the same id or number as a standard item; there is all kind of validation we should be doing here...
+        // TODO although, do we want to allow the length and things like that to be overridden?
         
         if (userDictionary != null) {
             for (NaaccrDictionaryItem item : userDictionary.getItems())

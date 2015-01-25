@@ -29,8 +29,6 @@ public class NaaccrDictionaryItem {
 
     private String parentItemId;
 
-    private String retiredVersion;
-
     public String getId() {
         return id;
     }
@@ -125,13 +123,5 @@ public class NaaccrDictionaryItem {
 
     public void setParentItemId(String val) {
         parentItemId = val;
-    }
-
-    public String getRetiredVersion() {
-        return retiredVersion;
-    }
-
-    public void setRetiredVersion(String val) {
-        this.retiredVersion = val;
     }
 }
