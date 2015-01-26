@@ -109,8 +109,8 @@ public class PatientFlatReader implements AutoCloseable {
     protected List<Item> createItemsFromLine(String line, RuntimeNaaccrDictionaryItem itemDef) {
         List<Item> items = new ArrayList<>();
 
-        int start = itemDef.getStartColumn();
-        int end = start + itemDef.getLength() - 1;
+        int start = itemDef.getStartColumn() - 1; // dictionary is 1-based; Java substring is 0-based...
+        int end = start + itemDef.getLength();
 
         if (end <= line.length()) {
             String value = line.substring(start, end);
@@ -127,17 +127,17 @@ public class PatientFlatReader implements AutoCloseable {
                 item.setValue(value);
                 items.add(item);
 
-                // handle the sub-items if any
+                // handle the sub-items if any (when reading, we add an item for both the parent and the children)
                 if (!itemDef.getSubItems().isEmpty()) {
                     for (RuntimeNaaccrDictionaryItem subItemDef : itemDef.getSubItems()) {
-                        start = subItemDef.getStartColumn();
-                        end = start + subItemDef.getLength() - 1;
+                        start = subItemDef.getStartColumn() - 1; // dictionary is 1-based; Java substring is 0-based...
+                        end = start + subItemDef.getLength();
 
-                        value = line.substring(start - 1, end).trim();
+                        value = line.substring(start, end).trim();
                         if (!value.isEmpty()) {
                             Item subItem = new Item();
-                            subItem.setId(itemDef.getId());
-                            subItem.setNum(itemDef.getNumber());
+                            subItem.setId(subItemDef.getId());
+                            subItem.setNum(subItemDef.getNumber());
                             subItem.setValue(value);
                             items.add(subItem);
                         }
@@ -151,12 +151,16 @@ public class PatientFlatReader implements AutoCloseable {
 
     // TODO remove this testing method
     public static void main(String[] args) throws IOException {
-        File inputFile = new File(System.getProperty("user.dir") + "/src/main/resources/data/fake-naaccr14inc-2-rec.txt");
+        File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/fake-naaccr14inc-2-rec.txt");
         PatientFlatReader reader = new PatientFlatReader(new FileReader(inputFile), NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
         int count = 0;
         Patient patient = reader.readPatient();
         while (patient != null) {
             System.out.println("  > num tumors: " + patient.getTumors().size());
+            System.out.println("      >> site: " + patient.getTumors().get(0).getItemById("primarySite").getValue());
+            System.out.println("      >> morph: " + patient.getTumors().get(0).getItemById("morphologyIcdO3").getValue());
+            System.out.println("      >> hist: " + patient.getTumors().get(0).getItemById("histologyIcdO3").getValue());
+            System.out.println("      >> beh: " + patient.getTumors().get(0).getItemById("behaviorIcdO3").getValue());
             count++;
             patient = reader.readPatient();
         }
