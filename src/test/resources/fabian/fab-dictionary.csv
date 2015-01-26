@@ -1,0 +1,2 @@
+Item ID,Item Number,Item Length,Item Name,Parent Item ID,Record Types,Item Start Column,Parent XML Element
+hosptialAbstractorId,10001,10,Hosptial Abstractor ID,stateRequestorItems,,2340,Tumor
