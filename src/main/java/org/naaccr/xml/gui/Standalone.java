@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -14,12 +15,16 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -34,6 +39,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.apache.commons.io.IOUtils;
 import org.naaccr.xml.NaaccrFormat;
 import org.naaccr.xml.NaaccrXmlUtils;
 
@@ -66,7 +72,7 @@ public class Standalone {
     }
 
     private static class StandaloneFrame extends JFrame {
-        
+
         private JFileChooser _fileChooser;
 
         public StandaloneFrame() {
@@ -82,10 +88,58 @@ public class Standalone {
             this.getContentPane().setLayout(new BorderLayout());
             this.getContentPane().add(contentPnl, BorderLayout.CENTER);
 
+            JPanel northPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 10));
+            northPnl.setOpaque(false);
+            JButton csvBtn = new JButton("Open CSV Dictionary in Excel");
+            csvBtn.setOpaque(false);
+            csvBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        File tmpFile = File.createTempFile("naaccr-dictionary-140", ".csv");
+                        tmpFile.deleteOnExit();
+                        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-140.csv");
+                        OutputStream os = new FileOutputStream(tmpFile);
+                        IOUtils.copy(is, os);
+                        is.close();
+                        os.close();
+                        Desktop.getDesktop().open(tmpFile);
+                    }
+                    catch (IOException e1) {
+                        e1.printStackTrace(); // TODO
+                    }
+                }
+            });
+            northPnl.add(csvBtn);
+            northPnl.add(Box.createHorizontalStrut(25));
+            JButton xmlBtn = new JButton("Open XML Dictionary in Text Editor");
+            xmlBtn.setOpaque(false);
+            xmlBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        File tmpFile = File.createTempFile("naaccr-dictionary-140", ".txt");
+                        tmpFile.deleteOnExit();
+                        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-140.xml");
+                        OutputStream os = new FileOutputStream(tmpFile);
+                        IOUtils.copy(is, os);
+                        is.close();
+                        os.flush();
+                        os.close();
+                        Desktop.getDesktop().open(tmpFile);
+                    }
+                    catch (IOException e1) {
+                        e1.printStackTrace(); // TODO
+                    }
+                }
+            });
+            northPnl.add(xmlBtn);
+            contentPnl.add(northPnl, BorderLayout.NORTH);
+            
             JTabbedPane pane = new JTabbedPane();
             pane.add("Flat to XML", crateFlatToXmlPanel());
             pane.add("XML to Flat", crateXmlToFlatPanel());
-            contentPnl.add(pane, BorderLayout.NORTH);
+            contentPnl.add(pane, BorderLayout.CENTER);
 
             _fileChooser = new JFileChooser();
             _fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -112,7 +166,7 @@ public class Standalone {
             JButton flatToXmlSoureBtn = new JButton("Browse...");
             row1Pnl.add(flatToXmlSoureBtn);
             pnl.add(row1Pnl);
-            
+
             JPanel row3Pnl = new JPanel();
             row3Pnl.setOpaque(false);
             row3Pnl.setBorder(null);
@@ -150,7 +204,7 @@ public class Standalone {
             flatToXmlResultLbl.setFont(flatToXmlResultLbl.getFont().deriveFont(Font.ITALIC));
             row5Pnl.add(flatToXmlResultLbl);
             pnl.add(row5Pnl);
-            
+
             JPanel row4Pnl = new JPanel();
             row4Pnl.setOpaque(false);
             row4Pnl.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
@@ -219,10 +273,9 @@ public class Standalone {
 
             pnl.setLayout(new GridBagLayout());
             pnl.add(new JLabel("Coming soon..."));
-            
+
             return pnl;
 
         }
-
     }
 }

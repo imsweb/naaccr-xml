@@ -66,7 +66,7 @@ public class NaaccrDictionaryUtils {
                 NaaccrDictionaryItem item = new NaaccrDictionaryItem();
                 item.setNaaccrId(line[0]);
                 if (line[1] != null && !line[1].isEmpty())
-                    item.setNumber(Integer.valueOf(line[1]));
+                    item.setNaaccrNum(Integer.valueOf(line[1]));
                 item.setLength(Integer.valueOf(line[2]));
                 if (line.length > 3 && line[3] != null && !line[3].isEmpty())
                     item.setNaaccrName(line[3]);

@@ -44,12 +44,12 @@ public class NaaccrDictionary {
         return _cachedById.get(id);
     }
     
-    public NaaccrDictionaryItem getItemByNumber(Integer number) {
+    public NaaccrDictionaryItem getItemByNaaccrNum(Integer number) {
         if (_cachedByNumber == null) {
             Map<Integer, NaaccrDictionaryItem> cache = new HashMap<>();
             for (NaaccrDictionaryItem item : items)
-                if (item.getNumber() != null)
-                    cache.put(item.getNumber(), item);
+                if (item.getNaaccrNum() != null)
+                    cache.put(item.getNaaccrNum(), item);
             _cachedByNumber = cache;
         }
         return _cachedByNumber.get(number);
@@ -59,7 +59,7 @@ public class NaaccrDictionary {
         if (key instanceof String)
             return getItemByNaaccrId((String)key);
         if (key instanceof Integer)
-            return getItemByNumber((Integer)key);
+            return getItemByNaaccrNum((Integer)key);
         return null;
     }
 }

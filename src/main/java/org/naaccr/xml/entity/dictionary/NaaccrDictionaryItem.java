@@ -7,7 +7,7 @@ public class NaaccrDictionaryItem {
 
     private String naaccrId;
 
-    private Integer number;
+    private Integer naaccrNum;
 
     private String naaccrName;
 
@@ -34,6 +34,10 @@ public class NaaccrDictionaryItem {
     private String retiredVersion;
 
     private String implementedVersion;
+    
+    public NaaccrDictionaryItem() {
+        isGroup = false;
+    }
 
     public String getNaaccrId() {
         return naaccrId;
@@ -43,12 +47,12 @@ public class NaaccrDictionaryItem {
         naaccrId = val;
     }
 
-    public Integer getNumber() {
-        return number;
+    public Integer getNaaccrNum() {
+        return naaccrNum;
     }
 
-    public void setNumber(Integer val) {
-        number = val;
+    public void setNaaccrNum(Integer val) {
+        naaccrNum = val;
     }
 
     public String getNaaccrName() {

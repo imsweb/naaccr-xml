@@ -32,7 +32,7 @@ public class PatientFlatReader implements AutoCloseable {
         _reader = new LineNumberReader(reader);
         _dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), nonStandardDictionary);
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
-            if (item.getNumber() != null && item.getNumber().equals(20)) {
+            if (item.getNaaccrNum() != null && item.getNaaccrNum().equals(20)) {
                 _patientIdNumberItem = item;
                 break;
             }
@@ -123,7 +123,7 @@ public class PatientFlatReader implements AutoCloseable {
             if (!value.isEmpty()) {
                 Item item = new Item();
                 item.setId(itemDef.getNaaccrId());
-                item.setNum(itemDef.getNumber());
+                item.setNum(itemDef.getNaaccrNum());
                 item.setValue(value);
                 items.add(item);
 
@@ -137,7 +137,7 @@ public class PatientFlatReader implements AutoCloseable {
                         if (!value.isEmpty()) {
                             Item subItem = new Item();
                             subItem.setId(subItemDef.getNaaccrId());
-                            subItem.setNum(subItemDef.getNumber());
+                            subItem.setNum(subItemDef.getNaaccrNum());
                             subItem.setValue(value);
                             items.add(subItem);
                         }

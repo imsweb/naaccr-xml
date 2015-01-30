@@ -15,7 +15,7 @@ public class RuntimeNaaccrDictionaryItem {
 
     private String naaccrId;
 
-    private Integer number;
+    private Integer naaccrNum;
     
     private Integer startColumn;
 
@@ -33,7 +33,7 @@ public class RuntimeNaaccrDictionaryItem {
     
     public RuntimeNaaccrDictionaryItem(NaaccrDictionaryItem item) {
         naaccrId = item.getNaaccrId();
-        number = item.getNumber();
+        naaccrNum = item.getNaaccrNum();
         startColumn = item.getStartColumn();
         length = item.getLength();
         recordTypes = new HashSet<>();
@@ -53,12 +53,12 @@ public class RuntimeNaaccrDictionaryItem {
         naaccrId = val;
     }
 
-    public Integer getNumber() {
-        return number;
+    public Integer getNaaccrNum() {
+        return naaccrNum;
     }
 
-    public void setNumber(Integer val) {
-        number = val;
+    public void setNaaccrNum(Integer val) {
+        naaccrNum = val;
     }
 
     public Integer getStartColumn() {

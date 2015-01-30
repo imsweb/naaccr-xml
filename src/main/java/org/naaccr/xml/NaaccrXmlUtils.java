@@ -286,11 +286,11 @@ public class NaaccrXmlUtils {
         public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
             Item item = (Item)source;
             if (item.getNum() != null)
-                writer.addAttribute("num", item.getNum().toString());
+                writer.addAttribute("naaccrNum", item.getNum().toString());
             else if (item.getId() != null)
-                writer.addAttribute("id", item.getId());
+                writer.addAttribute("naaccrId", item.getId());
             else
-                throw new RuntimeException("ID or Number is required for any item.");
+                throw new RuntimeException("NAACCR ID or Number is required for any item.");
             if (item.getValue() != null)
                 writer.setValue(item.getValue());
         }
@@ -298,10 +298,10 @@ public class NaaccrXmlUtils {
         @Override
         public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
             Item item = new Item();
-            String num = reader.getAttribute("num");
+            String num = reader.getAttribute("naaccrNum");
             if (num != null)
                 item.setNum(Integer.valueOf(num));
-            item.setId(reader.getAttribute("id"));
+            item.setId(reader.getAttribute("naaccrId"));
             item.setValue(reader.getValue());
             return item;
         }

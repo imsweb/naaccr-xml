@@ -30,10 +30,10 @@ public class PatientFlatWriter implements AutoCloseable {
         _writer = new BufferedWriter(writer);
         _dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), nonStandardDictionary);
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
-            if (item.getNumber() != null) {
-                if (item.getNumber().equals(10))
+            if (item.getNaaccrNum() != null) {
+                if (item.getNaaccrNum().equals(10))
                     _recordTypeItem = item;
-                if (item.getNumber().equals(50))
+                if (item.getNaaccrNum().equals(50))
                     _naaccrVersionItem = item;
                 if (_recordTypeItem != null && _naaccrVersionItem != null)
                     break;
@@ -145,9 +145,9 @@ public class PatientFlatWriter implements AutoCloseable {
         Item item;
 
         if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
-            item = patient.getItem(itemDef.getNaaccrId(), itemDef.getNumber());
+            item = patient.getItem(itemDef.getNaaccrId(), itemDef.getNaaccrNum());
         else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
-            item = tumor.getItem(itemDef.getNaaccrId(), itemDef.getNumber());
+            item = tumor.getItem(itemDef.getNaaccrId(), itemDef.getNaaccrNum());
         else
             throw new IOException("Unsupported parent element: " + itemDef.getParentXmlElement());
 
