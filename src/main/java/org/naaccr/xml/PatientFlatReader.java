@@ -122,7 +122,7 @@ public class PatientFlatReader implements AutoCloseable {
 
             if (!value.isEmpty()) {
                 Item item = new Item();
-                item.setId(itemDef.getId());
+                item.setId(itemDef.getNaaccrId());
                 item.setNum(itemDef.getNumber());
                 item.setValue(value);
                 items.add(item);
@@ -136,7 +136,7 @@ public class PatientFlatReader implements AutoCloseable {
                         value = line.substring(start, end).trim();
                         if (!value.isEmpty()) {
                             Item subItem = new Item();
-                            subItem.setId(subItemDef.getId());
+                            subItem.setId(subItemDef.getNaaccrId());
                             subItem.setNum(subItemDef.getNumber());
                             subItem.setValue(value);
                             items.add(subItem);

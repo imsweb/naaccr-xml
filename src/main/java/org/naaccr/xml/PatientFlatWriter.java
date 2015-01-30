@@ -145,9 +145,9 @@ public class PatientFlatWriter implements AutoCloseable {
         Item item;
 
         if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
-            item = patient.getItem(itemDef.getId(), itemDef.getNumber());
+            item = patient.getItem(itemDef.getNaaccrId(), itemDef.getNumber());
         else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
-            item = tumor.getItem(itemDef.getId(), itemDef.getNumber());
+            item = tumor.getItem(itemDef.getNaaccrId(), itemDef.getNumber());
         else
             throw new IOException("Unsupported parent element: " + itemDef.getParentXmlElement());
 

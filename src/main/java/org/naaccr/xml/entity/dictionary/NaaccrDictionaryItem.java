@@ -5,11 +5,11 @@ package org.naaccr.xml.entity.dictionary;
 
 public class NaaccrDictionaryItem {
 
-    private String id;
+    private String naaccrId;
 
     private Integer number;
 
-    private String name;
+    private String naaccrName;
 
     private Integer startColumn;
 
@@ -27,14 +27,20 @@ public class NaaccrDictionaryItem {
 
     private String dataType;
 
-    private String parentItemId;
+    private String groupNaaccrId;
 
-    public String getId() {
-        return id;
+    private Boolean isNaaccrGroup;
+
+    private String retiredVersion;
+
+    private String implementedVersion;
+
+    public String getNaaccrId() {
+        return naaccrId;
     }
 
-    public void setId(String val) {
-        id = val;
+    public void setNaaccrId(String val) {
+        naaccrId = val;
     }
 
     public Integer getNumber() {
@@ -45,12 +51,12 @@ public class NaaccrDictionaryItem {
         number = val;
     }
 
-    public String getName() {
-        return name;
+    public String getNaaccrName() {
+        return naaccrName;
     }
 
-    public void setName(String val) {
-        name = val;
+    public void setNaaccrName(String val) {
+        naaccrName = val;
     }
 
     public Integer getStartColumn() {
@@ -117,11 +123,35 @@ public class NaaccrDictionaryItem {
         dataType = val;
     }
 
-    public String getParentItemId() {
-        return parentItemId;
+    public String getGroupNaaccrId() {
+        return groupNaaccrId;
     }
 
-    public void setParentItemId(String val) {
-        parentItemId = val;
+    public void setGroupNaaccrId(String val) {
+        groupNaaccrId = val;
+    }
+
+    public Boolean getIsNaaccrGroup() {
+        return isNaaccrGroup;
+    }
+
+    public void setIsNaaccrGroup(Boolean val) {
+        this.isNaaccrGroup = val;
+    }
+
+    public String getRetiredVersion() {
+        return retiredVersion;
+    }
+
+    public void setRetiredVersion(String val) {
+        this.retiredVersion = val;
+    }
+
+    public String getImplementedVersion() {
+        return implementedVersion;
+    }
+
+    public void setImplementedVersion(String val) {
+        this.implementedVersion = val;
     }
 }

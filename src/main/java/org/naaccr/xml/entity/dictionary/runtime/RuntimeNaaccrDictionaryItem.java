@@ -13,7 +13,7 @@ import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
 public class RuntimeNaaccrDictionaryItem {
 
-    private String id;
+    private String naaccrId;
 
     private Integer number;
     
@@ -28,29 +28,29 @@ public class RuntimeNaaccrDictionaryItem {
     private String regexValidation;
 
     private String dataType;
-
-    private String parentItemId;
     
     private List<RuntimeNaaccrDictionaryItem> subItems;
     
     public RuntimeNaaccrDictionaryItem(NaaccrDictionaryItem item) {
-        id = item.getId();
+        naaccrId = item.getNaaccrId();
         number = item.getNumber();
         startColumn = item.getStartColumn();
         length = item.getLength();
-        recordTypes = item.getRecordTypes() == null ? null : new HashSet<>(Arrays.asList(item.getRecordTypes().split(",")));
+        recordTypes = new HashSet<>();
+        if (item.getRecordTypes() != null)
+            recordTypes.addAll(Arrays.asList(item.getRecordTypes().split(",")));
         parentXmlElement = item.getParentXmlElement();
         regexValidation = item.getRegexValidation();
         dataType = item.getDataType();
-        parentItemId = item.getParentItemId();
+        subItems = new ArrayList<>();
     }
 
-    public String getId() {
-        return id;
+    public String getNaaccrId() {
+        return naaccrId;
     }
 
-    public void setId(String val) {
-        id = val;
+    public void setNaaccrId(String val) {
+        naaccrId = val;
     }
 
     public Integer getNumber() {
@@ -78,8 +78,6 @@ public class RuntimeNaaccrDictionaryItem {
     }
 
     public Set<String> getRecordTypes() {
-        if (recordTypes == null)
-            recordTypes = new HashSet<>();
         return recordTypes;
     }
 
@@ -107,17 +105,7 @@ public class RuntimeNaaccrDictionaryItem {
         dataType = val;
     }
 
-    public String getParentItemId() {
-        return parentItemId;
-    }
-
-    public void setParentItemId(String val) {
-        parentItemId = val;
-    }
-
     public List<RuntimeNaaccrDictionaryItem> getSubItems() {
-        if (subItems == null)
-            subItems = new ArrayList<>();
         return subItems;
     }
 

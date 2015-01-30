@@ -64,14 +64,14 @@ public class NaaccrDictionaryUtils {
 
                 // TODO add validation, trim values, be safer since it could be a user-defined dictionary...
                 NaaccrDictionaryItem item = new NaaccrDictionaryItem();
-                item.setId(line[0]);
+                item.setNaaccrId(line[0]);
                 if (line[1] != null && !line[1].isEmpty())
                     item.setNumber(Integer.valueOf(line[1]));
                 item.setLength(Integer.valueOf(line[2]));
                 if (line.length > 3 && line[3] != null && !line[3].isEmpty())
-                    item.setName(line[3]);
+                    item.setNaaccrName(line[3]);
                 if (line.length > 4 && line[4] != null && !line[4].isEmpty())
-                    item.setParentItemId(line[4]);
+                    item.setGroupNaaccrId(line[4]);
                 if (line.length > 5 && line[5] != null && !line[5].isEmpty())
                     item.setRecordTypes(line[5]);
                 if (line.length > 6 && line[6] != null && !line[6].isEmpty())
