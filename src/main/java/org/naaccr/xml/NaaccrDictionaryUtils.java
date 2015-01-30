@@ -59,8 +59,8 @@ public class NaaccrDictionaryUtils {
         // always skip first line
         try (CSVReader csvReader = new CSVReader(reader, ',', '"', '\\', 1, false)) {
             for (String[] line : csvReader.readAll()) {
-                if (line.length < 3 || line.length > 12)
-                    throw new IOException("Wrong number of fields, expected between 3 and 12, got " + line.length + " (Item ID " + line[0] + ")");
+                if (line.length < 3 || line.length > 15)
+                    throw new IOException("Wrong number of fields, expected between 3 and 15, got " + line.length + " (Item ID " + line[0] + ")");
 
                 // TODO add validation, trim values, be safer since it could be a user-defined dictionary...
                 NaaccrDictionaryItem item = new NaaccrDictionaryItem();
@@ -71,21 +71,27 @@ public class NaaccrDictionaryUtils {
                 if (line.length > 3 && line[3] != null && !line[3].isEmpty())
                     item.setNaaccrName(line[3]);
                 if (line.length > 4 && line[4] != null && !line[4].isEmpty())
-                    item.setGroupNaaccrId(line[4]);
+                    item.setIsGroup("yes".equals(line[4].toLowerCase()) || "true".equals(line[4].toLowerCase()));
                 if (line.length > 5 && line[5] != null && !line[5].isEmpty())
-                    item.setRecordTypes(line[5]);
+                    item.setGroupNaaccrId(line[5]);
                 if (line.length > 6 && line[6] != null && !line[6].isEmpty())
-                    item.setStartColumn(Integer.valueOf(line[6]));
+                    item.setRecordTypes(line[6]);
                 if (line.length > 7 && line[7] != null && !line[7].isEmpty())
-                    item.setParentXmlElement(line[7]);
+                    item.setStartColumn(Integer.valueOf(line[7]));
                 if (line.length > 8 && line[8] != null && !line[8].isEmpty())
-                    item.setRegexValidation(line[8]);
+                    item.setParentXmlElement(line[8]);
                 if (line.length > 9 && line[9] != null && !line[9].isEmpty())
-                    item.setDataType(line[9]);
+                    item.setRegexValidation(line[9]);
                 if (line.length > 10 && line[10] != null && !line[10].isEmpty())
-                    item.setSection(line[10]);
+                    item.setDataType(line[10]);
                 if (line.length > 11 && line[11] != null && !line[11].isEmpty())
-                    item.setSourceOfStandard(line[11]);
+                    item.setSection(line[11]);
+                if (line.length > 12 && line[12] != null && !line[12].isEmpty())
+                    item.setSourceOfStandard(line[12]);
+                if (line.length > 13 && line[13] != null && !line[13].isEmpty())
+                    item.setRetiredVersion(line[13]);
+                if (line.length > 14 && line[14] != null && !line[14].isEmpty())
+                    item.setImplementedVersion(line[14]);
                 
                 if (item.getRecordTypes() == null)
                     item.setRecordTypes("A,M,C,I");
@@ -100,7 +106,7 @@ public class NaaccrDictionaryUtils {
     
 
     public static void main(String[] args) throws IOException {
-        NaaccrDictionary dictionary = readDictionary(Thread.currentThread().getContextClassLoader().getResource("fabian/naaccr-dictionary-v14.csv"), NAACCR_DICTIONARY_FORMAT_CSV);
+        NaaccrDictionary dictionary = readDictionary(Thread.currentThread().getContextClassLoader().getResource("fabian/naaccr-dictionary-140.csv"), NAACCR_DICTIONARY_FORMAT_CSV);
         System.out.println("Read " + dictionary.getItems().size() + " items...");
     }
 }

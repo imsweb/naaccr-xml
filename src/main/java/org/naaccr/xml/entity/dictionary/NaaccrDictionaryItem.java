@@ -29,7 +29,7 @@ public class NaaccrDictionaryItem {
 
     private String groupNaaccrId;
 
-    private Boolean isNaaccrGroup;
+    private Boolean isGroup;
 
     private String retiredVersion;
 
@@ -131,12 +131,12 @@ public class NaaccrDictionaryItem {
         groupNaaccrId = val;
     }
 
-    public Boolean getIsNaaccrGroup() {
-        return isNaaccrGroup;
+    public Boolean getIsGroup() {
+        return isGroup;
     }
 
-    public void setIsNaaccrGroup(Boolean val) {
-        this.isNaaccrGroup = val;
+    public void setIsGroup(Boolean val) {
+        this.isGroup = val;
     }
 
     public String getRetiredVersion() {

@@ -246,7 +246,7 @@ public class NaaccrXmlUtils {
     public static NaaccrDictionary getStandardDictionary() {
         try {
             // TODO finalize standard dictionary format and location...
-            URL standardDiciontaryUrl = Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-v14.csv");
+            URL standardDiciontaryUrl = Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-140.csv");
             return NaaccrDictionaryUtils.readDictionary(standardDiciontaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
         }
         catch (IOException e) {
