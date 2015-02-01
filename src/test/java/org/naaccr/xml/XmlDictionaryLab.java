@@ -40,8 +40,8 @@ public class XmlDictionaryLab {
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "implementedVersion", "implementedVersion");
         xstream.addImplicitCollection(NaaccrDictionary.class, "items", NaaccrDictionaryItem.class);
 
-        File outputFile = new File(System.getProperty("user.dir") + "/build/naaccr-dictionary-140.xml");
-        final FileWriter writer = new FileWriter(outputFile);
+        File outputFile = new File(System.getProperty("user.dir") + "/build/naaccr-dictionary-140-.xml");
+        FileWriter writer = new FileWriter(outputFile);
 
         PrettyPrintWriter prettyWriter = new PrettyPrintWriter(writer) {
             // why isn't the internal writer protected instead of private??? I hate when people do that!
