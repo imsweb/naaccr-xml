@@ -14,7 +14,6 @@ import java.util.List;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
-import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
 
@@ -28,9 +27,9 @@ public class PatientFlatReader implements AutoCloseable {
 
     protected String _previousLine;
 
-    public PatientFlatReader(Reader reader, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
+    public PatientFlatReader(Reader reader, RuntimeNaaccrDictionary dictionary) throws IOException {
         _reader = new LineNumberReader(reader);
-        _dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), nonStandardDictionary);
+        _dictionary = dictionary;
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
             if (item.getNaaccrNum() != null && item.getNaaccrNum().equals(20)) {
                 _patientIdNumberItem = item;
@@ -152,7 +151,8 @@ public class PatientFlatReader implements AutoCloseable {
     // TODO remove this testing method
     public static void main(String[] args) throws IOException {
         File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/fake-naaccr14inc-2-rec.txt");
-        PatientFlatReader reader = new PatientFlatReader(new FileReader(inputFile), NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getStandardDictionary(), null);
+        PatientFlatReader reader = new PatientFlatReader(new FileReader(inputFile), dictionary);
         int count = 0;
         Patient patient = reader.readPatient();
         while (patient != null) {

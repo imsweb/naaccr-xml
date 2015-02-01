@@ -3,16 +3,13 @@
  */
 package org.naaccr.xml;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-
-import com.thoughtworks.xstream.XStream;
 
 public class TestNonStandardData {
 
     public static void main(String[] args) throws IOException {
 
+        /**
         XStream xstream = NaaccrXmlUtils.getStandardXStream();
         // tell XStream how to read our customized data structure
         xstream.alias("EditsReport", EditsReport.class);
@@ -33,6 +30,7 @@ public class TestNonStandardData {
             ExtendedTumor tumor = (ExtendedTumor)patient.getTumors().get(0);
             System.out.println("Tumor #0 failures: " + tumor.getEditsReport().getFailures().size());
         }
+         */
     }
     
 }

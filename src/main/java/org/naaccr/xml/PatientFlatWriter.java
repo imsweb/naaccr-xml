@@ -14,7 +14,6 @@ import java.util.List;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
-import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
 
@@ -26,9 +25,9 @@ public class PatientFlatWriter implements AutoCloseable {
 
     protected RuntimeNaaccrDictionaryItem _naaccrVersionItem, _recordTypeItem;
 
-    public PatientFlatWriter(Writer writer, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
+    public PatientFlatWriter(Writer writer, RuntimeNaaccrDictionary dictionary) throws IOException {
         _writer = new BufferedWriter(writer);
-        _dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), nonStandardDictionary);
+        _dictionary = dictionary;
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
             if (item.getNaaccrNum() != null) {
                 if (item.getNaaccrNum().equals(10))
@@ -165,7 +164,8 @@ public class PatientFlatWriter implements AutoCloseable {
         patient.getTumors().add(new Tumor());
         patient.getTumors().get(1).getItems().add(new Item("primarySite", "C447"));
         File outputFile = new File(System.getProperty("user.dir") + "/build/write-flat-test.txt");
-        PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(outputFile), NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getStandardDictionary(), null);
+        PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(outputFile), dictionary);
         writer.writePatient(patient);
         writer.close();
     }

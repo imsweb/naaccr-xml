@@ -12,39 +12,35 @@ import java.io.Writer;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
-import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 
+import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
 public class PatientXmlWriter implements AutoCloseable {
 
-    private ObjectOutputStream _oos;
-    
-    private RuntimeNaaccrDictionary _dictionary;
+    protected ObjectOutputStream _oos;
 
-    public PatientXmlWriter(Writer writer, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
-        _dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), nonStandardDictionary);
+    public PatientXmlWriter(Writer writer, XStream xstream, final RuntimeNaaccrDictionary dictionary) throws IOException {
 
         // by default, XStream will write the root tag, but there is no easy way to add attributes to it; this is what this code does...
         PrettyPrintWriter prettyWriter = new PrettyPrintWriter(writer) {
             @Override
             public void startNode(String name) {
                 super.startNode(name);
-                if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(name)) {
-                    addAttribute("naaccrVersion", _dictionary.getFormat().getNaaccrVersion());
-                    addAttribute("recordType", _dictionary.getFormat().getRecordType());
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(name) && dictionary != null) {
+                    addAttribute("naaccrVersion", dictionary.getFormat().getNaaccrVersion());
+                    addAttribute("recordType", dictionary.getFormat().getRecordType());
                 }
             }
         };
-        _oos = NaaccrXmlUtils.getStandardXStream().createObjectOutputStream(prettyWriter, "NaaccrDataExchange");
+        _oos = xstream.createObjectOutputStream(prettyWriter, "NaaccrDataExchange");
         
         // it's a bit manual, but I am not sure how else to do this...
         writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));
     }
 
     public void writePatient(Patient patient) throws IOException {
-        // TODO FPD use the dictionary to validate the provided patient
         _oos.writeObject(patient);
     }
 
@@ -64,7 +60,8 @@ public class PatientXmlWriter implements AutoCloseable {
         patient.getTumors().add(new Tumor());
         patient.getTumors().get(1).getItems().add(new Item("primarySite", "C447"));
         File outputFile = new File(System.getProperty("user.dir") + "/build/write-xml-test.xml");
-        PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(outputFile), NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getStandardDictionary(), null);
+        PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(outputFile), NaaccrXmlUtils.getStandardXStream(dictionary, new NaaccrXmlOptions()), dictionary);
         writer.writePatient(patient);
         writer.close();
     }

@@ -20,6 +20,10 @@ public class RuntimeNaaccrDictionary {
     
     private List<RuntimeNaaccrDictionaryItem> items;
 
+    // caches to improve lookup performances
+    private Map<String, RuntimeNaaccrDictionaryItem> _cachedById;
+    private Map<Integer, RuntimeNaaccrDictionaryItem> _cachedByNumber;
+
     public RuntimeNaaccrDictionary(String format, NaaccrDictionary standardDictionary, NaaccrDictionary userDictionary) {
         
         _format = NaaccrFormat.getInstance(format);
@@ -72,5 +76,27 @@ public class RuntimeNaaccrDictionary {
         if (items == null)
             items = new ArrayList<>();
         return items;
+    }
+
+    public RuntimeNaaccrDictionaryItem getItemByNaaccrId(String id) {
+        if (_cachedById == null) {
+            Map<String, RuntimeNaaccrDictionaryItem> cache = new HashMap<>();
+            for (RuntimeNaaccrDictionaryItem item : items)
+                if (item.getNaaccrId() != null)
+                    cache.put(item.getNaaccrId(), item);
+            _cachedById = cache;
+        }
+        return _cachedById.get(id);
+    }
+
+    public RuntimeNaaccrDictionaryItem getItemByNaaccrNum(Integer number) {
+        if (_cachedByNumber == null) {
+            Map<Integer, RuntimeNaaccrDictionaryItem> cache = new HashMap<>();
+            for (RuntimeNaaccrDictionaryItem item : items)
+                if (item.getNaaccrNum() != null)
+                    cache.put(item.getNaaccrNum(), item);
+            _cachedByNumber = cache;
+        }
+        return _cachedByNumber.get(number);
     }
 }
