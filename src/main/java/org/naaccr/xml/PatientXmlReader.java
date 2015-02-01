@@ -56,11 +56,11 @@ public class PatientXmlReader implements AutoCloseable {
 
     // TODO remove this testing method
     public static void main(String[] args) throws Exception {
-        File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/test.xml");
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getStandardDictionary(), null);
+        File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/test-id.xml");
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, NaaccrXmlUtils.getStandardDictionary(), null);
         PatientXmlReader reader = new PatientXmlReader(new FileReader(inputFile), NaaccrXmlUtils.getStandardXStream(dictionary, new NaaccrXmlOptions()));
         Patient patient = reader.readPatient();
         reader.close();
-        //System.out.println(patient.getItemById("nameLast"));
+        System.out.println(patient.getItemById("nameLast"));
     }
 }
