@@ -1,0 +1,175 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://naaccr.org/naaccrfile" targetNamespace="http://naaccr.org/naaccrfile" >
+
+<xsd:element name="NAACCRDataExchange">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:Dictionary" minOccurs="0" maxOccurs="1" />
+			<xsd:element ref="tns:Document" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="extractID" use="optional" />
+		<xsd:attribute name="NAACCRVersion" use="required" />
+		<xsd:attribute name="xsdVersion" use="optional" fixed="1.0" />
+		<xsd:attribute name="datePrepared" use="required" type="xsd:dateTime" />
+		<xsd:attribute name="sender" use="required" />
+		<xsd:attribute name="senderCode" use="optional" />
+		<xsd:attribute name="description" use="optional" />
+		<xsd:attribute name="geography" use="optional" />
+		<xsd:attribute name="dateFrom" use="optional" type="xsd:date" />
+		<xsd:attribute name="dateTo" use="optional" type="xsd:date" />
+		<xsd:anyAttribute />
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="Document">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="tns:Patient" minOccurs="1" maxOccurs="1" />
+			<xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="documentID" use="optional" type="xsd:string" />
+		<xsd:attribute name="timeStamp" use="optional" type="xsd:dateTime" />
+		<xsd:attribute name="isVoid" use="optional" type="xsd:boolean" default="false" />
+		<xsd:attribute name="voidBy" use="optional" />
+		<xsd:attribute name="voidDate" use="optional" type="xsd:date" />
+		<xsd:attribute name="voidReason" use="optional" />
+		<xsd:anyAttribute />
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="Patient">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="tns:Tumor" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:anyAttribute />
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="Tumor">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:anyAttribute />
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:simpleType name="trimString" >
+	<xsd:restriction base="xsd:string">
+		<xsd:whiteSpace value="replace" />
+	</xsd:restriction>
+</xsd:simpleType>
+
+<xsd:complexType name="itemType" >
+	<xsd:simpleContent>
+		<xsd:extension base="tns:trimString" >
+			<xsd:attribute name="naaccrNum" type="xsd:integer" use="optional" />
+			<xsd:attribute name="naaccrId" use="optional" type="xsd:IDREF" />
+			<xsd:attribute name="isDeprecated" use="optional" type="xsd:boolean" default="false" />
+			<xsd:attribute name="isMissing" use="optional" type="xsd:boolean" default="false" />
+			<xsd:anyAttribute />
+		</xsd:extension>
+	</xsd:simpleContent>
+</xsd:complexType>
+
+<xsd:element name="Item" type="tns:itemType" />
+
+<xsd:element name="Dictionary">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:ItemDefs"  minOccurs="0" maxOccurs="1"/>
+			<xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="dictionaryVersion" use="optional" />
+		<xsd:attribute name="releaseDate" use="optional" />
+		<xsd:attribute name="description" use="optional" />
+		<xsd:anyAttribute />
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="ItemDefs">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:ItemDef" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:anyAttribute />
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:simpleType name="datatypeType">
+	<xsd:restriction base="xsd:string">
+		<xsd:enumeration value="code" />
+		<xsd:enumeration value="codeWithBlank" />
+		<xsd:enumeration value="alpha" />
+		<xsd:enumeration value="alphaWithBlank" />
+		<xsd:enumeration value="date" />
+		<xsd:enumeration value="string" />
+		<xsd:enumeration value="stringInitialBlankOK" />
+		<xsd:enumeration value="integer" />
+		<xsd:enumeration value="integerLeftZeroPad" />
+	</xsd:restriction>
+</xsd:simpleType>
+
+<xsd:element name="ItemDef">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:ValidValue" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="tns:Description" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="naaccrId" use="required" type="xsd:ID" />
+		<xsd:attribute name="naaccrNum" use="required" type="xsd:integer" />
+		<xsd:attribute name="datatype" use="required" type="tns:datatypeType" />
+		<xsd:attribute name="regexValidation" use="optional" type="xsd:string" />
+		<xsd:attribute name="parentXmlElement" use="required" type="xsd:string" />
+		<xsd:attribute name="naaccrName" use="optional" type="xsd:string" />
+		<xsd:attribute name="section" use="optional" type="xsd:string" />
+		<xsd:attribute name="startColumn" use="optional" type="xsd:integer" />
+		<xsd:attribute name="length" use="optional" type="xsd:integer" />
+		<xsd:attribute name="retiredVersion" use="optional" type="xsd:string" />
+		<xsd:attribute name="sourceOfStandard" use="optional" type="xsd:string" />
+		<xsd:attribute name="recordTypes" use="optional" type="xsd:string" />
+		<xsd:attribute name="isGroupItem" use="optional" type="xsd:boolean" default="false" />
+		<xsd:attribute name="groupItemId" use="optional" type="xsd:IDREF" />
+		<xsd:anyAttribute />
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:simpleType name="formattedString" >
+	<xsd:restriction base="xsd:string">
+		<xsd:whiteSpace value="preserve" />
+	</xsd:restriction>
+</xsd:simpleType>
+
+<xsd:element name="ValidValue" >
+	<xsd:complexType>
+		<xsd:simpleContent>
+			<xsd:extension base="tns:formattedString">
+				<xsd:attribute name="code" use="required" type="xsd:string" />
+				<xsd:attribute name="description" use="optional" />
+				<xsd:attribute name="isMissing" use="optional" type="xsd:boolean" default="false" />
+				<xsd:anyAttribute />
+			</xsd:extension>	
+		</xsd:simpleContent>
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="Description" >
+	<xsd:complexType>
+		<xsd:simpleContent>
+			<xsd:extension base="tns:formattedString">
+				<xsd:attribute name="section" use="optional" type="xsd:string" />
+				<xsd:attribute name="order" use="optional" type="xsd:integer" />
+				<xsd:anyAttribute />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+</xsd:element>
+
+</xsd:schema>

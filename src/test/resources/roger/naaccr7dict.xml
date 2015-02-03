@@ -1,0 +1,1712 @@
+<?xml version="1.0"?>
+<NAACCRDataExchange xmlns="http://naaccr.org/naaccrfile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://naaccr.org/naaccrfile/naaccr7.xsd"
+NAACCRVersion="140" XSDVersion="1.0" description="NAACCR v14 base dictionary" datePrepared="2014-12-18T09:06:25" >
+	<Dictionary releaseDate="2014-12-18T09:06:25" >
+		<ItemDefs>
+			<ItemDef itemNo="10" itemName="RecType" longName="Record Type" 
+				itemLength="1" fixedStart="1" section="Record ID" recordTypes="I,C,A,M" 
+				regex="^[ICAM]$" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="20" itemName="PatientID" longName="Patient ID Number" 
+				itemLength="8" fixedStart="42" section="Record ID" recordTypes="I,C,A,M" 
+				datatype="integerWithZero" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="21" itemName="PTSysIDHosp" longName="Patient System ID-Hosp" 
+				itemLength="8" fixedStart="50" section="Record ID" recordTypes="I,C,A,M" 
+				datatype="integer" parentElement="CancerRecord" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="30" itemName="RegType" longName="Registry Type" 
+				itemLength="1" fixedStart="2" section="Record ID" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="40" itemName="RegistryID" longName="Registry ID" 
+				itemLength="10" fixedStart="30" section="Record ID" recordTypes="I,C,A,M" 
+				datatype="integerWithZero" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="45" itemName="NPIRegID" longName="NPI--Registry ID" 
+				itemLength="10" fixedStart="20" section="Record ID" recordTypes="I,C,A,M" 
+				datatype="integerWithZero" parentElement="CancerRecord" sourceOfStandard="NAACCR111" />
+			<ItemDef itemNo="50" itemName="NAACCRRecVer" longName="NAACCR Record Version" 
+				itemLength="3" fixedStart="17" section="Record ID" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="60" itemName="TumRecNum" longName="Tumor Record Number" 
+				itemLength="2" fixedStart="40" section="Record ID" recordTypes="I,C,A,M" 
+				datatype="integerWithZero" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="70" itemName="DxCity" longName="Addr at DX--City" 
+				itemLength="50" fixedStart="95" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="80" itemName="DxState" longName="Addr at DX--State" 
+				itemLength="2" fixedStart="145" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="90" itemName="DxCounty" longName="County at DX" 
+				itemLength="3" fixedStart="156" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="100" itemName="DxPostalZip" longName="Addr at DX--Postal Code" 
+				itemLength="9" fixedStart="147" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="102" itemName="DxCountry" longName="Addr at DX--Country" 
+				itemLength="3" fixedStart="436" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="110" itemName="CenTract708090" longName="Census Tract 1970/80/90" 
+				itemLength="6" fixedStart="159" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="integerWithZero" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="120" itemName="CenCodSys708090" longName="Census Cod Sys 1970/80/90" 
+				itemLength="1" fixedStart="166" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="130" itemName="CenTract2000" longName="Census Tract 2000" 
+				itemLength="6" fixedStart="168" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="integerWithZero" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="135" itemName="CenTract2010" longName="Census Tract 2010" 
+				itemLength="6" fixedStart="428" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="integerWithZero" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="145" itemName="PovertyInd" longName="Census Tr Poverty Indictr" 
+				itemLength="1" fixedStart="463" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="150" itemName="Marital" longName="Marital Status at DX" 
+				itemLength="1" fixedStart="176" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="160" itemName="Race1" longName="Race 1" 
+				itemLength="2" fixedStart="177" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="161" itemName="Race2" longName="Race 2" 
+				itemLength="2" fixedStart="179" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR8" />
+			<ItemDef itemNo="162" itemName="Race3" longName="Race 3" 
+				itemLength="2" fixedStart="181" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR8" />
+			<ItemDef itemNo="163" itemName="Race4" longName="Race 4" 
+				itemLength="2" fixedStart="183" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR8" />
+			<ItemDef itemNo="164" itemName="Race5" longName="Race 5" 
+				itemLength="2" fixedStart="185" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR8" />
+			<ItemDef itemNo="170" itemName="RaceCodSysCur" longName="Race Coding Sys--Current" 
+				itemLength="1" fixedStart="187" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="180" itemName="RaceCodSysOrg" longName="Race Coding Sys--Original" 
+				itemLength="1" fixedStart="188" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="190" itemName="Hispanic" longName="Spanish/Hispanic Origin" 
+				itemLength="1" fixedStart="189" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="191" itemName="NHIA" longName="NHIA Derived Hisp Origin" 
+				itemLength="1" fixedStart="418" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR102" />
+			<ItemDef itemNo="192" itemName="IHSLink" longName="IHS Link" 
+				itemLength="1" fixedStart="421" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="193" itemName="RaceNAPIIA" longName="Race--NAPIIA(derived API)" 
+				itemLength="2" fixedStart="419" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR113" />
+			<ItemDef itemNo="200" itemName="CompEthn" longName="Computed Ethnicity" 
+				itemLength="1" fixedStart="190" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="210" itemName="CompEthnSrc" longName="Computed Ethnicity Source" 
+				itemLength="1" fixedStart="191" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="220" itemName="Sex" 
+				itemLength="1" fixedStart="192" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="230" itemName="AgeDx" longName="Age at Diagnosis" 
+				itemLength="3" fixedStart="193" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="240" itemName="BirthDate" longName="Date of Birth" 
+				itemLength="8" fixedStart="196" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="241" itemName="BirthDateFlag" longName="Date of Birth Flag" 
+				itemLength="2" fixedStart="204" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="250" itemName="BPCode" longName="Birthplace" 
+				itemLength="3" fixedStart="206" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="252" itemName="BPState" longName="Birthplace--State" 
+				itemLength="2" fixedStart="442" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Patient" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="254" itemName="BPCountry" longName="Birthplace--Country" 
+				itemLength="3" fixedStart="444" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Patient" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="270" itemName="OccCen" longName="Census Occ Code 1970-2000" 
+				itemLength="3" fixedStart="209" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="272" itemName="IndCen2010" longName="Census Ind Code 2010" 
+				itemLength="4" fixedStart="455" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="280" itemName="IndCen" longName="Census Ind Code 1970-2000" 
+				itemLength="3" fixedStart="212" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="282" itemName="OccCen2010" longName="Census Occ Code 2010" 
+				itemLength="4" fixedStart="459" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="290" itemName="OccSrc" longName="Occupation Source" 
+				itemLength="1" fixedStart="215" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="300" itemName="IndSrc" longName="Industry Source" 
+				itemLength="1" fixedStart="216" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="310" itemName="TxUsualOcc" longName="Text--Usual Occupation" 
+				itemLength="100" fixedStart="217" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="320" itemName="TxUsualInd" longName="Text--Usual Industry" 
+				itemLength="100" fixedStart="317" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="330" itemName="OccIndCodSys" longName="Census Occ/Ind Sys 70-00" 
+				itemLength="1" fixedStart="417" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="362" itemName="CenBlockGrp2000" longName="Census Block Group 2000" 
+				itemLength="1" fixedStart="174" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="363" itemName="CenBlockGrp2010" longName="Census Block Group 2010" 
+				itemLength="1" fixedStart="434" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="364" itemName="CenTractCer708090" longName="Census Tr Cert 1970/80/90" 
+				itemLength="1" fixedStart="167" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="365" itemName="CenTractCer2000" longName="Census Tr Certainty 2000" 
+				itemLength="1" fixedStart="175" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="366" itemName="GISQuality" longName="GIS Coordinate Quality" 
+				itemLength="2" fixedStart="422" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="367" itemName="CenTractCer2010" longName="Census Tr Certainty 2010" 
+				itemLength="1" fixedStart="435" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="368" itemName="CenBlockGrp708090" longName="Census Block Grp 1970-90" 
+				itemLength="1" fixedStart="165" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Tumor" sourceOfStandard="NAACCR112" />
+			<ItemDef itemNo="380" itemName="SeqNumCentr" longName="Sequence Number--Central" 
+				itemLength="2" fixedStart="528" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="390" itemName="DxDate" longName="Date of Diagnosis" 
+				itemLength="8" fixedStart="530" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="391" itemName="DxDateFlag" longName="Date of Diagnosis Flag" 
+				itemLength="2" fixedStart="538" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="400" itemName="PSite" longName="Primary Site" 
+				itemLength="4" fixedStart="540" section="Cancer identification" recordTypes="I,C,A,M" 
+				regex="^C\d{3}$" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="410" itemName="Lateral" longName="Laterality" 
+				itemLength="1" fixedStart="544" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="419" itemName="MorphTypBehICDO2" longName="Morph--Type&Behav ICD-O-2" 
+				itemLength="5" fixedStart="545" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="@D" shadow="true" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="420" itemName="HistTypeICDO2" longName="Histology (92-00) ICD-O-2" 
+				itemLength="4" fixedStart="545" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="430" itemName="BehaviorICDO2" longName="Behavior (92-00) ICD-O-2" 
+				itemLength="1" fixedStart="549" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="439" itemName="DateMultTumorFlag" longName="Date of Mult Tumors Flag" 
+				itemLength="2" fixedStart="587" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="440" itemName="Grade" 
+				itemLength="1" fixedStart="555" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="441" itemName="GradePathValue" longName="Grade Path Value" 
+				itemLength="1" fixedStart="556" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="442" itemName="AmbiguousTerm" longName="Ambiguous Terminology DX" 
+				itemLength="1" fixedStart="566" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="443" itemName="DateConclusiveDX" longName="Date Conclusive DX" 
+				itemLength="8" fixedStart="567" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="444" itemName="MultTumAsOne" longName="Mult Tum Rpt as One Prim" 
+				itemLength="2" fixedStart="577" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="445" itemName="DateMultTumors" longName="Date of Mult Tumors" 
+				itemLength="8" fixedStart="579" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="446" itemName="MultiplicityCount" longName="Multiplicity Counter" 
+				itemLength="2" fixedStart="589" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="448" itemName="DateConclusDXFlag" longName="Date Conclusive DX Flag" 
+				itemLength="2" fixedStart="575" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="449" itemName="GradePathSys" longName="Grade Path System" 
+				itemLength="1" fixedStart="557" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="450" itemName="SiteCodSysCur" longName="Site Coding Sys--Current" 
+				itemLength="1" fixedStart="558" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="460" itemName="SiteCodSysOrg" longName="Site Coding Sys--Original" 
+				itemLength="1" fixedStart="559" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="470" itemName="MorphCodSysCur" longName="Morph Coding Sys--Current" 
+				itemLength="1" fixedStart="560" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="480" itemName="MorphCodSysOrg" longName="Morph Coding Sys--Originl" 
+				itemLength="1" fixedStart="561" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="490" itemName="DxConf" longName="Diagnostic Confirmation" 
+				itemLength="1" fixedStart="562" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="500" itemName="TypeRepSrc" longName="Type Of Reporting Source" 
+				itemLength="1" fixedStart="563" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="501" itemName="CasefindingSrc" longName="Casefinding Source" 
+				itemLength="2" fixedStart="564" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="521" itemName="MorphTypBehICDO3" longName="Morph--Type&Behav ICD-O-3" 
+				itemLength="5" fixedStart="550" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="@D" shadow="true" sourceOfStandard="NAACCR9" />
+			<ItemDef itemNo="522" itemName="HistTypeICDO3" longName="Histologic Type ICD-O-3" 
+				itemLength="4" fixedStart="550" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR9" />
+			<ItemDef itemNo="523" itemName="BehaviorICDO3" longName="Behavior Code ICD-O-3" 
+				itemLength="1" fixedStart="554" section="Cancer identification" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR9" />
+			<ItemDef itemNo="540" itemName="RepHosp" longName="Reporting Facility" 
+				itemLength="10" fixedStart="701" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="integerWithZero" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="545" itemName="NPIRepFacility" longName="NPI--Reporting Facility" 
+				itemLength="10" fixedStart="691" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="integerWithZero" parentElement="CancerRecord" sourceOfStandard="NAACCR111" />
+			<ItemDef itemNo="550" itemName="AccNumHosp" longName="Accession Number--Hosp" 
+				itemLength="9" fixedStart="731" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="560" itemName="SeqNumHosp" longName="Sequence Number--Hospital" 
+				itemLength="2" fixedStart="740" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="570" itemName="Abstractor" longName="Abstracted By" 
+				itemLength="3" fixedStart="742" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="580" itemName="Date1stCont" longName="Date of 1st Contact" 
+				itemLength="8" fixedStart="745" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="581" itemName="Date1stContFlag" longName="Date of 1st Contact Flag" 
+				itemLength="2" fixedStart="753" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="590" itemName="InPtAdmDate" longName="Date of Inpt Adm" 
+				itemLength="8" fixedStart="755" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="591" itemName="InPtAdmDateFlag" longName="Date of Inpt Adm Flag" 
+				itemLength="2" fixedStart="763" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="600" itemName="InPtDischDate" longName="Date of Inpt Disch" 
+				itemLength="8" fixedStart="765" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="601" itemName="InPtDischDateFlag" longName="Date of Inpt Disch Flag" 
+				itemLength="2" fixedStart="773" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="605" itemName="InpatientStatus" longName="Inpatient Status" 
+				itemLength="1" fixedStart="775" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="610" itemName="ClassCase" longName="Class Of Case" 
+				itemLength="2" fixedStart="776" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="630" itemName="PriPayerDx" longName="Primary Payer at DX" 
+				itemLength="2" fixedStart="778" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="668" itemName="RxHSurgApp2010" longName="RX Hosp--Surg App 2010" 
+				itemLength="1" fixedStart="781" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="670" itemName="RxHSurgPSite" longName="RX Hosp--Surg Prim Site" 
+				itemLength="2" fixedStart="782" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="672" itemName="RxHScopeRegLN" longName="RX Hosp--Scope Reg LN Sur" 
+				itemLength="1" fixedStart="784" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="674" itemName="RxHSurgOthRegDis" longName="RX Hosp--Surg Oth Reg/Dis" 
+				itemLength="1" fixedStart="785" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="676" itemName="RxHRegLNRem" longName="RX Hosp--Reg LN Removed" 
+				itemLength="2" fixedStart="786" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="678" itemName="RxHospSurgTiming" longName="RX Hosp--Surg Timing" 
+				itemLength="1" fixedStart="788" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" retiredVersion="v12" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="690" itemName="RxHRad" longName="RX Hosp--Radiation" 
+				itemLength="1" fixedStart="789" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="700" itemName="RxHChemo" longName="RX Hosp--Chemo" 
+				itemLength="2" fixedStart="790" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="710" itemName="RxHHorm" longName="RX Hosp--Hormone" 
+				itemLength="2" fixedStart="792" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="720" itemName="RxHBRM" longName="RX Hosp--BRM" 
+				itemLength="2" fixedStart="794" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="730" itemName="RxHOth" longName="RX Hosp--Other" 
+				itemLength="1" fixedStart="796" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="740" itemName="RxHDXStgProc" longName="RX Hosp--DX/Stg Proc" 
+				itemLength="2" fixedStart="797" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="746" itemName="RxHSurgSite9802" longName="RX Hosp--Surg Site 98-02" 
+				itemLength="2" fixedStart="800" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR 2003" />
+			<ItemDef itemNo="747" itemName="RxHScopeReg9802" longName="RX Hosp--Scope Reg 98-02" 
+				itemLength="1" fixedStart="802" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR 2003" />
+			<ItemDef itemNo="748" itemName="RxHSurgOth9802" longName="RX Hosp--Surg Oth 98-02" 
+				itemLength="1" fixedStart="803" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR 2003" />
+			<ItemDef itemNo="759" itemName="SEERSumStg2000" longName="SEER Summary Stage 2000" 
+				itemLength="1" fixedStart="904" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR9" />
+			<ItemDef itemNo="760" itemName="SEERSumStg1977" longName="SEER Summary Stage 1977" 
+				itemLength="1" fixedStart="905" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="779" itemName="EOD10Dig" longName="Extent of Disease 10-Dig" 
+				itemLength="12" fixedStart="906" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="alpha" shadow="true" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="780" itemName="EODTumSize" longName="EOD--Tumor Size" 
+				itemLength="3" fixedStart="906" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="790" itemName="EODExtent" longName="EOD--Extension" 
+				itemLength="2" fixedStart="909" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="800" itemName="EODPathProst" longName="EOD--Extension Prost Path" 
+				itemLength="2" fixedStart="911" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="810" itemName="EODLymNode" longName="EOD--Lymph Node Involv" 
+				itemLength="1" fixedStart="913" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="820" itemName="RegNodPos" longName="Regional Nodes Positive" 
+				itemLength="2" fixedStart="914" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="830" itemName="RegNodExam" longName="Regional Nodes Examined" 
+				itemLength="2" fixedStart="916" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="840" itemName="EOD13Dig" longName="EOD--Old 13 Digit" 
+				itemLength="13" fixedStart="918" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="850" itemName="EOD2Dig" longName="EOD--Old 2 Digit" 
+				itemLength="2" fixedStart="931" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="860" itemName="EOD4Dig" longName="EOD--Old 4 Digit" 
+				itemLength="4" fixedStart="933" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="870" itemName="EODCodSys" longName="Coding System For EOD" 
+				itemLength="1" fixedStart="937" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="880" itemName="AJCCTPath" longName="TNM Path T" 
+				itemLength="4" fixedStart="940" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="890" itemName="AJCCNPath" longName="TNM Path N" 
+				itemLength="4" fixedStart="944" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="900" itemName="AJCCMPath" longName="TNM Path M" 
+				itemLength="4" fixedStart="948" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="910" itemName="AJCCPathGrp" longName="TNM Path Stage Group" 
+				itemLength="4" fixedStart="952" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="920" itemName="TNMPathDescr" longName="TNM Path Descriptor" 
+				itemLength="1" fixedStart="956" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="930" itemName="TNMPathStgBy" longName="TNM Path Staged By" 
+				itemLength="1" fixedStart="957" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="940" itemName="AJCCTClin" longName="TNM Clin T" 
+				itemLength="4" fixedStart="958" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="950" itemName="AJCCNClin" longName="TNM Clin N" 
+				itemLength="4" fixedStart="962" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="960" itemName="AJCCMClin" longName="TNM Clin M" 
+				itemLength="4" fixedStart="966" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="970" itemName="AJCCClinGrp" longName="TNM Clin Stage Group" 
+				itemLength="4" fixedStart="970" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="980" itemName="TNMClinDesc" longName="TNM Clin Descriptor" 
+				itemLength="1" fixedStart="974" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="990" itemName="TNMClinStgBy" longName="TNM Clin Staged By" 
+				itemLength="1" fixedStart="975" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1060" itemName="TNMEdition" longName="TNM Edition Number" 
+				itemLength="2" fixedStart="938" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1120" itemName="PedStage" longName="Pediatric Stage" 
+				itemLength="2" fixedStart="976" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1130" itemName="PedStageSys" longName="Pediatric Staging System" 
+				itemLength="2" fixedStart="978" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1140" itemName="PedStageBy" longName="Pediatric Staged By" 
+				itemLength="1" fixedStart="980" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1150" itemName="TumMark1" longName="Tumor Marker 1" 
+				itemLength="1" fixedStart="981" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1160" itemName="TumMark2" longName="Tumor Marker 2" 
+				itemLength="1" fixedStart="982" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1170" itemName="TumMark3" longName="Tumor Marker 3" 
+				itemLength="1" fixedStart="983" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1182" itemName="LVI" longName="Lymph-vascular Invasion" 
+				itemLength="1" fixedStart="984" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1200" itemName="RxDateSurg" longName="RX Date Surgery" 
+				itemLength="8" fixedStart="1456" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1201" itemName="RxDateSurgFlag" longName="RX Date Surgery Flag" 
+				itemLength="2" fixedStart="1464" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1210" itemName="RxDateRad" longName="RX Date Radiation" 
+				itemLength="8" fixedStart="1486" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1211" itemName="RxDateRadFlag" longName="RX Date Radiation Flag" 
+				itemLength="2" fixedStart="1494" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1220" itemName="RxDateChemo" longName="RX Date Chemo" 
+				itemLength="8" fixedStart="1516" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1221" itemName="RxDateChemoFlag" longName="RX Date Chemo Flag" 
+				itemLength="2" fixedStart="1524" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1230" itemName="RxDateHorm" longName="RX Date Hormone" 
+				itemLength="8" fixedStart="1526" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1231" itemName="RxDateHormFlag" longName="RX Date Hormone Flag" 
+				itemLength="2" fixedStart="1534" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1240" itemName="RxDateBRM" longName="RX Date BRM" 
+				itemLength="8" fixedStart="1536" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1241" itemName="RxDateBRMFlag" longName="RX Date BRM Flag" 
+				itemLength="2" fixedStart="1544" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1250" itemName="RxDateOth" longName="RX Date Other" 
+				itemLength="8" fixedStart="1546" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1251" itemName="RxDateOthFlag" longName="RX Date Other Flag" 
+				itemLength="2" fixedStart="1554" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1260" itemName="FirstRxDateSEER" longName="Date Initial RX SEER" 
+				itemLength="8" fixedStart="1436" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1261" itemName="FirstRxDtSEERFlag" longName="Date Initial RX SEER Flag" 
+				itemLength="2" fixedStart="1444" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1270" itemName="FirstRxDateCOC" longName="Date 1st Crs RX CoC" 
+				itemLength="8" fixedStart="1446" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1271" itemName="FirstRxDtCOCFlag" longName="Date 1st Crs RX CoC Flag" 
+				itemLength="2" fixedStart="1454" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1280" itemName="RxDateDXStg" longName="RX Date DX/Stg Proc" 
+				itemLength="8" fixedStart="1556" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1281" itemName="RxDateDXStgFlag" longName="RX Date DX/Stg Proc Flag" 
+				itemLength="2" fixedStart="1564" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1285" itemName="RXSummRXStatus" longName="RX Summ--Treatment Status" 
+				itemLength="1" fixedStart="1566" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1290" itemName="RxSumSurgPSite" longName="RX Summ--Surg Prim Site" 
+				itemLength="2" fixedStart="1567" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1292" itemName="RxSumScopeRegLN" longName="RX Summ--Scope Reg LN Sur" 
+				itemLength="1" fixedStart="1569" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1294" itemName="RxSumSurgOthReg" longName="RX Summ--Surg Oth Reg/Dis" 
+				itemLength="1" fixedStart="1570" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1296" itemName="RxSumRegLNExam" longName="RX Summ--Reg LN Examined" 
+				itemLength="2" fixedStart="1571" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1310" itemName="SurgApproch" longName="RX Summ--Surgical Approch" 
+				itemLength="1" fixedStart="1573" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1320" itemName="RxSumSurgMarg" longName="RX Summ--Surgical Margins" 
+				itemLength="1" fixedStart="1574" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1330" itemName="ReconSurg" longName="RX Summ--Reconstruct 1st" 
+				itemLength="1" fixedStart="1575" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1340" itemName="ReasonNoSurg" longName="Reason for No Surgery" 
+				itemLength="1" fixedStart="1576" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1350" itemName="RxSumDXStg" longName="RX Summ--DX/Stg Proc" 
+				itemLength="2" fixedStart="1577" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1360" itemName="RxSumRad" longName="RX Summ--Radiation" 
+				itemLength="1" fixedStart="1580" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1370" itemName="RxSumRadCNS" longName="RX Summ--Rad to CNS" 
+				itemLength="1" fixedStart="1581" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1380" itemName="RxSumSurgRadSeq" longName="RX Summ--Surg/Rad Seq" 
+				itemLength="1" fixedStart="1582" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1390" itemName="RxSumChemo" longName="RX Summ--Chemo" 
+				itemLength="2" fixedStart="1585" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1400" itemName="RxSumHorm" longName="RX Summ--Hormone" 
+				itemLength="2" fixedStart="1587" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1410" itemName="RxSumBRM" longName="RX Summ--BRM" 
+				itemLength="2" fixedStart="1589" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1420" itemName="RxSumOth" longName="RX Summ--Other" 
+				itemLength="1" fixedStart="1591" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1430" itemName="ReasonNoRad" longName="Reason for No Radiation" 
+				itemLength="1" fixedStart="1592" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1460" itemName="RxCodSysCur" longName="RX Coding System--Current" 
+				itemLength="2" fixedStart="1593" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1510" itemName="RadRegDose" longName="Rad--Regional Dose cGy" 
+				itemLength="5" fixedStart="1596" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1520" itemName="RadNumRxVol" longName="Rad--No of Treatments Vol" 
+				itemLength="3" fixedStart="1601" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1540" itemName="RadRxVol" longName="Rad--Treatment Volume" 
+				itemLength="2" fixedStart="1604" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1550" itemName="RadLocRx" longName="Rad--Location of RX" 
+				itemLength="1" fixedStart="1606" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1570" itemName="RadRegModal" longName="Rad--Regional RX Modality" 
+				itemLength="2" fixedStart="1607" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1639" itemName="RxSumSysSurSeq" longName="RX Summ--Systemic/Sur Seq" 
+				itemLength="1" fixedStart="1616" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="1640" itemName="RxSumSurgOld" longName="RX Summ--Surgery Type" 
+				itemLength="2" fixedStart="1617" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1646" itemName="RxSumSurgSite9802" longName="RX Summ--Surg Site 98-02" 
+				itemLength="2" fixedStart="1620" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR 2003" />
+			<ItemDef itemNo="1647" itemName="RxSumScopeReg9802" longName="RX Summ--Scope Reg 98-02" 
+				itemLength="1" fixedStart="1622" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR 2003" />
+			<ItemDef itemNo="1648" itemName="RxSumSurgOth9802" longName="RX Summ--Surg Oth 98-02" 
+				itemLength="1" fixedStart="1623" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR 2003" />
+			<ItemDef itemNo="1660" itemName="SbsqRxDate2" longName="Subsq RX 2nd Course Date" 
+				itemLength="8" fixedStart="1724" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1661" itemName="SbsqRx2DateFlag" longName="Subsq RX 2ndCrs Date Flag" 
+				itemLength="2" fixedStart="1732" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1670" itemName="SbsqRxCodes2" longName="Subsq RX 2nd Course Codes" 
+				itemLength="11" fixedStart="1734" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="string" shadow="true" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1671" itemName="SbsqRxSurg2" longName="Subsq RX 2nd Course Surg" 
+				itemLength="2" fixedStart="1734" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1672" itemName="SbsqRxRad2" longName="Subsq RX 2nd Course Rad" 
+				itemLength="1" fixedStart="1740" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1673" itemName="SbsqRxChemo2" longName="Subsq RX 2nd Course Chemo" 
+				itemLength="1" fixedStart="1741" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1674" itemName="SbsqRxHorm2" longName="Subsq RX 2nd Course Horm" 
+				itemLength="1" fixedStart="1742" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1675" itemName="SbsqRxBRM2" longName="Subsq RX 2nd Course BRM" 
+				itemLength="1" fixedStart="1743" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1676" itemName="SbsqRxOth2" longName="Subsq RX 2nd Course Oth" 
+				itemLength="1" fixedStart="1744" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1677" itemName="SbsqRxScpLN2" longName="Subsq RX 2nd--Scope LN Su" 
+				itemLength="1" fixedStart="1736" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1678" itemName="SbsqRxSurgOth2" longName="Subsq RX 2nd--Surg Oth" 
+				itemLength="1" fixedStart="1737" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1679" itemName="SbsqRxRegLN2" longName="Subsq RX 2nd--Reg LN Rem" 
+				itemLength="2" fixedStart="1738" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1680" itemName="SbsqRxDate3" longName="Subsq RX 3rd Course Date" 
+				itemLength="8" fixedStart="1745" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1681" itemName="SbsqRx3DateFlag" longName="Subsq RX 3rdCrs Date Flag" 
+				itemLength="2" fixedStart="1753" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1690" itemName="SbsqRxCodes3" longName="Subsq RX 3rd Course Codes" 
+				itemLength="11" fixedStart="1755" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="string" shadow="true" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1691" itemName="SbsqRxSurg3" longName="Subsq RX 3rd Course Surg" 
+				itemLength="2" fixedStart="1755" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1692" itemName="SbsqRxRad3" longName="Subsq RX 3rd Course Rad" 
+				itemLength="1" fixedStart="1761" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1693" itemName="SbsqRxChemo3" longName="Subsq RX 3rd Course Chemo" 
+				itemLength="1" fixedStart="1762" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1694" itemName="SbsqRxHorm3" longName="Subsq RX 3rd Course Horm" 
+				itemLength="1" fixedStart="1763" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1695" itemName="SbsqRxBRM3" longName="Subsq RX 3rd Course BRM" 
+				itemLength="1" fixedStart="1764" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1696" itemName="SbsqRxOth3" longName="Subsq RX 3rd Course Oth" 
+				itemLength="1" fixedStart="1765" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1697" itemName="SbsqRxScpLN3" longName="Subsq RX 3rd--Scope LN Su" 
+				itemLength="1" fixedStart="1757" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1698" itemName="SbsqRxSurgOth3" longName="Subsq RX 3rd--Surg Oth" 
+				itemLength="1" fixedStart="1758" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1699" itemName="SbsqRxRegLN3" longName="Subsq RX 3rd--Reg LN Rem" 
+				itemLength="2" fixedStart="1759" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1700" itemName="SbsqRxDate4" longName="Subsq RX 4th Course Date" 
+				itemLength="8" fixedStart="1766" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1701" itemName="SbsqRx4DateFlag" longName="Subsq RX 4thCrs Date Flag" 
+				itemLength="2" fixedStart="1774" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1710" itemName="SbsqRxCodes4" longName="Subsq RX 4th Course Codes" 
+				itemLength="11" fixedStart="1776" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="string" shadow="true" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1711" itemName="SbsqRxSurg4" longName="Subsq RX 4th Course Surg" 
+				itemLength="2" fixedStart="1776" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1712" itemName="SbsqRxRad4" longName="Subsq RX 4th Course Rad" 
+				itemLength="1" fixedStart="1782" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1713" itemName="SbsqRxChemo4" longName="Subsq RX 4th Course Chemo" 
+				itemLength="1" fixedStart="1783" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1714" itemName="SbsqRxHorm4" longName="Subsq RX 4th Course Horm" 
+				itemLength="1" fixedStart="1784" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1715" itemName="SbsqRxBRM4" longName="Subsq RX 4th Course BRM" 
+				itemLength="1" fixedStart="1785" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1716" itemName="SbsqRxOth4" longName="Subsq RX 4th Course Oth" 
+				itemLength="1" fixedStart="1786" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1717" itemName="SbsqRxScpLN4" longName="Subsq RX 4th--Scope LN Su" 
+				itemLength="1" fixedStart="1778" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1718" itemName="SbsqRxSurgOth4" longName="Subsq RX 4th--Surg Oth" 
+				itemLength="1" fixedStart="1779" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1719" itemName="SbsqRxRegLN4" longName="Subsq RX 4th--Reg LN Rem" 
+				itemLength="2" fixedStart="1780" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1741" itemName="SbsqRxReconDel" longName="Subsq RX--Reconstruct Del" 
+				itemLength="1" fixedStart="1787" section="Treatment-Subsequent" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1750" itemName="DateLastContact" longName="Date of Last Contact" 
+				itemLength="8" fixedStart="2116" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1751" itemName="DateLastContFlag" longName="Date of Last Contact Flag" 
+				itemLength="2" fixedStart="2124" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1755" itemName="DateDeathCanada" longName="Date of Death--Canada" 
+				itemLength="8" fixedStart="2280" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Patient" sourceOfStandard="NAACCR113" />
+			<ItemDef itemNo="1756" itemName="DateDeathCanadaFl" longName="Date of Death--CanadaFlag" 
+				itemLength="2" fixedStart="2288" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1760" itemName="VitalStatus" longName="Vital Status" 
+				itemLength="1" fixedStart="2126" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1770" itemName="CAStat" longName="Cancer Status" 
+				itemLength="1" fixedStart="2127" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1780" itemName="QualSurv" longName="Quality Of Survival" 
+				itemLength="1" fixedStart="2128" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1790" itemName="FupSource" longName="Follow-Up Source" 
+				itemLength="1" fixedStart="2129" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1791" itemName="FupSourceCentral" longName="Follow-Up Source Central" 
+				itemLength="2" fixedStart="2278" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="1800" itemName="NextFupSource" longName="Next Follow-Up Source" 
+				itemLength="1" fixedStart="2130" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1810" itemName="CurrCity" longName="Addr Current--City" 
+				itemLength="50" fixedStart="2131" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1820" itemName="CurrState" longName="Addr Current--State" 
+				itemLength="2" fixedStart="2181" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1830" itemName="CurrPostalZip" longName="Addr Current--Postal Code" 
+				itemLength="9" fixedStart="2183" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1832" itemName="CurrCountry" longName="Addr Current--Country" 
+				itemLength="3" fixedStart="439" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Patient" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="1840" itemName="CurrCounty" longName="County--Current" 
+				itemLength="3" fixedStart="2192" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1842" itemName="FupContCity" longName="Follow-Up Contact--City" 
+				itemLength="50" fixedStart="2208" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR6" />
+			<ItemDef itemNo="1844" itemName="FupContState" longName="Follow-Up Contact--State" 
+				itemLength="2" fixedStart="2258" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Patient" sourceOfStandard="NAACCR6" />
+			<ItemDef itemNo="1846" itemName="FupContPostalZip" longName="Follow-Up Contact--Postal" 
+				itemLength="9" fixedStart="2260" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR6" />
+			<ItemDef itemNo="1847" itemName="FupContCountry" longName="Followup Contact--Country" 
+				itemLength="3" fixedStart="447" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Patient" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="1850" itemName="FupUnusual" longName="Unusual Follow-Up Method" 
+				itemLength="2" fixedStart="2290" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1860" itemName="RecurDate1st" longName="Recurrence Date--1st" 
+				itemLength="8" fixedStart="2196" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1861" itemName="RecurDate1stFlag" longName="Recurrence Date--1st Flag" 
+				itemLength="2" fixedStart="2204" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="1880" itemName="RecurType1st" longName="Recurrence Type--1st" 
+				itemLength="2" fixedStart="2206" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1910" itemName="DthCause" longName="Cause Of Death" 
+				itemLength="4" fixedStart="2269" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1920" itemName="ICDRevNum" longName="ICD Revision Number" 
+				itemLength="1" fixedStart="2273" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1930" itemName="Autopsy" 
+				itemLength="1" fixedStart="2274" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1940" itemName="DthPlace" longName="Place of Death" 
+				itemLength="3" fixedStart="2275" section="Follow-up/Recurrence" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1942" itemName="DthPlaceState" longName="Place of Death--State" 
+				itemLength="2" fixedStart="450" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Patient" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="1944" itemName="DthPlaceCountry" longName="Place of Death--Country" 
+				itemLength="3" fixedStart="452" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Patient" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="1960" itemName="OldSite" longName="Site (73-91) ICD-O-1" 
+				itemLength="4" fixedStart="1909" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1970" itemName="OldMorph" longName="Morph (73-91) ICD-O-1" 
+				itemLength="6" fixedStart="1913" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" shadow="true" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1971" itemName="OldHist" longName="Histology (73-91) ICD-O-1" 
+				itemLength="4" fixedStart="1913" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1972" itemName="OldBeh" longName="Behavior (73-91) ICD-O-1" 
+				itemLength="1" fixedStart="1917" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1973" itemName="OldGrade" longName="Grade (73-91) ICD-O-1" 
+				itemLength="1" fixedStart="1918" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1980" itemName="ICDConvFlg" longName="ICD-O-2 Conversion Flag" 
+				itemLength="1" fixedStart="1919" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="1981" itemName="OvrdSSNodesPos" longName="Over-ride SS/NodesPos" 
+				itemLength="1" fixedStart="1888" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR9" />
+			<ItemDef itemNo="1982" itemName="OvrdSSTNMN" longName="Over-ride SS/TNM-N" 
+				itemLength="1" fixedStart="1889" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR9" />
+			<ItemDef itemNo="1983" itemName="OvrdSSTNMM" longName="Over-ride SS/TNM-M" 
+				itemLength="1" fixedStart="1890" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR9" />
+			<ItemDef itemNo="1985" itemName="OvrdAcsnClassSeq" longName="Over-ride Acsn/Class/Seq" 
+				itemLength="1" fixedStart="1891" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR9" />
+			<ItemDef itemNo="1986" itemName="OvrdHospSeqDxConf" longName="Over-ride HospSeq/DxConf" 
+				itemLength="1" fixedStart="1892" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR9" />
+			<ItemDef itemNo="1987" itemName="OvrdCOCSiteType" longName="Over-ride COC-Site/Type" 
+				itemLength="1" fixedStart="1893" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR9" />
+			<ItemDef itemNo="1988" itemName="OvrdHospSeqSite" longName="Over-ride HospSeq/Site" 
+				itemLength="1" fixedStart="1894" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR9" />
+			<ItemDef itemNo="1989" itemName="OvrdSiteTNMStgGrp" longName="Over-ride Site/TNM-StgGrp" 
+				itemLength="1" fixedStart="1895" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR9" />
+			<ItemDef itemNo="1990" itemName="OvrdAgeSiteMorph" longName="Over-ride Age/Site/Morph" 
+				itemLength="1" fixedStart="1896" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2000" itemName="OvrdSqDxCnf" longName="Over-ride SeqNo/DxConf" 
+				itemLength="1" fixedStart="1897" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2010" itemName="OvrdSitLatSq" longName="Over-ride Site/Lat/SeqNo" 
+				itemLength="1" fixedStart="1898" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2020" itemName="OvrdSurgDxCf" longName="Over-ride Surg/DxConf" 
+				itemLength="1" fixedStart="1899" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2030" itemName="OvrdSiteType" longName="Over-ride Site/Type" 
+				itemLength="1" fixedStart="1900" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2040" itemName="OvrdHist" longName="Over-ride Histology" 
+				itemLength="1" fixedStart="1901" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2050" itemName="OvrdRepSrc" longName="Over-ride Report Source" 
+				itemLength="1" fixedStart="1902" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2060" itemName="OvrdIldfSite" longName="Over-ride Ill-define Site" 
+				itemLength="1" fixedStart="1903" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2070" itemName="OvrdLeukLym" longName="Over-ride Leuk, Lymphoma" 
+				itemLength="1" fixedStart="1904" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2071" itemName="OvrdSiteBeh" longName="Over-ride Site/Behavior" 
+				itemLength="1" fixedStart="1905" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2072" itemName="OvrdSiteEODDXDt" longName="Over-ride Site/EOD/DX Dt" 
+				itemLength="1" fixedStart="1906" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2073" itemName="OvrdSiteLatEOD" longName="Over-ride Site/Lat/EOD" 
+				itemLength="1" fixedStart="1907" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2074" itemName="OvrdSiteLatMorph" longName="Over-ride Site/Lat/Morph" 
+				itemLength="1" fixedStart="1908" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2081" itemName="CRCCheckSum" longName="CRC CHECKSUM" 
+				itemLength="10" fixedStart="1920" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="integer" parentElement="CancerRecord" sourceOfStandard="NAACCR6" />
+			<ItemDef itemNo="2085" itemName="DateCaseInitiated" longName="Date Case Initiated" 
+				itemLength="8" fixedStart="1951" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2090" itemName="DtCaseComp" longName="Date Case Completed" 
+				itemLength="8" fixedStart="1959" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2092" itemName="DtCaseCompCoC" longName="Date Case Completed--CoC" 
+				itemLength="8" fixedStart="1967" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2100" itemName="DateLastChgd" longName="Date Case Last Changed" 
+				itemLength="8" fixedStart="1975" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2110" itemName="DateExported" longName="Date Case Report Exported" 
+				itemLength="8" fixedStart="1983" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2111" itemName="DtCaseRptRcvd" longName="Date Case Report Received" 
+				itemLength="8" fixedStart="1991" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR6" />
+			<ItemDef itemNo="2112" itemName="DtCaseRptLoad" longName="Date Case Report Loaded" 
+				itemLength="8" fixedStart="1999" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR6" />
+			<ItemDef itemNo="2113" itemName="DtTumorRecAvail" longName="Date Tumor Record Availbl" 
+				itemLength="8" fixedStart="2007" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR6" />
+			<ItemDef itemNo="2116" itemName="ICDO3ConvFlag" longName="ICD-O-3 Conversion Flag" 
+				itemLength="1" fixedStart="2015" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR9" />
+			<ItemDef itemNo="2120" itemName="SEERCodSysCur" longName="SEER Coding Sys--Current" 
+				itemLength="1" fixedStart="1930" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2130" itemName="SEERCodSysOrg" longName="SEER Coding Sys--Original" 
+				itemLength="1" fixedStart="1931" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2140" itemName="COCCodSysCur" longName="COC Coding Sys--Current" 
+				itemLength="2" fixedStart="1932" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2150" itemName="COCCodSysOrg" longName="COC Coding Sys--Original" 
+				itemLength="2" fixedStart="1934" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2170" itemName="VendorName" longName="Vendor Name" 
+				itemLength="10" fixedStart="1936" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2180" itemName="SEERTypeFup" longName="SEER Type of Follow-Up" 
+				itemLength="1" fixedStart="1946" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2190" itemName="SEERRecNum" longName="SEER Record Number" 
+				itemLength="2" fixedStart="1947" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2200" itemName="DxProcs" longName="Diagnostic Proc 73-87" 
+				itemLength="2" fixedStart="1949" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2230" itemName="LastName" longName="Name--Last" 
+				itemLength="40" fixedStart="3340" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2240" itemName="FirstName" longName="Name--First" 
+				itemLength="40" fixedStart="3380" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2250" itemName="MiddleName" longName="Name--Middle" 
+				itemLength="40" fixedStart="3420" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2260" itemName="NamePrefix" longName="Name--Prefix" 
+				itemLength="3" fixedStart="3460" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="alpha" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2270" itemName="NameSuffix" longName="Name--Suffix" 
+				itemLength="3" fixedStart="3463" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2280" itemName="Alias" longName="Name--Alias" 
+				itemLength="40" fixedStart="3466" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2290" itemName="SpouseName" longName="Name--Spouse/Parent" 
+				itemLength="60" fixedStart="3546" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2300" itemName="MedRecNum" longName="Medical Record Number" 
+				itemLength="11" fixedStart="3606" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2310" itemName="MilRecNumSfx" longName="Military Record No Suffix" 
+				itemLength="2" fixedStart="3617" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2320" itemName="SocSec" longName="Social Security Number" 
+				itemLength="9" fixedStart="3619" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="code" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2330" itemName="DxNumAndSt" longName="Addr at DX--No & Street" 
+				itemLength="60" fixedStart="3628" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2335" itemName="DxSupp" longName="Addr at DX--Supplementl" 
+				itemLength="60" fixedStart="3688" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2350" itemName="CurrNumAndSt" longName="Addr Current--No & Street" 
+				itemLength="60" fixedStart="3748" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2352" itemName="Latitude" 
+				itemLength="10" fixedStart="4064" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2354" itemName="Longitude" 
+				itemLength="11" fixedStart="4074" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2355" itemName="CurrSupp" longName="Addr Current--Supplementl" 
+				itemLength="60" fixedStart="3808" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2360" itemName="Phone" longName="Telephone" 
+				itemLength="10" fixedStart="3868" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2380" itemName="DCStateFileNum" longName="DC State File Number" 
+				itemLength="6" fixedStart="3878" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="alpha" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2390" itemName="MaidName" longName="Name--Maiden" 
+				itemLength="40" fixedStart="3506" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2392" itemName="FupContNumAndSt" longName="Follow-Up Contact--No&St" 
+				itemLength="60" fixedStart="3944" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR6" />
+			<ItemDef itemNo="2393" itemName="FupContSupp" longName="Follow-Up Contact--Suppl" 
+				itemLength="60" fixedStart="4004" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2394" itemName="FupContName" longName="Follow-Up Contact--Name" 
+				itemLength="60" fixedStart="3884" section="Patient-Confidential" recordTypes="C,A,M" 
+				datatype="string" parentElement="Patient" sourceOfStandard="NAACCR6" />
+			<ItemDef itemNo="2410" itemName="HosRefFrom" longName="Institution Referred From" 
+				itemLength="10" fixedStart="4315" section="Hospital-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2415" itemName="NPIInstRefFrom" longName="NPI--Inst Referred From" 
+				itemLength="10" fixedStart="4305" section="Hospital-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="CancerRecord" sourceOfStandard="NAACCR111" />
+			<ItemDef itemNo="2420" itemName="HosRefTo" longName="Institution Referred To" 
+				itemLength="10" fixedStart="4335" section="Hospital-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2425" itemName="NPIInstRefTo" longName="NPI--Inst Referred To" 
+				itemLength="10" fixedStart="4325" section="Hospital-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="CancerRecord" sourceOfStandard="NAACCR111" />
+			<ItemDef itemNo="2440" itemName="FollowRegistry" longName="Following Registry" 
+				itemLength="10" fixedStart="4295" section="Hospital-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2445" itemName="NPIFollowRegistry" longName="NPI--Following Registry" 
+				itemLength="10" fixedStart="4285" section="Hospital-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="Patient" sourceOfStandard="NAACCR111" />
+			<ItemDef itemNo="2460" itemName="PhysManaging" longName="Physician--Managing" 
+				itemLength="8" fixedStart="4405" section="Other-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="Tumor" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2465" itemName="NPIPhysManaging" longName="NPI--Physician--Managing" 
+				itemLength="10" fixedStart="4395" section="Other-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="Tumor" sourceOfStandard="NAACCR111" />
+			<ItemDef itemNo="2470" itemName="PhysFup" longName="Physician--Follow-Up" 
+				itemLength="8" fixedStart="4423" section="Other-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="Patient" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2475" itemName="NPIPhysFup" longName="NPI--Physician--Follow-Up" 
+				itemLength="10" fixedStart="4413" section="Other-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="Patient" sourceOfStandard="NAACCR111" />
+			<ItemDef itemNo="2480" itemName="PhysPriSurg" longName="Physician--Primary Surg" 
+				itemLength="8" fixedStart="4441" section="Other-confidential" recordTypes="C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2485" itemName="NPIPhysPriSurg" longName="NPI--Physician--Prim Surg" 
+				itemLength="10" fixedStart="4431" section="Other-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="CancerRecord" sourceOfStandard="NAACCR111" />
+			<ItemDef itemNo="2490" itemName="Phys3" longName="Physician 3" 
+				itemLength="8" fixedStart="4459" section="Other-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2495" itemName="NPIPhys3" longName="NPI--Physician 3" 
+				itemLength="10" fixedStart="4449" section="Other-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="CancerRecord" sourceOfStandard="NAACCR111" />
+			<ItemDef itemNo="2500" itemName="Phys4" longName="Physician 4" 
+				itemLength="8" fixedStart="4477" section="Other-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="CancerRecord" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2505" itemName="NPIPhys4" longName="NPI--Physician 4" 
+				itemLength="10" fixedStart="4467" section="Other-confidential" recordTypes="C,A,M" 
+				datatype="integerWithZero" parentElement="CancerRecord" sourceOfStandard="NAACCR111" />
+			<ItemDef itemNo="2520" itemName="TxDxPE" longName="Text--DX Proc--PE" 
+				itemLength="1000" fixedStart="5565" section="Text-Diagnosis" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2530" itemName="TxDxXray" longName="Text--DX Proc--X-ray/scan" 
+				itemLength="1000" fixedStart="6565" section="Text-Diagnosis" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2540" itemName="TxDxScope" longName="Text--DX Proc--Scopes" 
+				itemLength="1000" fixedStart="7565" section="Text-Diagnosis" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2550" itemName="TxDxLab" longName="Text--DX Proc--Lab Tests" 
+				itemLength="1000" fixedStart="8565" section="Text-Diagnosis" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2560" itemName="TxDxOp" longName="Text--DX Proc--Op" 
+				itemLength="1000" fixedStart="9565" section="Text-Diagnosis" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2570" itemName="TxDxPath" longName="Text--DX Proc--Path" 
+				itemLength="1000" fixedStart="10565" section="Text-Diagnosis" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2580" itemName="TxPSite" longName="Text--Primary Site Title" 
+				itemLength="100" fixedStart="11565" section="Text-Diagnosis" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2590" itemName="TxHist" longName="Text--Histology Title" 
+				itemLength="100" fixedStart="11665" section="Text-Diagnosis" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2600" itemName="TxStage" longName="Text--Staging" 
+				itemLength="1000" fixedStart="11765" section="Text-Diagnosis" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2610" itemName="TxRxSurg" longName="RX Text--Surgery" 
+				itemLength="1000" fixedStart="12765" section="Text-Treatment" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2620" itemName="TxRxRadBm" longName="RX Text--Radiation (Beam)" 
+				itemLength="1000" fixedStart="13765" section="Text-Treatment" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2630" itemName="TxRxRadOth" longName="RX Text--Radiation Other" 
+				itemLength="1000" fixedStart="14765" section="Text-Treatment" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2640" itemName="TxRxChemo" longName="RX Text--Chemo" 
+				itemLength="1000" fixedStart="15765" section="Text-Treatment" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2650" itemName="TxRxHorm" longName="RX Text--Hormone" 
+				itemLength="1000" fixedStart="16765" section="Text-Treatment" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2660" itemName="TxRxBRM" longName="RX Text--BRM" 
+				itemLength="1000" fixedStart="17765" section="Text-Treatment" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2670" itemName="TxRxOth" longName="RX Text--Other" 
+				itemLength="1000" fixedStart="18765" section="Text-Treatment" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2680" itemName="TxRemarks" longName="Text--Remarks" 
+				itemLength="1000" fixedStart="19765" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2690" itemName="TxDxPlace" longName="Text--Place Of Diagnosis" 
+				itemLength="60" fixedStart="20765" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="string" sourceOfStandard="NAACCR51" />
+			<ItemDef itemNo="2730" itemName="CSPreRxTumorSize" longName="CS PreRx Tumor Size" 
+				itemLength="3" fixedStart="1078" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="integer" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2735" itemName="CSPreRxExtension" longName="CS PreRx Extension" 
+				itemLength="3" fixedStart="1081" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="integer" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2740" itemName="CSPreRxSzExtEval" longName="CS PreRx Tum Sz/Ext Eval" 
+				itemLength="1" fixedStart="1084" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="integer" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2750" itemName="CSPreRxLymphNodes" longName="CS PreRx Lymph Nodes" 
+				itemLength="3" fixedStart="1085" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="integer" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2755" itemName="CSPreRxNodesEval" longName="CS PreRx Reg Nodes Eval" 
+				itemLength="1" fixedStart="1088" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="integer" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2760" itemName="CSPreRxMetsAtDX" longName="CS PreRx Mets at DX" 
+				itemLength="2" fixedStart="1089" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="integer" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2765" itemName="CSPreRxMetsEval" longName="CS PreRx Mets Eval" 
+				itemLength="1" fixedStart="1091" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="integer" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2770" itemName="CSPostRxTumorSize" longName="CS PostRx Tumor Size" 
+				itemLength="3" fixedStart="1092" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="integer" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2775" itemName="CSPostRxExtension" longName="CS PostRx Extension" 
+				itemLength="3" fixedStart="1095" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="integer" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2780" itemName="CSPostRxLymphNode" longName="CS PostRx Lymph Nodes" 
+				itemLength="3" fixedStart="1098" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="integer" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2785" itemName="CSPostRxMetsAtDX" longName="CS PostRx Mets at DX" 
+				itemLength="2" fixedStart="1101" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="integer" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2800" itemName="CSTumorSize" longName="CS Tumor Size" 
+				itemLength="3" fixedStart="985" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2810" itemName="CSExt" longName="CS Extension" 
+				itemLength="3" fixedStart="988" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2820" itemName="CSSizeExtEval" longName="CS Tumor Size/Ext Eval" 
+				itemLength="1" fixedStart="991" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2830" itemName="CSLymphNodes" longName="CS Lymph Nodes" 
+				itemLength="3" fixedStart="992" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2840" itemName="CSNodesEval" longName="CS Lymph Nodes Eval" 
+				itemLength="1" fixedStart="995" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2850" itemName="CSMetsDX" longName="CS Mets at DX" 
+				itemLength="2" fixedStart="996" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2851" itemName="CSMetsAtDXBone" longName="CS Mets at Dx-Bone" 
+				itemLength="1" fixedStart="999" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2852" itemName="CSMetsAtDXBrain" longName="CS Mets at Dx-Brain" 
+				itemLength="1" fixedStart="1000" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2853" itemName="CSMetsAtDXLiver" longName="CS Mets at Dx-Liver" 
+				itemLength="1" fixedStart="1001" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2854" itemName="CSMetsAtDXLung" longName="CS Mets at Dx-Lung" 
+				itemLength="1" fixedStart="1002" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2860" itemName="CSMetsEval" longName="CS Mets Eval" 
+				itemLength="1" fixedStart="998" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2861" itemName="CSSSF7" longName="CS Site-Specific Factor 7" 
+				itemLength="3" fixedStart="1021" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2862" itemName="CSSSF8" longName="CS Site-Specific Factor 8" 
+				itemLength="3" fixedStart="1024" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2863" itemName="CSSSF9" longName="CS Site-Specific Factor 9" 
+				itemLength="3" fixedStart="1027" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2864" itemName="CSSSF10" longName="CS Site-Specific Factor10" 
+				itemLength="3" fixedStart="1030" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2865" itemName="CSSSF11" longName="CS Site-Specific Factor11" 
+				itemLength="3" fixedStart="1033" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2866" itemName="CSSSF12" longName="CS Site-Specific Factor12" 
+				itemLength="3" fixedStart="1036" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2867" itemName="CSSSF13" longName="CS Site-Specific Factor13" 
+				itemLength="3" fixedStart="1039" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2868" itemName="CSSSF14" longName="CS Site-Specific Factor14" 
+				itemLength="3" fixedStart="1042" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2869" itemName="CSSSF15" longName="CS Site-Specific Factor15" 
+				itemLength="3" fixedStart="1045" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2870" itemName="CSSSF16" longName="CS Site-Specific Factor16" 
+				itemLength="3" fixedStart="1048" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2871" itemName="CSSSF17" longName="CS Site-Specific Factor17" 
+				itemLength="3" fixedStart="1051" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2872" itemName="CSSSF18" longName="CS Site-Specific Factor18" 
+				itemLength="3" fixedStart="1054" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2873" itemName="CSSSF19" longName="CS Site-Specific Factor19" 
+				itemLength="3" fixedStart="1057" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2874" itemName="CSSSF20" longName="CS Site-Specific Factor20" 
+				itemLength="3" fixedStart="1060" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2875" itemName="CSSSF21" longName="CS Site-Specific Factor21" 
+				itemLength="3" fixedStart="1063" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2876" itemName="CSSSF22" longName="CS Site-Specific Factor22" 
+				itemLength="3" fixedStart="1066" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2877" itemName="CSSSF23" longName="CS Site-Specific Factor23" 
+				itemLength="3" fixedStart="1069" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2878" itemName="CSSSF24" longName="CS Site-Specific Factor24" 
+				itemLength="3" fixedStart="1072" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2879" itemName="CSSSF25" longName="CS Site-Specific Factor25" 
+				itemLength="3" fixedStart="1075" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2880" itemName="CSSSF1" longName="CS Site-Specific Factor 1" 
+				itemLength="3" fixedStart="1003" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2890" itemName="CSSSF2" longName="CS Site-Specific Factor 2" 
+				itemLength="3" fixedStart="1006" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2900" itemName="CSSSF3" longName="CS Site-Specific Factor 3" 
+				itemLength="3" fixedStart="1009" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2910" itemName="CSSSF4" longName="CS Site-Specific Factor 4" 
+				itemLength="3" fixedStart="1012" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2920" itemName="CSSSF5" longName="CS Site-Specific Factor 5" 
+				itemLength="3" fixedStart="1015" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2930" itemName="CSSSF6" longName="CS Site-Specific Factor 6" 
+				itemLength="3" fixedStart="1018" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2935" itemName="CSVerInputOrig" longName="CS Version Input Original" 
+				itemLength="6" fixedStart="1167" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Tumor" sourceOfStandard="NAACCR101" />
+			<ItemDef itemNo="2936" itemName="CSVerDerived" longName="CS Version Derived" 
+				itemLength="6" fixedStart="1173" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="NAACCR101" />
+			<ItemDef itemNo="2937" itemName="CSVerInputCurrent" longName="CS Version Input Current" 
+				itemLength="6" fixedStart="1161" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="alpha" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="2940" itemName="DerivedAJCC6T" longName="Derived AJCC-6 T" 
+				itemLength="2" fixedStart="1103" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2950" itemName="DerivedAJCC6TDes" longName="Derived AJCC-6 T Descript" 
+				itemLength="1" fixedStart="1105" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2960" itemName="DerivedAJCC6N" longName="Derived AJCC-6 N" 
+				itemLength="2" fixedStart="1106" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2970" itemName="DerivedAJCC6NDes" longName="Derived AJCC-6 N Descript" 
+				itemLength="1" fixedStart="1108" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2980" itemName="DerivedAJCC6M" longName="Derived AJCC-6 M" 
+				itemLength="2" fixedStart="1109" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="2990" itemName="DerivedAJCC6MDes" longName="Derived AJCC-6 M Descript" 
+				itemLength="1" fixedStart="1111" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3000" itemName="DerivedAJCC6StGrp" longName="Derived AJCC-6 Stage Grp" 
+				itemLength="2" fixedStart="1112" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3010" itemName="DerivedSS1977" longName="Derived SS1977" 
+				itemLength="1" fixedStart="1155" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3020" itemName="DerivedSS2000" longName="Derived SS2000" 
+				itemLength="1" fixedStart="1156" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3030" itemName="DerivedTNMFlag" longName="Derived AJCC--Flag" 
+				itemLength="1" fixedStart="1158" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3040" itemName="DerivedSS77Flag" longName="Derived SS1977--Flag" 
+				itemLength="1" fixedStart="1159" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3050" itemName="DerivedSS2000Flag" longName="Derived SS2000--Flag" 
+				itemLength="1" fixedStart="1160" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3100" itemName="ArchiveFIN" longName="Archive FIN" 
+				itemLength="10" fixedStart="721" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3105" itemName="NPIArchiveFIN" longName="NPI--Archive FIN" 
+				itemLength="10" fixedStart="711" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR111" />
+			<ItemDef itemNo="3110" itemName="ComorbidComp1" longName="Comorbid/Complication 1" 
+				itemLength="5" fixedStart="1186" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3120" itemName="ComorbidComp2" longName="Comorbid/Complication 2" 
+				itemLength="5" fixedStart="1191" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3130" itemName="ComorbidComp3" longName="Comorbid/Complication 3" 
+				itemLength="5" fixedStart="1196" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3140" itemName="ComorbidComp4" longName="Comorbid/Complication 4" 
+				itemLength="5" fixedStart="1201" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3150" itemName="ComorbidComp5" longName="Comorbid/Complication 5" 
+				itemLength="5" fixedStart="1206" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3160" itemName="ComorbidComp6" longName="Comorbid/Complication 6" 
+				itemLength="5" fixedStart="1211" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3161" itemName="ComorbidComp7" longName="Comorbid/Complication 7" 
+				itemLength="5" fixedStart="1216" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="3162" itemName="ComorbidComp8" longName="Comorbid/Complication 8" 
+				itemLength="5" fixedStart="1221" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="3163" itemName="ComorbidComp9" longName="Comorbid/Complication 9" 
+				itemLength="5" fixedStart="1226" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="3164" itemName="ComorbidComp10" longName="Comorbid/Complication 10" 
+				itemLength="5" fixedStart="1231" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="3165" itemName="ICDRevComorbid" longName="ICD Revision Comorbid" 
+				itemLength="1" fixedStart="1185" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR11" />
+			<ItemDef itemNo="3170" itemName="RxDateMostDefSurg" longName="RX Date Mst Defn Srg" 
+				itemLength="8" fixedStart="1466" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3171" itemName="RxDateDefSurgFlag" longName="RX Date Mst Defn Srg Flag" 
+				itemLength="2" fixedStart="1474" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3180" itemName="RxDateSurgDisch" longName="RX Date Surg Disch" 
+				itemLength="8" fixedStart="1476" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3181" itemName="RxDateSurgDisFlag" longName="RX Date Surg Disch Flag" 
+				itemLength="2" fixedStart="1484" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3190" itemName="ReadmSameHosp" longName="Readm Same Hosp 30 Days" 
+				itemLength="1" fixedStart="1619" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3200" itemName="RadBoostRxModal" longName="Rad--Boost RX Modality" 
+				itemLength="2" fixedStart="1609" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3210" itemName="RadBoostDose" longName="Rad--Boost Dose cGy" 
+				itemLength="5" fixedStart="1611" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3220" itemName="RxDateRadEnd" longName="RX Date Rad Ended" 
+				itemLength="8" fixedStart="1496" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3221" itemName="RxDateRadEndFlag" longName="RX Date Rad Ended Flag" 
+				itemLength="2" fixedStart="1504" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3230" itemName="RxDateSystemic" longName="RX Date Systemic" 
+				itemLength="8" fixedStart="1506" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3231" itemName="RxDateSystmcFlag" longName="RX Date Systemic Flag" 
+				itemLength="2" fixedStart="1514" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3250" itemName="RxSumTransEndo" longName="RX Summ--Transplnt/Endocr" 
+				itemLength="2" fixedStart="1583" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3270" itemName="RxSumPalliative" longName="RX Summ--Palliative Proc" 
+				itemLength="1" fixedStart="1579" section="Treatment-1st Court" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3280" itemName="RxHPalliative" longName="RX Hosp--Palliative Proc" 
+				itemLength="1" fixedStart="799" section="Hospital-specific" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3300" itemName="RuralUrbanCon1993" longName="RuralUrban Continuum 1993" 
+				itemLength="2" fixedStart="424" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3310" itemName="RuralUrbanCon2003" longName="RuralUrban Continuum 2003" 
+				itemLength="2" fixedStart="426" section="Demographic" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR10" />
+			<ItemDef itemNo="3400" itemName="DerivedAJCC7T" longName="Derived AJCC-7 T" 
+				itemLength="3" fixedStart="1114" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3402" itemName="DerivedAJCC7TDes" longName="Derived AJCC-7 T Descript" 
+				itemLength="1" fixedStart="1117" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3410" itemName="DerivedAJCC7N" longName="Derived AJCC-7 N" 
+				itemLength="3" fixedStart="1118" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3412" itemName="DerivedAJCC7NDes" longName="Derived AJCC-7 N Descript" 
+				itemLength="1" fixedStart="1121" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3420" itemName="DerivedAJCC7M" longName="Derived AJCC-7 M" 
+				itemLength="3" fixedStart="1122" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3422" itemName="DerivedAJCC7MDes" longName="Derived AJCC-7 M Descript" 
+				itemLength="1" fixedStart="1125" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3430" itemName="DerivedAJCC7StGrp" longName="Derived AJCC-7 Stage Grp" 
+				itemLength="3" fixedStart="1126" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3440" itemName="DerivedPreRx7T" longName="Derived PreRx-7 T" 
+				itemLength="3" fixedStart="1129" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3442" itemName="DerivedPreRx7TDes" longName="Derived PreRx-7 T Descrip" 
+				itemLength="1" fixedStart="1132" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3450" itemName="DerivedPreRx7N" longName="Derived PreRx-7 N" 
+				itemLength="3" fixedStart="1133" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3452" itemName="DerivedPreRx7NDes" longName="Derived PreRx-7 N Descrip" 
+				itemLength="1" fixedStart="1136" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3460" itemName="DerivedPreRx7M" longName="Derived PreRx-7 M" 
+				itemLength="3" fixedStart="1137" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3462" itemName="DerivedPreRx7MDes" longName="Derived PreRx-7 M Descrip" 
+				itemLength="1" fixedStart="1140" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3470" itemName="DerivedPreRx7StGp" longName="Derived PreRx-7 Stage Grp" 
+				itemLength="3" fixedStart="1141" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3480" itemName="DerivedPostRx7T" longName="Derived PostRx-7 T" 
+				itemLength="3" fixedStart="1144" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3482" itemName="DerivedPostRx7N" longName="Derived PostRx-7 N" 
+				itemLength="3" fixedStart="1147" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3490" itemName="DerivedPostRx7M" longName="Derived PostRx-7 M" 
+				itemLength="2" fixedStart="1150" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3492" itemName="DerivedPostRx7SGp" longName="Derived PostRx-7 Stge Grp" 
+				itemLength="3" fixedStart="1152" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3600" itemName="DerivedNeoadjFlag" longName="Derived Neoadjuv Rx Flag" 
+				itemLength="1" fixedStart="1157" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3700" itemName="SEERSSF1" longName="SEER Site-Specific Fact 1" 
+				itemLength="1" fixedStart="1179" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3702" itemName="SEERSSF2" longName="SEER Site-Specific Fact 2" 
+				itemLength="1" fixedStart="1180" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3704" itemName="SEERSSF3" longName="SEER Site-Specific Fact 3" 
+				itemLength="1" fixedStart="1181" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3706" itemName="SEERSSF4" longName="SEER Site-Specific Fact 4" 
+				itemLength="1" fixedStart="1182" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3708" itemName="SEERSSF5" longName="SEER Site-Specific Fact 5" 
+				itemLength="1" fixedStart="1183" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3710" itemName="SEERSSF6" longName="SEER Site-Specific Fact 6" 
+				itemLength="1" fixedStart="1184" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="3720" itemName="NPCRField1" longName="NPCR Specific Field 1" 
+				itemLength="55" fixedStart="1326" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="3750" itemName="OvrdCS1" longName="Over-ride CS 1" 
+				itemLength="1" fixedStart="2016" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3751" itemName="OvrdCS2" longName="Over-ride CS 2" 
+				itemLength="1" fixedStart="2017" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3752" itemName="OvrdCS3" longName="Over-ride CS 3" 
+				itemLength="1" fixedStart="2018" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3753" itemName="OvrdCS4" longName="Over-ride CS 4" 
+				itemLength="1" fixedStart="2019" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3754" itemName="OvrdCS5" longName="Over-ride CS 5" 
+				itemLength="1" fixedStart="2020" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3755" itemName="OvrdCS6" longName="Over-ride CS 6" 
+				itemLength="1" fixedStart="2021" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3756" itemName="OvrdCS7" longName="Over-ride CS 7" 
+				itemLength="1" fixedStart="2022" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3757" itemName="OvrdCS8" longName="Over-ride CS 8" 
+				itemLength="1" fixedStart="2023" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3758" itemName="OvrdCS9" longName="Over-ride CS 9" 
+				itemLength="1" fixedStart="2024" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3759" itemName="OvrdCS10" longName="Over-ride CS 10" 
+				itemLength="1" fixedStart="2025" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3760" itemName="OvrdCS11" longName="Over-ride CS 11" 
+				itemLength="1" fixedStart="2026" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3761" itemName="OvrdCS12" longName="Over-ride CS 12" 
+				itemLength="1" fixedStart="2027" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3762" itemName="OvrdCS13" longName="Over-ride CS 13" 
+				itemLength="1" fixedStart="2028" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3763" itemName="OvrdCS14" longName="Over-ride CS 14" 
+				itemLength="1" fixedStart="2029" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3764" itemName="OvrdCS15" longName="Over-ride CS 15" 
+				itemLength="1" fixedStart="2030" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3765" itemName="OvrdCS16" longName="Over-ride CS 16" 
+				itemLength="1" fixedStart="2031" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3766" itemName="OvrdCS17" longName="Over-ride CS 17" 
+				itemLength="1" fixedStart="2032" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3767" itemName="OvrdCS18" longName="Over-ride CS 18" 
+				itemLength="1" fixedStart="2033" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3768" itemName="OvrdCS19" longName="Over-ride CS 19" 
+				itemLength="1" fixedStart="2034" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3769" itemName="OvrdCS20" longName="Over-ride CS 20" 
+				itemLength="1" fixedStart="2035" section="Edit Overrides" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NAACCR121" />
+			<ItemDef itemNo="3780" itemName="SecondaryDx1" longName="Secondary Diagnosis 1" 
+				itemLength="7" fixedStart="1236" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				regex="^[A-Z]\d{3}$" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="3782" itemName="SecondaryDx2" longName="Secondary Diagnosis 2" 
+				itemLength="7" fixedStart="1243" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				regex="^[A-Z]\d{3}$" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="3784" itemName="SecondaryDx3" longName="Secondary Diagnosis 3" 
+				itemLength="7" fixedStart="1250" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				regex="^[A-Z]\d{3}$" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="3786" itemName="SecondaryDx4" longName="Secondary Diagnosis 4" 
+				itemLength="7" fixedStart="1257" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				regex="^[A-Z]\d{3}$" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="3788" itemName="SecondaryDx5" longName="Secondary Diagnosis 5" 
+				itemLength="7" fixedStart="1264" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				regex="^[A-Z]\d{3}$" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="3790" itemName="SecondaryDx6" longName="Secondary Diagnosis 6" 
+				itemLength="7" fixedStart="1271" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				regex="^[A-Z]\d{3}$" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="3792" itemName="SecondaryDx7" longName="Secondary Diagnosis 7" 
+				itemLength="7" fixedStart="1278" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				regex="^[A-Z]\d{3}$" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="3794" itemName="SecondaryDx8" longName="Secondary Diagnosis 8" 
+				itemLength="7" fixedStart="1285" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				regex="^[A-Z]\d{3}$" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="3796" itemName="SecondaryDx9" longName="Secondary Diagnosis 9" 
+				itemLength="7" fixedStart="1292" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				regex="^[A-Z]\d{3}$" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="3798" itemName="SecondaryDx10" longName="Secondary Diagnosis 10" 
+				itemLength="7" fixedStart="1299" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				regex="^[A-Z]\d{3}$" parentElement="Tumor" sourceOfStandard="NAACCR13" />
+			<ItemDef itemNo="7010" itemName="PathRepFacID1" longName="Path Reporting Fac ID 1" 
+				itemLength="25" fixedStart="4535" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7011" itemName="PathRepFacID2" longName="Path Reporting Fac ID 2" 
+				itemLength="25" fixedStart="4641" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7012" itemName="PathRepFacID3" longName="Path Reporting Fac ID 3" 
+				itemLength="25" fixedStart="4747" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7013" itemName="PathRepFacID4" longName="Path Reporting Fac ID 4" 
+				itemLength="25" fixedStart="4853" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7014" itemName="PathRepFacID5" longName="Path Reporting Fac ID 5" 
+				itemLength="25" fixedStart="4959" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7090" itemName="PathNumber1" longName="Path Report Number 1" 
+				itemLength="20" fixedStart="4560" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7091" itemName="PathNumber2" longName="Path Report Number 2" 
+				itemLength="20" fixedStart="4666" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7092" itemName="PathNumber3" longName="Path Report Number 3" 
+				itemLength="20" fixedStart="4772" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7093" itemName="PathNumber4" longName="Path Report Number 4" 
+				itemLength="20" fixedStart="4878" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7094" itemName="PathNumber5" longName="Path Report Number 5" 
+				itemLength="20" fixedStart="4984" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7100" itemName="PathOrderPhys1" longName="Path Order Phys Lic No 1" 
+				itemLength="20" fixedStart="4621" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7101" itemName="PathOrderPhys2" longName="Path Order Phys Lic No 2" 
+				itemLength="20" fixedStart="4727" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7102" itemName="PathOrderPhys3" longName="Path Order Phys Lic No 3" 
+				itemLength="20" fixedStart="4833" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7103" itemName="PathOrderPhys4" longName="Path Order Phys Lic No 4" 
+				itemLength="20" fixedStart="4939" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7104" itemName="PathOrderPhys5" longName="Path Order Phys Lic No 5" 
+				itemLength="20" fixedStart="5045" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7190" itemName="PathOrderFac1" longName="Path Ordering Fac No 1" 
+				itemLength="25" fixedStart="4596" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7191" itemName="PathOrderFac2" longName="Path Ordering Fac No 2" 
+				itemLength="25" fixedStart="4702" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7192" itemName="PathOrderFac3" longName="Path Ordering Fac No 3" 
+				itemLength="25" fixedStart="4808" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7193" itemName="PathOrderFac4" longName="Path Ordering Fac No 4" 
+				itemLength="25" fixedStart="4914" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7194" itemName="PathOrderFac5" longName="Path Ordering Fac No 5" 
+				itemLength="25" fixedStart="5020" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7320" itemName="PathDateCollect1" longName="Path Date Spec Collect 1" 
+				itemLength="14" fixedStart="4580" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7321" itemName="PathDateCollect2" longName="Path Date Spec Collect 2" 
+				itemLength="14" fixedStart="4686" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7322" itemName="PathDateCollect3" longName="Path Date Spec Collect 3" 
+				itemLength="14" fixedStart="4792" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7323" itemName="PathDateCollect4" longName="Path Date Spec Collect 4" 
+				itemLength="14" fixedStart="4898" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7324" itemName="PathDateCollect5" longName="Path Date Spec Collect 5" 
+				itemLength="14" fixedStart="5004" section="Pathology" recordTypes="C,A,M" 
+				datatype="string" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7480" itemName="PathType1" longName="Path Report Type 1" 
+				itemLength="2" fixedStart="4594" section="Pathology" recordTypes="C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7481" itemName="PathType2" longName="Path Report Type 2" 
+				itemLength="2" fixedStart="4700" section="Pathology" recordTypes="C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7482" itemName="PathType3" longName="Path Report Type 3" 
+				itemLength="2" fixedStart="4806" section="Pathology" recordTypes="C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7483" itemName="PathType4" longName="Path Report Type 4" 
+				itemLength="2" fixedStart="4912" section="Pathology" recordTypes="C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="7484" itemName="PathType5" longName="Path Report Type 5" 
+				itemLength="2" fixedStart="5018" section="Pathology" recordTypes="C,A,M" 
+				datatype="code" parentElement="CancerRecord" sourceOfStandard="NAACCR12" />
+			<ItemDef itemNo="9980" itemName="MDELink" longName="EDP MDE Link" 
+				itemLength="1" fixedStart="1306" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="code" parentElement="Tumor" sourceOfStandard="NPCR CER" />
+			<ItemDef itemNo="9981" itemName="MDEDate" longName="EDP MDE Link Date" 
+				itemLength="8" fixedStart="1307" section="Stage/Prognostic Factors" recordTypes="I,C,A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="NPCR CER" />
+			<ItemDef itemNo="9999" itemName="LocalText" longName="State/Requestor Items" 
+				itemLength="1000" fixedStart="2340" section="Special use" recordTypes="I,C,A,M" 
+				datatype="string" shadow="true" />
+			<ItemDef itemNo="10006" itemName="AbsRefID" longName="Abstract Reference ID" 
+				itemLength="10" fixedStart="20855" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="CancerRecord" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10015" itemName="MedRefID" 
+				itemLength="8" fixedStart="20879" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10021" itemName="Project1" 
+				itemLength="1" fixedStart="20825" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10022" itemName="Project2" 
+				itemLength="1" fixedStart="20826" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10023" itemName="Project3" 
+				itemLength="1" fixedStart="20827" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10024" itemName="Project4" 
+				itemLength="1" fixedStart="20828" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10025" itemName="Project5" 
+				itemLength="1" fixedStart="20829" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10026" itemName="Project6" 
+				itemLength="1" fixedStart="20830" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10027" itemName="Project7" 
+				itemLength="1" fixedStart="20831" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10028" itemName="Project8" 
+				itemLength="1" fixedStart="20832" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10029" itemName="Project9" 
+				itemLength="1" fixedStart="20833" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10030" itemName="Project10" 
+				itemLength="1" fixedStart="20834" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10031" itemName="Project11" 
+				itemLength="1" fixedStart="20835" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10032" itemName="Project12" 
+				itemLength="1" fixedStart="20836" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10033" itemName="Project13" 
+				itemLength="1" fixedStart="20837" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10034" itemName="Project14" 
+				itemLength="1" fixedStart="20838" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10035" itemName="Project15" 
+				itemLength="1" fixedStart="20839" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10036" itemName="Project16" 
+				itemLength="1" fixedStart="20840" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10037" itemName="Project17" 
+				itemLength="1" fixedStart="20841" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10038" itemName="Project18" 
+				itemLength="1" fixedStart="20842" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10039" itemName="Project19" 
+				itemLength="1" fixedStart="20843" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10040" itemName="Project20" 
+				itemLength="1" fixedStart="20844" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integer" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10061" itemName="GrpSite1" 
+				itemLength="5" fixedStart="5979" section="Text-Diagnosis" recordTypes="A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10062" itemName="GrpSite2" 
+				itemLength="5" fixedStart="5984" section="Text-Diagnosis" recordTypes="A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10063" itemName="GrpSite3" 
+				itemLength="5" fixedStart="5989" section="Text-Diagnosis" recordTypes="A,M" 
+				datatype="string" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10090" itemName="DatePtUpdated" longName="Date PT Table Updated" 
+				itemLength="8" fixedStart="20887" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="date" parentElement="Patient" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10091" itemName="DateTumUpdated" longName="Date Tum Table Updated" 
+				itemLength="8" fixedStart="20895" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="date" parentElement="Tumor" sourceOfStandard="SYS" />
+			<ItemDef itemNo="10092" itemName="DateFacUpdated" longName="Date Fac Table Updated" 
+				itemLength="8" fixedStart="20903" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="date" parentElement="CancerRecord" sourceOfStandard="SYS" />
+			<ItemDef itemNo="20000" itemName="PID" longName="Personal ID" 
+				itemLength="14" fixedStart="20865" section="Text-Miscellaneous" recordTypes="A,M" 
+				datatype="integerWithZero" parentElement="Patient" />
+		</ItemDefs>
+	</Dictionary>
+</NAACCRDataExchange>
