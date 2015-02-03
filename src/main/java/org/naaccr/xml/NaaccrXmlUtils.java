@@ -17,6 +17,8 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -200,10 +202,9 @@ public class NaaccrXmlUtils {
     }
 
     /**
-     * Returns the NAACCR format of the given file.
+     * Returns the NAACCR format of the given flat file.
      * @param flatFile provided data file
      * @return the NAACCR format, null if it cannot be determined
-     * @throws IOException
      */
     public static String getFormatFromFlatFile(File flatFile) {
         if (flatFile == null || !flatFile.exists())
@@ -241,6 +242,58 @@ public class NaaccrXmlUtils {
             result = null;
 
         return result;
+    }
+
+    /**
+     * Returns the NAACCR format of the given XML file.
+     * @param xmlFile provided data file
+     * @return the NAACCR format, null if it cannot be determined
+     */
+    public static String getFormatFromXmlFile(File xmlFile) {
+        if (xmlFile == null || !xmlFile.exists())
+            return null;
+
+        Pattern patternVersion = Pattern.compile("naaccrVersion=\"(.+?)\"");
+        Pattern patternType = Pattern.compile("recordType=\"(.+?)\"");
+        
+        String version = null, type = null;
+        try (BufferedReader reader = new BufferedReader(createReader(xmlFile))) {
+            String line = reader.readLine();
+            while (line != null && (version == null || type == null)) {
+                Matcher matcherVersion = patternVersion.matcher(line);
+                if (matcherVersion.find())
+                    version = matcherVersion.group(1);
+                Matcher matcherType = patternType.matcher(line);
+                if (matcherType.find())
+                    type = matcherType.group(1);
+                line = reader.readLine();
+            }
+        }
+        catch (IOException e) {
+            // ignore, the result will be null
+        }
+        
+        String result = null;
+        if (version != null && type != null) {
+            switch (type) {
+                case "A":
+                    result = "naaccr-" + version + "abstract";
+                    break;
+                case "M":
+                    result = "naaccr-" + version + "modified";
+                    break;
+                case "C":
+                    result = "naaccr-" + version + "confidential";
+                    break;
+                case "I":
+                    result = "naaccr-" + version + "incidence";
+                    break;
+                default:
+                    result = null;
+            }
+        }
+
+        return NaaccrFormat.isFormatSupported(result) ? result : null;
     }
 
     public static NaaccrDictionary getStandardDictionary() {
