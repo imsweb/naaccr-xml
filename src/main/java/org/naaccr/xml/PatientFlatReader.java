@@ -42,23 +42,24 @@ public class PatientFlatReader implements AutoCloseable {
     public Patient readPatient() throws IOException {
         List<String> lines = new ArrayList<>();
 
-        if (_previousLine == null)
+        if (_previousLine == null) {
             _previousLine = _reader.readLine();
-            
-        if (_previousLine != null) {
-            lines.add(_previousLine);
+            if (_previousLine == null) // would be an empty file...
+                return null;
+        }
+        
+        lines.add(_previousLine);
+        String currentPatId = getPatientIdNumber(_previousLine);
 
-            String line = _reader.readLine();
-            boolean samePatient = true;
-            while (line != null && samePatient) {
-                String prevPatId = getPatientIdNumber(_previousLine);
-                samePatient = prevPatId != null && prevPatId.equals(getPatientIdNumber(line));
-                if (samePatient)
-                    lines.add(line);
-                line = _reader.readLine();
+        _previousLine = _reader.readLine();
+        while (_previousLine != null) {
+            boolean samePatient = currentPatId != null && currentPatId.equals(getPatientIdNumber(_previousLine));
+            if (samePatient) {
+                lines.add(_previousLine);
+                _previousLine = _reader.readLine();
             }
-
-            _previousLine = line;
+            else
+                break;
         }
 
         return lines.isEmpty() ? null : createPatientFromLines(lines);
@@ -99,7 +100,7 @@ public class PatientFlatReader implements AutoCloseable {
             Tumor tumor = new Tumor();
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
                 if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
-                    tumor.getItems().addAll(createItemsFromLine(lines.get(0), itemDef));
+                    tumor.getItems().addAll(createItemsFromLine(line, itemDef));
             patient.getTumors().add(tumor);
         }
 

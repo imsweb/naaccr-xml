@@ -277,16 +277,16 @@ public class NaaccrXmlUtils {
         if (version != null && type != null) {
             switch (type) {
                 case "A":
-                    result = "naaccr-" + version + "abstract";
+                    result = "naaccr-" + version + "-abstract";
                     break;
                 case "M":
-                    result = "naaccr-" + version + "modified";
+                    result = "naaccr-" + version + "-modified";
                     break;
                 case "C":
-                    result = "naaccr-" + version + "confidential";
+                    result = "naaccr-" + version + "-confidential";
                     break;
                 case "I":
-                    result = "naaccr-" + version + "incidence";
+                    result = "naaccr-" + version + "-incidence";
                     break;
                 default:
                     result = null;

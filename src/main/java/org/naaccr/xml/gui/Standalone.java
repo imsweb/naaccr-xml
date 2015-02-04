@@ -82,6 +82,13 @@ public class Standalone {
             this.getContentPane().setLayout(new BorderLayout());
             this.getContentPane().add(contentPnl, BorderLayout.CENTER);
             
+            JPanel northPnl = new JPanel(new FlowLayout(FlowLayout.LEADING));
+            northPnl.setOpaque(false);
+            JLabel northLbl = new JLabel("This GUI is in a very early phase; feel free to report bugs in the \"Java library beta testing\" basecamp thread.");
+            northLbl.setForeground(new Color(150, 0, 0));
+            northPnl.add(northLbl);
+            contentPnl.add(northPnl, BorderLayout.NORTH);
+            
             JTabbedPane pane = new JTabbedPane();
             pane.add("  Flat to XML  ", crateFlatToXmlPanel());
             pane.add("  XML to Flat  ", crateXmlToFlatPanel());
@@ -127,7 +134,7 @@ public class Standalone {
             Collections.sort(supportedFormat);
             final JComboBox flatToXmlFormatBox = new JComboBox(supportedFormat.toArray(new String[supportedFormat.size()]));
             row3Pnl.add(flatToXmlFormatBox);
-            row3Pnl.add(new JLabel("  (the format will be automatically set after you select a source file)"));
+            row3Pnl.add(new JLabel("  (the format will be automatically set after you select a source file, if possible)"));
             pnl.add(row3Pnl);
 
             JPanel row2Pnl = new JPanel();
@@ -170,7 +177,7 @@ public class Standalone {
                         if (format != null)
                             flatToXmlFormatBox.setSelectedItem(format);
                         String[] name = _fileChooser.getSelectedFile().getName().split("\\.");
-                        if (name.length == 3 && name[2].equals(".gz"))
+                        if (name.length == 3 && name[2].equals("gz"))
                             flatToXmlTargetFld.setText(new File(_fileChooser.getSelectedFile().getParentFile(), name[0] + ".xml.gz").getAbsolutePath());
                         else if (name.length == 2)
                             flatToXmlTargetFld.setText(new File(_fileChooser.getSelectedFile().getParentFile(), name[0] + ".xml").getAbsolutePath());
@@ -227,10 +234,10 @@ public class Standalone {
             JLabel xmlToFlatSourceLbl = new JLabel("Source XML File:");
             xmlToFlatSourceLbl.setFont(xmlToFlatSourceLbl.getFont().deriveFont(Font.BOLD));
             row1Pnl.add(xmlToFlatSourceLbl);
-            final JTextField xmlToFlatTargetFld = new JTextField(75);
-            row1Pnl.add(xmlToFlatTargetFld);
-            JButton xmlToFlatTargetBtn = new JButton("Browse...");
-            row1Pnl.add(xmlToFlatTargetBtn);
+            final JTextField xmlToFlatSourceFld = new JTextField(75);
+            row1Pnl.add(xmlToFlatSourceFld);
+            JButton xmlToFlatSourceBtn = new JButton("Browse...");
+            row1Pnl.add(xmlToFlatSourceBtn);
             pnl.add(row1Pnl);
 
             JPanel row2Pnl = new JPanel();
@@ -247,7 +254,7 @@ public class Standalone {
             Collections.sort(supportedFormat);
             final JComboBox xmlToFlatFormatBox = new JComboBox(supportedFormat.toArray(new String[supportedFormat.size()]));
             row2Pnl.add(xmlToFlatFormatBox);
-            row2Pnl.add(new JLabel("  (the format will be automatically set after you select a source file)"));
+            row2Pnl.add(new JLabel("  (the format will be automatically set after you select a source file, if possible)"));
             pnl.add(row2Pnl);
             
             JPanel row3Pnl = new JPanel();
@@ -257,10 +264,10 @@ public class Standalone {
             final JLabel xmlToFlatTargetLbl = new JLabel("Target Flat File:");
             xmlToFlatTargetLbl.setFont(xmlToFlatTargetLbl.getFont().deriveFont(Font.BOLD));
             row3Pnl.add(xmlToFlatTargetLbl);
-            final JTextField xmlToFlatSourceFld = new JTextField(75);
-            row3Pnl.add(xmlToFlatSourceFld);
-            JButton xmlToFlatSourceBtn = new JButton("Browse...");
-            row3Pnl.add(xmlToFlatSourceBtn);
+            final JTextField xmlToFlatTargetFld = new JTextField(75);
+            row3Pnl.add(xmlToFlatTargetFld);
+            JButton xmlToFlatTargetBtn = new JButton("Browse...");
+            row3Pnl.add(xmlToFlatTargetBtn);
             pnl.add(row3Pnl);
 
             JPanel row4Pnl = new JPanel();
@@ -290,7 +297,7 @@ public class Standalone {
                         if (format != null)
                             xmlToFlatFormatBox.setSelectedItem(format);
                         String[] name = _fileChooser.getSelectedFile().getName().split("\\.");
-                        if (name.length == 3 && name[2].equals(".gz"))
+                        if (name.length == 3 && name[2].equals("gz"))
                             xmlToFlatTargetFld.setText(new File(_fileChooser.getSelectedFile().getParentFile(), name[0] + ".txt.gz").getAbsolutePath());
                         else if (name.length == 2)
                             xmlToFlatTargetFld.setText(new File(_fileChooser.getSelectedFile().getParentFile(), name[0] + ".txt").getAbsolutePath());
