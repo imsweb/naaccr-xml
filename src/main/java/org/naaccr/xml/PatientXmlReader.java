@@ -14,6 +14,7 @@ import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.ConversionException;
 
 public class PatientXmlReader implements AutoCloseable {
 
@@ -32,7 +33,13 @@ public class PatientXmlReader implements AutoCloseable {
                 handleNonPatientObject(object);
         }
         catch (ClassNotFoundException e) {
-            throw new IOException(e);
+            throw new NaaccrValidationException(e.getMessage());
+        }
+        catch (ConversionException e) {
+            NaaccrValidationException ex = new NaaccrValidationException(e.get("message"));
+            ex.setLineNumber(e.get("line number") == null ? null : Integer.valueOf(e.get("line number")));
+            ex.setPath(e.get("path"));
+            throw ex;
         }
         catch (EOFException e) {
             // ignored, null will be returned
@@ -56,11 +63,17 @@ public class PatientXmlReader implements AutoCloseable {
 
     // TODO remove this testing method
     public static void main(String[] args) throws Exception {
-        File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/test-id.xml");
+        File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/test-num-bad-item2.xml");
         RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, NaaccrXmlUtils.getStandardDictionary(), null);
-        PatientXmlReader reader = new PatientXmlReader(new FileReader(inputFile), NaaccrXmlUtils.getStandardXStream(dictionary, new NaaccrXmlOptions()));
-        Patient patient = reader.readPatient();
-        reader.close();
-        System.out.println(patient.getItemById("nameLast"));
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(inputFile), NaaccrXmlUtils.getStandardXStream(dictionary, new NaaccrXmlOptions()))) {
+            Patient patient = reader.readPatient();
+            System.out.println(patient.getItemById("nameLast"));
+        }
+        catch (IOException ex) {
+            System.err.println("Unable to read next patient: " + ex.getMessage());
+        }
+        catch (NaaccrValidationException ex) {
+            System.err.println("Unable to read next patient: line " + ex.getLineNumber() + " (path=" + ex.getPath() + "): " + ex.getMessage());
+        }
     }
 }

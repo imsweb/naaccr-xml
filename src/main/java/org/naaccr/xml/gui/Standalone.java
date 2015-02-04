@@ -35,6 +35,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
 import org.naaccr.xml.NaaccrFormat;
+import org.naaccr.xml.NaaccrValidationException;
+import org.naaccr.xml.NaaccrXmlOptions;
 import org.naaccr.xml.NaaccrXmlUtils;
 
 @SuppressWarnings("unchecked")
@@ -204,10 +206,10 @@ public class Standalone {
                     flatToXmlResultLbl.setText("Processing file...");
                     pnl.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     try {
-                        int numPatients = NaaccrXmlUtils.flatToXml(sourceFile, targetFile, format, null);
+                        int numPatients = NaaccrXmlUtils.flatToXml(sourceFile, targetFile, format, new NaaccrXmlOptions(), null);
                         flatToXmlResultLbl.setText("Done processing source flat file; target XML file contains " + numPatients + " patient(s)");
                     }
-                    catch (IOException ex) {
+                    catch (IOException | NaaccrValidationException ex) {
                         JOptionPane.showMessageDialog(StandaloneFrame.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                         flatToXmlResultLbl.setText("Provide a value for the parameters and click the Process File button...");
                     }
@@ -324,10 +326,10 @@ public class Standalone {
                     xmlToFlatResultLbl.setText("Processing file...");
                     pnl.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     try {
-                        int numRecords = NaaccrXmlUtils.xmlToFlat(sourceFile, targetFile, format, null);
+                        int numRecords = NaaccrXmlUtils.xmlToFlat(sourceFile, targetFile, format, new NaaccrXmlOptions(), null);
                         xmlToFlatResultLbl.setText("Done processing source XML file; target flat file contains " + numRecords + " record(s)");
                     }
-                    catch (IOException ex) {
+                    catch (IOException | NaaccrValidationException ex) {
                         JOptionPane.showMessageDialog(StandaloneFrame.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                         xmlToFlatResultLbl.setText("Provide a value for the parameters and click the Process File button...");
                     }
