@@ -16,6 +16,8 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -37,10 +39,35 @@ import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 public class NaaccrXmlUtils {
 
     // structure tags in the XML
-    public static String NAACCR_XML_TAG_ROOT = "NaaccrDataExchange";
-    public static String NAACCR_XML_TAG_PATIENT = "Patient";
-    public static String NAACCR_XML_TAG_TUMOR = "Tumor";
-    public static String NAACCR_XML_TAG_ITEM = "Item";
+    public static final String NAACCR_XML_TAG_ROOT = "NaaccrDataExchange";
+    public static final String NAACCR_XML_TAG_PATIENT = "Patient";
+    public static final String NAACCR_XML_TAG_TUMOR = "Tumor";
+    public static final String NAACCR_XML_TAG_ITEM = "Item";
+    
+    // the different data types
+    public static final String NAACCR_DATA_TYPE_CODE = "code";
+    public static final String NAACCR_DATA_TYPE_CODE_WITH_BLANK = "codeWithBlank";
+    public static final String NAACCR_DATA_TYPE_ALPHA = "alpha";
+    public static final String NAACCR_DATA_TYPE_ALPHA_WITH_BLANK = "alphaWithBlank";
+    public static final String NAACCR_DATA_TYPE_DATE = "date";
+    public static final String NAACCR_DATA_TYPE_STRING = "string";
+    public static final String NAACCR_DATA_TYPE_STRING_WITH_BLANK = "stringWithBlank";
+    public static final String NAACCR_DATA_TYPE_INTEGER = "integer";
+    public static final String NAACCR_DATA_TYPE_INTEGER_WITH_ZERO = "integerWithZero";
+    
+    // regular expression for each data type
+    public static final Map<String, Pattern> NAACCR_DATA_TYPES_REGEX = new HashMap<>();
+    static {
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_CODE, Pattern.compile("^\\d+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_CODE_WITH_BLANK, Pattern.compile("^(\\d|\\s)+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_ALPHA, Pattern.compile("^[A-Za-z]+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_ALPHA_WITH_BLANK, Pattern.compile("^([A-Za-z]|\\s)+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)\\d\\d(0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_STRING, Pattern.compile("^[^\\s][.]+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_STRING_WITH_BLANK, Pattern.compile("^[.]+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_INTEGER, Pattern.compile("^\\d+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_INTEGER_WITH_ZERO, Pattern.compile("^\\d+"));
+    }
 
     /**
      * Translates a flat data file into an XML data file.
