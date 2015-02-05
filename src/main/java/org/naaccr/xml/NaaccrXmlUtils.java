@@ -29,9 +29,12 @@ import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
+import com.thoughtworks.xstream.io.xml.XppDriver;
 
 // TODO use a properties file with the exceptions so they can be shared with the DLL?
 // TODO investigate using abstract base reader/writer that would be parametrized classes...
@@ -365,7 +368,17 @@ public class NaaccrXmlUtils {
     }
 
     public static XStream getStandardXStream(RuntimeNaaccrDictionary dictionary, NaaccrXmlOptions options) {
-        XStream xstream = new XStream();
+        final NaaccrItemConverter converter = new NaaccrItemConverter(dictionary, options);
+        
+        XppDriver driver = new XppDriver() {
+            @Override
+            protected synchronized XmlPullParser createParser() throws XmlPullParserException {
+                XmlPullParser parser = super.createParser();
+                converter.setParser(parser);
+                return parser;
+            }
+        };
+        XStream xstream = new XStream(driver);
 
         // tell XStream how to read/write our main entities
         xstream.alias(NAACCR_XML_TAG_ROOT, NaaccrDataExchange.class);
@@ -380,7 +393,7 @@ public class NaaccrXmlUtils {
         xstream.addImplicitCollection(Tumor.class, "items", Item.class);
 
         // the item object is a bit harder to read/write, so we have to use a specific converter
-        xstream.registerConverter(new NaaccrItemConverter(dictionary, options));
+        xstream.registerConverter(converter);
 
         return xstream;
     }

@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
+import org.xmlpull.v1.XmlPullParser;
 
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
@@ -26,11 +27,17 @@ public class NaaccrItemConverter implements Converter {
 
     private NaaccrXmlOptions _options;
     
+    private XmlPullParser _parser;
+    
     public NaaccrItemConverter(RuntimeNaaccrDictionary dictionary, NaaccrXmlOptions options) {
         _dictionary = dictionary;
         _options = options;
     }
 
+    public void setParser(XmlPullParser parser) {
+        _parser = parser;
+    }
+    
     @Override
     public boolean canConvert(Class type) {
         return type.equals(Item.class);
@@ -90,7 +97,8 @@ public class NaaccrItemConverter implements Converter {
             itemDef = _dictionary.getItemByNaaccrNum(item.getNum());
         
         if (itemDef != null) {
-
+            //System.out.println(itemDef.getNaaccrId() + ": " + _parser.getLineNumber());
+            
             // item should be under the proper patient level
             Path path = getCurrentPath(reader);
             if (path != null) {
