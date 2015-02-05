@@ -11,4 +11,12 @@
             <Item naaccrId="primarySite">C456</Item>
         </Tumor>
     </Patient>
+    <Patient>
+        <Item naaccrId="nameLast">OTHER</Item>
+    </Patient>
+    <Patient>
+        <Tumor>
+            <Item naaccrId="primarySite">C789</Item>
+        </Tumor>
+    </Patient>
 </NaaccrDataExchange>

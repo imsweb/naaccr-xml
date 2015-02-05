@@ -8,7 +8,7 @@
         <Item naaccrId="patientIdNumber">0000002</Item>
         <Item naaccrId="nameLast">SHOULDN't BE HERE</Item>
         <Tumor>
-            <Item naaccrNum="primarySite">C456</Item>
+            <Item naaccrId="primarySite">C456</Item>
         </Tumor>
     </Patient>
     <Patient>

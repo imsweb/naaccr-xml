@@ -23,10 +23,8 @@ import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.NaaccrDataExchange;
 import org.naaccr.xml.entity.Patient;
-import org.naaccr.xml.entity.Tumor;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 import org.xmlpull.v1.XmlPullParser;
@@ -368,7 +366,7 @@ public class NaaccrXmlUtils {
     }
 
     public static XStream getStandardXStream(RuntimeNaaccrDictionary dictionary, NaaccrXmlOptions options) {
-        final NaaccrItemConverter converter = new NaaccrItemConverter(dictionary, options);
+        final NaaccrPatientConverter converter = new NaaccrPatientConverter(dictionary, options);
         
         XppDriver driver = new XppDriver() {
             @Override
@@ -383,14 +381,14 @@ public class NaaccrXmlUtils {
         // tell XStream how to read/write our main entities
         xstream.alias(NAACCR_XML_TAG_ROOT, NaaccrDataExchange.class);
         xstream.alias(NAACCR_XML_TAG_PATIENT, Patient.class);
-        xstream.alias(NAACCR_XML_TAG_TUMOR, Tumor.class);
-        xstream.alias(NAACCR_XML_TAG_ITEM, Item.class);
+        //xstream.alias(NAACCR_XML_TAG_TUMOR, Tumor.class);
+        //xstream.alias(NAACCR_XML_TAG_ITEM, Item.class);
 
         // all collections should be wrap into collection tags, but it's nicer to omit them in the XML; we have to tell XStream though
         xstream.addImplicitCollection(NaaccrDataExchange.class, "patients", Patient.class);
-        xstream.addImplicitCollection(Patient.class, "items", Item.class);
-        xstream.addImplicitCollection(Patient.class, "tumors", Tumor.class);
-        xstream.addImplicitCollection(Tumor.class, "items", Item.class);
+        //xstream.addImplicitCollection(Patient.class, "items", Item.class);
+        //xstream.addImplicitCollection(Patient.class, "tumors", Tumor.class);
+        //xstream.addImplicitCollection(Tumor.class, "items", Item.class);
 
         // the item object is a bit harder to read/write, so we have to use a specific converter
         xstream.registerConverter(converter);
