@@ -35,7 +35,7 @@ import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
 // TODO use a properties file with the exceptions so they can be shared with the DLL?
 // TODO investigate using abstract base reader/writer that would be parametrized classes...
-// TODO post something on XStream to expose the Path frmo the PartTracker
+// TODO post something on XStream to expose the Path from the PartTracker
 public class NaaccrXmlUtils {
 
     // structure tags in the XML
@@ -190,7 +190,7 @@ public class NaaccrXmlUtils {
      * @param options reading and validating options
      * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
      * @throws IOException
-     * @returns a <code>NaaccrDataExchange</code> object, never null
+     * @return a <code>NaaccrDataExchange</code> object, never null
      */
     public static NaaccrDataExchange readXmlFile(File xmlFile, String format, NaaccrXmlOptions options, NaaccrDictionary nonStandardDictionary) throws IOException {
         if (xmlFile == null)
@@ -356,8 +356,8 @@ public class NaaccrXmlUtils {
     public static NaaccrDictionary getStandardDictionary() {
         try {
             // TODO finalize standard dictionary format and location...
-            URL standardDiciontaryUrl = Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-140.csv");
-            return NaaccrDictionaryUtils.readDictionary(standardDiciontaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
+            URL standardDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-140.csv");
+            return NaaccrDictionaryUtils.readDictionary(standardDictionaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
         }
         catch (IOException e) {
             throw new RuntimeException("Unable to get standard dictionary!", e);

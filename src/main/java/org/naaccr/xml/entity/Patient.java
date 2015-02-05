@@ -33,7 +33,7 @@ public class Patient {
     public Item getItemById(String id) {
         if (_cachedById == null) {
             Map<String, Item> cache = new HashMap<>();
-            for (Item item : items)
+            for (Item item : getItems())
                 if (item.getId() != null)
                     cache.put(item.getId(), item);
             _cachedById = cache;
@@ -44,7 +44,7 @@ public class Patient {
     public Item getItemByNumber(Integer number) {
         if (_cachedByNumber == null) {
             Map<Integer, Item> cache = new HashMap<>();
-            for (Item item : items)
+            for (Item item : getItems())
                 if (item.getNum() != null)
                     cache.put(item.getNum(), item);
             _cachedByNumber = cache;

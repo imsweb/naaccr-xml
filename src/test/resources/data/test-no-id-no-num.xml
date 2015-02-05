@@ -2,8 +2,7 @@
 
 <NaaccrDataExchange naaccrVersion="140" recordType="A">
     <Patient>
-        <Item naaccrId="nameLast">DEPRY</Item>
-        <Item naaccrId="nameFirst">FABIAN</Item>
+        <Item naaccrId="patientIdNumber">00000001</Item>
         <Tumor>
             <Item naaccrId="primarySite">C123</Item>
         </Tumor>

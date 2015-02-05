@@ -56,25 +56,32 @@ public class PatientXmlReader implements AutoCloseable {
     protected Patient handlePatientObject(Patient patient) {
         return patient; // default behavior is to do no post-processing of the patient...
     }
-    
+
     protected void handleNonPatientObject(Object object) {
         // default behavior is to ignore the object...
     }
 
     // TODO remove this testing method
     public static void main(String[] args) throws Exception {
-        File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/test-num-bad-item.xml");
+        File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/test-num.xml");
         String format = NaaccrXmlUtils.getFormatFromXmlFile(inputFile);
         RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), null);
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(inputFile), NaaccrXmlUtils.getStandardXStream(dictionary, new NaaccrXmlOptions()))) {
-            Patient patient = reader.readPatient();
-            System.out.println(patient.getItemById("nameLast"));
+            do {
+                try {
+                    Patient patient = reader.readPatient();
+                    if (patient == null)
+                        break;
+                    System.out.println("   > patientIdNumber=" + patient.getItem("patientIdNumber", 20).getValue());
+                }
+                catch (NaaccrValidationException ex) {
+                    System.err.println("   > line " + ex.getLineNumber() + " (path=" + ex.getPath() + "): " + ex.getMessage());
+                }
+            }
+            while (true);
         }
         catch (IOException ex) {
             System.err.println("Unable to read next patient: " + ex.getMessage());
-        }
-        catch (NaaccrValidationException ex) {
-            System.err.println("Unable to read next patient: line " + ex.getLineNumber() + " (path=" + ex.getPath() + "): " + ex.getMessage());
         }
     }
 }

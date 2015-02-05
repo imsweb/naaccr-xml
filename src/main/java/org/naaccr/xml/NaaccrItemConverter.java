@@ -53,7 +53,6 @@ public class NaaccrItemConverter implements Converter {
     @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         
-        // read the ID
         Item item = new Item();
         String rawId = reader.getAttribute("naaccrId");
         if (rawId != null) {
