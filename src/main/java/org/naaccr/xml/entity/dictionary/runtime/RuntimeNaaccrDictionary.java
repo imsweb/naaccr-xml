@@ -30,22 +30,23 @@ public class RuntimeNaaccrDictionary {
 
         Map<String, RuntimeNaaccrDictionaryItem> runtimeItems = new HashMap<>();
 
+        // we have to do this in two passes because any child could reference any parent, so all parents must be read first...
         for (NaaccrDictionaryItem item : standardDictionary.getItems())
-            if (item.getRecordTypes().contains(_format.getRecordType()) && item.getGroupNaaccrId() == null) 
+            if (item.getGroupNaaccrId() == null) 
                 runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
         for (NaaccrDictionaryItem item : standardDictionary.getItems())
-            if (item.getRecordTypes().contains(_format.getRecordType()) && item.getGroupNaaccrId() != null)
+            if (item.getGroupNaaccrId() != null)
                 runtimeItems.get(item.getGroupNaaccrId()).getSubItems().add(new RuntimeNaaccrDictionaryItem(item));
         
         // TODO a user-defined field should never have the same id or number as a standard item; there is all kind of validation we should be doing here...
-        // TODO although, do we want to allow the length and things like that to be overridden?
+        // TODO define the rules for user-defined items to override standard items...
         
         if (userDictionary != null) {
             for (NaaccrDictionaryItem item : userDictionary.getItems())
-                if (item.getRecordTypes().contains(_format.getRecordType()) && item.getGroupNaaccrId() == null)
+                if (item.getGroupNaaccrId() == null)
                     runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
             for (NaaccrDictionaryItem item : userDictionary.getItems())
-                if (item.getRecordTypes().contains(_format.getRecordType()) && item.getGroupNaaccrId() != null)
+                if (item.getGroupNaaccrId() != null)
                     runtimeItems.get(item.getGroupNaaccrId()).getSubItems().add(new RuntimeNaaccrDictionaryItem(item));
         }
         

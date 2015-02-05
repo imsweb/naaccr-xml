@@ -31,6 +31,9 @@ import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
+// TODO use a properties file with the exceptions so they can be shared with the DLL?
+// TODO investigate using abstract base reader/writer that would be parametrized classes...
+// TODO post something on XStream to expose the Path frmo the PartTracker
 public class NaaccrXmlUtils {
 
     // structure tags in the XML

@@ -105,7 +105,8 @@ public class NaaccrItemConverter implements Converter {
             }
             
             // item should be in the proper record type
-            // TODO FPD
+            if (!itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType()))
+                throw createValidationException("item '" + itemDef.getNaaccrId() + "' is not allowed for this record type");
             
             // value should be valid
             // TODO FPD use regex for value validation; also need to use the options...
