@@ -6,7 +6,7 @@ package org.naaccr.xml;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
-import org.naaccr.xml.entity.dictionary.AbstractEntity;
+import org.naaccr.xml.entity.AbstractEntity;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
 import org.xmlpull.v1.XmlPullParser;
@@ -58,7 +58,7 @@ public class NaaccrPatientConverter implements Converter {
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
 
         if (!NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(reader.getNodeName()))
-            createValidationException("Unexpected tag: " + reader.getNodeName());
+            throw createValidationException("Unexpected tag: " + reader.getNodeName());
 
         Patient patient = new Patient();
         int patItemCount = 0, tumorCount = 0;

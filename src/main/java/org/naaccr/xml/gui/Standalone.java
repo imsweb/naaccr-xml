@@ -7,13 +7,18 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,17 +32,24 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
+import org.apache.commons.io.IOUtils;
 import org.naaccr.xml.NaaccrFormat;
+import org.naaccr.xml.NaaccrValidationError;
 import org.naaccr.xml.NaaccrValidationException;
 import org.naaccr.xml.NaaccrXmlOptions;
 import org.naaccr.xml.NaaccrXmlUtils;
+import org.naaccr.xml.PatientXmlReader;
+import org.naaccr.xml.entity.Patient;
+import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 
 @SuppressWarnings("unchecked")
 public class Standalone {
@@ -73,7 +85,7 @@ public class Standalone {
 
         public StandaloneFrame() {
             this.setTitle("NAACCR XML Utility v0.1");
-            //this.setPreferredSize(new Dimension(800, 600));
+            this.setPreferredSize(new Dimension(1000, 700));
             this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
             JPanel contentPnl = new JPanel();
@@ -94,6 +106,7 @@ public class Standalone {
             JTabbedPane pane = new JTabbedPane();
             pane.add("  Flat to XML  ", crateFlatToXmlPanel());
             pane.add("  XML to Flat  ", crateXmlToFlatPanel());
+            pane.add("  Validation Test  ", crateValidationTestPanel());
             contentPnl.add(pane, BorderLayout.CENTER);
 
             _fileChooser = new JFileChooser();
@@ -105,15 +118,15 @@ public class Standalone {
 
         private JPanel crateFlatToXmlPanel() {
             final JPanel pnl = new JPanel();
-            pnl.setOpaque(true);
-            pnl.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+            pnl.setOpaque(false);
+            pnl.setBorder(null);
             pnl.setLayout(new BoxLayout(pnl, BoxLayout.PAGE_AXIS));
 
             JPanel row1Pnl = new JPanel();
             row1Pnl.setOpaque(false);
             row1Pnl.setBorder(null);
             row1Pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 5));
-            final JLabel flatToXmlSourceLbl = new JLabel("Source Flat File:");
+            JLabel flatToXmlSourceLbl = new JLabel("Source Flat File:");
             flatToXmlSourceLbl.setFont(flatToXmlSourceLbl.getFont().deriveFont(Font.BOLD));
             row1Pnl.add(flatToXmlSourceLbl);
             final JTextField flatToXmlSourceFld = new JTextField(75);
@@ -219,13 +232,17 @@ public class Standalone {
                 }
             });
 
-            return pnl;
+            JPanel wrapperPnl = new JPanel(new BorderLayout());
+            wrapperPnl.setOpaque(true);
+            wrapperPnl.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+            wrapperPnl.add(pnl, BorderLayout.NORTH);
+            return wrapperPnl;
         }
 
         private JPanel crateXmlToFlatPanel() {
             final JPanel pnl = new JPanel();
-            pnl.setOpaque(true);
-            pnl.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+            pnl.setOpaque(false);
+            pnl.setBorder(null);
             pnl.setLayout(new BoxLayout(pnl, BoxLayout.PAGE_AXIS));
 
 
@@ -263,7 +280,7 @@ public class Standalone {
             row3Pnl.setOpaque(false);
             row3Pnl.setBorder(null);
             row3Pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 5));
-            final JLabel xmlToFlatTargetLbl = new JLabel("Target Flat File:");
+            JLabel xmlToFlatTargetLbl = new JLabel("Target Flat File:");
             xmlToFlatTargetLbl.setFont(xmlToFlatTargetLbl.getFont().deriveFont(Font.BOLD));
             row3Pnl.add(xmlToFlatTargetLbl);
             final JTextField xmlToFlatTargetFld = new JTextField(75);
@@ -339,6 +356,92 @@ public class Standalone {
                 }
             });
 
+            JPanel wrapperPnl = new JPanel(new BorderLayout());
+            wrapperPnl.setOpaque(true);
+            wrapperPnl.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+            wrapperPnl.add(pnl, BorderLayout.NORTH);
+            return wrapperPnl;
+        }
+
+        private JPanel crateValidationTestPanel() {
+            JPanel pnl = new JPanel(new BorderLayout());
+            pnl.setOpaque(true);
+            pnl.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+
+            JPanel textPnl = new JPanel(new BorderLayout());
+            textPnl.setOpaque(false);
+            textPnl.setBorder(null);
+            final JTextArea textFld = new JTextArea();
+            StringWriter writer = new StringWriter();
+            try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("testing-template.xml")) {
+                IOUtils.copy(inputStream, writer, "UTF-8");
+                textFld.setText(writer.toString());
+            }
+            catch (IOException e) {
+                textFld.setText("Unexpected error reading template file...");
+            }
+            textPnl.add(new JScrollPane(textFld), BorderLayout.CENTER);
+            pnl.add(textPnl, BorderLayout.CENTER);
+            
+            JPanel validationPnl = new JPanel(new BorderLayout());
+            validationPnl.setOpaque(false);
+            validationPnl.setBorder(null);
+            JPanel buttonPnl = new JPanel(new GridBagLayout());
+            buttonPnl.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
+            JButton validateBtn = new JButton("  Validate  ");
+            buttonPnl.add(validateBtn);
+            validationPnl.add(buttonPnl, BorderLayout.NORTH);
+            final JTextArea errorsFld = new JTextArea();
+            errorsFld.setRows(10);
+            validationPnl.add(new JScrollPane(errorsFld), BorderLayout.CENTER);
+            pnl.add(validationPnl, BorderLayout.SOUTH);
+
+            validateBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    errorsFld.setText(null);
+                    String format = NaaccrXmlUtils.getFormatFromXmlReader(new StringReader(textFld.getText()));
+                    if (format == null)
+                        format = NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT; // TODO this should be an error
+                    RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), null);
+                    try (PatientXmlReader reader = new PatientXmlReader(new StringReader(textFld.getText()), NaaccrXmlUtils.getStandardXStream(dictionary, new NaaccrXmlOptions()))) {
+                        do {
+                            Patient patient = reader.readPatient();
+                            if (patient == null)
+                                break;
+                            for (NaaccrValidationError error : patient.getAllValidationErrors()) {
+                                errorsFld.setForeground(new Color(125, 0, 0));
+                                errorsFld.append("Line # " + error.getLineNumber() + ": DATA validation error");
+                                if (error.getPath() != null)
+                                    errorsFld.append(" for path \"" + error.getPath() + "\"");
+                                errorsFld.append(":\n");
+                                errorsFld.append("       -> " + error.getMessage() + "\n");
+                            }
+                        }
+                        while (true);
+                        if (errorsFld.getText().isEmpty()) {
+                            errorsFld.append("Reading completed; found no error.");
+                            errorsFld.setForeground(new Color(0, 115, 0));
+                        }
+                    }
+                    catch (NaaccrValidationException ex) {
+                        errorsFld.setForeground(new Color(125, 0, 0));
+                        errorsFld.append("Line # " + ex.getLineNumber() + ": SYNTAX validation error");
+                        if (ex.getPath() != null)
+                            errorsFld.append(" for path \"" + ex.getPath() + "\"");
+                        errorsFld.append(":\n");
+                        errorsFld.append("       -> " + ex.getMessage() + "\n");
+                        errorsFld.append("Reading interrupted...");
+                    }
+                    catch (IOException ex) {
+                        errorsFld.setForeground(new Color(125, 0, 0));
+                        errorsFld.append("Unexpected error:\n");
+                        errorsFld.append("      -> " + ex.getMessage() + "\n");
+                        errorsFld.append("Reading interrupted...");
+                    }
+                }
+            });
+            
             return pnl;
         }
     }

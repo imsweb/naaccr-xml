@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.naaccr.xml.NaaccrValidationError;
-import org.naaccr.xml.entity.dictionary.AbstractEntity;
 
 public class Patient extends AbstractEntity {
     

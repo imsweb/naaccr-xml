@@ -3,6 +3,7 @@
  */
 package org.naaccr.xml;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,7 +45,7 @@ public class NaaccrXmlUtils {
     public static final String NAACCR_XML_TAG_PATIENT = "Patient";
     public static final String NAACCR_XML_TAG_TUMOR = "Tumor";
     public static final String NAACCR_XML_TAG_ITEM = "Item";
-    
+
     // the different data types
     public static final String NAACCR_DATA_TYPE_CODE = "code";
     public static final String NAACCR_DATA_TYPE_CODE_WITH_BLANK = "codeWithBlank";
@@ -55,9 +56,10 @@ public class NaaccrXmlUtils {
     public static final String NAACCR_DATA_TYPE_STRING_WITH_BLANK = "stringWithBlank";
     public static final String NAACCR_DATA_TYPE_INTEGER = "integer";
     public static final String NAACCR_DATA_TYPE_INTEGER_WITH_ZERO = "integerWithZero";
-    
+
     // regular expression for each data type
     public static final Map<String, Pattern> NAACCR_DATA_TYPES_REGEX = new HashMap<>();
+
     static {
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_CODE, Pattern.compile("^\\d+$"));
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_CODE_WITH_BLANK, Pattern.compile("^(\\d|\\s)+$"));
@@ -182,6 +184,27 @@ public class NaaccrXmlUtils {
         return new OutputStreamWriter(os, StandardCharsets.UTF_8);
     }
 
+    // TODO FPD use this to display a progress bar...
+    private int countLines(File file) throws IOException {
+        try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
+            byte[] c = new byte[1024];
+            int count = 0;
+            int readChars = 0;
+            boolean endsWithoutNewLine = false;
+            while ((readChars = is.read(c)) != -1) {
+                for (int i = 0; i < readChars; ++i) {
+                    if (c[i] == '\n')
+                        ++count;
+                }
+                endsWithoutNewLine = (c[readChars - 1] != '\n');
+            }
+            if (endsWithoutNewLine) {
+                ++count;
+            }
+            return count;
+        }
+    }
+
     /**
      * Reads an NAACCR XML data file and returns the corresponding data.
      * <br/>
@@ -190,8 +213,8 @@ public class NaaccrXmlUtils {
      * @param format expected NAACCR format
      * @param options reading and validating options
      * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
-     * @throws IOException
      * @return a <code>NaaccrDataExchange</code> object, never null
+     * @throws IOException
      */
     public static NaaccrDataExchange readXmlFile(File xmlFile, String format, NaaccrXmlOptions options, NaaccrDictionary nonStandardDictionary) throws IOException {
         if (xmlFile == null)
@@ -209,7 +232,7 @@ public class NaaccrXmlUtils {
         // make sure we have some options
         if (options == null)
             options = new NaaccrXmlOptions();
-        
+
         // let XStream read the data
         NaaccrDataExchange data;
         try (Reader reader = createReader(xmlFile)) {
@@ -310,12 +333,28 @@ public class NaaccrXmlUtils {
     public static String getFormatFromXmlFile(File xmlFile) {
         if (xmlFile == null || !xmlFile.exists())
             return null;
+        
+        try {
+            return getFormatFromXmlReader(createReader(xmlFile));
+        }
+        catch (IOException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the NAACCR format of the given XML reader.
+     * @param xmlReader provided reader
+     * @return the NAACCR format, null if it cannot be determined
+     */
+    public static String getFormatFromXmlReader(Reader xmlReader) {
+
 
         Pattern patternVersion = Pattern.compile("naaccrVersion=\"(.+?)\"");
         Pattern patternType = Pattern.compile("recordType=\"(.+?)\"");
-        
+
         String version = null, type = null;
-        try (BufferedReader reader = new BufferedReader(createReader(xmlFile))) {
+        try (BufferedReader reader = new BufferedReader(xmlReader)) {
             String line = reader.readLine();
             while (line != null && (version == null || type == null)) {
                 Matcher matcherVersion = patternVersion.matcher(line);
@@ -330,7 +369,7 @@ public class NaaccrXmlUtils {
         catch (IOException e) {
             // ignore, the result will be null
         }
-        
+
         String result = null;
         if (version != null && type != null) {
             switch (type) {
@@ -367,7 +406,7 @@ public class NaaccrXmlUtils {
 
     public static XStream getStandardXStream(RuntimeNaaccrDictionary dictionary, NaaccrXmlOptions options) {
         final NaaccrPatientConverter converter = new NaaccrPatientConverter(dictionary, options);
-        
+
         XppDriver driver = new XppDriver() {
             @Override
             protected synchronized XmlPullParser createParser() throws XmlPullParserException {
@@ -398,62 +437,62 @@ public class NaaccrXmlUtils {
 
     // testing method, will be removed eventually...
     /**
-    public static void main(String[] args) throws Exception {
+     public static void main(String[] args) throws Exception {
 
-        URL myDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("fabian/fab-dictionary.csv");
-        NaaccrDictionary myDictionary = NaaccrDictionaryUtils.readDictionary(myDictionaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
+     URL myDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("fabian/fab-dictionary.csv");
+     NaaccrDictionary myDictionary = NaaccrDictionaryUtils.readDictionary(myDictionaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
 
-        File inputFile = new File(System.getProperty("user.dir") + "/src/main/resources/data/fake-naaccr14inc-10000-rec.txt.gz");
-        File outputFile = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
-        long start = System.currentTimeMillis();
-        flatToXml(inputFile, outputFile, NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
-        System.out.println("Done translating flat-file to XML (10,000 records) using standard dictionary in " + (System.currentTimeMillis() - start) + "ms - see 'test.xml.gz'");
+     File inputFile = new File(System.getProperty("user.dir") + "/src/main/resources/data/fake-naaccr14inc-10000-rec.txt.gz");
+     File outputFile = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
+     long start = System.currentTimeMillis();
+     flatToXml(inputFile, outputFile, NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
+     System.out.println("Done translating flat-file to XML (10,000 records) using standard dictionary in " + (System.currentTimeMillis() - start) + "ms - see 'test.xml.gz'");
 
-        File inputFile2 = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
-        File outputFile2 = new File(System.getProperty("user.dir") + "/build/test.txt.gz");
-        long start2 = System.currentTimeMillis();
-        xmlToFlat(inputFile2, outputFile2, NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
-        System.out.println("Done translation XML back to flat-file (10,000 records) using standard dictionary in " + (System.currentTimeMillis() - start2) + "ms - see 'test.txt.gz'");
+     File inputFile2 = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
+     File outputFile2 = new File(System.getProperty("user.dir") + "/build/test.txt.gz");
+     long start2 = System.currentTimeMillis();
+     xmlToFlat(inputFile2, outputFile2, NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
+     System.out.println("Done translation XML back to flat-file (10,000 records) using standard dictionary in " + (System.currentTimeMillis() - start2) + "ms - see 'test.txt.gz'");
 
-        Patient patient = new Patient();
-        patient.getItems().add(new Item("nameLast", "DEPRY"));
-        patient.getItems().add(new Item("nameFirst", "FABIAN"));
-        patient.getTumors().add(new Tumor());
-        patient.getTumors().get(0).getItems().add(new Item("primarySite", "C619"));
-        patient.getTumors().get(0).getItems().add(new Item("hosptialAbstractorId", "FDEPRY"));
-        File outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test-names.xml");
-        PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(outputFile3), NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, myDictionary);
-        writer.writePatient(patient);
-        writer.close();
-        System.out.println("Done creating XML file using non-standard items (item referenced by ID) - see 'user-dictionary-test-names.xml'");
+     Patient patient = new Patient();
+     patient.getItems().add(new Item("nameLast", "DEPRY"));
+     patient.getItems().add(new Item("nameFirst", "FABIAN"));
+     patient.getTumors().add(new Tumor());
+     patient.getTumors().get(0).getItems().add(new Item("primarySite", "C619"));
+     patient.getTumors().get(0).getItems().add(new Item("hosptialAbstractorId", "FDEPRY"));
+     File outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test-names.xml");
+     PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(outputFile3), NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, myDictionary);
+     writer.writePatient(patient);
+     writer.close();
+     System.out.println("Done creating XML file using non-standard items (item referenced by ID) - see 'user-dictionary-test-names.xml'");
 
-        patient = new Patient();
-        patient.getItems().add(new Item(2230, "DEPRY"));
-        patient.getItems().add(new Item(2240, "FABIAN"));
-        patient.getTumors().add(new Tumor());
-        patient.getTumors().get(0).getItems().add(new Item(400, "C619"));
-        patient.getTumors().get(0).getItems().add(new Item(10001, "FDEPRY"));
-        outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test-numbers.xml");
-        writer = new PatientXmlWriter(new FileWriter(outputFile3), NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, myDictionary);
-        writer.writePatient(patient);
-        writer.close();
-        System.out.println("Done creating XML file using non-standard items (item referenced by number) - see 'user-dictionary-test-numbers.xml'");
+     patient = new Patient();
+     patient.getItems().add(new Item(2230, "DEPRY"));
+     patient.getItems().add(new Item(2240, "FABIAN"));
+     patient.getTumors().add(new Tumor());
+     patient.getTumors().get(0).getItems().add(new Item(400, "C619"));
+     patient.getTumors().get(0).getItems().add(new Item(10001, "FDEPRY"));
+     outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test-numbers.xml");
+     writer = new PatientXmlWriter(new FileWriter(outputFile3), NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, myDictionary);
+     writer.writePatient(patient);
+     writer.close();
+     System.out.println("Done creating XML file using non-standard items (item referenced by number) - see 'user-dictionary-test-numbers.xml'");
 
-        patient.getItems().add(new Item("recordType", "A"));
-        patient.getItems().add(new Item("naaccrRecordVersion", "140"));
-        outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test.txt");
-        PatientFlatWriter writer3 = new PatientFlatWriter(new FileWriter(outputFile3), NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, myDictionary);
-        writer3.writePatient(patient);
-        writer3.close();
-        System.out.println("Done creating flat-file using non-standard items in State Requestor Items - see 'user-dictionary-test.txt'");
+     patient.getItems().add(new Item("recordType", "A"));
+     patient.getItems().add(new Item("naaccrRecordVersion", "140"));
+     outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test.txt");
+     PatientFlatWriter writer3 = new PatientFlatWriter(new FileWriter(outputFile3), NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, myDictionary);
+     writer3.writePatient(patient);
+     writer3.close();
+     System.out.println("Done creating flat-file using non-standard items in State Requestor Items - see 'user-dictionary-test.txt'");
 
-        File inputFile4 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test-numbers.xml");
-        NaaccrDataExchange data = readXmlFile(inputFile4, NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, null);
-        System.out.println("Done reading 'user-dictionary-test-numbers.xml', got " + data.getPatients().size() + " patient(s)...");
+     File inputFile4 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test-numbers.xml");
+     NaaccrDataExchange data = readXmlFile(inputFile4, NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, null);
+     System.out.println("Done reading 'user-dictionary-test-numbers.xml', got " + data.getPatients().size() + " patient(s)...");
 
-        File outputFile5 = new File(System.getProperty("user.dir") + "/build/another-xml-test.xml");
-        writeXmlFile(data, outputFile5, NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, null);
-        System.out.println("Done writing 'another-xml-test.xml'");
-    }
+     File outputFile5 = new File(System.getProperty("user.dir") + "/build/another-xml-test.xml");
+     writeXmlFile(data, outputFile5, NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, null);
+     System.out.println("Done writing 'another-xml-test.xml'");
+     }
      */
 }
