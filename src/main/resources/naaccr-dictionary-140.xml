@@ -587,7 +587,7 @@
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
           dataType="string"
-          regexValidation="^Cd{3}$"/>
+          regexValidation="^C\d{3}$"/>
   <ItemDef naaccrId="laterality"
           naaccrNum="410"
           naaccrName="Laterality"
@@ -2290,7 +2290,7 @@
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
           dataType="string"
-          regexValidation="^[A-Z]d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"/>
   <ItemDef naaccrId="secondaryDiagnosis2"
           naaccrNum="3782"
           naaccrName="Secondary Diagnosis 2"
@@ -2300,7 +2300,7 @@
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
           dataType="string"
-          regexValidation="^[A-Z]d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"/>
   <ItemDef naaccrId="secondaryDiagnosis3"
           naaccrNum="3784"
           naaccrName="Secondary Diagnosis 3"
@@ -2310,7 +2310,7 @@
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
           dataType="string"
-          regexValidation="^[A-Z]d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"/>
   <ItemDef naaccrId="secondaryDiagnosis4"
           naaccrNum="3786"
           naaccrName="Secondary Diagnosis 4"
@@ -2320,7 +2320,7 @@
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
           dataType="string"
-          regexValidation="^[A-Z]d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"/>
   <ItemDef naaccrId="secondaryDiagnosis5"
           naaccrNum="3788"
           naaccrName="Secondary Diagnosis 5"
@@ -2330,7 +2330,7 @@
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
           dataType="string"
-          regexValidation="^[A-Z]d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"/>
   <ItemDef naaccrId="secondaryDiagnosis6"
           naaccrNum="3790"
           naaccrName="Secondary Diagnosis 6"
@@ -2340,7 +2340,7 @@
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
           dataType="string"
-          regexValidation="^[A-Z]d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"/>
   <ItemDef naaccrId="secondaryDiagnosis7"
           naaccrNum="3792"
           naaccrName="Secondary Diagnosis 7"
@@ -2350,7 +2350,7 @@
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
           dataType="string"
-          regexValidation="^[A-Z]d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"/>
   <ItemDef naaccrId="secondaryDiagnosis8"
           naaccrNum="3794"
           naaccrName="Secondary Diagnosis 8"
@@ -2360,7 +2360,7 @@
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
           dataType="string"
-          regexValidation="^[A-Z]d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"/>
   <ItemDef naaccrId="secondaryDiagnosis9"
           naaccrNum="3796"
           naaccrName="Secondary Diagnosis 9"
@@ -2370,7 +2370,7 @@
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
           dataType="string"
-          regexValidation="^[A-Z]d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"/>
   <ItemDef naaccrId="secondaryDiagnosis10"
           naaccrNum="3798"
           naaccrName="Secondary Diagnosis 10"
@@ -2380,7 +2380,7 @@
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
           dataType="string"
-          regexValidation="^[A-Z]d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"/>
   <ItemDef naaccrId="npcrSpecificField"
           naaccrNum="3720"
           naaccrName="NPCR Specific Field"

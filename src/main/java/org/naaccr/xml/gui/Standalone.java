@@ -107,6 +107,7 @@ public class Standalone {
             pane.add("  Flat to XML  ", crateFlatToXmlPanel());
             pane.add("  XML to Flat  ", crateXmlToFlatPanel());
             pane.add("  Validation Test  ", crateValidationTestPanel());
+            pane.add("  Dictionary  ", crateDictionaryPanel());
             contentPnl.add(pane, BorderLayout.CENTER);
 
             _fileChooser = new JFileChooser();
@@ -368,6 +369,14 @@ public class Standalone {
             pnl.setOpaque(true);
             pnl.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
+            JPanel disclaimerPnl = new JPanel(new FlowLayout(FlowLayout.LEADING));
+            disclaimerPnl.setOpaque(false);
+            disclaimerPnl.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
+            JLabel disclaimerLbl = new JLabel("Modify the XML to introduce some errors, and click the Validate button to see the errors.");
+            disclaimerLbl.setFont(disclaimerLbl.getFont().deriveFont(Font.BOLD));
+            disclaimerPnl.add(disclaimerLbl);
+            pnl.add(disclaimerPnl, BorderLayout.NORTH);
+            
             JPanel textPnl = new JPanel(new BorderLayout());
             textPnl.setOpaque(false);
             textPnl.setBorder(null);
@@ -411,11 +420,14 @@ public class Standalone {
                                 break;
                             for (NaaccrValidationError error : patient.getAllValidationErrors()) {
                                 errorsFld.setForeground(new Color(125, 0, 0));
-                                errorsFld.append("Line # " + error.getLineNumber() + ": DATA validation error");
-                                if (error.getPath() != null)
-                                    errorsFld.append(" for path \"" + error.getPath() + "\"");
-                                errorsFld.append(":\n");
-                                errorsFld.append("       -> " + error.getMessage() + "\n");
+                                if (!errorsFld.getText().isEmpty())
+                                    errorsFld.append("\n");
+                                errorsFld.append("Line #" + error.getLineNumber() + ": DATA validation error\n");
+                                errorsFld.append("   message: " + (error.getMessage() == null ? "<not available>" : error.getMessage()) + "\n");
+                                errorsFld.append("   path: " + (error.getPath() == null ? "<not available>" : error.getPath()) + "\n");
+                                errorsFld.append("   item ID: " + (error.getNaaccrId() == null ? "<not available>" : error.getNaaccrId()) + "\n");
+                                errorsFld.append("   item #: " + (error.getNaaccrNum() == null ? "<not available>" : error.getNaaccrNum()) + "\n");
+                                errorsFld.append("   value: " + (error.getValue() == null ? "<blank>" : error.getValue()) + "\n");
                             }
                         }
                         while (true);
@@ -424,14 +436,17 @@ public class Standalone {
                             errorsFld.setForeground(new Color(0, 115, 0));
                         }
                     }
-                    catch (NaaccrValidationException ex) {
+                    catch (NaaccrValidationException error) {
                         errorsFld.setForeground(new Color(125, 0, 0));
-                        errorsFld.append("Line # " + ex.getLineNumber() + ": SYNTAX validation error");
-                        if (ex.getPath() != null)
-                            errorsFld.append(" for path \"" + ex.getPath() + "\"");
-                        errorsFld.append(":\n");
-                        errorsFld.append("       -> " + ex.getMessage() + "\n");
-                        errorsFld.append("Reading interrupted...");
+                        if (!errorsFld.getText().isEmpty())
+                            errorsFld.append("\n");
+                        errorsFld.append("Line #" + error.getLineNumber() + ": SYNTAX validation error\n");
+                        errorsFld.append("   message: " + (error.getMessage() == null ? "<not available>" : error.getMessage()) + "\n");
+                        errorsFld.append("   path: " + (error.getPath() == null ? "<not available>" : error.getPath()) + "\n");
+                        errorsFld.append("   item ID: <not available>\n");
+                        errorsFld.append("   item #: <not available>\n");
+                        errorsFld.append("   value: <not available>\n");
+                        errorsFld.append("\nReading interrupted because of a syntax error...");
                     }
                     catch (IOException ex) {
                         errorsFld.setForeground(new Color(125, 0, 0));
@@ -439,8 +454,29 @@ public class Standalone {
                         errorsFld.append("      -> " + ex.getMessage() + "\n");
                         errorsFld.append("Reading interrupted...");
                     }
+                    errorsFld.setCaretPosition(0);
                 }
             });
+            
+            return pnl;
+        }
+
+        private JPanel crateDictionaryPanel() {
+            JPanel pnl = new JPanel(new BorderLayout());
+            pnl.setOpaque(true);
+            pnl.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+            JTextArea area = new JTextArea();
+            area.setEditable(false);
+            try {
+                area.setText(IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-140.xml"), "UTF-8"));
+            }
+            catch (IOException e) {
+                area.setText("Unable to read dictionary...");
+            }
+            JScrollPane pane = new JScrollPane(area);
+            pane.setBorder(null);
+            pnl.add(pane, BorderLayout.CENTER);
             
             return pnl;
         }

@@ -66,8 +66,8 @@ public class NaaccrXmlUtils {
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_ALPHA, Pattern.compile("^[A-Za-z]+$"));
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_ALPHA_WITH_BLANK, Pattern.compile("^([A-Za-z]|\\s)+$"));
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)\\d\\d(0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_STRING, Pattern.compile("^[^\\s][.]+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_STRING_WITH_BLANK, Pattern.compile("^[.]+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_STRING, Pattern.compile("^[^\\s].+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_STRING_WITH_BLANK, Pattern.compile("^.+$"));
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_INTEGER, Pattern.compile("^\\d+$"));
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_INTEGER_WITH_ZERO, Pattern.compile("^\\d+"));
     }

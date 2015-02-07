@@ -38,17 +38,32 @@ public class PatientXmlReader implements AutoCloseable {
             throw new RuntimeException(e);
         }
         catch (ConversionException e) {
-            NaaccrValidationException ex = new NaaccrValidationException("bad XML syntax");
+            String msg = e.get("message") != null ? e.get("message") : e.getMessage();
+            if (msg != null) {
+                msg = msg.trim();
+                if (msg.startsWith(":"))
+                    msg = msg.substring(1);
+                int idx = msg.indexOf("from line");
+                if (idx != -1)
+                    msg = msg.substring(0, idx).trim();
+            }
+            NaaccrValidationException ex = new NaaccrValidationException(msg);
             ex.setLineNumber(e.get("line number") == null ? null : Integer.valueOf(e.get("line number")));
             ex.setPath(e.get("path"));
             throw ex;
         }
-        catch (CannotResolveClassException e) {
+
+        catch (CannotResolveClassException e)
+
+        {
             NaaccrValidationException ex = new NaaccrValidationException("Unexpected tag: " + e.getMessage());
             // TODO would it be possible to get the line number from the parser? That parser is referenced in the xstream object...
             throw ex;
         }
-        catch (EOFException e) {
+
+        catch (EOFException e)
+
+        {
             // ignored, null will be returned
         }
 
@@ -83,8 +98,7 @@ public class PatientXmlReader implements AutoCloseable {
                     System.out.println("      > primarySite=" + tumor.getItemValue("primarySite", 400));
                 for (NaaccrValidationError error : patient.getAllValidationErrors())
                     System.out.println("   > line " + error.getLineNumber() + " [" + error.getPath() + "]: " + error.getMessage());
-            }
-            while (true);
+            } while (true);
         }
         catch (NaaccrValidationException ex) {
             System.out.println("   > line " + ex.getLineNumber() + " [path=" + ex.getPath() + "]: " + ex.getMessage());
