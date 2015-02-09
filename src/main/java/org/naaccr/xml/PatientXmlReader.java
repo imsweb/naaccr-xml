@@ -16,14 +16,20 @@ import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.io.StreamException;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 
 public class PatientXmlReader implements AutoCloseable {
 
     protected ObjectInputStream _ois;
 
-    public PatientXmlReader(Reader reader, XStream xstream) throws IOException {
-        _ois = xstream.createObjectInputStream(reader);
+    public PatientXmlReader(Reader reader, XStream xstream) throws IOException, NaaccrValidationException {
+        try {
+            _ois = xstream.createObjectInputStream(reader);
+        }
+        catch (StreamException e) {
+            throw new NaaccrValidationException("Error reading stream" + e.getMessage());
+        }
     }
 
     public Patient readPatient() throws IOException, NaaccrValidationException {
@@ -52,18 +58,17 @@ public class PatientXmlReader implements AutoCloseable {
             ex.setPath(e.get("path"));
             throw ex;
         }
-
-        catch (CannotResolveClassException e)
-
-        {
+        catch (CannotResolveClassException e) {
             NaaccrValidationException ex = new NaaccrValidationException("Unexpected tag: " + e.getMessage());
             // TODO would it be possible to get the line number from the parser? That parser is referenced in the xstream object...
             throw ex;
         }
-
-        catch (EOFException e)
-
-        {
+        catch (StreamException e) {
+            NaaccrValidationException ex = new NaaccrValidationException("Error reading stream: " + e.getMessage());
+            // TODO would it be possible to get the line number from the parser? That parser is referenced in the xstream object...
+            throw ex;
+        }
+        catch (EOFException e) {
             // ignored, null will be returned
         }
 

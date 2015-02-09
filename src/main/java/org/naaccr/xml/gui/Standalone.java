@@ -440,7 +440,7 @@ public class Standalone {
                         errorsFld.setForeground(new Color(125, 0, 0));
                         if (!errorsFld.getText().isEmpty())
                             errorsFld.append("\n");
-                        errorsFld.append("Line #" + error.getLineNumber() + ": SYNTAX validation error\n");
+                        errorsFld.append("Line " + (error.getLineNumber() == null ? "?" : ("#" + error.getLineNumber())) + ": SYNTAX validation error\n");
                         errorsFld.append("   message: " + (error.getMessage() == null ? "<not available>" : error.getMessage()) + "\n");
                         errorsFld.append("   path: " + (error.getPath() == null ? "<not available>" : error.getPath()) + "\n");
                         errorsFld.append("   item ID: <not available>\n");
