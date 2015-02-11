@@ -43,8 +43,24 @@ public class NaaccrPatientConverter implements Converter {
     @Override
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
 
-        // TODO FPD add validation
+        if (!(source instanceof Patient))
+            throw createValidationException("Unexpected object type: " + source.getClass().getName());
 
+        
+        Patient patient = (Patient)source;
+        int patItemCount = 0, tumorCount = 0;
+        writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT);
+        
+        // handle the patient items
+        for (Item item : patient.getItems()) {
+            
+        }
+        
+        // handle tumors
+        
+        writer.endNode();
+        
+        /**
         Item item = (Item)source;
         if (item.getNum() != null)
             writer.addAttribute("naaccrNum", item.getNum().toString());
@@ -52,6 +68,7 @@ public class NaaccrPatientConverter implements Converter {
             writer.addAttribute("naaccrId", item.getId());
         if (item.getValue() != null)
             writer.setValue(item.getValue());
+         */
     }
 
     @Override
@@ -62,8 +79,11 @@ public class NaaccrPatientConverter implements Converter {
 
         Patient patient = new Patient();
         int patItemCount = 0, tumorCount = 0;
+
         while (reader.hasMoreChildren()) {
             reader.moveDown();
+            
+            // handel patient items
             if (NaaccrXmlUtils.NAACCR_XML_TAG_ITEM.equals(reader.getNodeName())) {
                 if (tumorCount > 0)
                     throw new RuntimeException("Tumors should come after items...");
@@ -71,6 +91,7 @@ public class NaaccrPatientConverter implements Converter {
                 String path = "/Patient/Item[" + patItemCount + "]";
                 patient.getItems().add(createItem(patient, _parser.getLineNumber(), path, "Patient", reader.getAttribute("naaccrId"), reader.getAttribute("naaccrNum"), reader.getValue()));
             }
+            // handle tumors
             else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(reader.getNodeName())) {
                 Tumor tumor = new Tumor();
                 tumorCount++;
@@ -78,6 +99,8 @@ public class NaaccrPatientConverter implements Converter {
                 while (reader.hasMoreChildren()) {
                     reader.moveDown();
                     tumorItemCount++;
+                    
+                    // handle tumor items
                     if (NaaccrXmlUtils.NAACCR_XML_TAG_ITEM.equals(reader.getNodeName())) {
                         String path = "/Patient/Tumor[" + tumorCount + "]/Item[" + tumorItemCount + "]";
                         tumor.getItems().add(createItem(tumor, _parser.getLineNumber(), path, "Tumor", reader.getAttribute("naaccrId"), reader.getAttribute("naaccrNum"), reader.getValue()));
