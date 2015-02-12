@@ -9,7 +9,10 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
@@ -46,9 +49,10 @@ public class PatientFlatReader implements AutoCloseable {
             if (_previousLine == null) // would be an empty file...
                 return null;
         }
-        
+
         lines.add(_previousLine);
         String currentPatId = getPatientIdNumber(_previousLine);
+        int lineNumber = _reader.getLineNumber() - 1;
 
         _previousLine = _reader.readLine();
         while (_previousLine != null) {
@@ -61,7 +65,7 @@ public class PatientFlatReader implements AutoCloseable {
                 break;
         }
 
-        return lines.isEmpty() ? null : createPatientFromLines(lines);
+        return lines.isEmpty() ? null : createPatientFromLines(lineNumber, lines);
     }
 
     @Override
@@ -85,20 +89,38 @@ public class PatientFlatReader implements AutoCloseable {
 
         return result;
     }
-
-    protected Patient createPatientFromLines(List<String> lines) throws IOException {
+    
+    protected Patient createPatientFromLines(int lineNumber, List<String> lines) throws IOException {
 
         // create the patient using the first line only (other lines are supposed to be identical for patient items)
         Patient patient = new Patient();
-        for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
-            if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType()) && itemDef.getGroupNaaccrId() == null)
-                patient.getItems().addAll(createItemsFromLine(lines.get(0), itemDef));
+        for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
+            if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType())
+                    && itemDef.getGroupNaaccrId() == null) { // sub-items are handled through the parent item...
+                Map<String, Item> patItems = new LinkedHashMap<>();
+                for (String line : lines) {
+                    for (Item item : createItemsFromLine(line, itemDef)) {
+                        Item patItem = patItems.get(itemDef.getNaaccrId());
+                        if (patItem == null)
+                            patItems.put(itemDef.getNaaccrId(), item);
+                        else {
+                            boolean same = patItem.getValue() == null ? item.getValue() == null : patItem.getValue().equals(item.getValue());
+                            if (!same)
+                                throw new IOException("Line #" + lineNumber + ": patient-level field '" + itemDef.getNaaccrId() + "' doesn't have the same value for all tumors.");
+                        }
+                    }
+                }
+                for (Entry<String, Item> entry : patItems.entrySet())
+                    patient.getItems().add(entry.getValue());
+            }
+        }
 
         // create the tumors, one per line
         for (String line : lines) {
             Tumor tumor = new Tumor();
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
-                if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType()) && itemDef.getGroupNaaccrId() == null)
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType())
+                        && itemDef.getGroupNaaccrId() == null) // sub-items are handled through the parent item...
                     tumor.getItems().addAll(createItemsFromLine(line, itemDef));
             patient.getTumors().add(tumor);
         }

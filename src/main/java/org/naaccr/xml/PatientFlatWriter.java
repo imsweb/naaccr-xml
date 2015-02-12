@@ -98,7 +98,7 @@ public class PatientFlatWriter implements AutoCloseable {
                             currentIndex = subStart;
 
                             if (subEnd <= end) { // do not write the current sub-item out if it can potentially go out of the space
-                                String value = getValueForItem(subItemDef, patient, patient.getTumors().get(0));
+                                String value = getValueForItem(subItemDef, patient, tumor);
                                 if (value == null)
                                     value = "";
                                 if (value.length() > subLength)

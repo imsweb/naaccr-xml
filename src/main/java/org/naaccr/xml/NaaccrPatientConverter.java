@@ -117,7 +117,7 @@ public class NaaccrPatientConverter implements Converter {
                 throw createValidationException("Unexpected tag: " + reader.getNodeName());
             reader.moveUp();
         }
-
+        
         return patient;
     }
 
