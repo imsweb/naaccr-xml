@@ -52,7 +52,7 @@
           length="2"
           section="Record ID"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="integerWithZero"/>
   <ItemDef naaccrId="patientIdNumber"
           naaccrNum="20"
@@ -106,7 +106,7 @@
           length="3"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="alpha"/>
   <ItemDef naaccrId="censusTract708090"
           naaccrNum="110"
@@ -151,7 +151,7 @@
           length="6"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="integerWithZero"/>
   <ItemDef naaccrId="censusBlockGroup2000"
           naaccrNum="362"
@@ -169,7 +169,7 @@
           length="1"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="maritalStatusAtDx"
           naaccrNum="150"
@@ -178,7 +178,7 @@
           length="1"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="race1"
           naaccrNum="160"
@@ -286,7 +286,7 @@
           length="3"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="birthDate"
           naaccrNum="240"
@@ -440,7 +440,7 @@
           length="6"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="integerWithZero"/>
   <ItemDef naaccrId="censusBlockGroup2010"
           naaccrNum="363"
@@ -458,7 +458,7 @@
           length="1"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="addressAtDxCountry"
           naaccrNum="102"
@@ -548,7 +548,7 @@
           length="1"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="sequenceNumberCentral"
           naaccrNum="380"
@@ -4142,7 +4142,7 @@
           section="Special Use"
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
-          dataType="string"/>
+          dataType="stringWithLeadingSpaces"/>
   <ItemDef naaccrId="nameLast"
           naaccrNum="2230"
           naaccrName="Name--Last"

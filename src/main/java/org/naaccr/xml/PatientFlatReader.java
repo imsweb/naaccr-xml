@@ -136,7 +136,7 @@ public class PatientFlatReader implements AutoCloseable {
 
         if (end <= line.length()) {
             String value = line.substring(start, end);
-            String trimmedValue = value.trim();
+            String trimmedValue = NaaccrXmlUtils.NAACCR_DATA_TYPE_STRING_WITH_LEADING_SPACES.equals(itemDef.getDataType()) ? value : value.trim();
 
             // never trim a group field unless it's completely empty (or we would lose the info of which child value is which)
             if (itemDef.getSubItems().isEmpty() || trimmedValue.isEmpty())

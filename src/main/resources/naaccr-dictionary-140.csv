@@ -448,7 +448,7 @@ followUpSourceCentral,1791,2,Follow-up Source Central,,,"A,M,C,I",2278,Tumor,,co
 dateOfDeathCanada,1755,8,Date of Death--Canada,Yes,,"A,M,C,I",2280,Tumor,,date,Follow-up / Recurrence / Death,,,
 dateOfDeathCanadaFlag,1756,2,Date of Death--Canada Flag,,,"A,M,C,I",2288,Tumor,,code,Follow-up / Recurrence / Death,,,
 unusualFollowUpMethod,1850,2,Unusual Follow-Up Method,,,"A,M,C,I",2290,Tumor,,code,Follow-up / Recurrence / Death,,,
-stateRequestorItems,2220,1000,State/Requestor Items,,,"A,M,C,I",2340,Tumor,,string,Special Use,,,
+stateRequestorItems,2220,1000,State/Requestor Items,,,"A,M,C,I",2340,Tumor,,stringWithLeadingSpaces,Special Use,,,
 nameLast,2230,40,Name--Last,,,"A,M,C",3340,Patient,,string,Patient - Confidential,,,
 nameFirst,2240,40,Name--First,,,"A,M,C",3380,Patient,,string,Patient - Confidential,,,
 nameMiddle,2250,40,Name--Middle,,,"A,M,C",3420,Patient,,string,Patient - Confidential,,,
