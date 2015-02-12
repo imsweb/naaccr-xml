@@ -64,6 +64,15 @@ public class PatientFlatWriter implements AutoCloseable {
             int currentIndex = 1;
             StringBuilder line = new StringBuilder();
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
+
+                // as soon as an item is not supported for the dictionary's record type, we can stop (making the assumption the items are correctly sorted)
+                if (!itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType()))
+                    break;
+                
+                // sub-items are handled as part of the parent, so ignore them here
+                if (itemDef.getGroupNaaccrId() != null)
+                    continue;
+                
                 if (itemDef.getParentXmlElement() != null && itemDef.getStartColumn() != null && itemDef.getLength() != null) {
                     int start = itemDef.getStartColumn();
                     int length = itemDef.getLength();

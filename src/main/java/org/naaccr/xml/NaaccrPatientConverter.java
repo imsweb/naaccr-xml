@@ -42,38 +42,40 @@ public class NaaccrPatientConverter implements Converter {
 
     @Override
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-
         if (!(source instanceof Patient))
             throw createValidationException("Unexpected object type: " + source.getClass().getName());
-
         
         Patient patient = (Patient)source;
-        int patItemCount = 0, tumorCount = 0;
-        writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT);
-        
-        // handle the patient items
-        for (Item item : patient.getItems()) {
-            
+        for (Item item : patient.getItems())
+            writeItem(item, writer);
+        for (Tumor tumor : patient.getTumors()) {
+            writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+            for (Item item : tumor.getItems())
+                writeItem(item, writer);
+            writer.endNode();
         }
-        
-        // handle tumors
-        
-        writer.endNode();
-        
-        /**
-        Item item = (Item)source;
-        if (item.getNum() != null)
-            writer.addAttribute("naaccrNum", item.getNum().toString());
-        if (item.getId() != null)
-            writer.addAttribute("naaccrId", item.getId());
-        if (item.getValue() != null)
+    }
+    
+    protected void writeItem(Item item, HierarchicalStreamWriter writer) {
+        RuntimeNaaccrDictionaryItem itemDef = _dictionary.getItem(item);
+        if (itemDef == null) {
+            if (item.getId() != null)
+                throw createValidationException("Unable to find item definition for NAACCR ID " + item.getId());
+            else if (item.getNum() != null)
+                throw createValidationException("Unable to find item definition for NAACCR Number " + item.getNum());
+            else
+                throw createValidationException("Unable to find item definition; both NAACCR ID and NAACCR Number are missing");
+        }
+
+        writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
+        writer.addAttribute("naaccrId", itemDef.getNaaccrId());
+        if (item.getValue() != null && !item.getValue().isEmpty())
             writer.setValue(item.getValue());
-         */
+        writer.endNode();
     }
 
     @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-
         if (!NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(reader.getNodeName()))
             throw createValidationException("Unexpected tag: " + reader.getNodeName());
 
@@ -89,7 +91,7 @@ public class NaaccrPatientConverter implements Converter {
                     throw new RuntimeException("Tumors should come after items...");
                 patItemCount++;
                 String path = "/Patient/Item[" + patItemCount + "]";
-                patient.getItems().add(createItem(patient, _parser.getLineNumber(), path, "Patient", reader.getAttribute("naaccrId"), reader.getAttribute("naaccrNum"), reader.getValue()));
+                patient.getItems().add(readItem(patient, _parser.getLineNumber(), path, "Patient", reader.getAttribute("naaccrId"), reader.getAttribute("naaccrNum"), reader.getValue()));
             }
             // handle tumors
             else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(reader.getNodeName())) {
@@ -103,7 +105,7 @@ public class NaaccrPatientConverter implements Converter {
                     // handle tumor items
                     if (NaaccrXmlUtils.NAACCR_XML_TAG_ITEM.equals(reader.getNodeName())) {
                         String path = "/Patient/Tumor[" + tumorCount + "]/Item[" + tumorItemCount + "]";
-                        tumor.getItems().add(createItem(tumor, _parser.getLineNumber(), path, "Tumor", reader.getAttribute("naaccrId"), reader.getAttribute("naaccrNum"), reader.getValue()));
+                        tumor.getItems().add(readItem(tumor, _parser.getLineNumber(), path, "Tumor", reader.getAttribute("naaccrId"), reader.getAttribute("naaccrNum"), reader.getValue()));
                     }
                     else
                         throw createValidationException("Unexpected tag: " + reader.getNodeName());
@@ -119,7 +121,7 @@ public class NaaccrPatientConverter implements Converter {
         return patient;
     }
 
-    private Item createItem(AbstractEntity entity, int lineNumber, String currentPath, String parentTag, String rawId, String rawNum, String value) {
+    protected Item readItem(AbstractEntity entity, int lineNumber, String currentPath, String parentTag, String rawId, String rawNum, String value) {
         Item item = new Item();
 
         // assign the NAACCR ID

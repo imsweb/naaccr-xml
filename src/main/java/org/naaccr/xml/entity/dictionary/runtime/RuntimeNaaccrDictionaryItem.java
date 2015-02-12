@@ -29,6 +29,8 @@ public class RuntimeNaaccrDictionaryItem {
     private Pattern regexValidation;
 
     private String dataType;
+
+    private String groupNaaccrId;
     
     private List<RuntimeNaaccrDictionaryItem> subItems;
     
@@ -44,6 +46,7 @@ public class RuntimeNaaccrDictionaryItem {
         if (item.getRegexValidation() != null)
             regexValidation = Pattern.compile(item.getRegexValidation());
         dataType = item.getDataType();
+        groupNaaccrId = item.getGroupNaaccrId();
         subItems = new ArrayList<>();
     }
 
@@ -105,6 +108,14 @@ public class RuntimeNaaccrDictionaryItem {
 
     public void setDataType(String val) {
         dataType = val;
+    }
+
+    public String getGroupNaaccrId() {
+        return groupNaaccrId;
+    }
+
+    public void setGroupNaaccrId(String val) {
+        groupNaaccrId = val;
     }
 
     public List<RuntimeNaaccrDictionaryItem> getSubItems() {

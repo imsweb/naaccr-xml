@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.naaccr.xml.NaaccrFormat;
+import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
@@ -32,8 +33,7 @@ public class RuntimeNaaccrDictionary {
 
         // we have to do this in two passes because any child could reference any parent, so all parents must be read first...
         for (NaaccrDictionaryItem item : standardDictionary.getItems())
-            if (item.getGroupNaaccrId() == null) 
-                runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
+            runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
         for (NaaccrDictionaryItem item : standardDictionary.getItems())
             if (item.getGroupNaaccrId() != null)
                 runtimeItems.get(item.getGroupNaaccrId()).getSubItems().add(new RuntimeNaaccrDictionaryItem(item));
@@ -43,8 +43,7 @@ public class RuntimeNaaccrDictionary {
         
         if (userDictionary != null) {
             for (NaaccrDictionaryItem item : userDictionary.getItems())
-                if (item.getGroupNaaccrId() == null)
-                    runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
+                runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
             for (NaaccrDictionaryItem item : userDictionary.getItems())
                 if (item.getGroupNaaccrId() != null)
                     runtimeItems.get(item.getGroupNaaccrId()).getSubItems().add(new RuntimeNaaccrDictionaryItem(item));
@@ -99,5 +98,13 @@ public class RuntimeNaaccrDictionary {
             _cachedByNumber = cache;
         }
         return _cachedByNumber.get(number);
+    }
+
+    public RuntimeNaaccrDictionaryItem getItem(Item item) {
+        if (item.getId() != null)
+            return getItemByNaaccrId(item.getId());
+        if (item.getNum() != null)
+            return getItemByNaaccrNum(item.getNum());
+        return null;
     }
 }

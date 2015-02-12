@@ -116,6 +116,25 @@ public class Standalone {
             _fileChooser.setApproveButtonToolTipText("Select file");
             _fileChooser.setMultiSelectionEnabled(false);
         }
+        
+        private String invertFilename(File file) {
+            String[] name = file.getName().split("\\.");
+            if (name.length < 2)
+                return null;
+            String extension = name[name.length - 1];
+            boolean compressed = false;
+            if (extension.equalsIgnoreCase("gz")) {
+                extension = name[name.length - 2];
+                compressed = true;
+            }
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < (compressed ? name.length - 2 : name.length - 1); i++)
+                result.append(name[i]).append(".");
+            result.append(extension.equalsIgnoreCase("xml") ? "txt" : "xml");
+            if (compressed)
+                result.append(".gz");
+            return new File(file.getParentFile(), result.toString()).getAbsolutePath();
+        }
 
         private JPanel crateFlatToXmlPanel() {
             final JPanel pnl = new JPanel();
@@ -192,11 +211,7 @@ public class Standalone {
                         String format = NaaccrXmlUtils.getFormatFromFlatFile(_fileChooser.getSelectedFile());
                         if (format != null)
                             flatToXmlFormatBox.setSelectedItem(format);
-                        String[] name = _fileChooser.getSelectedFile().getName().split("\\.");
-                        if (name.length == 3 && name[2].equals("gz"))
-                            flatToXmlTargetFld.setText(new File(_fileChooser.getSelectedFile().getParentFile(), name[0] + ".xml.gz").getAbsolutePath());
-                        else if (name.length == 2)
-                            flatToXmlTargetFld.setText(new File(_fileChooser.getSelectedFile().getParentFile(), name[0] + ".xml").getAbsolutePath());
+                        flatToXmlTargetFld.setText(invertFilename(_fileChooser.getSelectedFile()));
                         flatToXmlProcessBtn.requestFocusInWindow();
                     }
                 }
@@ -316,11 +331,7 @@ public class Standalone {
                         String format = NaaccrXmlUtils.getFormatFromXmlFile(_fileChooser.getSelectedFile());
                         if (format != null)
                             xmlToFlatFormatBox.setSelectedItem(format);
-                        String[] name = _fileChooser.getSelectedFile().getName().split("\\.");
-                        if (name.length == 3 && name[2].equals("gz"))
-                            xmlToFlatTargetFld.setText(new File(_fileChooser.getSelectedFile().getParentFile(), name[0] + ".txt.gz").getAbsolutePath());
-                        else if (name.length == 2)
-                            xmlToFlatTargetFld.setText(new File(_fileChooser.getSelectedFile().getParentFile(), name[0] + ".txt").getAbsolutePath());
+                        xmlToFlatTargetFld.setText(invertFilename(_fileChooser.getSelectedFile()));
                         xmlToFlatProcessBtn.requestFocusInWindow();
                     }
                 }

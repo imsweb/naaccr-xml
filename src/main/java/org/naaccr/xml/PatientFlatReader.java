@@ -91,14 +91,14 @@ public class PatientFlatReader implements AutoCloseable {
         // create the patient using the first line only (other lines are supposed to be identical for patient items)
         Patient patient = new Patient();
         for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
-            if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
+            if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType()) && itemDef.getGroupNaaccrId() == null)
                 patient.getItems().addAll(createItemsFromLine(lines.get(0), itemDef));
 
         // create the tumors, one per line
         for (String line : lines) {
             Tumor tumor = new Tumor();
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
-                if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType()) && itemDef.getGroupNaaccrId() == null)
                     tumor.getItems().addAll(createItemsFromLine(line, itemDef));
             patient.getTumors().add(tumor);
         }
