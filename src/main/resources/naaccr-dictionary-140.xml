@@ -7,8 +7,8 @@
           section="Record ID"
           recordTypes="A,M,C,I"
           parentXmlElement="Patient"
-          dataType="string"
-          regexValidation="^[ICAM]$"/>
+          regexValidation="^[ICAM]$"
+          dataType="string"/>
   <ItemDef naaccrId="registryType"
           naaccrNum="30"
           naaccrName="Registry Type"
@@ -79,7 +79,7 @@
           length="50"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="string"/>
   <ItemDef naaccrId="addressAtDxState"
           naaccrNum="80"
@@ -88,7 +88,7 @@
           length="2"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="alpha"/>
   <ItemDef naaccrId="addressAtDxPostalCode"
           naaccrNum="100"
@@ -97,7 +97,7 @@
           length="9"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="addressAtDxCounty"
           naaccrNum="90"
@@ -115,7 +115,7 @@
           length="6"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="integerWithZero"/>
   <ItemDef naaccrId="censusBlockGroup708090"
           naaccrNum="368"
@@ -124,7 +124,7 @@
           length="1"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="alpha"/>
   <ItemDef naaccrId="censusCodingSys708090"
           naaccrNum="120"
@@ -133,7 +133,7 @@
           length="1"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="censusCertainty708090"
           naaccrNum="364"
@@ -142,7 +142,7 @@
           length="1"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="censusTract2000"
           naaccrNum="130"
@@ -160,7 +160,7 @@
           length="1"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="alpha"/>
   <ItemDef naaccrId="censusCertainty2000"
           naaccrNum="365"
@@ -241,7 +241,7 @@
           length="1"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="spanishHispanicOrigin"
           naaccrNum="190"
@@ -323,7 +323,7 @@
           length="3"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="industryCodeCensus"
           naaccrNum="280"
@@ -332,7 +332,7 @@
           length="3"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="occupationSource"
           naaccrNum="290"
@@ -341,7 +341,7 @@
           length="1"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="industrySource"
           naaccrNum="300"
@@ -350,7 +350,7 @@
           length="1"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="textUsualOccupation"
           naaccrNum="310"
@@ -359,7 +359,7 @@
           length="100"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="string"/>
   <ItemDef naaccrId="textUsualIndustry"
           naaccrNum="320"
@@ -368,7 +368,7 @@
           length="100"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="string"/>
   <ItemDef naaccrId="occupationIndustryCodingSys"
           naaccrNum="330"
@@ -377,7 +377,7 @@
           length="1"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="nhia"
           naaccrNum="191"
@@ -413,7 +413,7 @@
           length="2"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="ruralUrbanContinuum1993"
           naaccrNum="3300"
@@ -422,7 +422,7 @@
           length="2"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="ruralUrbanContinuum2003"
           naaccrNum="3310"
@@ -431,7 +431,7 @@
           length="2"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="censusTract2010"
           naaccrNum="135"
@@ -449,7 +449,7 @@
           length="1"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="censusCertainty2010"
           naaccrNum="367"
@@ -467,7 +467,7 @@
           length="3"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="alpha"/>
   <ItemDef naaccrId="addressCurrentCountry"
           naaccrNum="1832"
@@ -530,7 +530,7 @@
           length="4"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="string"/>
   <ItemDef naaccrId="censusOccCode2010"
           naaccrNum="282"
@@ -539,7 +539,7 @@
           length="4"
           section="Demographic"
           recordTypes="A,M,C,I"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="code"/>
   <ItemDef naaccrId="censusPovertyIndictr"
           naaccrNum="145"
@@ -586,8 +586,8 @@
           section="Cancer Identification"
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
-          dataType="string"
-          regexValidation="^C\d{3}$"/>
+          regexValidation="^C\d{3}$"
+          dataType="string"/>
   <ItemDef naaccrId="laterality"
           naaccrNum="410"
           naaccrName="Laterality"
@@ -2289,8 +2289,8 @@
           section="Stage / Prognostic Factors"
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
-          dataType="string"
-          regexValidation="^[A-Z]\d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"
+          dataType="string"/>
   <ItemDef naaccrId="secondaryDiagnosis2"
           naaccrNum="3782"
           naaccrName="Secondary Diagnosis 2"
@@ -2299,8 +2299,8 @@
           section="Stage / Prognostic Factors"
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
-          dataType="string"
-          regexValidation="^[A-Z]\d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"
+          dataType="string"/>
   <ItemDef naaccrId="secondaryDiagnosis3"
           naaccrNum="3784"
           naaccrName="Secondary Diagnosis 3"
@@ -2309,8 +2309,8 @@
           section="Stage / Prognostic Factors"
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
-          dataType="string"
-          regexValidation="^[A-Z]\d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"
+          dataType="string"/>
   <ItemDef naaccrId="secondaryDiagnosis4"
           naaccrNum="3786"
           naaccrName="Secondary Diagnosis 4"
@@ -2319,8 +2319,8 @@
           section="Stage / Prognostic Factors"
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
-          dataType="string"
-          regexValidation="^[A-Z]\d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"
+          dataType="string"/>
   <ItemDef naaccrId="secondaryDiagnosis5"
           naaccrNum="3788"
           naaccrName="Secondary Diagnosis 5"
@@ -2329,8 +2329,8 @@
           section="Stage / Prognostic Factors"
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
-          dataType="string"
-          regexValidation="^[A-Z]\d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"
+          dataType="string"/>
   <ItemDef naaccrId="secondaryDiagnosis6"
           naaccrNum="3790"
           naaccrName="Secondary Diagnosis 6"
@@ -2339,8 +2339,8 @@
           section="Stage / Prognostic Factors"
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
-          dataType="string"
-          regexValidation="^[A-Z]\d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"
+          dataType="string"/>
   <ItemDef naaccrId="secondaryDiagnosis7"
           naaccrNum="3792"
           naaccrName="Secondary Diagnosis 7"
@@ -2349,8 +2349,8 @@
           section="Stage / Prognostic Factors"
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
-          dataType="string"
-          regexValidation="^[A-Z]\d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"
+          dataType="string"/>
   <ItemDef naaccrId="secondaryDiagnosis8"
           naaccrNum="3794"
           naaccrName="Secondary Diagnosis 8"
@@ -2359,8 +2359,8 @@
           section="Stage / Prognostic Factors"
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
-          dataType="string"
-          regexValidation="^[A-Z]\d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"
+          dataType="string"/>
   <ItemDef naaccrId="secondaryDiagnosis9"
           naaccrNum="3796"
           naaccrName="Secondary Diagnosis 9"
@@ -2369,8 +2369,8 @@
           section="Stage / Prognostic Factors"
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
-          dataType="string"
-          regexValidation="^[A-Z]\d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"
+          dataType="string"/>
   <ItemDef naaccrId="secondaryDiagnosis10"
           naaccrNum="3798"
           naaccrName="Secondary Diagnosis 10"
@@ -2379,8 +2379,8 @@
           section="Stage / Prognostic Factors"
           recordTypes="A,M,C,I"
           parentXmlElement="Tumor"
-          dataType="string"
-          regexValidation="^[A-Z]\d{3}$"/>
+          regexValidation="^[A-Z]\d{3}$"
+          dataType="string"/>
   <ItemDef naaccrId="npcrSpecificField"
           naaccrNum="3720"
           naaccrName="NPCR Specific Field"
@@ -4249,7 +4249,7 @@
           length="60"
           section="Patient - Confidential"
           recordTypes="A,M,C"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="string"/>
   <ItemDef naaccrId="addressAtDxSupplementl"
           naaccrNum="2335"
@@ -4258,7 +4258,7 @@
           length="60"
           section="Patient - Confidential"
           recordTypes="A,M,C"
-          parentXmlElement="Patient"
+          parentXmlElement="Tumor"
           dataType="string"/>
   <ItemDef naaccrId="addressCurrentStreetName"
           naaccrNum="2350"
