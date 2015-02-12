@@ -9,10 +9,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
@@ -97,21 +94,9 @@ public class PatientFlatReader implements AutoCloseable {
         for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
             if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType())
                     && itemDef.getGroupNaaccrId() == null) { // sub-items are handled through the parent item...
-                Map<String, Item> patItems = new LinkedHashMap<>();
-                for (String line : lines) {
-                    for (Item item : createItemsFromLine(line, itemDef)) {
-                        Item patItem = patItems.get(itemDef.getNaaccrId());
-                        if (patItem == null)
-                            patItems.put(itemDef.getNaaccrId(), item);
-                        else {
-                            boolean same = patItem.getValue() == null ? item.getValue() == null : patItem.getValue().equals(item.getValue());
-                            if (!same)
-                                throw new IOException("Line #" + lineNumber + ": patient-level field '" + itemDef.getNaaccrId() + "' doesn't have the same value for all tumors.");
-                        }
-                    }
-                }
-                for (Entry<String, Item> entry : patItems.entrySet())
-                    patient.getItems().add(entry.getValue());
+                
+                // TODO FPD do we want to throw an error if not all the patient-level fields have the same value?
+                patient.getItems().addAll(createItemsFromLine(lines.get(0), itemDef));
             }
         }
 
@@ -136,10 +121,14 @@ public class PatientFlatReader implements AutoCloseable {
 
         if (end <= line.length()) {
             String value = line.substring(start, end);
-            String trimmedValue = NaaccrXmlUtils.NAACCR_DATA_TYPE_STRING_WITH_LEADING_SPACES.equals(itemDef.getDataType()) ? value : value.trim();
+            String trimmedValue = value.trim();
 
-            // never trim a group field unless it's completely empty (or we would lose the info of which child value is which)
-            if (itemDef.getSubItems().isEmpty() || trimmedValue.isEmpty())
+            // if there is no actual value, it can be trimmed
+            if (trimmedValue.isEmpty())
+                value = trimmedValue;
+            
+            // never trim a group field (or we would lose the info of which child value is which) and never trim a value that can't be trimmed
+            if (itemDef.getSubItems().isEmpty() && !NaaccrXmlUtils.NAACCR_DATA_TYPE_STRING_WITH_LEADING_SPACES.equals(itemDef.getDataType()))
                 value = trimmedValue;
 
             if (!value.isEmpty()) {

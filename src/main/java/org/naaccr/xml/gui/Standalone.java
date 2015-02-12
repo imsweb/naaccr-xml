@@ -84,7 +84,7 @@ public class Standalone {
         private JFileChooser _fileChooser;
 
         public StandaloneFrame() {
-            this.setTitle("NAACCR XML Utility v0.1");
+            this.setTitle("NAACCR XML Utility v0.2");
             this.setPreferredSize(new Dimension(1000, 700));
             this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -235,8 +235,8 @@ public class Standalone {
                     flatToXmlResultLbl.setText("Processing file...");
                     pnl.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     try {
-                        int numPatients = NaaccrXmlUtils.flatToXml(sourceFile, targetFile, format, new NaaccrXmlOptions(), null);
-                        flatToXmlResultLbl.setText("Done processing source flat file; target XML file contains " + numPatients + " patient(s)");
+                        int numRecords = NaaccrXmlUtils.flatToXml(sourceFile, targetFile, format, new NaaccrXmlOptions(), null);
+                        flatToXmlResultLbl.setText("Done processing source flat file; processed " + numRecords + " records!");
                     }
                     catch (IOException | NaaccrValidationException ex) {
                         JOptionPane.showMessageDialog(StandaloneFrame.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -356,7 +356,7 @@ public class Standalone {
                     pnl.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     try {
                         int numRecords = NaaccrXmlUtils.xmlToFlat(sourceFile, targetFile, format, new NaaccrXmlOptions(), null);
-                        xmlToFlatResultLbl.setText("Done processing source XML file; target flat file contains " + numRecords + " record(s)");
+                        xmlToFlatResultLbl.setText("Done processing source XML file; processed " + numRecords + " tumors!");
                     }
                     catch (IOException | NaaccrValidationException ex) {
                         JOptionPane.showMessageDialog(StandaloneFrame.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

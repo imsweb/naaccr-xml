@@ -81,7 +81,7 @@ public class NaaccrXmlUtils {
      * @param format expected NAACCR format
      * @param options validating options
      * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
-     * @return the number of written patients
+     * @return the number of read records
      * @throws IOException if there is problem reading/writing the files
      * @throws NaaccrValidationException if there is a problem validating the data
      */
@@ -111,7 +111,7 @@ public class NaaccrXmlUtils {
                 Patient patient = reader.readPatient();
                 while (patient != null) {
                     writer.writePatient(patient);
-                    processedCount++;
+                    processedCount += patient.getTumors().size();
                     patient = reader.readPatient();
                 }
             }
