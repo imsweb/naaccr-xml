@@ -1,0 +1,103 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://naaccr.org/naaccrmeta" targetNamespace="http://naaccr.org/naaccrmeta" >
+
+<xsd:element name="NaaccrMetadata">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:Dictionary" minOccurs="0" maxOccurs="1" />
+			<xsd:any minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="metadataVersion" use="required" />
+		<xsd:attribute name="releaseDate" use="optional" type="xsd:date" />
+		<xsd:attribute name="description" use="optional" />
+		<xsd:anyAttribute />
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="Dictionary">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:ItemDef"  minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:any minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:anyAttribute />
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:simpleType name="datatypeType">
+	<xsd:restriction base="xsd:string">
+		<xsd:enumeration value="code" />
+		<xsd:enumeration value="codeWithBlank" />
+		<xsd:enumeration value="alpha" />
+		<xsd:enumeration value="alphaWithBlank" />
+		<xsd:enumeration value="date" />
+		<xsd:enumeration value="string" />
+		<xsd:enumeration value="stringInitialBlankOK" />
+		<xsd:enumeration value="integer" />
+		<xsd:enumeration value="integerLeftZeroPad" />
+	</xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="parentType">
+	<xsd:restriction base="xsd:string">
+		<xsd:enumeration value="Patient" />
+		<xsd:enumeration value="Tumor" />
+	</xsd:restriction>
+</xsd:simpleType>
+
+<xsd:element name="ItemDef">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:ValidValue" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="tns:Description" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="naaccrId" use="required" type="xsd:ID" />
+		<xsd:attribute name="naaccrNum" use="required" type="xsd:integer" />
+		<xsd:attribute name="datatype" use="required" type="tns:datatypeType" />
+		<xsd:attribute name="regexValidation" use="optional" type="xsd:string" />
+		<xsd:attribute name="parentXmlElement" use="required" type="tns:parentType" />
+		<xsd:attribute name="naaccrName" use="optional" type="xsd:string" />
+		<xsd:attribute name="section" use="optional" type="xsd:string" />
+		<xsd:attribute name="startColumn" use="optional" type="xsd:integer" />
+		<xsd:attribute name="length" use="optional" type="xsd:integer" />
+		<xsd:attribute name="retiredVersion" use="optional" type="xsd:string" />
+		<xsd:attribute name="sourceOfStandard" use="optional" type="xsd:string" />
+		<xsd:attribute name="recordTypes" use="optional" type="xsd:string" />
+		<xsd:attribute name="isGroupItem" use="optional" type="xsd:boolean" default="false" />
+		<xsd:attribute name="groupItemId" use="optional" type="xsd:IDREF" />
+		<xsd:anyAttribute />
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:simpleType name="formattedString" >
+	<xsd:restriction base="xsd:string">
+		<xsd:whiteSpace value="preserve" />
+	</xsd:restriction>
+</xsd:simpleType>
+
+<xsd:element name="ValidValue" >
+	<xsd:complexType>
+		<xsd:simpleContent>
+			<xsd:extension base="tns:formattedString">
+				<xsd:attribute name="code" use="required" type="xsd:string" />
+				<xsd:attribute name="description" use="optional" />
+				<xsd:attribute name="isMissing" use="optional" type="xsd:boolean" default="false" />
+				<xsd:anyAttribute />
+			</xsd:extension>	
+		</xsd:simpleContent>
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="Description" >
+	<xsd:ComplexType>
+		<xsd:simpleContent>
+			<xsd:extension base="tns:formattedString">
+				<xsd:attribute name="topic" use="optional" type="xsd:string" />
+				<xsd:attribute name="sortOrder" use="optional" type="xsd:integer" />
+				<xsd:anyAttribute />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:ComplexType>
+</xsd:element>
+
+</xsd:schema>
