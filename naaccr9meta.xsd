@@ -7,6 +7,7 @@
 			<xsd:any minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
 		<xsd:attribute name="metadataVersion" use="required" />
+		<xsd:attribute name="xsdVersion" use="optional" fixed="1.0" />
 		<xsd:attribute name="releaseDate" use="optional" type="xsd:date" />
 		<xsd:attribute name="description" use="optional" />
 		<xsd:anyAttribute />
