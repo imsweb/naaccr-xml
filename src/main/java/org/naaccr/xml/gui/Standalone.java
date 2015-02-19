@@ -56,16 +56,18 @@ public class Standalone {
 
     public static void main(String[] args) {
 
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        if (System.getProperty("os.name").toUpperCase().contains("windows")) {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            }
+            catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
+                // ignored, the look and feel will be the default Java one...
+            }
+            UIManager.put("TabbedPane.contentBorderInsets", new Insets(0, 0, 0, 0));
+            Insets insets = UIManager.getInsets("TabbedPane.tabAreaInsets");
+            insets.bottom = 0;
+            UIManager.put("TabbedPane.tabAreaInsets", insets);
         }
-        catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
-            // ignored, the look and feel will be the default Java one...
-        }
-        UIManager.put("TabbedPane.contentBorderInsets", new Insets(0, 0, 0, 0));
-        Insets insets = UIManager.getInsets("TabbedPane.tabAreaInsets");
-        insets.bottom = 0;
-        UIManager.put("TabbedPane.tabAreaInsets", insets);
 
         final JFrame frame = new StandaloneFrame();
 
