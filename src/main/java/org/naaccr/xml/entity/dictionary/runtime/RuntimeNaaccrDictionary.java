@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.naaccr.xml.NaaccrFormat;
+import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
@@ -20,28 +21,31 @@ public class RuntimeNaaccrDictionary {
     
     private List<RuntimeNaaccrDictionaryItem> items;
 
+    // caches to improve lookup performances
+    private Map<String, RuntimeNaaccrDictionaryItem> _cachedById;
+    private Map<Integer, RuntimeNaaccrDictionaryItem> _cachedByNumber;
+
     public RuntimeNaaccrDictionary(String format, NaaccrDictionary standardDictionary, NaaccrDictionary userDictionary) {
         
         _format = NaaccrFormat.getInstance(format);
 
         Map<String, RuntimeNaaccrDictionaryItem> runtimeItems = new HashMap<>();
 
+        // we have to do this in two passes because any child could reference any parent, so all parents must be read first...
         for (NaaccrDictionaryItem item : standardDictionary.getItems())
-            if (item.getRecordTypes().contains(_format.getRecordType()) && item.getGroupNaaccrId() == null) 
-                runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
+            runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
         for (NaaccrDictionaryItem item : standardDictionary.getItems())
-            if (item.getRecordTypes().contains(_format.getRecordType()) && item.getGroupNaaccrId() != null)
+            if (item.getGroupNaaccrId() != null)
                 runtimeItems.get(item.getGroupNaaccrId()).getSubItems().add(new RuntimeNaaccrDictionaryItem(item));
         
         // TODO a user-defined field should never have the same id or number as a standard item; there is all kind of validation we should be doing here...
-        // TODO although, do we want to allow the length and things like that to be overridden?
+        // TODO define the rules for user-defined items to override standard items...
         
         if (userDictionary != null) {
             for (NaaccrDictionaryItem item : userDictionary.getItems())
-                if (item.getRecordTypes().contains(_format.getRecordType()) && item.getGroupNaaccrId() == null)
-                    runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
+                runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
             for (NaaccrDictionaryItem item : userDictionary.getItems())
-                if (item.getRecordTypes().contains(_format.getRecordType()) && item.getGroupNaaccrId() != null)
+                if (item.getGroupNaaccrId() != null)
                     runtimeItems.get(item.getGroupNaaccrId()).getSubItems().add(new RuntimeNaaccrDictionaryItem(item));
         }
         
@@ -72,5 +76,35 @@ public class RuntimeNaaccrDictionary {
         if (items == null)
             items = new ArrayList<>();
         return items;
+    }
+
+    public RuntimeNaaccrDictionaryItem getItemByNaaccrId(String id) {
+        if (_cachedById == null) {
+            Map<String, RuntimeNaaccrDictionaryItem> cache = new HashMap<>();
+            for (RuntimeNaaccrDictionaryItem item : items)
+                if (item.getNaaccrId() != null)
+                    cache.put(item.getNaaccrId(), item);
+            _cachedById = cache;
+        }
+        return _cachedById.get(id);
+    }
+
+    public RuntimeNaaccrDictionaryItem getItemByNaaccrNum(Integer number) {
+        if (_cachedByNumber == null) {
+            Map<Integer, RuntimeNaaccrDictionaryItem> cache = new HashMap<>();
+            for (RuntimeNaaccrDictionaryItem item : items)
+                if (item.getNaaccrNum() != null)
+                    cache.put(item.getNaaccrNum(), item);
+            _cachedByNumber = cache;
+        }
+        return _cachedByNumber.get(number);
+    }
+
+    public RuntimeNaaccrDictionaryItem getItem(Item item) {
+        if (item.getId() != null)
+            return getItemByNaaccrId(item.getId());
+        if (item.getNum() != null)
+            return getItemByNaaccrNum(item.getNum());
+        return null;
     }
 }

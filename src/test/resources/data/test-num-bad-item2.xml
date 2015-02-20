@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<NaaccrDataExchange naaccrVersion="140" recordType="A">
+    <Patient>
+        <Item naaccrNum="2230">DEPRY</Item>
+        <Item naaccrNum="2240">FABIAN</Item>
+        <Tumor>
+            <Item naaccrNum="400">C123</Item>
+        </Tumor>
+        <Tumor>
+            <Item naaccrNum="400">C456</Item>
+            <Item naaccrNum="2250">MIDDLE</Item>
+        </Tumor>
+    </Patient>
+</NaaccrDataExchange>

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
@@ -25,9 +26,11 @@ public class RuntimeNaaccrDictionaryItem {
 
     private String parentXmlElement;
 
-    private String regexValidation;
+    private Pattern regexValidation;
 
     private String dataType;
+
+    private String groupNaaccrId;
     
     private List<RuntimeNaaccrDictionaryItem> subItems;
     
@@ -40,8 +43,10 @@ public class RuntimeNaaccrDictionaryItem {
         if (item.getRecordTypes() != null)
             recordTypes.addAll(Arrays.asList(item.getRecordTypes().split(",")));
         parentXmlElement = item.getParentXmlElement();
-        regexValidation = item.getRegexValidation();
+        if (item.getRegexValidation() != null)
+            regexValidation = Pattern.compile(item.getRegexValidation());
         dataType = item.getDataType();
+        groupNaaccrId = item.getGroupNaaccrId();
         subItems = new ArrayList<>();
     }
 
@@ -89,11 +94,11 @@ public class RuntimeNaaccrDictionaryItem {
         parentXmlElement = val;
     }
 
-    public String getRegexValidation() {
+    public Pattern getRegexValidation() {
         return regexValidation;
     }
 
-    public void setRegexValidation(String val) {
+    public void setRegexValidation(Pattern val) {
         regexValidation = val;
     }
 
@@ -103,6 +108,14 @@ public class RuntimeNaaccrDictionaryItem {
 
     public void setDataType(String val) {
         dataType = val;
+    }
+
+    public String getGroupNaaccrId() {
+        return groupNaaccrId;
+    }
+
+    public void setGroupNaaccrId(String val) {
+        groupNaaccrId = val;
     }
 
     public List<RuntimeNaaccrDictionaryItem> getSubItems() {

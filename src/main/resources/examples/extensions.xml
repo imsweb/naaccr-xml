@@ -1,0 +1,35 @@
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  This example shows how extensions can be used. The thing to understand about 
+  extensions is that to be properly used, they require the library itself to be 
+  extended; it's not enough to provide a user-defined dictionary... Without 
+  extending the library, then there will be an error when reading the file, unless
+  the option to ignore unkown tags is turned on...
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+
+<NaaccrDataExchange naaccrVersion="140" recordType="I">
+    <Patient>
+        <Item naaccrId="patientIdNumber" naaccrNum="20">00000001</Item>
+        <EditsReport>
+            <EditFailure id="EDIT-1" message="Message 1"/>
+        </EditsReport>
+    </Patient>
+    <Patient>
+        <Item naaccrId="patientIdNumber" naaccrNum="20">00000002</Item>
+        <Tumor>
+            <Item naaccrId="primarySite" naaccrNum="400">C456</Item>
+            <EditsReport>
+                <EditFailure id="EDIT-2" message="Message 2"/>
+            </EditsReport>
+        </Tumor>
+        <EditsReport>
+            <EditFailure id="EDIT-1" message="Message 1"/>
+        </EditsReport>
+    </Patient>
+    <Patient>
+        <Item naaccrId="patientIdNumber" naaccrNum="20">00000003</Item>
+        <EditsReport>
+            <EditFailure id="EDIT-3" message="Message 3"/>
+        </EditsReport>
+    </Patient>
+</NaaccrDataExchange>

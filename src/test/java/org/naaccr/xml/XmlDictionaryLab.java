@@ -40,7 +40,7 @@ public class XmlDictionaryLab {
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "implementedVersion", "implementedVersion");
         xstream.addImplicitCollection(NaaccrDictionary.class, "items", NaaccrDictionaryItem.class);
 
-        File outputFile = new File(System.getProperty("user.dir") + "/build/naaccr-dictionary-140-.xml");
+        File outputFile = new File(System.getProperty("user.dir") + "/build/naaccr-dictionary-140.xml");
         FileWriter writer = new FileWriter(outputFile);
 
         PrettyPrintWriter prettyWriter = new PrettyPrintWriter(writer) {
@@ -90,10 +90,10 @@ public class XmlDictionaryLab {
                     return "isGroup".equals(attribute);
                 if (item.getGroupNaaccrId() != null)
                     return "groupNaaccrId".equals(attribute);
-                if (item.getDataType() != null)
-                    return "dataType".equals(attribute);
                 if (item.getRegexValidation() != null)
                     return "regexValidation".equals(attribute);
+                if (item.getDataType() != null)
+                    return "dataType".equals(attribute);
                 if (item.getParentXmlElement() != null)
                     return "parentXmlElement".equals(attribute);
                 return false;

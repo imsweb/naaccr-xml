@@ -1,0 +1,19 @@
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  This example demonstrates using only ID attributes 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+
+<NaaccrDataExchange naaccrVersion="140" recordType="I">
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000001</Item>
+    </Patient>
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000002</Item>
+        <Tumor>
+            <Item naaccrId="primarySite">C456</Item>
+        </Tumor>
+    </Patient>
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000003</Item>
+    </Patient>
+</NaaccrDataExchange>

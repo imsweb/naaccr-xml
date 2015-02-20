@@ -23,9 +23,9 @@ public class NaaccrDictionaryItem {
 
     private String parentXmlElement;
 
-    private String regexValidation;
-
     private String dataType;
+
+    private String regexValidation;
 
     private String groupNaaccrId;
 
@@ -111,20 +111,20 @@ public class NaaccrDictionaryItem {
         parentXmlElement = val;
     }
 
-    public String getRegexValidation() {
-        return regexValidation;
-    }
-
-    public void setRegexValidation(String val) {
-        regexValidation = val;
-    }
-
     public String getDataType() {
         return dataType;
     }
 
     public void setDataType(String val) {
         dataType = val;
+    }
+    
+    public String getRegexValidation() {
+        return regexValidation;
+    }
+
+    public void setRegexValidation(String val) {
+        regexValidation = val;
     }
 
     public String getGroupNaaccrId() {

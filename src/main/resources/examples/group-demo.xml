@@ -1,0 +1,73 @@
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  This example demonstrates how the groups look like in XML; the important think 
+  to understand is that the library will read the XML as it is provided to it, and 
+  write the patients as they are provided. That means if the XML doesn't contain the 
+  group value, but only the children values, then the patient will end up with only 
+  the children. I think it's fine; if an application requires a more complex process
+  (like recreating the group from the children or vice-versa), then it will be the 
+  application's responsibility to post-process the patients...
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+<!-- only the children are provided in the XML (most common scenario I think) -->
+<NaaccrDataExchange naaccrVersion="140" recordType="I">
+    <Patient>
+        <Item naaccrId="">00000001</Item>
+        <Tumor>
+            <Item naaccrId="histologyIcdO3">8000</Item>
+            <Item naaccrId="behaviorIcdO3">3</Item>
+        </Tumor>
+    </Patient>
+</NaaccrDataExchange>
+
+<!-- only the group is provided in the XML-->
+<NaaccrDataExchange naaccrVersion="140" recordType="I">
+    <Patient>
+        <Item naaccrId="">00000001</Item>
+        <Tumor>
+            <Item naaccrId="morphologyIcdO3">80003</Item>
+        </Tumor>
+    </Patient>
+</NaaccrDataExchange>
+
+
+<!-- both group and children are provided (this will be needed for running Metafile edits) -->
+<NaaccrDataExchange naaccrVersion="140" recordType="I">
+    <Patient>
+        <Item naaccrId="">00000001</Item>
+        <Tumor>
+            <Item naaccrId="morphologyIcdO3">80003</Item>
+            <Item naaccrId="histologyIcdO3">8000</Item>
+            <Item naaccrId="behaviorIcdO3">3</Item>
+        </Tumor>
+    </Patient>
+</NaaccrDataExchange>
+        
+        
+<!-- what about this example? -->
+<NaaccrDataExchange naaccrVersion="140" recordType="I">
+    <Patient>
+        <Item naaccrId="">00000001</Item>
+        <Tumor>
+            <Item naaccrId="morphologyIcdO3">80003</Item>
+            <Item naaccrId="histologyIcdO3">8010</Item>
+            <Item naaccrId="behaviorIcdO3">3</Item>
+        </Tumor>
+    </Patient>
+</NaaccrDataExchange>
+
+        
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  On major issue I have with the groups is that apparently NAACCR defines the groups
+  has being the real field, and the children as being "shadow" field. That seems to 
+  indicate that when writing a flat file, only the groups should be written. But 
+  it's clear that the community uses the children, not the groups (except some rare 
+  exceptions). So it's must more logical to write the children and not the groups when 
+  writing flat files...
+
+  I think the groups are not a good concept and we should try to retire them if we can.
+  Duplicating data that way causes TONS of technical issues.  All our SEER softare only 
+  deal with the children; but I know for example the Metafile edits use both groups 
+  and children. Maybe we can convinced people to re-write the few edits that use them, and 
+  to retire those groups items (or if not retired, they would at least be totally ignored 
+  by the library; not read, not written, not handled in any way other that documentation...
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->

@@ -14,7 +14,6 @@ import java.util.List;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
-import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
 
@@ -26,9 +25,9 @@ public class PatientFlatWriter implements AutoCloseable {
 
     protected RuntimeNaaccrDictionaryItem _naaccrVersionItem, _recordTypeItem;
 
-    public PatientFlatWriter(Writer writer, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
+    public PatientFlatWriter(Writer writer, RuntimeNaaccrDictionary dictionary) throws IOException {
         _writer = new BufferedWriter(writer);
-        _dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), nonStandardDictionary);
+        _dictionary = dictionary;
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
             if (item.getNaaccrNum() != null) {
                 if (item.getNaaccrNum().equals(10))
@@ -65,6 +64,15 @@ public class PatientFlatWriter implements AutoCloseable {
             int currentIndex = 1;
             StringBuilder line = new StringBuilder();
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
+
+                // as soon as an item is not supported for the dictionary's record type, we can stop (making the assumption the items are correctly sorted)
+                if (!itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType()))
+                    break;
+                
+                // sub-items are handled as part of the parent, so ignore them here
+                if (itemDef.getGroupNaaccrId() != null)
+                    continue;
+                
                 if (itemDef.getParentXmlElement() != null && itemDef.getStartColumn() != null && itemDef.getLength() != null) {
                     int start = itemDef.getStartColumn();
                     int length = itemDef.getLength();
@@ -90,7 +98,7 @@ public class PatientFlatWriter implements AutoCloseable {
                             currentIndex = subStart;
 
                             if (subEnd <= end) { // do not write the current sub-item out if it can potentially go out of the space
-                                String value = getValueForItem(subItemDef, patient, patient.getTumors().get(0));
+                                String value = getValueForItem(subItemDef, patient, tumor);
                                 if (value == null)
                                     value = "";
                                 if (value.length() > subLength)
@@ -165,7 +173,8 @@ public class PatientFlatWriter implements AutoCloseable {
         patient.getTumors().add(new Tumor());
         patient.getTumors().get(1).getItems().add(new Item("primarySite", "C447"));
         File outputFile = new File(System.getProperty("user.dir") + "/build/write-flat-test.txt");
-        PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(outputFile), NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getStandardDictionary(), null);
+        PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(outputFile), dictionary);
         writer.writePatient(patient);
         writer.close();
     }

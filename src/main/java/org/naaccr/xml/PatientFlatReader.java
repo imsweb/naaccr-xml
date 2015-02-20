@@ -14,7 +14,6 @@ import java.util.List;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
-import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
 
@@ -28,9 +27,9 @@ public class PatientFlatReader implements AutoCloseable {
 
     protected String _previousLine;
 
-    public PatientFlatReader(Reader reader, String format, NaaccrDictionary nonStandardDictionary) throws IOException {
+    public PatientFlatReader(Reader reader, RuntimeNaaccrDictionary dictionary) throws IOException {
         _reader = new LineNumberReader(reader);
-        _dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), nonStandardDictionary);
+        _dictionary = dictionary;
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
             if (item.getNaaccrNum() != null && item.getNaaccrNum().equals(20)) {
                 _patientIdNumberItem = item;
@@ -47,9 +46,10 @@ public class PatientFlatReader implements AutoCloseable {
             if (_previousLine == null) // would be an empty file...
                 return null;
         }
-        
+
         lines.add(_previousLine);
         String currentPatId = getPatientIdNumber(_previousLine);
+        int lineNumber = _reader.getLineNumber() - 1;
 
         _previousLine = _reader.readLine();
         while (_previousLine != null) {
@@ -62,7 +62,7 @@ public class PatientFlatReader implements AutoCloseable {
                 break;
         }
 
-        return lines.isEmpty() ? null : createPatientFromLines(lines);
+        return lines.isEmpty() ? null : createPatientFromLines(lineNumber, lines);
     }
 
     @Override
@@ -86,20 +86,26 @@ public class PatientFlatReader implements AutoCloseable {
 
         return result;
     }
-
-    protected Patient createPatientFromLines(List<String> lines) throws IOException {
+    
+    protected Patient createPatientFromLines(int lineNumber, List<String> lines) throws IOException {
 
         // create the patient using the first line only (other lines are supposed to be identical for patient items)
         Patient patient = new Patient();
-        for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
-            if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
+        for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
+            if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType())
+                    && itemDef.getGroupNaaccrId() == null) { // sub-items are handled through the parent item...
+                
+                // TODO FPD do we want to throw an error if not all the patient-level fields have the same value?
                 patient.getItems().addAll(createItemsFromLine(lines.get(0), itemDef));
+            }
+        }
 
         // create the tumors, one per line
         for (String line : lines) {
             Tumor tumor = new Tumor();
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
-                if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType())
+                        && itemDef.getGroupNaaccrId() == null) // sub-items are handled through the parent item...
                     tumor.getItems().addAll(createItemsFromLine(line, itemDef));
             patient.getTumors().add(tumor);
         }
@@ -117,8 +123,12 @@ public class PatientFlatReader implements AutoCloseable {
             String value = line.substring(start, end);
             String trimmedValue = value.trim();
 
-            // never trim a group field unless it's completely empty (or we would lose the info of which child value is which)
-            if (itemDef.getSubItems().isEmpty() || trimmedValue.isEmpty())
+            // if there is no actual value, it can be trimmed
+            if (trimmedValue.isEmpty())
+                value = trimmedValue;
+            
+            // never trim a group field (or we would lose the info of which child value is which) and never trim a value that can't be trimmed
+            if (itemDef.getSubItems().isEmpty() && !NaaccrXmlUtils.NAACCR_DATA_TYPE_STRING_WITH_LEADING_SPACES.equals(itemDef.getDataType()))
                 value = trimmedValue;
 
             if (!value.isEmpty()) {
@@ -153,7 +163,8 @@ public class PatientFlatReader implements AutoCloseable {
     // TODO remove this testing method
     public static void main(String[] args) throws IOException {
         File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/fake-naaccr14inc-2-rec.txt");
-        PatientFlatReader reader = new PatientFlatReader(new FileReader(inputFile), NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getStandardDictionary(), null);
+        PatientFlatReader reader = new PatientFlatReader(new FileReader(inputFile), dictionary);
         int count = 0;
         Patient patient = reader.readPatient();
         while (patient != null) {
