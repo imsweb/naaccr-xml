@@ -1,0 +1,24 @@
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  I understand why we want "naaccrId" and "naaccrNumber" in the dictionary; I am 
+  not sure I understand why we want them that way in the data. I don't think a lot 
+  of people are going to open the XML in text editor (well, maybe out of curiosity, 
+  but not to really do something with the XML); and if they do, I don't think there 
+  would be any confusion with seing "id" and/or "num" instead. That would help with 
+  the file size issues that's coming our way soon.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+
+<NaaccrDataExchange naaccrVersion="140" recordType="I">
+    <Patient>
+        <Item id="patientIdNumber" num="20">00000001</Item>
+    </Patient>
+    <Patient>
+        <Item id="patientIdNumber" num="20">00000002</Item>
+        <Tumor>
+            <Item id="primarySite" num="400">C456</Item>
+        </Tumor>
+    </Patient>
+    <Patient>
+        <Item num="20">00000003</Item>
+    </Patient>
+</NaaccrDataExchange>

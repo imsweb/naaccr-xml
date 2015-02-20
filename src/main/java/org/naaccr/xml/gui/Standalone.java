@@ -22,6 +22,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -30,6 +31,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -40,6 +42,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.io.IOUtils;
 import org.naaccr.xml.NaaccrFormat;
@@ -55,8 +59,8 @@ import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 public class Standalone {
 
     public static void main(String[] args) {
-
-        if (System.getProperty("os.name").toUpperCase().contains("windows")) {
+        
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             }
@@ -106,10 +110,11 @@ public class Standalone {
             contentPnl.add(northPnl, BorderLayout.NORTH);
             
             JTabbedPane pane = new JTabbedPane();
-            pane.add("  Flat to XML  ", crateFlatToXmlPanel());
-            pane.add("  XML to Flat  ", crateXmlToFlatPanel());
-            pane.add("  Validation Test  ", crateValidationTestPanel());
-            pane.add("  Dictionary  ", crateDictionaryPanel());
+            pane.add("  Transform Flat to XML  ", crateFlatToXmlPanel());
+            pane.add("  Transform XML to Flat  ", crateXmlToFlatPanel());
+            pane.add("  Validation Proof of Concept  ", crateValidationTestPanel());
+            pane.add("  Dictionary (XML Format)  ", crateDictionaryPanel());
+            pane.add("  More XML Data Examples  ", crateExamplePanel());
             contentPnl.add(pane, BorderLayout.CENTER);
 
             _fileChooser = new JFileChooser();
@@ -490,6 +495,52 @@ public class Standalone {
             JScrollPane pane = new JScrollPane(area);
             pane.setBorder(null);
             pnl.add(pane, BorderLayout.CENTER);
+            
+            return pnl;
+        }
+        
+        private JPanel crateExamplePanel() {
+            JPanel pnl = new JPanel(new BorderLayout());
+            pnl.setOpaque(true);
+            pnl.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+            Vector<String> data = new Vector<>();
+            data.add("attributes-both.xml");
+            data.add("attributes-id-only.xml");
+            data.add("attributes-num-only.xml");
+            data.add("items-above-patient-level.xml");
+            data.add("order.xml");
+            data.add("smaller-attributes.xml");
+            data.add("state-requestor-items.xml");
+            final JList list = new JList(data);
+            list.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+            pnl.add(new JScrollPane(list), BorderLayout.WEST);
+            
+            JPanel centerPnl = new JPanel(new BorderLayout());
+            pnl.setOpaque(false);
+            //pnl.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            final JTextArea area = new JTextArea();
+            area.setEditable(false);
+            JScrollPane pane = new JScrollPane(area);
+            //pane.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+            pane.setBorder(null);
+            centerPnl.add(pane, BorderLayout.CENTER);
+            pnl.add(centerPnl, BorderLayout.CENTER);
+            
+            list.addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
+                    String s = (String)list.getSelectedValue();
+                    try {
+                        area.setText(IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("examples/" + s), "UTF-8"));
+                    }
+                    catch (IOException ex) {
+                        area.setText("Unable to read dictionary...");
+                    }
+                }
+            });
+
+            list.setSelectedIndex(0);
             
             return pnl;
         }

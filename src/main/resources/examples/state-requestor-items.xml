@@ -1,0 +1,22 @@
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  This is an example of how the state requestor items can be used as a standard 
+  field, or re-defined in a user-defined dictionary which allows the individual 
+  variables to be accessed...
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+TODO
+
+<NaaccrDataExchange naaccrVersion="140" recordType="I">
+    <Patient>
+        <Item naaccrId="patientIdNumber" naaccrNum="20">00000001</Item>
+    </Patient>
+    <Patient>
+        <Item naaccrId="patientIdNumber" naaccrNum="20">00000002</Item>
+        <Tumor>
+            <Item naaccrId="primarySite" naaccrNum="400">C456</Item>
+        </Tumor>
+    </Patient>
+    <Patient>
+        <Item naaccrId="patientIdNumber" naaccrNum="20">00000003</Item>
+    </Patient>
+</NaaccrDataExchange>

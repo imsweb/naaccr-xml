@@ -1,0 +1,19 @@
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  This example demonstrates using only NUM attributes 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+
+
+<NaaccrDataExchange naaccrVersion="140" recordType="I">
+    <Patient>
+        <Item naaccrNum="20">00000001</Item>
+    </Patient>
+    <Patient>
+        <Item naaccrNum="20">00000002</Item>
+        <Tumor>
+            <Item naaccrNum="400">C456</Item>
+        </Tumor>
+    </Patient>
+    <Patient>
+        <Item naaccrNum="20">00000003</Item>
+    </Patient>
+</NaaccrDataExchange>
