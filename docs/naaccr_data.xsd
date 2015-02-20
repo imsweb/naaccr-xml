@@ -1,21 +1,14 @@
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://naaccr.org/naaccrdata" targetNamespace="http://naaccr.org/naaccrdata" >
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://naaccr.org/naaccrdata">
 
-<xsd:element name="NaaccrData">
+	<xsd:element name="NaaccrDataExchange">
 	<xsd:complexType>
 		<xsd:sequence>
-			<xsd:element ref="tns:Patient" minOccurs="0" maxOccurs="unbounded" />
-			<xsd:any minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="Item" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="Patient" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
-		<xsd:attribute name="extractId" use="optional" />
-		<xsd:attribute name="metadataVersion" use="required" />
-		<xsd:attribute name="xsdVersion" use="optional" fixed="1.0" />
-		<xsd:attribute name="datePrepared" use="required" type="xsd:dateTime" />
-		<xsd:attribute name="sender" use="required" />
-		<xsd:attribute name="senderCode" use="optional" />
-		<xsd:attribute name="description" use="optional" />
-		<xsd:attribute name="geography" use="optional" />
-		<xsd:attribute name="dateFrom" use="optional" type="xsd:date" />
-		<xsd:attribute name="dateTo" use="optional" type="xsd:date" />
+		<xsd:attribute name="naaccrVersion" use="required" />
+		<xsd:attribute name="recordType" use="required" />
 		<xsd:anyAttribute />
 	</xsd:complexType>
 </xsd:element>
@@ -23,9 +16,9 @@
 <xsd:element name="Patient">
 	<xsd:complexType>
 		<xsd:sequence>
-			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
-			<xsd:any minOccurs="0" maxOccurs="unbounded" />
-			<xsd:element ref="tns:Tumor" minOccurs="1" maxOccurs="unbounded" />
+			<xsd:element ref="Item" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="Tumor" minOccurs="1" maxOccurs="unbounded" />
+			<xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
 		<xsd:anyAttribute />
 	</xsd:complexType>
@@ -34,8 +27,8 @@
 <xsd:element name="Tumor">
 	<xsd:complexType>
 		<xsd:sequence>
-			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
-			<xsd:any minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="Item" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
 		<xsd:anyAttribute />
 	</xsd:complexType>
@@ -49,7 +42,7 @@
 
 <xsd:complexType name="itemType" >
 	<xsd:simpleContent>
-		<xsd:extension base="tns:trimString" >
+		<xsd:extension base="trimString" >
 			<xsd:attribute name="naaccrNum" type="xsd:integer" use="optional" />
 			<xsd:attribute name="naaccrId" use="optional" type="xsd:NCName" />
 			<xsd:anyAttribute />
@@ -57,6 +50,6 @@
 	</xsd:simpleContent>
 </xsd:complexType>
 
-<xsd:element name="Item" type="tns:itemType" />
+<xsd:element name="Item" type="itemType" />
 
 </xsd:schema>
