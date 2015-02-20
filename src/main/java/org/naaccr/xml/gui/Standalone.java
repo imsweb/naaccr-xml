@@ -511,18 +511,18 @@ public class Standalone {
             data.add("items-above-patient-level.xml");
             data.add("order.xml");
             data.add("smaller-attributes.xml");
+            data.add("group-demo.xml");
             data.add("state-requestor-items.xml");
+            data.add("extensions.xml");
             final JList list = new JList(data);
             list.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
             pnl.add(new JScrollPane(list), BorderLayout.WEST);
             
             JPanel centerPnl = new JPanel(new BorderLayout());
             pnl.setOpaque(false);
-            //pnl.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             final JTextArea area = new JTextArea();
-            area.setEditable(false);
+            area.setEditable(true);
             JScrollPane pane = new JScrollPane(area);
-            //pane.setBorder(BorderFactory.createLineBorder(Color.GRAY));
             pane.setBorder(null);
             centerPnl.add(pane, BorderLayout.CENTER);
             pnl.add(centerPnl, BorderLayout.CENTER);
@@ -537,6 +537,7 @@ public class Standalone {
                     catch (IOException ex) {
                         area.setText("Unable to read dictionary...");
                     }
+                    area.setCaretPosition(0);
                 }
             });
 

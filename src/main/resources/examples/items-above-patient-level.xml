@@ -14,23 +14,11 @@
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
     </Patient>
-    <Patient>
-        <Item naaccrId="patientIdNumber">00000002</Item>
-        <Tumor>
-            <Item naaccrId="primarySite">C456</Item>
-        </Tumor>
-    </Patient>
 </NaaccrDataExchange>
 
 
 <NaaccrDataExchange naaccrVersion="140" recordType="I" vendorName="SEER*Abs">
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
-    </Patient>
-    <Patient>
-        <Item naaccrId="patientIdNumber">00000002</Item>
-        <Tumor>
-            <Item naaccrId="primarySite">C456</Item>
-        </Tumor>
     </Patient>
 </NaaccrDataExchange>

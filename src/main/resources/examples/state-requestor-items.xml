@@ -4,19 +4,24 @@
   variables to be accessed...
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
-TODO
-
 <NaaccrDataExchange naaccrVersion="140" recordType="I">
     <Patient>
-        <Item naaccrId="patientIdNumber" naaccrNum="20">00000001</Item>
-    </Patient>
-    <Patient>
-        <Item naaccrId="patientIdNumber" naaccrNum="20">00000002</Item>
-        <Tumor>
-            <Item naaccrId="primarySite" naaccrNum="400">C456</Item>
-        </Tumor>
-    </Patient>
-    <Patient>
-        <Item naaccrId="patientIdNumber" naaccrNum="20">00000003</Item>
+        <Item naaccrId="stateRequestorItems">123ABC                                 etc...</Item>
     </Patient>
 </NaaccrDataExchange>
+
+<!-- This assumes that a user-dictionary is availabe and it defines the stateRequestorItems as a group 
+     and the two new user-defined variables -->
+<NaaccrDataExchange naaccrVersion="140" recordType="I">
+    <Patient>
+        <Item naaccrId="myVariable1">123</Item>
+        <Item naaccrId="myVariable2">ABC</Item>
+    </Patient>
+</NaaccrDataExchange>
+
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  This interesting thing about this is what happend when reading a flat file into an 
+  XML? Do we need to retain the full stateRequestorItems (the 1,000 characters). It's 
+  tempting to just say no, but remember that it's just a regular group field, and that 
+  the Metafile edits use the other group values...
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
