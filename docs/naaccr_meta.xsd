@@ -52,7 +52,7 @@
 		</xsd:sequence>
 		<xsd:attribute name="naaccrId" use="required" type="xsd:ID" />
 		<xsd:attribute name="naaccrNum" use="required" type="xsd:integer" />
-		<xsd:attribute name="dataType" use="required" type="tns:datatypeType" />
+		<xsd:attribute name="dataType" use="optional" default="string" type="tns:datatypeType" />
 		<xsd:attribute name="regexValidation" use="optional" type="xsd:string" />
 		<xsd:attribute name="parentXmlElement" use="required" type="tns:parentType" />
 		<xsd:attribute name="naaccrName" use="optional" type="xsd:string" />
