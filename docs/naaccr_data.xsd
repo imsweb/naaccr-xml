@@ -9,7 +9,7 @@
 	</xsd:restriction>
 </xsd:simpleType>
 
-<xsd:element name="NaaccrDataExchange">
+<xsd:element name="NaaccrData">
 	<xsd:complexType>
 		<xsd:sequence>
 			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
@@ -55,8 +55,8 @@
 <xsd:complexType name="itemType" >
 	<xsd:simpleContent>
 		<xsd:extension base="tns:trimString" >
-			<xsd:attribute name="naaccrNum" type="xsd:integer" use="required" />
-			<xsd:attribute name="naaccrId" use="optional" type="xsd:NCName" />
+			<xsd:attribute name="naaccrId" use="required" type="xsd:NCName" />
+			<xsd:attribute name="naaccrNum" type="xsd:integer" use="optional" />
 			<xsd:anyAttribute />
 		</xsd:extension>
 	</xsd:simpleContent>

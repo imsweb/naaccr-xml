@@ -39,7 +39,7 @@
 
 <xsd:simpleType name="parentType">
 	<xsd:restriction base="xsd:string">
-		<xsd:enumeration value="NaaccrDataExchange" />
+		<xsd:enumeration value="NaaccrData" />
 		<xsd:enumeration value="Patient" />
 		<xsd:enumeration value="Tumor" />
 	</xsd:restriction>
