@@ -16,7 +16,7 @@
 			<xsd:any minOccurs="0" maxOccurs="unbounded" />
 			<xsd:element ref="tns:Patient" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
-		<xsd:attribute name="dictionaryUri" use="required" type="xsd:anyURI"/>
+		<xsd:attribute name="baseDictionaryUri" use="required" type="xsd:anyURI"/>
 		<xsd:attribute name="userDictionaryUri" use="optional" type="xsd:anyURI" 
 		default="http://naaccr.org/naaccrxml/defaultUserDictionary.xml" />
 		<xsd:attribute name="timeGenerated" use="required" type="xsd:dateTime" />
