@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<NAACCRDictionary xmlns="http://naaccr.org/naaccrxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://naaccr.org/naaccrxml/naaccr_meta.xsd" 
+<NaaccrDictionary xmlns="http://naaccr.org/naaccrxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://naaccr.org/naaccrxml/naaccr_meta.xsd" 
 	dictionaryUri="http://naaccr.org/naaccrxml/NaaccrDict14.xml" naaccrVersion="140" description="NAACCR v14 base dictionary" >
 	<ItemDefs>
 		<ItemDef naaccrId="recordType" naaccrNum="10" naaccrName="Record Type" 
