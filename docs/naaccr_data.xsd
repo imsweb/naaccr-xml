@@ -1,21 +1,26 @@
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://naaccr.org/naaccrdata" targetNamespace="http://naaccr.org/naaccrdata" >
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://naaccr.org/naaccrxml" targetNamespace="http://naaccr.org/naaccrxml" >
+
+<xsd:simpleType name="recordtypeType">
+	<xsd:restriction base="xsd:string">
+		<xsd:enumeration value="A" />
+		<xsd:enumeration value="M" />
+		<xsd:enumeration value="C" />
+		<xsd:enumeration value="I" />
+	</xsd:restriction>
+</xsd:simpleType>
 
 <xsd:element name="NaaccrData">
 	<xsd:complexType>
 		<xsd:sequence>
-			<xsd:element ref="tns:Patient" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
 			<xsd:any minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="tns:Patient" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
-		<xsd:attribute name="extractId" use="optional" />
-		<xsd:attribute name="metadataVersion" use="required" />
-		<xsd:attribute name="xsdVersion" use="optional" fixed="1.0" />
-		<xsd:attribute name="datePrepared" use="required" type="xsd:dateTime" />
-		<xsd:attribute name="sender" use="required" />
-		<xsd:attribute name="senderCode" use="optional" />
-		<xsd:attribute name="description" use="optional" />
-		<xsd:attribute name="geography" use="optional" />
-		<xsd:attribute name="dateFrom" use="optional" type="xsd:date" />
-		<xsd:attribute name="dateTo" use="optional" type="xsd:date" />
+		<xsd:attribute name="baseDictionaryUri" use="required" type="xsd:anyURI"/>
+		<xsd:attribute name="userDictionaryUri" use="optional" type="xsd:anyURI" 
+		default="http://naaccr.org/naaccrxml/defaultUserDictionary.xml" />
+		<xsd:attribute name="timeGenerated" use="required" type="xsd:dateTime" />
+		<xsd:attribute name="recordType" use="required" type="tns:recordtypeType" />
 		<xsd:anyAttribute />
 	</xsd:complexType>
 </xsd:element>
@@ -50,8 +55,8 @@
 <xsd:complexType name="itemType" >
 	<xsd:simpleContent>
 		<xsd:extension base="tns:trimString" >
+			<xsd:attribute name="naaccrId" use="required" type="xsd:NCName" />
 			<xsd:attribute name="naaccrNum" type="xsd:integer" use="optional" />
-			<xsd:attribute name="naaccrId" use="optional" type="xsd:NCName" />
 			<xsd:anyAttribute />
 		</xsd:extension>
 	</xsd:simpleContent>

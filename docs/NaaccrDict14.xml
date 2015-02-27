@@ -1,0 +1,1614 @@
+<?xml version="1.0"?>
+<NaaccrDictionary xmlns="http://naaccr.org/naaccrxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://naaccr.org/naaccrxml/naaccr_meta.xsd" 
+	dictionaryUri="http://naaccr.org/naaccrxml/NaaccrDict14.xml" naaccrVersion="140" description="NAACCR v14 base dictionary" >
+	<ItemDefs>
+		<ItemDef naaccrId="recordType" naaccrNum="10" naaccrName="Record Type" 
+			parentXMLElement="NaaccrData" regexValidation="^[ICAM]$" startColumn="1" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="registryType" naaccrNum="30" naaccrName="Registry Type" 
+			parentXMLElement="NaaccrData" dataType="code" startColumn="2" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="registryId" naaccrNum="40" naaccrName="Registry ID" 
+			parentXMLElement="NaaccrData" dataType="integerWithZero" startColumn="30" length="10" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="registryIdNpi" naaccrNum="45" naaccrName="NPI--Registry ID" 
+			parentXMLElement="NaaccrData" dataType="integerWithZero" startColumn="20" length="10" 
+			sourceOfStandard="NAACCR111" />
+		<ItemDef naaccrId="naaccrRecordVersion" naaccrNum="50" naaccrName="NAACCR Record Version" 
+			parentXMLElement="NaaccrData" dataType="code" startColumn="17" length="3" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="vendorName" naaccrNum="2170" naaccrName="Vendor Name" 
+			parentXMLElement="NaaccrData" dataType="string" startColumn="1936" length="10" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="patientIdNumber" naaccrNum="20" naaccrName="Patient ID Number" 
+			parentXMLElement="Patient" dataType="integerWithZero" startColumn="42" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="patientSysIdHospital" naaccrNum="21" naaccrName="Patient System ID-Hosp" 
+			parentXMLElement="Patient" dataType="integer" startColumn="50" length="8" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="race1" naaccrNum="160" naaccrName="Race 1" 
+			parentXMLElement="Patient" dataType="code" startColumn="177" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="race2" naaccrNum="161" naaccrName="Race 2" 
+			parentXMLElement="Patient" dataType="code" startColumn="179" length="2" 
+			sourceOfStandard="NAACCR8" />
+		<ItemDef naaccrId="race3" naaccrNum="162" naaccrName="Race 3" 
+			parentXMLElement="Patient" dataType="code" startColumn="181" length="2" 
+			sourceOfStandard="NAACCR8" />
+		<ItemDef naaccrId="race4" naaccrNum="163" naaccrName="Race 4" 
+			parentXMLElement="Patient" dataType="code" startColumn="183" length="2" 
+			sourceOfStandard="NAACCR8" />
+		<ItemDef naaccrId="race5" naaccrNum="164" naaccrName="Race 5" 
+			parentXMLElement="Patient" dataType="code" startColumn="185" length="2" 
+			sourceOfStandard="NAACCR8" />
+		<ItemDef naaccrId="raceCodingSysCurrent" naaccrNum="170" naaccrName="Race Coding Sys--Current" 
+			parentXMLElement="Patient" dataType="code" startColumn="187" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="raceCodingSysOriginal" naaccrNum="180" naaccrName="Race Coding Sys--Original" 
+			parentXMLElement="Patient" dataType="code" startColumn="188" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="spanishHispanicOrigin" naaccrNum="190" naaccrName="Spanish/Hispanic Origin" 
+			parentXMLElement="Patient" dataType="code" startColumn="189" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="nhia" naaccrNum="191" naaccrName="NHIA Derived Hisp Origin" 
+			parentXMLElement="Patient" dataType="code" startColumn="418" length="1" 
+			sourceOfStandard="NAACCR102" />
+		<ItemDef naaccrId="ihs" naaccrNum="192" naaccrName="IHS Link" 
+			parentXMLElement="Patient" dataType="code" startColumn="421" length="1" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="napiia" naaccrNum="193" naaccrName="Race--NAPIIA(derived API)" 
+			parentXMLElement="Patient" dataType="code" startColumn="419" length="2" 
+			sourceOfStandard="NAACCR113" />
+		<ItemDef naaccrId="computedEthnicity" naaccrNum="200" naaccrName="Computed Ethnicity" 
+			parentXMLElement="Patient" dataType="code" startColumn="190" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="computedEthnicitySource" naaccrNum="210" naaccrName="Computed Ethnicity Source" 
+			parentXMLElement="Patient" dataType="code" startColumn="191" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="sex" naaccrNum="220" naaccrName="Sex" 
+			parentXMLElement="Patient" dataType="code" startColumn="192" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="birthDate" naaccrNum="240" naaccrName="Date of Birth" 
+			parentXMLElement="Patient" dataType="date" startColumn="196" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="birthDateFlag" naaccrNum="241" naaccrName="Date of Birth Flag" 
+			parentXMLElement="Patient" dataType="code" startColumn="204" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="birthPlace" naaccrNum="250" naaccrName="Birthplace" 
+			parentXMLElement="Patient" dataType="code" startColumn="206" length="3" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="birthplaceState" naaccrNum="252" naaccrName="Birthplace--State" 
+			parentXMLElement="Patient" dataType="alpha" startColumn="442" length="2" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="birthplaceCountry" naaccrNum="254" naaccrName="Birthplace--Country" 
+			parentXMLElement="Patient" dataType="alpha" startColumn="444" length="3" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="dateOfLastContact" naaccrNum="1750" naaccrName="Date of Last Contact" 
+			parentXMLElement="Patient" dataType="date" startColumn="2116" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dateOfLastContactFlag" naaccrNum="1751" naaccrName="Date of Last Contact Flag" 
+			parentXMLElement="Patient" dataType="code" startColumn="2124" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="dateOfDeathCanada" naaccrNum="1755" naaccrName="Date of Death--Canada" 
+			parentXMLElement="Patient" dataType="date" startColumn="2280" length="8" 
+			sourceOfStandard="NAACCR113" />
+		<ItemDef naaccrId="dateOfDeathCanadaFlag" naaccrNum="1756" naaccrName="Date of Death--Canada Flag" 
+			parentXMLElement="Patient" dataType="code" startColumn="2288" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="vitalStatus" naaccrNum="1760" naaccrName="Vital Status" 
+			parentXMLElement="Patient" dataType="code" startColumn="2126" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="addressCurrentCity" naaccrNum="1810" naaccrName="Addr Current--City" 
+			parentXMLElement="Patient" dataType="string" startColumn="2131" length="50" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="addressCurrentState" naaccrNum="1820" naaccrName="Addr Current--State" 
+			parentXMLElement="Patient" dataType="alpha" startColumn="2181" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="addressCurrentPostalCode" naaccrNum="1830" naaccrName="Addr Current--Postal Code" 
+			parentXMLElement="Patient" dataType="code" startColumn="2183" length="9" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="addressCurrentCountry" naaccrNum="1832" naaccrName="Addr Current--Country" 
+			parentXMLElement="Patient" dataType="alpha" startColumn="439" length="3" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="addressCurrentCounty" naaccrNum="1840" naaccrName="County--Current" 
+			parentXMLElement="Patient" dataType="alpha" startColumn="2192" length="3" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="causeOfDeath" naaccrNum="1910" naaccrName="Cause of Death" 
+			parentXMLElement="Patient" dataType="code" startColumn="2269" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="icdRevisionNumber" naaccrNum="1920" naaccrName="ICD Revision Number" 
+			parentXMLElement="Patient" dataType="code" startColumn="2273" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="autopsy" naaccrNum="1930" naaccrName="Autopsy" 
+			parentXMLElement="Patient" dataType="code" startColumn="2274" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="placeOfDeath" naaccrNum="1940" naaccrName="Place of Death" 
+			parentXMLElement="Patient" dataType="alpha" startColumn="2275" length="3" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="placeOfDeathState" naaccrNum="1942" naaccrName="Place of Death--State" 
+			parentXMLElement="Patient" dataType="alpha" startColumn="450" length="2" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="placeOfDeathCountry" naaccrNum="1944" naaccrName="Place of Death--Country" 
+			parentXMLElement="Patient" dataType="alpha" startColumn="452" length="3" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="nameLast" naaccrNum="2230" naaccrName="Name--Last" 
+			parentXMLElement="Patient" dataType="string" startColumn="3340" length="40" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="nameFirst" naaccrNum="2240" naaccrName="Name--First" 
+			parentXMLElement="Patient" dataType="string" startColumn="3380" length="40" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="nameMiddle" naaccrNum="2250" naaccrName="Name--Middle" 
+			parentXMLElement="Patient" dataType="string" startColumn="3420" length="40" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="namePrefix" naaccrNum="2260" naaccrName="Name--Prefix" 
+			parentXMLElement="Patient" dataType="alpha" startColumn="3460" length="3" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="nameSuffix" naaccrNum="2270" naaccrName="Name--Suffix" 
+			parentXMLElement="Patient" dataType="string" startColumn="3463" length="3" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="nameAlias" naaccrNum="2280" naaccrName="Name--Alias" 
+			parentXMLElement="Patient" dataType="string" startColumn="3466" length="40" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="socialSecurityNumber" naaccrNum="2320" naaccrName="Social Security Number" 
+			parentXMLElement="Patient" dataType="code" startColumn="3619" length="9" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="addressCurrentStreetName" naaccrNum="2350" naaccrName="Addr Current--No & Street" 
+			parentXMLElement="Patient" dataType="string" startColumn="3748" length="60" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="addressCurrentSupplementl" naaccrNum="2355" naaccrName="Addr Current--Supplementl" 
+			parentXMLElement="Patient" dataType="string" startColumn="3808" length="60" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="telephone" naaccrNum="2360" naaccrName="Telephone" 
+			parentXMLElement="Patient" dataType="string" startColumn="3868" length="10" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dcStateFileNumber" naaccrNum="2380" naaccrName="DC State File Number" 
+			parentXMLElement="Patient" dataType="alpha" startColumn="3878" length="6" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="nameMaiden" naaccrNum="2390" naaccrName="Name--Maiden" 
+			parentXMLElement="Patient" dataType="string" startColumn="3506" length="40" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tumorRecordNumber" naaccrNum="60" naaccrName="Tumor Record Number" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="40" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="addressAtDxCity" naaccrNum="70" naaccrName="Addr at DX--City" 
+			parentXMLElement="Tumor" dataType="string" startColumn="95" length="50" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="addressAtDxState" naaccrNum="80" naaccrName="Addr at DX--State" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="145" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="addressAtDxCounty" naaccrNum="90" naaccrName="County at DX" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="156" length="3" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="addressAtDxPostalCode" naaccrNum="100" naaccrName="Addr at DX--Postal Code" 
+			parentXMLElement="Tumor" dataType="code" startColumn="147" length="9" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="addressAtDxCountry" naaccrNum="102" naaccrName="Addr at DX--Country" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="436" length="3" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="censusTract708090" naaccrNum="110" naaccrName="Census Tract 1970/80/90" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="159" length="6" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="censusCodingSys708090" naaccrNum="120" naaccrName="Census Cod Sys 1970/80/90" 
+			parentXMLElement="Tumor" dataType="code" startColumn="166" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="censusTract2000" naaccrNum="130" naaccrName="Census Tract 2000" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="168" length="6" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="censusTract2010" naaccrNum="135" naaccrName="Census Tract 2010" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="428" length="6" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="censusPovertyIndictr" naaccrNum="145" naaccrName="Census Tr Poverty Indictr" 
+			parentXMLElement="Tumor" dataType="code" startColumn="463" length="1" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="maritalStatusAtDx" naaccrNum="150" naaccrName="Marital Status at DX" 
+			parentXMLElement="Tumor" dataType="code" startColumn="176" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="ageAtDx" naaccrNum="230" naaccrName="Age at Diagnosis" 
+			parentXMLElement="Tumor" dataType="code" startColumn="193" length="3" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="occupationCodeCensus" naaccrNum="270" naaccrName="Census Occ Code 1970-2000" 
+			parentXMLElement="Tumor" dataType="code" startColumn="209" length="3" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="censusIndCode2010" naaccrNum="272" naaccrName="Census Ind Code 2010" 
+			parentXMLElement="Tumor" dataType="string" startColumn="455" length="4" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="industryCodeCensus" naaccrNum="280" naaccrName="Census Ind Code 1970-2000" 
+			parentXMLElement="Tumor" dataType="code" startColumn="212" length="3" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="censusOccCode2010" naaccrNum="282" naaccrName="Census Occ Code 2010" 
+			parentXMLElement="Tumor" dataType="code" startColumn="459" length="4" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="occupationSource" naaccrNum="290" naaccrName="Occupation Source" 
+			parentXMLElement="Tumor" dataType="code" startColumn="215" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="industrySource" naaccrNum="300" naaccrName="Industry Source" 
+			parentXMLElement="Tumor" dataType="code" startColumn="216" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="textUsualOccupation" naaccrNum="310" naaccrName="Text--Usual Occupation" 
+			parentXMLElement="Tumor" dataType="string" startColumn="217" length="100" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="textUsualIndustry" naaccrNum="320" naaccrName="Text--Usual Industry" 
+			parentXMLElement="Tumor" dataType="string" startColumn="317" length="100" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="occupationIndustryCodingSys" naaccrNum="330" naaccrName="Census Occ/Ind Sys 70-00" 
+			parentXMLElement="Tumor" dataType="code" startColumn="417" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="censusBlockGroup2000" naaccrNum="362" naaccrName="Census Block Group 2000" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="174" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="censusBlockGroup2010" naaccrNum="363" naaccrName="Census Block Group 2010" 
+			parentXMLElement="Tumor" dataType="code" startColumn="434" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="censusCertainty708090" naaccrNum="364" naaccrName="Census Tr Cert 1970/80/90" 
+			parentXMLElement="Tumor" dataType="code" startColumn="167" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="censusCertainty2000" naaccrNum="365" naaccrName="Census Tr Certainty 2000" 
+			parentXMLElement="Tumor" dataType="code" startColumn="175" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="gisQuality" naaccrNum="366" naaccrName="GIS Coordinate Quality" 
+			parentXMLElement="Tumor" dataType="code" startColumn="422" length="2" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="censusCertainty2010" naaccrNum="367" naaccrName="Census Tr Certainty 2010" 
+			parentXMLElement="Tumor" dataType="code" startColumn="435" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="censusBlockGroup708090" naaccrNum="368" naaccrName="Census Block Grp 1970-90" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="165" length="1" 
+			sourceOfStandard="NAACCR112" />
+		<ItemDef naaccrId="sequenceNumberCentral" naaccrNum="380" naaccrName="Sequence Number--Central" 
+			parentXMLElement="Tumor" dataType="code" startColumn="528" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dateOfDiagnosis" naaccrNum="390" naaccrName="Date of Diagnosis" 
+			parentXMLElement="Tumor" dataType="date" startColumn="530" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dateOfDiagnosisFlag" naaccrNum="391" naaccrName="Date of Diagnosis Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="538" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="primarySite" naaccrNum="400" naaccrName="Primary Site" 
+			parentXMLElement="Tumor" regexValidation="^C\d{3}$" startColumn="540" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="laterality" naaccrNum="410" naaccrName="Laterality" 
+			parentXMLElement="Tumor" dataType="code" startColumn="544" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="morphologyIcdO2" naaccrNum="419" naaccrName="Morph--Type&Behav ICD-O-2" 
+			parentXMLElement="Tumor" dataType="@D" startColumn="545" length="5" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="histologyIcdO2" naaccrNum="420" naaccrName="Histology (92-00) ICD-O-2" 
+			parentXMLElement="Tumor" dataType="code" startColumn="545" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="behaviorIcdO2" naaccrNum="430" naaccrName="Behavior (92-00) ICD-O-2" 
+			parentXMLElement="Tumor" dataType="code" startColumn="549" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dateOfMultipleTumorsFlag" naaccrNum="439" naaccrName="Date of Mult Tumors Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="587" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="grade" naaccrNum="440" naaccrName="Grade" 
+			parentXMLElement="Tumor" dataType="code" startColumn="555" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="gradePathValue" naaccrNum="441" naaccrName="Grade Path Value" 
+			parentXMLElement="Tumor" dataType="code" startColumn="556" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="ambiguousTerminologyDx" naaccrNum="442" naaccrName="Ambiguous Terminology DX" 
+			parentXMLElement="Tumor" dataType="code" startColumn="566" length="1" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="dateConclusiveDx" naaccrNum="443" naaccrName="Date Conclusive DX" 
+			parentXMLElement="Tumor" dataType="date" startColumn="567" length="8" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="multiTumorRptAsOnePrim" naaccrNum="444" naaccrName="Mult Tum Rpt as One Prim" 
+			parentXMLElement="Tumor" dataType="code" startColumn="577" length="2" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="dateOfMultipleTumors" naaccrNum="445" naaccrName="Date of Mult Tumors" 
+			parentXMLElement="Tumor" dataType="date" startColumn="579" length="8" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="multiplicityCounter" naaccrNum="446" naaccrName="Multiplicity Counter" 
+			parentXMLElement="Tumor" dataType="code" startColumn="589" length="2" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="dateConclusiveDxFlag" naaccrNum="448" naaccrName="Date Conclusive DX Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="575" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="gradePathSys" naaccrNum="449" naaccrName="Grade Path System" 
+			parentXMLElement="Tumor" dataType="code" startColumn="557" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="siteCodingSysCurrent" naaccrNum="450" naaccrName="Site Coding Sys--Current" 
+			parentXMLElement="Tumor" dataType="code" startColumn="558" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="siteCodingSysOriginal" naaccrNum="460" naaccrName="Site Coding Sys--Original" 
+			parentXMLElement="Tumor" dataType="code" startColumn="559" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="morphCodingSysCurrent" naaccrNum="470" naaccrName="Morph Coding Sys--Current" 
+			parentXMLElement="Tumor" dataType="code" startColumn="560" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="morphCodingSysOriginal" naaccrNum="480" naaccrName="Morph Coding Sys--Originl" 
+			parentXMLElement="Tumor" dataType="code" startColumn="561" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="diagnosticConfirmation" naaccrNum="490" naaccrName="Diagnostic Confirmation" 
+			parentXMLElement="Tumor" dataType="code" startColumn="562" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="typeOfReportingSource" naaccrNum="500" naaccrName="Type of Reporting Source" 
+			parentXMLElement="Tumor" dataType="code" startColumn="563" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="casefindingSource" naaccrNum="501" naaccrName="Casefinding Source" 
+			parentXMLElement="Tumor" dataType="code" startColumn="564" length="2" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="morphologyIcdO3" naaccrNum="521" naaccrName="Morph--Type&Behav ICD-O-3" 
+			parentXMLElement="Tumor" dataType="@D" startColumn="550" length="5" 
+			sourceOfStandard="NAACCR9" />
+		<ItemDef naaccrId="histologyIcdO3" naaccrNum="522" naaccrName="Histologic Type ICD-O-3" 
+			parentXMLElement="Tumor" dataType="code" startColumn="550" length="4" 
+			sourceOfStandard="NAACCR9" />
+		<ItemDef naaccrId="behaviorIcdO3" naaccrNum="523" naaccrName="Behavior Code ICD-O-3" 
+			parentXMLElement="Tumor" dataType="code" startColumn="554" length="1" 
+			sourceOfStandard="NAACCR9" />
+		<ItemDef naaccrId="reportingFacility" naaccrNum="540" naaccrName="Reporting Facility" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="701" length="10" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="reportingFacilityNpi" naaccrNum="545" naaccrName="NPI--Reporting Facility" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="691" length="10" 
+			sourceOfStandard="NAACCR111" />
+		<ItemDef naaccrId="accessionNumberHosp" naaccrNum="550" naaccrName="Accession Number--Hosp" 
+			parentXMLElement="Tumor" dataType="string" startColumn="731" length="9" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="sequenceNumberHosp" naaccrNum="560" naaccrName="Sequence Number--Hospital" 
+			parentXMLElement="Tumor" dataType="code" startColumn="740" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="abstractedBy" naaccrNum="570" naaccrName="Abstracted By" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="742" length="3" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dateOf1stContact" naaccrNum="580" naaccrName="Date of 1st Contact" 
+			parentXMLElement="Tumor" dataType="date" startColumn="745" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dateOf1stContactFlag" naaccrNum="581" naaccrName="Date of 1st Contact Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="753" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="dateOfInptAdm" naaccrNum="590" naaccrName="Date of Inpt Adm" 
+			parentXMLElement="Tumor" dataType="date" startColumn="755" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dateOfInptAdmFlag" naaccrNum="591" naaccrName="Date of Inpt Adm Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="763" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="dateOfInptDisch" naaccrNum="600" naaccrName="Date of Inpt Disch" 
+			parentXMLElement="Tumor" dataType="date" startColumn="765" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dateOfInptDischFlag" naaccrNum="601" naaccrName="Date of Inpt Disch Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="773" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="inpatientStatus" naaccrNum="605" naaccrName="Inpatient Status" 
+			parentXMLElement="Tumor" dataType="code" startColumn="775" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="classOfCase" naaccrNum="610" naaccrName="Class of Case" 
+			parentXMLElement="Tumor" dataType="code" startColumn="776" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="primaryPayerAtDx" naaccrNum="630" naaccrName="Primary Payer at DX" 
+			parentXMLElement="Tumor" dataType="code" startColumn="778" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxHospSurgApp2010" naaccrNum="668" naaccrName="RX Hosp--Surg App 2010" 
+			parentXMLElement="Tumor" dataType="code" startColumn="781" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="rxHospSurgPrimSite" naaccrNum="670" naaccrName="RX Hosp--Surg Prim Site" 
+			parentXMLElement="Tumor" dataType="code" startColumn="782" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxHospScopeRegLnSur" naaccrNum="672" naaccrName="RX Hosp--Scope Reg LN Sur" 
+			parentXMLElement="Tumor" dataType="code" startColumn="784" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxHospSurgOthRegDis" naaccrNum="674" naaccrName="RX Hosp--Surg Oth Reg/Dis" 
+			parentXMLElement="Tumor" dataType="code" startColumn="785" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxHospRegLnRemoved" naaccrNum="676" naaccrName="RX Hosp--Reg LN Removed" 
+			parentXMLElement="Tumor" dataType="code" startColumn="786" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxHospRadiation" naaccrNum="690" naaccrName="RX Hosp--Radiation" 
+			parentXMLElement="Tumor" dataType="code" startColumn="789" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxHospChemo" naaccrNum="700" naaccrName="RX Hosp--Chemo" 
+			parentXMLElement="Tumor" dataType="code" startColumn="790" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxHospHormone" naaccrNum="710" naaccrName="RX Hosp--Hormone" 
+			parentXMLElement="Tumor" dataType="code" startColumn="792" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxHospBrm" naaccrNum="720" naaccrName="RX Hosp--BRM" 
+			parentXMLElement="Tumor" dataType="code" startColumn="794" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxHospOther" naaccrNum="730" naaccrName="RX Hosp--Other" 
+			parentXMLElement="Tumor" dataType="code" startColumn="796" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxHospDxStgProc" naaccrNum="740" naaccrName="RX Hosp--DX/Stg Proc" 
+			parentXMLElement="Tumor" dataType="code" startColumn="797" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxHospSurgSite9802" naaccrNum="746" naaccrName="RX Hosp--Surg Site 98-02" 
+			parentXMLElement="Tumor" dataType="code" startColumn="800" length="2" 
+			sourceOfStandard="NAACCR 2003" />
+		<ItemDef naaccrId="rxHospScopeReg9802" naaccrNum="747" naaccrName="RX Hosp--Scope Reg 98-02" 
+			parentXMLElement="Tumor" dataType="code" startColumn="802" length="1" 
+			sourceOfStandard="NAACCR 2003" />
+		<ItemDef naaccrId="rxHospSurgOth9802" naaccrNum="748" naaccrName="RX Hosp--Surg Oth 98-02" 
+			parentXMLElement="Tumor" dataType="code" startColumn="803" length="1" 
+			sourceOfStandard="NAACCR 2003" />
+		<ItemDef naaccrId="seerSummaryStage2000" naaccrNum="759" naaccrName="SEER Summary Stage 2000" 
+			parentXMLElement="Tumor" dataType="code" startColumn="904" length="1" 
+			sourceOfStandard="NAACCR9" />
+		<ItemDef naaccrId="seerSummaryStage1977" naaccrNum="760" naaccrName="SEER Summary Stage 1977" 
+			parentXMLElement="Tumor" dataType="code" startColumn="905" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="extentOfDisease10Digit" naaccrNum="779" naaccrName="Extent of Disease 10-Dig" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="906" length="12" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="eodTumorSize" naaccrNum="780" naaccrName="EOD--Tumor Size" 
+			parentXMLElement="Tumor" dataType="string" startColumn="906" length="3" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="eodExtension" naaccrNum="790" naaccrName="EOD--Extension" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="909" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="eodExtensionProstPath" naaccrNum="800" naaccrName="EOD--Extension Prost Path" 
+			parentXMLElement="Tumor" dataType="code" startColumn="911" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="eodLymphNodeInvolv" naaccrNum="810" naaccrName="EOD--Lymph Node Involv" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="913" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="regionalNodesPositive" naaccrNum="820" naaccrName="Regional Nodes Positive" 
+			parentXMLElement="Tumor" dataType="code" startColumn="914" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="regionalNodesExamined" naaccrNum="830" naaccrName="Regional Nodes Examined" 
+			parentXMLElement="Tumor" dataType="code" startColumn="916" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="eodOld13Digit" naaccrNum="840" naaccrName="EOD--Old 13 Digit" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="918" length="13" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="eodOld2Digit" naaccrNum="850" naaccrName="EOD--Old 2 Digit" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="931" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="eodOld4Digit" naaccrNum="860" naaccrName="EOD--Old 4 Digit" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="933" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="eodCodingSys" naaccrNum="870" naaccrName="Coding System for EOD" 
+			parentXMLElement="Tumor" dataType="code" startColumn="937" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tnmPathT" naaccrNum="880" naaccrName="TNM Path T" 
+			parentXMLElement="Tumor" dataType="code" startColumn="940" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tnmPathN" naaccrNum="890" naaccrName="TNM Path N" 
+			parentXMLElement="Tumor" dataType="code" startColumn="944" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tnmPathM" naaccrNum="900" naaccrName="TNM Path M" 
+			parentXMLElement="Tumor" dataType="code" startColumn="948" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tnmPathStageGroup" naaccrNum="910" naaccrName="TNM Path Stage Group" 
+			parentXMLElement="Tumor" dataType="code" startColumn="952" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tnmPathDescriptor" naaccrNum="920" naaccrName="TNM Path Descriptor" 
+			parentXMLElement="Tumor" dataType="code" startColumn="956" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tnmPathStagedBy" naaccrNum="930" naaccrName="TNM Path Staged By" 
+			parentXMLElement="Tumor" dataType="code" startColumn="957" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tnmClinT" naaccrNum="940" naaccrName="TNM Clin T" 
+			parentXMLElement="Tumor" dataType="code" startColumn="958" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tnmClinN" naaccrNum="950" naaccrName="TNM Clin N" 
+			parentXMLElement="Tumor" dataType="code" startColumn="962" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tnmClinM" naaccrNum="960" naaccrName="TNM Clin M" 
+			parentXMLElement="Tumor" dataType="code" startColumn="966" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tnmClinStageGroup" naaccrNum="970" naaccrName="TNM Clin Stage Group" 
+			parentXMLElement="Tumor" dataType="code" startColumn="970" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tnmClinDescriptor" naaccrNum="980" naaccrName="TNM Clin Descriptor" 
+			parentXMLElement="Tumor" dataType="code" startColumn="974" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tnmClinStagedBy" naaccrNum="990" naaccrName="TNM Clin Staged By" 
+			parentXMLElement="Tumor" dataType="code" startColumn="975" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tnmEditionNumber" naaccrNum="1060" naaccrName="TNM Edition Number" 
+			parentXMLElement="Tumor" dataType="code" startColumn="938" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="pediatricStage" naaccrNum="1120" naaccrName="Pediatric Stage" 
+			parentXMLElement="Tumor" dataType="code" startColumn="976" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="pediatricStagingSys" naaccrNum="1130" naaccrName="Pediatric Staging System" 
+			parentXMLElement="Tumor" dataType="code" startColumn="978" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="pediatricStagedBy" naaccrNum="1140" naaccrName="Pediatric Staged By" 
+			parentXMLElement="Tumor" dataType="code" startColumn="980" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tumorMarker1" naaccrNum="1150" naaccrName="Tumor Marker 1" 
+			parentXMLElement="Tumor" dataType="code" startColumn="981" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tumorMarker2" naaccrNum="1160" naaccrName="Tumor Marker 2" 
+			parentXMLElement="Tumor" dataType="code" startColumn="982" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="tumorMarker3" naaccrNum="1170" naaccrName="Tumor Marker 3" 
+			parentXMLElement="Tumor" dataType="code" startColumn="983" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="lymphVascularInvasion" naaccrNum="1182" naaccrName="Lymph-vascular Invasion" 
+			parentXMLElement="Tumor" dataType="code" startColumn="984" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="rxDateSurgery" naaccrNum="1200" naaccrName="RX Date Surgery" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1456" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxDateSurgeryFlag" naaccrNum="1201" naaccrName="RX Date Surgery Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1464" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="rxDateRadiation" naaccrNum="1210" naaccrName="RX Date Radiation" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1486" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxDateRadiationFlag" naaccrNum="1211" naaccrName="RX Date Radiation Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1494" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="rxDateChemo" naaccrNum="1220" naaccrName="RX Date Chemo" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1516" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxDateChemoFlag" naaccrNum="1221" naaccrName="RX Date Chemo Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1524" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="rxDateHormone" naaccrNum="1230" naaccrName="RX Date Hormone" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1526" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxDateHormoneFlag" naaccrNum="1231" naaccrName="RX Date Hormone Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1534" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="rxDateBrm" naaccrNum="1240" naaccrName="RX Date BRM" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1536" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxDateBrmFlag" naaccrNum="1241" naaccrName="RX Date BRM Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1544" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="rxDateOther" naaccrNum="1250" naaccrName="RX Date Other" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1546" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxDateOtherFlag" naaccrNum="1251" naaccrName="RX Date Other Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1554" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="dateOfInitialRx" naaccrNum="1260" naaccrName="Date Initial RX SEER" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1436" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dateOfInitialRxFlag" naaccrNum="1261" naaccrName="Date Initial RX SEER Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1444" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="dateOf1stCrsRxCoc" naaccrNum="1270" naaccrName="Date 1st Crs RX CoC" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1446" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dateOf1stCrsRxCocFlag" naaccrNum="1271" naaccrName="Date 1st Crs RX CoC Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1454" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="rxDateDxStgProc" naaccrNum="1280" naaccrName="RX Date DX/Stg Proc" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1556" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxDateDxStgProcFlag" naaccrNum="1281" naaccrName="RX Date DX/Stg Proc Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1564" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="rxSummTreatmentStatus" naaccrNum="1285" naaccrName="RX Summ--Treatment Status" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1566" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="rxSummSurgPrimSite" naaccrNum="1290" naaccrName="RX Summ--Surg Prim Site" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1567" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummScopeRegLnSur" naaccrNum="1292" naaccrName="RX Summ--Scope Reg LN Sur" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1569" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummSurgOthRegDis" naaccrNum="1294" naaccrName="RX Summ--Surg Oth Reg/Dis" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1570" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummRegLnExamined" naaccrNum="1296" naaccrName="RX Summ--Reg LN Examined" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1571" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummSurgicalApproach" naaccrNum="1310" naaccrName="RX Summ--Surgical Approch" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1573" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummSurgicalMargins" naaccrNum="1320" naaccrName="RX Summ--Surgical Margins" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1574" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummReconstruct1st" naaccrNum="1330" naaccrName="RX Summ--Reconstruct 1st" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1575" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="reasonForNoSurgery" naaccrNum="1340" naaccrName="Reason for No Surgery" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1576" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummDxStgProc" naaccrNum="1350" naaccrName="RX Summ--DX/Stg Proc" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1577" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummRadiation" naaccrNum="1360" naaccrName="RX Summ--Radiation" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1580" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummRadToCns" naaccrNum="1370" naaccrName="RX Summ--Rad to CNS" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1581" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummSurgRadSeq" naaccrNum="1380" naaccrName="RX Summ--Surg/Rad Seq" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1582" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummChemo" naaccrNum="1390" naaccrName="RX Summ--Chemo" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1585" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummHormone" naaccrNum="1400" naaccrName="RX Summ--Hormone" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1587" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummBrm" naaccrNum="1410" naaccrName="RX Summ--BRM" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1589" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummOther" naaccrNum="1420" naaccrName="RX Summ--Other" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1591" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="reasonForNoRadiation" naaccrNum="1430" naaccrName="Reason for No Radiation" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1592" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxCodingSysCurrent" naaccrNum="1460" naaccrName="RX Coding System--Current" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1593" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="radRegionalDoseCgy" naaccrNum="1510" naaccrName="Rad--Regional Dose: cGy" 
+			parentXMLElement="Tumor" dataType="string" startColumn="1596" length="5" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="radNoOfTreatmentVol" naaccrNum="1520" naaccrName="Rad--No of Treatment Vol" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1601" length="3" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="radTreatmentVolume" naaccrNum="1540" naaccrName="Rad--Treatment Volume" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1604" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="radLocationOfRx" naaccrNum="1550" naaccrName="Rad--Location of RX" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1606" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="radRegionalRxModality" naaccrNum="1570" naaccrName="Rad--Regional RX Modality" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1607" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummSystemicSurgSeq" naaccrNum="1639" naaccrName="RX Summ--Systemic/Sur Seq" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1616" length="1" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="rxSummSurgeryType" naaccrNum="1640" naaccrName="RX Summ--Surgery Type" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1617" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxSummSurgSite9802" naaccrNum="1646" naaccrName="RX Summ--Surg Site 98-02" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1620" length="2" 
+			sourceOfStandard="NAACCR 2003" />
+		<ItemDef naaccrId="rxSummScopeReg9802" naaccrNum="1647" naaccrName="RX Summ--Scope Reg 98-02" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1622" length="1" 
+			sourceOfStandard="NAACCR 2003" />
+		<ItemDef naaccrId="rxSummSurgOth9802" naaccrNum="1648" naaccrName="RX Summ--Surg Oth 98-02" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1623" length="1" 
+			sourceOfStandard="NAACCR 2003" />
+		<ItemDef naaccrId="subsqRx2ndCourseDate" naaccrNum="1660" naaccrName="Subsq RX 2nd Course Date" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1724" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx2ndCourseDateFlag" naaccrNum="1661" naaccrName="Subsq RX 2ndCrs Date Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1732" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="subsqRx2ndCourseCodes" naaccrNum="1670" naaccrName="Subsq RX 2nd Course Codes" 
+			parentXMLElement="Tumor" dataType="string" startColumn="1734" length="11" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx2ndCourseSurg" naaccrNum="1671" naaccrName="Subsq RX 2nd Course Surg" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1734" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx2ndCourseRad" naaccrNum="1672" naaccrName="Subsq RX 2nd Course Rad" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1740" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx2ndCourseChemo" naaccrNum="1673" naaccrName="Subsq RX 2nd Course Chemo" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1741" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx2ndCourseHorm" naaccrNum="1674" naaccrName="Subsq RX 2nd Course Horm" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1742" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx2ndCourseBrm" naaccrNum="1675" naaccrName="Subsq RX 2nd Course BRM" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1743" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx2ndCourseOth" naaccrNum="1676" naaccrName="Subsq RX 2nd Course Oth" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1744" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx2ndScopeLnSu" naaccrNum="1677" naaccrName="Subsq RX 2nd--Scope LN SU" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1736" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx2ndSurgOth" naaccrNum="1678" naaccrName="Subsq RX 2nd--Surg Oth" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1737" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx2ndRegLnRem" naaccrNum="1679" naaccrName="Subsq RX 2nd--Reg LN Rem" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1738" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx3rdCourseDate" naaccrNum="1680" naaccrName="Subsq RX 3rd Course Date" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1745" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx3rdCourseDateFlag" naaccrNum="1681" naaccrName="Subsq RX 3rdCrs Date Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1753" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="subsqRx3rdCourseCodes" naaccrNum="1690" naaccrName="Subsq RX 3rd Course Codes" 
+			parentXMLElement="Tumor" dataType="string" startColumn="1755" length="11" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx3rdCourseSurg" naaccrNum="1691" naaccrName="Subsq RX 3rd Course Surg" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1755" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx3rdCourseRad" naaccrNum="1692" naaccrName="Subsq RX 3rd Course Rad" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1761" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx3rdCourseChemo" naaccrNum="1693" naaccrName="Subsq RX 3rd Course Chemo" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1762" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx3rdCourseHorm" naaccrNum="1694" naaccrName="Subsq RX 3rd Course Horm" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1763" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx3rdCourseBrm" naaccrNum="1695" naaccrName="Subsq RX 3rd Course BRM" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1764" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx3rdCourseOth" naaccrNum="1696" naaccrName="Subsq RX 3rd Course Oth" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1765" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx3rdScopeLnSu" naaccrNum="1697" naaccrName="Subsq RX 3rd--Scope LN Su" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1757" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx3rdSurgOth" naaccrNum="1698" naaccrName="Subsq RX 3rd--Surg Oth" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1758" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx3rdRegLnRem" naaccrNum="1699" naaccrName="Subsq RX 3rd--Reg LN Rem" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1759" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx4thCourseDate" naaccrNum="1700" naaccrName="Subsq RX 4th Course Date" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1766" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx4thCourseDateFlag" naaccrNum="1701" naaccrName="Subsq RX 4thCrs Date Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1774" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="subsqRx4thCourseCodes" naaccrNum="1710" naaccrName="Subsq RX 4th Course Codes" 
+			parentXMLElement="Tumor" dataType="string" startColumn="1776" length="11" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx4thCourseSurg" naaccrNum="1711" naaccrName="Subsq RX 4th Course Surg" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1776" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx4thCourseRad" naaccrNum="1712" naaccrName="Subsq RX 4th Course Rad" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1782" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx4thCourseChemo" naaccrNum="1713" naaccrName="Subsq RX 4th Course Chemo" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1783" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx4thCourseHorm" naaccrNum="1714" naaccrName="Subsq RX 4th Course Horm" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1784" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx4thCourseBrm" naaccrNum="1715" naaccrName="Subsq RX 4th Course BRM" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1785" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx4thCourseOth" naaccrNum="1716" naaccrName="Subsq RX 4th Course Oth" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1786" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx4thScopeLnSu" naaccrNum="1717" naaccrName="Subsq RX 4th--Scope LN Su" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1778" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx4thSurgOth" naaccrNum="1718" naaccrName="Subsq RX 4th--Surg Oth" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1779" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRx4thRegLnRem" naaccrNum="1719" naaccrName="Subsq RX 4th--Reg LN Rem" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1780" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="subsqRxReconstructDel" naaccrNum="1741" naaccrName="Subsq RX--Reconstruct Del" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1787" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="cancerStatus" naaccrNum="1770" naaccrName="Cancer Status" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2127" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="qualityOfSurvival" naaccrNum="1780" naaccrName="Quality of Survival" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2128" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="followUpSource" naaccrNum="1790" naaccrName="Follow-Up Source" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2129" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="followUpSourceCentral" naaccrNum="1791" naaccrName="Follow-up Source Central" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2278" length="2" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="nextFollowUpSource" naaccrNum="1800" naaccrName="Next Follow-Up Source" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2130" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="followUpContactCity" naaccrNum="1842" naaccrName="Follow-Up Contact--City" 
+			parentXMLElement="Tumor" dataType="string" startColumn="2208" length="50" 
+			sourceOfStandard="NAACCR6" />
+		<ItemDef naaccrId="followUpContactState" naaccrNum="1844" naaccrName="Follow-Up Contact--State" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="2258" length="2" 
+			sourceOfStandard="NAACCR6" />
+		<ItemDef naaccrId="followUpContactPostal" naaccrNum="1846" naaccrName="Follow-Up Contact--Postal" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2260" length="9" 
+			sourceOfStandard="NAACCR6" />
+		<ItemDef naaccrId="followupContactCountry" naaccrNum="1847" naaccrName="FollowUp Contact--Country" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="447" length="3" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="unusualFollowUpMethod" naaccrNum="1850" naaccrName="Unusual Follow-Up Method" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2290" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="recurrenceDate1st" naaccrNum="1860" naaccrName="Recurrence Date--1st" 
+			parentXMLElement="Tumor" dataType="date" startColumn="2196" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="recurrenceDate1stFlag" naaccrNum="1861" naaccrName="Recurrence Date--1st Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2204" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="recurrenceType1st" naaccrNum="1880" naaccrName="Recurrence Type--1st" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2206" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="primarySiteIcdO1" naaccrNum="1960" naaccrName="Site (73-91) ICD-O-1" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1909" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="morphologyIcdO1" naaccrNum="1970" naaccrName="Morph (73-91) ICD-O-1" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1913" length="6" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="histologyIcdO1" naaccrNum="1971" naaccrName="Histology (73-91) ICD-O-1" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1913" length="4" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="behaviorIcdO1" naaccrNum="1972" naaccrName="Behavior (73-91) ICD-O-1" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1917" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="gradeIcdO1" naaccrNum="1973" naaccrName="Grade (73-91) ICD-O-1" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1918" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="icdO2ConversionFlag" naaccrNum="1980" naaccrName="ICD-O-2 Conversion Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1919" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="overRideSsNodesPos" naaccrNum="1981" naaccrName="Over-ride SS/NodesPos" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1888" length="1" 
+			sourceOfStandard="NAACCR9" />
+		<ItemDef naaccrId="overRideSsTnmN" naaccrNum="1982" naaccrName="Over-ride SS/TNM-N" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1889" length="1" 
+			sourceOfStandard="NAACCR9" />
+		<ItemDef naaccrId="overRideSsTnmM" naaccrNum="1983" naaccrName="Over-ride SS/TNM-M" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1890" length="1" 
+			sourceOfStandard="NAACCR9" />
+		<ItemDef naaccrId="overRideAcsnClassSeq" naaccrNum="1985" naaccrName="Over-ride Acsn/Class/Seq" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1891" length="1" 
+			sourceOfStandard="NAACCR9" />
+		<ItemDef naaccrId="overRideHospSeqDxConf" naaccrNum="1986" naaccrName="Over-ride HospSeq/DxConf" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1892" length="1" 
+			sourceOfStandard="NAACCR9" />
+		<ItemDef naaccrId="overRideCocSiteType" naaccrNum="1987" naaccrName="Over-ride CoC-Site/Type" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1893" length="1" 
+			sourceOfStandard="NAACCR9" />
+		<ItemDef naaccrId="overRideHospSeqSite" naaccrNum="1988" naaccrName="Over-ride HospSeq/Site" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1894" length="1" 
+			sourceOfStandard="NAACCR9" />
+		<ItemDef naaccrId="overRideSiteTnmStgGrp" naaccrNum="1989" naaccrName="Over-ride Site/TNM-StgGrp" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1895" length="1" 
+			sourceOfStandard="NAACCR9" />
+		<ItemDef naaccrId="overRideAgeSiteMorph" naaccrNum="1990" naaccrName="Over-ride Age/Site/Morph" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1896" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="overRideSeqNoDxConf" naaccrNum="2000" naaccrName="Over-ride SeqNo/DxConf" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1897" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="overRideSiteLatSeqNo" naaccrNum="2010" naaccrName="Over-ride Site/Lat/SeqNo" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1898" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="overRideSurgDxConf" naaccrNum="2020" naaccrName="Over-ride Surg/DxConf" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1899" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="overRideSiteType" naaccrNum="2030" naaccrName="Over-ride Site/Type" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1900" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="overRideHistology" naaccrNum="2040" naaccrName="Over-ride Histology" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1901" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="overRideReportSource" naaccrNum="2050" naaccrName="Over-ride Report Source" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1902" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="overRideIllDefineSite" naaccrNum="2060" naaccrName="Over-ride Ill-define Site" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1903" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="overRideLeukLymphoma" naaccrNum="2070" naaccrName="Over-ride Leuk,  Lymphoma" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1904" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="overRideSiteBehavior" naaccrNum="2071" naaccrName="Over-ride Site/Behavior" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1905" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="overRideSiteEodDxDate" naaccrNum="2072" naaccrName="Over-ride Site/EOD/DX Dt" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1906" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="overRideSiteLatEod" naaccrNum="2073" naaccrName="Over-ride Site/Lat/EOD" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1907" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="overRideSiteLatMorph" naaccrNum="2074" naaccrName="Over-ride Site/Lat/Morph" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1908" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="crcChecksum" naaccrNum="2081" naaccrName="CRC CHECKSUM" 
+			parentXMLElement="Tumor" dataType="integer" startColumn="1920" length="10" 
+			sourceOfStandard="NAACCR6" />
+		<ItemDef naaccrId="dateCaseInitiated" naaccrNum="2085" naaccrName="Date Case Initiated" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1951" length="8" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="dateCaseCompleted" naaccrNum="2090" naaccrName="Date Case Completed" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1959" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dateCaseCompletedCoc" naaccrNum="2092" naaccrName="Date Case Completed--CoC" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1967" length="8" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="dateCaseLastChanged" naaccrNum="2100" naaccrName="Date Case Last Changed" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1975" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dateCaseReportExported" naaccrNum="2110" naaccrName="Date Case Report Exported" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1983" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="dateCaseReportReceived" naaccrNum="2111" naaccrName="Date Case Report Received" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1991" length="8" 
+			sourceOfStandard="NAACCR6" />
+		<ItemDef naaccrId="dateCaseReportLoaded" naaccrNum="2112" naaccrName="Date Case Report Loaded" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1999" length="8" 
+			sourceOfStandard="NAACCR6" />
+		<ItemDef naaccrId="dateTumorRecordAvailbl" naaccrNum="2113" naaccrName="Date Tumor Record Availbl" 
+			parentXMLElement="Tumor" dataType="date" startColumn="2007" length="8" 
+			sourceOfStandard="NAACCR6" />
+		<ItemDef naaccrId="icdO3ConversionFlag" naaccrNum="2116" naaccrName="ICD-O-3 Conversion Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2015" length="1" 
+			sourceOfStandard="NAACCR9" />
+		<ItemDef naaccrId="seerCodingSysCurrent" naaccrNum="2120" naaccrName="SEER Coding Sys--Current" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1930" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="seerCodingSysOriginal" naaccrNum="2130" naaccrName="SEER Coding Sys--Original" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1931" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="cocCodingSysCurrent" naaccrNum="2140" naaccrName="CoC Coding Sys--Current" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1932" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="cocCodingSysOriginal" naaccrNum="2150" naaccrName="CoC Coding Sys--Original" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1934" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="seerTypeOfFollowUp" naaccrNum="2180" naaccrName="SEER Type of Follow-Up" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1946" length="1" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="seerRecordNumber" naaccrNum="2190" naaccrName="SEER Record Number" 
+			parentXMLElement="Tumor" dataType="integer" startColumn="1947" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="diagnosticProc7387" naaccrNum="2200" naaccrName="Diagnostic Proc 73-87" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="1949" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="stateRequestorItems" naaccrNum="2220" naaccrName="State/Requestor Items" 
+			parentXMLElement="Tumor" dataType="" />
+		<ItemDef naaccrId="nameSpouseParent" naaccrNum="2290" naaccrName="Name--Spouse/Parent" 
+			parentXMLElement="Tumor" dataType="string" startColumn="3546" length="60" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="medicalRecordNumber" naaccrNum="2300" naaccrName="Medical Record Number" 
+			parentXMLElement="Tumor" dataType="string" startColumn="3606" length="11" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="militaryRecordNoSuffix" naaccrNum="2310" naaccrName="Military Record No Suffix" 
+			parentXMLElement="Tumor" dataType="code" startColumn="3617" length="2" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="addressAtDxStreetName" naaccrNum="2330" naaccrName="Addr at DX--No & Street" 
+			parentXMLElement="Tumor" dataType="string" startColumn="3628" length="60" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="addressAtDxSupplementl" naaccrNum="2335" naaccrName="Addr at DX--Supplementl" 
+			parentXMLElement="Tumor" dataType="string" startColumn="3688" length="60" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="latitude" naaccrNum="2352" naaccrName="Latitude" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4064" length="10" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="longitude" naaccrNum="2354" naaccrName="Longitude" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4074" length="11" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="followUpContactNoAndStreet" naaccrNum="2392" naaccrName="Follow-Up Contact--No&St" 
+			parentXMLElement="Tumor" dataType="string" startColumn="3944" length="60" 
+			sourceOfStandard="NAACCR6" />
+		<ItemDef naaccrId="followUpContactSuppl" naaccrNum="2393" naaccrName="Follow-Up Contact--Suppl" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4004" length="60" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="followUpContactName" naaccrNum="2394" naaccrName="Follow-Up Contact--Name" 
+			parentXMLElement="Tumor" dataType="string" startColumn="3884" length="60" 
+			sourceOfStandard="NAACCR6" />
+		<ItemDef naaccrId="institutionReferredFrom" naaccrNum="2410" naaccrName="Institution Referred From" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4315" length="10" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="institutionReferredFromNpi" naaccrNum="2415" naaccrName="NPI--Inst Referred From" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4305" length="10" 
+			sourceOfStandard="NAACCR111" />
+		<ItemDef naaccrId="institutionReferredTo" naaccrNum="2420" naaccrName="Institution Referred To" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4335" length="10" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="institutionReferredToNpi" naaccrNum="2425" naaccrName="NPI--Inst Referred To" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4325" length="10" 
+			sourceOfStandard="NAACCR111" />
+		<ItemDef naaccrId="followingRegistry" naaccrNum="2440" naaccrName="Following Registry" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4295" length="10" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="followingRegistryNpi" naaccrNum="2445" naaccrName="NPI--Following Registry" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4285" length="10" 
+			sourceOfStandard="NAACCR111" />
+		<ItemDef naaccrId="physicianManaging" naaccrNum="2460" naaccrName="Physician--Managing" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4405" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="physicianManagingNpi" naaccrNum="2465" naaccrName="NPI--Physician--Managing" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4395" length="10" 
+			sourceOfStandard="NAACCR111" />
+		<ItemDef naaccrId="physicianFollowUp" naaccrNum="2470" naaccrName="Physician--Follow-Up" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4423" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="physicianFollowUpNpi" naaccrNum="2475" naaccrName="NPI--Physician--Follow-Up" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4413" length="10" 
+			sourceOfStandard="NAACCR111" />
+		<ItemDef naaccrId="physicianPrimarySurg" naaccrNum="2480" naaccrName="Physician--Primary Surg" 
+			parentXMLElement="Tumor" dataType="code" startColumn="4441" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="physicianPrimarySurgNpi" naaccrNum="2485" naaccrName="NPI--Physician--Primary Surg" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4431" length="10" 
+			sourceOfStandard="NAACCR111" />
+		<ItemDef naaccrId="physician3" naaccrNum="2490" naaccrName="Physician 3" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4459" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="physician3Npi" naaccrNum="2495" naaccrName="NPI--Physician 3" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4449" length="10" 
+			sourceOfStandard="NAACCR111" />
+		<ItemDef naaccrId="physician4" naaccrNum="2500" naaccrName="Physician 4" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4477" length="8" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="physician4Npi" naaccrNum="2505" naaccrName="NPI--Physician 4" 
+			parentXMLElement="Tumor" dataType="integerWithZero" startColumn="4467" length="10" 
+			sourceOfStandard="NAACCR111" />
+		<ItemDef naaccrId="textDxProcPe" naaccrNum="2520" naaccrName="Text--DX Proc--PE" 
+			parentXMLElement="Tumor" dataType="string" startColumn="5565" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="textDxProcXRayScan" naaccrNum="2530" naaccrName="Text--DX Proc--X-ray/Scan" 
+			parentXMLElement="Tumor" dataType="string" startColumn="6565" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="textDxProcScopes" naaccrNum="2540" naaccrName="Text--DX Proc--Scopes" 
+			parentXMLElement="Tumor" dataType="string" startColumn="7565" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="textDxProcLabTests" naaccrNum="2550" naaccrName="Text--DX Proc--Lab Tests" 
+			parentXMLElement="Tumor" dataType="string" startColumn="8565" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="textDxProcOp" naaccrNum="2560" naaccrName="Text--DX Proc--Op" 
+			parentXMLElement="Tumor" dataType="string" startColumn="9565" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="textDxProcPath" naaccrNum="2570" naaccrName="Text--DX Proc--Path" 
+			parentXMLElement="Tumor" dataType="string" startColumn="10565" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="textPrimarySiteTitle" naaccrNum="2580" naaccrName="Text--Primary Site Title" 
+			parentXMLElement="Tumor" dataType="string" startColumn="11565" length="100" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="textHistologyTitle" naaccrNum="2590" naaccrName="Text--Histology Title" 
+			parentXMLElement="Tumor" dataType="string" startColumn="11665" length="100" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="textStaging" naaccrNum="2600" naaccrName="Text--Staging" 
+			parentXMLElement="Tumor" dataType="string" startColumn="11765" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxTextSurgery" naaccrNum="2610" naaccrName="RX Text--Surgery" 
+			parentXMLElement="Tumor" dataType="string" startColumn="12765" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxTextRadiationBeam" naaccrNum="2620" naaccrName="RX Text--Radiation (Beam)" 
+			parentXMLElement="Tumor" dataType="string" startColumn="13765" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxTextRadiationOther" naaccrNum="2630" naaccrName="RX Text--Radiation Other" 
+			parentXMLElement="Tumor" dataType="string" startColumn="14765" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxTextChemo" naaccrNum="2640" naaccrName="RX Text--Chemo" 
+			parentXMLElement="Tumor" dataType="string" startColumn="15765" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxTextHormone" naaccrNum="2650" naaccrName="RX Text--Hormone" 
+			parentXMLElement="Tumor" dataType="string" startColumn="16765" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxTextBrm" naaccrNum="2660" naaccrName="RX Text--BRM" 
+			parentXMLElement="Tumor" dataType="string" startColumn="17765" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="rxTextOther" naaccrNum="2670" naaccrName="RX Text--Other" 
+			parentXMLElement="Tumor" dataType="string" startColumn="18765" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="textRemarks" naaccrNum="2680" naaccrName="Text--Remarks" 
+			parentXMLElement="Tumor" dataType="string" startColumn="19765" length="1000" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="placeOfDiagnosis" naaccrNum="2690" naaccrName="Text--Place of Diagnosis" 
+			parentXMLElement="Tumor" dataType="string" startColumn="20765" length="60" 
+			sourceOfStandard="NAACCR51" />
+		<ItemDef naaccrId="csPreRxTumorSize" naaccrNum="2730" naaccrName="CS PreRx Tumor Size" 
+			parentXMLElement="Tumor" dataType="integer" startColumn="1078" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csPreRxExt" naaccrNum="2735" naaccrName="CS PreRx Extension" 
+			parentXMLElement="Tumor" dataType="integer" startColumn="1081" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csPreRxSizeExtEval" naaccrNum="2740" naaccrName="CS PreRx Tum Sz/Ext Eval" 
+			parentXMLElement="Tumor" dataType="integer" startColumn="1084" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csPreRxLymphNodes" naaccrNum="2750" naaccrName="CS PreRx Lymph Nodes" 
+			parentXMLElement="Tumor" dataType="integer" startColumn="1085" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csPreRxRegNodesEval" naaccrNum="2755" naaccrName="CS PreRx Reg Nodes Eval" 
+			parentXMLElement="Tumor" dataType="integer" startColumn="1088" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csPreRxMetsAtDx" naaccrNum="2760" naaccrName="CS PreRx Mets at DX" 
+			parentXMLElement="Tumor" dataType="integer" startColumn="1089" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csPreRxMetsEval" naaccrNum="2765" naaccrName="CS PreRx Mets Eval" 
+			parentXMLElement="Tumor" dataType="integer" startColumn="1091" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csPostRxTumorSize" naaccrNum="2770" naaccrName="CS PostRx Tumor Size" 
+			parentXMLElement="Tumor" dataType="integer" startColumn="1092" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csPostRxExt" naaccrNum="2775" naaccrName="CS PostRx Extension" 
+			parentXMLElement="Tumor" dataType="integer" startColumn="1095" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csPostRxLymphNodes" naaccrNum="2780" naaccrName="CS PostRx Lymph Nodes" 
+			parentXMLElement="Tumor" dataType="integer" startColumn="1098" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csPostRxMetsAtDx" naaccrNum="2785" naaccrName="CS PostRx Mets at DX" 
+			parentXMLElement="Tumor" dataType="integer" startColumn="1101" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csTumorSize" naaccrNum="2800" naaccrName="CS Tumor Size" 
+			parentXMLElement="Tumor" dataType="code" startColumn="985" length="3" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="csExtension" naaccrNum="2810" naaccrName="CS Extension" 
+			parentXMLElement="Tumor" dataType="code" startColumn="988" length="3" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="csTumorSizeExtEval" naaccrNum="2820" naaccrName="CS Tumor Size/Ext Eval" 
+			parentXMLElement="Tumor" dataType="code" startColumn="991" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="csLymphNodes" naaccrNum="2830" naaccrName="CS Lymph Nodes" 
+			parentXMLElement="Tumor" dataType="code" startColumn="992" length="3" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="csLymphNodesEval" naaccrNum="2840" naaccrName="CS Lymph Nodes Eval" 
+			parentXMLElement="Tumor" dataType="code" startColumn="995" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="csMetsAtDx" naaccrNum="2850" naaccrName="CS Mets at DX" 
+			parentXMLElement="Tumor" dataType="code" startColumn="996" length="2" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="csMetsAtDxBone" naaccrNum="2851" naaccrName="CS Mets at Dx-Bone" 
+			parentXMLElement="Tumor" dataType="code" startColumn="999" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csMetsAtDxBrain" naaccrNum="2852" naaccrName="CS Mets at Dx-Brain" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1000" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csMetsAtDxLiver" naaccrNum="2853" naaccrName="CS Mets at Dx-Liver" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1001" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csMetsAtDxLung" naaccrNum="2854" naaccrName="CS Mets at Dx-Lung" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1002" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csMetsEval" naaccrNum="2860" naaccrName="CS Mets Eval" 
+			parentXMLElement="Tumor" dataType="code" startColumn="998" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="csSiteSpecificFactor7" naaccrNum="2861" naaccrName="CS Site-Specific Factor 7" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1021" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor8" naaccrNum="2862" naaccrName="CS Site-Specific Factor 8" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1024" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor9" naaccrNum="2863" naaccrName="CS Site-Specific Factor 9" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1027" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor10" naaccrNum="2864" naaccrName="CS Site-Specific Factor10" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1030" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor11" naaccrNum="2865" naaccrName="CS Site-Specific Factor11" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1033" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor12" naaccrNum="2866" naaccrName="CS Site-Specific Factor12" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1036" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor13" naaccrNum="2867" naaccrName="CS Site-Specific Factor13" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1039" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor14" naaccrNum="2868" naaccrName="CS Site-Specific Factor14" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1042" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor15" naaccrNum="2869" naaccrName="CS Site-Specific Factor15" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1045" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor16" naaccrNum="2870" naaccrName="CS Site-Specific Factor16" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1048" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor17" naaccrNum="2871" naaccrName="CS Site-Specific Factor17" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1051" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor18" naaccrNum="2872" naaccrName="CS Site-Specific Factor18" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1054" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor19" naaccrNum="2873" naaccrName="CS Site-Specific Factor19" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1057" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor20" naaccrNum="2874" naaccrName="CS Site-Specific Factor20" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1060" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor21" naaccrNum="2875" naaccrName="CS Site-Specific Factor21" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1063" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor22" naaccrNum="2876" naaccrName="CS Site-Specific Factor22" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1066" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor23" naaccrNum="2877" naaccrName="CS Site-Specific Factor23" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1069" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor24" naaccrNum="2878" naaccrName="CS Site-Specific Factor24" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1072" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor25" naaccrNum="2879" naaccrName="CS Site-Specific Factor25" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1075" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="csSiteSpecificFactor1" naaccrNum="2880" naaccrName="CS Site-Specific Factor 1" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1003" length="3" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="csSiteSpecificFactor2" naaccrNum="2890" naaccrName="CS Site-Specific Factor 2" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1006" length="3" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="csSiteSpecificFactor3" naaccrNum="2900" naaccrName="CS Site-Specific Factor 3" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1009" length="3" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="csSiteSpecificFactor4" naaccrNum="2910" naaccrName="CS Site-Specific Factor 4" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1012" length="3" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="csSiteSpecificFactor5" naaccrNum="2920" naaccrName="CS Site-Specific Factor 5" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1015" length="3" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="csSiteSpecificFactor6" naaccrNum="2930" naaccrName="CS Site-Specific Factor 6" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1018" length="3" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="csVersionOriginal" naaccrNum="2935" naaccrName="CS Version Input Original" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="1167" length="6" 
+			sourceOfStandard="NAACCR101" />
+		<ItemDef naaccrId="csVersionDerived" naaccrNum="2936" naaccrName="CS Version Derived" 
+			parentXMLElement="Tumor" dataType="string" startColumn="1173" length="6" 
+			sourceOfStandard="NAACCR101" />
+		<ItemDef naaccrId="csVersionInputCurrent" naaccrNum="2937" naaccrName="CS Version Input Current" 
+			parentXMLElement="Tumor" dataType="alpha" startColumn="1161" length="6" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedAjcc6T" naaccrNum="2940" naaccrName="Derived AJCC-6 T" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1103" length="2" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="derivedAjcc6TDescriptor" naaccrNum="2950" naaccrName="Derived AJCC-6 T Descript" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1105" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="derivedAjcc6N" naaccrNum="2960" naaccrName="Derived AJCC-6 N" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1106" length="2" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="derivedAjcc6NDescriptor" naaccrNum="2970" naaccrName="Derived AJCC-6 N Descript" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1108" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="derivedAjcc6M" naaccrNum="2980" naaccrName="Derived AJCC-6 M" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1109" length="2" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="derivedAjcc6MDescriptor" naaccrNum="2990" naaccrName="Derived AJCC-6 M Descript" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1111" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="derivedAjcc6StageGroup" naaccrNum="3000" naaccrName="Derived AJCC-6 Stage Grp" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1112" length="2" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="derivedSs1977" naaccrNum="3010" naaccrName="Derived SS1977" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1155" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="derivedSs2000" naaccrNum="3020" naaccrName="Derived SS2000" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1156" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="derivedAjccFlag" naaccrNum="3030" naaccrName="Derived AJCC--Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1158" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="derivedSs1977Flag" naaccrNum="3040" naaccrName="Derived SS1977--Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1159" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="derivedSs2000Flag" naaccrNum="3050" naaccrName="Derived SS2000--Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1160" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="archiveFin" naaccrNum="3100" naaccrName="Archive FIN" 
+			parentXMLElement="Tumor" dataType="code" startColumn="721" length="10" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="archiveFinNpi" naaccrNum="3105" naaccrName="NPI--Archive FIN" 
+			parentXMLElement="Tumor" dataType="string" startColumn="711" length="10" 
+			sourceOfStandard="NAACCR111" />
+		<ItemDef naaccrId="comorbidComplication1" naaccrNum="3110" naaccrName="Comorbid/Complication 1" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1186" length="5" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="comorbidComplication2" naaccrNum="3120" naaccrName="Comorbid/Complication 2" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1191" length="5" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="comorbidComplication3" naaccrNum="3130" naaccrName="Comorbid/Complication 3" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1196" length="5" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="comorbidComplication4" naaccrNum="3140" naaccrName="Comorbid/Complication 4" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1201" length="5" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="comorbidComplication5" naaccrNum="3150" naaccrName="Comorbid/Complication 5" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1206" length="5" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="comorbidComplication6" naaccrNum="3160" naaccrName="Comorbid/Complication 6" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1211" length="5" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="comorbidComplication7" naaccrNum="3161" naaccrName="Comorbid/Complication 7" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1216" length="5" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="comorbidComplication8" naaccrNum="3162" naaccrName="Comorbid/Complication 8" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1221" length="5" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="comorbidComplication9" naaccrNum="3163" naaccrName="Comorbid/Complication 9" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1226" length="5" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="comorbidComplication10" naaccrNum="3164" naaccrName="Comorbid/Complication 10" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1231" length="5" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="icdRevisionComorbid" naaccrNum="3165" naaccrName="ICD Revision Comorbid" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1185" length="1" 
+			sourceOfStandard="NAACCR11" />
+		<ItemDef naaccrId="rxDateMostDefinSurg" naaccrNum="3170" naaccrName="RX Date Most Defin Surg" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1466" length="8" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="rxDateMostDefinSurgFlag" naaccrNum="3171" naaccrName="RX Date Most Defin Surg Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1474" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="rxDateSurgicalDisch" naaccrNum="3180" naaccrName="RX Date Surgical Disch" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1476" length="8" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="rxDateSurgicalDischFlag" naaccrNum="3181" naaccrName="RX Date Surgical Disch Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1484" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="readmSameHosp30Days" naaccrNum="3190" naaccrName="Readm Same Hosp 30 Days" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1619" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="radBoostRxModality" naaccrNum="3200" naaccrName="Rad--Boost RX Modality" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1609" length="2" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="radBoostDoseCgy" naaccrNum="3210" naaccrName="Rad--Boost Dose cGy" 
+			parentXMLElement="Tumor" dataType="string" startColumn="1611" length="5" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="rxDateRadiationEnded" naaccrNum="3220" naaccrName="RX Date Radiation Ended" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1496" length="8" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="rxDateRadiationEndedFlag" naaccrNum="3221" naaccrName="RX Date Radiation Ended Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1504" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="rxDateSystemic" naaccrNum="3230" naaccrName="RX Date Systemic" 
+			parentXMLElement="Tumor" dataType="date" startColumn="1506" length="8" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="rxDateSystemicFlag" naaccrNum="3231" naaccrName="RX Date Systemic Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1514" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="rxSummTransplntEndocr" naaccrNum="3250" naaccrName="RX Summ--Transplnt/Endocr" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1583" length="2" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="rxSummPalliativeProc" naaccrNum="3270" naaccrName="RX Summ--Palliative Proc" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1579" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="rxHospPalliativeProc" naaccrNum="3280" naaccrName="RX Hosp--Palliative Proc" 
+			parentXMLElement="Tumor" dataType="code" startColumn="799" length="1" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="ruralUrbanContinuum1993" naaccrNum="3300" naaccrName="RuralUrban Continuum 1993" 
+			parentXMLElement="Tumor" dataType="code" startColumn="424" length="2" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="ruralUrbanContinuum2003" naaccrNum="3310" naaccrName="RuralUrban Continuum 2003" 
+			parentXMLElement="Tumor" dataType="code" startColumn="426" length="2" 
+			sourceOfStandard="NAACCR10" />
+		<ItemDef naaccrId="derivedAjcc7T" naaccrNum="3400" naaccrName="Derived AJCC-7 T" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1114" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedAjcc7TDescriptor" naaccrNum="3402" naaccrName="Derived AJCC-7 T Descript" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1117" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedAjcc7N" naaccrNum="3410" naaccrName="Derived AJCC-7 N" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1118" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedAjcc7NDescriptor" naaccrNum="3412" naaccrName="Derived AJCC-7 N Descript" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1121" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedAjcc7M" naaccrNum="3420" naaccrName="Derived AJCC-7 M" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1122" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedAjcc7MDescriptor" naaccrNum="3422" naaccrName="Derived AJCC-7 M Descript" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1125" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedAjcc7StageGroup" naaccrNum="3430" naaccrName="Derived AJCC-7 Stage Grp" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1126" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedPreRx7T" naaccrNum="3440" naaccrName="Derived PreRx-7 T" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1129" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedPreRx7TDescriptor" naaccrNum="3442" naaccrName="Derived PreRx-7 T Descrip" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1132" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedPreRx7N" naaccrNum="3450" naaccrName="Derived PreRx-7 N" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1133" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedPreRx7NDescriptor" naaccrNum="3452" naaccrName="Derived PreRx-7 N Descrip" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1136" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedPreRx7M" naaccrNum="3460" naaccrName="Derived PreRx-7 M" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1137" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedPreRx7MDescriptor" naaccrNum="3462" naaccrName="Derived PreRx-7 M Descrip" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1140" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedPreRx7StageGroup" naaccrNum="3470" naaccrName="Derived PreRx-7 Stage Grp" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1141" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedPostRx7T" naaccrNum="3480" naaccrName="Derived PostRx-7 T" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1144" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedPostRx7N" naaccrNum="3482" naaccrName="Derived PostRx-7 N" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1147" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedPostRx7M" naaccrNum="3490" naaccrName="Derived PostRx-7 M" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1150" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedPostRx7StageGroup" naaccrNum="3492" naaccrName="Derived PostRx-7 Stge Grp" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1152" length="3" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="derivedNeoAdJuvRxFlag" naaccrNum="3600" naaccrName="Derived Neoadjuv Rx Flag" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1157" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="seerSiteSpecificFactor1" naaccrNum="3700" naaccrName="SEER Site-Specific Fact 1" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1179" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="seerSiteSpecificFactor2" naaccrNum="3702" naaccrName="SEER Site-Specific Fact 2" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1180" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="seerSiteSpecificFactor3" naaccrNum="3704" naaccrName="SEER Site-Specific Fact 3" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1181" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="seerSiteSpecificFactor4" naaccrNum="3706" naaccrName="SEER Site-Specific Fact 4" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1182" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="seerSiteSpecificFactor5" naaccrNum="3708" naaccrName="SEER Site-Specific Fact 5" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1183" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="seerSiteSpecificFactor6" naaccrNum="3710" naaccrName="SEER Site-Specific Fact 6" 
+			parentXMLElement="Tumor" dataType="code" startColumn="1184" length="1" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="npcrSpecificField" naaccrNum="3720" naaccrName="NPCR Specific Field" 
+			parentXMLElement="Tumor" dataType="string" startColumn="1326" length="55" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="overrideCs1" naaccrNum="3750" naaccrName="Over-ride CS 1" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2016" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs2" naaccrNum="3751" naaccrName="Over-ride CS 2" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2017" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs3" naaccrNum="3752" naaccrName="Over-ride CS 3" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2018" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs4" naaccrNum="3753" naaccrName="Over-ride CS 4" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2019" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs5" naaccrNum="3754" naaccrName="Over-ride CS 5" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2020" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs6" naaccrNum="3755" naaccrName="Over-ride CS 6" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2021" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs7" naaccrNum="3756" naaccrName="Over-ride CS 7" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2022" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs8" naaccrNum="3757" naaccrName="Over-ride CS 8" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2023" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs9" naaccrNum="3758" naaccrName="Over-ride CS 9" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2024" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs10" naaccrNum="3759" naaccrName="Over-ride CS 10" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2025" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs11" naaccrNum="3760" naaccrName="Over-ride CS 11" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2026" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs12" naaccrNum="3761" naaccrName="Over-ride CS 12" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2027" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs13" naaccrNum="3762" naaccrName="Over-ride CS 13" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2028" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs14" naaccrNum="3763" naaccrName="Over-ride CS 14" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2029" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs15" naaccrNum="3764" naaccrName="Over-ride CS 15" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2030" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs16" naaccrNum="3765" naaccrName="Over-ride CS 16" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2031" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs17" naaccrNum="3766" naaccrName="Over-ride CS 17" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2032" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs18" naaccrNum="3767" naaccrName="Over-ride CS 18" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2033" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs19" naaccrNum="3768" naaccrName="Over-ride CS 19" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2034" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="overrideCs20" naaccrNum="3769" naaccrName="Over-ride CS 20" 
+			parentXMLElement="Tumor" dataType="code" startColumn="2035" length="1" 
+			sourceOfStandard="NAACCR121" />
+		<ItemDef naaccrId="secondaryDiagnosis1" naaccrNum="3780" naaccrName="Secondary Diagnosis 1" 
+			parentXMLElement="Tumor" regexValidation="^[A-Z]\d{3}$" startColumn="1236" length="7" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="secondaryDiagnosis2" naaccrNum="3782" naaccrName="Secondary Diagnosis 2" 
+			parentXMLElement="Tumor" regexValidation="^[A-Z]\d{3}$" startColumn="1243" length="7" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="secondaryDiagnosis3" naaccrNum="3784" naaccrName="Secondary Diagnosis 3" 
+			parentXMLElement="Tumor" regexValidation="^[A-Z]\d{3}$" startColumn="1250" length="7" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="secondaryDiagnosis4" naaccrNum="3786" naaccrName="Secondary Diagnosis 4" 
+			parentXMLElement="Tumor" regexValidation="^[A-Z]\d{3}$" startColumn="1257" length="7" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="secondaryDiagnosis5" naaccrNum="3788" naaccrName="Secondary Diagnosis 5" 
+			parentXMLElement="Tumor" regexValidation="^[A-Z]\d{3}$" startColumn="1264" length="7" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="secondaryDiagnosis6" naaccrNum="3790" naaccrName="Secondary Diagnosis 6" 
+			parentXMLElement="Tumor" regexValidation="^[A-Z]\d{3}$" startColumn="1271" length="7" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="secondaryDiagnosis7" naaccrNum="3792" naaccrName="Secondary Diagnosis 7" 
+			parentXMLElement="Tumor" regexValidation="^[A-Z]\d{3}$" startColumn="1278" length="7" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="secondaryDiagnosis8" naaccrNum="3794" naaccrName="Secondary Diagnosis 8" 
+			parentXMLElement="Tumor" regexValidation="^[A-Z]\d{3}$" startColumn="1285" length="7" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="secondaryDiagnosis9" naaccrNum="3796" naaccrName="Secondary Diagnosis 9" 
+			parentXMLElement="Tumor" regexValidation="^[A-Z]\d{3}$" startColumn="1292" length="7" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="secondaryDiagnosis10" naaccrNum="3798" naaccrName="Secondary Diagnosis 10" 
+			parentXMLElement="Tumor" regexValidation="^[A-Z]\d{3}$" startColumn="1299" length="7" 
+			sourceOfStandard="NAACCR13" />
+		<ItemDef naaccrId="pathReportFacId1" naaccrNum="7010" naaccrName="Path Reporting Fac ID 1" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4535" length="25" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportFacId2" naaccrNum="7011" naaccrName="Path Reporting Fac ID 2" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4641" length="25" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportFacId3" naaccrNum="7012" naaccrName="Path Reporting Fac ID 3" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4747" length="25" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportFacId4" naaccrNum="7013" naaccrName="Path Reporting Fac ID 4" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4853" length="25" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportFacId5" naaccrNum="7014" naaccrName="Path Reporting Fac ID 5" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4959" length="25" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportNumber1" naaccrNum="7090" naaccrName="Path Report Number 1" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4560" length="20" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportNumber2" naaccrNum="7091" naaccrName="Path Report Number 2" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4666" length="20" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportNumber3" naaccrNum="7092" naaccrName="Path Report Number 3" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4772" length="20" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportNumber4" naaccrNum="7093" naaccrName="Path Report Number 4" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4878" length="20" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportNumber5" naaccrNum="7094" naaccrName="Path Report Number 5" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4984" length="20" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathOrderPhysLicNo1" naaccrNum="7100" naaccrName="Path Order Phys Lic No 1" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4621" length="20" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathOrderPhysLicNo2" naaccrNum="7101" naaccrName="Path Order Phys Lic No 2" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4727" length="20" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathOrderPhysLicNo3" naaccrNum="7102" naaccrName="Path Order Phys Lic No 3" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4833" length="20" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathOrderPhysLicNo4" naaccrNum="7103" naaccrName="Path Order Phys Lic No 4" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4939" length="20" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathOrderPhysLicNo5" naaccrNum="7104" naaccrName="Path Order Phys Lic No 5" 
+			parentXMLElement="Tumor" dataType="string" startColumn="5045" length="20" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathOrderingFacNo1" naaccrNum="7190" naaccrName="Path Ordering Fac No 1" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4596" length="25" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathOrderingFacNo2" naaccrNum="7191" naaccrName="Path Ordering Fac No 2" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4702" length="25" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathOrderingFacNo3" naaccrNum="7192" naaccrName="Path Ordering Fac No 3" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4808" length="25" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathOrderingFacNo4" naaccrNum="7193" naaccrName="Path Ordering Fac No 4" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4914" length="25" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathOrderingFacNo5" naaccrNum="7194" naaccrName="Path Ordering Fac No 5" 
+			parentXMLElement="Tumor" dataType="string" startColumn="5020" length="25" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathDateSpecCollect1" naaccrNum="7320" naaccrName="Path Date Spec Collect 1" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4580" length="14" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathDateSpecCollect2" naaccrNum="7321" naaccrName="Path Date Spec Collect 2" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4686" length="14" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathDateSpecCollect3" naaccrNum="7322" naaccrName="Path Date Spec Collect 3" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4792" length="14" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathDateSpecCollect4" naaccrNum="7323" naaccrName="Path Date Spec Collect 4" 
+			parentXMLElement="Tumor" dataType="string" startColumn="4898" length="14" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathDateSpecCollect5" naaccrNum="7324" naaccrName="Path Date Spec Collect 5" 
+			parentXMLElement="Tumor" dataType="string" startColumn="5004" length="14" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportType1" naaccrNum="7480" naaccrName="Path Report Type 1" 
+			parentXMLElement="Tumor" dataType="code" startColumn="4594" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportType2" naaccrNum="7481" naaccrName="Path Report Type 2" 
+			parentXMLElement="Tumor" dataType="code" startColumn="4700" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportType3" naaccrNum="7482" naaccrName="Path Report Type 3" 
+			parentXMLElement="Tumor" dataType="code" startColumn="4806" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportType4" naaccrNum="7483" naaccrName="Path Report Type 4" 
+			parentXMLElement="Tumor" dataType="code" startColumn="4912" length="2" 
+			sourceOfStandard="NAACCR12" />
+		<ItemDef naaccrId="pathReportType5" naaccrNum="7484" naaccrName="Path Report Type 5" 
+			parentXMLElement="Tumor" dataType="code" startColumn="5018" length="2" 
+			sourceOfStandard="NAACCR12" />
+	</ItemDefs>
+	</NaacrDictionary>
+<NAACCRDataExchange/>
