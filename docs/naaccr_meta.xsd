@@ -9,7 +9,7 @@
 		<xsd:attribute name="dictionaryUri" use="required" type="xsd:anyURI"/>
 		<xsd:attribute name="naaccrVersion" use="optional" />
 		<xsd:attribute name="description" use="optional" />
-		<xsd:anyAttribute />
+		<xsd:anyAttribute processContents="lax" />
 	</xsd:complexType>
 </xsd:element>
 
@@ -19,7 +19,7 @@
 			<xsd:element ref="tns:ItemDef"  minOccurs="0" maxOccurs="unbounded" />
 			<xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
 		</xsd:sequence>
-		<xsd:anyAttribute />
+		<xsd:anyAttribute processContents="lax" />
 	</xsd:complexType>
 </xsd:element>
 
@@ -60,7 +60,7 @@
 		<xsd:attribute name="length" use="required" type="xsd:integer" />
 		<xsd:attribute name="sourceOfStandard" use="optional" type="xsd:string" />
 		<xsd:attribute name="recordTypes" use="optional" type="xsd:string" />
-		<xsd:anyAttribute />
+		<xsd:anyAttribute processContents="lax" />
 	</xsd:complexType>
 </xsd:element>
 

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<NaaccrDictionary xmlns="http://naaccr.org/naaccrxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://naaccr.org/naaccrxml/naaccr_meta.xsd" 
+	dictionaryUri="http://naaccr.org/naaccrxml/Extension.xml" description="Example of extension" >
+	<ItemDefs>
+		<ItemDef naaccrId="screeningDate" naaccrNum="510" naaccrName="Screening Date" 
+			parentXmlElement="Tumor" dataType="date" startColumn="313" length="8" 
+			sourceOfStandard="NAACCR51" recordTypes="A,M,C,I" isRetired="true" />
+		<ItemDef naaccrId="screeningResult" naaccrNum="520" naaccrName="Screening Result" 
+			parentXmlElement="NaaccrData" dataType="code" startColumn="321" length="1" 
+			sourceOfStandard="NAACCR51" recordTypes="A,M,C,I" isRetired="true">
+			<ValidValue code="0" description="Within Normal Limits" />
+			<ValidValue code="1" description="Abnormal, not suggestive of cancer" />
+			<ValidValue code="2" description="Abnormal, suggestive of cancer" />
+			<ValidValue code="3" description="Equivocal, no followup necessary" />
+			<ValidValue code="4" description="Equivocal, evaluation recommended" />
+			<ValidValue code="8" description="Not applicable" isMissing="true" >
+This code is used when a screening program did not exist prior to the date of diagnosis.
+			</ValidValue>
+			<ValidValue code="9" description="Unknown, result not specified" isMissing="true" />
+		</ItemDef>	
+	</ItemDefs>
+</NaaccrDictionary>
