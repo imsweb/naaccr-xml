@@ -14,9 +14,9 @@
 			<ValidValue code="3" description="Equivocal, no followup necessary" />
 			<ValidValue code="4" description="Equivocal, evaluation recommended" />
 			<ValidValue code="8" description="Not applicable" isMissing="true" >
-This code is used when a screening program did not exist prior to the date of diagnosis.
+This code is used <B>only</B> when a screening program did not exist prior to the date of diagnosis.
 			</ValidValue>
 			<ValidValue code="9" description="Unknown, result not specified" isMissing="true" />
 		</ItemDef>	
 	</ItemDefs>
-</NaaccrDictionary>
+</NaaccrDictionary >
