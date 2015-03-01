@@ -70,10 +70,6 @@ public class NaaccrDictionaryUtils {
                 item.setLength(Integer.valueOf(line[2]));
                 if (line.length > 3 && line[3] != null && !line[3].isEmpty())
                     item.setNaaccrName(line[3]);
-                if (line.length > 4 && line[4] != null && !line[4].isEmpty())
-                    item.setIsGroup("yes".equals(line[4].toLowerCase()) || "true".equals(line[4].toLowerCase()));
-                if (line.length > 5 && line[5] != null && !line[5].isEmpty())
-                    item.setGroupNaaccrId(line[5]);
                 if (line.length > 6 && line[6] != null && !line[6].isEmpty())
                     item.setRecordTypes(line[6]);
                 if (line.length > 7 && line[7] != null && !line[7].isEmpty())
@@ -84,14 +80,8 @@ public class NaaccrDictionaryUtils {
                     item.setRegexValidation(line[9]);
                 if (line.length > 10 && line[10] != null && !line[10].isEmpty())
                     item.setDataType(line[10]);
-                if (line.length > 11 && line[11] != null && !line[11].isEmpty())
-                    item.setSection(line[11]);
                 if (line.length > 12 && line[12] != null && !line[12].isEmpty())
                     item.setSourceOfStandard(line[12]);
-                if (line.length > 13 && line[13] != null && !line[13].isEmpty())
-                    item.setRetiredVersion(line[13]);
-                if (line.length > 14 && line[14] != null && !line[14].isEmpty())
-                    item.setImplementedVersion(line[14]);
                 
                 if (item.getRecordTypes() == null)
                     item.setRecordTypes("A,M,C,I");

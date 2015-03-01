@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.naaccr.xml.entity.NaaccrDataExchange;
+import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
@@ -41,7 +41,7 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 public class NaaccrXmlUtils {
 
     // structure tags in the XML
-    public static final String NAACCR_XML_TAG_ROOT = "NaaccrDataExchange";
+    public static final String NAACCR_XML_TAG_ROOT = "NaaccrData";
     public static final String NAACCR_XML_TAG_PATIENT = "Patient";
     public static final String NAACCR_XML_TAG_TUMOR = "Tumor";
     public static final String NAACCR_XML_TAG_ITEM = "Item";
@@ -218,7 +218,7 @@ public class NaaccrXmlUtils {
      * @return a <code>NaaccrDataExchange</code> object, never null
      * @throws IOException
      */
-    public static NaaccrDataExchange readXmlFile(File xmlFile, String format, NaaccrXmlOptions options, NaaccrDictionary nonStandardDictionary) throws IOException {
+    public static NaaccrData readXmlFile(File xmlFile, String format, NaaccrXmlOptions options, NaaccrDictionary nonStandardDictionary) throws IOException {
         if (xmlFile == null)
             throw new IOException("Source XML file is required");
         if (!xmlFile.exists())
@@ -236,9 +236,9 @@ public class NaaccrXmlUtils {
             options = new NaaccrXmlOptions();
 
         // let XStream read the data
-        NaaccrDataExchange data;
+        NaaccrData data;
         try (Reader reader = createReader(xmlFile)) {
-            data = (NaaccrDataExchange)getStandardXStream(dictionary, options).fromXML(reader);
+            data = (NaaccrData)getStandardXStream(dictionary, options).fromXML(reader);
         }
 
         return data;
@@ -255,7 +255,7 @@ public class NaaccrXmlUtils {
      * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
      * @throws IOException
      */
-    public static void writeXmlFile(NaaccrDataExchange data, File xmlFile, String format, NaaccrXmlOptions options, NaaccrDictionary nonStandardDictionary) throws IOException {
+    public static void writeXmlFile(NaaccrData data, File xmlFile, String format, NaaccrXmlOptions options, NaaccrDictionary nonStandardDictionary) throws IOException {
         if (data == null)
             throw new IOException("Data is required");
         if (format == null)
@@ -420,13 +420,13 @@ public class NaaccrXmlUtils {
         XStream xstream = new XStream(driver);
 
         // tell XStream how to read/write our main entities
-        xstream.alias(NAACCR_XML_TAG_ROOT, NaaccrDataExchange.class);
+        xstream.alias(NAACCR_XML_TAG_ROOT, NaaccrData.class);
         xstream.alias(NAACCR_XML_TAG_PATIENT, Patient.class);
         //xstream.alias(NAACCR_XML_TAG_TUMOR, Tumor.class);
         //xstream.alias(NAACCR_XML_TAG_ITEM, Item.class);
 
         // all collections should be wrap into collection tags, but it's nicer to omit them in the XML; we have to tell XStream though
-        xstream.addImplicitCollection(NaaccrDataExchange.class, "patients", Patient.class);
+        xstream.addImplicitCollection(NaaccrData.class, "patients", Patient.class);
         //xstream.addImplicitCollection(Patient.class, "items", Item.class);
         //xstream.addImplicitCollection(Patient.class, "tumors", Tumor.class);
         //xstream.addImplicitCollection(Tumor.class, "items", Item.class);

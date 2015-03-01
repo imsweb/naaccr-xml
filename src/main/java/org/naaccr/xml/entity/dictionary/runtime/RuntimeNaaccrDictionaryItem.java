@@ -3,10 +3,8 @@
  */
 package org.naaccr.xml.entity.dictionary.runtime;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -29,10 +27,6 @@ public class RuntimeNaaccrDictionaryItem {
     private Pattern regexValidation;
 
     private String dataType;
-
-    private String groupNaaccrId;
-    
-    private List<RuntimeNaaccrDictionaryItem> subItems;
     
     public RuntimeNaaccrDictionaryItem(NaaccrDictionaryItem item) {
         naaccrId = item.getNaaccrId();
@@ -46,8 +40,6 @@ public class RuntimeNaaccrDictionaryItem {
         if (item.getRegexValidation() != null)
             regexValidation = Pattern.compile(item.getRegexValidation());
         dataType = item.getDataType();
-        groupNaaccrId = item.getGroupNaaccrId();
-        subItems = new ArrayList<>();
     }
 
     public String getNaaccrId() {
@@ -108,18 +100,6 @@ public class RuntimeNaaccrDictionaryItem {
 
     public void setDataType(String val) {
         dataType = val;
-    }
-
-    public String getGroupNaaccrId() {
-        return groupNaaccrId;
-    }
-
-    public void setGroupNaaccrId(String val) {
-        groupNaaccrId = val;
-    }
-
-    public List<RuntimeNaaccrDictionaryItem> getSubItems() {
-        return subItems;
     }
 
 }

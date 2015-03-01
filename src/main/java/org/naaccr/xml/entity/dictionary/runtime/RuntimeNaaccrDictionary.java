@@ -31,23 +31,15 @@ public class RuntimeNaaccrDictionary {
 
         Map<String, RuntimeNaaccrDictionaryItem> runtimeItems = new HashMap<>();
 
-        // we have to do this in two passes because any child could reference any parent, so all parents must be read first...
         for (NaaccrDictionaryItem item : standardDictionary.getItems())
             runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
-        for (NaaccrDictionaryItem item : standardDictionary.getItems())
-            if (item.getGroupNaaccrId() != null)
-                runtimeItems.get(item.getGroupNaaccrId()).getSubItems().add(new RuntimeNaaccrDictionaryItem(item));
         
         // TODO a user-defined field should never have the same id or number as a standard item; there is all kind of validation we should be doing here...
         // TODO define the rules for user-defined items to override standard items...
         
-        if (userDictionary != null) {
+        if (userDictionary != null)
             for (NaaccrDictionaryItem item : userDictionary.getItems())
                 runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
-            for (NaaccrDictionaryItem item : userDictionary.getItems())
-                if (item.getGroupNaaccrId() != null)
-                    runtimeItems.get(item.getGroupNaaccrId()).getSubItems().add(new RuntimeNaaccrDictionaryItem(item));
-        }
         
         // now we are ready to assign the fields
         items = new ArrayList<>(runtimeItems.values());
@@ -62,10 +54,6 @@ public class RuntimeNaaccrDictionary {
 
         // sort the fields
         Collections.sort(items, comparator);
-        
-        // don't forget to sort the subfields
-        for (RuntimeNaaccrDictionaryItem item : items)
-            Collections.sort(item.getSubItems(), comparator);
     }
 
     public NaaccrFormat getFormat() {

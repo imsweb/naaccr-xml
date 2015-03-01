@@ -90,7 +90,7 @@ public class Standalone {
         private JFileChooser _fileChooser;
 
         public StandaloneFrame() {
-            this.setTitle("NAACCR XML Utility v0.3");
+            this.setTitle("NAACCR XML Utility v0.4");
             this.setPreferredSize(new Dimension(1000, 700));
             this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 

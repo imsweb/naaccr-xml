@@ -6,7 +6,7 @@ package org.naaccr.xml.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NaaccrDataExchange {
+public class NaaccrData {
 
     private String naaccrVersion;
     

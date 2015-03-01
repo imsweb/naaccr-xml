@@ -15,8 +15,6 @@ public class NaaccrDictionaryItem {
 
     private Integer length;
 
-    private String section;
-
     private String recordTypes;
 
     private String sourceOfStandard;
@@ -26,18 +24,6 @@ public class NaaccrDictionaryItem {
     private String dataType;
 
     private String regexValidation;
-
-    private String groupNaaccrId;
-
-    private Boolean isGroup;
-
-    private String retiredVersion;
-
-    private String implementedVersion;
-    
-    public NaaccrDictionaryItem() {
-        isGroup = false;
-    }
 
     public String getNaaccrId() {
         return naaccrId;
@@ -79,14 +65,6 @@ public class NaaccrDictionaryItem {
         length = val;
     }
 
-    public String getSection() {
-        return section;
-    }
-
-    public void setSection(String val) {
-        section = val;
-    }
-
     public String getRecordTypes() {
         return recordTypes;
     }
@@ -125,37 +103,5 @@ public class NaaccrDictionaryItem {
 
     public void setRegexValidation(String val) {
         regexValidation = val;
-    }
-
-    public String getGroupNaaccrId() {
-        return groupNaaccrId;
-    }
-
-    public void setGroupNaaccrId(String val) {
-        groupNaaccrId = val;
-    }
-
-    public Boolean getIsGroup() {
-        return isGroup;
-    }
-
-    public void setIsGroup(Boolean val) {
-        this.isGroup = val;
-    }
-
-    public String getRetiredVersion() {
-        return retiredVersion;
-    }
-
-    public void setRetiredVersion(String val) {
-        this.retiredVersion = val;
-    }
-
-    public String getImplementedVersion() {
-        return implementedVersion;
-    }
-
-    public void setImplementedVersion(String val) {
-        this.implementedVersion = val;
     }
 }

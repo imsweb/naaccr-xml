@@ -176,8 +176,7 @@ public class NaaccrPatientConverter implements Converter {
             // value should be valid
             if (item.getValue() != null) {
                 if (item.getValue().length() > itemDef.getLength())
-                    addError(entity, lineNumber, currentPath, "value too long, expected at most " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef, item.getValue
-                            ());
+                    addError(entity, lineNumber, currentPath, "value too long, expected at most " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef, item.getValue());
                 else if (exactLengthRequired(itemDef.getDataType()) && item.getValue().length() != itemDef.getLength())
                     addError(entity, lineNumber, currentPath, "invalid value, expected exactly " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef, item.getValue());
                 else if (!NaaccrXmlUtils.NAACCR_DATA_TYPES_REGEX.get(itemDef.getDataType()).matcher(item.getValue()).matches())
