@@ -19,6 +19,7 @@ Notes from the in-person meeting February 23-24 2015 in Atlanta.
 
 5. For now, the items provided in the user-defined dictionary have to provide a start column and have to fall either
    in the state req items or one of the reserved gaps. That will ensure full compatibility with flat file in version 1.
+   [post meeting: the NPCR field should also fall in this "can override" category of fields]
 
 6. The default user-defined dictionary will be used as a starting point, a template. If only a part of a field is
    provided, the rest of the field will be ignored when reading/writing. That means if a user only
@@ -33,7 +34,7 @@ Notes from the in-person meeting February 23-24 2015 in Atlanta.
    match between the data and the metadata. The naaccrVersion is required. the description is optional.
 
 8. The data structure of the data will be
-     <NaaccrDataExchange dictionaryUri="" userDictionaryUri="" recordType="" timeGenerated="">
+     <NaaccrDataExchange baseDictionaryUri="" userDictionaryUri="" recordType="" timeGenerated="">
          <Item...>
          <Patient>
              <item...>
@@ -42,6 +43,8 @@ Notes from the in-person meeting February 23-24 2015 in Atlanta.
    The dictionaryUri is required, the userDictionaryUri is optional, the recordType and timeGenerated are required.
    The XSD will allow "any" attributes in addition to the ones we defined; the library will provide a way to
    extract all those attributes without reading the entire file.
+   [post meeting: according to these notes, the attribute was going to be "dictionaryUri", but that was changed 
+   to "baseDicionsaryUri"; the root tag was also chagned from "NaaccrDataExchange" to just "DataExchange"]
 
 9. In the dictionary, both naaccrId and naaccrNum are required. In the data, naaccrId is required and naaccrNum is
    optional. This might be re-visited if file size becomes an issue. That means the library will only use
@@ -58,7 +61,7 @@ Notes from the in-person meeting February 23-24 2015 in Atlanta.
 12. Both dictionary and data will need a "dictionaryStructureVersion" and "dataStructureVersion" but we will add those
     when we actually need to increase the structure version; they are not needed for version 1.
 
-13. We will allow items outside de Patient tags (so under the NaaccrDataExchange one). The library will provide a way
+13. We will allow items outside the Patient tags (so under the DataExchange one). The library will provide a way
     to return them on demand.
 
 14. We talked about adding a link to the parent in the data entities, so a Tumor object would be able to access the
@@ -79,5 +82,8 @@ Notes from the in-person meeting February 23-24 2015 in Atlanta.
 
 17. Decisions were made about what we are going to present at the NAACCR conference; Rich took some good notes, so I
     am not going to duplicate that here...
+    
+18. Post meeting: the extensions will go after the items, but before the complex entities (Patient for the NaaccrData 
+    level and Tumor for the Patient level).
 
 
