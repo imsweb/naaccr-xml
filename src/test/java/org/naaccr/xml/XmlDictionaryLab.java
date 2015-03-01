@@ -82,14 +82,16 @@ public class XmlDictionaryLab {
                 if (item == null)
                     return false;
 
-                if (item.getImplementedVersion() != null)
-                    return "implementedVersion".equals(attribute);
-                if (item.getRetiredVersion() != null)
-                    return "retiredVersion".equals(attribute);
-                if (item.getIsGroup() != null && Boolean.TRUE.equals(item.getIsGroup()))
-                    return "isGroup".equals(attribute);
-                if (item.getGroupNaaccrId() != null)
-                    return "groupNaaccrId".equals(attribute);
+                // TODO FPD review this...
+                
+                //if (item.getImplementedVersion() != null)
+                //    return "implementedVersion".equals(attribute);
+                //if (item.getRetiredVersion() != null)
+                //    return "retiredVersion".equals(attribute);
+                //if (item.getIsGroup() != null && Boolean.TRUE.equals(item.getIsGroup()))
+                //    return "isGroup".equals(attribute);
+                //if (item.getGroupNaaccrId() != null)
+                //    return "groupNaaccrId".equals(attribute);
                 if (item.getRegexValidation() != null)
                     return "regexValidation".equals(attribute);
                 if (item.getDataType() != null)
