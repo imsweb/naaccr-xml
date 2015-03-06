@@ -22,6 +22,7 @@ public class NaaccrPatientConverter implements Converter {
 
     private RuntimeNaaccrDictionary _dictionary;
 
+    // TODO finish implementing the options once the rest is finalized...
     private NaaccrXmlOptions _options;
 
     private XmlPullParser _parser;
@@ -214,12 +215,9 @@ public class NaaccrPatientConverter implements Converter {
     }
 
     protected boolean exactLengthRequired(String type) {
-        boolean result = NaaccrXmlUtils.NAACCR_DATA_TYPE_CODE.equals(type);
-        result |= NaaccrXmlUtils.NAACCR_DATA_TYPE_CODE_WITH_BLANK.equals(type);
-        result |= NaaccrXmlUtils.NAACCR_DATA_TYPE_ALPHA.equals(type);
-        result |= NaaccrXmlUtils.NAACCR_DATA_TYPE_ALPHA_WITH_BLANK.equals(type);
-        result |= NaaccrXmlUtils.NAACCR_DATA_TYPE_DATE.equals(type);
-        result |= NaaccrXmlUtils.NAACCR_DATA_TYPE_INTEGER_WITH_ZERO.equals(type);
+        boolean result = NaaccrXmlUtils.NAACCR_DATA_TYPE_ALPHA.equals(type);
+        result |= NaaccrXmlUtils.NAACCR_DATA_TYPE_DIGITS.equals(type);
+        result |= NaaccrXmlUtils.NAACCR_DATA_TYPE_MIXED.equals(type);
         return result;
     }
 

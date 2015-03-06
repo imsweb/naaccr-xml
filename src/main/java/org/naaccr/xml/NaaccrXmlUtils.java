@@ -3,7 +3,6 @@
  */
 package org.naaccr.xml;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,31 +46,23 @@ public class NaaccrXmlUtils {
     public static final String NAACCR_XML_TAG_ITEM = "Item";
 
     // the different data types
-    public static final String NAACCR_DATA_TYPE_CODE = "code";
-    public static final String NAACCR_DATA_TYPE_CODE_WITH_BLANK = "codeWithBlank";
-    public static final String NAACCR_DATA_TYPE_ALPHA = "alpha";
-    public static final String NAACCR_DATA_TYPE_ALPHA_WITH_BLANK = "alphaWithBlank";
-    public static final String NAACCR_DATA_TYPE_DATE = "date";
-    public static final String NAACCR_DATA_TYPE_STRING = "string";
-    public static final String NAACCR_DATA_TYPE_STRING_WITH_BLANK = "stringWithBlank";
-    public static final String NAACCR_DATA_TYPE_STRING_WITH_LEADING_SPACES = "stringWithLeadingSpaces";
-    public static final String NAACCR_DATA_TYPE_INTEGER = "integer";
-    public static final String NAACCR_DATA_TYPE_INTEGER_WITH_ZERO = "integerWithZero";
+    public static final String NAACCR_DATA_TYPE_ALPHA = "alpha"; // uppercase letters, A-Z, no spaces, full length needs to be filled in
+    public static final String NAACCR_DATA_TYPE_DIGITS = "digits"; // digits, 0-9, no spaces, full length needs to be filled in
+    public static final String NAACCR_DATA_TYPE_MIXED = "mixed"; // uppercase letters or digites, A-Z,0-9, no spaces, full length needs to be filled in
+    public static final String NAACCR_DATA_TYPE_NUMERIC = "numeric"; // digits, 0-9 with optional period, no spaces but value can be smaller than the length
+    public static final String NAACCR_DATA_TYPE_TEXT = "text"; // no checking on this value
+    public static final String NAACCR_DATA_TYPE_DATE = "date"; // digites, YYYY or YYYYMM or YYYYMMDD
 
     // regular expression for each data type
     public static final Map<String, Pattern> NAACCR_DATA_TYPES_REGEX = new HashMap<>();
 
     static {
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_CODE, Pattern.compile("^\\d+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_CODE_WITH_BLANK, Pattern.compile("^(\\d|\\s)+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_ALPHA, Pattern.compile("^[A-Za-z]+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_ALPHA_WITH_BLANK, Pattern.compile("^([A-Za-z]|\\s)+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)\\d\\d(0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_STRING, Pattern.compile("^[^\\s].+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_STRING_WITH_BLANK, Pattern.compile("^.+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_STRING_WITH_LEADING_SPACES, Pattern.compile("^.+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_INTEGER, Pattern.compile("^\\d+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_INTEGER_WITH_ZERO, Pattern.compile("^\\d+"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_ALPHA, Pattern.compile("^[A-Z]+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DIGITS, Pattern.compile("^[0-9]+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_MIXED, Pattern.compile("^[A-Z0-9]+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_NUMERIC, Pattern.compile("^([A-Za-z]|\\s)+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_TEXT, Pattern.compile("^.+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)[0-9][0-9]((0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])?)?$"));
     }
 
     /**
@@ -98,7 +89,7 @@ public class NaaccrXmlUtils {
             throw new IOException("Target folder must exist");
 
         // create the runtime dictionary
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, getStandardDictionary(), nonStandardDictionary);
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, nonStandardDictionary);
 
         // make sure we have some options
         if (options == null)
@@ -144,7 +135,7 @@ public class NaaccrXmlUtils {
             throw new IOException("Target folder must exist");
 
         // create the runtime dictionary
-        RuntimeNaaccrDictionary runtimeDictionary = new RuntimeNaaccrDictionary(format, getStandardDictionary(), nonStandardDictionary);
+        RuntimeNaaccrDictionary runtimeDictionary = new RuntimeNaaccrDictionary(format, nonStandardDictionary);
 
         // make sure we have some options
         if (options == null)
@@ -186,7 +177,8 @@ public class NaaccrXmlUtils {
         return new OutputStreamWriter(os, StandardCharsets.UTF_8);
     }
 
-    // TODO FPD use this to display a progress bar...
+    // TODO FPD this could be used to display a progress bar; but I don't think it belongs in this class...
+    /**
     private int countLines(File file) throws IOException {
         try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
             byte[] c = new byte[1024];
@@ -206,6 +198,7 @@ public class NaaccrXmlUtils {
             return count;
         }
     }
+     */
 
     /**
      * Reads an NAACCR XML data file and returns the corresponding data.
@@ -229,7 +222,7 @@ public class NaaccrXmlUtils {
             throw new IOException("Invalid file format");
 
         // create the runtime dictionary
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, getStandardDictionary(), nonStandardDictionary);
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, nonStandardDictionary);
 
         // make sure we have some options
         if (options == null)
@@ -266,7 +259,7 @@ public class NaaccrXmlUtils {
             throw new IOException("Invalid file format");
 
         // create the runtime dictionary
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, getStandardDictionary(), nonStandardDictionary);
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, nonStandardDictionary);
 
         // make sure we have some options
         if (options == null)
@@ -335,7 +328,7 @@ public class NaaccrXmlUtils {
     public static String getFormatFromXmlFile(File xmlFile) {
         if (xmlFile == null || !xmlFile.exists())
             return null;
-        
+
         try {
             return getFormatFromXmlReader(createReader(xmlFile));
         }
@@ -351,12 +344,12 @@ public class NaaccrXmlUtils {
      */
     public static String getFormatFromXmlReader(Reader xmlReader) {
 
-
         Pattern patternVersion = Pattern.compile("naaccrVersion=\"(.+?)\"");
         Pattern patternType = Pattern.compile("recordType=\"(.+?)\"");
 
         String version = null, type = null;
         try (BufferedReader reader = new BufferedReader(xmlReader)) {
+            // this isn't going to work if the file is big and doesn't contain any new lines, which is technically allowed in XML...
             String line = reader.readLine();
             while (line != null && (version == null || type == null)) {
                 Matcher matcherVersion = patternVersion.matcher(line);
@@ -395,14 +388,33 @@ public class NaaccrXmlUtils {
         return NaaccrFormat.isFormatSupported(result) ? result : null;
     }
 
-    public static NaaccrDictionary getStandardDictionary() {
+    public static NaaccrDictionary getBaseDictionary(String naaccrVersion) {
+        if (naaccrVersion == null)
+            throw new RuntimeException("Version is required for getting the base dictionary.");
+        if (!NaaccrFormat.isVersionSupported(naaccrVersion))
+            throw new RuntimeException("Unsupported base dictionary version: " + naaccrVersion);
         try {
-            // TODO finalize standard dictionary format and location...
-            URL standardDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-140.csv");
-            return NaaccrDictionaryUtils.readDictionary(standardDictionaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
+            // TODO finalize standard dictionary format and location; switch to XML
+            URL baseDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-" + naaccrVersion + ".csv");
+            return NaaccrDictionaryUtils.readDictionary(baseDictionaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
         }
         catch (IOException e) {
-            throw new RuntimeException("Unable to get standard dictionary!", e);
+            throw new RuntimeException("Unable to get base dictionary!", e);
+        }
+    }
+
+    public static NaaccrDictionary getDefaultUserDictionary(String naaccrVersion) {
+        if (naaccrVersion == null)
+            throw new RuntimeException("Version is required for getting the default user dictionary.");
+        if (!NaaccrFormat.isVersionSupported(naaccrVersion))
+            throw new RuntimeException("Unsupported default user dictionary version: " + naaccrVersion);
+        try {
+            // TODO finalize standard dictionary format and location; switch to XML
+            URL defaultUserDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-" + naaccrVersion + ".csv");
+            return NaaccrDictionaryUtils.readDictionary(defaultUserDictionaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Unable to get default user dictionary!", e);
         }
     }
 

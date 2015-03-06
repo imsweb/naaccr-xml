@@ -139,7 +139,7 @@ public class PatientFlatWriter implements AutoCloseable {
         patient.getTumors().add(new Tumor());
         patient.getTumors().get(1).getItems().add(new Item("primarySite", "C447"));
         File outputFile = new File(System.getProperty("user.dir") + "/build/write-flat-test.txt");
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getStandardDictionary(), null);
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getBaseDictionary(), null);
         PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(outputFile), dictionary);
         writer.writePatient(patient);
         writer.close();

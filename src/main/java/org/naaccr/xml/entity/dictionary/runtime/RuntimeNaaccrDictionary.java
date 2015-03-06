@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.naaccr.xml.NaaccrFormat;
+import org.naaccr.xml.NaaccrXmlUtils;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
@@ -18,32 +19,31 @@ import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 public class RuntimeNaaccrDictionary {
 
     private NaaccrFormat _format;
-    
+
     private List<RuntimeNaaccrDictionaryItem> items;
 
     // caches to improve lookup performances
     private Map<String, RuntimeNaaccrDictionaryItem> _cachedById;
     private Map<Integer, RuntimeNaaccrDictionaryItem> _cachedByNumber;
 
-    public RuntimeNaaccrDictionary(String format, NaaccrDictionary standardDictionary, NaaccrDictionary userDictionary) {
-        
+    public RuntimeNaaccrDictionary(String format, NaaccrDictionary userDictionary) {
+
         _format = NaaccrFormat.getInstance(format);
+
+        NaaccrDictionary baseDictionary = NaaccrXmlUtils.getBaseDictionary(_format.getNaaccrVersion());
+        if (userDictionary == null)
+            userDictionary = NaaccrXmlUtils.getDefaultUserDictionary(_format.getNaaccrVersion());
 
         Map<String, RuntimeNaaccrDictionaryItem> runtimeItems = new HashMap<>();
 
-        for (NaaccrDictionaryItem item : standardDictionary.getItems())
+        for (NaaccrDictionaryItem item : baseDictionary.getItems())
             runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
-        
-        // TODO a user-defined field should never have the same id or number as a standard item; there is all kind of validation we should be doing here...
-        // TODO define the rules for user-defined items to override standard items...
-        
-        if (userDictionary != null)
-            for (NaaccrDictionaryItem item : userDictionary.getItems())
-                runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
-        
+        for (NaaccrDictionaryItem item : userDictionary.getItems())
+            runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
+
         // now we are ready to assign the fields
         items = new ArrayList<>(runtimeItems.values());
-        
+
         // we will use a shared comparator that will sort the fields by starting columns
         Comparator<RuntimeNaaccrDictionaryItem> comparator = new Comparator<RuntimeNaaccrDictionaryItem>() {
             @Override

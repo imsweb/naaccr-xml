@@ -430,7 +430,7 @@ public class Standalone {
                     String format = NaaccrXmlUtils.getFormatFromXmlReader(new StringReader(textFld.getText()));
                     if (format == null)
                         format = NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT; // TODO this should be an error
-                    RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getStandardDictionary(), null);
+                    RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getBaseDictionary(), null);
                     try (PatientXmlReader reader = new PatientXmlReader(new StringReader(textFld.getText()), NaaccrXmlUtils.getStandardXStream(dictionary, new NaaccrXmlOptions()))) {
                         do {
                             Patient patient = reader.readPatient();

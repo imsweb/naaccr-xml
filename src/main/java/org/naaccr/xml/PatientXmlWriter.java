@@ -60,7 +60,7 @@ public class PatientXmlWriter implements AutoCloseable {
         patient.getTumors().add(new Tumor());
         patient.getTumors().get(1).getItems().add(new Item("primarySite", "C447"));
         File outputFile = new File(System.getProperty("user.dir") + "/build/write-xml-test.xml");
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getStandardDictionary(), null);
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getBaseDictionary(), null);
         PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(outputFile), NaaccrXmlUtils.getStandardXStream(dictionary, new NaaccrXmlOptions()), dictionary);
         writer.writePatient(patient);
         writer.close();

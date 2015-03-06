@@ -139,7 +139,7 @@ public class PatientFlatReader implements AutoCloseable {
     // TODO remove this testing method
     public static void main(String[] args) throws IOException {
         File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/fake-naaccr14inc-2-rec.txt");
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getStandardDictionary(), null);
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getBaseDictionary(), null);
         PatientFlatReader reader = new PatientFlatReader(new FileReader(inputFile), dictionary);
         int count = 0;
         Patient patient = reader.readPatient();
