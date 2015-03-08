@@ -20,9 +20,9 @@ public class RuntimeNaaccrDictionary {
 
     private NaaccrFormat _format;
 
-    private List<RuntimeNaaccrDictionaryItem> items;
+    private List<RuntimeNaaccrDictionaryItem> _items;
 
-    // caches to improve lookup performances
+    // caches used to improve lookup performances
     private Map<String, RuntimeNaaccrDictionaryItem> _cachedById;
     private Map<Integer, RuntimeNaaccrDictionaryItem> _cachedByNumber;
 
@@ -34,26 +34,19 @@ public class RuntimeNaaccrDictionary {
         if (userDictionary == null)
             userDictionary = NaaccrXmlUtils.getDefaultUserDictionary(_format.getNaaccrVersion());
 
-        Map<String, RuntimeNaaccrDictionaryItem> runtimeItems = new HashMap<>();
-
+        _items = new ArrayList<>();
         for (NaaccrDictionaryItem item : baseDictionary.getItems())
-            runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
+            _items.add(new RuntimeNaaccrDictionaryItem(item));
         for (NaaccrDictionaryItem item : userDictionary.getItems())
-            runtimeItems.put(item.getNaaccrId(), new RuntimeNaaccrDictionaryItem(item));
+            _items.add(new RuntimeNaaccrDictionaryItem(item));
 
-        // now we are ready to assign the fields
-        items = new ArrayList<>(runtimeItems.values());
-
-        // we will use a shared comparator that will sort the fields by starting columns
-        Comparator<RuntimeNaaccrDictionaryItem> comparator = new Comparator<RuntimeNaaccrDictionaryItem>() {
+        // sort the fields by starting columns
+        Collections.sort(_items, new Comparator<RuntimeNaaccrDictionaryItem>() {
             @Override
             public int compare(RuntimeNaaccrDictionaryItem o1, RuntimeNaaccrDictionaryItem o2) {
                 return o1.getStartColumn().compareTo(o2.getStartColumn());
             }
-        };
-
-        // sort the fields
-        Collections.sort(items, comparator);
+        });
     }
 
     public NaaccrFormat getFormat() {
@@ -61,15 +54,15 @@ public class RuntimeNaaccrDictionary {
     }
 
     public List<RuntimeNaaccrDictionaryItem> getItems() {
-        if (items == null)
-            items = new ArrayList<>();
-        return items;
+        if (_items == null)
+            _items = new ArrayList<>();
+        return _items;
     }
 
     public RuntimeNaaccrDictionaryItem getItemByNaaccrId(String id) {
         if (_cachedById == null) {
             Map<String, RuntimeNaaccrDictionaryItem> cache = new HashMap<>();
-            for (RuntimeNaaccrDictionaryItem item : items)
+            for (RuntimeNaaccrDictionaryItem item : _items)
                 if (item.getNaaccrId() != null)
                     cache.put(item.getNaaccrId(), item);
             _cachedById = cache;
@@ -80,7 +73,7 @@ public class RuntimeNaaccrDictionary {
     public RuntimeNaaccrDictionaryItem getItemByNaaccrNum(Integer number) {
         if (_cachedByNumber == null) {
             Map<Integer, RuntimeNaaccrDictionaryItem> cache = new HashMap<>();
-            for (RuntimeNaaccrDictionaryItem item : items)
+            for (RuntimeNaaccrDictionaryItem item : _items)
                 if (item.getNaaccrNum() != null)
                     cache.put(item.getNaaccrNum(), item);
             _cachedByNumber = cache;

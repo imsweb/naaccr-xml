@@ -15,7 +15,7 @@ public class RuntimeNaaccrDictionaryItem {
     private String naaccrId;
 
     private Integer naaccrNum;
-    
+
     private Integer startColumn;
 
     private Integer length;
@@ -27,7 +27,11 @@ public class RuntimeNaaccrDictionaryItem {
     private Pattern regexValidation;
 
     private String dataType;
-    
+
+    private String trim;
+
+    private String padding;
+
     public RuntimeNaaccrDictionaryItem(NaaccrDictionaryItem item) {
         naaccrId = item.getNaaccrId();
         naaccrNum = item.getNaaccrNum();
@@ -40,6 +44,8 @@ public class RuntimeNaaccrDictionaryItem {
         if (item.getRegexValidation() != null)
             regexValidation = Pattern.compile(item.getRegexValidation());
         dataType = item.getDataType();
+        trim = item.getTrim();
+        padding = item.getPadding();
     }
 
     public String getNaaccrId() {
@@ -102,4 +108,19 @@ public class RuntimeNaaccrDictionaryItem {
         dataType = val;
     }
 
+    public String getPadding() {
+        return padding;
+    }
+
+    public void setPadding(String val) {
+        padding = val;
+    }
+
+    public String getTrim() {
+        return trim;
+    }
+
+    public void setTrim(String val) {
+        trim = val;
+    }
 }

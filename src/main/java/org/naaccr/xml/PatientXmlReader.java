@@ -92,7 +92,7 @@ public class PatientXmlReader implements AutoCloseable {
     public static void main(String[] args) throws Exception {
         File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/test-num-bad-item3.xml");
         String format = NaaccrXmlUtils.getFormatFromXmlFile(inputFile);
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, NaaccrXmlUtils.getBaseDictionary(), null);
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, null);
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(inputFile), NaaccrXmlUtils.getStandardXStream(dictionary, new NaaccrXmlOptions()))) {
             do {
                 Patient patient = reader.readPatient();

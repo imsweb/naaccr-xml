@@ -18,6 +18,7 @@ import au.com.bytecode.opencsv.CSVReader;
 public class NaaccrDictionaryUtils {
 
     public static final String NAACCR_DICTIONARY_FORMAT_CSV = "csv";
+    public static final String NAACCR_DICTIONARY_FORMAT_XML = "xml";
 
     public static NaaccrDictionary readDictionary(File file) throws IOException {
         if (file == null)
@@ -59,7 +60,7 @@ public class NaaccrDictionaryUtils {
         // always skip first line
         try (CSVReader csvReader = new CSVReader(reader, ',', '"', '\\', 1, false)) {
             for (String[] line : csvReader.readAll()) {
-                if (line.length < 3 || line.length > 15)
+                if (line.length < 3 || line.length > 17)
                     throw new IOException("Wrong number of fields, expected between 3 and 15, got " + line.length + " (Item ID " + line[0] + ")");
 
                 // TODO add validation, trim values, be safer since it could be a user-defined dictionary...
@@ -80,8 +81,15 @@ public class NaaccrDictionaryUtils {
                     item.setRegexValidation(line[9]);
                 if (line.length > 10 && line[10] != null && !line[10].isEmpty())
                     item.setDataType(line[10]);
+                // section is not used anymore
                 if (line.length > 12 && line[12] != null && !line[12].isEmpty())
                     item.setSourceOfStandard(line[12]);
+                // retired is not used anymore
+                // imlementation is not used anymore
+                if (line.length > 13 && line[13] != null && !line[13].isEmpty())
+                    item.setTrim(line[13]);
+                if (line.length > 14 && line[14] != null && !line[14].isEmpty())
+                    item.setPadding(line[14]);
                 
                 if (item.getRecordTypes() == null)
                     item.setRecordTypes("A,M,C,I");
@@ -94,9 +102,11 @@ public class NaaccrDictionaryUtils {
     }
     
     
-
+    // TODO remove this testing method...
     public static void main(String[] args) throws IOException {
-        NaaccrDictionary dictionary = readDictionary(Thread.currentThread().getContextClassLoader().getResource("fabian/naaccr-dictionary-140.csv"), NAACCR_DICTIONARY_FORMAT_CSV);
-        System.out.println("Read " + dictionary.getItems().size() + " items...");
+        NaaccrDictionary baseDictionary = readDictionary(Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-140.csv"), NAACCR_DICTIONARY_FORMAT_CSV);
+        System.out.println("Read " + baseDictionary.getItems().size() + " items from base dictionary...");
+        NaaccrDictionary defaultUserDictionary = readDictionary(Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-gaps-140.csv"), NAACCR_DICTIONARY_FORMAT_CSV);
+        System.out.println("Read " + defaultUserDictionary.getItems().size() + " items from default user dictionary...");
     }
 }

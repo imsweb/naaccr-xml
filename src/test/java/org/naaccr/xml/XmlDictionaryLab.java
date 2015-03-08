@@ -17,7 +17,7 @@ import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 public class XmlDictionaryLab {
 
     public static void main(String[] args) throws IOException {
-        final NaaccrDictionary dictionary = NaaccrXmlUtils.getBaseDictionary();
+        final NaaccrDictionary dictionary = NaaccrXmlUtils.getBaseDictionary("140");
         System.out.println("Read " + dictionary.getItems().size() + " items from standard CSV dictionary...");
 
         XStream xstream = new XStream();

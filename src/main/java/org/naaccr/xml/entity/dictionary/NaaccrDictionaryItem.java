@@ -3,6 +3,8 @@
  */
 package org.naaccr.xml.entity.dictionary;
 
+import org.naaccr.xml.NaaccrXmlUtils;
+
 public class NaaccrDictionaryItem {
 
     private String naaccrId;
@@ -24,6 +26,16 @@ public class NaaccrDictionaryItem {
     private String dataType;
 
     private String regexValidation;
+
+    private String padding;
+
+    private String trim;
+
+    public NaaccrDictionaryItem() {
+        dataType = NaaccrXmlUtils.NAACCR_DATA_TYPE_TEXT;
+        padding = NaaccrXmlUtils.NAACCR_PADDING_RIGHT_BLANK;
+        trim = NaaccrXmlUtils.NAACCR_TRIM_ALL;
+    }
 
     public String getNaaccrId() {
         return naaccrId;
@@ -96,12 +108,28 @@ public class NaaccrDictionaryItem {
     public void setDataType(String val) {
         dataType = val;
     }
-    
+
     public String getRegexValidation() {
         return regexValidation;
     }
 
     public void setRegexValidation(String val) {
         regexValidation = val;
+    }
+
+    public String getPadding() {
+        return padding;
+    }
+
+    public void setPadding(String val) {
+        padding = val;
+    }
+
+    public String getTrim() {
+        return trim;
+    }
+
+    public void setTrim(String val) {
+        trim = val;
     }
 }

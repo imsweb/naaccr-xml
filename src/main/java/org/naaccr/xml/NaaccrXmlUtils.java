@@ -64,6 +64,16 @@ public class NaaccrXmlUtils {
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_TEXT, Pattern.compile("^.+$"));
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)[0-9][0-9]((0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])?)?$"));
     }
+    
+    // trimming rules
+    public static final String NAACCR_TRIM_ALL = "all";
+    public static final String NAACCR_TRIM_NONE = "none";
+    
+    // padding rules
+    public static final String NAACCR_PADDING_RIGHT_BLANK = "rightBlank";
+    public static final String NAACCR_PADDING_LEFT_BLANK = "leftBlank";
+    public static final String NAACCR_PADDING_RIGHT_ZERO = "rightZero";
+    public static final String NAACCR_PADDING_LEFT_ZERO = "leftZero";
 
     /**
      * Translates a flat data file into an XML data file.
@@ -394,7 +404,7 @@ public class NaaccrXmlUtils {
         if (!NaaccrFormat.isVersionSupported(naaccrVersion))
             throw new RuntimeException("Unsupported base dictionary version: " + naaccrVersion);
         try {
-            // TODO finalize standard dictionary format and location; switch to XML
+            // TODO finalize base dictionary format and location; switch to XML
             URL baseDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-" + naaccrVersion + ".csv");
             return NaaccrDictionaryUtils.readDictionary(baseDictionaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
         }
@@ -409,8 +419,8 @@ public class NaaccrXmlUtils {
         if (!NaaccrFormat.isVersionSupported(naaccrVersion))
             throw new RuntimeException("Unsupported default user dictionary version: " + naaccrVersion);
         try {
-            // TODO finalize standard dictionary format and location; switch to XML
-            URL defaultUserDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-" + naaccrVersion + ".csv");
+            // TODO finalize user defined dictionary format and location; switch to XML
+            URL defaultUserDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-gaps" + naaccrVersion + ".csv");
             return NaaccrDictionaryUtils.readDictionary(defaultUserDictionaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
         }
         catch (IOException e) {

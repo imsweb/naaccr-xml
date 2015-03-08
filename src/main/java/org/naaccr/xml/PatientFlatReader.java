@@ -121,7 +121,7 @@ public class PatientFlatReader implements AutoCloseable {
             String trimmedValue = value.trim();
 
             // apply trimming rule
-            if (trimmedValue.isEmpty() || !NaaccrXmlUtils.NAACCR_DATA_TYPE_STRING_WITH_LEADING_SPACES.equals(itemDef.getDataType()))
+            if (trimmedValue.isEmpty() || NaaccrXmlUtils.NAACCR_TRIM_ALL.equals(itemDef.getTrim()))
                 value = trimmedValue;
 
             if (!value.isEmpty()) {
@@ -139,7 +139,7 @@ public class PatientFlatReader implements AutoCloseable {
     // TODO remove this testing method
     public static void main(String[] args) throws IOException {
         File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/fake-naaccr14inc-2-rec.txt");
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getBaseDictionary(), null);
+        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
         PatientFlatReader reader = new PatientFlatReader(new FileReader(inputFile), dictionary);
         int count = 0;
         Patient patient = reader.readPatient();
