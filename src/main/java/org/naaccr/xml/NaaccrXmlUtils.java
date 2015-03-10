@@ -48,10 +48,10 @@ public class NaaccrXmlUtils {
     // the different data types
     public static final String NAACCR_DATA_TYPE_ALPHA = "alpha"; // uppercase letters, A-Z, no spaces, full length needs to be filled in
     public static final String NAACCR_DATA_TYPE_DIGITS = "digits"; // digits, 0-9, no spaces, full length needs to be filled in
-    public static final String NAACCR_DATA_TYPE_MIXED = "mixed"; // uppercase letters or digites, A-Z,0-9, no spaces, full length needs to be filled in
+    public static final String NAACCR_DATA_TYPE_MIXED = "mixed"; // uppercase letters or digits, A-Z,0-9, no spaces, full length needs to be filled in
     public static final String NAACCR_DATA_TYPE_NUMERIC = "numeric"; // digits, 0-9 with optional period, no spaces but value can be smaller than the length
     public static final String NAACCR_DATA_TYPE_TEXT = "text"; // no checking on this value
-    public static final String NAACCR_DATA_TYPE_DATE = "date"; // digites, YYYY or YYYYMM or YYYYMMDD
+    public static final String NAACCR_DATA_TYPE_DATE = "date"; // digits, YYYY or YYYYMM or YYYYMMDD
 
     // regular expression for each data type
     public static final Map<String, Pattern> NAACCR_DATA_TYPES_REGEX = new HashMap<>();
