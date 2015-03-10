@@ -28,16 +28,13 @@ public class XmlDictionaryLab {
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "naaccrName", "naaccrName");
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "startColumn", "startColumn");
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "length", "length");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "section", "section");
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "recordTypes", "recordTypes");
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "sourceOfStandard", "sourceOfStandard");
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "parentXmlElement", "parentXmlElement");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "regexValidation", "regexValidation");
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "dataType", "dataType");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "groupNaaccrId", "groupNaaccrId");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "isGroup", "isGroup");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "retiredVersion", "retiredVersion");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "implementedVersion", "implementedVersion");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "regexValidation", "regexValidation");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "padding", "padding");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "trim", "trim");
         xstream.addImplicitCollection(NaaccrDictionary.class, "items", NaaccrDictionaryItem.class);
 
         File outputFile = new File(System.getProperty("user.dir") + "/build/naaccr-dictionary-140.xml");
@@ -68,7 +65,9 @@ public class XmlDictionaryLab {
 
             @Override
             public void addAttribute(String key, String value) {
-                if ("isGroup".equals(key) && !"true".equals(value))
+                if ("padding".equals(key) && NaaccrXmlUtils.NAACCR_PADDING_RIGHT_BLANK.equals(value))
+                    return;
+                if ("trim".equals(key) && NaaccrXmlUtils.NAACCR_TRIM_ALL.equals(value))
                     return;
                 super.addAttribute(key, value);
                 if ("naaccrId".equals(key))
@@ -82,16 +81,10 @@ public class XmlDictionaryLab {
                 if (item == null)
                     return false;
 
-                // TODO FPD review this...
-                
-                //if (item.getImplementedVersion() != null)
-                //    return "implementedVersion".equals(attribute);
-                //if (item.getRetiredVersion() != null)
-                //    return "retiredVersion".equals(attribute);
-                //if (item.getIsGroup() != null && Boolean.TRUE.equals(item.getIsGroup()))
-                //    return "isGroup".equals(attribute);
-                //if (item.getGroupNaaccrId() != null)
-                //    return "groupNaaccrId".equals(attribute);
+                if (item.getTrim() != null && !NaaccrXmlUtils.NAACCR_TRIM_ALL.equals(item.getTrim()))
+                    return "trim".equals(attribute);
+                if (item.getPadding() != null && !NaaccrXmlUtils.NAACCR_PADDING_RIGHT_BLANK.equals(item.getPadding()))
+                    return "padding".equals(attribute);
                 if (item.getRegexValidation() != null)
                     return "regexValidation".equals(attribute);
                 if (item.getDataType() != null)
