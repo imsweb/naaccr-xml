@@ -79,10 +79,4 @@
 	</xsd:complexType>
 </xsd:element>
 
-<xsd:simpleType name="formattedString" >
-	<xsd:restriction base="xsd:string">
-		<xsd:whiteSpace value="preserve" />
-	</xsd:restriction>
-</xsd:simpleType>
-
 </xsd:schema>
