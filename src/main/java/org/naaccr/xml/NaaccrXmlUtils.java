@@ -420,7 +420,7 @@ public class NaaccrXmlUtils {
             throw new RuntimeException("Unsupported default user dictionary version: " + naaccrVersion);
         try {
             // TODO finalize user defined dictionary format and location; switch to XML
-            URL defaultUserDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-gaps" + naaccrVersion + ".csv");
+            URL defaultUserDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-gaps-" + naaccrVersion + ".csv");
             return NaaccrDictionaryUtils.readDictionary(defaultUserDictionaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
         }
         catch (IOException e) {
@@ -442,16 +442,11 @@ public class NaaccrXmlUtils {
         XStream xstream = new XStream(driver);
 
         // tell XStream how to read/write our main entities
-        xstream.alias(NAACCR_XML_TAG_ROOT, NaaccrData.class);
+        xstream.alias(NAACCR_XML_TAG_ROOT, NaaccrData.class); // TODO FPD could we just declare the root and handle the patients "manually"?
         xstream.alias(NAACCR_XML_TAG_PATIENT, Patient.class);
-        //xstream.alias(NAACCR_XML_TAG_TUMOR, Tumor.class);
-        //xstream.alias(NAACCR_XML_TAG_ITEM, Item.class);
 
         // all collections should be wrap into collection tags, but it's nicer to omit them in the XML; we have to tell XStream though
         xstream.addImplicitCollection(NaaccrData.class, "patients", Patient.class);
-        //xstream.addImplicitCollection(Patient.class, "items", Item.class);
-        //xstream.addImplicitCollection(Patient.class, "tumors", Tumor.class);
-        //xstream.addImplicitCollection(Tumor.class, "items", Item.class);
 
         // the item object is a bit harder to read/write, so we have to use a specific converter
         xstream.registerConverter(converter);

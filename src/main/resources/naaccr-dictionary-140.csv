@@ -2,20 +2,20 @@ Item ID,Item Number,Item Length,Item Name,Is Group,Group Item ID,Record Types,It
 recordType,10,1,Record Type,,,"A,M,C,I",1,Patient,^[ICAM]$,text,Record ID,,,,,
 registryType,30,1,Registry Type,,,"A,M,C,I",2,Patient,,digits,Record ID,,,,,
 naaccrRecordVersion,50,3,NAACCR Record Version,,,"A,M,C,I",17,Patient,,digits,Record ID,,,,,
-registryIdNpi,45,10,NPI--Registry ID,,,"A,M,C,I",20,Patient,,integerWithZero,Record ID,,,,,
-registryId,40,10,Registry ID,,,"A,M,C,I",30,Patient,,integerWithZero,Record ID,,,,,
-tumorRecordNumber,60,2,Tumor Record Number,,,"A,M,C,I",40,Tumor,,integerWithZero,Record ID,,,,,
-patientIdNumber,20,8,Patient ID Number,,,"A,M,C,I",42,Patient,,integerWithZero,Record ID,,,,,
-patientSysIdHospital,21,8,Patient System ID-Hosp,,,"A,M,C,I",50,Patient,,integer,Record ID,,,,,
+registryIdNpi,45,10,NPI--Registry ID,,,"A,M,C,I",20,Patient,,digits,Record ID,,,,,leftZero
+registryId,40,10,Registry ID,,,"A,M,C,I",30,Patient,,digits,Record ID,,,,,leftZero
+tumorRecordNumber,60,2,Tumor Record Number,,,"A,M,C,I",40,Tumor,,digits,Record ID,,,,,leftZero
+patientIdNumber,20,8,Patient ID Number,,,"A,M,C,I",42,Patient,,digits,Record ID,,,,,leftZero
+patientSysIdHospital,21,8,Patient System ID-Hosp,,,"A,M,C,I",50,Patient,,numeric,Record ID,,,,,
 addressAtDxCity,70,50,Addr at DX--City,,,"A,M,C,I",95,Tumor,,text,Demographic,,,,,
 addressAtDxState,80,2,Addr at DX--State,,,"A,M,C,I",145,Tumor,,alpha,Demographic,,,,,
 addressAtDxPostalCode,100,9,Addr at DX--Postal Code,,,"A,M,C,I",147,Tumor,,digits,Demographic,,,,,
 addressAtDxCounty,90,3,County at DX,,,"A,M,C,I",156,Tumor,,alpha,Demographic,,,,,
-censusTract708090,110,6,Census Tract 1970/80/90,,,"A,M,C,I",159,Tumor,,integerWithZero,Demographic,,,,,
+censusTract708090,110,6,Census Tract 1970/80/90,,,"A,M,C,I",159,Tumor,,digits,Demographic,,,,,leftZero
 censusBlockGroup708090,368,1,Census Block Grp 1970-90,,,"A,M,C,I",165,Tumor,,alpha,Demographic,,,,,
 censusCodingSys708090,120,1,Census Cod Sys 1970/80/90,,,"A,M,C,I",166,Tumor,,digits,Demographic,,,,,
 censusCertainty708090,364,1,Census Tr Cert 1970/80/90,,,"A,M,C,I",167,Tumor,,digits,Demographic,,,,,
-censusTract2000,130,6,Census Tract 2000,,,"A,M,C,I",168,Tumor,,integerWithZero,Demographic,,,,,
+censusTract2000,130,6,Census Tract 2000,,,"A,M,C,I",168,Tumor,,digits,Demographic,,,,,leftZero
 censusBlockGroup2000,362,1,Census Block Group 2000,,,"A,M,C,I",174,Tumor,,alpha,Demographic,,,,,
 censusCertainty2000,365,1,Census Tr Certainty 2000,,,"A,M,C,I",175,Tumor,,digits,Demographic,,,,,
 maritalStatusAtDx,150,1,Marital Status at DX,,,"A,M,C,I",176,Tumor,,digits,Demographic,,,,,
@@ -47,7 +47,7 @@ ihs,192,1,IHS Link,,,"A,M,C,I",421,Patient,,digits,Demographic,,,,,
 gisQuality,366,2,GIS Coordinate Quality,,,"A,M,C,I",422,Tumor,,digits,Demographic,,,,,
 ruralUrbanContinuum1993,3300,2,RuralUrban Continuum 1993,,,"A,M,C,I",424,Tumor,,digits,Demographic,,,,,
 ruralUrbanContinuum2003,3310,2,RuralUrban Continuum 2003,,,"A,M,C,I",426,Tumor,,digits,Demographic,,,,,
-censusTract2010,135,6,Census Tract 2010,,,"A,M,C,I",428,Tumor,,integerWithZero,Demographic,,,,,
+censusTract2010,135,6,Census Tract 2010,,,"A,M,C,I",428,Tumor,,digits,Demographic,,,,,leftZero
 censusBlockGroup2010,363,1,Census Block Group 2010,,,"A,M,C,I",434,Tumor,,digits,Demographic,,,,,
 censusCertainty2010,367,1,Census Tr Certainty 2010,,,"A,M,C,I",435,Tumor,,digits,Demographic,,,,,
 addressAtDxCountry,102,3,Addr at DX--Country,,,"A,M,C,I",436,Tumor,,alpha,Demographic,,,,,
@@ -88,8 +88,8 @@ multiTumorRptAsOnePrim,444,2,Mult Tum Rpt as One Prim,,,"A,M,C,I",577,Tumor,,dig
 dateOfMultipleTumors,445,8,Date of Mult Tumors,Yes,,"A,M,C,I",579,Tumor,,date,Cancer Identification,,,,,
 dateOfMultipleTumorsFlag,439,2,Date of Mult Tumors Flag,,,"A,M,C,I",587,Tumor,,digits,Cancer Identification,,,,,
 multiplicityCounter,446,2,Multiplicity Counter,,,"A,M,C,I",589,Tumor,,digits,Cancer Identification,,,,,
-reportingFacilityNpi,545,10,NPI--Reporting Facility,,,"A,M,C,I",691,Tumor,,integerWithZero,Hospital Specific,,,,,
-reportingFacility,540,10,Reporting Facility,,,"A,M,C,I",701,Tumor,,integerWithZero,Hospital Specific,,,,,
+reportingFacilityNpi,545,10,NPI--Reporting Facility,,,"A,M,C,I",691,Tumor,,digits,Hospital Specific,,,,,leftZero
+reportingFacility,540,10,Reporting Facility,,,"A,M,C,I",701,Tumor,,digits,Hospital Specific,,,,,leftZero
 archiveFinNpi,3105,10,NPI--Archive FIN,,,"A,M,C,I",711,Tumor,,text,Hospital Specific,,,,,
 archiveFin,3100,10,Archive FIN,,,"A,M,C,I",721,Tumor,,digits,Hospital Specific,,,,,
 accessionNumberHosp,550,9,Accession Number--Hosp,,,"A,M,C,I",731,Tumor,,text,Hospital Specific,,,,,
@@ -188,17 +188,17 @@ csSiteSpecificFactor22,2876,3,CS Site-Specific Factor22,,,"A,M,C,I",1066,Tumor,,
 csSiteSpecificFactor23,2877,3,CS Site-Specific Factor23,,,"A,M,C,I",1069,Tumor,,digits,Stage / Prognostic Factors,,,,,
 csSiteSpecificFactor24,2878,3,CS Site-Specific Factor24,,,"A,M,C,I",1072,Tumor,,digits,Stage / Prognostic Factors,,,,,
 csSiteSpecificFactor25,2879,3,CS Site-Specific Factor25,,,"A,M,C,I",1075,Tumor,,digits,Stage / Prognostic Factors,,,,,
-csPreRxTumorSize,2730,3,CS PreRx Tumor Size,,,"A,M,C,I",1078,Tumor,,integer,Stage / Prognostic Factors,,,,,
-csPreRxExt,2735,3,CS PreRx Extension,,,"A,M,C,I",1081,Tumor,,integer,Stage / Prognostic Factors,,,,,
-csPreRxSizeExtEval,2740,1,CS PreRx Tum Sz/Ext Eval,,,"A,M,C,I",1084,Tumor,,integer,Stage / Prognostic Factors,,,,,
-csPreRxLymphNodes,2750,3,CS PreRx Lymph Nodes,,,"A,M,C,I",1085,Tumor,,integer,Stage / Prognostic Factors,,,,,
-csPreRxRegNodesEval,2755,1,CS PreRx Reg Nodes Eval,,,"A,M,C,I",1088,Tumor,,integer,Stage / Prognostic Factors,,,,,
-csPreRxMetsAtDx,2760,2,CS PreRx Mets at DX,,,"A,M,C,I",1089,Tumor,,integer,Stage / Prognostic Factors,,,,,
-csPreRxMetsEval,2765,1,CS PreRx Mets Eval,,,"A,M,C,I",1091,Tumor,,integer,Stage / Prognostic Factors,,,,,
-csPostRxTumorSize,2770,3,CS PostRx Tumor Size,,,"A,M,C,I",1092,Tumor,,integer,Stage / Prognostic Factors,,,,,
-csPostRxExt,2775,3,CS PostRx Extension,,,"A,M,C,I",1095,Tumor,,integer,Stage / Prognostic Factors,,,,,
-csPostRxLymphNodes,2780,3,CS PostRx Lymph Nodes,,,"A,M,C,I",1098,Tumor,,integer,Stage / Prognostic Factors,,,,,
-csPostRxMetsAtDx,2785,2,CS PostRx Mets at DX,,,"A,M,C,I",1101,Tumor,,integer,Stage / Prognostic Factors,,,,,
+csPreRxTumorSize,2730,3,CS PreRx Tumor Size,,,"A,M,C,I",1078,Tumor,,numeric,Stage / Prognostic Factors,,,,,
+csPreRxExt,2735,3,CS PreRx Extension,,,"A,M,C,I",1081,Tumor,,numeric,Stage / Prognostic Factors,,,,,
+csPreRxSizeExtEval,2740,1,CS PreRx Tum Sz/Ext Eval,,,"A,M,C,I",1084,Tumor,,numeric,Stage / Prognostic Factors,,,,,
+csPreRxLymphNodes,2750,3,CS PreRx Lymph Nodes,,,"A,M,C,I",1085,Tumor,,numeric,Stage / Prognostic Factors,,,,,
+csPreRxRegNodesEval,2755,1,CS PreRx Reg Nodes Eval,,,"A,M,C,I",1088,Tumor,,numeric,Stage / Prognostic Factors,,,,,
+csPreRxMetsAtDx,2760,2,CS PreRx Mets at DX,,,"A,M,C,I",1089,Tumor,,numeric,Stage / Prognostic Factors,,,,,
+csPreRxMetsEval,2765,1,CS PreRx Mets Eval,,,"A,M,C,I",1091,Tumor,,numeric,Stage / Prognostic Factors,,,,,
+csPostRxTumorSize,2770,3,CS PostRx Tumor Size,,,"A,M,C,I",1092,Tumor,,numeric,Stage / Prognostic Factors,,,,,
+csPostRxExt,2775,3,CS PostRx Extension,,,"A,M,C,I",1095,Tumor,,numeric,Stage / Prognostic Factors,,,,,
+csPostRxLymphNodes,2780,3,CS PostRx Lymph Nodes,,,"A,M,C,I",1098,Tumor,,numeric,Stage / Prognostic Factors,,,,,
+csPostRxMetsAtDx,2785,2,CS PostRx Mets at DX,,,"A,M,C,I",1101,Tumor,,numeric,Stage / Prognostic Factors,,,,,
 derivedAjcc6T,2940,2,Derived AJCC-6 T,,,"A,M,C,I",1103,Tumor,,digits,Stage / Prognostic Factors,,,,,
 derivedAjcc6TDescriptor,2950,1,Derived AJCC-6 T Descript,,,"A,M,C,I",1105,Tumor,,digits,Stage / Prognostic Factors,,,,,
 derivedAjcc6N,2960,2,Derived AJCC-6 N,,,"A,M,C,I",1106,Tumor,,digits,Stage / Prognostic Factors,,,,,
@@ -391,7 +391,7 @@ cocCodingSysCurrent,2140,2,CoC Coding Sys--Current,,,"A,M,C,I",1932,Tumor,,digit
 cocCodingSysOriginal,2150,2,CoC Coding Sys--Original,,,"A,M,C,I",1934,Tumor,,digits,Edit Overrides / Conversion History / System Admin,,,,,
 vendorName,2170,10,Vendor Name,,,"A,M,C,I",1936,Tumor,,text,Edit Overrides / Conversion History / System Admin,,,,,
 seerTypeOfFollowUp,2180,1,SEER Type of Follow-Up,,,"A,M,C,I",1946,Tumor,,digits,Edit Overrides / Conversion History / System Admin,,,,,
-seerRecordNumber,2190,2,SEER Record Number,,,"A,M,C,I",1947,Tumor,,integer,Edit Overrides / Conversion History / System Admin,,,,,
+seerRecordNumber,2190,2,SEER Record Number,,,"A,M,C,I",1947,Tumor,,numeric,Edit Overrides / Conversion History / System Admin,,,,,
 diagnosticProc7387,2200,2,Diagnostic Proc 73-87,,,"A,M,C,I",1949,Tumor,,alpha,Edit Overrides / Conversion History / System Admin,,,,,
 dateCaseInitiated,2085,8,Date Case Initiated,Yes,,"A,M,C,I",1951,Tumor,,date,Edit Overrides / Conversion History / System Admin,,,,,
 dateCaseCompleted,2090,8,Date Case Completed,Yes,,"A,M,C,I",1959,Tumor,,date,Edit Overrides / Conversion History / System Admin,,,,,
@@ -469,22 +469,22 @@ followUpContactNoAndStreet,2392,60,Follow-Up Contact--No&St,,,"A,M,C",3944,Patie
 followUpContactSuppl,2393,60,Follow-Up Contact--Suppl,,,"A,M,C",4004,Patient,,text,Patient - Confidential,,,,,
 latitude,2352,10,Latitude,,,"A,M,C",4064,Patient,,text,Patient - Confidential,,,,,
 longitude,2354,11,Longitude,,,"A,M,C",4074,Patient,,text,Patient - Confidential,,,,,
-followingRegistryNpi,2445,10,NPI--Following Registry,,,"A,M,C",4285,Tumor,,integerWithZero,Hospital - Confidential,,,,,
-followingRegistry,2440,10,Following Registry,,,"A,M,C",4295,Tumor,,integerWithZero,Hospital - Confidential,,,,,
-institutionReferredFromNpi,2415,10,NPI--Inst Referred From,,,"A,M,C",4305,Tumor,,integerWithZero,Hospital - Confidential,,,,,
-institutionReferredFrom,2410,10,Institution Referred From,,,"A,M,C",4315,Tumor,,integerWithZero,Hospital - Confidential,,,,,
-institutionReferredToNpi,2425,10,NPI--Inst Referred To,,,"A,M,C",4325,Tumor,,integerWithZero,Hospital - Confidential,,,,,
-institutionReferredTo,2420,10,Institution Referred To,,,"A,M,C",4335,Tumor,,integerWithZero,Hospital - Confidential,,,,,
-physicianManagingNpi,2465,10,NPI--Physician--Managing,,,"A,M,C",4395,Tumor,,integerWithZero,Other - Confidential,,,,,
-physicianManaging,2460,8,Physician--Managing,,,"A,M,C",4405,Tumor,,integerWithZero,Other - Confidential,,,,,
-physicianFollowUpNpi,2475,10,NPI--Physician--Follow-Up,,,"A,M,C",4413,Tumor,,integerWithZero,Other - Confidential,,,,,
-physicianFollowUp,2470,8,Physician--Follow-Up,,,"A,M,C",4423,Tumor,,integerWithZero,Other - Confidential,,,,,
-physicianPrimarySurgNpi,2485,10,NPI--Physician--Primary Surg,,,"A,M,C",4431,Tumor,,integerWithZero,Other - Confidential,,,,,
+followingRegistryNpi,2445,10,NPI--Following Registry,,,"A,M,C",4285,Tumor,,digits,Hospital - Confidential,,,,,leftZero
+followingRegistry,2440,10,Following Registry,,,"A,M,C",4295,Tumor,,digits,Hospital - Confidential,,,,,leftZero
+institutionReferredFromNpi,2415,10,NPI--Inst Referred From,,,"A,M,C",4305,Tumor,,digits,Hospital - Confidential,,,,,leftZero
+institutionReferredFrom,2410,10,Institution Referred From,,,"A,M,C",4315,Tumor,,digits,Hospital - Confidential,,,,,leftZero
+institutionReferredToNpi,2425,10,NPI--Inst Referred To,,,"A,M,C",4325,Tumor,,digits,Hospital - Confidential,,,,,leftZero
+institutionReferredTo,2420,10,Institution Referred To,,,"A,M,C",4335,Tumor,,digits,Hospital - Confidential,,,,,leftZero
+physicianManagingNpi,2465,10,NPI--Physician--Managing,,,"A,M,C",4395,Tumor,,digits,Other - Confidential,,,,,leftZero
+physicianManaging,2460,8,Physician--Managing,,,"A,M,C",4405,Tumor,,digits,Other - Confidential,,,,,leftZero
+physicianFollowUpNpi,2475,10,NPI--Physician--Follow-Up,,,"A,M,C",4413,Tumor,,digits,Other - Confidential,,,,,leftZero
+physicianFollowUp,2470,8,Physician--Follow-Up,,,"A,M,C",4423,Tumor,,digits,Other - Confidential,,,,,leftZero
+physicianPrimarySurgNpi,2485,10,NPI--Physician--Primary Surg,,,"A,M,C",4431,Tumor,,digits,Other - Confidential,,,,,leftZero
 physicianPrimarySurg,2480,8,Physician--Primary Surg,,,"A,M,C",4441,Tumor,,digits,Other - Confidential,,,,,
-physician3Npi,2495,10,NPI--Physician 3,,,"A,M,C",4449,Tumor,,integerWithZero,Other - Confidential,,,,,
-physician3,2490,8,Physician 3,,,"A,M,C",4459,Tumor,,integerWithZero,Other - Confidential,,,,,
-physician4Npi,2505,10,NPI--Physician 4,,,"A,M,C",4467,Tumor,,integerWithZero,Other - Confidential,,,,,
-physician4,2500,8,Physician 4,,,"A,M,C",4477,Tumor,,integerWithZero,Other - Confidential,,,,,
+physician3Npi,2495,10,NPI--Physician 3,,,"A,M,C",4449,Tumor,,digits,Other - Confidential,,,,,leftZero
+physician3,2490,8,Physician 3,,,"A,M,C",4459,Tumor,,digits,Other - Confidential,,,,,leftZero
+physician4Npi,2505,10,NPI--Physician 4,,,"A,M,C",4467,Tumor,,digits,Other - Confidential,,,,,leftZero
+physician4,2500,8,Physician 4,,,"A,M,C",4477,Tumor,,digits,Other - Confidential,,,,,leftZero
 pathReportFacId1,7010,25,Path Reporting Fac ID 1,,,"A,M,C",4535,Tumor,,text,Pathology,,,,,
 pathReportNumber1,7090,20,Path Report Number 1,,,"A,M,C",4560,Tumor,,text,Pathology,,,,,
 pathDateSpecCollect1,7320,14,Path Date Spec Collect 1,,,"A,M,C",4580,Tumor,,text,Pathology,,,,,

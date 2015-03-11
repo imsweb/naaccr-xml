@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
@@ -29,8 +31,10 @@ public class PatientXmlWriter implements AutoCloseable {
             public void startNode(String name) {
                 super.startNode(name);
                 if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(name) && dictionary != null) {
-                    addAttribute("naaccrVersion", dictionary.getFormat().getNaaccrVersion());
+                    addAttribute("baseDictionaryUri", dictionary.getBaseDictionaryUri());
+                    addAttribute("userDictionaryUri", dictionary.getUserDictionaryUri()); // TODO FDP we shouldn't write it if this is the default one...
                     addAttribute("recordType", dictionary.getFormat().getRecordType());
+                    addAttribute("timeGenerated", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date())); // TODO verify the format...
                 }
             }
         };

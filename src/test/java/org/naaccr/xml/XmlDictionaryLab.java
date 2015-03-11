@@ -17,8 +17,22 @@ import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 public class XmlDictionaryLab {
 
     public static void main(String[] args) throws IOException {
+
+        final String naaccrVersion = "140";
+
         final NaaccrDictionary dictionary = NaaccrXmlUtils.getBaseDictionary("140");
-        System.out.println("Read " + dictionary.getItems().size() + " items from standard CSV dictionary...");
+        System.out.println("Read " + dictionary.getItems().size() + " items from base CSV dictionary...");
+        final String dictionaryUri = "http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml";
+        final String description = "NAACCR 14 base dictionary.";
+        File outputFile = new File(System.getProperty("user.dir") + "/build/naaccr-dictionary-140.xml");
+        FileWriter writer = new FileWriter(outputFile);
+
+//        final NaaccrDictionary dictionary = NaaccrXmlUtils.getDefaultUserDictionary(naaccrVersion);
+//        System.out.println("Read " + dictionary.getItems().size() + " items from default user CSV dictionary...");
+//        final String dictionaryUri = "http://naaccr.org/naaccrxml/naaccr-dictionary-gaps-140.xml";
+//        final String description = "NAACCR 14 default user dictionary.";
+//        File outputFile = new File(System.getProperty("user.dir") + "/build/naaccr-dictionary-gaps-140.xml");
+//        FileWriter writer = new FileWriter(outputFile);
 
         XStream xstream = new XStream();
         xstream.alias("NaaccrDictionary", NaaccrDictionary.class);
@@ -35,10 +49,7 @@ public class XmlDictionaryLab {
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "regexValidation", "regexValidation");
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "padding", "padding");
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "trim", "trim");
-        xstream.addImplicitCollection(NaaccrDictionary.class, "items", NaaccrDictionaryItem.class);
-
-        File outputFile = new File(System.getProperty("user.dir") + "/build/naaccr-dictionary-140.xml");
-        FileWriter writer = new FileWriter(outputFile);
+        xstream.addImplicitCollection(NaaccrDictionary.class, "_items", NaaccrDictionaryItem.class);
 
         PrettyPrintWriter prettyWriter = new PrettyPrintWriter(writer) {
             // why isn't the internal writer protected instead of private??? I hate when people do that!
@@ -58,13 +69,16 @@ public class XmlDictionaryLab {
                 super.startNode(name);
                 _currentItemId = null;
                 if ("NaaccrDictionary".equals(name)) {
-                    addAttribute("naaccrVersion", "140");
-                    addAttribute("description", "NAACCR 14 data dictionary.");
+                    addAttribute("dictionaryUri", dictionaryUri);
+                    addAttribute("naaccrVersion", naaccrVersion);
+                    addAttribute("description", description);
                 }
             }
 
             @Override
             public void addAttribute(String key, String value) {
+                if ("dataType".equals(key) && NaaccrXmlUtils.NAACCR_DATA_TYPE_TEXT.equals(value))
+                    return;
                 if ("padding".equals(key) && NaaccrXmlUtils.NAACCR_PADDING_RIGHT_BLANK.equals(value))
                     return;
                 if ("trim".equals(key) && NaaccrXmlUtils.NAACCR_TRIM_ALL.equals(value))
@@ -72,7 +86,7 @@ public class XmlDictionaryLab {
                 super.addAttribute(key, value);
                 if ("naaccrId".equals(key))
                     _currentItemId = value;
-                if (!"naaccrVersion".equals(key) && !"description".equals(key) && !isLastAttribute(key))
+                if (!"description".equals(key) && !isLastAttribute(key))
                     _internalWriter.write("\r\n     ");
             }
 
@@ -88,7 +102,7 @@ public class XmlDictionaryLab {
                 if (item.getRegexValidation() != null)
                     return "regexValidation".equals(attribute);
                 if (item.getDataType() != null)
-                    return "dataType".equals(attribute);
+                    return "dataType".equals(attribute) && !NaaccrXmlUtils.NAACCR_DATA_TYPE_TEXT.equals(item.getDataType());
                 if (item.getParentXmlElement() != null)
                     return "parentXmlElement".equals(attribute);
                 return false;

@@ -4,36 +4,56 @@
 package org.naaccr.xml.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class NaaccrData {
 
-    private String naaccrVersion;
+    private String _baseDictionaryUri;
+
+    private String _userDictionaryUri;
     
-    private String recordType;
+    private String _recordType;
 
-    private List<Patient> patients;
+    private Date _timeGenerated;
 
-    public String getNaaccrVersion() {
-        return naaccrVersion;
+    private List<Patient> _patients;
+
+    public String getBaseDictionaryUri() {
+        return _baseDictionaryUri;
     }
 
-    public void setNaaccrVersion(String val) {
-        this.naaccrVersion = val;
+    public void setBaseDictionaryUri(String baseDictionaryUri) {
+        _baseDictionaryUri = baseDictionaryUri;
+    }
+
+    public String getUserDictionaryUri() {
+        return _userDictionaryUri;
+    }
+
+    public void setUserDictionaryUri(String userDictionaryUri) {
+        _userDictionaryUri = userDictionaryUri;
     }
 
     public String getRecordType() {
-        return recordType;
+        return _recordType;
     }
 
-    public void setRecordType(String val) {
-        this.recordType = val;
+    public void setRecordType(String recordType) {
+        _recordType = recordType;
     }
 
+    public Date getTimeGenerated() {
+        return _timeGenerated;
+    }
+
+    public void setTimeGenerated(Date timeGenerated) {
+        _timeGenerated = timeGenerated;
+    }
 
     public List<Patient> getPatients() {
-        if (patients == null)
-            patients = new ArrayList<>();
-        return patients;
+        if (_patients == null)
+            _patients = new ArrayList<>();
+        return _patients;
     }
 }

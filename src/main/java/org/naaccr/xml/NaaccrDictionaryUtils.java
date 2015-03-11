@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
@@ -81,15 +84,17 @@ public class NaaccrDictionaryUtils {
                     item.setRegexValidation(line[9]);
                 if (line.length > 10 && line[10] != null && !line[10].isEmpty())
                     item.setDataType(line[10]);
+                if (!NaaccrXmlUtils.NAACCR_DATA_TYPES_REGEX.containsKey(item.getDataType()))
+                    throw new RuntimeException("Unsupported data type: " + item.getDataType());
                 // section is not used anymore
                 if (line.length > 12 && line[12] != null && !line[12].isEmpty())
                     item.setSourceOfStandard(line[12]);
                 // retired is not used anymore
-                // imlementation is not used anymore
-                if (line.length > 13 && line[13] != null && !line[13].isEmpty())
-                    item.setTrim(line[13]);
-                if (line.length > 14 && line[14] != null && !line[14].isEmpty())
-                    item.setPadding(line[14]);
+                // implementation is not used anymore
+                if (line.length > 15 && line[15] != null && !line[15].isEmpty())
+                    item.setTrim(line[15]);
+                if (line.length > 16 && line[16] != null && !line[16].isEmpty())
+                    item.setPadding(line[16]);
                 
                 if (item.getRecordTypes() == null)
                     item.setRecordTypes("A,M,C,I");
@@ -106,7 +111,14 @@ public class NaaccrDictionaryUtils {
     public static void main(String[] args) throws IOException {
         NaaccrDictionary baseDictionary = readDictionary(Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-140.csv"), NAACCR_DICTIONARY_FORMAT_CSV);
         System.out.println("Read " + baseDictionary.getItems().size() + " items from base dictionary...");
-        NaaccrDictionary defaultUserDictionary = readDictionary(Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-gaps-140.csv"), NAACCR_DICTIONARY_FORMAT_CSV);
-        System.out.println("Read " + defaultUserDictionary.getItems().size() + " items from default user dictionary...");
+
+        Set<String> types = new HashSet<>();
+        for (NaaccrDictionaryItem item : baseDictionary.getItems())
+            types.add(item.getDataType());
+        System.out.println(types);
+
+
+        //NaaccrDictionary defaultUserDictionary = readDictionary(Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-gaps-140.csv"), NAACCR_DICTIONARY_FORMAT_CSV);
+        //System.out.println("Read " + defaultUserDictionary.getItems().size() + " items from default user dictionary...");
     }
 }

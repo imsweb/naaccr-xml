@@ -18,6 +18,10 @@ import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
 public class RuntimeNaaccrDictionary {
 
+    private String _baseDictionaryUri;
+
+    private String _userDictionaryUri;
+
     private NaaccrFormat _format;
 
     private List<RuntimeNaaccrDictionaryItem> _items;
@@ -34,6 +38,9 @@ public class RuntimeNaaccrDictionary {
         if (userDictionary == null)
             userDictionary = NaaccrXmlUtils.getDefaultUserDictionary(_format.getNaaccrVersion());
 
+        _baseDictionaryUri = baseDictionary.getDictionaryUri();
+        _userDictionaryUri = userDictionary.getDictionaryUri();
+
         _items = new ArrayList<>();
         for (NaaccrDictionaryItem item : baseDictionary.getItems())
             _items.add(new RuntimeNaaccrDictionaryItem(item));
@@ -47,6 +54,14 @@ public class RuntimeNaaccrDictionary {
                 return o1.getStartColumn().compareTo(o2.getStartColumn());
             }
         });
+    }
+
+    public String getBaseDictionaryUri() {
+        return _baseDictionaryUri;
+    }
+
+    public String getUserDictionaryUri() {
+        return _userDictionaryUri;
     }
 
     public NaaccrFormat getFormat() {
