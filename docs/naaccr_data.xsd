@@ -46,15 +46,9 @@
 	</xsd:complexType>
 </xsd:element>
 
-<xsd:simpleType name="trimString" >
-	<xsd:restriction base="xsd:string">
-		<xsd:whiteSpace value="replace" />
-	</xsd:restriction>
-</xsd:simpleType>
-
 <xsd:complexType name="itemType" >
 	<xsd:simpleContent>
-		<xsd:extension base="tns:trimString" >
+		<xsd:extension base="xsd:string" >
 			<xsd:attribute name="naaccrId" use="required" type="xsd:NCName" />
 			<xsd:attribute name="naaccrNum" type="xsd:integer" use="optional" />
 			<xsd:anyAttribute />

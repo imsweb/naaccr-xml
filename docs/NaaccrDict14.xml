@@ -152,7 +152,7 @@
 		<ItemDef naaccrId="socialSecurityNumber" naaccrNum="2320" naaccrName="Social Security Number" 
 			parentXmlElement="Patient" dataType="code" startColumn="3619" length="9" 
 			sourceOfStandard="NAACCR51" recordTypes="A,M,C" />
-		<ItemDef naaccrId="addressCurrentStreetName" naaccrNum="2350" naaccrName="Addr Current--No + Street" 
+		<ItemDef naaccrId="addressCurrentStreetName" naaccrNum="2350" naaccrName="Addr Current--No &amp; Street" 
 			parentXmlElement="Patient" dataType="string" startColumn="3748" length="60" 
 			sourceOfStandard="NAACCR51" recordTypes="A,M,C" />
 		<ItemDef naaccrId="addressCurrentSupplementl" naaccrNum="2355" naaccrName="Addr Current--Supplementl" 
@@ -932,7 +932,7 @@
 		<ItemDef naaccrId="militaryRecordNoSuffix" naaccrNum="2310" naaccrName="Military Record No Suffix" 
 			parentXmlElement="Tumor" dataType="code" startColumn="3617" length="2" 
 			sourceOfStandard="NAACCR51" recordTypes="A,M,C" />
-		<ItemDef naaccrId="addressAtDxStreetName" naaccrNum="2330" naaccrName="Addr at DX--No + Street" 
+		<ItemDef naaccrId="addressAtDxStreetName" naaccrNum="2330" naaccrName="Addr at DX--No &amp; Street" 
 			parentXmlElement="Tumor" dataType="string" startColumn="3628" length="60" 
 			sourceOfStandard="NAACCR51" recordTypes="A,M,C" />
 		<ItemDef naaccrId="addressAtDxSupplementl" naaccrNum="2335" naaccrName="Addr at DX--Supplementl" 
@@ -944,7 +944,7 @@
 		<ItemDef naaccrId="longitude" naaccrNum="2354" naaccrName="Longitude" 
 			parentXmlElement="Tumor" dataType="string" startColumn="4074" length="11" 
 			sourceOfStandard="NAACCR10" recordTypes="A,M,C" />
-		<ItemDef naaccrId="followUpContactNoAndStreet" naaccrNum="2392" naaccrName="Follow-Up Contact--No+St" 
+		<ItemDef naaccrId="followUpContactNoAndStreet" naaccrNum="2392" naaccrName="Follow-Up Contact--No&amp;St" 
 			parentXmlElement="Tumor" dataType="string" startColumn="3944" length="60" 
 			sourceOfStandard="NAACCR6" recordTypes="A,M,C" />
 		<ItemDef naaccrId="followUpContactSuppl" naaccrNum="2393" naaccrName="Follow-Up Contact--Suppl" 

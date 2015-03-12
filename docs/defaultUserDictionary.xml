@@ -4,46 +4,46 @@
 	dictionaryUri="http://naaccr.org/naaccrxml/defaultUserDictionary.xml" naaccrVersion="140" description="NAACCR v14 default user dictionary" >
 	<ItemDefs>
 		<ItemDef naaccrId="stateRequestorItems" naaccrNum="2220" naaccrName="State/Requestor Items"
-			parentXMLElement="Tumor" startColumn="2340" length="1000" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="2340" trim="none" length="1000" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrID="npcrSpecificField" naaccrNum="3720" naaccrName="NPCR Specific Field"
-			parentXMLElement="Tumor" startColumn="1306" length="75" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="1306" trim="none" length="75" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved00" naaccrNum="37" naaccrName="Reserved 00"
-			parentXMLElement="Tumor" startColumn="3" length="14" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="3" trim="none" length="14" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved01" naaccrNum="370" naaccrName="Reserved 01"
-			parentXMLElement="Tumor" startColumn="58" length="37" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="58" trim="none" length="37" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved02" naaccrNum="530" naaccrName="Reserved 02"
-			parentXMLElement="Tumor" startColumn="464" length="64" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="464" trim="none" length="64" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved03" naaccrNum="680" naaccrName="Reserved 03"
-			parentXMLElement="Tumor" startColumn="591" length="100" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="591" trim="none" length="100" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved04" naaccrNum="750" naaccrName="Reserved 04"
-			parentXMLElement="Tumor" startColumn="804" length="100" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="804" trim="none" length="100" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved05" naaccrNum="1180" naaccrName="Reserved 05"
-			parentXMLElement="Tumor" startColumn="1381" length="55" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="1381" trim="none" length="55" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved06" naaccrNum="1190" naaccrName="Reserved 06"
-			parentXMLElement="Tumor" startColumn="1624" length="100" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="1624" trim="none" length="100" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved07" naaccrNum="1300" naaccrName="Reserved 07"
-			parentXMLElement="Tumor" startColumn="1788" length="100" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="1788" trim="none" length="100" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved08" naaccrNum="1650" naaccrName="Reserved 08"
-			parentXMLElement="Tumor" startColumn="2036" length="80" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="2036" trim="none" length="80" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved09" naaccrNum="1740" naaccrName="Reserved 09"
-			parentXMLElement="Tumor" startColumn="2292" length="48" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="2292" trim="none" length="48" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved10" naaccrNum="1835" naaccrName="Reserved 10"
-			parentXMLElement="Tumor" startColumn="4085" length="200" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="4085" trim="none" length="200" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved11" naaccrNum="1900" naaccrName="Reserved 11"
-			parentXMLElement="Tumor" startColumn="4345" length="50" sourceOfStandard="NAACCR14" recordTypes="A,M,C" />
+			parentXMLElement="Tumor" startColumn="4345" trim="none" length="50" sourceOfStandard="NAACCR14" recordTypes="A,M,C" />
 		<ItemDef naaccrId="reserved12" naaccrNum="2510" naaccrName="Reserved 12"
-			parentXMLElement="Tumor" startColumn="4485" length="50" sourceOfStandard="NAACCR14" recordTypes="A,M,C" />
+			parentXMLElement="Tumor" startColumn="4485" trim="none" length="50" sourceOfStandard="NAACCR14" recordTypes="A,M,C" />
 		<ItemDef naaccrId="reserved13" naaccrNum="2080" naaccrName="Reserved 13"
-			parentXMLElement="Tumor" startColumn="5065" length="500" sourceOfStandard="NAACCR14" recordTypes="A,M,C" />
+			parentXMLElement="Tumor" startColumn="5065" trim="none" length="500" sourceOfStandard="NAACCR14" recordTypes="A,M,C" />
 		<ItemDef naaccrId="reserved14" naaccrNum="2210" naaccrName="Reserved 14"
-			parentXMLElement="Tumor" startColumn="20825" length="2000" sourceOfStandard="NAACCR14" recordTypes="A,M" />
+			parentXMLElement="Tumor" startColumn="20825" trim="none" length="2000" sourceOfStandard="NAACCR14" recordTypes="A,M" />
 		<ItemDef naaccrId="reserved15" naaccrNum="2400" naaccrName="Reserved 15"
-			parentXMLElement="Tumor" startColumn="780" length="1" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="780" trim="none" length="1" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved16" naaccrNum="2450" naaccrName="Reserved 16"
-			parentXMLElement="Tumor" startColumn="788" length="1" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="788" trim="none" length="1" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved17" naaccrNum="2700" naaccrName="Reserved 17"
-			parentXMLElement="Tumor" startColumn="2195" length="1" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="2195" trim="none" length="1" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 		<ItemDef naaccrId="reserved18" naaccrNum="2161" naaccrName="Reserved 18"
-			parentXMLElement="Tumor" startColumn="1595" length="1" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
+			parentXMLElement="Tumor" startColumn="1595" trim="none" length="1" sourceOfStandard="NAACCR14" recordTypes="A,M,C,I" />
 	</ItemDefs>
 </NaaccrDictionary>
