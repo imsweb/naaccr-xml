@@ -1,0 +1,279 @@
+<NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-gaps-140.xml"
+        naaccrVersion="140"
+        description="NAACCR 14 default user dictionary.">
+    <ItemDef naaccrId="reserved00"
+        naaccrNum="37"
+        naaccrName="Reserved 00"
+        startColumn="3"
+        length="14"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved01"
+        naaccrNum="370"
+        naaccrName="Reserved 01"
+        startColumn="58"
+        length="37"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved02"
+        naaccrNum="530"
+        naaccrName="Reserved 02"
+        startColumn="464"
+        length="64"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved03"
+        naaccrNum="680"
+        naaccrName="Reserved 03"
+        startColumn="591"
+        length="100"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved15"
+        naaccrNum="2400"
+        naaccrName="Reserved 15"
+        startColumn="780"
+        length="1"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved16"
+        naaccrNum="2450"
+        naaccrName="Reserved 16"
+        startColumn="788"
+        length="1"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved04"
+        naaccrNum="750"
+        naaccrName="Reserved 04"
+        startColumn="804"
+        length="100"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="npcrSpecificField"
+        naaccrNum="3720"
+        naaccrName="NPCR Specific Field"
+        startColumn="1306"
+        length="75"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved05"
+        naaccrNum="1180"
+        naaccrName="Reserved 05"
+        startColumn="1381"
+        length="55"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved18"
+        naaccrNum="2161"
+        naaccrName="Reserved 18"
+        startColumn="1595"
+        length="1"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved06"
+        naaccrNum="1190"
+        naaccrName="Reserved 06"
+        startColumn="1624"
+        length="100"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved07"
+        naaccrNum="1300"
+        naaccrName="Reserved 07"
+        startColumn="1788"
+        length="100"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved08"
+        naaccrNum="1650"
+        naaccrName="Reserved 08"
+        startColumn="2036"
+        length="80"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved17"
+        naaccrNum="270"
+        naaccrName="Reserved 17"
+        startColumn="2195"
+        length="1"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved09"
+        naaccrNum="1740"
+        naaccrName="Reserved 09"
+        startColumn="2292"
+        length="48"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="stateRequestorItems"
+        naaccrNum="2220"
+        naaccrName="State/Requestor Items"
+        startColumn="2340"
+        length="1000"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved10"
+        naaccrNum="1835"
+        naaccrName="Reserved 10"
+        startColumn="4085"
+        length="200"
+        recordTypes="A,M,C,I"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved11"
+        naaccrNum="1900"
+        naaccrName="Reserved 11"
+        startColumn="4345"
+        length="50"
+        recordTypes="A,M,C"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved12"
+        naaccrNum="2510"
+        naaccrName="Reserved 12"
+        startColumn="4485"
+        length="50"
+        recordTypes="A,M,C"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved13"
+        naaccrNum="2080"
+        naaccrName="Reserved 13"
+        startColumn="5065"
+        length="500"
+        recordTypes="A,M,C"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <ItemDef naaccrId="reserved14"
+        naaccrNum="2210"
+        naaccrName="Reserved 14"
+        startColumn="20825"
+        length="2000"
+        recordTypes="A,M"
+        parentXmlElement="Tumor"
+        trim="none"/>
+    <__cachedById>
+        <entry>
+            <string>reserved10</string>
+            <ItemDef reference="../../../ItemDef[17]"
+       />
+        </entry>
+        <entry>
+            <string>npcrSpecificField</string>
+            <ItemDef reference="../../../ItemDef[8]"
+       />
+        </entry>
+        <entry>
+            <string>reserved14</string>
+            <ItemDef reference="../../../ItemDef[21]"
+       />
+        </entry>
+        <entry>
+            <string>reserved05</string>
+            <ItemDef reference="../../../ItemDef[9]"
+       />
+        </entry>
+        <entry>
+            <string>reserved13</string>
+            <ItemDef reference="../../../ItemDef[20]"
+       />
+        </entry>
+        <entry>
+            <string>reserved04</string>
+            <ItemDef reference="../../../ItemDef[7]"
+       />
+        </entry>
+        <entry>
+            <string>reserved12</string>
+            <ItemDef reference="../../../ItemDef[19]"
+       />
+        </entry>
+        <entry>
+            <string>reserved07</string>
+            <ItemDef reference="../../../ItemDef[12]"
+       />
+        </entry>
+        <entry>
+            <string>reserved11</string>
+            <ItemDef reference="../../../ItemDef[18]"
+       />
+        </entry>
+        <entry>
+            <string>reserved06</string>
+            <ItemDef reference="../../../ItemDef[11]"
+       />
+        </entry>
+        <entry>
+            <string>reserved01</string>
+            <ItemDef reference="../../../ItemDef[2]"
+       />
+        </entry>
+        <entry>
+            <string>reserved18</string>
+            <ItemDef reference="../../../ItemDef[10]"
+       />
+        </entry>
+        <entry>
+            <string>reserved17</string>
+            <ItemDef reference="../../../ItemDef[14]"
+       />
+        </entry>
+        <entry>
+            <string>reserved00</string>
+            <ItemDef reference="../../../ItemDef"
+       />
+        </entry>
+        <entry>
+            <string>stateRequestorItems</string>
+            <ItemDef reference="../../../ItemDef[16]"
+       />
+        </entry>
+        <entry>
+            <string>reserved03</string>
+            <ItemDef reference="../../../ItemDef[4]"
+       />
+        </entry>
+        <entry>
+            <string>reserved16</string>
+            <ItemDef reference="../../../ItemDef[6]"
+       />
+        </entry>
+        <entry>
+            <string>reserved02</string>
+            <ItemDef reference="../../../ItemDef[3]"
+       />
+        </entry>
+        <entry>
+            <string>reserved15</string>
+            <ItemDef reference="../../../ItemDef[5]"
+       />
+        </entry>
+        <entry>
+            <string>reserved08</string>
+            <ItemDef reference="../../../ItemDef[13]"
+       />
+        </entry>
+        <entry>
+            <string>reserved09</string>
+            <ItemDef reference="../../../ItemDef[15]"
+       />
+        </entry>
+    </__cachedById>
+</NaaccrDictionary>

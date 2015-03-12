@@ -1,0 +1,537 @@
+Item ID,Item Number,Item Length,Item Name,Record Types,Item Start Column,XMLLevel - NAACCRData(N); Patient(P); Tumor(T)
+recordType,10,1,Record Type,"A,M,C,I",1,n
+registryType,30,1,Registry Type,"A,M,C,I",2,n
+naaccrRecordVersion,50,3,NAACCR Record Version,"A,M,C,I",17,n
+registryIdNpi,45,10,NPI--Registry ID,"A,M,C,I",20,n
+registryId,40,10,Registry ID,"A,M,C,I",30,n
+tumorRecordNumber,60,2,Tumor Record Number,"A,M,C,I",40,t
+patientIdNumber,20,8,Patient ID Number,"A,M,C,I",42,p
+patientSysIdHospital,21,8,Patient System ID-Hosp,"A,M,C,I",50,p
+addressAtDxCity,70,50,Addr at DX--City,"A,M,C,I",95,t
+addressAtDxState,80,2,Addr at DX--State,"A,M,C,I",145,t
+addressAtDxPostalCode,100,9,Addr at DX--Postal Code,"A,M,C,I",147,t
+addressAtDxCounty,90,3,County at DX,"A,M,C,I",156,t
+censusTract708090,110,6,Census Tract 1970/80/90,"A,M,C,I",159,t
+censusBlockGroup708090,368,1,Census Block Grp 1970-90,"A,M,C,I",165,t
+censusCodingSys708090,120,1,Census Cod Sys 1970/80/90,"A,M,C,I",166,t
+censusCertainty708090,364,1,Census Tr Cert 1970/80/90,"A,M,C,I",167,t
+censusTract2000,130,6,Census Tract 2000,"A,M,C,I",168,t
+censusBlockGroup2000,362,1,Census Block Group 2000,"A,M,C,I",174,t
+censusCertainty2000,365,1,Census Tr Certainty 2000,"A,M,C,I",175,t
+maritalStatusAtDx,150,1,Marital Status at DX,"A,M,C,I",176,t
+race1,160,2,Race 1,"A,M,C,I",177,p
+race2,161,2,Race 2,"A,M,C,I",179,p
+race3,162,2,Race 3,"A,M,C,I",181,p
+race4,163,2,Race 4,"A,M,C,I",183,p
+race5,164,2,Race 5,"A,M,C,I",185,p
+raceCodingSysCurrent,170,1,Race Coding Sys--Current,"A,M,C,I",187,p
+raceCodingSysOriginal,180,1,Race Coding Sys--Original,"A,M,C,I",188,p
+spanishHispanicOrigin,190,1,Spanish/Hispanic Origin,"A,M,C,I",189,p
+computedEthnicity,200,1,Computed Ethnicity,"A,M,C,I",190,p
+computedEthnicitySource,210,1,Computed Ethnicity Source,"A,M,C,I",191,p
+sex,220,1,Sex,"A,M,C,I",192,p
+ageAtDx,230,3,Age at Diagnosis,"A,M,C,I",193,t
+birthDate,240,8,Date of Birth,"A,M,C,I",196,p
+birthDateFlag,241,2,Date of Birth Flag,"A,M,C,I",204,p
+birthPlace,250,3,Birthplace,"A,M,C,I",206,p
+occupationCodeCensus,270,3,Census Occ Code 1970-2000,"A,M,C,I",209,t
+industryCodeCensus,280,3,Census Ind Code 1970-2000,"A,M,C,I",212,t
+occupationSource,290,1,Occupation Source,"A,M,C,I",215,t
+industrySource,300,1,Industry Source,"A,M,C,I",216,t
+textUsualOccupation,310,100,Text--Usual Occupation,"A,M,C,I",217,t
+textUsualIndustry,320,100,Text--Usual Industry,"A,M,C,I",317,t
+occupationIndustryCodingSys,330,1,Census Occ/Ind Sys 70-00,"A,M,C,I",417,t
+nhia,191,1,NHIA Derived Hisp Origin,"A,M,C,I",418,p
+napiia,193,2,Race--NAPIIA(derived API),"A,M,C,I",419,p
+ihs,192,1,IHS Link,"A,M,C,I",421,p
+gisQuality,366,2,GIS Coordinate Quality,"A,M,C,I",422,t
+ruralUrbanContinuum1993,3300,2,RuralUrban Continuum 1993,"A,M,C,I",424,t
+ruralUrbanContinuum2003,3310,2,RuralUrban Continuum 2003,"A,M,C,I",426,t
+censusTract2010,135,6,Census Tract 2010,"A,M,C,I",428,t
+censusBlockGroup2010,363,1,Census Block Group 2010,"A,M,C,I",434,t
+censusCertainty2010,367,1,Census Tr Certainty 2010,"A,M,C,I",435,t
+addressAtDxCountry,102,3,Addr at DX--Country,"A,M,C,I",436,t
+addressCurrentCountry,1832,3,Addr Current--Country,"A,M,C,I",439,p
+birthplaceState,252,2,Birthplace--State,"A,M,C,I",442,p
+birthplaceCountry,254,3,Birthplace--Country,"A,M,C,I",444,p
+followupContactCountry,1847,3,FollowUp Contact--Country,"A,M,C,I",447,t
+placeOfDeathState,1942,2,Place of Death--State,"A,M,C,I",450,p
+placeOfDeathCountry,1944,3,Place of Death--Country,"A,M,C,I",452,p
+censusIndCode2010,272,4,Census Ind Code 2010,"A,M,C,I",455,t
+censusOccCode2010,282,4,Census Occ Code 2010,"A,M,C,I",459,t
+censusPovertyIndictr,145,1,Census Tr Poverty Indictr,"A,M,C,I",463,t
+sequenceNumberCentral,380,2,Sequence Number--Central,"A,M,C,I",528,t
+dateOfDiagnosis,390,8,Date of Diagnosis,"A,M,C,I",530,t
+dateOfDiagnosisFlag,391,2,Date of Diagnosis Flag,"A,M,C,I",538,t
+primarySite,400,4,Primary Site,"A,M,C,I",540,t
+laterality,410,1,Laterality,"A,M,C,I",544,t
+morphologyIcdO2,419,5,Morph--Type&Behav ICD-O-2,"A,M,C,I",545,t
+histologyIcdO2,420,4,Histology (92-00) ICD-O-2,"A,M,C,I",545,t
+behaviorIcdO2,430,1,Behavior (92-00) ICD-O-2,"A,M,C,I",549,t
+morphologyIcdO3,521,5,Morph--Type&Behav ICD-O-3,"A,M,C,I",550,t
+histologyIcdO3,522,4,Histologic Type ICD-O-3,"A,M,C,I",550,t
+behaviorIcdO3,523,1,Behavior Code ICD-O-3,"A,M,C,I",554,t
+grade,440,1,Grade,"A,M,C,I",555,t
+gradePathValue,441,1,Grade Path Value,"A,M,C,I",556,t
+gradePathSys,449,1,Grade Path System,"A,M,C,I",557,t
+siteCodingSysCurrent,450,1,Site Coding Sys--Current,"A,M,C,I",558,t
+siteCodingSysOriginal,460,1,Site Coding Sys--Original,"A,M,C,I",559,t
+morphCodingSysCurrent,470,1,Morph Coding Sys--Current,"A,M,C,I",560,t
+morphCodingSysOriginal,480,1,Morph Coding Sys--Originl,"A,M,C,I",561,t
+diagnosticConfirmation,490,1,Diagnostic Confirmation,"A,M,C,I",562,t
+typeOfReportingSource,500,1,Type of Reporting Source,"A,M,C,I",563,t
+casefindingSource,501,2,Casefinding Source,"A,M,C,I",564,t
+ambiguousTerminologyDx,442,1,Ambiguous Terminology DX,"A,M,C,I",566,t
+dateConclusiveDx,443,8,Date Conclusive DX,"A,M,C,I",567,t
+dateConclusiveDxFlag,448,2,Date Conclusive DX Flag,"A,M,C,I",575,t
+multiTumorRptAsOnePrim,444,2,Mult Tum Rpt as One Prim,"A,M,C,I",577,t
+dateOfMultipleTumors,445,8,Date of Mult Tumors,"A,M,C,I",579,t
+dateOfMultipleTumorsFlag,439,2,Date of Mult Tumors Flag,"A,M,C,I",587,t
+multiplicityCounter,446,2,Multiplicity Counter,"A,M,C,I",589,t
+reportingFacilityNpi,545,10,NPI--Reporting Facility,"A,M,C,I",691,t
+reportingFacility,540,10,Reporting Facility,"A,M,C,I",701,t
+archiveFinNpi,3105,10,NPI--Archive FIN,"A,M,C,I",711,t
+archiveFin,3100,10,Archive FIN,"A,M,C,I",721,t
+accessionNumberHosp,550,9,Accession Number--Hosp,"A,M,C,I",731,t
+sequenceNumberHosp,560,2,Sequence Number--Hospital,"A,M,C,I",740,t
+abstractedBy,570,3,Abstracted By,"A,M,C,I",742,t
+dateOf1stContact,580,8,Date of 1st Contact,"A,M,C,I",745,t
+dateOf1stContactFlag,581,2,Date of 1st Contact Flag,"A,M,C,I",753,t
+dateOfInptAdm,590,8,Date of Inpt Adm,"A,M,C,I",755,t
+dateOfInptAdmFlag,591,2,Date of Inpt Adm Flag,"A,M,C,I",763,t
+dateOfInptDisch,600,8,Date of Inpt Disch,"A,M,C,I",765,t
+dateOfInptDischFlag,601,2,Date of Inpt Disch Flag,"A,M,C,I",773,t
+inpatientStatus,605,1,Inpatient Status,"A,M,C,I",775,t
+classOfCase,610,2,Class of Case,"A,M,C,I",776,t
+primaryPayerAtDx,630,2,Primary Payer at DX,"A,M,C,I",778,t
+rxHospSurgApp2010,668,1,RX Hosp--Surg App 2010,"A,M,C,I",781,t
+rxHospSurgPrimSite,670,2,RX Hosp--Surg Prim Site,"A,M,C,I",782,t
+rxHospScopeRegLnSur,672,1,RX Hosp--Scope Reg LN Sur,"A,M,C,I",784,t
+rxHospSurgOthRegDis,674,1,RX Hosp--Surg Oth Reg/Dis,"A,M,C,I",785,t
+rxHospRegLnRemoved,676,2,RX Hosp--Reg LN Removed,"A,M,C,I",786,t
+rxHospRadiation,690,1,RX Hosp--Radiation,"A,M,C,I",789,t
+rxHospChemo,700,2,RX Hosp--Chemo,"A,M,C,I",790,t
+rxHospHormone,710,2,RX Hosp--Hormone,"A,M,C,I",792,t
+rxHospBrm,720,2,RX Hosp--BRM,"A,M,C,I",794,t
+rxHospOther,730,1,RX Hosp--Other,"A,M,C,I",796,t
+rxHospDxStgProc,740,2,RX Hosp--DX/Stg Proc,"A,M,C,I",797,t
+rxHospPalliativeProc,3280,1,RX Hosp--Palliative Proc,"A,M,C,I",799,t
+rxHospSurgSite9802,746,2,RX Hosp--Surg Site 98-02,"A,M,C,I",800,t
+rxHospScopeReg9802,747,1,RX Hosp--Scope Reg 98-02,"A,M,C,I",802,t
+rxHospSurgOth9802,748,1,RX Hosp--Surg Oth 98-02,"A,M,C,I",803,t
+seerSummaryStage2000,759,1,SEER Summary Stage 2000,"A,M,C,I",904,t
+seerSummaryStage1977,760,1,SEER Summary Stage 1977,"A,M,C,I",905,t
+extentOfDisease10Digit,779,12,Extent of Disease 10-Dig,"A,M,C,I",906,t
+eodTumorSize,780,3,EOD--Tumor Size,"A,M,C,I",906,t
+eodExtension,790,2,EOD--Extension,"A,M,C,I",909,t
+eodExtensionProstPath,800,2,EOD--Extension Prost Path,"A,M,C,I",911,t
+eodLymphNodeInvolv,810,1,EOD--Lymph Node Involv,"A,M,C,I",913,t
+regionalNodesPositive,820,2,Regional Nodes Positive,"A,M,C,I",914,t
+regionalNodesExamined,830,2,Regional Nodes Examined,"A,M,C,I",916,t
+eodOld13Digit,840,13,EOD--Old 13 Digit,"A,M,C,I",918,t
+eodOld2Digit,850,2,EOD--Old 2 Digit,"A,M,C,I",931,t
+eodOld4Digit,860,4,EOD--Old 4 Digit,"A,M,C,I",933,t
+eodCodingSys,870,1,Coding System for EOD,"A,M,C,I",937,t
+tnmEditionNumber,1060,2,TNM Edition Number,"A,M,C,I",938,t
+tnmPathT,880,4,TNM Path T,"A,M,C,I",940,t
+tnmPathN,890,4,TNM Path N,"A,M,C,I",944,t
+tnmPathM,900,4,TNM Path M,"A,M,C,I",948,t
+tnmPathStageGroup,910,4,TNM Path Stage Group,"A,M,C,I",952,t
+tnmPathDescriptor,920,1,TNM Path Descriptor,"A,M,C,I",956,t
+tnmPathStagedBy,930,1,TNM Path Staged By,"A,M,C,I",957,t
+tnmClinT,940,4,TNM Clin T,"A,M,C,I",958,t
+tnmClinN,950,4,TNM Clin N,"A,M,C,I",962,t
+tnmClinM,960,4,TNM Clin M,"A,M,C,I",966,t
+tnmClinStageGroup,970,4,TNM Clin Stage Group,"A,M,C,I",970,t
+tnmClinDescriptor,980,1,TNM Clin Descriptor,"A,M,C,I",974,t
+tnmClinStagedBy,990,1,TNM Clin Staged By,"A,M,C,I",975,t
+pediatricStage,1120,2,Pediatric Stage,"A,M,C,I",976,t
+pediatricStagingSys,1130,2,Pediatric Staging System,"A,M,C,I",978,t
+pediatricStagedBy,1140,1,Pediatric Staged By,"A,M,C,I",980,t
+tumorMarker1,1150,1,Tumor Marker 1,"A,M,C,I",981,t
+tumorMarker2,1160,1,Tumor Marker 2,"A,M,C,I",982,t
+tumorMarker3,1170,1,Tumor Marker 3,"A,M,C,I",983,t
+lymphVascularInvasion,1182,1,Lymph-vascular Invasion,"A,M,C,I",984,t
+csTumorSize,2800,3,CS Tumor Size,"A,M,C,I",985,t
+csExtension,2810,3,CS Extension,"A,M,C,I",988,t
+csTumorSizeExtEval,2820,1,CS Tumor Size/Ext Eval,"A,M,C,I",991,t
+csLymphNodes,2830,3,CS Lymph Nodes,"A,M,C,I",992,t
+csLymphNodesEval,2840,1,CS Lymph Nodes Eval,"A,M,C,I",995,t
+csMetsAtDx,2850,2,CS Mets at DX,"A,M,C,I",996,t
+csMetsEval,2860,1,CS Mets Eval,"A,M,C,I",998,t
+csMetsAtDxBone,2851,1,CS Mets at Dx-Bone,"A,M,C,I",999,t
+csMetsAtDxBrain,2852,1,CS Mets at Dx-Brain,"A,M,C,I",1000,t
+csMetsAtDxLiver,2853,1,CS Mets at Dx-Liver,"A,M,C,I",1001,t
+csMetsAtDxLung,2854,1,CS Mets at Dx-Lung,"A,M,C,I",1002,t
+csSiteSpecificFactor1,2880,3,CS Site-Specific Factor 1,"A,M,C,I",1003,t
+csSiteSpecificFactor2,2890,3,CS Site-Specific Factor 2,"A,M,C,I",1006,t
+csSiteSpecificFactor3,2900,3,CS Site-Specific Factor 3,"A,M,C,I",1009,t
+csSiteSpecificFactor4,2910,3,CS Site-Specific Factor 4,"A,M,C,I",1012,t
+csSiteSpecificFactor5,2920,3,CS Site-Specific Factor 5,"A,M,C,I",1015,t
+csSiteSpecificFactor6,2930,3,CS Site-Specific Factor 6,"A,M,C,I",1018,t
+csSiteSpecificFactor7,2861,3,CS Site-Specific Factor 7,"A,M,C,I",1021,t
+csSiteSpecificFactor8,2862,3,CS Site-Specific Factor 8,"A,M,C,I",1024,t
+csSiteSpecificFactor9,2863,3,CS Site-Specific Factor 9,"A,M,C,I",1027,t
+csSiteSpecificFactor10,2864,3,CS Site-Specific Factor10,"A,M,C,I",1030,t
+csSiteSpecificFactor11,2865,3,CS Site-Specific Factor11,"A,M,C,I",1033,t
+csSiteSpecificFactor12,2866,3,CS Site-Specific Factor12,"A,M,C,I",1036,t
+csSiteSpecificFactor13,2867,3,CS Site-Specific Factor13,"A,M,C,I",1039,t
+csSiteSpecificFactor14,2868,3,CS Site-Specific Factor14,"A,M,C,I",1042,t
+csSiteSpecificFactor15,2869,3,CS Site-Specific Factor15,"A,M,C,I",1045,t
+csSiteSpecificFactor16,2870,3,CS Site-Specific Factor16,"A,M,C,I",1048,t
+csSiteSpecificFactor17,2871,3,CS Site-Specific Factor17,"A,M,C,I",1051,t
+csSiteSpecificFactor18,2872,3,CS Site-Specific Factor18,"A,M,C,I",1054,t
+csSiteSpecificFactor19,2873,3,CS Site-Specific Factor19,"A,M,C,I",1057,t
+csSiteSpecificFactor20,2874,3,CS Site-Specific Factor20,"A,M,C,I",1060,t
+csSiteSpecificFactor21,2875,3,CS Site-Specific Factor21,"A,M,C,I",1063,t
+csSiteSpecificFactor22,2876,3,CS Site-Specific Factor22,"A,M,C,I",1066,t
+csSiteSpecificFactor23,2877,3,CS Site-Specific Factor23,"A,M,C,I",1069,t
+csSiteSpecificFactor24,2878,3,CS Site-Specific Factor24,"A,M,C,I",1072,t
+csSiteSpecificFactor25,2879,3,CS Site-Specific Factor25,"A,M,C,I",1075,t
+csPreRxTumorSize,2730,3,CS PreRx Tumor Size,"A,M,C,I",1078,t
+csPreRxExt,2735,3,CS PreRx Extension,"A,M,C,I",1081,t
+csPreRxSizeExtEval,2740,1,CS PreRx Tum Sz/Ext Eval,"A,M,C,I",1084,t
+csPreRxLymphNodes,2750,3,CS PreRx Lymph Nodes,"A,M,C,I",1085,t
+csPreRxRegNodesEval,2755,1,CS PreRx Reg Nodes Eval,"A,M,C,I",1088,t
+csPreRxMetsAtDx,2760,2,CS PreRx Mets at DX,"A,M,C,I",1089,t
+csPreRxMetsEval,2765,1,CS PreRx Mets Eval,"A,M,C,I",1091,t
+csPostRxTumorSize,2770,3,CS PostRx Tumor Size,"A,M,C,I",1092,t
+csPostRxExt,2775,3,CS PostRx Extension,"A,M,C,I",1095,t
+csPostRxLymphNodes,2780,3,CS PostRx Lymph Nodes,"A,M,C,I",1098,t
+csPostRxMetsAtDx,2785,2,CS PostRx Mets at DX,"A,M,C,I",1101,t
+derivedAjcc6T,2940,2,Derived AJCC-6 T,"A,M,C,I",1103,t
+derivedAjcc6TDescriptor,2950,1,Derived AJCC-6 T Descript,"A,M,C,I",1105,t
+derivedAjcc6N,2960,2,Derived AJCC-6 N,"A,M,C,I",1106,t
+derivedAjcc6NDescriptor,2970,1,Derived AJCC-6 N Descript,"A,M,C,I",1108,t
+derivedAjcc6M,2980,2,Derived AJCC-6 M,"A,M,C,I",1109,t
+derivedAjcc6MDescriptor,2990,1,Derived AJCC-6 M Descript,"A,M,C,I",1111,t
+derivedAjcc6StageGroup,3000,2,Derived AJCC-6 Stage Grp,"A,M,C,I",1112,t
+derivedAjcc7T,3400,3,Derived AJCC-7 T,"A,M,C,I",1114,t
+derivedAjcc7TDescriptor,3402,1,Derived AJCC-7 T Descript,"A,M,C,I",1117,t
+derivedAjcc7N,3410,3,Derived AJCC-7 N,"A,M,C,I",1118,t
+derivedAjcc7NDescriptor,3412,1,Derived AJCC-7 N Descript,"A,M,C,I",1121,t
+derivedAjcc7M,3420,3,Derived AJCC-7 M,"A,M,C,I",1122,t
+derivedAjcc7MDescriptor,3422,1,Derived AJCC-7 M Descript,"A,M,C,I",1125,t
+derivedAjcc7StageGroup,3430,3,Derived AJCC-7 Stage Grp,"A,M,C,I",1126,t
+derivedPreRx7T,3440,3,Derived PreRx-7 T,"A,M,C,I",1129,t
+derivedPreRx7TDescriptor,3442,1,Derived PreRx-7 T Descrip,"A,M,C,I",1132,t
+derivedPreRx7N,3450,3,Derived PreRx-7 N,"A,M,C,I",1133,t
+derivedPreRx7NDescriptor,3452,1,Derived PreRx-7 N Descrip,"A,M,C,I",1136,t
+derivedPreRx7M,3460,3,Derived PreRx-7 M,"A,M,C,I",1137,t
+derivedPreRx7MDescriptor,3462,1,Derived PreRx-7 M Descrip,"A,M,C,I",1140,t
+derivedPreRx7StageGroup,3470,3,Derived PreRx-7 Stage Grp,"A,M,C,I",1141,t
+derivedPostRx7T,3480,3,Derived PostRx-7 T,"A,M,C,I",1144,t
+derivedPostRx7N,3482,3,Derived PostRx-7 N,"A,M,C,I",1147,t
+derivedPostRx7M,3490,2,Derived PostRx-7 M,"A,M,C,I",1150,t
+derivedPostRx7StageGroup,3492,3,Derived PostRx-7 Stge Grp,"A,M,C,I",1152,t
+derivedSs1977,3010,1,Derived SS1977,"A,M,C,I",1155,t
+derivedSs2000,3020,1,Derived SS2000,"A,M,C,I",1156,t
+derivedNeoAdJuvRxFlag,3600,1,Derived Neoadjuv Rx Flag,"A,M,C,I",1157,t
+derivedAjccFlag,3030,1,Derived AJCC--Flag,"A,M,C,I",1158,t
+derivedSs1977Flag,3040,1,Derived SS1977--Flag,"A,M,C,I",1159,t
+derivedSs2000Flag,3050,1,Derived SS2000--Flag,"A,M,C,I",1160,t
+csVersionInputCurrent,2937,6,CS Version Input Current,"A,M,C,I",1161,t
+csVersionOriginal,2935,6,CS Version Input Original,"A,M,C,I",1167,t
+csVersionDerived,2936,6,CS Version Derived,"A,M,C,I",1173,t
+seerSiteSpecificFactor1,3700,1,SEER Site-Specific Fact 1,"A,M,C,I",1179,t
+seerSiteSpecificFactor2,3702,1,SEER Site-Specific Fact 2,"A,M,C,I",1180,t
+seerSiteSpecificFactor3,3704,1,SEER Site-Specific Fact 3,"A,M,C,I",1181,t
+seerSiteSpecificFactor4,3706,1,SEER Site-Specific Fact 4,"A,M,C,I",1182,t
+seerSiteSpecificFactor5,3708,1,SEER Site-Specific Fact 5,"A,M,C,I",1183,t
+seerSiteSpecificFactor6,3710,1,SEER Site-Specific Fact 6,"A,M,C,I",1184,t
+icdRevisionComorbid,3165,1,ICD Revision Comorbid,"A,M,C,I",1185,t
+comorbidComplication1,3110,5,Comorbid/Complication 1,"A,M,C,I",1186,t
+comorbidComplication2,3120,5,Comorbid/Complication 2,"A,M,C,I",1191,t
+comorbidComplication3,3130,5,Comorbid/Complication 3,"A,M,C,I",1196,t
+comorbidComplication4,3140,5,Comorbid/Complication 4,"A,M,C,I",1201,t
+comorbidComplication5,3150,5,Comorbid/Complication 5,"A,M,C,I",1206,t
+comorbidComplication6,3160,5,Comorbid/Complication 6,"A,M,C,I",1211,t
+comorbidComplication7,3161,5,Comorbid/Complication 7,"A,M,C,I",1216,t
+comorbidComplication8,3162,5,Comorbid/Complication 8,"A,M,C,I",1221,t
+comorbidComplication9,3163,5,Comorbid/Complication 9,"A,M,C,I",1226,t
+comorbidComplication10,3164,5,Comorbid/Complication 10,"A,M,C,I",1231,t
+secondaryDiagnosis1,3780,7,Secondary Diagnosis 1,"A,M,C,I",1236,t
+secondaryDiagnosis2,3782,7,Secondary Diagnosis 2,"A,M,C,I",1243,t
+secondaryDiagnosis3,3784,7,Secondary Diagnosis 3,"A,M,C,I",1250,t
+secondaryDiagnosis4,3786,7,Secondary Diagnosis 4,"A,M,C,I",1257,t
+secondaryDiagnosis5,3788,7,Secondary Diagnosis 5,"A,M,C,I",1264,t
+secondaryDiagnosis6,3790,7,Secondary Diagnosis 6,"A,M,C,I",1271,t
+secondaryDiagnosis7,3792,7,Secondary Diagnosis 7,"A,M,C,I",1278,t
+secondaryDiagnosis8,3794,7,Secondary Diagnosis 8,"A,M,C,I",1285,t
+secondaryDiagnosis9,3796,7,Secondary Diagnosis 9,"A,M,C,I",1292,t
+secondaryDiagnosis10,3798,7,Secondary Diagnosis 10,"A,M,C,I",1299,t
+npcrSpecificField,3720,75,NPCR Specific Field,"A,M,C,I",1306,t
+dateOfInitialRx,1260,8,Date Initial RX SEER,"A,M,C,I",1436,t
+dateOfInitialRxFlag,1261,2,Date Initial RX SEER Flag,"A,M,C,I",1444,t
+dateOf1stCrsRxCoc,1270,8,Date 1st Crs RX CoC,"A,M,C,I",1446,t
+dateOf1stCrsRxCocFlag,1271,2,Date 1st Crs RX CoC Flag,"A,M,C,I",1454,t
+rxDateSurgery,1200,8,RX Date Surgery,"A,M,C,I",1456,t
+rxDateSurgeryFlag,1201,2,RX Date Surgery Flag,"A,M,C,I",1464,t
+rxDateMostDefinSurg,3170,8,RX Date Most Defin Surg,"A,M,C,I",1466,t
+rxDateMostDefinSurgFlag,3171,2,RX Date Most Defin Surg Flag,"A,M,C,I",1474,t
+rxDateSurgicalDisch,3180,8,RX Date Surgical Disch,"A,M,C,I",1476,t
+rxDateSurgicalDischFlag,3181,2,RX Date Surgical Disch Flag,"A,M,C,I",1484,t
+rxDateRadiation,1210,8,RX Date Radiation,"A,M,C,I",1486,t
+rxDateRadiationFlag,1211,2,RX Date Radiation Flag,"A,M,C,I",1494,t
+rxDateRadiationEnded,3220,8,RX Date Radiation Ended,"A,M,C,I",1496,t
+rxDateRadiationEndedFlag,3221,2,RX Date Radiation Ended Flag,"A,M,C,I",1504,t
+rxDateSystemic,3230,8,RX Date Systemic,"A,M,C,I",1506,t
+rxDateSystemicFlag,3231,2,RX Date Systemic Flag,"A,M,C,I",1514,t
+rxDateChemo,1220,8,RX Date Chemo,"A,M,C,I",1516,t
+rxDateChemoFlag,1221,2,RX Date Chemo Flag,"A,M,C,I",1524,t
+rxDateHormone,1230,8,RX Date Hormone,"A,M,C,I",1526,t
+rxDateHormoneFlag,1231,2,RX Date Hormone Flag,"A,M,C,I",1534,t
+rxDateBrm,1240,8,RX Date BRM,"A,M,C,I",1536,t
+rxDateBrmFlag,1241,2,RX Date BRM Flag,"A,M,C,I",1544,t
+rxDateOther,1250,8,RX Date Other,"A,M,C,I",1546,t
+rxDateOtherFlag,1251,2,RX Date Other Flag,"A,M,C,I",1554,t
+rxDateDxStgProc,1280,8,RX Date DX/Stg Proc,"A,M,C,I",1556,t
+rxDateDxStgProcFlag,1281,2,RX Date DX/Stg Proc Flag,"A,M,C,I",1564,t
+rxSummTreatmentStatus,1285,1,RX Summ--Treatment Status,"A,M,C,I",1566,t
+rxSummSurgPrimSite,1290,2,RX Summ--Surg Prim Site,"A,M,C,I",1567,t
+rxSummScopeRegLnSur,1292,1,RX Summ--Scope Reg LN Sur,"A,M,C,I",1569,t
+rxSummSurgOthRegDis,1294,1,RX Summ--Surg Oth Reg/Dis,"A,M,C,I",1570,t
+rxSummRegLnExamined,1296,2,RX Summ--Reg LN Examined,"A,M,C,I",1571,t
+rxSummSurgicalApproach,1310,1,RX Summ--Surgical Approch,"A,M,C,I",1573,t
+rxSummSurgicalMargins,1320,1,RX Summ--Surgical Margins,"A,M,C,I",1574,t
+rxSummReconstruct1st,1330,1,RX Summ--Reconstruct 1st,"A,M,C,I",1575,t
+reasonForNoSurgery,1340,1,Reason for No Surgery,"A,M,C,I",1576,t
+rxSummDxStgProc,1350,2,RX Summ--DX/Stg Proc,"A,M,C,I",1577,t
+rxSummPalliativeProc,3270,1,RX Summ--Palliative Proc,"A,M,C,I",1579,t
+rxSummRadiation,1360,1,RX Summ--Radiation,"A,M,C,I",1580,t
+rxSummRadToCns,1370,1,RX Summ--Rad to CNS,"A,M,C,I",1581,t
+rxSummSurgRadSeq,1380,1,RX Summ--Surg/Rad Seq,"A,M,C,I",1582,t
+rxSummTransplntEndocr,3250,2,RX Summ--Transplnt/Endocr,"A,M,C,I",1583,t
+rxSummChemo,1390,2,RX Summ--Chemo,"A,M,C,I",1585,t
+rxSummHormone,1400,2,RX Summ--Hormone,"A,M,C,I",1587,t
+rxSummBrm,1410,2,RX Summ--BRM,"A,M,C,I",1589,t
+rxSummOther,1420,1,RX Summ--Other,"A,M,C,I",1591,t
+reasonForNoRadiation,1430,1,Reason for No Radiation,"A,M,C,I",1592,t
+rxCodingSysCurrent,1460,2,RX Coding System--Current,"A,M,C,I",1593,t
+radRegionalDoseCgy,1510,5,Rad--Regional Dose: cGy,"A,M,C,I",1596,t
+radNoOfTreatmentVol,1520,3,Rad--No of Treatment Vol,"A,M,C,I",1601,t
+radTreatmentVolume,1540,2,Rad--Treatment Volume,"A,M,C,I",1604,t
+radLocationOfRx,1550,1,Rad--Location of RX,"A,M,C,I",1606,t
+radRegionalRxModality,1570,2,Rad--Regional RX Modality,"A,M,C,I",1607,t
+radBoostRxModality,3200,2,Rad--Boost RX Modality,"A,M,C,I",1609,t
+radBoostDoseCgy,3210,5,Rad--Boost Dose cGy,"A,M,C,I",1611,t
+rxSummSystemicSurgSeq,1639,1,RX Summ--Systemic/Sur Seq,"A,M,C,I",1616,t
+rxSummSurgeryType,1640,2,RX Summ--Surgery Type,"A,M,C,I",1617,t
+readmSameHosp30Days,3190,1,Readm Same Hosp 30 Days,"A,M,C,I",1619,t
+rxSummSurgSite9802,1646,2,RX Summ--Surg Site 98-02,"A,M,C,I",1620,t
+rxSummScopeReg9802,1647,1,RX Summ--Scope Reg 98-02,"A,M,C,I",1622,t
+rxSummSurgOth9802,1648,1,RX Summ--Surg Oth 98-02,"A,M,C,I",1623,t
+subsqRx2ndCourseDate,1660,8,Subsq RX 2nd Course Date,"A,M,C,I",1724,t
+subsqRx2ndCourseDateFlag,1661,2,Subsq RX 2ndCrs Date Flag,"A,M,C,I",1732,t
+subsqRx2ndCourseCodes,1670,11,Subsq RX 2nd Course Codes,"A,M,C,I",1734,t
+subsqRx2ndCourseSurg,1671,2,Subsq RX 2nd Course Surg,"A,M,C,I",1734,t
+subsqRx2ndScopeLnSu,1677,1,Subsq RX 2nd--Scope LN SU,"A,M,C,I",1736,t
+subsqRx2ndSurgOth,1678,1,Subsq RX 2nd--Surg Oth,"A,M,C,I",1737,t
+subsqRx2ndRegLnRem,1679,2,Subsq RX 2nd--Reg LN Rem,"A,M,C,I",1738,t
+subsqRx2ndCourseRad,1672,1,Subsq RX 2nd Course Rad,"A,M,C,I",1740,t
+subsqRx2ndCourseChemo,1673,1,Subsq RX 2nd Course Chemo,"A,M,C,I",1741,t
+subsqRx2ndCourseHorm,1674,1,Subsq RX 2nd Course Horm,"A,M,C,I",1742,t
+subsqRx2ndCourseBrm,1675,1,Subsq RX 2nd Course BRM,"A,M,C,I",1743,t
+subsqRx2ndCourseOth,1676,1,Subsq RX 2nd Course Oth,"A,M,C,I",1744,t
+subsqRx3rdCourseDate,1680,8,Subsq RX 3rd Course Date,"A,M,C,I",1745,t
+subsqRx3rdCourseDateFlag,1681,2,Subsq RX 3rdCrs Date Flag,"A,M,C,I",1753,t
+subsqRx3rdCourseCodes,1690,11,Subsq RX 3rd Course Codes,"A,M,C,I",1755,t
+subsqRx3rdCourseSurg,1691,2,Subsq RX 3rd Course Surg,"A,M,C,I",1755,t
+subsqRx3rdScopeLnSu,1697,1,Subsq RX 3rd--Scope LN Su,"A,M,C,I",1757,t
+subsqRx3rdSurgOth,1698,1,Subsq RX 3rd--Surg Oth,"A,M,C,I",1758,t
+subsqRx3rdRegLnRem,1699,2,Subsq RX 3rd--Reg LN Rem,"A,M,C,I",1759,t
+subsqRx3rdCourseRad,1692,1,Subsq RX 3rd Course Rad,"A,M,C,I",1761,t
+subsqRx3rdCourseChemo,1693,1,Subsq RX 3rd Course Chemo,"A,M,C,I",1762,t
+subsqRx3rdCourseHorm,1694,1,Subsq RX 3rd Course Horm,"A,M,C,I",1763,t
+subsqRx3rdCourseBrm,1695,1,Subsq RX 3rd Course BRM,"A,M,C,I",1764,t
+subsqRx3rdCourseOth,1696,1,Subsq RX 3rd Course Oth,"A,M,C,I",1765,t
+subsqRx4thCourseDate,1700,8,Subsq RX 4th Course Date,"A,M,C,I",1766,t
+subsqRx4thCourseDateFlag,1701,2,Subsq RX 4thCrs Date Flag,"A,M,C,I",1774,t
+subsqRx4thCourseCodes,1710,11,Subsq RX 4th Course Codes,"A,M,C,I",1776,t
+subsqRx4thCourseSurg,1711,2,Subsq RX 4th Course Surg,"A,M,C,I",1776,t
+subsqRx4thScopeLnSu,1717,1,Subsq RX 4th--Scope LN Su,"A,M,C,I",1778,t
+subsqRx4thSurgOth,1718,1,Subsq RX 4th--Surg Oth,"A,M,C,I",1779,t
+subsqRx4thRegLnRem,1719,2,Subsq RX 4th--Reg LN Rem,"A,M,C,I",1780,t
+subsqRx4thCourseRad,1712,1,Subsq RX 4th Course Rad,"A,M,C,I",1782,t
+subsqRx4thCourseChemo,1713,1,Subsq RX 4th Course Chemo,"A,M,C,I",1783,t
+subsqRx4thCourseHorm,1714,1,Subsq RX 4th Course Horm,"A,M,C,I",1784,t
+subsqRx4thCourseBrm,1715,1,Subsq RX 4th Course BRM,"A,M,C,I",1785,t
+subsqRx4thCourseOth,1716,1,Subsq RX 4th Course Oth,"A,M,C,I",1786,t
+subsqRxReconstructDel,1741,1,Subsq RX--Reconstruct Del,"A,M,C,I",1787,t
+overRideSsNodesPos,1981,1,Over-ride SS/NodesPos,"A,M,C,I",1888,t
+overRideSsTnmN,1982,1,Over-ride SS/TNM-N,"A,M,C,I",1889,t
+overRideSsTnmM,1983,1,Over-ride SS/TNM-M,"A,M,C,I",1890,t
+overRideAcsnClassSeq,1985,1,Over-ride Acsn/Class/Seq,"A,M,C,I",1891,t
+overRideHospSeqDxConf,1986,1,Over-ride HospSeq/DxConf,"A,M,C,I",1892,t
+overRideCocSiteType,1987,1,Over-ride CoC-Site/Type,"A,M,C,I",1893,t
+overRideHospSeqSite,1988,1,Over-ride HospSeq/Site,"A,M,C,I",1894,t
+overRideSiteTnmStgGrp,1989,1,Over-ride Site/TNM-StgGrp,"A,M,C,I",1895,t
+overRideAgeSiteMorph,1990,1,Over-ride Age/Site/Morph,"A,M,C,I",1896,t
+overRideSeqNoDxConf,2000,1,Over-ride SeqNo/DxConf,"A,M,C,I",1897,t
+overRideSiteLatSeqNo,2010,1,Over-ride Site/Lat/SeqNo,"A,M,C,I",1898,t
+overRideSurgDxConf,2020,1,Over-ride Surg/DxConf,"A,M,C,I",1899,t
+overRideSiteType,2030,1,Over-ride Site/Type,"A,M,C,I",1900,t
+overRideHistology,2040,1,Over-ride Histology,"A,M,C,I",1901,t
+overRideReportSource,2050,1,Over-ride Report Source,"A,M,C,I",1902,t
+overRideIllDefineSite,2060,1,Over-ride Ill-define Site,"A,M,C,I",1903,t
+overRideLeukLymphoma,2070,1,"Over-ride Leuk,  Lymphoma","A,M,C,I",1904,t
+overRideSiteBehavior,2071,1,Over-ride Site/Behavior,"A,M,C,I",1905,t
+overRideSiteEodDxDate,2072,1,Over-ride Site/EOD/DX Dt,"A,M,C,I",1906,t
+overRideSiteLatEod,2073,1,Over-ride Site/Lat/EOD,"A,M,C,I",1907,t
+overRideSiteLatMorph,2074,1,Over-ride Site/Lat/Morph,"A,M,C,I",1908,t
+primarySiteIcdO1,1960,4,Site (73-91) ICD-O-1,"A,M,C,I",1909,t
+morphologyIcdO1,1970,6,Morph (73-91) ICD-O-1,"A,M,C,I",1913,t
+histologyIcdO1,1971,4,Histology (73-91) ICD-O-1,"A,M,C,I",1913,t
+behaviorIcdO1,1972,1,Behavior (73-91) ICD-O-1,"A,M,C,I",1917,t
+gradeIcdO1,1973,1,Grade (73-91) ICD-O-1,"A,M,C,I",1918,t
+icdO2ConversionFlag,1980,1,ICD-O-2 Conversion Flag,"A,M,C,I",1919,t
+crcChecksum,2081,10,CRC CHECKSUM,"A,M,C,I",1920,t
+seerCodingSysCurrent,2120,1,SEER Coding Sys--Current,"A,M,C,I",1930,t
+seerCodingSysOriginal,2130,1,SEER Coding Sys--Original,"A,M,C,I",1931,t
+cocCodingSysCurrent,2140,2,CoC Coding Sys--Current,"A,M,C,I",1932,t
+cocCodingSysOriginal,2150,2,CoC Coding Sys--Original,"A,M,C,I",1934,t
+vendorName,2170,10,Vendor Name,"A,M,C,I",1936,n
+seerTypeOfFollowUp,2180,1,SEER Type of Follow-Up,"A,M,C,I",1946,t
+seerRecordNumber,2190,2,SEER Record Number,"A,M,C,I",1947,t
+diagnosticProc7387,2200,2,Diagnostic Proc 73-87,"A,M,C,I",1949,t
+dateCaseInitiated,2085,8,Date Case Initiated,"A,M,C,I",1951,t
+dateCaseCompleted,2090,8,Date Case Completed,"A,M,C,I",1959,t
+dateCaseCompletedCoc,2092,8,Date Case Completed--CoC,"A,M,C,I",1967,t
+dateCaseLastChanged,2100,8,Date Case Last Changed,"A,M,C,I",1975,t
+dateCaseReportExported,2110,8,Date Case Report Exported,"A,M,C,I",1983,t
+dateCaseReportReceived,2111,8,Date Case Report Received,"A,M,C,I",1991,t
+dateCaseReportLoaded,2112,8,Date Case Report Loaded,"A,M,C,I",1999,t
+dateTumorRecordAvailbl,2113,8,Date Tumor Record Availbl,"A,M,C,I",2007,t
+icdO3ConversionFlag,2116,1,ICD-O-3 Conversion Flag,"A,M,C,I",2015,t
+overrideCs1,3750,1,Over-ride CS 1,"A,M,C,I",2016,t
+overrideCs2,3751,1,Over-ride CS 2,"A,M,C,I",2017,t
+overrideCs3,3752,1,Over-ride CS 3,"A,M,C,I",2018,t
+overrideCs4,3753,1,Over-ride CS 4,"A,M,C,I",2019,t
+overrideCs5,3754,1,Over-ride CS 5,"A,M,C,I",2020,t
+overrideCs6,3755,1,Over-ride CS 6,"A,M,C,I",2021,t
+overrideCs7,3756,1,Over-ride CS 7,"A,M,C,I",2022,t
+overrideCs8,3757,1,Over-ride CS 8,"A,M,C,I",2023,t
+overrideCs9,3758,1,Over-ride CS 9,"A,M,C,I",2024,t
+overrideCs10,3759,1,Over-ride CS 10,"A,M,C,I",2025,t
+overrideCs11,3760,1,Over-ride CS 11,"A,M,C,I",2026,t
+overrideCs12,3761,1,Over-ride CS 12,"A,M,C,I",2027,t
+overrideCs13,3762,1,Over-ride CS 13,"A,M,C,I",2028,t
+overrideCs14,3763,1,Over-ride CS 14,"A,M,C,I",2029,t
+overrideCs15,3764,1,Over-ride CS 15,"A,M,C,I",2030,t
+overrideCs16,3765,1,Over-ride CS 16,"A,M,C,I",2031,t
+overrideCs17,3766,1,Over-ride CS 17,"A,M,C,I",2032,t
+overrideCs18,3767,1,Over-ride CS 18,"A,M,C,I",2033,t
+overrideCs19,3768,1,Over-ride CS 19,"A,M,C,I",2034,t
+overrideCs20,3769,1,Over-ride CS 20,"A,M,C,I",2035,t
+dateOfLastContact,1750,8,Date of Last Contact,"A,M,C,I",2116,p
+dateOfLastContactFlag,1751,2,Date of Last Contact Flag,"A,M,C,I",2124,p
+vitalStatus,1760,1,Vital Status,"A,M,C,I",2126,p
+cancerStatus,1770,1,Cancer Status,"A,M,C,I",2127,t
+qualityOfSurvival,1780,1,Quality of Survival,"A,M,C,I",2128,t
+followUpSource,1790,1,Follow-Up Source,"A,M,C,I",2129,t
+nextFollowUpSource,1800,1,Next Follow-Up Source,"A,M,C,I",2130,t
+addressCurrentCity,1810,50,Addr Current--City,"A,M,C,I",2131,p
+addressCurrentState,1820,2,Addr Current--State,"A,M,C,I",2181,p
+addressCurrentPostalCode,1830,9,Addr Current--Postal Code,"A,M,C,I",2183,p
+addressCurrentCounty,1840,3,County--Current,"A,M,C,I",2192,p
+recurrenceDate1st,1860,8,Recurrence Date--1st,"A,M,C,I",2196,t
+recurrenceDate1stFlag,1861,2,Recurrence Date--1st Flag,"A,M,C,I",2204,t
+recurrenceType1st,1880,2,Recurrence Type--1st,"A,M,C,I",2206,t
+followUpContactCity,1842,50,Follow-Up Contact--City,"A,M,C,I",2208,t
+followUpContactState,1844,2,Follow-Up Contact--State,"A,M,C,I",2258,t
+followUpContactPostal,1846,9,Follow-Up Contact--Postal,"A,M,C,I",2260,t
+causeOfDeath,1910,4,Cause of Death,"A,M,C,I",2269,p
+icdRevisionNumber,1920,1,ICD Revision Number,"A,M,C,I",2273,p
+autopsy,1930,1,Autopsy,"A,M,C,I",2274,p
+placeOfDeath,1940,3,Place of Death,"A,M,C,I",2275,p
+followUpSourceCentral,1791,2,Follow-up Source Central,"A,M,C,I",2278,t
+dateOfDeathCanada,1755,8,Date of Death--Canada,"A,M,C,I",2280,p
+dateOfDeathCanadaFlag,1756,2,Date of Death--Canada Flag,"A,M,C,I",2288,p
+unusualFollowUpMethod,1850,2,Unusual Follow-Up Method,"A,M,C,I",2290,t
+stateRequestorItems,2220,1000,State/Requestor Items,"A,M,C,I",2340,t
+nameLast,2230,40,Name--Last,"A,M,C",3340,p
+nameFirst,2240,40,Name--First,"A,M,C",3380,p
+nameMiddle,2250,40,Name--Middle,"A,M,C",3420,p
+namePrefix,2260,3,Name--Prefix,"A,M,C",3460,p
+nameSuffix,2270,3,Name--Suffix,"A,M,C",3463,p
+nameAlias,2280,40,Name--Alias,"A,M,C",3466,p
+nameMaiden,2390,40,Name--Maiden,"A,M,C",3506,p
+nameSpouseParent,2290,60,Name--Spouse/Parent,"A,M,C",3546,t
+medicalRecordNumber,2300,11,Medical Record Number,"A,M,C",3606,t
+militaryRecordNoSuffix,2310,2,Military Record No Suffix,"A,M,C",3617,t
+socialSecurityNumber,2320,9,Social Security Number,"A,M,C",3619,p
+addressAtDxStreetName,2330,60,Addr at DX--No & Street,"A,M,C",3628,t
+addressAtDxSupplementl,2335,60,Addr at DX--Supplementl,"A,M,C",3688,t
+addressCurrentStreetName,2350,60,Addr Current--No & Street,"A,M,C",3748,p
+addressCurrentSupplementl,2355,60,Addr Current--Supplementl,"A,M,C",3808,p
+telephone,2360,10,Telephone,"A,M,C",3868,p
+dcStateFileNumber,2380,6,DC State File Number,"A,M,C",3878,p
+followUpContactName,2394,60,Follow-Up Contact--Name,"A,M,C",3884,t
+followUpContactNoAndStreet,2392,60,Follow-Up Contact--No&St,"A,M,C",3944,t
+followUpContactSuppl,2393,60,Follow-Up Contact--Suppl,"A,M,C",4004,t
+latitude,2352,10,Latitude,"A,M,C",4064,t
+longitude,2354,11,Longitude,"A,M,C",4074,t
+followingRegistryNpi,2445,10,NPI--Following Registry,"A,M,C",4285,t
+followingRegistry,2440,10,Following Registry,"A,M,C",4295,t
+institutionReferredFromNpi,2415,10,NPI--Inst Referred From,"A,M,C",4305,t
+institutionReferredFrom,2410,10,Institution Referred From,"A,M,C",4315,t
+institutionReferredToNpi,2425,10,NPI--Inst Referred To,"A,M,C",4325,t
+institutionReferredTo,2420,10,Institution Referred To,"A,M,C",4335,t
+physicianManagingNpi,2465,10,NPI--Physician--Managing,"A,M,C",4395,t
+physicianManaging,2460,8,Physician--Managing,"A,M,C",4405,t
+physicianFollowUpNpi,2475,10,NPI--Physician--Follow-Up,"A,M,C",4413,t
+physicianFollowUp,2470,8,Physician--Follow-Up,"A,M,C",4423,t
+physicianPrimarySurgNpi,2485,10,NPI--Physician--Primary Surg,"A,M,C",4431,t
+physicianPrimarySurg,2480,8,Physician--Primary Surg,"A,M,C",4441,t
+physician3Npi,2495,10,NPI--Physician 3,"A,M,C",4449,t
+physician3,2490,8,Physician 3,"A,M,C",4459,t
+physician4Npi,2505,10,NPI--Physician 4,"A,M,C",4467,t
+physician4,2500,8,Physician 4,"A,M,C",4477,t
+pathReportFacId1,7010,25,Path Reporting Fac ID 1,"A,M,C",4535,t
+pathReportNumber1,7090,20,Path Report Number 1,"A,M,C",4560,t
+pathDateSpecCollect1,7320,14,Path Date Spec Collect 1,"A,M,C",4580,t
+pathReportType1,7480,2,Path Report Type 1,"A,M,C",4594,t
+pathOrderingFacNo1,7190,25,Path Ordering Fac No 1,"A,M,C",4596,t
+pathOrderPhysLicNo1,7100,20,Path Order Phys Lic No 1,"A,M,C",4621,t
+pathReportFacId2,7011,25,Path Reporting Fac ID 2,"A,M,C",4641,t
+pathReportNumber2,7091,20,Path Report Number 2,"A,M,C",4666,t
+pathDateSpecCollect2,7321,14,Path Date Spec Collect 2,"A,M,C",4686,t
+pathReportType2,7481,2,Path Report Type 2,"A,M,C",4700,t
+pathOrderingFacNo2,7191,25,Path Ordering Fac No 2,"A,M,C",4702,t
+pathOrderPhysLicNo2,7101,20,Path Order Phys Lic No 2,"A,M,C",4727,t
+pathReportFacId3,7012,25,Path Reporting Fac ID 3,"A,M,C",4747,t
+pathReportNumber3,7092,20,Path Report Number 3,"A,M,C",4772,t
+pathDateSpecCollect3,7322,14,Path Date Spec Collect 3,"A,M,C",4792,t
+pathReportType3,7482,2,Path Report Type 3,"A,M,C",4806,t
+pathOrderingFacNo3,7192,25,Path Ordering Fac No 3,"A,M,C",4808,t
+pathOrderPhysLicNo3,7102,20,Path Order Phys Lic No 3,"A,M,C",4833,t
+pathReportFacId4,7013,25,Path Reporting Fac ID 4,"A,M,C",4853,t
+pathReportNumber4,7093,20,Path Report Number 4,"A,M,C",4878,t
+pathDateSpecCollect4,7323,14,Path Date Spec Collect 4,"A,M,C",4898,t
+pathReportType4,7483,2,Path Report Type 4,"A,M,C",4912,t
+pathOrderingFacNo4,7193,25,Path Ordering Fac No 4,"A,M,C",4914,t
+pathOrderPhysLicNo4,7103,20,Path Order Phys Lic No 4,"A,M,C",4939,t
+pathReportFacId5,7014,25,Path Reporting Fac ID 5,"A,M,C",4959,t
+pathReportNumber5,7094,20,Path Report Number 5,"A,M,C",4984,t
+pathDateSpecCollect5,7324,14,Path Date Spec Collect 5,"A,M,C",5004,t
+pathReportType5,7484,2,Path Report Type 5,"A,M,C",5018,t
+pathOrderingFacNo5,7194,25,Path Ordering Fac No 5,"A,M,C",5020,t
+pathOrderPhysLicNo5,7104,20,Path Order Phys Lic No 5,"A,M,C",5045,t
+textDxProcPe,2520,1000,Text--DX Proc--PE,"A,M",5565,t
+textDxProcXRayScan,2530,1000,Text--DX Proc--X-ray/Scan,"A,M",6565,t
+textDxProcScopes,2540,1000,Text--DX Proc--Scopes,"A,M",7565,t
+textDxProcLabTests,2550,1000,Text--DX Proc--Lab Tests,"A,M",8565,t
+textDxProcOp,2560,1000,Text--DX Proc--Op,"A,M",9565,t
+textDxProcPath,2570,1000,Text--DX Proc--Path,"A,M",10565,t
+textPrimarySiteTitle,2580,100,Text--Primary Site Title,"A,M",11565,t
+textHistologyTitle,2590,100,Text--Histology Title,"A,M",11665,t
+textStaging,2600,1000,Text--Staging,"A,M",11765,t
+rxTextSurgery,2610,1000,RX Text--Surgery,"A,M",12765,t
+rxTextRadiationBeam,2620,1000,RX Text--Radiation (Beam),"A,M",13765,t
+rxTextRadiationOther,2630,1000,RX Text--Radiation Other,"A,M",14765,t
+rxTextChemo,2640,1000,RX Text--Chemo,"A,M",15765,t
+rxTextHormone,2650,1000,RX Text--Hormone,"A,M",16765,t
+rxTextBrm,2660,1000,RX Text--BRM,"A,M",17765,t
+rxTextOther,2670,1000,RX Text--Other,"A,M",18765,t
+textRemarks,2680,1000,Text--Remarks,"A,M",19765,t
+placeOfDiagnosis,2690,60,Text--Place of Diagnosis,"A,M",20765,t

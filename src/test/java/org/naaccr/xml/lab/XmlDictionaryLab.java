@@ -1,12 +1,13 @@
 /*
  * Copyright (C) 2015 Information Management Services, Inc.
  */
-package org.naaccr.xml;
+package org.naaccr.xml.lab;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.naaccr.xml.NaaccrXmlUtils;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
@@ -51,7 +52,7 @@ public class XmlDictionaryLab {
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "trim", "trim");
         xstream.addImplicitCollection(NaaccrDictionary.class, "_items", NaaccrDictionaryItem.class);
 
-        PrettyPrintWriter prettyWriter = new PrettyPrintWriter(writer) {
+        PrettyPrintWriter prettyWriter = new PrettyPrintWriter(writer, new char[]{' ', ' ', ' ', ' '}) {
             // why isn't the internal writer protected instead of private??? I hate when people do that!
             private QuickWriter _internalWriter;
 
@@ -87,7 +88,7 @@ public class XmlDictionaryLab {
                 if ("naaccrId".equals(key))
                     _currentItemId = value;
                 if (!"description".equals(key) && !isLastAttribute(key))
-                    _internalWriter.write("\r\n     ");
+                    _internalWriter.write("\r\n       ");
             }
 
             private boolean isLastAttribute(String attribute) {
@@ -101,8 +102,8 @@ public class XmlDictionaryLab {
                     return "padding".equals(attribute);
                 if (item.getRegexValidation() != null)
                     return "regexValidation".equals(attribute);
-                if (item.getDataType() != null)
-                    return "dataType".equals(attribute) && !NaaccrXmlUtils.NAACCR_DATA_TYPE_TEXT.equals(item.getDataType());
+                if (item.getDataType() != null && !NaaccrXmlUtils.NAACCR_DATA_TYPE_TEXT.equals(item.getDataType()))
+                    return "dataType".equals(attribute);
                 if (item.getParentXmlElement() != null)
                     return "parentXmlElement".equals(attribute);
                 return false;
