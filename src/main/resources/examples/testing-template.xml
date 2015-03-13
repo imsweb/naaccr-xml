@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<NaaccrDataExchange naaccrVersion="140" recordType="I">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" recordType="I" timeGenerated="2015-03-13T12:09:19-0400">
     <Patient>
         <Item naaccrId="patientIdNumber" naaccrNum="20">00000001</Item>
     </Patient>
@@ -13,4 +13,4 @@
     <Patient>
         <Item naaccrId="patientIdNumber" naaccrNum="20">00000003</Item>
     </Patient>
-</NaaccrDataExchange>
+</NaaccrData>

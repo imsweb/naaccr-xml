@@ -242,8 +242,8 @@ public class Standalone {
                     flatToXmlResultLbl.setText("Processing file...");
                     pnl.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     try {
-                        int numRecords = NaaccrXmlUtils.flatToXml(sourceFile, targetFile, format, new NaaccrXmlOptions(), null);
-                        flatToXmlResultLbl.setText("Done processing source flat file; processed " + numRecords + " records!");
+                        NaaccrXmlUtils.flatToXml(sourceFile, targetFile, format, new NaaccrXmlOptions(), null);
+                        flatToXmlResultLbl.setText("Done processing source flat file...");
                     }
                     catch (IOException | NaaccrValidationException ex) {
                         JOptionPane.showMessageDialog(StandaloneFrame.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -362,8 +362,8 @@ public class Standalone {
                     xmlToFlatResultLbl.setText("Processing file...");
                     pnl.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     try {
-                        int numRecords = NaaccrXmlUtils.xmlToFlat(sourceFile, targetFile, format, new NaaccrXmlOptions(), null);
-                        xmlToFlatResultLbl.setText("Done processing source XML file; processed " + numRecords + " tumors!");
+                        NaaccrXmlUtils.xmlToFlat(sourceFile, targetFile, format, new NaaccrXmlOptions(), null);
+                        xmlToFlatResultLbl.setText("Done processing source XML file...");
                     }
                     catch (IOException | NaaccrValidationException ex) {
                         JOptionPane.showMessageDialog(StandaloneFrame.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -400,7 +400,7 @@ public class Standalone {
             textPnl.setBorder(null);
             final JTextArea textFld = new JTextArea();
             StringWriter writer = new StringWriter();
-            try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("testing-template.xml")) {
+            try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("examples/testing-template.xml")) {
                 IOUtils.copy(inputStream, writer, "UTF-8");
                 textFld.setText(writer.toString());
             }
@@ -485,7 +485,6 @@ public class Standalone {
             pnl.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
             JTextArea area = new JTextArea();
-            area.setEditable(false);
             try {
                 area.setText(IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-140.xml"), "UTF-8"));
             }
@@ -509,9 +508,6 @@ public class Standalone {
             data.add("attributes-id-only.xml");
             data.add("attributes-num-only.xml");
             data.add("items-above-patient-level.xml");
-            data.add("order.xml");
-            data.add("smaller-attributes.xml");
-            data.add("group-demo.xml");
             data.add("state-requestor-items.xml");
             data.add("extensions.xml");
             final JList list = new JList(data);
@@ -546,4 +542,28 @@ public class Standalone {
             return pnl;
         }
     }
+
+
+    // TODO FPD this could be used to display a progress bar; but I don't think it belongs in this class...
+    /**
+     private int countLines(File file) throws IOException {
+     try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
+     byte[] c = new byte[1024];
+     int count = 0;
+     int readChars = 0;
+     boolean endsWithoutNewLine = false;
+     while ((readChars = is.read(c)) != -1) {
+     for (int i = 0; i < readChars; ++i) {
+     if (c[i] == '\n')
+     ++count;
+     }
+     endsWithoutNewLine = (c[readChars - 1] != '\n');
+     }
+     if (endsWithoutNewLine) {
+     ++count;
+     }
+     return count;
+     }
+     }
+     */
 }

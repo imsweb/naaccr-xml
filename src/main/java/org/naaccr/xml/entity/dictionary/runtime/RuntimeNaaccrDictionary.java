@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.naaccr.xml.NaaccrDictionaryUtils;
 import org.naaccr.xml.NaaccrFormat;
-import org.naaccr.xml.NaaccrXmlUtils;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
@@ -34,9 +34,9 @@ public class RuntimeNaaccrDictionary {
 
         _format = NaaccrFormat.getInstance(format);
 
-        NaaccrDictionary baseDictionary = NaaccrXmlUtils.getBaseDictionary(_format.getNaaccrVersion());
+        NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByVersion(_format.getNaaccrVersion());
         if (userDictionary == null)
-            userDictionary = NaaccrXmlUtils.getDefaultUserDictionary(_format.getNaaccrVersion());
+            userDictionary = NaaccrDictionaryUtils.getDefaultUserDictionary(_format.getNaaccrVersion());
 
         _baseDictionaryUri = baseDictionary.getDictionaryUri();
         _userDictionaryUri = userDictionary.getDictionaryUri();

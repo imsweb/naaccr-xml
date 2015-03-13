@@ -9,16 +9,9 @@
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
 
 
-<NaaccrDataExchange naaccrVersion="140" recordType="I">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" recordType="I" timeGenerated="2015-03-13T12:09:19-0400">
     <Item naaccrId="vendorName">SEER*Abs</Item>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
     </Patient>
-</NaaccrDataExchange>
-
-
-<NaaccrDataExchange naaccrVersion="140" recordType="I" vendorName="SEER*Abs">
-    <Patient>
-        <Item naaccrId="patientIdNumber">00000001</Item>
-    </Patient>
-</NaaccrDataExchange>
+</NaaccrData>

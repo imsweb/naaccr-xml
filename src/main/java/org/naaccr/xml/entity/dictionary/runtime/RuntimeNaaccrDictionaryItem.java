@@ -12,115 +12,115 @@ import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
 public class RuntimeNaaccrDictionaryItem {
 
-    private String naaccrId;
+    private String _naaccrId;
 
-    private Integer naaccrNum;
+    private Integer _naaccrNum;
 
-    private Integer startColumn;
+    private Integer _startColumn;
 
-    private Integer length;
+    private Integer _length;
 
-    private Set<String> recordTypes;
+    private Set<String> _recordTypes;
 
-    private String parentXmlElement;
+    private String _parentXmlElement;
 
-    private Pattern regexValidation;
+    private Pattern _regexValidation;
 
-    private String dataType;
+    private String _dataType;
 
-    private String trim;
+    private String _trim;
 
-    private String padding;
+    private String _padding;
 
     public RuntimeNaaccrDictionaryItem(NaaccrDictionaryItem item) {
-        naaccrId = item.getNaaccrId();
-        naaccrNum = item.getNaaccrNum();
-        startColumn = item.getStartColumn();
-        length = item.getLength();
-        recordTypes = new HashSet<>();
+        _naaccrId = item.getNaaccrId();
+        _naaccrNum = item.getNaaccrNum();
+        _startColumn = item.getStartColumn();
+        _length = item.getLength();
+        _recordTypes = new HashSet<>();
         if (item.getRecordTypes() != null)
-            recordTypes.addAll(Arrays.asList(item.getRecordTypes().split(",")));
-        parentXmlElement = item.getParentXmlElement();
+            _recordTypes.addAll(Arrays.asList(item.getRecordTypes().split(",")));
+        _parentXmlElement = item.getParentXmlElement();
         if (item.getRegexValidation() != null)
-            regexValidation = Pattern.compile(item.getRegexValidation());
-        dataType = item.getDataType();
-        trim = item.getTrim();
-        padding = item.getPadding();
+            _regexValidation = Pattern.compile(item.getRegexValidation());
+        _dataType = item.getDataType();
+        _trim = item.getTrim();
+        _padding = item.getPadding();
     }
 
     public String getNaaccrId() {
-        return naaccrId;
+        return _naaccrId;
     }
 
-    public void setNaaccrId(String val) {
-        naaccrId = val;
+    public void setNaaccrId(String naaccrId) {
+        _naaccrId = naaccrId;
     }
 
     public Integer getNaaccrNum() {
-        return naaccrNum;
+        return _naaccrNum;
     }
 
-    public void setNaaccrNum(Integer val) {
-        naaccrNum = val;
+    public void setNaaccrNum(Integer naaccrNum) {
+        _naaccrNum = naaccrNum;
     }
 
     public Integer getStartColumn() {
-        return startColumn;
+        return _startColumn;
     }
 
-    public void setStartColumn(Integer val) {
-        startColumn = val;
+    public void setStartColumn(Integer startColumn) {
+        _startColumn = startColumn;
     }
 
     public Integer getLength() {
-        return length;
+        return _length;
     }
 
-    public void setLength(Integer val) {
-        length = val;
+    public void setLength(Integer length) {
+        _length = length;
     }
 
     public Set<String> getRecordTypes() {
-        return recordTypes;
+        return _recordTypes;
     }
 
     public String getParentXmlElement() {
-        return parentXmlElement;
+        return _parentXmlElement;
     }
 
-    public void setParentXmlElement(String val) {
-        parentXmlElement = val;
+    public void setParentXmlElement(String parentXmlElement) {
+        _parentXmlElement = parentXmlElement;
     }
 
     public Pattern getRegexValidation() {
-        return regexValidation;
+        return _regexValidation;
     }
 
-    public void setRegexValidation(Pattern val) {
-        regexValidation = val;
+    public void setRegexValidation(Pattern regexValidation) {
+        _regexValidation = regexValidation;
     }
 
     public String getDataType() {
-        return dataType;
+        return _dataType;
     }
 
-    public void setDataType(String val) {
-        dataType = val;
+    public void setDataType(String dataType) {
+        _dataType = dataType;
     }
 
     public String getPadding() {
-        return padding;
+        return _padding;
     }
 
-    public void setPadding(String val) {
-        padding = val;
+    public void setPadding(String padding) {
+        _padding = padding;
     }
 
     public String getTrim() {
-        return trim;
+        return _trim;
     }
 
-    public void setTrim(String val) {
-        trim = val;
+    public void setTrim(String trim) {
+        _trim = trim;
     }
 }

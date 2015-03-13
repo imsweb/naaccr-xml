@@ -3,17 +3,13 @@
  */
 package org.naaccr.xml;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
-import org.naaccr.xml.entity.Tumor;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 
 import com.thoughtworks.xstream.XStream;
@@ -55,6 +51,7 @@ public class PatientXmlWriter implements AutoCloseable {
 
     // TODO remove this testing method
     public static void main(String[] args) throws IOException {
+        /**
         Patient patient = new Patient();
         patient.getItems().add(new Item("nameLast", "DEPRY"));
         patient.getItems().add(new Item("nameFirst", "FABIAN"));
@@ -68,5 +65,6 @@ public class PatientXmlWriter implements AutoCloseable {
         PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(outputFile), NaaccrXmlUtils.getStandardXStream(dictionary, new NaaccrXmlOptions()), dictionary);
         writer.writePatient(patient);
         writer.close();
+         */
     }
 }

@@ -121,7 +121,7 @@ public class PatientFlatReader implements AutoCloseable {
             String trimmedValue = value.trim();
 
             // apply trimming rule
-            if (trimmedValue.isEmpty() || NaaccrXmlUtils.NAACCR_TRIM_ALL.equals(itemDef.getTrim()))
+            if (trimmedValue.isEmpty() || NaaccrDictionaryUtils.NAACCR_TRIM_ALL.equals(itemDef.getTrim()))
                 value = trimmedValue;
 
             if (!value.isEmpty()) {

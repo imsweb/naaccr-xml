@@ -19,7 +19,7 @@ public class FixEntityLevelsLab {
     public static void main(String[] args) throws IOException {
         // first read the new levels in the spreadsheet
         Map<String, String> newLevels = new HashMap<>();
-        File file = new File(System.getProperty("user.dir") + "/docs/naaccr-dictionary-140_XMLNesting-reivewed-by-rich-20151312.csv");
+        File file = new File(System.getProperty("user.dir") + "/docs/rich/naaccr-dictionary-140_XMLNesting-reivewed-by-rich-20151312.csv");
         for (String[] row : new CSVReader(new FileReader(file)).readAll()) {
             if (row[0].equals("Item ID"))
                 continue;

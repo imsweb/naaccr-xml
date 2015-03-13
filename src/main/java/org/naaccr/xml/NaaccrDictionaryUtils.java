@@ -4,121 +4,260 @@
 package org.naaccr.xml;
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URL;
+import java.io.Writer;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
-import au.com.bytecode.opencsv.CSVReader;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.core.util.QuickWriter;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
-public class NaaccrDictionaryUtils {
+/**
+ * This utillity class can be used to read/write dictionaries, whether they are internal to the library, or provided by the user...
+ */
+public final class NaaccrDictionaryUtils {
 
+    // the different data types
+    public static final String NAACCR_DATA_TYPE_ALPHA = "alpha"; // uppercase letters, A-Z, no spaces, full length needs to be filled in
+    public static final String NAACCR_DATA_TYPE_DIGITS = "digits"; // digits, 0-9, no spaces, full length needs to be filled in
+    public static final String NAACCR_DATA_TYPE_MIXED = "mixed"; // uppercase letters or digits, A-Z,0-9, no spaces, full length needs to be filled in
+    public static final String NAACCR_DATA_TYPE_NUMERIC = "numeric"; // digits, 0-9 with optional period, no spaces but value can be smaller than the length
+    public static final String NAACCR_DATA_TYPE_TEXT = "text"; // no checking on this value
+    public static final String NAACCR_DATA_TYPE_DATE = "date"; // digits, YYYY or YYYYMM or YYYYMMDD
+
+    // regular expression for each data type
+    public static final Map<String, Pattern> NAACCR_DATA_TYPES_REGEX = new HashMap<>();
+
+    static {
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_ALPHA, Pattern.compile("^[A-Z]+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DIGITS, Pattern.compile("^[0-9]+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_MIXED, Pattern.compile("^[A-Z0-9]+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_NUMERIC, Pattern.compile("^([A-Za-z]|\\s)+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_TEXT, Pattern.compile("^.+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)[0-9][0-9]((0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])?)?$"));
+    }
+
+    // trimming rules
+    public static final String NAACCR_TRIM_ALL = "all";
+    public static final String NAACCR_TRIM_NONE = "none";
+
+    // padding rules
+    public static final String NAACCR_PADDING_RIGHT_BLANK = "rightBlank";
+    public static final String NAACCR_PADDING_LEFT_BLANK = "leftBlank";
+    public static final String NAACCR_PADDING_RIGHT_ZERO = "rightZero";
+    public static final String NAACCR_PADDING_LEFT_ZERO = "leftZero";
+
+    // TODO remove this once support for CSV is removed...
     public static final String NAACCR_DICTIONARY_FORMAT_CSV = "csv";
     public static final String NAACCR_DICTIONARY_FORMAT_XML = "xml";
 
-    public static NaaccrDictionary readDictionary(File file) throws IOException {
-        if (file == null)
-            throw new IOException("File is required");
-        if (!file.exists())
-            throw new IOException("File does not exist");
 
-        NaaccrDictionary dictionary;
+    // the Patterns for the internal dictionaries URI
+    public static final Pattern _PATTERN_DICTIONARY_BASE_URI = Pattern.compile("http://naaccr\\.org/naaccrxml/naaccr-dictionary-(.+?)\\.xml");
+    public static final Pattern _PATTERN_DICTIONARY_USER_URI = Pattern.compile("http://naaccr\\.org/naaccrxml/naaccr-dictionary-gaps-(.+?)\\.xml");
 
-        if (file.getName().endsWith(".csv"))
-            dictionary = readDictionaryFromCsv(new FileReader(file));
-        else
-            throw new IOException("Unsupported format");
-
-        return dictionary;
+    /**
+     * Private constructor, no instanciation...
+     */
+    private NaaccrDictionaryUtils() {
     }
 
-    public static NaaccrDictionary readDictionary(URL url, String format) throws IOException {
-        if (url == null)
-            throw new IOException("URL is required");
+    /**
+     * Returns the base dictionary for the requested URI.
+     * @param uri URI, required
+     * @return the corresponding base dictionary, throws a runtime exception if not found
+     */
+    public static NaaccrDictionary getBaseDictionaryByUri(String uri) {
+        if (uri == null)
+            throw new RuntimeException("URI is required for getting the base dictionary.");
+        Matcher matcher = _PATTERN_DICTIONARY_BASE_URI.matcher(uri);
+        if (!matcher.matches())
+            throw new RuntimeException("Invalid URI for base dictionary.");
+        return getBaseDictionaryByVersion(matcher.group(1));
+    }
 
-        NaaccrDictionary dictionary;
+    /**
+     * Returns the base dictionary for the requested NAACCR version.
+     * @param naaccrVersion NAACCR version, required (see constants in NaaccrFormat)
+     * @return the corresponding base dictionary, throws a runtime exception if not found
+     */
+    public static NaaccrDictionary getBaseDictionaryByVersion(String naaccrVersion) {
+        if (naaccrVersion == null)
+            throw new RuntimeException("Version is required for getting the base dictionary.");
+        if (!NaaccrFormat.isVersionSupported(naaccrVersion))
+            throw new RuntimeException("Unsupported base dictionary version: " + naaccrVersion);
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-" + naaccrVersion + ".xml").openStream())) {
+            return readDictionary(reader);
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Unable to get base dictionary!", e);
+        }
+    }
 
-        switch (format) {
-            case NAACCR_DICTIONARY_FORMAT_CSV:
-                dictionary = readDictionaryFromCsv(new InputStreamReader(url.openStream()));
-                break;
-            default:
-                throw new IOException("Unsupported format: " + format);
+    /**
+     * Returns the default user dictionary for the requested URI.
+     * @param uri URI, required
+     * @return the corresponding default user dictionary, throws a runtime exception if not found
+     */
+    public static NaaccrDictionary getDefaultUserDictionaryByUri(String uri) {
+        if (uri == null)
+            throw new RuntimeException("URI is required for getting the default user dictionary.");
+        Matcher matcher = _PATTERN_DICTIONARY_USER_URI.matcher(uri);
+        if (!matcher.matches())
+            throw new RuntimeException("Invalid URI for default user dictionary.");
+        return getDefaultUserDictionary(matcher.group(1));
+    }
 
+    /**
+     * Returns the default user dictionary for the requested NAACCR version.
+     * @param naaccrVersion NAACCR version, required (see constants in NaaccrFormat)
+     * @return the corresponding default user dictionary, throws a runtime exception if not found
+     */
+    public static NaaccrDictionary getDefaultUserDictionary(String naaccrVersion) {
+        if (naaccrVersion == null)
+            throw new RuntimeException("Version is required for getting the default user dictionary.");
+        if (!NaaccrFormat.isVersionSupported(naaccrVersion))
+            throw new RuntimeException("Unsupported default user dictionary version: " + naaccrVersion);
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-gaps-" + naaccrVersion + ".xml").openStream())) {
+            return readDictionary(reader);
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Unable to get base dictionary!", e);
+        }
+    }
+
+    /**
+     * Reads a dictionary from the provided reader.
+     * @param reader reader, cannot be null
+     * @return the corresonding dictionary
+     * @throws IOException if the dictionary could not be read
+     */
+    public static NaaccrDictionary readDictionary(Reader reader) throws IOException {
+        return (NaaccrDictionary)instanciateXStream().fromXML(reader);
+    }
+
+    /**
+     * Writes the given dictionary to the provided writer.
+     * @param dictionary dictionary to write, cannot be null
+     * @param writer writer, cannot be null
+     * @throws IOException if the dictionary could not be written
+     */
+    public static void writeDictionary(NaaccrDictionary dictionary, Writer writer) throws IOException {
+        // TODO do we really want this formatting? It's really not standard, and adds a lot of complexity to this class...
+        instanciateXStream().marshal(dictionary, new NaaccrPrettyPrintWriter(dictionary, writer));
+        //instanciateXStream().toXML(dictionary, writer);
+    }
+
+    private static XStream instanciateXStream() {
+        XStream xstream = new XStream();
+
+        xstream.alias("NaaccrDictionary", NaaccrDictionary.class);
+        xstream.alias("ItemDef", NaaccrDictionaryItem.class);
+
+        xstream.aliasAttribute(NaaccrDictionary.class, "_dictionaryUri", "dictionaryUri");
+        xstream.aliasAttribute(NaaccrDictionary.class, "_naaccrVersion", "naaccrVersion");
+        xstream.aliasAttribute(NaaccrDictionary.class, "_description", "description");
+        xstream.aliasAttribute(NaaccrDictionary.class, "_items", "ItemDefs");
+
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_naaccrId", "naaccrId");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_naaccrNum", "naaccrNum");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_naaccrName", "naaccrName");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_startColumn", "startColumn");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_length", "length");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_recordTypes", "recordTypes");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_sourceOfStandard", "sourceOfStandard");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_parentXmlElement", "parentXmlElement");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_dataType", "dataType");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_regexValidation", "regexValidation");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_padding", "padding");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_trim", "trim");
+
+        xstream.omitField(NaaccrDictionary.class, "_cachedById");
+        xstream.omitField(NaaccrDictionary.class, "_cachedByNumber");
+
+        return xstream;
+    }
+
+    private static class NaaccrPrettyPrintWriter extends PrettyPrintWriter {
+
+        // why isn't the internal writer protected instead of private??? I hate when people do that!
+        private QuickWriter _internalWriter;
+
+        private NaaccrDictionary _dictionary;
+
+        private String _currentItemId;
+
+        public NaaccrPrettyPrintWriter(NaaccrDictionary dictionary, Writer writer) {
+            super(writer, new char[] {' ', ' ', ' ', ' '});
+            _dictionary = dictionary;
         }
 
-        return dictionary;
-    }
-
-    private static NaaccrDictionary readDictionaryFromCsv(Reader reader) throws IOException {
-        NaaccrDictionary dictionary = new NaaccrDictionary();
-
-        // always skip first line
-        try (CSVReader csvReader = new CSVReader(reader, ',', '"', '\\', 1, false)) {
-            for (String[] line : csvReader.readAll()) {
-                if (line.length < 3 || line.length > 17)
-                    throw new IOException("Wrong number of fields, expected between 3 and 15, got " + line.length + " (Item ID " + line[0] + ")");
-
-                // TODO add validation, trim values, be safer since it could be a user-defined dictionary...
-                NaaccrDictionaryItem item = new NaaccrDictionaryItem();
-                item.setNaaccrId(line[0]);
-                if (line[1] != null && !line[1].isEmpty())
-                    item.setNaaccrNum(Integer.valueOf(line[1]));
-                item.setLength(Integer.valueOf(line[2]));
-                if (line.length > 3 && line[3] != null && !line[3].isEmpty())
-                    item.setNaaccrName(line[3]);
-                if (line.length > 6 && line[6] != null && !line[6].isEmpty())
-                    item.setRecordTypes(line[6]);
-                if (line.length > 7 && line[7] != null && !line[7].isEmpty())
-                    item.setStartColumn(Integer.valueOf(line[7]));
-                if (line.length > 8 && line[8] != null && !line[8].isEmpty())
-                    item.setParentXmlElement(line[8]);
-                if (line.length > 9 && line[9] != null && !line[9].isEmpty())
-                    item.setRegexValidation(line[9]);
-                if (line.length > 10 && line[10] != null && !line[10].isEmpty())
-                    item.setDataType(line[10]);
-                if (!NaaccrXmlUtils.NAACCR_DATA_TYPES_REGEX.containsKey(item.getDataType()))
-                    throw new RuntimeException("Unsupported data type: " + item.getDataType());
-                // section is not used anymore
-                if (line.length > 12 && line[12] != null && !line[12].isEmpty())
-                    item.setSourceOfStandard(line[12]);
-                // retired is not used anymore
-                // implementation is not used anymore
-                if (line.length > 15 && line[15] != null && !line[15].isEmpty())
-                    item.setTrim(line[15]);
-                if (line.length > 16 && line[16] != null && !line[16].isEmpty())
-                    item.setPadding(line[16]);
-                
-                if (item.getRecordTypes() == null)
-                    item.setRecordTypes("A,M,C,I");
-
-                dictionary.getItems().add(item);
-            }
+        @Override
+        protected void writeAttributeValue(QuickWriter writer, String text) {
+            super.writeAttributeValue(writer, text);
+            if (_internalWriter == null)
+                _internalWriter = writer;
         }
 
-        return dictionary;
+        @Override
+        public void startNode(String name) {
+            super.startNode(name);
+            _currentItemId = null;
+        }
+
+        @Override
+        public void addAttribute(String key, String value) {
+            if ("dataType".equals(key) && NAACCR_DATA_TYPE_TEXT.equals(value))
+                return;
+            if ("padding".equals(key) && NAACCR_PADDING_RIGHT_BLANK.equals(value))
+                return;
+            if ("trim".equals(key) && NAACCR_TRIM_ALL.equals(value))
+                return;
+            super.addAttribute(key, value);
+            if ("naaccrId".equals(key))
+                _currentItemId = value;
+            if (!"description".equals(key) && !isLastAttribute(key))
+                _internalWriter.write("\r\n           ");
+        }
+
+        private boolean isLastAttribute(String attribute) {
+            NaaccrDictionaryItem item = _dictionary.getItemByNaaccrId(_currentItemId);
+            if (item == null)
+                return false;
+
+            if (item.getTrim() != null && !NAACCR_TRIM_ALL.equals(item.getTrim()))
+                return "trim".equals(attribute);
+            if (item.getPadding() != null && !NAACCR_PADDING_RIGHT_BLANK.equals(item.getPadding()))
+                return "padding".equals(attribute);
+            if (item.getRegexValidation() != null)
+                return "regexValidation".equals(attribute);
+            if (item.getDataType() != null && !NAACCR_DATA_TYPE_TEXT.equals(item.getDataType()))
+                return "dataType".equals(attribute);
+            if (item.getParentXmlElement() != null)
+                return "parentXmlElement".equals(attribute);
+            return false;
+        }
     }
-    
-    
+
+
     // TODO remove this testing method...
     public static void main(String[] args) throws IOException {
-        NaaccrDictionary baseDictionary = readDictionary(Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-140.csv"), NAACCR_DICTIONARY_FORMAT_CSV);
-        System.out.println("Read " + baseDictionary.getItems().size() + " items from base dictionary...");
+        NaaccrDictionary dict = getBaseDictionaryByVersion("140");
+        System.out.println("Read " + dict.getItems().size() + " items from base dictionary...");
+        //dict = getDefaultUserDictionary("140");
+        //System.out.println("Read " + dict.getItems().size() + " items from default user dictionary...");
 
-        Set<String> types = new HashSet<>();
-        for (NaaccrDictionaryItem item : baseDictionary.getItems())
-            types.add(item.getDataType());
-        System.out.println(types);
-
-
-        //NaaccrDictionary defaultUserDictionary = readDictionary(Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-gaps-140.csv"), NAACCR_DICTIONARY_FORMAT_CSV);
-        //System.out.println("Read " + defaultUserDictionary.getItems().size() + " items from default user dictionary...");
+        FileWriter writer = new FileWriter(new File(System.getProperty("user.dir") + "/build/test-dictionary.xml"));
+        writeDictionary(dict, writer);
+        writer.close();
     }
 }

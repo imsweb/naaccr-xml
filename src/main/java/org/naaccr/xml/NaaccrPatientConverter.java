@@ -3,10 +3,10 @@
  */
 package org.naaccr.xml;
 
+import org.naaccr.xml.entity.AbstractEntity;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
-import org.naaccr.xml.entity.AbstractEntity;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
 import org.xmlpull.v1.XmlPullParser;
@@ -180,8 +180,8 @@ public class NaaccrPatientConverter implements Converter {
                     addError(entity, lineNumber, currentPath, "value too long, expected at most " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef, item.getValue());
                 else if (exactLengthRequired(itemDef.getDataType()) && item.getValue().length() != itemDef.getLength())
                     addError(entity, lineNumber, currentPath, "invalid value, expected exactly " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef, item.getValue());
-                else if (!NaaccrXmlUtils.NAACCR_DATA_TYPES_REGEX.get(itemDef.getDataType()).matcher(item.getValue()).matches())
-                    addError(entity, lineNumber, currentPath, "invalid value according to the definition of data type '" + itemDef.getDataType() + "'", itemDef, item.getValue());
+                else if (itemDef.getDataType() != null && !NaaccrDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(itemDef.getDataType()).matcher(item.getValue()).matches())
+                addError(entity, lineNumber, currentPath, "invalid value according to the definition of data type '" + itemDef.getDataType() + "'", itemDef, item.getValue());
                 else if (itemDef.getRegexValidation() != null && !itemDef.getRegexValidation().matcher(item.getValue()).matches())
                     addError(entity, lineNumber, currentPath, "invalid value according to specific item validation", itemDef, item.getValue());
             }
@@ -215,9 +215,9 @@ public class NaaccrPatientConverter implements Converter {
     }
 
     protected boolean exactLengthRequired(String type) {
-        boolean result = NaaccrXmlUtils.NAACCR_DATA_TYPE_ALPHA.equals(type);
-        result |= NaaccrXmlUtils.NAACCR_DATA_TYPE_DIGITS.equals(type);
-        result |= NaaccrXmlUtils.NAACCR_DATA_TYPE_MIXED.equals(type);
+        boolean result = NaaccrDictionaryUtils.NAACCR_DATA_TYPE_ALPHA.equals(type);
+        result |= NaaccrDictionaryUtils.NAACCR_DATA_TYPE_DIGITS.equals(type);
+        result |= NaaccrDictionaryUtils.NAACCR_DATA_TYPE_MIXED.equals(type);
         return result;
     }
 
