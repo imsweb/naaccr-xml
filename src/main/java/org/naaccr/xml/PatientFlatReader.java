@@ -43,6 +43,12 @@ public class PatientFlatReader implements AutoCloseable {
         _dictionary = new RuntimeNaaccrDictionary(naaccrFormat.getRecordType(), baseDictionary, userDictionary);
         _rootData = new NaaccrData(naaccrFormat.toString());
 
+        // read the root items
+        if (_previousLine != null)
+            for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getRecordType()))
+                    _rootData.getItems().addAll(createItemsFromLine(_previousLine, itemDef));
+
         // TODO FPD I think we want to allow another property to be used for the grouping...
         
         // let's cache the patient ID number item, we are going to need them a lot...
@@ -141,7 +147,7 @@ public class PatientFlatReader implements AutoCloseable {
             String trimmedValue = value.trim();
 
             // apply trimming rule
-            if (trimmedValue.isEmpty() || NaaccrDictionaryUtils.NAACCR_TRIM_ALL.equals(itemDef.getTrim()))
+            if (trimmedValue.isEmpty() || itemDef.getTrim() == null || NaaccrDictionaryUtils.NAACCR_TRIM_ALL.equals(itemDef.getTrim()))
                 value = trimmedValue;
 
             if (!value.isEmpty()) {

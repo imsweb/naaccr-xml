@@ -3,8 +3,6 @@
  */
 package org.naaccr.xml;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -55,10 +53,6 @@ public final class NaaccrDictionaryUtils {
     public static final String NAACCR_PADDING_LEFT_BLANK = "leftBlank";
     public static final String NAACCR_PADDING_RIGHT_ZERO = "rightZero";
     public static final String NAACCR_PADDING_LEFT_ZERO = "leftZero";
-
-    // TODO remove this once support for CSV is removed...
-    public static final String NAACCR_DICTIONARY_FORMAT_CSV = "csv";
-    public static final String NAACCR_DICTIONARY_FORMAT_XML = "xml";
 
 
     // the Patterns for the internal dictionaries URI
@@ -275,11 +269,8 @@ public final class NaaccrDictionaryUtils {
     public static void main(String[] args) throws IOException {
         NaaccrDictionary dict = getBaseDictionaryByVersion("140");
         System.out.println("Read " + dict.getItems().size() + " items from base dictionary...");
+        System.out.println(dict.getItemByNaaccrId("vendorName").getTrim());
         //dict = getDefaultUserDictionary("140");
         //System.out.println("Read " + dict.getItems().size() + " items from default user dictionary...");
-
-        FileWriter writer = new FileWriter(new File(System.getProperty("user.dir") + "/build/test-dictionary.xml"));
-        writeDictionary(dict, writer);
-        writer.close();
     }
 }
