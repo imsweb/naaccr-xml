@@ -53,7 +53,6 @@ import org.naaccr.xml.NaaccrXmlOptions;
 import org.naaccr.xml.NaaccrXmlUtils;
 import org.naaccr.xml.PatientXmlReader;
 import org.naaccr.xml.entity.Patient;
-import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 
 @SuppressWarnings("unchecked")
 public class Standalone {
@@ -429,48 +428,48 @@ public class Standalone {
                     errorsFld.setText(null);
                     String format = NaaccrXmlUtils.getFormatFromXmlReader(new StringReader(textFld.getText()));
                     if (format == null)
-                        format = NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT; // TODO this should be an error
-                    RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, null);
-                    try (PatientXmlReader reader = new PatientXmlReader(new StringReader(textFld.getText()), NaaccrXmlUtils.getStandardXStream(dictionary, new NaaccrXmlOptions()))) {
-                        do {
-                            Patient patient = reader.readPatient();
-                            if (patient == null)
-                                break;
-                            for (NaaccrValidationError error : patient.getAllValidationErrors()) {
-                                errorsFld.setForeground(new Color(125, 0, 0));
-                                if (!errorsFld.getText().isEmpty())
-                                    errorsFld.append("\n");
-                                errorsFld.append("Line #" + error.getLineNumber() + ": DATA validation error\n");
-                                errorsFld.append("   message: " + (error.getMessage() == null ? "<not available>" : error.getMessage()) + "\n");
-                                errorsFld.append("   path: " + (error.getPath() == null ? "<not available>" : error.getPath()) + "\n");
-                                errorsFld.append("   item ID: " + (error.getNaaccrId() == null ? "<not available>" : error.getNaaccrId()) + "\n");
-                                errorsFld.append("   item #: " + (error.getNaaccrNum() == null ? "<not available>" : error.getNaaccrNum()) + "\n");
-                                errorsFld.append("   value: " + (error.getValue() == null ? "<blank>" : error.getValue()) + "\n");
+                        errorsFld.append("Unable to determine format of the XML file (this require a valid dictionary URI and record type)...\n");
+                    else {
+                        try (PatientXmlReader reader = new PatientXmlReader(new StringReader(textFld.getText()))) {
+                            do {
+                                Patient patient = reader.readPatient();
+                                if (patient == null)
+                                    break;
+                                for (NaaccrValidationError error : patient.getAllValidationErrors()) {
+                                    errorsFld.setForeground(new Color(125, 0, 0));
+                                    if (!errorsFld.getText().isEmpty())
+                                        errorsFld.append("\n");
+                                    errorsFld.append("Line #" + error.getLineNumber() + ": DATA validation error\n");
+                                    errorsFld.append("   message: " + (error.getMessage() == null ? "<not available>" : error.getMessage()) + "\n");
+                                    errorsFld.append("   path: " + (error.getPath() == null ? "<not available>" : error.getPath()) + "\n");
+                                    errorsFld.append("   item ID: " + (error.getNaaccrId() == null ? "<not available>" : error.getNaaccrId()) + "\n");
+                                    errorsFld.append("   item #: " + (error.getNaaccrNum() == null ? "<not available>" : error.getNaaccrNum()) + "\n");
+                                    errorsFld.append("   value: " + (error.getValue() == null ? "<blank>" : error.getValue()) + "\n");
+                                }
+                            } while (true);
+                            if (errorsFld.getText().isEmpty()) {
+                                errorsFld.append("Reading completed; found no error.");
+                                errorsFld.setForeground(new Color(0, 115, 0));
                             }
                         }
-                        while (true);
-                        if (errorsFld.getText().isEmpty()) {
-                            errorsFld.append("Reading completed; found no error.");
-                            errorsFld.setForeground(new Color(0, 115, 0));
+                        catch (NaaccrValidationException error) {
+                            errorsFld.setForeground(new Color(125, 0, 0));
+                            if (!errorsFld.getText().isEmpty())
+                                errorsFld.append("\n");
+                            errorsFld.append("Line " + (error.getLineNumber() == null ? "?" : ("#" + error.getLineNumber())) + ": SYNTAX validation error\n");
+                            errorsFld.append("   message: " + (error.getMessage() == null ? "<not available>" : error.getMessage()) + "\n");
+                            errorsFld.append("   path: " + (error.getPath() == null ? "<not available>" : error.getPath()) + "\n");
+                            errorsFld.append("   item ID: <not available>\n");
+                            errorsFld.append("   item #: <not available>\n");
+                            errorsFld.append("   value: <not available>\n");
+                            errorsFld.append("\nReading interrupted because of a syntax error...");
                         }
-                    }
-                    catch (NaaccrValidationException error) {
-                        errorsFld.setForeground(new Color(125, 0, 0));
-                        if (!errorsFld.getText().isEmpty())
-                            errorsFld.append("\n");
-                        errorsFld.append("Line " + (error.getLineNumber() == null ? "?" : ("#" + error.getLineNumber())) + ": SYNTAX validation error\n");
-                        errorsFld.append("   message: " + (error.getMessage() == null ? "<not available>" : error.getMessage()) + "\n");
-                        errorsFld.append("   path: " + (error.getPath() == null ? "<not available>" : error.getPath()) + "\n");
-                        errorsFld.append("   item ID: <not available>\n");
-                        errorsFld.append("   item #: <not available>\n");
-                        errorsFld.append("   value: <not available>\n");
-                        errorsFld.append("\nReading interrupted because of a syntax error...");
-                    }
-                    catch (IOException ex) {
-                        errorsFld.setForeground(new Color(125, 0, 0));
-                        errorsFld.append("Unexpected error:\n");
-                        errorsFld.append("      -> " + ex.getMessage() + "\n");
-                        errorsFld.append("Reading interrupted...");
+                        catch (IOException ex) {
+                            errorsFld.setForeground(new Color(125, 0, 0));
+                            errorsFld.append("Unexpected error:\n");
+                            errorsFld.append("      -> " + ex.getMessage() + "\n");
+                            errorsFld.append("Reading interrupted...");
+                        }
                     }
                     errorsFld.setCaretPosition(0);
                 }

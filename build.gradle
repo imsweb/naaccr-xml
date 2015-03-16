@@ -37,31 +37,3 @@ jar {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.2'
 }
-
-// **************************************************************************
-//    Rest of the script is used to create classes from xsd using JAXB...
-// **************************************************************************
-
-// used to generate JAXB entities
-configurations {
-    xjc
-}
-
-// JAXB dependencies
-dependencies {
-    xjc group: 'com.sun.xml.bind', name: 'jaxb-xjc', version: '2.2.7'
-    xjc group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.2.7'
-}
-
-// JAXB xjc task
-task generateXmlEntities << {
-    ant.taskdef(name: 'xjc', classname: 'com.sun.tools.xjc.XJCTask', classpath: configurations.xjc.asPath)
-
-    def runXjc = { schema, pkg ->
-        ant.xjc(destdir: 'src/main/java', schema: schema, binding: 'src/main/resources/stuff/binding.xml', package: pkg, extension: 'true') {
-            arg(line: '-no-header')
-        }
-    }
-
-    runXjc('src/main/resources/isaac/data6.xsd', 'com.imsweb.naaccr.xml.entities.naaccr6')
-}

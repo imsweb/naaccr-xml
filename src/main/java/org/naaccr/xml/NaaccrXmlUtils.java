@@ -23,13 +23,6 @@ import java.util.zip.GZIPOutputStream;
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
-import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-import com.thoughtworks.xstream.io.xml.XppDriver;
 
 // TODO use a properties file with the exceptions so they can be shared with the DLL?
 // TODO investigate using abstract base reader/writer that would be parametrized classes...
@@ -42,13 +35,21 @@ public class NaaccrXmlUtils {
     public static final String NAACCR_XML_TAG_TUMOR = "Tumor";
     public static final String NAACCR_XML_TAG_ITEM = "Item";
 
+    // root attributes
+    public static final String NAACCR_XML_ROOT_ATT_BASE_DICT = "baseDictionaryUri";
+    public static final String NAACCR_XML_ROOT_ATT_USER_DICT = "userDictionaryUri";
+    public static final String NAACCR_XML_ROOT_ATT_REC_TYPE = "recordType";
+    public static final String NAACCR_XML_ROOT_ATT_TIME_GENERATED = "timeGenerated";
+    
+    public static final String GENERATED_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ"; // TODO verify the format...
+
     /**
      * Translates a flat data file into an XML data file.
      * @param flatFile source flat data file, must exists
      * @param xmlFile target XML data file, parent file must exists
      * @param format expected NAACCR format, required (but you can use the getFormatFromFlatFile() method to evaluate it from the file)
      * @param options optional validating options
-     * @param userDictionary an opitional user-defined dictionary (will be merged with the base dictionary)
+     * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @throws IOException if there is problem reading/writing the file
      * @throws NaaccrValidationException if there is a problem validating the data
      */
@@ -64,12 +65,9 @@ public class NaaccrXmlUtils {
         if (!xmlFile.getParentFile().exists())
             throw new IOException("Target folder must exist");
 
-        // create the runtime dictionary (it includes only what is needed to actually process the data)
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, userDictionary);
-
         // create the reader and writer and let them do all the work!
-        try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlFile), getStandardXStream(dictionary, options), dictionary)) {
-            try (PatientFlatReader reader = new PatientFlatReader(createReader(flatFile), dictionary)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlFile), format)) {
+            try (PatientFlatReader reader = new PatientFlatReader(createReader(flatFile), options, userDictionary)) {
                 Patient patient = reader.readPatient();
                 while (patient != null) {
                     writer.writePatient(patient);
@@ -85,7 +83,7 @@ public class NaaccrXmlUtils {
      * @param flatFile target flat data file, parent file must exists
      * @param format expected NAACCR format, required (but you can use the getFormatFromXmlFile() method to evaluate it from the file)
      * @param options optional validating options
-     * @param userDictionary an opitional user-defined dictionary (will be merged with the base dictionary)
+     * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @throws IOException if there is problem reading/writing the file
      * @throws NaaccrValidationException if there is a problem validating the data
      */
@@ -101,12 +99,9 @@ public class NaaccrXmlUtils {
         if (!flatFile.getParentFile().exists())
             throw new IOException("Target folder must exist");
 
-        // create the runtime dictionary (it includes only what is needed to actually process the data)
-        RuntimeNaaccrDictionary runtimeDictionary = new RuntimeNaaccrDictionary(format, userDictionary);
-
         // create the reader and writer and let them do all the work!
-        try (PatientFlatWriter writer = new PatientFlatWriter(createWriter(flatFile), runtimeDictionary)) {
-            try (PatientXmlReader reader = new PatientXmlReader(createReader(xmlFile), getStandardXStream(runtimeDictionary, options))) {
+        try (PatientFlatWriter writer = new PatientFlatWriter(createWriter(flatFile), format, options, userDictionary)) {
+            try (PatientXmlReader reader = new PatientXmlReader(createReader(xmlFile), options, userDictionary)) {
                 Patient patient = reader.readPatient();
                 while (patient != null) {
                     writer.writePatient(patient);
@@ -122,12 +117,12 @@ public class NaaccrXmlUtils {
      * ATTENTION: THIS METHOD WILL RETURN THE FULL CONTENT OF THE FILE AND IS NOT SUITABLE FOR LARGE FILE; CONSIDER USING A STREAM INSTEAD.
      * @param xmlFile source XML data file, must exists
      * @param format expected NAACCR format
-     * @param options reading and validating options
-     * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
-     * @return a <code>NaaccrDataExchange</code> object, never null
-     * @throws IOException
+     * @param options optional validating options
+     * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
+     * @throws IOException if there is problem reading/writing the file
+     * @throws NaaccrValidationException if there is a problem validating the data
      */
-    public static NaaccrData readXmlFile(File xmlFile, String format, NaaccrXmlOptions options, NaaccrDictionary nonStandardDictionary) throws IOException {
+    public static NaaccrData readXmlFile(File xmlFile, String format, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException, NaaccrValidationException {
         if (xmlFile == null)
             throw new IOException("Source XML file is required");
         if (!xmlFile.exists())
@@ -136,21 +131,16 @@ public class NaaccrXmlUtils {
             throw new IOException("File format is required");
         if (!NaaccrFormat.isFormatSupported(format))
             throw new IOException("Invalid file format");
-
-        // create the runtime dictionary
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, nonStandardDictionary);
-
-        // make sure we have some options
-        if (options == null)
-            options = new NaaccrXmlOptions();
-
-        // let XStream read the data
-        NaaccrData data;
-        try (Reader reader = createReader(xmlFile)) {
-            data = (NaaccrData)getStandardXStream(dictionary, options).fromXML(reader);
+        
+        try (PatientXmlReader reader = new PatientXmlReader(createReader(xmlFile), options, userDictionary)) {
+            NaaccrData rootData = reader.getRootData();
+            Patient patient = reader.readPatient();
+            while (patient != null) {
+                rootData.getPatients().add(patient);
+                patient = reader.readPatient();
+            }
+            return rootData;
         }
-
-        return data;
     }
 
     /**
@@ -160,9 +150,10 @@ public class NaaccrXmlUtils {
      * @param data a <code>NaaccrDataExchange</code> object, cannot be null
      * @param xmlFile target XML data file
      * @param format expected NAACCR format
-     * @param options writing and validating options
-     * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
-     * @throws IOException
+     * @param options optional validating options
+     * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
+     * @throws IOException if there is problem reading/writing the file
+     * @throws NaaccrValidationException if there is a problem validating the data
      */
     public static void writeXmlFile(NaaccrData data, File xmlFile, String format, NaaccrXmlOptions options, NaaccrDictionary nonStandardDictionary) throws IOException {
         if (data == null)
@@ -174,22 +165,9 @@ public class NaaccrXmlUtils {
         if (!NaaccrFormat.isFormatSupported(format))
             throw new IOException("Invalid file format");
 
-        // create the runtime dictionary
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, nonStandardDictionary);
-
-        // make sure we have some options
-        if (options == null)
-            options = new NaaccrXmlOptions();
-
-        // let XStream writer the data
-        try (Writer writer = createWriter(xmlFile)) {
-            PrettyPrintWriter prettyWriter = new PrettyPrintWriter(writer);
-            try {
-                getStandardXStream(dictionary, options).marshal(data, prettyWriter); // can't use xstream.toXML because it doesn't use a pretty formatting...
-            }
-            finally {
-                prettyWriter.flush();
-            }
+        try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlFile), data)) {
+            for (Patient patient : data.getPatients())
+                writer.writePatient(patient);
         }
     }
 
@@ -202,38 +180,30 @@ public class NaaccrXmlUtils {
         if (flatFile == null || !flatFile.exists())
             return null;
 
-        String result = null;
         try (BufferedReader reader = new BufferedReader(createReader(flatFile))) {
-            String line = reader.readLine();
-            if (line != null && line.length() > 19) {
-                String naaccrVersion = line.substring(16, 19).trim();
-                String recordType = line.substring(0, 1).trim();
-                switch (recordType) {
-                    case "A":
-                        result = "naaccr-" + naaccrVersion + "-abstract";
-                        break;
-                    case "M":
-                        result = "naaccr-" + naaccrVersion + "-modified";
-                        break;
-                    case "C":
-                        result = "naaccr-" + naaccrVersion + "-confidential";
-                        break;
-                    case "I":
-                        result = "naaccr-" + naaccrVersion + "-incidence";
-                        break;
-                    default:
-                        // ignored
-                }
-            }
+            return getFormatFromFlatFile(reader.readLine());
         }
         catch (IOException e) {
-            result = null;
+            return null;
         }
+    }
 
-        if (result != null && !NaaccrFormat.isFormatSupported(result))
-            result = null;
+    /**
+     * Returns the NAACCR format of the given line in a flat file.
+     * @param flatFile provided data line
+     * @return the NAACCR format, null if it cannot be determined
+     */
+    public static String getFormatFromFlatFile(String line) {
+        if (line == null || line.length() < 19)
+            return null;
+        
+        String version = line.substring(16, 19).trim();
+        String type = line.substring(0, 1).trim();
 
-        return result;
+        if (NaaccrFormat.isVersionSupported(version) && NaaccrFormat.isRecordTypeSupported(type))
+            return NaaccrFormat.getInstance(version, type).toString();
+
+        return null;
     }
 
     /**
@@ -260,7 +230,7 @@ public class NaaccrXmlUtils {
      */
     public static String getFormatFromXmlReader(Reader xmlReader) {
 
-        Pattern patternVersion = Pattern.compile("naaccrVersion=\"(.+?)\"");
+        Pattern patternDictionary = Pattern.compile("baseDictionaryUri=\"(.+?)\"");
         Pattern patternType = Pattern.compile("recordType=\"(.+?)\"");
 
         String version = null, type = null;
@@ -268,9 +238,9 @@ public class NaaccrXmlUtils {
             // this isn't going to work if the file is big and doesn't contain any new lines, which is technically allowed in XML...
             String line = reader.readLine();
             while (line != null && (version == null || type == null)) {
-                Matcher matcherVersion = patternVersion.matcher(line);
-                if (matcherVersion.find())
-                    version = matcherVersion.group(1);
+                Matcher matcherDictionary = patternDictionary.matcher(line);
+                if (matcherDictionary.find())
+                    version = NaaccrDictionaryUtils.extractVersionFromUri(matcherDictionary.group(1));
                 Matcher matcherType = patternType.matcher(line);
                 if (matcherType.find())
                     type = matcherType.group(1);
@@ -281,55 +251,10 @@ public class NaaccrXmlUtils {
             // ignore, the result will be null
         }
 
-        String result = null;
-        if (version != null && type != null) {
-            switch (type) {
-                case "A":
-                    result = "naaccr-" + version + "-abstract";
-                    break;
-                case "M":
-                    result = "naaccr-" + version + "-modified";
-                    break;
-                case "C":
-                    result = "naaccr-" + version + "-confidential";
-                    break;
-                case "I":
-                    result = "naaccr-" + version + "-incidence";
-                    break;
-                default:
-                    result = null;
-            }
-        }
-
-        return NaaccrFormat.isFormatSupported(result) ? result : null;
-    }
-
-    public static XStream getStandardXStream(RuntimeNaaccrDictionary dictionary, NaaccrXmlOptions options) {
-
-        final NaaccrPatientConverter converter = new NaaccrPatientConverter(dictionary, options == null ? new NaaccrXmlOptions() : options);
-
-        XppDriver driver = new XppDriver() {
-            @Override
-            protected synchronized XmlPullParser createParser() throws XmlPullParserException {
-                XmlPullParser parser = super.createParser();
-                converter.setParser(parser);
-                return parser;
-            }
-        };
-
-        XStream xstream = new XStream(driver);
-
-        // tell XStream how to read/write our main entities
-        xstream.alias(NAACCR_XML_TAG_ROOT, NaaccrData.class); // TODO FPD could we just declare the root and handle the patients "manually"?
-        xstream.alias(NAACCR_XML_TAG_PATIENT, Patient.class);
-
-        // all collections should be wrap into collection tags, but it's nicer to omit them in the XML; we have to tell XStream though
-        xstream.addImplicitCollection(NaaccrData.class, "_patients", Patient.class);
-
-        // the item object is a bit harder to read/write, so we have to use a specific converter
-        xstream.registerConverter(converter);
-
-        return xstream;
+        if (version != null && NaaccrFormat.isVersionSupported(version) && type != null && NaaccrFormat.isRecordTypeSupported(type))
+            return NaaccrFormat.getInstance(version, type).toString();
+        
+        return null;
     }
 
     // takes care of the file encoding and compression...

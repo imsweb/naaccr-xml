@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" recordType="I" timeGenerated="2015-03-13T12:09:19-0400" mySpecialAttribute="value">
+    <Item naaccrId="vendorName">SEER*ABS</Item>
+    <MySpecialData>
+        <Item naaccrId="myDataItem">VALUE</Item>
+    </MySpecialData>
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000001</Item>
+        <MySpecialPatientData>
+            <Item naaccrId="myPatientItem">VALUE</Item>
+        </MySpecialPatientData>
+        <Tumor>
+            <Item naaccrId="primarySite">C456</Item>
+        </Tumor>
+    </Patient>
+    <Patient>
+        <Item naaccrId="patientIdNumber" naaccrNum="20">00000002</Item>
+    </Patient>
+</NaaccrData>

@@ -5,9 +5,14 @@ package org.naaccr.xml.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class NaaccrData {
+import org.naaccr.xml.NaaccrDictionaryUtils;
+import org.naaccr.xml.NaaccrFormat;
+
+public class NaaccrData extends AbstractEntity {
 
     private String _baseDictionaryUri;
 
@@ -16,8 +21,21 @@ public class NaaccrData {
     private String _recordType;
 
     private Date _timeGenerated;
+    
+    private Map<String, String> _extraRootParameters;
 
     private List<Patient> _patients;
+    
+    public NaaccrData() {
+    }
+    
+    public NaaccrData(String format) {
+        this();
+        NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(format);
+        _baseDictionaryUri = NaaccrDictionaryUtils.createUriFromVersion(naaccrFormat.getNaaccrVersion(), true);
+        _recordType = naaccrFormat.getRecordType();
+        _timeGenerated = new Date();
+    }
 
     public String getBaseDictionaryUri() {
         return _baseDictionaryUri;
@@ -51,6 +69,12 @@ public class NaaccrData {
         _timeGenerated = timeGenerated;
     }
 
+    public Map<String, String> getExtraRootParameters() {
+        if (_extraRootParameters == null)
+            _extraRootParameters = new HashMap<>();
+        return _extraRootParameters;
+    }
+    
     public List<Patient> getPatients() {
         if (_patients == null)
             _patients = new ArrayList<>();

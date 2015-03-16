@@ -4,8 +4,6 @@
 package org.naaccr.xml;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -14,6 +12,7 @@ import java.util.List;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
+import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
 
@@ -21,13 +20,30 @@ public class PatientFlatWriter implements AutoCloseable {
 
     protected BufferedWriter _writer;
 
+    protected NaaccrXmlOptions _options;
+
     protected RuntimeNaaccrDictionary _dictionary;
 
     protected RuntimeNaaccrDictionaryItem _naaccrVersionItem, _recordTypeItem;
 
-    public PatientFlatWriter(Writer writer, RuntimeNaaccrDictionary dictionary) throws IOException {
+    public PatientFlatWriter(Writer writer, String format) throws IOException {
+        this(writer, format, null, null);
+    }
+
+    public PatientFlatWriter(Writer writer, String format, NaaccrXmlOptions options) throws IOException {
+        this(writer, format, options, null);
+    }
+
+    public PatientFlatWriter(Writer writer, String format, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException {
         _writer = new BufferedWriter(writer);
-        _dictionary = dictionary;
+        _options = options == null ? new NaaccrXmlOptions() : options;
+
+        // TODO FPD add better validation
+
+        NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(format);
+        NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByVersion(naaccrFormat.getNaaccrVersion());
+        _dictionary = new RuntimeNaaccrDictionary(naaccrFormat.getRecordType(), baseDictionary, userDictionary);
+
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
             if (item.getNaaccrNum() != null) {
                 if (item.getNaaccrNum().equals(10))
@@ -66,7 +82,7 @@ public class PatientFlatWriter implements AutoCloseable {
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
 
                 // as soon as an item is not supported for the dictionary's record type, we can stop (making the assumption the items are correctly sorted)
-                if (!itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType()))
+                if (!itemDef.getRecordTypes().contains(_dictionary.getRecordType()))
                     break;
 
                 if (itemDef.getParentXmlElement() != null && itemDef.getStartColumn() != null && itemDef.getLength() != null) {
@@ -75,7 +91,7 @@ public class PatientFlatWriter implements AutoCloseable {
                     int end = start + length - 1;
 
                     // TODO this code doesn't handle padding yet...
-                    
+
                     // adjust for the "leading" gap
                     if (start > currentIndex)
                         for (int i = 0; i < start - currentIndex; i++)
@@ -99,15 +115,15 @@ public class PatientFlatWriter implements AutoCloseable {
             }
 
             // adjust for the final "trailing" gap
-            if (currentIndex <= _dictionary.getFormat().getLineLength())
-                for (int i = 0; i < _dictionary.getFormat().getLineLength() - currentIndex + 1; i++)
+            if (currentIndex <= _dictionary.getLineLength())
+                for (int i = 0; i < _dictionary.getLineLength() - currentIndex + 1; i++)
                     line.append(' ');
 
             // always use the format to write the NAACCR version and record type
-            if (_dictionary.getFormat().getRecordType() != null && _recordTypeItem != null)
-                line.replace(_recordTypeItem.getStartColumn() - 1, _recordTypeItem.getStartColumn() + _recordTypeItem.getLength() - 1, _dictionary.getFormat().getRecordType());
-            if (_dictionary.getFormat().getNaaccrVersion() != null && _naaccrVersionItem != null)
-                line.replace(_naaccrVersionItem.getStartColumn() - 1, _naaccrVersionItem.getStartColumn() + _naaccrVersionItem.getLength() - 1, _dictionary.getFormat().getNaaccrVersion());
+            if (_dictionary.getRecordType() != null && _recordTypeItem != null)
+                line.replace(_recordTypeItem.getStartColumn() - 1, _recordTypeItem.getStartColumn() + _recordTypeItem.getLength() - 1, _dictionary.getRecordType());
+            if (_dictionary.getNaaccrVersion() != null && _naaccrVersionItem != null)
+                line.replace(_naaccrVersionItem.getStartColumn() - 1, _naaccrVersionItem.getStartColumn() + _naaccrVersionItem.getLength() - 1, _dictionary.getNaaccrVersion());
 
             lines.add(line.toString());
         }
@@ -126,22 +142,5 @@ public class PatientFlatWriter implements AutoCloseable {
             throw new IOException("Unsupported parent element: " + itemDef.getParentXmlElement());
 
         return item == null ? null : item.getValue();
-    }
-
-    // TODO remove this testing method
-    public static void main(String[] args) throws IOException {
-        Patient patient = new Patient();
-        patient.getItems().add(new Item("nameLast", "DEPRY"));
-        patient.getItems().add(new Item("nameFirst", "FABIAN"));
-        patient.getTumors().add(new Tumor());
-        patient.getTumors().get(0).getItems().add(new Item("primarySite", "C619"));
-        patient.getTumors().get(0).getItems().add(new Item("hosptialAbstractorId", "FDEPRY")); // should be ignored because not defined
-        patient.getTumors().add(new Tumor());
-        patient.getTumors().get(1).getItems().add(new Item("primarySite", "C447"));
-        File outputFile = new File(System.getProperty("user.dir") + "/build/write-flat-test.txt");
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
-        PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(outputFile), dictionary);
-        writer.writePatient(patient);
-        writer.close();
     }
 }

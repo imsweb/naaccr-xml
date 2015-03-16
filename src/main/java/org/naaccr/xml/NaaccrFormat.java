@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A format encapsulates a NAACCR version and a record type.
+ * A format encapsulates a NAACCR version and a record type. It also makes the flat-file line length available based on those two fields.
  */
 public class NaaccrFormat {
 
@@ -25,6 +25,26 @@ public class NaaccrFormat {
 
     public static boolean isVersionSupported(String version) {
         return _SUPPORTED_VERSIONS.contains(version);
+    }
+
+    // record type constants
+    public static String NAACCR_REC_TYPE_ABSTRACT = "A";
+    public static String NAACCR_REC_TYPE_MODIFIED = "M";
+    public static String NAACCR_REC_TYPE_CONFIDENTIAL = "C";
+    public static String NAACCR_REC_TYPE_INCIDENCE = "I";
+
+    // list of supported record types
+    private static final List<String> _SUPPORTED_REC_TYPES = new ArrayList<>();
+
+    static {
+        _SUPPORTED_REC_TYPES.add(NAACCR_REC_TYPE_ABSTRACT);
+        _SUPPORTED_REC_TYPES.add(NAACCR_REC_TYPE_MODIFIED);
+        _SUPPORTED_REC_TYPES.add(NAACCR_REC_TYPE_CONFIDENTIAL);
+        _SUPPORTED_REC_TYPES.add(NAACCR_REC_TYPE_INCIDENCE);
+    }
+
+    public static boolean isRecordTypeSupported(String recordType) {
+        return _SUPPORTED_REC_TYPES.contains(recordType);
     }
     
     // format constants
@@ -53,6 +73,10 @@ public class NaaccrFormat {
     
     public static NaaccrFormat getInstance(String format) {
         return new NaaccrFormat(format);
+    }
+    
+    public static NaaccrFormat getInstance(String naaccrVersion, String recordType) {
+        return new NaaccrFormat(getFormatFromVersionAndType(naaccrVersion, recordType));
     }
 
     private String _naaccrVersion;
@@ -91,6 +115,27 @@ public class NaaccrFormat {
                 throw new RuntimeException("Unsupported format: " + parts[2]);
         }
     }
+    
+    private static String getFormatFromVersionAndType(String version, String type) {
+        String format;
+        switch (type) {
+            case "A":
+                format = "naaccr-" + version + "-abstract";
+                break;
+            case "M":
+                format = "naaccr-" + version + "-modified";
+                break;
+            case "C":
+                format = "naaccr-" + version + "-confidential";
+                break;
+            case "I":
+                format = "naaccr-" + version + "-incidence";
+                break;
+            default:
+                format = null;
+        }
+        return format;
+    }
 
     public String getNaaccrVersion() {
         return _naaccrVersion;
@@ -106,6 +151,10 @@ public class NaaccrFormat {
 
     @Override
     public String toString() {
+        return getFormatFromVersionAndType(_naaccrVersion, _recordType);
+    }
+
+    public String getDisplayName() {
         String formattedType;
         switch (_recordType) {
             case "A":

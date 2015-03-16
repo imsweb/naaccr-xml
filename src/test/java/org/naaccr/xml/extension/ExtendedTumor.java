@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2015 Information Management Services, Inc.
  */
-package org.naaccr.xml;
+package org.naaccr.xml.extension;
 
-import org.naaccr.xml.entity.Patient;
+import org.naaccr.xml.entity.Tumor;
 
-public class ExtendedPatient extends Patient {
-    
+public class ExtendedTumor extends Tumor {
+
     private EditsReport editsReport;
 
     public EditsReport getEditsReport() {
@@ -16,4 +16,5 @@ public class ExtendedPatient extends Patient {
     public void setEditsReport(EditsReport val) {
         editsReport = val;
     }
+    
 }

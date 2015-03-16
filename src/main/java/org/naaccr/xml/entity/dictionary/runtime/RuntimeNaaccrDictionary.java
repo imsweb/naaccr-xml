@@ -30,17 +30,15 @@ public class RuntimeNaaccrDictionary {
     private Map<String, RuntimeNaaccrDictionaryItem> _cachedById;
     private Map<Integer, RuntimeNaaccrDictionaryItem> _cachedByNumber;
 
-    public RuntimeNaaccrDictionary(String format, NaaccrDictionary userDictionary) {
+    public RuntimeNaaccrDictionary(String recordType, NaaccrDictionary baseDictionary, NaaccrDictionary userDictionary) {
 
-        _format = NaaccrFormat.getInstance(format);
-
-        NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByVersion(_format.getNaaccrVersion());
+        // use the default user dictionary if one is not provided...
         if (userDictionary == null)
-            userDictionary = NaaccrDictionaryUtils.getDefaultUserDictionary(_format.getNaaccrVersion());
+            userDictionary = NaaccrDictionaryUtils.getDefaultUserDictionary(baseDictionary.getNaaccrVersion());
 
         _baseDictionaryUri = baseDictionary.getDictionaryUri();
         _userDictionaryUri = userDictionary.getDictionaryUri();
-
+        _format = NaaccrFormat.getInstance(baseDictionary.getNaaccrVersion(), recordType);
         _items = new ArrayList<>();
         for (NaaccrDictionaryItem item : baseDictionary.getItems())
             _items.add(new RuntimeNaaccrDictionaryItem(item));
@@ -64,8 +62,16 @@ public class RuntimeNaaccrDictionary {
         return _userDictionaryUri;
     }
 
-    public NaaccrFormat getFormat() {
-        return _format;
+    public String getNaaccrVersion() {
+        return _format.getNaaccrVersion();
+    }
+
+    public String getRecordType() {
+        return _format.getRecordType();
+    }
+
+    public Integer getLineLength() {
+        return _format.getLineLength();
     }
 
     public List<RuntimeNaaccrDictionaryItem> getItems() {

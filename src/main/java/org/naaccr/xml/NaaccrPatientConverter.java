@@ -7,9 +7,7 @@ import org.naaccr.xml.entity.AbstractEntity;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
-import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
-import org.xmlpull.v1.XmlPullParser;
 
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
@@ -20,20 +18,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public class NaaccrPatientConverter implements Converter {
 
-    private RuntimeNaaccrDictionary _dictionary;
+    protected XmlStreamContext _context;
 
-    // TODO finish implementing the options once the rest is finalized...
-    private NaaccrXmlOptions _options;
-
-    private XmlPullParser _parser;
-
-    public NaaccrPatientConverter(RuntimeNaaccrDictionary dictionary, NaaccrXmlOptions options) {
-        _dictionary = dictionary;
-        _options = options;
-    }
-
-    public void setParser(XmlPullParser parser) {
-        _parser = parser;
+    public void setContext(XmlStreamContext context) {
+        _context = context;
     }
 
     @Override
@@ -45,7 +33,7 @@ public class NaaccrPatientConverter implements Converter {
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
         if (!(source instanceof Patient))
             throw createValidationException("Unexpected object type: " + source.getClass().getName());
-        
+
         Patient patient = (Patient)source;
         for (Item item : patient.getItems())
             writeItem(item, writer);
@@ -56,9 +44,9 @@ public class NaaccrPatientConverter implements Converter {
             writer.endNode();
         }
     }
-    
+
     protected void writeItem(Item item, HierarchicalStreamWriter writer) {
-        RuntimeNaaccrDictionaryItem itemDef = _dictionary.getItem(item);
+        RuntimeNaaccrDictionaryItem itemDef = _context.getDictionary().getItem(item);
         if (itemDef == null) {
             if (item.getId() != null)
                 throw createValidationException("Unable to find item definition for NAACCR ID " + item.getId());
@@ -85,14 +73,14 @@ public class NaaccrPatientConverter implements Converter {
 
         while (reader.hasMoreChildren()) {
             reader.moveDown();
-            
+
             // handel patient items
             if (NaaccrXmlUtils.NAACCR_XML_TAG_ITEM.equals(reader.getNodeName())) {
                 if (tumorCount > 0)
                     throw new RuntimeException("Tumors should come after items...");
                 patItemCount++;
                 String path = "/Patient/Item[" + patItemCount + "]";
-                patient.getItems().add(readItem(patient, _parser.getLineNumber(), path, "Patient", reader.getAttribute("naaccrId"), reader.getAttribute("naaccrNum"), reader.getValue()));
+                patient.getItems().add(readItem(patient, _context.getParser().getLineNumber(), path, "Patient", reader.getAttribute("naaccrId"), reader.getAttribute("naaccrNum"), reader.getValue()));
             }
             // handle tumors
             else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(reader.getNodeName())) {
@@ -102,11 +90,11 @@ public class NaaccrPatientConverter implements Converter {
                 while (reader.hasMoreChildren()) {
                     reader.moveDown();
                     tumorItemCount++;
-                    
+
                     // handle tumor items
                     if (NaaccrXmlUtils.NAACCR_XML_TAG_ITEM.equals(reader.getNodeName())) {
                         String path = "/Patient/Tumor[" + tumorCount + "]/Item[" + tumorItemCount + "]";
-                        tumor.getItems().add(readItem(tumor, _parser.getLineNumber(), path, "Tumor", reader.getAttribute("naaccrId"), reader.getAttribute("naaccrNum"), reader.getValue()));
+                        tumor.getItems().add(readItem(tumor, _context.getParser().getLineNumber(), path, "Tumor", reader.getAttribute("naaccrId"), reader.getAttribute("naaccrNum"), reader.getValue()));
                     }
                     else
                         throw createValidationException("Unexpected tag: " + reader.getNodeName());
@@ -118,7 +106,7 @@ public class NaaccrPatientConverter implements Converter {
                 throw createValidationException("Unexpected tag: " + reader.getNodeName());
             reader.moveUp();
         }
-        
+
         return patient;
     }
 
@@ -130,7 +118,7 @@ public class NaaccrPatientConverter implements Converter {
             rawId = rawId.trim();
             if (!rawId.isEmpty()) {
                 item.setId(rawId);
-                if (_dictionary.getItemByNaaccrId(item.getId()) == null)
+                if (_context.getDictionary().getItemByNaaccrId(item.getId()) == null)
                     addError(entity, lineNumber, currentPath, "unknown 'naaccrId' attribute value: " + rawId);
             }
         }
@@ -141,7 +129,7 @@ public class NaaccrPatientConverter implements Converter {
             if (!rawNum.isEmpty()) {
                 try {
                     item.setNum(Integer.valueOf(rawNum));
-                    if (_dictionary.getItemByNaaccrNum(item.getNum()) == null)
+                    if (_context.getDictionary().getItemByNaaccrNum(item.getNum()) == null)
                         addError(entity, lineNumber, currentPath, "unknown 'naaccrNum' attribute value: " + rawNum);
                 }
                 catch (NumberFormatException e) {
@@ -157,9 +145,9 @@ public class NaaccrPatientConverter implements Converter {
         // get the item definition
         RuntimeNaaccrDictionaryItem itemDef = null;
         if (item.getId() != null)
-            itemDef = _dictionary.getItemByNaaccrId(item.getId());
+            itemDef = _context.getDictionary().getItemByNaaccrId(item.getId());
         else if (item.getNum() != null)
-            itemDef = _dictionary.getItemByNaaccrNum(item.getNum());
+            itemDef = _context.getDictionary().getItemByNaaccrNum(item.getNum());
         else
             addError(entity, lineNumber, currentPath, "'naaccrId' and 'naaccrNum' attributes cannot be both missing");
 
@@ -171,7 +159,7 @@ public class NaaccrPatientConverter implements Converter {
                 addError(entity, lineNumber, currentPath, "invalid parent XML tag; was expecting '" + itemDef.getParentXmlElement() + "' but got '" + parentTag + "'", itemDef);
 
             // item should be in the proper record type
-            if (!itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType()))
+            if (!itemDef.getRecordTypes().contains(_context.getDictionary().getRecordType()))
                 addError(entity, lineNumber, currentPath, "item '" + itemDef.getNaaccrId() + "' is not allowed for this record type", itemDef);
 
             // value should be valid
@@ -181,7 +169,7 @@ public class NaaccrPatientConverter implements Converter {
                 else if (exactLengthRequired(itemDef.getDataType()) && item.getValue().length() != itemDef.getLength())
                     addError(entity, lineNumber, currentPath, "invalid value, expected exactly " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef, item.getValue());
                 else if (itemDef.getDataType() != null && !NaaccrDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(itemDef.getDataType()).matcher(item.getValue()).matches())
-                addError(entity, lineNumber, currentPath, "invalid value according to the definition of data type '" + itemDef.getDataType() + "'", itemDef, item.getValue());
+                    addError(entity, lineNumber, currentPath, "invalid value according to the definition of data type '" + itemDef.getDataType() + "'", itemDef, item.getValue());
                 else if (itemDef.getRegexValidation() != null && !itemDef.getRegexValidation().matcher(item.getValue()).matches())
                     addError(entity, lineNumber, currentPath, "invalid value according to specific item validation", itemDef, item.getValue());
             }
@@ -199,7 +187,7 @@ public class NaaccrPatientConverter implements Converter {
     protected void addError(AbstractEntity entity, int line, String path, String msg, RuntimeNaaccrDictionaryItem def) {
         addError(entity, line, path, msg, def, null);
     }
-    
+
     protected void addError(AbstractEntity entity, int line, String path, String msg, RuntimeNaaccrDictionaryItem def, String value) {
         NaaccrValidationError error = new NaaccrValidationError();
         error.setMessage(msg);

@@ -62,8 +62,7 @@ public final class NaaccrDictionaryUtils {
 
 
     // the Patterns for the internal dictionaries URI
-    public static final Pattern _PATTERN_DICTIONARY_BASE_URI = Pattern.compile("http://naaccr\\.org/naaccrxml/naaccr-dictionary-(.+?)\\.xml");
-    public static final Pattern _PATTERN_DICTIONARY_USER_URI = Pattern.compile("http://naaccr\\.org/naaccrxml/naaccr-dictionary-gaps-(.+?)\\.xml");
+    public static final Pattern _PATTERN_DICTIONARY_URI = Pattern.compile("http://naaccr\\.org/naaccrxml/naaccr-dictionary(-gaps)?-(.+?)\\.xml");
 
     /**
      * Private constructor, no instanciation...
@@ -72,6 +71,33 @@ public final class NaaccrDictionaryUtils {
     }
 
     /**
+     * Extracts the NAACCR version from an internal dictionary URI.
+     * @param uri internal dictionary URI
+     * @return the corrsponding NAACCR version, null if it can't be extracted
+     */
+    public static String extractVersionFromUri(String uri) {
+        if (uri == null)
+            return null;
+        Matcher matcher = _PATTERN_DICTIONARY_URI.matcher(uri);
+        if (matcher.matches())
+            return matcher.group(2);
+        return null;
+    }
+
+    /**
+     * Returns the internal dictionary URI for the given version.
+     * @param version version, required
+     * @param isBase if true, the base URI will be returned, otherwise the default user one
+     * @return URI as a string
+     */
+    public static String createUriFromVersion(String version, boolean isBase) {
+        if (isBase)
+            return "http://naaccr.org/naaccrxml/naaccr-dictionary-" + version + ".xml";
+        else
+            return "http://naaccr.org/naaccrxml/naaccr-dictionary-gaps-" + version + ".xml";
+    }
+    
+    /**
      * Returns the base dictionary for the requested URI.
      * @param uri URI, required
      * @return the corresponding base dictionary, throws a runtime exception if not found
@@ -79,10 +105,7 @@ public final class NaaccrDictionaryUtils {
     public static NaaccrDictionary getBaseDictionaryByUri(String uri) {
         if (uri == null)
             throw new RuntimeException("URI is required for getting the base dictionary.");
-        Matcher matcher = _PATTERN_DICTIONARY_BASE_URI.matcher(uri);
-        if (!matcher.matches())
-            throw new RuntimeException("Invalid URI for base dictionary.");
-        return getBaseDictionaryByVersion(matcher.group(1));
+        return getBaseDictionaryByVersion(extractVersionFromUri(uri));
     }
 
     /**
@@ -90,6 +113,7 @@ public final class NaaccrDictionaryUtils {
      * @param naaccrVersion NAACCR version, required (see constants in NaaccrFormat)
      * @return the corresponding base dictionary, throws a runtime exception if not found
      */
+    @SuppressWarnings("ConstantConditions")
     public static NaaccrDictionary getBaseDictionaryByVersion(String naaccrVersion) {
         if (naaccrVersion == null)
             throw new RuntimeException("Version is required for getting the base dictionary.");
@@ -111,10 +135,7 @@ public final class NaaccrDictionaryUtils {
     public static NaaccrDictionary getDefaultUserDictionaryByUri(String uri) {
         if (uri == null)
             throw new RuntimeException("URI is required for getting the default user dictionary.");
-        Matcher matcher = _PATTERN_DICTIONARY_USER_URI.matcher(uri);
-        if (!matcher.matches())
-            throw new RuntimeException("Invalid URI for default user dictionary.");
-        return getDefaultUserDictionary(matcher.group(1));
+        return getDefaultUserDictionary(extractVersionFromUri(uri));
     }
 
     /**
@@ -122,6 +143,7 @@ public final class NaaccrDictionaryUtils {
      * @param naaccrVersion NAACCR version, required (see constants in NaaccrFormat)
      * @return the corresponding default user dictionary, throws a runtime exception if not found
      */
+    @SuppressWarnings("ConstantConditions")
     public static NaaccrDictionary getDefaultUserDictionary(String naaccrVersion) {
         if (naaccrVersion == null)
             throw new RuntimeException("Version is required for getting the default user dictionary.");

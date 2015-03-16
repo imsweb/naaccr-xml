@@ -3,8 +3,6 @@
  */
 package org.naaccr.xml;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
@@ -14,6 +12,7 @@ import java.util.List;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
+import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
 
@@ -21,15 +20,28 @@ public class PatientFlatReader implements AutoCloseable {
 
     protected LineNumberReader _reader;
 
+    protected NaaccrXmlOptions _options;
+
     protected RuntimeNaaccrDictionary _dictionary;
 
     protected RuntimeNaaccrDictionaryItem _patientIdNumberItem;
 
     protected String _previousLine;
 
-    public PatientFlatReader(Reader reader, RuntimeNaaccrDictionary dictionary) throws IOException {
+    public PatientFlatReader(Reader reader, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException {
         _reader = new LineNumberReader(reader);
-        _dictionary = dictionary;
+        _options = options == null ? new NaaccrXmlOptions() : options;
+
+        // TODO FPD add better validation
+        
+        _previousLine = _reader.readLine();
+        NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromFlatFile(_previousLine));
+        NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByVersion(naaccrFormat.getNaaccrVersion());
+        _dictionary = new RuntimeNaaccrDictionary(naaccrFormat.getRecordType(), baseDictionary, userDictionary);
+
+        // TODO FPD I think we want to allow another property to be used for the grouping...
+        
+        // let's cache the patient ID number item, we are going to need them a lot...
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
             if (item.getNaaccrNum() != null && item.getNaaccrNum().equals(20)) {
                 _patientIdNumberItem = item;
@@ -92,7 +104,7 @@ public class PatientFlatReader implements AutoCloseable {
         // create the patient using the first line only (other lines are supposed to be identical for patient items)
         Patient patient = new Patient();
         for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
-            if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType())) {
+            if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getRecordType())) {
                 // TODO FPD do we want to throw an error if not all the patient-level fields have the same value?
                 patient.getItems().addAll(createItemsFromLine(lines.get(0), itemDef));
             }
@@ -102,7 +114,7 @@ public class PatientFlatReader implements AutoCloseable {
         for (String line : lines) {
             Tumor tumor = new Tumor();
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
-                if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getFormat().getRecordType()))
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getRecordType()))
                     tumor.getItems().addAll(createItemsFromLine(line, itemDef));
             patient.getTumors().add(tumor);
         }
@@ -134,25 +146,5 @@ public class PatientFlatReader implements AutoCloseable {
         }
 
         return items;
-    }
-
-    // TODO remove this testing method
-    public static void main(String[] args) throws IOException {
-        File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/fake-naaccr14inc-2-rec.txt");
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
-        PatientFlatReader reader = new PatientFlatReader(new FileReader(inputFile), dictionary);
-        int count = 0;
-        Patient patient = reader.readPatient();
-        while (patient != null) {
-            System.out.println("  > num tumors: " + patient.getTumors().size());
-            System.out.println("      >> site: " + patient.getTumors().get(0).getItemById("primarySite").getValue());
-            System.out.println("      >> morph: " + patient.getTumors().get(0).getItemById("morphologyIcdO3").getValue());
-            System.out.println("      >> hist: " + patient.getTumors().get(0).getItemById("histologyIcdO3").getValue());
-            System.out.println("      >> beh: " + patient.getTumors().get(0).getItemById("behaviorIcdO3").getValue());
-            count++;
-            patient = reader.readPatient();
-        }
-        reader.close();
-        System.out.println("num patients: " + count);
     }
 }

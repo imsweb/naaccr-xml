@@ -3,97 +3,153 @@
  */
 package org.naaccr.xml;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Reader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.naaccr.xml.entity.Item;
+import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
-import org.naaccr.xml.entity.Tumor;
+import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.ConversionException;
-import com.thoughtworks.xstream.io.StreamException;
-import com.thoughtworks.xstream.mapper.CannotResolveClassException;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 
 public class PatientXmlReader implements AutoCloseable {
 
-    protected ObjectInputStream _ois;
+    protected NaaccrData _rootData;
 
-    public PatientXmlReader(Reader reader, XStream xstream) throws IOException, NaaccrValidationException {
+    protected HierarchicalStreamReader _reader;
+
+    protected XStream _xstream;
+
+    public PatientXmlReader(Reader reader) throws IOException {
+        this(reader, null, null, null);
+    }
+
+    public PatientXmlReader(Reader reader, NaaccrXmlOptions options) throws IOException {
+        this(reader, options, null, null);
+    }
+
+    public PatientXmlReader(Reader reader, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException {
+        this(reader, options, userDictionary, null);
+    }
+
+    public PatientXmlReader(Reader reader, NaaccrXmlOptions options, NaaccrDictionary userDictionary, XmlStreamConfiguration configuration) throws IOException {
+
+        // we always need options
+        if (options == null)
+            options = new NaaccrXmlOptions();
+
+        // we always need a configuration
+        if (configuration == null)
+            configuration = new XmlStreamConfiguration();
+
+        // create the XML reader
+        _reader = configuration.getDriver().createReader(reader);
+        if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
+            throw new IOException("Was expecting " + NaaccrXmlUtils.NAACCR_XML_TAG_ROOT + " root tag but got " + _reader.getNodeName());
+
+        // create the root data holder (it will be use for every fields except the patients)
+        _rootData = new NaaccrData(); // TODO FPD what if the root object has been extended?
+
+        // read the standard attribute: base dictionary
+        _rootData.setBaseDictionaryUri(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
+        if (_rootData.getBaseDictionaryUri() == null)
+            throw new IOException("The " + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT + " attribute is required");
+        NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByUri(_rootData.getBaseDictionaryUri());
+        if (baseDictionary == null)
+            throw new IOException("Unknown base dictionary: " + _rootData.getBaseDictionaryUri());
+
+        // read the standard attribute: user dictionary
+        _rootData.setUserDictionaryUri(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT));
+        if (_rootData.getUserDictionaryUri() != null && (userDictionary == null || !_rootData.getUserDictionaryUri().equals(userDictionary.getDictionaryUri())))
+            throw new IOException("Unknown user dictionary: " + _rootData.getUserDictionaryUri());
+
+        // read the standard attribute: record type            
+        _rootData.setRecordType(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE));
+        if (!NaaccrFormat.isRecordTypeSupported(_rootData.getRecordType()))
+            throw new IOException("Invalid record type: " + _rootData.getRecordType());
+
+        // read the standard attribute: time generated
         try {
-            _ois = xstream.createObjectInputStream(reader);
+            _rootData.setTimeGenerated(new SimpleDateFormat(NaaccrXmlUtils.GENERATED_TIME_FORMAT).parse(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED)));
         }
-        catch (StreamException e) {
-            throw new NaaccrValidationException("Error reading stream" + e.getMessage());
+        catch (ParseException e) {
+            throw new IOException("Bad format for " + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED + " attributes (expects " + NaaccrXmlUtils.GENERATED_TIME_FORMAT + ")");
         }
+
+        // read the non-standard attributes
+        Set<String> standardAttributes = new HashSet<>();
+        standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT);
+        standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT);
+        standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE);
+        standardAttributes.add(NaaccrXmlUtils.GENERATED_TIME_FORMAT);
+        for (int i = 0; i < _reader.getAttributeCount(); i++)
+            if (!standardAttributes.contains(_reader.getAttributeName(i)))
+                _rootData.getExtraRootParameters().put(_reader.getAttributeName(i), _reader.getAttribute(i));
+        _reader.moveDown();
+
+        // now we are ready to create our reading context and make it available to the patient converter
+        XmlStreamContext context = new XmlStreamContext();
+        context.setDictionary(new RuntimeNaaccrDictionary(_rootData.getRecordType(), baseDictionary, userDictionary));
+        context.setOptions(options);
+        context.setParser(configuration.getParser());
+        configuration.getPatientConverter().setContext(context);
+
+        // read the root items
+        while (_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM)) {
+            _rootData.getItems().add((Item)configuration.getXstream().unmarshal(_reader));
+            _reader.moveUp();
+            _reader.moveDown();
+        }
+
+        if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT)) {
+            _reader.moveDown();
+            _reader.moveUp();
+        }
+
+        if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT))
+            throw new IOException("Was expecting " + NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT + " repeating tag but got " + _reader.getNodeName());
+
+        // need to expose xstream so the other methods can use it...
+        _xstream = configuration.getXstream();
     }
 
     public Patient readPatient() throws IOException, NaaccrValidationException {
-        try {
-            Object object = _ois.readObject();
-            if (object instanceof Patient)
-                return handlePatientObject((Patient)object);
-            else
-                handleNonPatientObject(object);
+        Patient patient = null;
+        if (_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT)) {
+            patient = (Patient)_xstream.unmarshal(_reader);
+            _reader.moveUp();
+            if (_reader.hasMoreChildren())
+                _reader.moveDown();
         }
-        catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        catch (ConversionException e) {
-            String msg = e.get("message") != null ? e.get("message") : e.getMessage();
-            if (msg != null) {
-                msg = msg.trim();
-                if (msg.startsWith(":"))
-                    msg = msg.substring(1);
-                int idx = msg.indexOf("from line");
-                if (idx != -1)
-                    msg = msg.substring(0, idx).trim();
-            }
-            NaaccrValidationException ex = new NaaccrValidationException(msg);
-            ex.setLineNumber(e.get("line number") == null ? null : Integer.valueOf(e.get("line number")));
-            ex.setPath(e.get("path"));
-            throw ex;
-        }
-        catch (CannotResolveClassException e) {
-            NaaccrValidationException ex = new NaaccrValidationException("Unexpected tag: " + e.getMessage());
-            // TODO would it be possible to get the line number from the parser? That parser is referenced in the xstream object...
-            throw ex;
-        }
-        catch (StreamException e) {
-            NaaccrValidationException ex = new NaaccrValidationException("Error reading stream: " + e.getMessage());
-            // TODO would it be possible to get the line number from the parser? That parser is referenced in the xstream object...
-            throw ex;
-        }
-        catch (EOFException e) {
-            // ignored, null will be returned
-        }
-
-        return null;
+        else if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
+            throw new IOException("Expected " + NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT + " tag but found " + _reader.getNodeName());
+        return patient;
     }
 
     @Override
     public void close() throws IOException {
-        _ois.close();
+        _reader.moveUp();
+        _reader.close();
     }
 
-    protected Patient handlePatientObject(Patient patient) {
-        return patient; // default behavior is to do no post-processing of the patient...
-    }
-
-    protected void handleNonPatientObject(Object object) {
-        // default behavior is to ignore the object...
+    public NaaccrData getRootData() {
+        return _rootData;
     }
 
     // TODO remove this testing method
+    /**
     public static void main(String[] args) throws Exception {
         File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/test-num-bad-item3.xml");
         String format = NaaccrXmlUtils.getFormatFromXmlFile(inputFile);
         RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, null);
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(inputFile), NaaccrXmlUtils.getStandardXStream(dictionary, new NaaccrXmlOptions()))) {
+        try (PatientXmlReader2 reader = new PatientXmlReader2(new FileReader(inputFile))) { // TODO FPD
             do {
                 Patient patient = reader.readPatient();
                 if (patient == null)
@@ -115,4 +171,5 @@ public class PatientXmlReader implements AutoCloseable {
             e.printStackTrace();
         }
     }
+     */
 }
