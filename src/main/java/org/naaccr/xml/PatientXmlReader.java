@@ -88,7 +88,7 @@ public class PatientXmlReader implements AutoCloseable {
         standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT);
         standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT);
         standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE);
-        standardAttributes.add(NaaccrXmlUtils.GENERATED_TIME_FORMAT);
+        standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
         for (int i = 0; i < _reader.getAttributeCount(); i++)
             if (!standardAttributes.contains(_reader.getAttributeName(i)))
                 _rootData.getExtraRootParameters().put(_reader.getAttributeName(i), _reader.getAttribute(i));
@@ -103,11 +103,18 @@ public class PatientXmlReader implements AutoCloseable {
 
         // read the root items
         while (_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM)) {
-            _rootData.getItems().add((Item)configuration.getXstream().unmarshal(_reader));
+            // TODO FPD, wouldn't it be better to define an item converter? But then I want to share it with the patient converter!
+            Item item = new Item();
+            item.setId(_reader.getAttribute("naaccrId"));
+            if (_reader.getAttribute("naaccrNum") != null)
+                item.setNum(Integer.valueOf(_reader.getAttribute("naaccrNum")));
+            item.setValue(_reader.getValue());
+            _rootData.getItems().add(item);
             _reader.moveUp();
             _reader.moveDown();
         }
 
+        // for now, ignore the root extension...
         if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT)) {
             _reader.moveDown();
             _reader.moveUp();

@@ -4,25 +4,27 @@
 package org.naaccr.xml;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
 public class PatientXmlWriter implements AutoCloseable {
 
-    protected ObjectOutputStream _oos;
+    protected HierarchicalStreamWriter _writer;
 
-    public PatientXmlWriter(Writer writer, String format) throws IOException {
-        this(writer, new NaaccrData(format), null, null, null);
-    }
+    protected XStream _xstream;
 
     public PatientXmlWriter(Writer writer, NaaccrData rootData) throws IOException {
         this(writer, rootData, null, null, null);
@@ -45,40 +47,64 @@ public class PatientXmlWriter implements AutoCloseable {
         // we always need a configuration
         if (configuration == null)
             configuration = new XmlStreamConfiguration();
-        
-        // TODO FPD add more validation
 
         NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByUri(rootData.getBaseDictionaryUri());
-        final RuntimeNaaccrDictionary runtimeDictionary = new RuntimeNaaccrDictionary(rootData.getRecordType(), baseDictionary, userDictionary);
-        
-        // by default, XStream will write the root tag, but there is no easy way to add attributes to it; this is what this code does...
-        PrettyPrintWriter prettyWriter = new PrettyPrintWriter(writer) {
-            @Override
-            public void startNode(String name) {
-                // TODO FPD use the rootData, not the dictionary!
-                super.startNode(name);
-                if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(name) && runtimeDictionary != null) {
-                    addAttribute("baseDictionaryUri", runtimeDictionary.getBaseDictionaryUri());
-                    addAttribute("userDictionaryUri", runtimeDictionary.getUserDictionaryUri()); // TODO FDP we shouldn't write it if this is the default one...
-                    addAttribute("recordType", runtimeDictionary.getRecordType());
-                    addAttribute("timeGenerated", new SimpleDateFormat(NaaccrXmlUtils.GENERATED_TIME_FORMAT).format(new Date()));
-                }
-            }
-        };
-        
-        // TODO FPD don't use an object stream, not flexible enough; use a writer...
-        _oos = configuration.getXstream().createObjectOutputStream(prettyWriter, "NaaccrDataExchange");
-        
-        // it's a bit manual, but I am not sure how else to do this...
+
+        // create the writer
+        _writer = new PrettyPrintWriter(writer, new char[] {' ', ' ', ' ', ' '});
+
+        // write the header // TODO FPD look into a header writer, I think there is a class that does that already...
         writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));
+
+        // write standard attributes
+        _writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT);
+        _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT, rootData.getBaseDictionaryUri());
+        if (rootData.getUserDictionaryUri() != null)
+            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT, rootData.getUserDictionaryUri());
+        _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE, rootData.getRecordType());
+        _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, new SimpleDateFormat(NaaccrXmlUtils.GENERATED_TIME_FORMAT).format(rootData.getTimeGenerated()));
+
+        // write non-standard attributes
+        Set<String> standardAttributes = new HashSet<>();
+        standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT);
+        standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT);
+        standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE);
+        standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
+        for (Entry<String, String> entry : rootData.getExtraRootParameters().entrySet())
+                if (!standardAttributes.contains(entry.getKey()))
+                    _writer.addAttribute(entry.getKey(), entry.getValue());
+
+        // now we are ready to create our reading context and make it available to the patient converter
+        XmlStreamContext context = new XmlStreamContext();
+        context.setDictionary(new RuntimeNaaccrDictionary(rootData.getRecordType(), baseDictionary, userDictionary));
+        context.setOptions(options);
+        context.setParser(configuration.getParser());
+        configuration.getPatientConverter().setContext(context);
+
+        // write the root items
+        for (Item item : rootData.getItems()) {
+            // TODO FPD, wouldn't it be better to define an item converter? But then I want to share it with the patient converter!
+            _writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
+            _writer.addAttribute("naaccrId", item.getId());
+            if (item.getNum() != null)
+                _writer.addAttribute("naaccrNum", item.getNum().toString());
+            if (item.getValue() != null)
+                _writer.setValue(item.getValue());
+            _writer.endNode();
+        }
+
+        // for now, ignore the root extension...
+
+        // need to expose xstream so the other methods can use it...
+        _xstream = configuration.getXstream();
     }
 
     public void writePatient(Patient patient) throws IOException {
-        _oos.writeObject(patient);
+        _xstream.marshal(patient, _writer);
     }
 
     @Override
     public void close() throws IOException {
-        _oos.close();
+        _writer.endNode();
     }
 }

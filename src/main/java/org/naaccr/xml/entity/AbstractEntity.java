@@ -9,10 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.naaccr.xml.NaaccrValidationError;
-import org.naaccr.xml.entity.Item;
 
 /**
- * Encapsulates the logic about the complex entities (except the root one, NaaccrDataExchange):
+ * Encapsulates the logic about the complex entities.
  * <ol>
  *     <li>Entity has a collection of items on it</li>
  *     <li>Entity has a collection of validation errors on it</li>

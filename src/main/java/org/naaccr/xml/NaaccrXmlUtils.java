@@ -40,34 +40,29 @@ public class NaaccrXmlUtils {
     public static final String NAACCR_XML_ROOT_ATT_USER_DICT = "userDictionaryUri";
     public static final String NAACCR_XML_ROOT_ATT_REC_TYPE = "recordType";
     public static final String NAACCR_XML_ROOT_ATT_TIME_GENERATED = "timeGenerated";
-    
+
     public static final String GENERATED_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ"; // TODO verify the format...
 
     /**
      * Translates a flat data file into an XML data file.
      * @param flatFile source flat data file, must exists
      * @param xmlFile target XML data file, parent file must exists
-     * @param format expected NAACCR format, required (but you can use the getFormatFromFlatFile() method to evaluate it from the file)
      * @param options optional validating options
      * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @throws IOException if there is problem reading/writing the file
      * @throws NaaccrValidationException if there is a problem validating the data
      */
-    public static void flatToXml(File flatFile, File xmlFile, String format, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException, NaaccrValidationException {
+    public static void flatToXml(File flatFile, File xmlFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException, NaaccrValidationException {
         if (flatFile == null)
             throw new IOException("Source flat file is required");
         if (!flatFile.exists())
             throw new IOException("Source flat file must exist");
-        if (format == null)
-            throw new IOException("File format is required");
-        if (!NaaccrFormat.isFormatSupported(format))
-            throw new IOException("Invalid file format");
         if (!xmlFile.getParentFile().exists())
             throw new IOException("Target folder must exist");
 
         // create the reader and writer and let them do all the work!
-        try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlFile), format)) {
-            try (PatientFlatReader reader = new PatientFlatReader(createReader(flatFile), options, userDictionary)) {
+        try (PatientFlatReader reader = new PatientFlatReader(createReader(flatFile), options, userDictionary)) {
+            try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlFile), reader.getRootData())) {
                 Patient patient = reader.readPatient();
                 while (patient != null) {
                     writer.writePatient(patient);
@@ -81,27 +76,22 @@ public class NaaccrXmlUtils {
      * Translates an XML data file into a flat data file.
      * @param xmlFile source XML data file, must exists
      * @param flatFile target flat data file, parent file must exists
-     * @param format expected NAACCR format, required (but you can use the getFormatFromXmlFile() method to evaluate it from the file)
      * @param options optional validating options
      * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @throws IOException if there is problem reading/writing the file
      * @throws NaaccrValidationException if there is a problem validating the data
      */
-    public static void xmlToFlat(File xmlFile, File flatFile, String format, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException, NaaccrValidationException {
+    public static void xmlToFlat(File xmlFile, File flatFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException, NaaccrValidationException {
         if (xmlFile == null)
             throw new IOException("Source XML file is required");
         if (!xmlFile.exists())
             throw new IOException("Source XML file must exist");
-        if (format == null)
-            throw new IOException("File format is required");
-        if (!NaaccrFormat.isFormatSupported(format))
-            throw new IOException("Invalid file format");
         if (!flatFile.getParentFile().exists())
             throw new IOException("Target folder must exist");
 
         // create the reader and writer and let them do all the work!
-        try (PatientFlatWriter writer = new PatientFlatWriter(createWriter(flatFile), format, options, userDictionary)) {
-            try (PatientXmlReader reader = new PatientXmlReader(createReader(xmlFile), options, userDictionary)) {
+        try (PatientXmlReader reader = new PatientXmlReader(createReader(xmlFile), options, userDictionary)) {
+            try (PatientFlatWriter writer = new PatientFlatWriter(createWriter(flatFile), reader.getRootData(), options, userDictionary)) {
                 Patient patient = reader.readPatient();
                 while (patient != null) {
                     writer.writePatient(patient);
@@ -116,22 +106,17 @@ public class NaaccrXmlUtils {
      * <br/>
      * ATTENTION: THIS METHOD WILL RETURN THE FULL CONTENT OF THE FILE AND IS NOT SUITABLE FOR LARGE FILE; CONSIDER USING A STREAM INSTEAD.
      * @param xmlFile source XML data file, must exists
-     * @param format expected NAACCR format
      * @param options optional validating options
      * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @throws IOException if there is problem reading/writing the file
      * @throws NaaccrValidationException if there is a problem validating the data
      */
-    public static NaaccrData readXmlFile(File xmlFile, String format, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException, NaaccrValidationException {
+    public static NaaccrData readXmlFile(File xmlFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException, NaaccrValidationException {
         if (xmlFile == null)
             throw new IOException("Source XML file is required");
         if (!xmlFile.exists())
             throw new IOException("Source XML file must exist");
-        if (format == null)
-            throw new IOException("File format is required");
-        if (!NaaccrFormat.isFormatSupported(format))
-            throw new IOException("Invalid file format");
-        
+
         try (PatientXmlReader reader = new PatientXmlReader(createReader(xmlFile), options, userDictionary)) {
             NaaccrData rootData = reader.getRootData();
             Patient patient = reader.readPatient();
@@ -147,25 +132,71 @@ public class NaaccrXmlUtils {
      * Writes the provided data to the requested XML file.
      * <br/>
      * ATTENTION: THIS METHOD REQUIRES THE ENTIRE DATA OBJECT TO BE IN MEMORY; CONSIDER USING A STREAM INSTEAD.
-     * @param data a <code>NaaccrDataExchange</code> object, cannot be null
+     * @param data a <code>NaaccrData</code> object, cannot be null
      * @param xmlFile target XML data file
+     * @param options optional validating options
+     * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
+     * @throws IOException if there is problem reading/writing the file
+     * @throws NaaccrValidationException if there is a problem validating the data
+     */
+    public static void writeXmlFile(NaaccrData data, File xmlFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException {
+        if (data == null)
+            throw new IOException("Data is required");
+        if (!xmlFile.getParentFile().exists())
+            throw new IOException("Target folder must exist");
+
+        try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlFile), data, options, userDictionary)) {
+            for (Patient patient : data.getPatients())
+                writer.writePatient(patient);
+        }
+    }
+
+    /**
+     * Reads an NAACCR flat file data file and returns the corresponding data.
+     * <br/>
+     * ATTENTION: THIS METHOD WILL RETURN THE FULL CONTENT OF THE FILE AND IS NOT SUITABLE FOR LARGE FILE; CONSIDER USING A STREAM INSTEAD.
+     * @param xmlFile source XML data file, must exists
+     * @param options optional validating options
+     * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
+     * @throws IOException if there is problem reading/writing the file
+     * @throws NaaccrValidationException if there is a problem validating the data
+     */
+    public static NaaccrData readFlatFile(File flatFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException, NaaccrValidationException {
+        if (flatFile == null)
+            throw new IOException("Source flat file is required");
+        if (!flatFile.exists())
+            throw new IOException("Source flat file must exist");
+
+        try (PatientFlatReader reader = new PatientFlatReader(createReader(flatFile), options, userDictionary)) {
+            NaaccrData data = reader.getRootData();
+            Patient patient = reader.readPatient();
+            while (patient != null) {
+                data.getPatients().add(patient);
+                patient = reader.readPatient();
+            }
+            return data;
+        }
+    }
+
+    /**
+     * Writes the provided data to the requested flat file.
+     * <br/>
+     * ATTENTION: THIS METHOD REQUIRES THE ENTIRE DATA OBJECT TO BE IN MEMORY; CONSIDER USING A STREAM INSTEAD.
+     * @param data a <code>NaaccrData</code> object, cannot be null
+     * @param flatFile target flat data file
      * @param format expected NAACCR format
      * @param options optional validating options
      * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @throws IOException if there is problem reading/writing the file
      * @throws NaaccrValidationException if there is a problem validating the data
      */
-    public static void writeXmlFile(NaaccrData data, File xmlFile, String format, NaaccrXmlOptions options, NaaccrDictionary nonStandardDictionary) throws IOException {
+    public static void writeFlatFile(NaaccrData data, File flatFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException {
         if (data == null)
             throw new IOException("Data is required");
-        if (format == null)
-            throw new IOException("File format is required");
-        if (!xmlFile.getParentFile().exists())
+        if (!flatFile.getParentFile().exists())
             throw new IOException("Target folder must exist");
-        if (!NaaccrFormat.isFormatSupported(format))
-            throw new IOException("Invalid file format");
 
-        try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlFile), data)) {
+        try (PatientFlatWriter writer = new PatientFlatWriter(createWriter(flatFile), data, options, userDictionary)) {
             for (Patient patient : data.getPatients())
                 writer.writePatient(patient);
         }
@@ -196,7 +227,7 @@ public class NaaccrXmlUtils {
     public static String getFormatFromFlatFile(String line) {
         if (line == null || line.length() < 19)
             return null;
-        
+
         String version = line.substring(16, 19).trim();
         String type = line.substring(0, 1).trim();
 
@@ -253,7 +284,7 @@ public class NaaccrXmlUtils {
 
         if (version != null && NaaccrFormat.isVersionSupported(version) && type != null && NaaccrFormat.isRecordTypeSupported(type))
             return NaaccrFormat.getInstance(version, type).toString();
-        
+
         return null;
     }
 
@@ -276,65 +307,4 @@ public class NaaccrXmlUtils {
 
         return new OutputStreamWriter(os, StandardCharsets.UTF_8);
     }
-
-    // testing method, will be removed eventually...
-    /**
-     public static void main(String[] args) throws Exception {
-
-     URL myDictionaryUrl = Thread.currentThread().getContextClassLoader().getResource("fabian/fab-dictionary.csv");
-     NaaccrDictionary myDictionary = NaaccrDictionaryUtils.readDictionary(myDictionaryUrl, NaaccrDictionaryUtils.NAACCR_DICTIONARY_FORMAT_CSV);
-
-     File inputFile = new File(System.getProperty("user.dir") + "/src/main/resources/data/fake-naaccr14inc-10000-rec.txt.gz");
-     File outputFile = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
-     long start = System.currentTimeMillis();
-     flatToXml(inputFile, outputFile, NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
-     System.out.println("Done translating flat-file to XML (10,000 records) using standard dictionary in " + (System.currentTimeMillis() - start) + "ms - see 'test.xml.gz'");
-
-     File inputFile2 = new File(System.getProperty("user.dir") + "/build/test.xml.gz");
-     File outputFile2 = new File(System.getProperty("user.dir") + "/build/test.txt.gz");
-     long start2 = System.currentTimeMillis();
-     xmlToFlat(inputFile2, outputFile2, NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, null);
-     System.out.println("Done translation XML back to flat-file (10,000 records) using standard dictionary in " + (System.currentTimeMillis() - start2) + "ms - see 'test.txt.gz'");
-
-     Patient patient = new Patient();
-     patient.getItems().add(new Item("nameLast", "DEPRY"));
-     patient.getItems().add(new Item("nameFirst", "FABIAN"));
-     patient.getTumors().add(new Tumor());
-     patient.getTumors().get(0).getItems().add(new Item("primarySite", "C619"));
-     patient.getTumors().get(0).getItems().add(new Item("hosptialAbstractorId", "FDEPRY"));
-     File outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test-names.xml");
-     PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(outputFile3), NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, myDictionary);
-     writer.writePatient(patient);
-     writer.close();
-     System.out.println("Done creating XML file using non-standard items (item referenced by ID) - see 'user-dictionary-test-names.xml'");
-
-     patient = new Patient();
-     patient.getItems().add(new Item(2230, "DEPRY"));
-     patient.getItems().add(new Item(2240, "FABIAN"));
-     patient.getTumors().add(new Tumor());
-     patient.getTumors().get(0).getItems().add(new Item(400, "C619"));
-     patient.getTumors().get(0).getItems().add(new Item(10001, "FDEPRY"));
-     outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test-numbers.xml");
-     writer = new PatientXmlWriter(new FileWriter(outputFile3), NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, myDictionary);
-     writer.writePatient(patient);
-     writer.close();
-     System.out.println("Done creating XML file using non-standard items (item referenced by number) - see 'user-dictionary-test-numbers.xml'");
-
-     patient.getItems().add(new Item("recordType", "A"));
-     patient.getItems().add(new Item("naaccrRecordVersion", "140"));
-     outputFile3 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test.txt");
-     PatientFlatWriter writer3 = new PatientFlatWriter(new FileWriter(outputFile3), NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, myDictionary);
-     writer3.writePatient(patient);
-     writer3.close();
-     System.out.println("Done creating flat-file using non-standard items in State Requestor Items - see 'user-dictionary-test.txt'");
-
-     File inputFile4 = new File(System.getProperty("user.dir") + "/build/user-dictionary-test-numbers.xml");
-     NaaccrDataExchange data = readXmlFile(inputFile4, NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, null);
-     System.out.println("Done reading 'user-dictionary-test-numbers.xml', got " + data.getPatients().size() + " patient(s)...");
-
-     File outputFile5 = new File(System.getProperty("user.dir") + "/build/another-xml-test.xml");
-     writeXmlFile(data, outputFile5, NaaccrFormat.NAACCR_FORMAT_14_ABSTRACT, null);
-     System.out.println("Done writing 'another-xml-test.xml'");
-     }
-     */
 }

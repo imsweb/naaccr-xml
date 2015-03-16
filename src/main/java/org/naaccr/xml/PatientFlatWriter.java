@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.naaccr.xml.entity.Item;
+import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
@@ -20,29 +21,31 @@ public class PatientFlatWriter implements AutoCloseable {
 
     protected BufferedWriter _writer;
 
+    protected NaaccrData _rootData;
+
     protected NaaccrXmlOptions _options;
 
     protected RuntimeNaaccrDictionary _dictionary;
 
     protected RuntimeNaaccrDictionaryItem _naaccrVersionItem, _recordTypeItem;
 
-    public PatientFlatWriter(Writer writer, String format) throws IOException {
-        this(writer, format, null, null);
+    public PatientFlatWriter(Writer writer, NaaccrData data) throws IOException {
+        this(writer, data, null, null);
     }
 
-    public PatientFlatWriter(Writer writer, String format, NaaccrXmlOptions options) throws IOException {
-        this(writer, format, options, null);
+    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrXmlOptions options) throws IOException {
+        this(writer, data, options, null);
     }
 
-    public PatientFlatWriter(Writer writer, String format, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException {
+    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException {
         _writer = new BufferedWriter(writer);
+        _rootData = data;
         _options = options == null ? new NaaccrXmlOptions() : options;
 
         // TODO FPD add better validation
 
-        NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(format);
-        NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByVersion(naaccrFormat.getNaaccrVersion());
-        _dictionary = new RuntimeNaaccrDictionary(naaccrFormat.getRecordType(), baseDictionary, userDictionary);
+        NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByUri(data.getBaseDictionaryUri());
+        _dictionary = new RuntimeNaaccrDictionary(data.getRecordType(), baseDictionary, userDictionary);
 
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
             if (item.getNaaccrNum() != null) {
@@ -57,7 +60,7 @@ public class PatientFlatWriter implements AutoCloseable {
     }
 
     public void writePatient(Patient patient) throws IOException {
-        for (String line : createLinesFromPatient(patient)) {
+        for (String line : createLinesFromPatient(_rootData, patient)) {
             _writer.write(line);
             _writer.newLine();
         }
@@ -68,7 +71,7 @@ public class PatientFlatWriter implements AutoCloseable {
         _writer.close();
     }
 
-    protected List<String> createLinesFromPatient(Patient patient) throws IOException {
+    protected List<String> createLinesFromPatient(NaaccrData root, Patient patient) throws IOException {
         List<String> lines = new ArrayList<>();
 
         // it's possible to have a patient without any tumor; in that case, we will want to output a line...
@@ -98,7 +101,7 @@ public class PatientFlatWriter implements AutoCloseable {
                             line.append(' ');
                     currentIndex = start;
 
-                    String value = getValueForItem(itemDef, patient, tumor);
+                    String value = getValueForItem(itemDef, root, patient, tumor);
                     if (value != null) {
                         if (value.length() > length)
                             value = value.substring(0, length);
@@ -131,10 +134,12 @@ public class PatientFlatWriter implements AutoCloseable {
         return lines;
     }
 
-    protected String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, Patient patient, Tumor tumor) throws IOException {
+    protected String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, NaaccrData root, Patient patient, Tumor tumor) throws IOException {
         Item item;
 
-        if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
+        if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(itemDef.getParentXmlElement()))
+            item = root.getItem(itemDef.getNaaccrId(), itemDef.getNaaccrNum());
+        else if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
             item = patient.getItem(itemDef.getNaaccrId(), itemDef.getNaaccrNum());
         else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
             item = tumor.getItem(itemDef.getNaaccrId(), itemDef.getNaaccrNum());

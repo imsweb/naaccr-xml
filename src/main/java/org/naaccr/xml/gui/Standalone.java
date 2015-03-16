@@ -241,7 +241,7 @@ public class Standalone {
                     flatToXmlResultLbl.setText("Processing file...");
                     pnl.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     try {
-                        NaaccrXmlUtils.flatToXml(sourceFile, targetFile, format, new NaaccrXmlOptions(), null);
+                        NaaccrXmlUtils.flatToXml(sourceFile, targetFile, new NaaccrXmlOptions(), null);
                         flatToXmlResultLbl.setText("Done processing source flat file...");
                     }
                     catch (IOException | NaaccrValidationException ex) {
@@ -357,11 +357,11 @@ public class Standalone {
                 public void actionPerformed(ActionEvent e) {
                     File sourceFile = new File(xmlToFlatSourceFld.getText());
                     File targetFile = new File(xmlToFlatTargetFld.getText());
-                    String format = (String)xmlToFlatFormatBox.getSelectedItem();
+                    String format = (String)xmlToFlatFormatBox.getSelectedItem(); // TODO FPD this doens't need to be a dropdown anymore! Same with other tab...
                     xmlToFlatResultLbl.setText("Processing file...");
                     pnl.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     try {
-                        NaaccrXmlUtils.xmlToFlat(sourceFile, targetFile, format, new NaaccrXmlOptions(), null);
+                        NaaccrXmlUtils.xmlToFlat(sourceFile, targetFile, new NaaccrXmlOptions(), null);
                         xmlToFlatResultLbl.setText("Done processing source XML file...");
                     }
                     catch (IOException | NaaccrValidationException ex) {

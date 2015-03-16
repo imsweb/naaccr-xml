@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.naaccr.xml.entity.Item;
+import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
@@ -19,6 +20,8 @@ import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
 public class PatientFlatReader implements AutoCloseable {
 
     protected LineNumberReader _reader;
+
+    protected NaaccrData _rootData;
 
     protected NaaccrXmlOptions _options;
 
@@ -38,6 +41,7 @@ public class PatientFlatReader implements AutoCloseable {
         NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromFlatFile(_previousLine));
         NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByVersion(naaccrFormat.getNaaccrVersion());
         _dictionary = new RuntimeNaaccrDictionary(naaccrFormat.getRecordType(), baseDictionary, userDictionary);
+        _rootData = new NaaccrData(naaccrFormat.toString());
 
         // TODO FPD I think we want to allow another property to be used for the grouping...
         
@@ -80,6 +84,10 @@ public class PatientFlatReader implements AutoCloseable {
     @Override
     public void close() throws IOException {
         _reader.close();
+    }
+
+    public NaaccrData getRootData() {
+        return _rootData;
     }
 
     protected String getPatientIdNumber(String line) {
