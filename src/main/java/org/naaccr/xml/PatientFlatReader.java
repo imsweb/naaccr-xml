@@ -38,7 +38,7 @@ public class PatientFlatReader implements AutoCloseable {
         // TODO FPD add better validation
         
         _previousLine = _reader.readLine();
-        NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromFlatFile(_previousLine));
+        NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromFlatFileLine(_previousLine));
         NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByVersion(naaccrFormat.getNaaccrVersion());
         _dictionary = new RuntimeNaaccrDictionary(naaccrFormat.getRecordType(), baseDictionary, userDictionary);
         _rootData = new NaaccrData(naaccrFormat.toString());

@@ -212,7 +212,7 @@ public class NaaccrXmlUtils {
             return null;
 
         try (BufferedReader reader = new BufferedReader(createReader(flatFile))) {
-            return getFormatFromFlatFile(reader.readLine());
+            return getFormatFromFlatFileLine(reader.readLine());
         }
         catch (IOException e) {
             return null;
@@ -224,7 +224,7 @@ public class NaaccrXmlUtils {
      * @param flatFile provided data line
      * @return the NAACCR format, null if it cannot be determined
      */
-    public static String getFormatFromFlatFile(String line) {
+    public static String getFormatFromFlatFileLine(String line) {
         if (line == null || line.length() < 19)
             return null;
 
