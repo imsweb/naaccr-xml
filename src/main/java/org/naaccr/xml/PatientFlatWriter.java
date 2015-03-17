@@ -9,7 +9,6 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
@@ -47,15 +46,14 @@ public class PatientFlatWriter implements AutoCloseable {
         NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByUri(data.getBaseDictionaryUri());
         _dictionary = new RuntimeNaaccrDictionary(data.getRecordType(), baseDictionary, userDictionary);
 
+        // let's cache the record type and naaccr version items; we are going to use them a lot...
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
-            if (item.getNaaccrNum() != null) {
-                if (item.getNaaccrNum().equals(10))
-                    _recordTypeItem = item;
-                if (item.getNaaccrNum().equals(50))
-                    _naaccrVersionItem = item;
-                if (_recordTypeItem != null && _naaccrVersionItem != null)
-                    break;
-            }
+            if (item.getNaaccrId().equals(NaaccrXmlUtils.FLAT_FIILE_FORMAT_ITEM_REC_TYPE))
+                _recordTypeItem = item;
+            if (item.getNaaccrId().equals(NaaccrXmlUtils.FLAT_FIILE_FORMAT_ITEM_NAACCR_VERSION))
+                _naaccrVersionItem = item;
+            if (_recordTypeItem != null && _naaccrVersionItem != null)
+                break;
         }
     }
 
@@ -83,11 +81,8 @@ public class PatientFlatWriter implements AutoCloseable {
             int currentIndex = 1;
             StringBuilder line = new StringBuilder();
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
-
-                // as soon as an item is not supported for the dictionary's record type, we can stop (making the assumption the items are correctly sorted)
-                if (!itemDef.getRecordTypes().contains(_dictionary.getRecordType()))
-                    break;
-
+                if (_options.getItemsToExclude().contains(itemDef.getNaaccrId()))
+                    continue;
                 if (itemDef.getParentXmlElement() != null && itemDef.getStartColumn() != null && itemDef.getLength() != null) {
                     int start = itemDef.getStartColumn();
                     int length = itemDef.getLength();
@@ -135,17 +130,17 @@ public class PatientFlatWriter implements AutoCloseable {
     }
 
     protected String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, NaaccrData root, Patient patient, Tumor tumor) throws IOException {
-        Item item;
+        String value;
 
         if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(itemDef.getParentXmlElement()))
-            item = root.getItem(itemDef.getNaaccrId(), itemDef.getNaaccrNum());
+            value = root.getItemValue(itemDef.getNaaccrId());
         else if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
-            item = patient.getItem(itemDef.getNaaccrId(), itemDef.getNaaccrNum());
+            value = patient.getItemValue(itemDef.getNaaccrId());
         else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
-            item = tumor.getItem(itemDef.getNaaccrId(), itemDef.getNaaccrNum());
+            value = tumor.getItemValue(itemDef.getNaaccrId());
         else
             throw new IOException("Unsupported parent element: " + itemDef.getParentXmlElement());
 
-        return item == null ? null : item.getValue();
+        return value;
     }
 }

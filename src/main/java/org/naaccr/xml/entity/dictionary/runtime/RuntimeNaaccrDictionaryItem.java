@@ -3,9 +3,6 @@
  */
 package org.naaccr.xml.entity.dictionary.runtime;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
@@ -19,8 +16,6 @@ public class RuntimeNaaccrDictionaryItem {
     private Integer _startColumn;
 
     private Integer _length;
-
-    private Set<String> _recordTypes;
 
     private String _parentXmlElement;
 
@@ -37,9 +32,6 @@ public class RuntimeNaaccrDictionaryItem {
         _naaccrNum = item.getNaaccrNum();
         _startColumn = item.getStartColumn();
         _length = item.getLength();
-        _recordTypes = new HashSet<>();
-        if (item.getRecordTypes() != null)
-            _recordTypes.addAll(Arrays.asList(item.getRecordTypes().split(",")));
         _parentXmlElement = item.getParentXmlElement();
         if (item.getRegexValidation() != null)
             _regexValidation = Pattern.compile(item.getRegexValidation());
@@ -78,10 +70,6 @@ public class RuntimeNaaccrDictionaryItem {
 
     public void setLength(Integer length) {
         _length = length;
-    }
-
-    public Set<String> getRecordTypes() {
-        return _recordTypes;
     }
 
     public String getParentXmlElement() {

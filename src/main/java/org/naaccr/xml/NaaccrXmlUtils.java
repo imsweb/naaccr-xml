@@ -46,6 +46,13 @@ public class NaaccrXmlUtils {
 
     public static final String GENERATED_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ"; // TODO verify the format...
 
+    // item to use by default to group the tumors together
+    public static final String DEFAULT_TUMOR_GROUPING_ITEM = "patientIdNumber";
+
+    // items used to determine the format of a flat file line
+    public static final String FLAT_FIILE_FORMAT_ITEM_REC_TYPE = "recordType";
+    public static final String FLAT_FIILE_FORMAT_ITEM_NAACCR_VERSION = "naaccrRecordVersion";
+
     /**
      * Translates a flat data file into an XML data file.
      * @param flatFile source flat data file, must exists

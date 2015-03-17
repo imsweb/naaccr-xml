@@ -105,11 +105,12 @@ public class PatientXmlReader implements AutoCloseable {
         while (_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM)) {
             // TODO FPD, wouldn't it be better to define an item converter? But then I want to share it with the patient converter!
             Item item = new Item();
-            item.setId(_reader.getAttribute("naaccrId"));
-            if (_reader.getAttribute("naaccrNum") != null)
-                item.setNum(Integer.valueOf(_reader.getAttribute("naaccrNum")));
+            item.setNaaccrId(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID));
+            if (_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM) != null)
+                item.setNaaccrNum(Integer.valueOf(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM)));
             item.setValue(_reader.getValue());
-            _rootData.getItems().add(item);
+            if (!options.getItemsToExclude().contains(item.getNaaccrId()))
+                _rootData.getItems().add(item);
             _reader.moveUp();
             _reader.moveDown();
         }

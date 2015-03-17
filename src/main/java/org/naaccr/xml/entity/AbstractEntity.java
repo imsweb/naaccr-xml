@@ -26,7 +26,6 @@ public class AbstractEntity {
 
     // caches to improve lookup performances
     protected Map<String, Item> _cachedById;
-    protected Map<Integer, Item> _cachedByNumber;
 
     public List<Item> getItems() {
         if (_items == null)
@@ -34,37 +33,19 @@ public class AbstractEntity {
         return _items;
     }
     
-    public Item getItemById(String id) {
+    public Item getItem(String id) {
         if (_cachedById == null) {
             Map<String, Item> cache = new HashMap<>();
             for (Item item : getItems())
-                if (item.getId() != null)
-                    cache.put(item.getId(), item);
+                if (item.getNaaccrId() != null)
+                    cache.put(item.getNaaccrId(), item);
             _cachedById = cache;
         }
         return _cachedById.get(id);
     }
-
-    public Item getItemByNumber(Integer number) {
-        if (_cachedByNumber == null) {
-            Map<Integer, Item> cache = new HashMap<>();
-            for (Item item : getItems())
-                if (item.getNum() != null)
-                    cache.put(item.getNum(), item);
-            _cachedByNumber = cache;
-        }
-        return _cachedByNumber.get(number);
-    }
-
-    public Item getItem(String id, Integer number) {
-        Item item = getItemById(id);
-        if (item == null)
-            item = getItemByNumber(number);
-        return item;
-    }
     
-    public String getItemValue(String id, Integer number) {
-        Item item = getItem(id, number);
+    public String getItemValue(String id) {
+        Item item = getItem(id);
         if (item != null)
             return item.getValue();
         return null;

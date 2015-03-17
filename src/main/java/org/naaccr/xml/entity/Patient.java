@@ -10,12 +10,12 @@ import org.naaccr.xml.NaaccrValidationError;
 
 public class Patient extends AbstractEntity {
     
-    protected List<Tumor> tumors;
+    protected List<Tumor> _tumors;
 
     public List<Tumor> getTumors() {
-        if (tumors == null)
-            tumors = new ArrayList<>();
-        return tumors;
+        if (_tumors == null)
+            _tumors = new ArrayList<>();
+        return _tumors;
     }
     
     public List<NaaccrValidationError> getAllValidationErrors() {

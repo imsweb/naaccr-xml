@@ -104,13 +104,13 @@ public class NaaccrPatientConverter implements Converter {
             return;
 
         // get the item definition
-        if (item.getId() == null)
+        if (item.getNaaccrId() == null)
             throw reportSyntaxError("NAACCR ID is required when writing an item");
-        RuntimeNaaccrDictionaryItem itemDef = _context.getDictionary().getItemByNaaccrId(item.getId());
+        RuntimeNaaccrDictionaryItem itemDef = _context.getDictionary().getItemByNaaccrId(item.getNaaccrId());
         if (itemDef == null)
-            throw reportSyntaxError("Unable to find item definition for NAACCR ID " + item.getId());
-        if (item.getNum() != null && !item.getNum().equals(itemDef.getNaaccrNum()))
-            throw reportSyntaxError("Provided NAACCR Number '" + item.getNum() + "' doesn't correspond to the provided NAACCR ID '" + item.getId() + "'");
+            throw reportSyntaxError("Unable to find item definition for NAACCR ID " + item.getNaaccrId());
+        if (item.getNaaccrNum() != null && !item.getNaaccrNum().equals(itemDef.getNaaccrNum()))
+            throw reportSyntaxError("Provided NAACCR Number '" + item.getNaaccrNum() + "' doesn't correspond to the provided NAACCR ID '" + item.getNaaccrId() + "'");
 
         // write the item
         writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
@@ -148,8 +148,8 @@ public class NaaccrPatientConverter implements Converter {
 
         // crate the item
         Item item = new Item();
-        item.setId(itemDef.getNaaccrId());
-        item.setNum(itemDef.getNaaccrNum());
+        item.setNaaccrId(itemDef.getNaaccrId());
+        item.setNaaccrNum(itemDef.getNaaccrNum());
         item.setValue(value);
 
         // the rest of the validation will happen only if we actually find the item definition...
@@ -158,10 +158,6 @@ public class NaaccrPatientConverter implements Converter {
             // item should be under the proper patient level
             if (!parentTag.equals(itemDef.getParentXmlElement()))
                 reportError(entity, lineNumber, currentPath, "invalid parent XML tag; was expecting '" + itemDef.getParentXmlElement() + "' but got '" + parentTag + "'", itemDef);
-
-            // item should be in the proper record type
-            if (!itemDef.getRecordTypes().contains(_context.getDictionary().getRecordType()))
-                reportError(entity, lineNumber, currentPath, "item '" + itemDef.getNaaccrId() + "' is not allowed for this record type", itemDef);
 
             // value should be valid
             if (item.getValue() != null) {

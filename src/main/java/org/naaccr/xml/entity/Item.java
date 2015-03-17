@@ -5,47 +5,34 @@ package org.naaccr.xml.entity;
 
 public class Item {
     
-    private String id;
+    private String _naaccrId;
     
-    private Integer num;
+    private Integer _naaccrNum;
     
-    private String value;
-    
-    public Item() {
+    private String _value;
+
+    public String getNaaccrId() {
+        return _naaccrId;
     }
 
-    public Item(String idVal, String val) {
-        id = idVal;
-        value = val;
+    public void setNaaccrId(String naaccrId) {
+        _naaccrId = naaccrId;
     }
     
-    public Item(Integer numVal, String val) {
-        num = numVal;
-        value = val;
+    public Integer getNaaccrNum() {
+        return _naaccrNum;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String val) {
-        id = val;
-    }
-    
-    public Integer getNum() {
-        return num;
-    }
-
-    public void setNum(Integer val) {
-        num = val;
+    public void setNaaccrNum(Integer naaccrNum) {
+        _naaccrNum = naaccrNum;
     }
 
     public String getValue() {
-        return value;
+        return _value;
     }
 
-    public void setValue(String val) {
-        value = val;
+    public void setValue(String value) {
+        _value = value;
     }
     
 }

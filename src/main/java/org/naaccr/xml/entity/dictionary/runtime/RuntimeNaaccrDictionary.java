@@ -4,6 +4,7 @@
 package org.naaccr.xml.entity.dictionary.runtime;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -40,9 +41,11 @@ public class RuntimeNaaccrDictionary {
         _format = NaaccrFormat.getInstance(baseDictionary.getNaaccrVersion(), recordType);
         _items = new ArrayList<>();
         for (NaaccrDictionaryItem item : baseDictionary.getItems())
-            _items.add(new RuntimeNaaccrDictionaryItem(item));
+            if (Arrays.asList(item.getRecordTypes().split(",")).contains(recordType))
+                _items.add(new RuntimeNaaccrDictionaryItem(item));
         for (NaaccrDictionaryItem item : userDictionary.getItems())
-            _items.add(new RuntimeNaaccrDictionaryItem(item));
+            if (Arrays.asList(item.getRecordTypes().split(",")).contains(recordType))
+                _items.add(new RuntimeNaaccrDictionaryItem(item));
 
         // sort the fields by starting columns
         Collections.sort(_items, new Comparator<RuntimeNaaccrDictionaryItem>() {

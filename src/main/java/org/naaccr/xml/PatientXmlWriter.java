@@ -83,14 +83,16 @@ public class PatientXmlWriter implements AutoCloseable {
 
         // write the root items
         for (Item item : rootData.getItems()) {
-            // TODO FPD, wouldn't it be better to define an item converter? But then I want to share it with the patient converter!
-            _writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
-            _writer.addAttribute("naaccrId", item.getId());
-            if (item.getNum() != null)
-                _writer.addAttribute("naaccrNum", item.getNum().toString());
-            if (item.getValue() != null)
-                _writer.setValue(item.getValue());
-            _writer.endNode();
+            if (!options.getItemsToExclude().contains(item.getNaaccrId())) {
+                // TODO FPD, wouldn't it be better to define an item converter? But then I want to share it with the patient converter!
+                _writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
+                _writer.addAttribute("naaccrId", item.getNaaccrId());
+                if (item.getNaaccrNum() != null)
+                    _writer.addAttribute("naaccrNum", item.getNaaccrNum().toString()); // TODO FPD need to use the options to know if the num needs to be written...
+                if (item.getValue() != null)
+                    _writer.setValue(item.getValue());
+                _writer.endNode();
+            }
         }
 
         // for now, ignore the root extension...

@@ -94,7 +94,7 @@ public class ValidationTest {
         File flatFile1 = new File(System.getProperty("user.dir") + "/build/test.txt");
         NaaccrXmlUtils.writeFlatFile(data1, flatFile1, null, null, null);
         data1 = NaaccrXmlUtils.readFlatFile(flatFile1, null, null, null);
-        Assert.assertEquals("VENDOR", data1.getItemValue("vendorName", null));
+        Assert.assertEquals("VENDOR", data1.getItemValue("vendorName"));
 
         File xmlFile2 = new File(System.getProperty("user.dir") + "/build/test.xml");
         NaaccrXmlUtils.flatToXml(flatFile1, xmlFile2, null, null, null);
@@ -105,7 +105,7 @@ public class ValidationTest {
 
     private Item createItem(String id, String value) {
         Item item = new Item();
-        item.setId(id);
+        item.setNaaccrId(id);
         item.setValue(value);
         return item;
     }

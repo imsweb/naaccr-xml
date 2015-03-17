@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.naaccr.xml.entity.AbstractEntity;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
@@ -27,7 +30,7 @@ public class PatientFlatReader implements AutoCloseable {
 
     protected RuntimeNaaccrDictionary _dictionary;
 
-    protected RuntimeNaaccrDictionaryItem _patientIdNumberItem;
+    protected List<RuntimeNaaccrDictionaryItem> _groupingItems;
 
     protected String _previousLine;
 
@@ -36,7 +39,7 @@ public class PatientFlatReader implements AutoCloseable {
         _options = options == null ? new NaaccrXmlOptions() : options;
 
         // TODO FPD add better validation
-        
+
         _previousLine = _reader.readLine();
         NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromFlatFileLine(_previousLine));
         NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByVersion(naaccrFormat.getNaaccrVersion());
@@ -46,17 +49,15 @@ public class PatientFlatReader implements AutoCloseable {
         // read the root items
         if (_previousLine != null)
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
-                if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getRecordType()))
-                    _rootData.getItems().addAll(createItemsFromLine(_previousLine, itemDef));
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(itemDef.getParentXmlElement()) && !_options.getItemsToExclude().contains(itemDef.getNaaccrId()))
+                    addItemFromLine(_rootData, _previousLine, itemDef);
 
-        // TODO FPD I think we want to allow another property to be used for the grouping...
-        
-        // let's cache the patient ID number item, we are going to need them a lot...
-        for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
-            if (item.getNaaccrNum() != null && item.getNaaccrNum().equals(20)) {
-                _patientIdNumberItem = item;
-                break;
-            }
+        // let's cache the grouping items, we are going to need them a lot...
+        _groupingItems = new ArrayList<>();
+        for (String id : _options.getTumorGroupingItems()) {
+            RuntimeNaaccrDictionaryItem item = _dictionary.getItemByNaaccrId(id);
+            if (item != null)
+                _groupingItems.add(item);
         }
     }
 
@@ -67,6 +68,7 @@ public class PatientFlatReader implements AutoCloseable {
      */
     public Patient readPatient() throws IOException {
         List<String> lines = new ArrayList<>();
+        List<Integer> lineNumbers = new ArrayList<>();
 
         if (_previousLine == null) {
             _previousLine = _reader.readLine();
@@ -74,22 +76,22 @@ public class PatientFlatReader implements AutoCloseable {
                 return null;
         }
 
+        Map<String, String> firstLineGroupingValues = extractGroupingValues(_previousLine, _groupingItems);
         lines.add(_previousLine);
-        String currentPatId = getPatientIdNumber(_previousLine);
-        int lineNumber = _reader.getLineNumber() - 1;
-
+        lineNumbers.add(_reader.getLineNumber());
         _previousLine = _reader.readLine();
         while (_previousLine != null) {
-            boolean samePatient = currentPatId != null && currentPatId.equals(getPatientIdNumber(_previousLine));
+            boolean samePatient = firstLineGroupingValues.equals(extractGroupingValues(_previousLine, _groupingItems));
             if (samePatient) {
                 lines.add(_previousLine);
+                lineNumbers.add(_reader.getLineNumber());
                 _previousLine = _reader.readLine();
             }
             else
                 break;
         }
 
-        return lines.isEmpty() ? null : createPatientFromLines(lineNumber, lines);
+        return lines.isEmpty() ? null : createPatientFromLines(lines, lineNumbers);
     }
 
     /**
@@ -105,48 +107,63 @@ public class PatientFlatReader implements AutoCloseable {
         _reader.close();
     }
 
-    protected String getPatientIdNumber(String line) {
-        if (_patientIdNumberItem == null)
-            return null;
+    protected Map<String, String> extractGroupingValues(String line, List<RuntimeNaaccrDictionaryItem> itemDefs) {
+        Map<String, String> values = new HashMap<>();
 
-        int start = _patientIdNumberItem.getStartColumn();
-        int end = start + _patientIdNumberItem.getLength() - 1;
-
-        if (line.length() < end)
-            return null;
-
-        String result = line.substring(start, end).trim();
-        if (result.isEmpty())
-            return null;
-
-        return result;
-    }
-    
-    protected Patient createPatientFromLines(int lineNumber, List<String> lines) throws IOException {
-
-        // create the patient using the first line only (other lines are supposed to be identical for patient items)
-        Patient patient = new Patient();
-        for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
-            if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getRecordType())) {
-                // TODO FPD do we want to throw an error if not all the patient-level fields have the same value?
-                patient.getItems().addAll(createItemsFromLine(lines.get(0), itemDef));
-            }
+        for (RuntimeNaaccrDictionaryItem itemDef : itemDefs) {
+            Item item = createItemFromLine(line, itemDef);
+            if (item != null)
+                values.put(item.getNaaccrId(), item.getValue());
         }
 
-        // create the tumors, one per line
-        for (String line : lines) {
+        return values;
+    }
+
+    protected Patient createPatientFromLines(List<String> lines, List<Integer> lineNumbers) throws IOException {
+        Patient patient = new Patient();
+
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+
             Tumor tumor = new Tumor();
-            for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
-                if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()) && itemDef.getRecordTypes().contains(_dictionary.getRecordType()))
-                    tumor.getItems().addAll(createItemsFromLine(line, itemDef));
+            for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
+                if (_options.getItemsToExclude().contains(itemDef.getNaaccrId()))
+                    continue;
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement())) {
+                    if (i == 0)
+                        addItemFromLine(patient, line, itemDef);
+                    else if (_options.getReportLevelMismatch()) {
+                        Item currentTumorItem = createItemFromLine(line, itemDef);
+                        String patValue = patient.getItemValue(itemDef.getNaaccrId());
+                        String tumorValue = currentTumorItem == null ? null : currentTumorItem.getValue();
+                        boolean same = patValue == null ? tumorValue == null : patValue.equals(tumorValue);
+                        if (!same) {
+                            NaaccrValidationError error = new NaaccrValidationError();
+                            error.setMessage("item '" + itemDef.getNaaccrId() + "' is defined at the patient level but has different values for the tumors");
+                            error.setLineNumber(lineNumbers.get(i));
+                            error.setNaaccrId(itemDef.getNaaccrId());
+                            error.setNaaccrNum(itemDef.getNaaccrNum());
+                            patient.getValidationErrors().add(error);
+                        }
+                    }
+                }
+                else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
+                    addItemFromLine(tumor, line, itemDef);
+            }
             patient.getTumors().add(tumor);
         }
 
         return patient;
     }
 
-    protected List<Item> createItemsFromLine(String line, RuntimeNaaccrDictionaryItem itemDef) {
-        List<Item> items = new ArrayList<>();
+    protected void addItemFromLine(AbstractEntity entity, String line, RuntimeNaaccrDictionaryItem itemDef) {
+        Item item = createItemFromLine(line, itemDef);
+        if (item != null)
+            entity.getItems().add(item);
+    }
+
+    protected Item createItemFromLine(String line, RuntimeNaaccrDictionaryItem itemDef) {
+        Item item = null;
 
         int start = itemDef.getStartColumn() - 1; // dictionary is 1-based; Java substring is 0-based...
         int end = start + itemDef.getLength();
@@ -155,19 +172,18 @@ public class PatientFlatReader implements AutoCloseable {
             String value = line.substring(start, end);
             String trimmedValue = value.trim();
 
-            // apply trimming rule
+            // apply trimming rule (no trimming rule means trim all)
             if (trimmedValue.isEmpty() || itemDef.getTrim() == null || NaaccrDictionaryUtils.NAACCR_TRIM_ALL.equals(itemDef.getTrim()))
                 value = trimmedValue;
 
             if (!value.isEmpty()) {
-                Item item = new Item();
-                item.setId(itemDef.getNaaccrId());
-                item.setNum(itemDef.getNaaccrNum());
+                item = new Item();
+                item.setNaaccrId(itemDef.getNaaccrId());
+                item.setNaaccrNum(itemDef.getNaaccrNum());
                 item.setValue(value);
-                items.add(item);
             }
         }
 
-        return items;
+        return item;
     }
 }
