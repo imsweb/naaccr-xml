@@ -60,6 +60,11 @@ public class PatientFlatReader implements AutoCloseable {
         }
     }
 
+    /**
+     * Reads the next patient on this stream.
+     * @return the next available patient, null if not such patient
+     * @throws IOException
+     */
     public Patient readPatient() throws IOException {
         List<String> lines = new ArrayList<>();
 
@@ -87,13 +92,17 @@ public class PatientFlatReader implements AutoCloseable {
         return lines.isEmpty() ? null : createPatientFromLines(lineNumber, lines);
     }
 
+    /**
+     * Returns the "root" data; it includes root attributes and the root items.
+     * @return the root data, never null
+     */
+    public NaaccrData getRootData() {
+        return _rootData;
+    }
+
     @Override
     public void close() throws IOException {
         _reader.close();
-    }
-
-    public NaaccrData getRootData() {
-        return _rootData;
     }
 
     protected String getPatientIdNumber(String line) {

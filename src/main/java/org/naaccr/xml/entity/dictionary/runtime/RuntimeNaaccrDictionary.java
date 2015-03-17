@@ -12,7 +12,6 @@ import java.util.Map;
 
 import org.naaccr.xml.NaaccrDictionaryUtils;
 import org.naaccr.xml.NaaccrFormat;
-import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
@@ -100,13 +99,5 @@ public class RuntimeNaaccrDictionary {
             _cachedByNumber = cache;
         }
         return _cachedByNumber.get(number);
-    }
-
-    public RuntimeNaaccrDictionaryItem getItem(Item item) {
-        if (item.getId() != null)
-            return getItemByNaaccrId(item.getId());
-        if (item.getNum() != null)
-            return getItemByNaaccrNum(item.getNum());
-        return null;
     }
 }

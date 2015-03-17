@@ -49,7 +49,6 @@ import org.apache.commons.io.IOUtils;
 import org.naaccr.xml.NaaccrFormat;
 import org.naaccr.xml.NaaccrValidationError;
 import org.naaccr.xml.NaaccrValidationException;
-import org.naaccr.xml.NaaccrXmlOptions;
 import org.naaccr.xml.NaaccrXmlUtils;
 import org.naaccr.xml.PatientXmlReader;
 import org.naaccr.xml.entity.Patient;
@@ -241,7 +240,7 @@ public class Standalone {
                     flatToXmlResultLbl.setText("Processing file...");
                     pnl.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     try {
-                        NaaccrXmlUtils.flatToXml(sourceFile, targetFile, new NaaccrXmlOptions(), null);
+                        NaaccrXmlUtils.flatToXml(sourceFile, targetFile, null, null, null); // TODO FPD add observer
                         flatToXmlResultLbl.setText("Done processing source flat file...");
                     }
                     catch (IOException | NaaccrValidationException ex) {
@@ -361,7 +360,7 @@ public class Standalone {
                     xmlToFlatResultLbl.setText("Processing file...");
                     pnl.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     try {
-                        NaaccrXmlUtils.xmlToFlat(sourceFile, targetFile, new NaaccrXmlOptions(), null);
+                        NaaccrXmlUtils.xmlToFlat(sourceFile, targetFile, null, null, null); // TOOD FPD add observer
                         xmlToFlatResultLbl.setText("Done processing source XML file...");
                     }
                     catch (IOException | NaaccrValidationException ex) {

@@ -15,7 +15,7 @@ import com.thoughtworks.xstream.converters.basic.DateConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
-public class XmlStreamConfiguration {
+public class NaaccrStreamConfiguration {
     
     protected XmlPullParser _parser;
     
@@ -25,7 +25,7 @@ public class XmlStreamConfiguration {
     
     protected XStream _xstream;
     
-    public XmlStreamConfiguration() {
+    public NaaccrStreamConfiguration() {
         _parser = createParser();
         _driver = new XppDriver() {
             @Override

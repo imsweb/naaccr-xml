@@ -39,7 +39,7 @@ public class PatientXmlReader implements AutoCloseable {
         this(reader, options, userDictionary, null);
     }
 
-    public PatientXmlReader(Reader reader, NaaccrXmlOptions options, NaaccrDictionary userDictionary, XmlStreamConfiguration configuration) throws IOException {
+    public PatientXmlReader(Reader reader, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws IOException {
 
         // we always need options
         if (options == null)
@@ -47,7 +47,7 @@ public class PatientXmlReader implements AutoCloseable {
 
         // we always need a configuration
         if (configuration == null)
-            configuration = new XmlStreamConfiguration();
+            configuration = new NaaccrStreamConfiguration();
 
         // create the XML reader
         _reader = configuration.getDriver().createReader(reader);
@@ -95,7 +95,7 @@ public class PatientXmlReader implements AutoCloseable {
         _reader.moveDown();
 
         // now we are ready to create our reading context and make it available to the patient converter
-        XmlStreamContext context = new XmlStreamContext();
+        NaaccrStreamContext context = new NaaccrStreamContext();
         context.setDictionary(new RuntimeNaaccrDictionary(_rootData.getRecordType(), baseDictionary, userDictionary));
         context.setOptions(options);
         context.setParser(configuration.getParser());
@@ -127,9 +127,16 @@ public class PatientXmlReader implements AutoCloseable {
         _xstream = configuration.getXstream();
     }
 
+    /**
+     * Reads the next patient on this stream.
+     * @return the next available patient, null if not such patient
+     * @throws IOException
+     * @throws NaaccrValidationException
+     */
     public Patient readPatient() throws IOException, NaaccrValidationException {
         Patient patient = null;
         if (_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT)) {
+            // TODO FPD deal with the conversion exception, create a naaccrValidationException from it...
             patient = (Patient)_xstream.unmarshal(_reader);
             _reader.moveUp();
             if (_reader.hasMoreChildren())
@@ -140,43 +147,17 @@ public class PatientXmlReader implements AutoCloseable {
         return patient;
     }
 
+    /**
+     * Returns the "root" data; it includes root attributes and the root items.
+     * @return the root data, never null
+     */
+    public NaaccrData getRootData() {
+        return _rootData;
+    }
+
     @Override
     public void close() throws IOException {
         _reader.moveUp();
         _reader.close();
     }
-
-    public NaaccrData getRootData() {
-        return _rootData;
-    }
-
-    // TODO remove this testing method
-    /**
-    public static void main(String[] args) throws Exception {
-        File inputFile = new File(System.getProperty("user.dir") + "/src/test/resources/data/test-num-bad-item3.xml");
-        String format = NaaccrXmlUtils.getFormatFromXmlFile(inputFile);
-        RuntimeNaaccrDictionary dictionary = new RuntimeNaaccrDictionary(format, null);
-        try (PatientXmlReader2 reader = new PatientXmlReader2(new FileReader(inputFile))) { // TODO FPD
-            do {
-                Patient patient = reader.readPatient();
-                if (patient == null)
-                    break;
-                System.out.println("   > patientIdNumber=" + patient.getItemValue("patientIdNumber", 20));
-                for (Tumor tumor : patient.getTumors())
-                    System.out.println("      > primarySite=" + tumor.getItemValue("primarySite", 400));
-                for (NaaccrValidationError error : patient.getAllValidationErrors())
-                    System.out.println("   > line " + error.getLineNumber() + " [" + error.getPath() + "]: " + error.getMessage());
-            } while (true);
-        }
-        catch (NaaccrValidationException ex) {
-            System.out.println("   > line " + ex.getLineNumber() + " [path=" + ex.getPath() + "]: " + ex.getMessage());
-        }
-        catch (IOException ex) {
-            System.out.println("Unable to read next patient: " + ex.getMessage());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-     */
 }

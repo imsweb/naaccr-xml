@@ -6,7 +6,7 @@ package org.naaccr.xml;
 import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
 import org.xmlpull.v1.XmlPullParser;
 
-public class XmlStreamContext {
+public class NaaccrStreamContext {
 
     protected RuntimeNaaccrDictionary _dictionary;
 

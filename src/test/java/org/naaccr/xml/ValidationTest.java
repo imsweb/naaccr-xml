@@ -18,6 +18,7 @@ import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
 
+// TODO FPD beef up these tests; add cases for options, user dictionary and observer...
 public class ValidationTest {
 
     @Test
@@ -29,7 +30,7 @@ public class ValidationTest {
         Assert.assertNotNull(format);
         
         // read the entire file at once
-        NaaccrData data = NaaccrXmlUtils.readXmlFile(file, null, null);
+        NaaccrData data = NaaccrXmlUtils.readXmlFile(file, null, null, null);
         Assert.assertNotNull(data.getBaseDictionaryUri());
         Assert.assertNull(data.getUserDictionaryUri());
         Assert.assertNotNull(data.getRecordType());
@@ -75,7 +76,7 @@ public class ValidationTest {
 
         // write the entire file at once
         File file = new File(System.getProperty("user.dir") + "/build/test-writing-1.xml");
-        NaaccrXmlUtils.writeXmlFile(data, file, null, null);
+        NaaccrXmlUtils.writeXmlFile(data, file, null, null, null);
 
         // write the file using a steam
         file = new File(System.getProperty("user.dir") + "/build/test-writing-2.xml");
@@ -88,18 +89,18 @@ public class ValidationTest {
     @Test
     public void testFlatToXmlAndXmlToFlat() throws IOException, NaaccrValidationException {
         File xmlFile1 = new File(System.getProperty("user.dir") + "/src/test/resources/validation-test-1.xml");
-        NaaccrData data1 = NaaccrXmlUtils.readXmlFile(xmlFile1, null, null);
+        NaaccrData data1 = NaaccrXmlUtils.readXmlFile(xmlFile1, null, null, null);
 
         File flatFile1 = new File(System.getProperty("user.dir") + "/build/test.txt");
-        NaaccrXmlUtils.writeFlatFile(data1, flatFile1, null, null);
-        data1 = NaaccrXmlUtils.readFlatFile(flatFile1, null, null);
+        NaaccrXmlUtils.writeFlatFile(data1, flatFile1, null, null, null);
+        data1 = NaaccrXmlUtils.readFlatFile(flatFile1, null, null, null);
         Assert.assertEquals("VENDOR", data1.getItemValue("vendorName", null));
 
         File xmlFile2 = new File(System.getProperty("user.dir") + "/build/test.xml");
-        NaaccrXmlUtils.flatToXml(flatFile1, xmlFile2, null, null);
+        NaaccrXmlUtils.flatToXml(flatFile1, xmlFile2, null, null, null);
 
         File flatFile2 = new File(System.getProperty("user.dir") + "/build/test2.txt");
-        NaaccrXmlUtils.xmlToFlat(xmlFile2, flatFile2, null, null);
+        NaaccrXmlUtils.xmlToFlat(xmlFile2, flatFile2, null, null, null);
     }
 
     private Item createItem(String id, String value) {

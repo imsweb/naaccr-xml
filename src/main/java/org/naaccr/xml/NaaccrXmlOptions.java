@@ -3,6 +3,7 @@
  */
 package org.naaccr.xml;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NaaccrXmlOptions {
@@ -13,8 +14,6 @@ public class NaaccrXmlOptions {
 
     private Boolean _validateAgainstDictionary;
     
-    private String _retiredItemHandling;
-    
     private String _unknownItemHandling;
 
     private Boolean _validateValues;
@@ -24,12 +23,19 @@ public class NaaccrXmlOptions {
     private List<String> _itemsToExclude;
 
     private List<String> _itemsToInclude;
+
+    private List<String> _groupingItems;
+
+    private Boolean _writeItemNumber;
     
     public NaaccrXmlOptions() {
         _validateAgainstDictionary = true;
-        _retiredItemHandling = ITEM_HANDLING_ERROR;
         _unknownItemHandling = ITEM_HANDLING_ERROR;
         _validateValues = true;
+        _enforceRecordType = true;
+        _groupingItems = new ArrayList<>();
+        _groupingItems.add("patientIdNumber");
+        _writeItemNumber = false;
     }
 
     public Boolean getValidateAgainstDictionary() {
@@ -38,14 +44,6 @@ public class NaaccrXmlOptions {
 
     public void setValidateAgainstDictionary(Boolean validateAgainstDictionary) {
         _validateAgainstDictionary = validateAgainstDictionary;
-    }
-
-    public String getRetiredItemHandling() {
-        return _retiredItemHandling;
-    }
-
-    public void setRetiredItemHandling(String retiredItemHandling) {
-        _retiredItemHandling = retiredItemHandling;
     }
 
     public String getUnknownItemHandling() {
@@ -87,5 +85,20 @@ public class NaaccrXmlOptions {
     public void setItemsToInclude(List<String> itemsToInclude) {
         _itemsToInclude = itemsToInclude;
     }
-    
+
+    public List<String> getGroupingItems() {
+        return _groupingItems;
+    }
+
+    public void setGroupingItems(List<String> groupingItems) {
+        _groupingItems = groupingItems;
+    }
+
+    public Boolean getWriteItemNumber() {
+        return _writeItemNumber;
+    }
+
+    public void setWriteItemNumber(Boolean writeItemNumber) {
+        _writeItemNumber = writeItemNumber;
+    }
 }
