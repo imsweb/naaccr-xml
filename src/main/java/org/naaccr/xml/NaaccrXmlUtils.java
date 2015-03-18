@@ -60,16 +60,15 @@ public class NaaccrXmlUtils {
      * @param options optional validating options
      * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @param observer an optional observer, useful to keep track of the progress
-     * @throws IOException if there is problem reading/writing the file
-     * @throws NaaccrValidationException if there is a problem with the data (usually syntax errors; data validation issues are reported on the patient objects)
+     * @throws NaaccrIOException if there is problem reading/writing the file
      */
-    public static void flatToXml(File flatFile, File xmlFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws IOException, NaaccrValidationException {
+    public static void flatToXml(File flatFile, File xmlFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
         if (flatFile == null)
-            throw new IOException("Source flat file is required");
+            throw new NaaccrIOException("Source flat file is required");
         if (!flatFile.exists())
-            throw new IOException("Source flat file must exist");
+            throw new NaaccrIOException("Source flat file must exist");
         if (!xmlFile.getParentFile().exists())
-            throw new IOException("Target folder must exist");
+            throw new NaaccrIOException("Target folder must exist");
 
         // create the reader and writer and let them do all the work!
         try (PatientFlatReader reader = new PatientFlatReader(createReader(flatFile), options, userDictionary)) {
@@ -94,16 +93,15 @@ public class NaaccrXmlUtils {
      * @param options optional validating options
      * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @param observer an optional observer, useful to keep track of the progress
-     * @throws IOException if there is problem reading/writing the file
-     * @throws NaaccrValidationException if there is a problem with the data (usually syntax errors; data validation issues are reported on the patient objects)
+     * @throws NaaccrIOException if there is problem reading/writing the file
      */
-    public static void xmlToFlat(File xmlFile, File flatFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws IOException, NaaccrValidationException {
+    public static void xmlToFlat(File xmlFile, File flatFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
         if (xmlFile == null)
-            throw new IOException("Source XML file is required");
+            throw new NaaccrIOException("Source XML file is required");
         if (!xmlFile.exists())
-            throw new IOException("Source XML file must exist");
+            throw new NaaccrIOException("Source XML file must exist");
         if (!flatFile.getParentFile().exists())
-            throw new IOException("Target folder must exist");
+            throw new NaaccrIOException("Target folder must exist");
 
         // create the reader and writer and let them do all the work!
         try (PatientXmlReader reader = new PatientXmlReader(createReader(xmlFile), options, userDictionary)) {
@@ -129,14 +127,13 @@ public class NaaccrXmlUtils {
      * @param options optional validating options
      * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @param observer an optional observer, useful to keep track of the progress
-     * @throws IOException if there is problem reading/writing the file
-     * @throws NaaccrValidationException if there is a problem with the data (usually syntax errors; data validation issues are reported on the patient objects)
+     * @throws NaaccrIOException if there is problem reading/writing the file
      */
-    public static NaaccrData readXmlFile(File xmlFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws IOException, NaaccrValidationException {
+    public static NaaccrData readXmlFile(File xmlFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
         if (xmlFile == null)
-            throw new IOException("Source XML file is required");
+            throw new NaaccrIOException("Source XML file is required");
         if (!xmlFile.exists())
-            throw new IOException("Source XML file must exist");
+            throw new NaaccrIOException("Source XML file must exist");
 
         try (PatientXmlReader reader = new PatientXmlReader(createReader(xmlFile), options, userDictionary)) {
             NaaccrData rootData = reader.getRootData();
@@ -160,13 +157,13 @@ public class NaaccrXmlUtils {
      * @param options optional validating options
      * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @param observer an optional observer, useful to keep track of the progress
-     * @throws IOException if there is problem reading/writing the file
+     * @throws NaaccrIOException if there is problem reading/writing the file
      */
-    public static void writeXmlFile(NaaccrData data, File xmlFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws IOException {
+    public static void writeXmlFile(NaaccrData data, File xmlFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
         if (data == null)
-            throw new IOException("Data is required");
+            throw new NaaccrIOException("Data is required");
         if (!xmlFile.getParentFile().exists())
-            throw new IOException("Target folder must exist");
+            throw new NaaccrIOException("Target folder must exist");
 
         try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlFile), data, options, userDictionary)) {
             for (Patient patient : data.getPatients()) {
@@ -185,14 +182,13 @@ public class NaaccrXmlUtils {
      * @param options optional validating options
      * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @param observer an optional observer, useful to keep track of the progress
-     * @throws IOException if there is problem reading/writing the file
-     * @throws NaaccrValidationException if there is a problem with the data (usually syntax errors; data validation issues are reported on the patient objects)
+     * @throws NaaccrIOException if there is problem reading/writing the file
      */
-    public static NaaccrData readFlatFile(File flatFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws IOException, NaaccrValidationException {
+    public static NaaccrData readFlatFile(File flatFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
         if (flatFile == null)
-            throw new IOException("Source flat file is required");
+            throw new NaaccrIOException("Source flat file is required");
         if (!flatFile.exists())
-            throw new IOException("Source flat file must exist");
+            throw new NaaccrIOException("Source flat file must exist");
 
         try (PatientFlatReader reader = new PatientFlatReader(createReader(flatFile), options, userDictionary)) {
             NaaccrData data = reader.getRootData();
@@ -217,13 +213,13 @@ public class NaaccrXmlUtils {
      * @param options optional validating options
      * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @param observer an optional observer, useful to keep track of the progress
-     * @throws IOException if there is problem reading/writing the file
+     * @throws NaaccrIOException if there is problem reading/writing the file
      */
-    public static void writeFlatFile(NaaccrData data, File flatFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws IOException {
+    public static void writeFlatFile(NaaccrData data, File flatFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
         if (data == null)
-            throw new IOException("Data is required");
+            throw new NaaccrIOException("Data is required");
         if (!flatFile.getParentFile().exists())
-            throw new IOException("Target folder must exist");
+            throw new NaaccrIOException("Target folder must exist");
 
         try (PatientFlatWriter writer = new PatientFlatWriter(createWriter(flatFile), data, options, userDictionary)) {
             for (Patient patient : data.getPatients()) {
@@ -281,7 +277,7 @@ public class NaaccrXmlUtils {
         try {
             return getFormatFromXmlReader(createReader(xmlFile));
         }
-        catch (IOException e) {
+        catch (NaaccrIOException e) {
             return null;
         }
     }
@@ -321,22 +317,32 @@ public class NaaccrXmlUtils {
     }
 
     // takes care of the file encoding and compression...
-    private static Reader createReader(File file) throws IOException {
-        InputStream is = new FileInputStream(file);
+    private static Reader createReader(File file) throws NaaccrIOException {
+        try {
+            InputStream is = new FileInputStream(file);
 
-        if (file.getName().endsWith(".gz"))
-            is = new GZIPInputStream(is);
+            if (file.getName().endsWith(".gz"))
+                is = new GZIPInputStream(is);
 
-        return new InputStreamReader(is, StandardCharsets.UTF_8);
+            return new InputStreamReader(is, StandardCharsets.UTF_8);
+        }
+        catch (IOException e) {
+            throw new NaaccrIOException(e.getMessage());
+        }
     }
 
     // takes care of the file encoding and compression...
-    private static Writer createWriter(File file) throws IOException {
-        OutputStream os = new FileOutputStream(file);
+    private static Writer createWriter(File file) throws NaaccrIOException {
+        try {
+            OutputStream os = new FileOutputStream(file);
 
-        if (file.getName().endsWith(".gz"))
-            os = new GZIPOutputStream(os);
+            if (file.getName().endsWith(".gz"))
+                os = new GZIPOutputStream(os);
 
-        return new OutputStreamWriter(os, StandardCharsets.UTF_8);
+            return new OutputStreamWriter(os, StandardCharsets.UTF_8);
+        }
+        catch (IOException e) {
+            throw new NaaccrIOException(e.getMessage());
+        }
     }
 }

@@ -3,14 +3,21 @@
  */
 package org.naaccr.xml;
 
-public class NaaccrValidationException extends Exception {
+import java.io.IOException;
+
+public class NaaccrIOException extends IOException {
 
     protected Integer _lineNumber;
     
     protected String _path;
     
-    public NaaccrValidationException(String message) {
+    public NaaccrIOException(String message) {
         super(message);
+    }
+
+    public NaaccrIOException(String message, Integer lineNumber) {
+        super(message);
+        _lineNumber = lineNumber;
     }
 
     public Integer getLineNumber() {

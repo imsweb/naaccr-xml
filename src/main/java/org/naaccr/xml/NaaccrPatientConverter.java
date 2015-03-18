@@ -36,15 +36,21 @@ public class NaaccrPatientConverter implements Converter {
     @Override
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
         if (!(source instanceof Patient))
-            throw reportSyntaxError("Unexpected object type: " + source.getClass().getName());
+            reportSyntaxError("Unexpected object type: " + source.getClass().getName());
 
         Patient patient = (Patient)source;
         for (Item item : patient.getItems())
             writeItem(item, writer);
+
+        // TODO FPD this would be the place to write the patient extension...
+
         for (Tumor tumor : patient.getTumors()) {
             writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
             for (Item item : tumor.getItems())
                 writeItem(item, writer);
+
+            // TODO FPD this would be the place to write the tumor extension...
+
             writer.endNode();
         }
     }
@@ -52,52 +58,71 @@ public class NaaccrPatientConverter implements Converter {
     @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         if (!NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(reader.getNodeName()))
-            throw reportSyntaxError("Unexpected tag: " + reader.getNodeName());
+            reportSyntaxError("unexpected tag: " + reader.getNodeName());
 
         Patient patient = new Patient();
         int patItemCount = 0, tumorCount = 0;
+        boolean seenPatientExtension = false;
 
         while (reader.hasMoreChildren()) {
             reader.moveDown();
 
             // handel patient items
             if (NaaccrXmlUtils.NAACCR_XML_TAG_ITEM.equals(reader.getNodeName())) {
-                if (tumorCount > 0)
-                    throw reportSyntaxError("Tumors should come after items...");
+                if (tumorCount > 0 || seenPatientExtension)
+                    reportSyntaxError("unexpected tag: " + reader.getNodeName());
                 patItemCount++;
                 String path = "/Patient/Item[" + patItemCount + "]";
-                patient.getItems().add(readItem(patient, path, "Patient", reader.getAttribute("naaccrId"), reader.getAttribute("naaccrNum"), reader.getValue()));
+                String rawId = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID);
+                String rawNum = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM);
+                readItem(patient, path, NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT, rawId, rawNum, reader.getValue());
             }
             // handle tumors
             else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(reader.getNodeName())) {
                 Tumor tumor = new Tumor();
                 tumorCount++;
                 int tumorItemCount = 0;
+                boolean seenTumorExtension = false;
                 while (reader.hasMoreChildren()) {
                     reader.moveDown();
-                    tumorItemCount++;
 
                     // handle tumor items
                     if (NaaccrXmlUtils.NAACCR_XML_TAG_ITEM.equals(reader.getNodeName())) {
+                        if (seenTumorExtension)
+                            reportSyntaxError("unexpected tag: " + reader.getNodeName());
+                        tumorItemCount++;
                         String path = "/Patient/Tumor[" + tumorCount + "]/Item[" + tumorItemCount + "]";
-                        tumor.getItems().add(readItem(tumor, path, "Tumor", reader.getAttribute("naaccrId"), reader.getAttribute("naaccrNum"), reader.getValue()));
+                        String rawId = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID);
+                        String rawNum = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM);
+                        readItem(tumor, path, NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR, rawId, rawNum, reader.getValue());
                     }
-                    else
-                        throw reportSyntaxError("Unexpected tag: " + reader.getNodeName());
+                    // handle tumor extension
+                    else {
+                        // TODO FPD this would be the place to read the tumor extension; for now it's ignored...
+                        reader.moveDown();
+                        reader.moveUp();
+                    }
+
                     reader.moveUp();
                 }
                 patient.getTumors().add(tumor);
             }
-            else
-                throw reportSyntaxError("Unexpected tag: " + reader.getNodeName());
+            // handle patient extension
+            else {
+                if (tumorCount > 0)
+                    reportSyntaxError("unexpected tag: " + reader.getNodeName());
+                // TODO FPD this would be the place to read the patient extension; for now it's ignored...
+                reader.moveDown();
+                reader.moveUp();
+            }
+
             reader.moveUp();
         }
 
         return patient;
     }
 
-
-    protected void writeItem(Item item, HierarchicalStreamWriter writer) {
+    void writeItem(Item item, HierarchicalStreamWriter writer) {
 
         // don't bother if the item has no value!
         if (item.getValue() == null || item.getValue().isEmpty())
@@ -105,12 +130,14 @@ public class NaaccrPatientConverter implements Converter {
 
         // get the item definition
         if (item.getNaaccrId() == null)
-            throw reportSyntaxError("NAACCR ID is required when writing an item");
+            reportSyntaxError("NAACCR ID is required when writing an item");
+        if (_context.getOptions().getItemsToExclude().contains(item.getNaaccrId()))
+            return;
         RuntimeNaaccrDictionaryItem itemDef = _context.getDictionary().getItemByNaaccrId(item.getNaaccrId());
         if (itemDef == null)
-            throw reportSyntaxError("Unable to find item definition for NAACCR ID " + item.getNaaccrId());
+            reportSyntaxError("unable to find item definition for NAACCR ID " + item.getNaaccrId());
         if (item.getNaaccrNum() != null && !item.getNaaccrNum().equals(itemDef.getNaaccrNum()))
-            throw reportSyntaxError("Provided NAACCR Number '" + item.getNaaccrNum() + "' doesn't correspond to the provided NAACCR ID '" + item.getNaaccrId() + "'");
+            reportSyntaxError("provided NAACCR Number '" + item.getNaaccrNum() + "' doesn't correspond to the provided NAACCR ID '" + item.getNaaccrId() + "'");
 
         // write the item
         writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
@@ -121,46 +148,68 @@ public class NaaccrPatientConverter implements Converter {
         writer.endNode();
     }
 
-    protected Item readItem(AbstractEntity entity, String currentPath, String parentTag, String rawId, String rawNum, String value) {
+    void readItem(AbstractEntity entity, String currentPath, String parentTag, String rawId, String rawNum, String value) {
         int lineNumber = _context.getParser().getLineNumber();
+
+        // if there is no value at all, don't bother
+        if (value == null || value.isEmpty())
+            return;
+
+        // create the item
+        Item item = new Item();
+        item.setValue(value);
 
         // the NAACCR ID is required
         if (rawId == null)
-            throw reportSyntaxError("attribute 'naaccrId' is required");
+            reportSyntaxError("attribute '" + NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID + "' is required");
         rawId = rawId.trim();
+        if (_context.getOptions().getItemsToExclude().contains(rawId))
+            return;
         RuntimeNaaccrDictionaryItem itemDef = _context.getDictionary().getItemByNaaccrId(rawId);
-        if (itemDef == null)
-            reportError(entity, lineNumber, currentPath, "unknown 'naaccrId' attribute value: " + rawId);
+        if (itemDef != null) {
+            item.setNaaccrId(itemDef.getNaaccrId());
+            item.setNaaccrNum(itemDef.getNaaccrNum());
+        }
+        else {
+            if (NaaccrXmlOptions.ITEM_HANDLING_PROCESS.equals(_context.getOptions().getUnknownItemHandling()))
+                item.setNaaccrId(rawId);
+            else if (NaaccrXmlOptions.ITEM_HANDLING_ERROR.equals(_context.getOptions().getUnknownItemHandling())) {
+                reportError(entity, lineNumber, currentPath, "unknown '" + NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID + "' attribute value: " + rawId);
+                return;
+            }
+            else if (NaaccrXmlOptions.ITEM_HANDLING_IGNORE.equals(_context.getOptions().getUnknownItemHandling()))
+                return;
+            else
+                throw new RuntimeException("Unknown option: " + _context.getOptions().getUnknownItemHandling());
+        }
 
         // validate the NAACCR Number if provided
         if (rawNum != null) {
             rawNum = rawNum.trim();
             if (!rawNum.isEmpty()) {
                 try {
-                    if (!Integer.valueOf(rawNum).equals(itemDef.getNaaccrNum()))
-                        reportError(entity, lineNumber, currentPath, "invalid 'naaccrNum' attribute value: " + rawNum);
+                    if (itemDef != null) {
+                        if (!Integer.valueOf(rawNum).equals(itemDef.getNaaccrNum()))
+                            reportError(entity, lineNumber, currentPath, "invalid '" + NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM + "' attribute value: " + rawNum);
+                    }
+                    else
+                        item.setNaaccrNum(Integer.valueOf(rawNum));
                 }
                 catch (NumberFormatException e) {
-                    reportError(entity, lineNumber, currentPath, "invalid 'naaccrNum' attribute value: " + rawNum);
+                    reportSyntaxError("invalid '" + NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM + "' attribute value: " + rawNum);
                 }
             }
         }
-
-        // crate the item
-        Item item = new Item();
-        item.setNaaccrId(itemDef.getNaaccrId());
-        item.setNaaccrNum(itemDef.getNaaccrNum());
-        item.setValue(value);
 
         // the rest of the validation will happen only if we actually find the item definition...
         if (itemDef != null) {
 
             // item should be under the proper patient level
             if (!parentTag.equals(itemDef.getParentXmlElement()))
-                reportError(entity, lineNumber, currentPath, "invalid parent XML tag; was expecting '" + itemDef.getParentXmlElement() + "' but got '" + parentTag + "'", itemDef);
+                reportSyntaxError("invalid parent XML tag; was expecting '" + itemDef.getParentXmlElement() + "' but got '" + parentTag + "'");
 
             // value should be valid
-            if (item.getValue() != null) {
+            if (item.getValue() != null && _context.getOptions().getValidateValues()) {
                 if (item.getValue().length() > itemDef.getLength())
                     reportError(entity, lineNumber, currentPath, "value too long, expected at most " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef,
                             item.getValue());
@@ -175,7 +224,7 @@ public class NaaccrPatientConverter implements Converter {
 
         }
 
-        return item;
+        entity.getItems().add(item);
     }
 
     protected boolean exactLengthRequired(String type) {
@@ -188,7 +237,6 @@ public class NaaccrPatientConverter implements Converter {
     protected void reportError(AbstractEntity entity, int line, String path, String msg) {
         reportError(entity, line, path, msg, null, null);
     }
-
 
     protected void reportError(AbstractEntity entity, int line, String path, String msg, RuntimeNaaccrDictionaryItem def) {
         reportError(entity, line, path, msg, def, null);
@@ -208,9 +256,9 @@ public class NaaccrPatientConverter implements Converter {
         entity.getValidationErrors().add(error);
     }
 
-    protected ConversionException reportSyntaxError(String message) {
+    protected void reportSyntaxError(String message) {
         ConversionException ex = new ConversionException(message);
         ex.add("message", message);
-        return ex;
+        throw ex;
     }
 }

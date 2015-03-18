@@ -34,13 +34,16 @@ public class PatientFlatReader implements AutoCloseable {
 
     protected String _previousLine;
 
-    public PatientFlatReader(Reader reader, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException {
+    public PatientFlatReader(Reader reader, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         _reader = new LineNumberReader(reader);
         _options = options == null ? new NaaccrXmlOptions() : options;
 
-        // TODO FPD add better validation
-
-        _previousLine = _reader.readLine();
+        try {
+            _previousLine = _reader.readLine();
+        }
+        catch (IOException e) {
+            throw new NaaccrIOException(e.getMessage());
+        }
         NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromFlatFileLine(_previousLine));
         NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByVersion(naaccrFormat.getNaaccrVersion());
         _dictionary = new RuntimeNaaccrDictionary(naaccrFormat.getRecordType(), baseDictionary, userDictionary);
@@ -49,8 +52,8 @@ public class PatientFlatReader implements AutoCloseable {
         // read the root items
         if (_previousLine != null)
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
-                if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(itemDef.getParentXmlElement()) && !_options.getItemsToExclude().contains(itemDef.getNaaccrId()))
-                    addItemFromLine(_rootData, _previousLine, itemDef);
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(itemDef.getParentXmlElement()))
+                    addItemFromLine(_rootData, _previousLine, _reader.getLineNumber(), itemDef);
 
         // let's cache the grouping items, we are going to need them a lot...
         _groupingItems = new ArrayList<>();
@@ -66,29 +69,34 @@ public class PatientFlatReader implements AutoCloseable {
      * @return the next available patient, null if not such patient
      * @throws IOException
      */
-    public Patient readPatient() throws IOException {
+    public Patient readPatient() throws NaaccrIOException {
         List<String> lines = new ArrayList<>();
         List<Integer> lineNumbers = new ArrayList<>();
 
-        if (_previousLine == null) {
-            _previousLine = _reader.readLine();
-            if (_previousLine == null) // would be an empty file...
-                return null;
-        }
-
-        Map<String, String> firstLineGroupingValues = extractGroupingValues(_previousLine, _groupingItems);
-        lines.add(_previousLine);
-        lineNumbers.add(_reader.getLineNumber());
-        _previousLine = _reader.readLine();
-        while (_previousLine != null) {
-            boolean samePatient = firstLineGroupingValues.equals(extractGroupingValues(_previousLine, _groupingItems));
-            if (samePatient) {
-                lines.add(_previousLine);
-                lineNumbers.add(_reader.getLineNumber());
+        try {
+            if (_previousLine == null) {
                 _previousLine = _reader.readLine();
+                if (_previousLine == null) // would be an empty file...
+                    return null;
             }
-            else
-                break;
+
+            Map<String, String> firstLineGroupingValues = extractGroupingValues(_previousLine, _reader.getLineNumber() - 1, _groupingItems);
+            lines.add(_previousLine);
+            lineNumbers.add(_reader.getLineNumber() - 1);
+            _previousLine = _reader.readLine();
+            while (_previousLine != null) {
+                boolean samePatient = firstLineGroupingValues.equals(extractGroupingValues(_previousLine, _reader.getLineNumber(), _groupingItems));
+                if (samePatient) {
+                    lines.add(_previousLine);
+                    lineNumbers.add(_reader.getLineNumber());
+                    _previousLine = _reader.readLine();
+                }
+                else
+                    break;
+            }
+        }
+        catch (IOException e) {
+            throw new NaaccrIOException(e.getMessage());
         }
 
         return lines.isEmpty() ? null : createPatientFromLines(lines, lineNumbers);
@@ -103,15 +111,20 @@ public class PatientFlatReader implements AutoCloseable {
     }
 
     @Override
-    public void close() throws IOException {
-        _reader.close();
+    public void close() throws NaaccrIOException {
+        try {
+            _reader.close();
+        }
+        catch (IOException e) {
+            throw new NaaccrIOException(e.getMessage());
+        }
     }
 
-    protected Map<String, String> extractGroupingValues(String line, List<RuntimeNaaccrDictionaryItem> itemDefs) {
+    protected Map<String, String> extractGroupingValues(String line, Integer linNumber, List<RuntimeNaaccrDictionaryItem> itemDefs) {
         Map<String, String> values = new HashMap<>();
 
         for (RuntimeNaaccrDictionaryItem itemDef : itemDefs) {
-            Item item = createItemFromLine(line, itemDef);
+            Item item = createItemFromLine(null, line, linNumber, itemDef);
             if (item != null)
                 values.put(item.getNaaccrId(), item.getValue());
         }
@@ -119,21 +132,20 @@ public class PatientFlatReader implements AutoCloseable {
         return values;
     }
 
-    protected Patient createPatientFromLines(List<String> lines, List<Integer> lineNumbers) throws IOException {
+    protected Patient createPatientFromLines(List<String> lines, List<Integer> lineNumbers) throws NaaccrIOException {
         Patient patient = new Patient();
 
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
+            Integer lineNumber = lineNumbers.get(i);
 
             Tumor tumor = new Tumor();
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
-                if (_options.getItemsToExclude().contains(itemDef.getNaaccrId()))
-                    continue;
                 if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement())) {
                     if (i == 0)
-                        addItemFromLine(patient, line, itemDef);
+                        addItemFromLine(patient, line, lineNumber, itemDef);
                     else if (_options.getReportLevelMismatch()) {
-                        Item currentTumorItem = createItemFromLine(line, itemDef);
+                        Item currentTumorItem = createItemFromLine(null, line, lineNumber, itemDef);
                         String patValue = patient.getItemValue(itemDef.getNaaccrId());
                         String tumorValue = currentTumorItem == null ? null : currentTumorItem.getValue();
                         boolean same = patValue == null ? tumorValue == null : patValue.equals(tumorValue);
@@ -148,7 +160,7 @@ public class PatientFlatReader implements AutoCloseable {
                     }
                 }
                 else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
-                    addItemFromLine(tumor, line, itemDef);
+                    addItemFromLine(tumor, line, lineNumber, itemDef);
             }
             patient.getTumors().add(tumor);
         }
@@ -156,13 +168,13 @@ public class PatientFlatReader implements AutoCloseable {
         return patient;
     }
 
-    protected void addItemFromLine(AbstractEntity entity, String line, RuntimeNaaccrDictionaryItem itemDef) {
-        Item item = createItemFromLine(line, itemDef);
-        if (item != null)
+    protected void addItemFromLine(AbstractEntity entity, String line, Integer lineNumber, RuntimeNaaccrDictionaryItem itemDef) {
+        Item item = createItemFromLine(entity, line, lineNumber, itemDef);
+        if (item != null && !_options.getItemsToExclude().contains(itemDef.getNaaccrId()))
             entity.getItems().add(item);
     }
 
-    protected Item createItemFromLine(String line, RuntimeNaaccrDictionaryItem itemDef) {
+    protected Item createItemFromLine(AbstractEntity entity, String line, Integer lineNumber, RuntimeNaaccrDictionaryItem itemDef) {
         Item item = null;
 
         int start = itemDef.getStartColumn() - 1; // dictionary is 1-based; Java substring is 0-based...
@@ -181,9 +193,42 @@ public class PatientFlatReader implements AutoCloseable {
                 item.setNaaccrId(itemDef.getNaaccrId());
                 item.setNaaccrNum(itemDef.getNaaccrNum());
                 item.setValue(value);
+
+                if (entity != null && _options.getValidateValues()) {
+                    if (item.getValue().length() > itemDef.getLength())
+                        reportError(entity, lineNumber, "value too long, expected at most " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef,
+                                item.getValue());
+                    else if (exactLengthRequired(itemDef.getDataType()) && item.getValue().length() != itemDef.getLength())
+                        reportError(entity, lineNumber, "invalid value, expected exactly " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef,
+                                item.getValue());
+                    else if (itemDef.getDataType() != null && !NaaccrDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(itemDef.getDataType()).matcher(item.getValue()).matches())
+                        reportError(entity, lineNumber, "invalid value according to the definition of data type '" + itemDef.getDataType() + "'", itemDef, item.getValue());
+                    else if (itemDef.getRegexValidation() != null && !itemDef.getRegexValidation().matcher(item.getValue()).matches())
+                        reportError(entity, lineNumber, "invalid value according to specific item validation", itemDef, item.getValue());
+                }
             }
         }
 
         return item;
+    }
+
+    protected boolean exactLengthRequired(String type) {
+        boolean result = NaaccrDictionaryUtils.NAACCR_DATA_TYPE_ALPHA.equals(type);
+        result |= NaaccrDictionaryUtils.NAACCR_DATA_TYPE_DIGITS.equals(type);
+        result |= NaaccrDictionaryUtils.NAACCR_DATA_TYPE_MIXED.equals(type);
+        return result;
+    }
+
+    protected void reportError(AbstractEntity entity, int line, String msg, RuntimeNaaccrDictionaryItem def, String value) {
+        NaaccrValidationError error = new NaaccrValidationError();
+        error.setMessage(msg);
+        error.setLineNumber(line);
+        if (def != null) {
+            error.setNaaccrId(def.getNaaccrId());
+            error.setNaaccrNum(def.getNaaccrNum());
+        }
+        if (value != null && !value.isEmpty())
+            error.setValue(value);
+        entity.getValidationErrors().add(error);
     }
 }

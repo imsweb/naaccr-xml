@@ -28,15 +28,15 @@ public class PatientFlatWriter implements AutoCloseable {
 
     protected RuntimeNaaccrDictionaryItem _naaccrVersionItem, _recordTypeItem;
 
-    public PatientFlatWriter(Writer writer, NaaccrData data) throws IOException {
+    public PatientFlatWriter(Writer writer, NaaccrData data) throws NaaccrIOException {
         this(writer, data, null, null);
     }
 
-    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrXmlOptions options) throws IOException {
+    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrXmlOptions options) throws NaaccrIOException {
         this(writer, data, options, null);
     }
 
-    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException {
+    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         _writer = new BufferedWriter(writer);
         _rootData = data;
         _options = options == null ? new NaaccrXmlOptions() : options;
@@ -57,19 +57,29 @@ public class PatientFlatWriter implements AutoCloseable {
         }
     }
 
-    public void writePatient(Patient patient) throws IOException {
+    public void writePatient(Patient patient) throws NaaccrIOException {
         for (String line : createLinesFromPatient(_rootData, patient)) {
-            _writer.write(line);
-            _writer.newLine();
+            try {
+                _writer.write(line);
+                _writer.newLine();
+            }
+            catch (IOException e) {
+                throw new NaaccrIOException(e.getMessage());
+            }
         }
     }
 
     @Override
-    public void close() throws IOException {
-        _writer.close();
+    public void close() throws NaaccrIOException {
+        try {
+            _writer.close();
+        }
+        catch (IOException e) {
+            throw new NaaccrIOException(e.getMessage());
+        }
     }
 
-    protected List<String> createLinesFromPatient(NaaccrData root, Patient patient) throws IOException {
+    protected List<String> createLinesFromPatient(NaaccrData root, Patient patient) throws NaaccrIOException {
         List<String> lines = new ArrayList<>();
 
         // it's possible to have a patient without any tumor; in that case, we will want to output a line...
@@ -129,7 +139,7 @@ public class PatientFlatWriter implements AutoCloseable {
         return lines;
     }
 
-    protected String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, NaaccrData root, Patient patient, Tumor tumor) throws IOException {
+    protected String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, NaaccrData root, Patient patient, Tumor tumor) throws NaaccrIOException {
         String value;
 
         if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(itemDef.getParentXmlElement()))
@@ -139,7 +149,7 @@ public class PatientFlatWriter implements AutoCloseable {
         else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
             value = tumor.getItemValue(itemDef.getNaaccrId());
         else
-            throw new IOException("Unsupported parent element: " + itemDef.getParentXmlElement());
+            throw new NaaccrIOException("Unsupported parent element: " + itemDef.getParentXmlElement());
 
         return value;
     }

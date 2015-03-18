@@ -22,13 +22,13 @@ import org.naaccr.xml.entity.Tumor;
 public class ValidationTest {
 
     @Test
-    public void testReadingXml() throws IOException, NaaccrValidationException {
+    public void testReadingXml() throws IOException {
         File file = new File(System.getProperty("user.dir") + "/src/test/resources/validation-test-1.xml");
-        
+
         // get the format from the file (not necessary, one could hard-code it in the reading call)
         String format = NaaccrXmlUtils.getFormatFromXmlFile(file);
         Assert.assertNotNull(format);
-        
+
         // read the entire file at once
         NaaccrData data = NaaccrXmlUtils.readXmlFile(file, null, null, null);
         Assert.assertNotNull(data.getBaseDictionaryUri());
@@ -37,7 +37,7 @@ public class ValidationTest {
         Assert.assertNotNull(data.getTimeGenerated());
         Assert.assertEquals(1, data.getItems().size());
         Assert.assertEquals(2, data.getPatients().size());
-        
+
         // read the file using a stream
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file))) {
             data = reader.getRootData();
@@ -58,7 +58,7 @@ public class ValidationTest {
     }
 
     @Test
-    public void testWritingXml() throws IOException, NaaccrValidationException {
+    public void testWritingXml() throws IOException {
         NaaccrData data = new NaaccrData();
         data.setBaseDictionaryUri(NaaccrDictionaryUtils.createUriFromVersion("140", true));
         data.setRecordType("I");
@@ -87,7 +87,7 @@ public class ValidationTest {
     }
 
     @Test
-    public void testFlatToXmlAndXmlToFlat() throws IOException, NaaccrValidationException {
+    public void testFlatToXmlAndXmlToFlat() throws IOException {
         File xmlFile1 = new File(System.getProperty("user.dir") + "/src/test/resources/validation-test-1.xml");
         NaaccrData data1 = NaaccrXmlUtils.readXmlFile(xmlFile1, null, null, null);
 

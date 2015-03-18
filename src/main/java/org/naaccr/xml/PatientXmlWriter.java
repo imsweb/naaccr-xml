@@ -26,19 +26,19 @@ public class PatientXmlWriter implements AutoCloseable {
 
     protected XStream _xstream;
 
-    public PatientXmlWriter(Writer writer, NaaccrData rootData) throws IOException {
+    public PatientXmlWriter(Writer writer, NaaccrData rootData) throws NaaccrIOException {
         this(writer, rootData, null, null, null);
     }
 
-    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrXmlOptions options) throws IOException {
+    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrXmlOptions options) throws NaaccrIOException {
         this(writer, rootData, options, null, null);
     }
 
-    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws IOException {
+    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         this(writer, rootData, options, userDictionary, null);
     }
     
-    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws IOException {
+    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
 
         // we always need options
         if (options == null)
@@ -54,7 +54,12 @@ public class PatientXmlWriter implements AutoCloseable {
         _writer = new PrettyPrintWriter(writer, new char[] {' ', ' ', ' ', ' '});
 
         // write the header // TODO FPD look into a header writer, I think there is a class that does that already...
-        writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));
+        try {
+            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));
+        }
+        catch (IOException e) {
+            throw new NaaccrIOException(e.getMessage());
+        }
 
         // write standard attributes
         _writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT);
@@ -82,18 +87,8 @@ public class PatientXmlWriter implements AutoCloseable {
         configuration.getPatientConverter().setContext(context);
 
         // write the root items
-        for (Item item : rootData.getItems()) {
-            if (!options.getItemsToExclude().contains(item.getNaaccrId())) {
-                // TODO FPD, wouldn't it be better to define an item converter? But then I want to share it with the patient converter!
-                _writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
-                _writer.addAttribute("naaccrId", item.getNaaccrId());
-                if (item.getNaaccrNum() != null)
-                    _writer.addAttribute("naaccrNum", item.getNaaccrNum().toString()); // TODO FPD need to use the options to know if the num needs to be written...
-                if (item.getValue() != null)
-                    _writer.setValue(item.getValue());
-                _writer.endNode();
-            }
-        }
+        for (Item item : rootData.getItems())
+            configuration.getPatientConverter().writeItem(item, _writer);
 
         // for now, ignore the root extension...
 
@@ -101,12 +96,12 @@ public class PatientXmlWriter implements AutoCloseable {
         _xstream = configuration.getXstream();
     }
 
-    public void writePatient(Patient patient) throws IOException {
+    public void writePatient(Patient patient) throws NaaccrIOException {
         _xstream.marshal(patient, _writer);
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         _writer.endNode();
         _writer.close();
     }

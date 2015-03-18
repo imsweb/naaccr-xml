@@ -47,8 +47,8 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.io.IOUtils;
 import org.naaccr.xml.NaaccrFormat;
+import org.naaccr.xml.NaaccrIOException;
 import org.naaccr.xml.NaaccrValidationError;
-import org.naaccr.xml.NaaccrValidationException;
 import org.naaccr.xml.NaaccrXmlUtils;
 import org.naaccr.xml.PatientXmlReader;
 import org.naaccr.xml.entity.Patient;
@@ -243,7 +243,7 @@ public class Standalone {
                         NaaccrXmlUtils.flatToXml(sourceFile, targetFile, null, null, null); // TODO FPD add observer
                         flatToXmlResultLbl.setText("Done processing source flat file...");
                     }
-                    catch (IOException | NaaccrValidationException ex) {
+                    catch (NaaccrIOException ex) {
                         JOptionPane.showMessageDialog(StandaloneFrame.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                         flatToXmlResultLbl.setText("Provide a value for the parameters and click the Process File button...");
                     }
@@ -363,7 +363,7 @@ public class Standalone {
                         NaaccrXmlUtils.xmlToFlat(sourceFile, targetFile, null, null, null); // TOOD FPD add observer
                         xmlToFlatResultLbl.setText("Done processing source XML file...");
                     }
-                    catch (IOException | NaaccrValidationException ex) {
+                    catch (NaaccrIOException ex) {
                         JOptionPane.showMessageDialog(StandaloneFrame.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                         xmlToFlatResultLbl.setText("Provide a value for the parameters and click the Process File button...");
                     }
@@ -451,7 +451,7 @@ public class Standalone {
                                 errorsFld.setForeground(new Color(0, 115, 0));
                             }
                         }
-                        catch (NaaccrValidationException error) {
+                        catch (NaaccrIOException error) {
                             errorsFld.setForeground(new Color(125, 0, 0));
                             if (!errorsFld.getText().isEmpty())
                                 errorsFld.append("\n");
@@ -463,7 +463,7 @@ public class Standalone {
                             errorsFld.append("   value: <not available>\n");
                             errorsFld.append("\nReading interrupted because of a syntax error...");
                         }
-                        catch (IOException ex) {
+                        catch (Exception ex) {
                             errorsFld.setForeground(new Color(125, 0, 0));
                             errorsFld.append("Unexpected error:\n");
                             errorsFld.append("      -> " + ex.getMessage() + "\n");
