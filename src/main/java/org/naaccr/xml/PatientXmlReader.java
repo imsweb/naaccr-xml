@@ -26,6 +26,8 @@ public class PatientXmlReader implements AutoCloseable {
 
     protected XStream _xstream;
 
+    protected NaaccrStreamContext _context;
+
     public PatientXmlReader(Reader reader) throws NaaccrIOException {
         this(reader, null, null, null);
     }
@@ -95,11 +97,15 @@ public class PatientXmlReader implements AutoCloseable {
         _reader.moveDown();
 
         // now we are ready to create our reading context and make it available to the patient converter
-        NaaccrStreamContext context = new NaaccrStreamContext();
-        context.setDictionary(new RuntimeNaaccrDictionary(_rootData.getRecordType(), baseDictionary, userDictionary));
-        context.setOptions(options);
-        context.setParser(configuration.getParser());
-        configuration.getPatientConverter().setContext(context);
+        _context = new NaaccrStreamContext();
+        _context.setDictionary(new RuntimeNaaccrDictionary(_rootData.getRecordType(), baseDictionary, userDictionary));
+        _context.setOptions(options);
+        _context.setParser(configuration.getParser());
+        configuration.getPatientConverter().setContext(_context);
+
+        // check order of the tags
+        if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM) && !_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT))
+            throw new NaaccrIOException("Unexpected tag: " + _reader.getNodeName(), configuration.getParser().getLineNumber());
 
         // read the root items
         while (_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM)) {
@@ -117,8 +123,7 @@ public class PatientXmlReader implements AutoCloseable {
         }
 
         if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT))
-            throw new NaaccrIOException("Was expecting " + NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT + " repeating tag but got " + _reader.getNodeName(),
-                    configuration.getParser().getLineNumber());
+            throw new NaaccrIOException("Unexpected tag: " + _reader.getNodeName(), configuration.getParser().getLineNumber());
 
         // need to expose xstream so the other methods can use it...
         _xstream = configuration.getXstream();
@@ -130,6 +135,12 @@ public class PatientXmlReader implements AutoCloseable {
      * @throws NaaccrIOException
      */
     public Patient readPatient() throws NaaccrIOException {
+        if (_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
+            return null;
+
+        if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT))
+            throw new NaaccrIOException("Unexpected tag: " + _reader.getNodeName(), _context.getParser().getLineNumber());
+
         Patient patient;
         try {
             patient = (Patient)_xstream.unmarshal(_reader);
@@ -146,6 +157,7 @@ public class PatientXmlReader implements AutoCloseable {
             e.setPath(ex.get("path"));
             throw e;
         }
+
         return patient;
     }
 
