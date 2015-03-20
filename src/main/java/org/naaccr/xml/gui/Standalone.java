@@ -4,60 +4,139 @@
 package org.naaccr.xml.gui;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.ComponentOrientation;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 
-import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 
-import org.apache.commons.io.IOUtils;
-import org.naaccr.xml.NaaccrFormat;
-import org.naaccr.xml.NaaccrIOException;
-import org.naaccr.xml.NaaccrValidationError;
-import org.naaccr.xml.NaaccrXmlUtils;
-import org.naaccr.xml.PatientXmlReader;
-import org.naaccr.xml.entity.Patient;
+import org.naaccr.xml.gui.pages.FlatToXmlPage;
+import org.naaccr.xml.gui.pages.XmlToFlatPage;
 
-@SuppressWarnings("unchecked")
-public class Standalone {
+public class Standalone extends JFrame {
+    
+    private CardLayout _layout;
+    private JPanel _centerPnl;
+    private JLabel _titleLbl;
+    private List<JButton> _buttons = new ArrayList<>();
+
+    public Standalone() {
+        this.setTitle("NAACCR XML Utility v0.4");
+        this.setPreferredSize(new Dimension(1000, 700));
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.getContentPane().setLayout(new BorderLayout());
+
+        JPanel northPnl = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        northPnl.setBackground(new Color(134, 178, 205));
+        northPnl.setBorder(new CompoundBorder(new MatteBorder(1, 1, 1, 1, Color.GRAY), new EmptyBorder(0, 5, 0, 5)));
+        _titleLbl = new JLabel();
+        northPnl.add(_titleLbl);
+        this.add(northPnl, BorderLayout.NORTH);
+        
+        JToolBar toolbar = new JToolBar();
+        toolbar.setOpaque(true);
+        toolbar.setBackground(new Color(167, 191, 205));
+        toolbar.setFloatable(false);
+        toolbar.setBorder(new CompoundBorder(new MatteBorder(0, 1, 1, 1, Color.GRAY), new EmptyBorder(5, 10, 5, 10)));
+        
+        toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
+        toolbar.add(createToolbarButton("Flat to XML", "flat_to_xml.png", "flat-to-xml", "transform a NAACCR Flat file into the corresponding NAACCR XML file."));
+        toolbar.add(Box.createVerticalStrut(15));
+        toolbar.add(createToolbarButton("XML to Flat", "xml_to_flat.png", "xml-to-flat", "TODO"));
+        toolbar.add(Box.createVerticalStrut(15));
+        toolbar.add(createToolbarButton("Dictionary", "dictionary.png", "dictionary", "TODO"));
+        //toolbar.add(Box.createVerticalStrut(15));
+        //toolbar.add(createToolbarButton("Samples", "dictionary.png", "samples"));
+        this.getContentPane().add(toolbar, BorderLayout.WEST);
+
+        _centerPnl = new JPanel();
+        _centerPnl.setBorder(null);
+        _layout = new CardLayout();
+        _centerPnl.setLayout(_layout);
+        _centerPnl.add("flat-to-xml", new FlatToXmlPage());
+        _centerPnl.add("xml-to-flat", new XmlToFlatPage());
+        this.getContentPane().add(_centerPnl, BorderLayout.CENTER);
+
+        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, final Throwable e) {
+                //e.printStackTrace(); // TODO FPD
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        String msg = "An unexpected error happened, it is recommended to close the application.\n\n   Error: " + (e.getMessage() == null ? "null access" : e.getMessage());
+                        JOptionPane.showMessageDialog(Standalone.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+            }
+        });
+        
+        _buttons.get(0).doClick();
+    }
+
+    private JButton createToolbarButton(final String text, String icon, final String pageId, final String description) {
+        JButton btn = new JButton();
+        btn.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("icons/" + icon)));
+        btn.setOpaque(false);
+        btn.setFocusPainted(false);
+        btn.setFocusable(false);
+        btn.setBorder(new EmptyBorder(10, 5, 5, 5));
+        btn.setText("<html><b>" + text + "<b></html>");
+        btn.setForeground(Color.GRAY);
+        btn.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btn.setHorizontalTextPosition(SwingConstants.CENTER);
+        btn.setActionCommand(text);
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                _titleLbl.setText(text + ": " + description);
+                _layout.show(_centerPnl, pageId);
+                for (JButton btn : _buttons)
+                    btn.setForeground(btn.getActionCommand().equals(text) ? Color.BLACK : Color.GRAY);
+            }
+        });
+        _buttons.add(btn);
+        return btn;
+    }
+    
+    public static JLabel createItalicLabel(String text) {
+        JLabel lbl = new JLabel(text);
+        lbl.setFont(lbl.getFont().deriveFont(Font.ITALIC));
+        return lbl;
+    }
+
+    public static JLabel createBoldLabel(String text) {
+        JLabel lbl = new JLabel(text);
+        lbl.setFont(lbl.getFont().deriveFont(Font.BOLD));
+        return lbl;
+    }
 
     public static void main(String[] args) {
-        
+
         if (System.getProperty("os.name").toLowerCase().contains("windows")) {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -71,7 +150,7 @@ public class Standalone {
             UIManager.put("TabbedPane.tabAreaInsets", insets);
         }
 
-        final JFrame frame = new StandaloneFrame();
+        final JFrame frame = new Standalone();
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -82,486 +161,4 @@ public class Standalone {
             }
         });
     }
-
-    private static class StandaloneFrame extends JFrame {
-
-        private JFileChooser _fileChooser;
-
-        public StandaloneFrame() {
-            this.setTitle("NAACCR XML Utility v0.4");
-            this.setPreferredSize(new Dimension(1000, 700));
-            this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-            JPanel contentPnl = new JPanel();
-            contentPnl.setOpaque(true);
-            contentPnl.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            contentPnl.setLayout(new BorderLayout());
-            contentPnl.setBackground(new Color(180, 191, 211));
-            this.getContentPane().setLayout(new BorderLayout());
-            this.getContentPane().add(contentPnl, BorderLayout.CENTER);
-            
-            JPanel northPnl = new JPanel(new FlowLayout(FlowLayout.LEADING));
-            northPnl.setOpaque(false);
-            JLabel northLbl = new JLabel("This GUI is in a very early phase; feel free to report bugs in the \"Java library beta testing\" basecamp thread.");
-            northLbl.setForeground(new Color(150, 0, 0));
-            northPnl.add(northLbl);
-            contentPnl.add(northPnl, BorderLayout.NORTH);
-            
-            JTabbedPane pane = new JTabbedPane();
-            pane.add("  Transform Flat to XML  ", crateFlatToXmlPanel());
-            pane.add("  Transform XML to Flat  ", crateXmlToFlatPanel());
-            pane.add("  Validation Proof of Concept  ", crateValidationTestPanel());
-            pane.add("  Dictionary (XML Format)  ", crateDictionaryPanel());
-            pane.add("  More XML Data Examples  ", crateExamplePanel());
-            contentPnl.add(pane, BorderLayout.CENTER);
-
-            _fileChooser = new JFileChooser();
-            _fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            _fileChooser.setDialogTitle("Select File");
-            _fileChooser.setApproveButtonToolTipText("Select file");
-            _fileChooser.setMultiSelectionEnabled(false);
-        }
-        
-        private String invertFilename(File file) {
-            String[] name = file.getName().split("\\.");
-            if (name.length < 2)
-                return null;
-            String extension = name[name.length - 1];
-            boolean compressed = false;
-            if (extension.equalsIgnoreCase("gz")) {
-                extension = name[name.length - 2];
-                compressed = true;
-            }
-            StringBuilder result = new StringBuilder();
-            for (int i = 0; i < (compressed ? name.length - 2 : name.length - 1); i++)
-                result.append(name[i]).append(".");
-            result.append(extension.equalsIgnoreCase("xml") ? "txt" : "xml");
-            if (compressed)
-                result.append(".gz");
-            return new File(file.getParentFile(), result.toString()).getAbsolutePath();
-        }
-
-        private JPanel crateFlatToXmlPanel() {
-            final JPanel pnl = new JPanel();
-            pnl.setOpaque(false);
-            pnl.setBorder(null);
-            pnl.setLayout(new BoxLayout(pnl, BoxLayout.PAGE_AXIS));
-
-            JPanel row1Pnl = new JPanel();
-            row1Pnl.setOpaque(false);
-            row1Pnl.setBorder(null);
-            row1Pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 5));
-            JLabel flatToXmlSourceLbl = new JLabel("Source Flat File:");
-            flatToXmlSourceLbl.setFont(flatToXmlSourceLbl.getFont().deriveFont(Font.BOLD));
-            row1Pnl.add(flatToXmlSourceLbl);
-            final JTextField flatToXmlSourceFld = new JTextField(75);
-            row1Pnl.add(flatToXmlSourceFld);
-            JButton flatToXmlSourceBtn = new JButton("Browse...");
-            row1Pnl.add(flatToXmlSourceBtn);
-            pnl.add(row1Pnl);
-
-            JPanel row3Pnl = new JPanel();
-            row3Pnl.setOpaque(false);
-            row3Pnl.setBorder(null);
-            row3Pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 5));
-            JLabel flatToXmlFormatLbl = new JLabel("File Format:");
-            flatToXmlFormatLbl.setFont(flatToXmlFormatLbl.getFont().deriveFont(Font.BOLD));
-            flatToXmlFormatLbl.setPreferredSize(flatToXmlSourceLbl.getPreferredSize());
-            flatToXmlFormatLbl.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-            row3Pnl.add(flatToXmlFormatLbl);
-            List<String> supportedFormat = new ArrayList<>(NaaccrFormat.getSupportedFormats());
-            supportedFormat.add("< none selected >");
-            Collections.sort(supportedFormat);
-            final JComboBox flatToXmlFormatBox = new JComboBox(supportedFormat.toArray(new String[supportedFormat.size()]));
-            row3Pnl.add(flatToXmlFormatBox);
-            row3Pnl.add(new JLabel("  (the format will be automatically set after you select a source file, if possible)"));
-            pnl.add(row3Pnl);
-
-            JPanel row2Pnl = new JPanel();
-            row2Pnl.setOpaque(false);
-            row2Pnl.setBorder(null);
-            row2Pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 5));
-            JLabel flatToXmlTargetLbl = new JLabel("Target XML File:");
-            flatToXmlTargetLbl.setFont(flatToXmlTargetLbl.getFont().deriveFont(Font.BOLD));
-            row2Pnl.add(flatToXmlTargetLbl);
-            final JTextField flatToXmlTargetFld = new JTextField(75);
-            row2Pnl.add(flatToXmlTargetFld);
-            JButton flatToXmlTargetBtn = new JButton("Browse...");
-            row2Pnl.add(flatToXmlTargetBtn);
-            pnl.add(row2Pnl);
-
-            JPanel row5Pnl = new JPanel();
-            row5Pnl.setOpaque(false);
-            row5Pnl.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
-            row5Pnl.setLayout(new FlowLayout(FlowLayout.CENTER));
-            final JLabel flatToXmlResultLbl = new JLabel("Provide a value for the parameters and click the Process File button...");
-            flatToXmlResultLbl.setFont(flatToXmlResultLbl.getFont().deriveFont(Font.ITALIC));
-            row5Pnl.add(flatToXmlResultLbl);
-            pnl.add(row5Pnl);
-
-            JPanel row4Pnl = new JPanel();
-            row4Pnl.setOpaque(false);
-            row4Pnl.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-            row4Pnl.setLayout(new FlowLayout(FlowLayout.CENTER));
-            final JButton flatToXmlProcessBtn = new JButton("Process File");
-            row4Pnl.add(flatToXmlProcessBtn);
-            pnl.add(row4Pnl);
-
-            flatToXmlSourceBtn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int returnVal = _fileChooser.showDialog(StandaloneFrame.this, "Select");
-                    if (returnVal == JFileChooser.APPROVE_OPTION) {
-                        flatToXmlSourceFld.setText(_fileChooser.getSelectedFile().getAbsolutePath());
-                        String format = NaaccrXmlUtils.getFormatFromFlatFile(_fileChooser.getSelectedFile());
-                        if (format != null)
-                            flatToXmlFormatBox.setSelectedItem(format);
-                        flatToXmlTargetFld.setText(invertFilename(_fileChooser.getSelectedFile()));
-                        flatToXmlProcessBtn.requestFocusInWindow();
-                    }
-                }
-            });
-
-            flatToXmlTargetBtn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int returnVal = _fileChooser.showDialog(StandaloneFrame.this, "Select");
-                    if (returnVal == JFileChooser.APPROVE_OPTION)
-                        flatToXmlTargetFld.setText(_fileChooser.getSelectedFile().getAbsolutePath());
-                }
-            });
-
-            flatToXmlProcessBtn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    File sourceFile = new File(flatToXmlSourceFld.getText());
-                    File targetFile = new File(flatToXmlTargetFld.getText());
-                    String format = (String)flatToXmlFormatBox.getSelectedItem();
-                    flatToXmlResultLbl.setText("Processing file...");
-                    pnl.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    try {
-                        NaaccrXmlUtils.flatToXml(sourceFile, targetFile, null, null, null); // TODO FPD add observer
-                        flatToXmlResultLbl.setText("Done processing source flat file...");
-                    }
-                    catch (NaaccrIOException ex) {
-                        JOptionPane.showMessageDialog(StandaloneFrame.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        flatToXmlResultLbl.setText("Provide a value for the parameters and click the Process File button...");
-                    }
-                    finally {
-                        pnl.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                    }
-                }
-            });
-
-            JPanel wrapperPnl = new JPanel(new BorderLayout());
-            wrapperPnl.setOpaque(true);
-            wrapperPnl.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-            wrapperPnl.add(pnl, BorderLayout.NORTH);
-            return wrapperPnl;
-        }
-
-        private JPanel crateXmlToFlatPanel() {
-            final JPanel pnl = new JPanel();
-            pnl.setOpaque(false);
-            pnl.setBorder(null);
-            pnl.setLayout(new BoxLayout(pnl, BoxLayout.PAGE_AXIS));
-
-
-            JPanel row1Pnl = new JPanel();
-            row1Pnl.setOpaque(false);
-            row1Pnl.setBorder(null);
-            row1Pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 5));
-            JLabel xmlToFlatSourceLbl = new JLabel("Source XML File:");
-            xmlToFlatSourceLbl.setFont(xmlToFlatSourceLbl.getFont().deriveFont(Font.BOLD));
-            row1Pnl.add(xmlToFlatSourceLbl);
-            final JTextField xmlToFlatSourceFld = new JTextField(75);
-            row1Pnl.add(xmlToFlatSourceFld);
-            JButton xmlToFlatSourceBtn = new JButton("Browse...");
-            row1Pnl.add(xmlToFlatSourceBtn);
-            pnl.add(row1Pnl);
-
-            JPanel row2Pnl = new JPanel();
-            row2Pnl.setOpaque(false);
-            row2Pnl.setBorder(null);
-            row2Pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 5));
-            JLabel xmlToFlatFormatLbl = new JLabel("File Format:");
-            xmlToFlatFormatLbl.setFont(xmlToFlatFormatLbl.getFont().deriveFont(Font.BOLD));
-            xmlToFlatFormatLbl.setPreferredSize(xmlToFlatSourceLbl.getPreferredSize());
-            xmlToFlatFormatLbl.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-            row2Pnl.add(xmlToFlatFormatLbl);
-            List<String> supportedFormat = new ArrayList<>(NaaccrFormat.getSupportedFormats());
-            supportedFormat.add("< none selected >");
-            Collections.sort(supportedFormat);
-            final JComboBox xmlToFlatFormatBox = new JComboBox(supportedFormat.toArray(new String[supportedFormat.size()]));
-            row2Pnl.add(xmlToFlatFormatBox);
-            row2Pnl.add(new JLabel("  (the format will be automatically set after you select a source file, if possible)"));
-            pnl.add(row2Pnl);
-            
-            JPanel row3Pnl = new JPanel();
-            row3Pnl.setOpaque(false);
-            row3Pnl.setBorder(null);
-            row3Pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 5));
-            JLabel xmlToFlatTargetLbl = new JLabel("Target Flat File:");
-            xmlToFlatTargetLbl.setFont(xmlToFlatTargetLbl.getFont().deriveFont(Font.BOLD));
-            row3Pnl.add(xmlToFlatTargetLbl);
-            final JTextField xmlToFlatTargetFld = new JTextField(75);
-            row3Pnl.add(xmlToFlatTargetFld);
-            JButton xmlToFlatTargetBtn = new JButton("Browse...");
-            row3Pnl.add(xmlToFlatTargetBtn);
-            pnl.add(row3Pnl);
-
-            JPanel row4Pnl = new JPanel();
-            row4Pnl.setOpaque(false);
-            row4Pnl.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
-            row4Pnl.setLayout(new FlowLayout(FlowLayout.CENTER));
-            final JLabel xmlToFlatResultLbl = new JLabel("Provide a value for the parameters and click the Process File button...");
-            xmlToFlatResultLbl.setFont(xmlToFlatResultLbl.getFont().deriveFont(Font.ITALIC));
-            row4Pnl.add(xmlToFlatResultLbl);
-            pnl.add(row4Pnl);
-
-            JPanel row5Pnl = new JPanel();
-            row5Pnl.setOpaque(false);
-            row5Pnl.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-            row5Pnl.setLayout(new FlowLayout(FlowLayout.CENTER));
-            final JButton xmlToFlatProcessBtn = new JButton("Process File");
-            row5Pnl.add(xmlToFlatProcessBtn);
-            pnl.add(row5Pnl);
-
-            xmlToFlatSourceBtn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int returnVal = _fileChooser.showDialog(StandaloneFrame.this, "Select");
-                    if (returnVal == JFileChooser.APPROVE_OPTION) {
-                        xmlToFlatSourceFld.setText(_fileChooser.getSelectedFile().getAbsolutePath());
-                        String format = NaaccrXmlUtils.getFormatFromXmlFile(_fileChooser.getSelectedFile());
-                        if (format != null)
-                            xmlToFlatFormatBox.setSelectedItem(format);
-                        xmlToFlatTargetFld.setText(invertFilename(_fileChooser.getSelectedFile()));
-                        xmlToFlatProcessBtn.requestFocusInWindow();
-                    }
-                }
-            });
-
-            xmlToFlatTargetBtn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int returnVal = _fileChooser.showDialog(StandaloneFrame.this, "Select");
-                    if (returnVal == JFileChooser.APPROVE_OPTION)
-                        xmlToFlatTargetFld.setText(_fileChooser.getSelectedFile().getAbsolutePath());
-                }
-            });
-
-            xmlToFlatProcessBtn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    File sourceFile = new File(xmlToFlatSourceFld.getText());
-                    File targetFile = new File(xmlToFlatTargetFld.getText());
-                    String format = (String)xmlToFlatFormatBox.getSelectedItem(); // TODO FPD this doens't need to be a dropdown anymore! Same with other tab...
-                    xmlToFlatResultLbl.setText("Processing file...");
-                    pnl.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    try {
-                        NaaccrXmlUtils.xmlToFlat(sourceFile, targetFile, null, null, null); // TOOD FPD add observer
-                        xmlToFlatResultLbl.setText("Done processing source XML file...");
-                    }
-                    catch (NaaccrIOException ex) {
-                        JOptionPane.showMessageDialog(StandaloneFrame.this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                        xmlToFlatResultLbl.setText("Provide a value for the parameters and click the Process File button...");
-                    }
-                    finally {
-                        pnl.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                    }
-                }
-            });
-
-            JPanel wrapperPnl = new JPanel(new BorderLayout());
-            wrapperPnl.setOpaque(true);
-            wrapperPnl.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-            wrapperPnl.add(pnl, BorderLayout.NORTH);
-            return wrapperPnl;
-        }
-
-        private JPanel crateValidationTestPanel() {
-            JPanel pnl = new JPanel(new BorderLayout());
-            pnl.setOpaque(true);
-            pnl.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
-
-            JPanel disclaimerPnl = new JPanel(new FlowLayout(FlowLayout.LEADING));
-            disclaimerPnl.setOpaque(false);
-            disclaimerPnl.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
-            JLabel disclaimerLbl = new JLabel("Modify the XML to introduce some errors, and click the Validate button to see the errors.");
-            disclaimerLbl.setFont(disclaimerLbl.getFont().deriveFont(Font.BOLD));
-            disclaimerPnl.add(disclaimerLbl);
-            pnl.add(disclaimerPnl, BorderLayout.NORTH);
-            
-            JPanel textPnl = new JPanel(new BorderLayout());
-            textPnl.setOpaque(false);
-            textPnl.setBorder(null);
-            final JTextArea textFld = new JTextArea();
-            StringWriter writer = new StringWriter();
-            try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("examples/testing-template.xml")) {
-                IOUtils.copy(inputStream, writer, "UTF-8");
-                textFld.setText(writer.toString());
-            }
-            catch (IOException e) {
-                textFld.setText("Unexpected error reading template file...");
-            }
-            textPnl.add(new JScrollPane(textFld), BorderLayout.CENTER);
-            pnl.add(textPnl, BorderLayout.CENTER);
-            
-            JPanel validationPnl = new JPanel(new BorderLayout());
-            validationPnl.setOpaque(false);
-            validationPnl.setBorder(null);
-            JPanel buttonPnl = new JPanel(new GridBagLayout());
-            buttonPnl.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 10));
-            JButton validateBtn = new JButton("  Validate  ");
-            buttonPnl.add(validateBtn);
-            validationPnl.add(buttonPnl, BorderLayout.NORTH);
-            final JTextArea errorsFld = new JTextArea();
-            errorsFld.setRows(10);
-            validationPnl.add(new JScrollPane(errorsFld), BorderLayout.CENTER);
-            pnl.add(validationPnl, BorderLayout.SOUTH);
-
-            validateBtn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    errorsFld.setText(null);
-                    String format = NaaccrXmlUtils.getFormatFromXmlReader(new StringReader(textFld.getText()));
-                    if (format == null)
-                        errorsFld.append("Unable to determine format of the XML file (this require a valid dictionary URI and record type)...\n");
-                    else {
-                        try (PatientXmlReader reader = new PatientXmlReader(new StringReader(textFld.getText()))) {
-                            do {
-                                Patient patient = reader.readPatient();
-                                if (patient == null)
-                                    break;
-                                for (NaaccrValidationError error : patient.getAllValidationErrors()) {
-                                    errorsFld.setForeground(new Color(125, 0, 0));
-                                    if (!errorsFld.getText().isEmpty())
-                                        errorsFld.append("\n");
-                                    errorsFld.append("Line #" + error.getLineNumber() + ": DATA validation error\n");
-                                    errorsFld.append("   message: " + (error.getMessage() == null ? "<not available>" : error.getMessage()) + "\n");
-                                    errorsFld.append("   path: " + (error.getPath() == null ? "<not available>" : error.getPath()) + "\n");
-                                    errorsFld.append("   item ID: " + (error.getNaaccrId() == null ? "<not available>" : error.getNaaccrId()) + "\n");
-                                    errorsFld.append("   item #: " + (error.getNaaccrNum() == null ? "<not available>" : error.getNaaccrNum()) + "\n");
-                                    errorsFld.append("   value: " + (error.getValue() == null ? "<blank>" : error.getValue()) + "\n");
-                                }
-                            } while (true);
-                            if (errorsFld.getText().isEmpty()) {
-                                errorsFld.append("Reading completed; found no error.");
-                                errorsFld.setForeground(new Color(0, 115, 0));
-                            }
-                        }
-                        catch (NaaccrIOException error) {
-                            errorsFld.setForeground(new Color(125, 0, 0));
-                            if (!errorsFld.getText().isEmpty())
-                                errorsFld.append("\n");
-                            errorsFld.append("Line " + (error.getLineNumber() == null ? "?" : ("#" + error.getLineNumber())) + ": SYNTAX validation error\n");
-                            errorsFld.append("   message: " + (error.getMessage() == null ? "<not available>" : error.getMessage()) + "\n");
-                            errorsFld.append("   path: " + (error.getPath() == null ? "<not available>" : error.getPath()) + "\n");
-                            errorsFld.append("   item ID: <not available>\n");
-                            errorsFld.append("   item #: <not available>\n");
-                            errorsFld.append("   value: <not available>\n");
-                            errorsFld.append("\nReading interrupted because of a syntax error...");
-                        }
-                        catch (Exception ex) {
-                            errorsFld.setForeground(new Color(125, 0, 0));
-                            errorsFld.append("Unexpected error:\n");
-                            errorsFld.append("      -> " + ex.getMessage() + "\n");
-                            errorsFld.append("Reading interrupted...");
-                        }
-                    }
-                    errorsFld.setCaretPosition(0);
-                }
-            });
-            
-            return pnl;
-        }
-
-        private JPanel crateDictionaryPanel() {
-            JPanel pnl = new JPanel(new BorderLayout());
-            pnl.setOpaque(true);
-            pnl.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-
-            JTextArea area = new JTextArea();
-            try {
-                area.setText(IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-140.xml"), "UTF-8"));
-            }
-            catch (IOException e) {
-                area.setText("Unable to read dictionary...");
-            }
-            JScrollPane pane = new JScrollPane(area);
-            pane.setBorder(null);
-            pnl.add(pane, BorderLayout.CENTER);
-            
-            return pnl;
-        }
-        
-        private JPanel crateExamplePanel() {
-            JPanel pnl = new JPanel(new BorderLayout());
-            pnl.setOpaque(true);
-            pnl.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-
-            Vector<String> data = new Vector<>();
-            data.add("attributes-both.xml");
-            data.add("attributes-id-only.xml");
-            data.add("attributes-num-only.xml");
-            data.add("items-above-patient-level.xml");
-            data.add("state-requestor-items.xml");
-            data.add("extensions.xml");
-            final JList list = new JList(data);
-            list.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-            pnl.add(new JScrollPane(list), BorderLayout.WEST);
-            
-            JPanel centerPnl = new JPanel(new BorderLayout());
-            pnl.setOpaque(false);
-            final JTextArea area = new JTextArea();
-            area.setEditable(true);
-            JScrollPane pane = new JScrollPane(area);
-            pane.setBorder(null);
-            centerPnl.add(pane, BorderLayout.CENTER);
-            pnl.add(centerPnl, BorderLayout.CENTER);
-            
-            list.addListSelectionListener(new ListSelectionListener() {
-                @Override
-                public void valueChanged(ListSelectionEvent e) {
-                    String s = (String)list.getSelectedValue();
-                    try {
-                        area.setText(IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("examples/" + s), "UTF-8"));
-                    }
-                    catch (IOException ex) {
-                        area.setText("Unable to read dictionary...");
-                    }
-                    area.setCaretPosition(0);
-                }
-            });
-
-            list.setSelectedIndex(0);
-            
-            return pnl;
-        }
-    }
-
-
-    // TODO FPD this could be used to display a progress bar; but I don't think it belongs in this class...
-    /**
-     private int countLines(File file) throws IOException {
-     try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
-     byte[] c = new byte[1024];
-     int count = 0;
-     int readChars = 0;
-     boolean endsWithoutNewLine = false;
-     while ((readChars = is.read(c)) != -1) {
-     for (int i = 0; i < readChars; ++i) {
-     if (c[i] == '\n')
-     ++count;
-     }
-     endsWithoutNewLine = (c[readChars - 1] != '\n');
-     }
-     if (endsWithoutNewLine) {
-     ++count;
-     }
-     return count;
-     }
-     }
-     */
 }

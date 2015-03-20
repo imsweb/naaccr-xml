@@ -74,7 +74,7 @@ public class NaaccrXmlUtils {
         try (PatientFlatReader reader = new PatientFlatReader(createReader(flatFile), options, userDictionary)) {
             try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlFile), reader.getRootData())) {
                 Patient patient = reader.readPatient();
-                while (patient != null) {
+                while (patient != null && !Thread.currentThread().isInterrupted()) {
                     if (observer != null)
                         observer.patientRead(patient);
                     writer.writePatient(patient);
@@ -107,7 +107,7 @@ public class NaaccrXmlUtils {
         try (PatientXmlReader reader = new PatientXmlReader(createReader(xmlFile), options, userDictionary)) {
             try (PatientFlatWriter writer = new PatientFlatWriter(createWriter(flatFile), reader.getRootData(), options, userDictionary)) {
                 Patient patient = reader.readPatient();
-                while (patient != null) {
+                while (patient != null && !Thread.currentThread().isInterrupted()) {
                     if (observer != null)
                         observer.patientRead(patient);
                     writer.writePatient(patient);
@@ -138,7 +138,7 @@ public class NaaccrXmlUtils {
         try (PatientXmlReader reader = new PatientXmlReader(createReader(xmlFile), options, userDictionary)) {
             NaaccrData rootData = reader.getRootData();
             Patient patient = reader.readPatient();
-            while (patient != null) {
+            while (patient != null && !Thread.currentThread().isInterrupted()) {
                 if (observer != null)
                     observer.patientRead(patient);
                 rootData.getPatients().add(patient);
@@ -170,6 +170,8 @@ public class NaaccrXmlUtils {
                 writer.writePatient(patient);
                 if (observer != null)
                     observer.patientWritten(patient);
+                if (Thread.currentThread().isInterrupted())
+                    break;
             }
         }
     }
@@ -193,7 +195,7 @@ public class NaaccrXmlUtils {
         try (PatientFlatReader reader = new PatientFlatReader(createReader(flatFile), options, userDictionary)) {
             NaaccrData data = reader.getRootData();
             Patient patient = reader.readPatient();
-            while (patient != null) {
+            while (patient != null && !Thread.currentThread().isInterrupted()) {
                 if (observer != null)
                     observer.patientRead(patient);
                 data.getPatients().add(patient);
@@ -226,6 +228,8 @@ public class NaaccrXmlUtils {
                 writer.writePatient(patient);
                 if (observer != null)
                     observer.patientWritten(patient);
+                if (Thread.currentThread().isInterrupted())
+                    break;
             }
         }
     }
@@ -317,7 +321,7 @@ public class NaaccrXmlUtils {
     }
 
     // takes care of the file encoding and compression...
-    private static Reader createReader(File file) throws NaaccrIOException {
+    public static Reader createReader(File file) throws NaaccrIOException {
         try {
             InputStream is = new FileInputStream(file);
 
@@ -332,7 +336,7 @@ public class NaaccrXmlUtils {
     }
 
     // takes care of the file encoding and compression...
-    private static Writer createWriter(File file) throws NaaccrIOException {
+    public static Writer createWriter(File file) throws NaaccrIOException {
         try {
             OutputStream os = new FileOutputStream(file);
 

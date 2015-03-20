@@ -3,6 +3,9 @@
  */
 package org.naaccr.xml;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -152,6 +155,18 @@ public final class NaaccrDictionaryUtils {
     }
 
     /**
+     * Reads a dictionary from the provided file.
+     * @param file file, cannot be null
+     * @return the corresonding dictionary
+     * @throws IOException if the dictionary could not be read
+     */
+    public static NaaccrDictionary readDictionary(File file) throws IOException {
+        try (FileReader reader = new FileReader(file)) {
+            return readDictionary(reader);
+        }
+    }
+    
+    /**
      * Reads a dictionary from the provided reader.
      * @param reader reader, cannot be null
      * @return the corresonding dictionary
@@ -161,6 +176,18 @@ public final class NaaccrDictionaryUtils {
         return (NaaccrDictionary)instanciateXStream().fromXML(reader);
     }
 
+    /**
+     * Writes the given dictionary to the provided file.
+     * @param dictionary dictionary to write, cannot be null
+     * @param file file, cannot be null
+     * @throws IOException if the dictionary could not be written
+     */
+    public static void writeDictionary(NaaccrDictionary dictionary, File file) throws IOException {
+        try (FileWriter writer = new FileWriter(file)) {
+            writeDictionary(dictionary, writer);
+        }
+    }
+    
     /**
      * Writes the given dictionary to the provided writer.
      * @param dictionary dictionary to write, cannot be null
