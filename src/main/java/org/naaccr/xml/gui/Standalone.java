@@ -37,6 +37,7 @@ import javax.swing.border.MatteBorder;
 import org.naaccr.xml.gui.pages.FlatToXmlPage;
 import org.naaccr.xml.gui.pages.XmlToFlatPage;
 
+// icons: https://www.iconfinder.com/iconsets/ellegant
 public class Standalone extends JFrame {
     
     private CardLayout _layout;
