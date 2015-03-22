@@ -3,11 +3,16 @@
  */
 package org.naaccr.xml.gui.pages;
 
+import java.awt.BorderLayout;
+
+import javax.swing.JLabel;
+
 public class XmlToFlatPage extends AbstractPage {
 
     public XmlToFlatPage() {
-        super("XML to Flat", "TODO");
+        super();
 
+        this.add(new JLabel("Coming soon..."), BorderLayout.CENTER);
 
     }
     

@@ -11,9 +11,10 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.List;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -31,7 +32,6 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.BadLocationException;
 
 import org.naaccr.xml.NaaccrDictionaryUtils;
 import org.naaccr.xml.NaaccrFormat;
@@ -57,14 +57,14 @@ public class FlatToXmlPage extends AbstractPage {
     private JPanel _northPnl, _centerPnl, _northProcessingPnl;
     private JTextField _sourceFld, _targetFld, _dictionaryFld;
     private JProgressBar _analysisBar, _processingBar;
-    private JLabel _errorLbl, _formatLbl, _numLinesLbl;
+    private JLabel _errorLbl, _formatLbl, _numLinesLbl, _fileSizeLbl, _processingErrorsLbl;
     private SwingWorker<Void, Void> _analysisWorker;
-    private SwingWorker<Void, Integer> _processingWorker;
+    private SwingWorker<Void, Patient> _processingWorker;
     private JTextArea _textArea;
     private StandaloneOptions _guiOptions;
 
     public FlatToXmlPage() {
-        super("Flat to XML", "Transform a NAACCR Flat file into the corresponding NAACCR XML file.");
+        super();
 
         _fileChooser = new JFileChooser();
         _fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -181,10 +181,15 @@ public class FlatToXmlPage extends AbstractPage {
         _formatLbl = new JLabel(" ");
         pnl.add(_formatLbl);
         pnl.add(Box.createHorizontalStrut(25));
-        pnl.add(Standalone.createBoldLabel("Num lines: "));
+        pnl.add(Standalone.createBoldLabel("Numbe of lines: "));
         pnl.add(Box.createHorizontalStrut(5));
         _numLinesLbl = new JLabel(" ");
         pnl.add(_numLinesLbl);
+        pnl.add(Box.createHorizontalStrut(25));
+        pnl.add(Standalone.createBoldLabel("File size: "));
+        pnl.add(Box.createHorizontalStrut(5));
+        _fileSizeLbl = new JLabel(" ");
+        pnl.add(_fileSizeLbl);
 
         return pnl;
     }
@@ -192,7 +197,7 @@ public class FlatToXmlPage extends AbstractPage {
     private JPanel buildOptionsPanel() {
         JPanel pnl = new JPanel();
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
-        
+
         JPanel targetFieldPnl = new JPanel();
         targetFieldPnl.setOpaque(false);
         targetFieldPnl.setBorder(null);
@@ -213,12 +218,12 @@ public class FlatToXmlPage extends AbstractPage {
         targetFieldPnl.add(browseBtn);
         pnl.add(targetFieldPnl);
         pnl.add(Box.createVerticalStrut(15));
-        
+
         JPanel optionsPnl = new JPanel(new BorderLayout());
         Font font = new JLabel().getFont();
         optionsPnl.setBorder(new TitledBorder(null, "Options", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, font.deriveFont(Font.BOLD), Color.BLACK));
         _guiOptions = new StandaloneOptions(true, false, false, true);
-        _guiOptions.setBorder(new EmptyBorder(10, 15, 10, 10));
+        _guiOptions.setBorder(new EmptyBorder(10, 20, 10, 10));
         optionsPnl.add(_guiOptions);
         pnl.add(optionsPnl);
 
@@ -243,8 +248,8 @@ public class FlatToXmlPage extends AbstractPage {
         pnl.add(dictionaryPnl);
 
         JPanel controlsPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        controlsPnl.setBorder(new EmptyBorder(10, 0, 0, 0));
-        controlsPnl.add(Box.createHorizontalStrut(75));
+        controlsPnl.setBorder(new EmptyBorder(25, 0, 0, 0));
+        controlsPnl.add(Box.createHorizontalStrut(50));
         JButton processBtn = new JButton("Process File");
         processBtn.addActionListener(new ActionListener() {
             @Override
@@ -254,7 +259,7 @@ public class FlatToXmlPage extends AbstractPage {
         });
         controlsPnl.add(processBtn);
         pnl.add(controlsPnl);
-        
+
         JPanel wrapperPnl = new JPanel(new BorderLayout());
         wrapperPnl.add(pnl, BorderLayout.NORTH);
         return wrapperPnl;
@@ -297,18 +302,22 @@ public class FlatToXmlPage extends AbstractPage {
 
         JPanel centerPnl = new JPanel(new BorderLayout());
         JPanel textAreaLabelPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        textAreaLabelPnl.add(Standalone.createBoldLabel("Processing Errors"));
+        textAreaLabelPnl.add(Standalone.createBoldLabel("Processing warnings"));
+        textAreaLabelPnl.add(Box.createHorizontalStrut(15));
+        _processingErrorsLbl = new JLabel("");
+        textAreaLabelPnl.add(_processingErrorsLbl);
         centerPnl.add(textAreaLabelPnl, BorderLayout.NORTH);
         _textArea = new JTextArea();
+        _textArea.setEditable(false);
         _textArea.setBorder(new EmptyBorder(2, 3, 2, 3));
         JScrollPane pane = new JScrollPane(_textArea);
         pane.setBorder(new CompoundBorder(new EmptyBorder(5, 0, 0, 0), new LineBorder(Color.LIGHT_GRAY)));
         centerPnl.add(pane, BorderLayout.CENTER);
         pnl.add(centerPnl, BorderLayout.CENTER);
-        
+
         return pnl;
     }
-    
+
     private JPanel buildErrorPanel() {
         JPanel pnl = new JPanel();
         pnl.setBorder(new EmptyBorder(10, 10, 0, 0));
@@ -325,7 +334,6 @@ public class FlatToXmlPage extends AbstractPage {
     }
 
     private void performAnalysis() {
-        _northPnl.setVisible(false);
         _centerPnl.setVisible(true);
         _centerLayout.show(_centerPnl, _PANEL_ID_ANALYSIS);
         _analysisBar.setMinimum(0);
@@ -345,20 +353,35 @@ public class FlatToXmlPage extends AbstractPage {
                             numLines++;
                             line = reader.readLine();
                         }
-                        _formatLbl.setText(NaaccrFormat.getInstance(format).getDisplayName());
-                        _numLinesLbl.setText(String.valueOf(numLines));
-                        _northPnl.setVisible(true);
+                        if (file.getName().toLowerCase().endsWith(".gz"))
+                            _formatLbl.setText("Compressed " + NaaccrFormat.getInstance(format).getDisplayName());
+                        else
+                            _formatLbl.setText(NaaccrFormat.getInstance(format).getDisplayName());
+                        _numLinesLbl.setText(Standalone.formatNumber(numLines));
+                        _fileSizeLbl.setText(Standalone.formatFileSize(file.length()));
                         _northLayout.show(_northPnl, _PANEL_ID_ANALYSIS_RESULTS);
                         _analysisBar.setIndeterminate(false);
                         _centerLayout.show(_centerPnl, _PANEL_ID_OPTIONS);
                         _targetFld.setText(invertFilename(new File(_sourceFld.getText())));
                     }
-                    catch (IOException e) {
-                        reportError(e.getMessage());
-                    }
                 }
-                _analysisWorker = null;
                 return null;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    get();
+                }
+                catch (CancellationException | InterruptedException e) {
+                    // ignored
+                }
+                catch (ExecutionException e) {
+                    reportError(e.getCause().getMessage());
+                }
+                finally {
+                    _analysisWorker = null;
+                }
             }
         };
         _analysisWorker.execute();
@@ -369,71 +392,93 @@ public class FlatToXmlPage extends AbstractPage {
         _textArea.setText(null);
         _centerLayout.show(_centerPnl, _PANEL_ID_PROCESSING);
         _processingBar.setMinimum(0);
-        _processingBar.setMaximum(Integer.valueOf(_numLinesLbl.getText()));
-        _processingWorker = new SwingWorker<Void, Integer>() {
+        _processingBar.setMaximum(Integer.valueOf(_numLinesLbl.getText().replaceAll(",", "")));
+        _processingBar.setValue(0);
+        _processingErrorsLbl.setText("");
+        _processingWorker = new SwingWorker<Void, Patient>() {
             @Override
             protected Void doInBackground() throws Exception {
                 File srcFile = new File(_sourceFld.getText());
                 File targetFile = new File(_targetFld.getText());
-                
-                try {
-                    NaaccrDictionary userDictionary = null;
-                    if (_dictionaryFld.getText() != null)
-                        userDictionary = NaaccrDictionaryUtils.readDictionary(new File(_dictionaryFld.getText()));
-                    NaaccrXmlUtils.flatToXml(srcFile, targetFile, _guiOptions.getOptions(), userDictionary, new NaaccrStreamObserver() {
-                        @Override
-                        public void patientRead(Patient patient) {
-                            publish(patient.getTumors().size());
-                            if (_textArea.getLineCount() < 10000) {
-                                for (NaaccrValidationError error : patient.getAllValidationErrors())
-                                    _textArea.append("Line " + error.getLineNumber() + ": " + error.getMessage() + "\n");
-                            }
-                            else if (!_textArea.getText().endsWith("..."))
-                                _textArea.append("...");
-                            
-                            try {
-                                _textArea.setCaretPosition(_textArea.getLineStartOffset(_textArea.getLineCount() - 1));
-                            }
-                            catch (BadLocationException e) {
-                                // ignore this one, we won't scroll to the end...
-                            }
-                        }
 
-                        @Override
-                        public void patientWritten(Patient patient) {
-                        }
-                    });
-                }
-                catch (IOException e1) {
-                    reportError(e1.getMessage());
-                }
+                NaaccrDictionary userDictionary = null;
+                if (!_dictionaryFld.getText().isEmpty())
+                    userDictionary = NaaccrDictionaryUtils.readDictionary(new File(_dictionaryFld.getText()));
 
-                _northProcessingPnl.setVisible(false);
-                _processingWorker = null;
+                NaaccrXmlUtils.flatToXml(srcFile, targetFile, _guiOptions.getOptions(), userDictionary, new NaaccrStreamObserver() {
+                            @Override
+                            public void patientRead(Patient patient) {
+                                publish(patient);
+                            }
+
+                            @Override
+                            public void patientWritten(Patient patient) {
+                            }
+                        });
+
                 return null;
             }
 
             @Override
-            protected void process(final List<Integer> chunks) {
+            protected void done() {
+                try {
+                    get();
+                }
+                catch (CancellationException | InterruptedException e) {
+                    // ignored
+                }
+                catch (ExecutionException e) {
+                    reportError(e.getCause().getMessage());
+                }
+                finally {
+                    _northProcessingPnl.setVisible(false);
+                    _processingWorker = null;
+                }
+            }
+
+            @Override
+            protected void process(final List<Patient> patients) {
+                final StringBuilder buf = new StringBuilder();
+                for (Patient patient : patients) {
+                    for (NaaccrValidationError error : patient.getAllValidationErrors()) {
+                        buf.append("Line ").append(error.getLineNumber());
+                        if (error.getNaaccrId() != null) {
+                            buf.append(", item '").append(error.getNaaccrId()).append("'");
+                            if (error.getNaaccrNum() != null)
+                                buf.append(" (#").append(error.getNaaccrNum()).append(")");
+                        }
+                        buf.append(": ").append(error.getMessage());
+                        if (error.getValue() != null && !error.getValue().isEmpty())
+                            buf.append(": ").append(error.getValue());
+                        buf.append("\n");
+                    }
+                }
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
                         int count = _processingBar.getValue();
-                        for (Integer i : chunks)
-                            count += i;
-                        _processingBar.setValue(count);     
+                        for (Patient patient : patients)
+                            count += patient.getTumors().size();
+                        _processingBar.setValue(count);
+                        if (_textArea.getLineCount() < 10000)
+                            _textArea.append(buf.toString());
+                        else if (_processingErrorsLbl.getText().trim().isEmpty()) {
+                            _processingErrorsLbl.setText("(reached maximum number of warnings that can be displayed)");
+                            _textArea.append("...");
+                        }
                     }
                 });
             }
-        };
+        }
+
+        ;
         _processingWorker.execute();
     }
 
     private void reportError(String error) {
-        _northPnl.setVisible(true);
-        _centerPnl.setVisible(false);
+        _centerPnl.setVisible(true);
         _analysisBar.setIndeterminate(false);
-        _errorLbl.setText(error == null ? "null access" : error);
-        _northLayout.show(_northPnl, _PANEL_ID_ERROR);
+        _errorLbl.setText(error == null || error.isEmpty() ? "unexpected error" : error);
+        _centerLayout.show(_centerPnl, _PANEL_ID_ERROR);
     }
 }

@@ -38,7 +38,7 @@ public class StandaloneOptions extends JPanel {
 
         if (readFlat) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-            _groupTumorBox = new JCheckBox("When reading the tumors, group them by Patient ID Number (#20)");
+            _groupTumorBox = new JCheckBox(" When reading the tumors, group them by Patient ID Number (Item #20).");
             _groupTumorBox.setSelected(true);
             pnl.add(_groupTumorBox);
             contentPnl.add(pnl);
@@ -50,31 +50,31 @@ public class StandaloneOptions extends JPanel {
 
         if (readFlat) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-            _reportMissmatchBox = new JCheckBox("When grouping the tumors, report values missmatch.");
+            _reportMissmatchBox = new JCheckBox(" When grouping the tumors, report values missmatch.");
             _reportMissmatchBox.setSelected(true);
             pnl.add(_reportMissmatchBox);
             contentPnl.add(pnl);
             contentPnl.add(Box.createVerticalStrut(3));
-            contentPnl.add(addHelpRow("If this option is checked, the tumors groupped together but having different values will be reported as errors."));
+            contentPnl.add(addHelpRow("If this option is checked, the items of the tumors grouped together but having different values will be reported as errors."));
             contentPnl.add(addHelpRow("This option has no effet if the tumor are not grouped."));
             contentPnl.add(Box.createVerticalStrut(15));
         }
 
         if (readFlat || readXml) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-            _validateValuesBox = new JCheckBox("When reading the items, validate their value.");
-            _validateValuesBox.setSelected(true);
+            _validateValuesBox = new JCheckBox(" When reading the items, validate their value.");
+            _validateValuesBox.setSelected(false);
             pnl.add(_validateValuesBox);
             contentPnl.add(pnl);
             contentPnl.add(Box.createVerticalStrut(3));
-            contentPnl.add(addHelpRow("If this option is checked, each value will be validated againts the item's data type defined in the dictionary"));
+            contentPnl.add(addHelpRow("If this option is checked, each value will be validated againts the item's data type defined in the dictionary."));
             contentPnl.add(Box.createVerticalStrut(15));
         }
 
         if (readXml) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-            _ignoreUnkItemsBox = new JCheckBox("When reading the file, ignore unknown items.");
-            _ignoreUnkItemsBox.setSelected(false);
+            _ignoreUnkItemsBox = new JCheckBox(" When reading the file, ignore unknown items.");
+            _ignoreUnkItemsBox.setSelected(true);
             pnl.add(_ignoreUnkItemsBox);
             contentPnl.add(pnl);
             contentPnl.add(Box.createVerticalStrut(3));
@@ -84,7 +84,7 @@ public class StandaloneOptions extends JPanel {
 
         if (writeXml) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-            _writeNumBox = new JCheckBox("When writing the items in the XML file, also include the NAACCR Number.");
+            _writeNumBox = new JCheckBox(" When writing the items in the XML file, also include the NAACCR Number.");
             _writeNumBox.setSelected(false);
             pnl.add(_writeNumBox);
             contentPnl.add(pnl);

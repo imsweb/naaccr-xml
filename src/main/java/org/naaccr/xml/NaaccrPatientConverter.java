@@ -217,9 +217,9 @@ public class NaaccrPatientConverter implements Converter {
                     reportError(entity, lineNumber, currentPath, "invalid value, expected exactly " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef,
                             item.getValue());
                 else if (itemDef.getDataType() != null && !NaaccrDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(itemDef.getDataType()).matcher(item.getValue()).matches())
-                    reportError(entity, lineNumber, currentPath, "invalid value according to the definition of data type '" + itemDef.getDataType() + "'", itemDef, item.getValue());
+                    reportError(entity, lineNumber, currentPath, "invalid value for data type '" + itemDef.getDataType() + "'", itemDef, item.getValue());
                 else if (itemDef.getRegexValidation() != null && !itemDef.getRegexValidation().matcher(item.getValue()).matches())
-                    reportError(entity, lineNumber, currentPath, "invalid value according to specific item validation", itemDef, item.getValue());
+                    reportError(entity, lineNumber, currentPath, "invalid value", itemDef, item.getValue());
             }
 
         }

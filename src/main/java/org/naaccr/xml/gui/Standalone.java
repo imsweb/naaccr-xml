@@ -13,6 +13,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,9 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
+import org.naaccr.xml.gui.pages.DictionariesPage;
 import org.naaccr.xml.gui.pages.FlatToXmlPage;
+import org.naaccr.xml.gui.pages.SamplesPage;
 import org.naaccr.xml.gui.pages.XmlToFlatPage;
 
 // icons: https://www.iconfinder.com/iconsets/ellegant
@@ -42,7 +45,7 @@ public class Standalone extends JFrame {
     
     private CardLayout _layout;
     private JPanel _centerPnl;
-    private JLabel _titleLbl;
+    private JLabel _currentPageIdLbl, _currentPageDescLbl;
     private List<JButton> _buttons = new ArrayList<>();
 
     public Standalone() {
@@ -52,10 +55,13 @@ public class Standalone extends JFrame {
         this.getContentPane().setLayout(new BorderLayout());
 
         JPanel northPnl = new JPanel(new FlowLayout(FlowLayout.LEADING));
-        northPnl.setBackground(new Color(134, 178, 205));
+        northPnl.setBackground(new Color(133, 180, 205));
         northPnl.setBorder(new CompoundBorder(new MatteBorder(1, 1, 1, 1, Color.GRAY), new EmptyBorder(0, 5, 0, 5)));
-        _titleLbl = new JLabel();
-        northPnl.add(_titleLbl);
+        _currentPageIdLbl = new JLabel();
+        _currentPageIdLbl.setFont(_currentPageIdLbl.getFont().deriveFont(Font.BOLD));
+        northPnl.add(_currentPageIdLbl);
+        _currentPageDescLbl = new JLabel();
+        northPnl.add(_currentPageDescLbl);
         this.add(northPnl, BorderLayout.NORTH);
         
         JToolBar toolbar = new JToolBar();
@@ -67,11 +73,11 @@ public class Standalone extends JFrame {
         toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
         toolbar.add(createToolbarButton("Flat to XML", "flat_to_xml.png", "flat-to-xml", "transform a NAACCR Flat file into the corresponding NAACCR XML file."));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("XML to Flat", "xml_to_flat.png", "xml-to-flat", "TODO"));
+        toolbar.add(createToolbarButton("XML to Flat", "xml_to_flat.png", "xml-to-flat", "transform a NAACCR XML file inot the corresponding Flat file."));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("Dictionary", "dictionary.png", "dictionary", "TODO"));
-        //toolbar.add(Box.createVerticalStrut(15));
-        //toolbar.add(createToolbarButton("Samples", "dictionary.png", "samples"));
+        toolbar.add(createToolbarButton("Dictionaries", "dictionary.png", "dictionaries", "standard (base) NAACCR dictionaries."));
+        toolbar.add(Box.createVerticalStrut(15));
+        toolbar.add(createToolbarButton("Samples", "samples.png", "samples", "examples of typicial NAACCR XML files."));
         this.getContentPane().add(toolbar, BorderLayout.WEST);
 
         _centerPnl = new JPanel();
@@ -80,6 +86,8 @@ public class Standalone extends JFrame {
         _centerPnl.setLayout(_layout);
         _centerPnl.add("flat-to-xml", new FlatToXmlPage());
         _centerPnl.add("xml-to-flat", new XmlToFlatPage());
+        _centerPnl.add("dictionaries", new DictionariesPage());
+        _centerPnl.add("samples", new SamplesPage());
         this.getContentPane().add(_centerPnl, BorderLayout.CENTER);
 
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
@@ -114,7 +122,8 @@ public class Standalone extends JFrame {
         btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                _titleLbl.setText(text + ": " + description);
+                _currentPageIdLbl.setText(text + ": ");
+                _currentPageDescLbl.setText(description);
                 _layout.show(_centerPnl, pageId);
                 for (JButton btn : _buttons)
                     btn.setForeground(btn.getActionCommand().equals(text) ? Color.BLACK : Color.GRAY);
@@ -134,6 +143,89 @@ public class Standalone extends JFrame {
         JLabel lbl = new JLabel(text);
         lbl.setFont(lbl.getFont().deriveFont(Font.BOLD));
         return lbl;
+    }
+
+    /**
+     * Format the passed number, added commas for the decimal parts.
+     * <p/>
+     * Created on Dec 3, 2008 by depryf
+     * @param num number to format
+     * @return formatted number
+     */
+    public static String formatNumber(int num) {
+        DecimalFormat format = new DecimalFormat();
+        format.setDecimalSeparatorAlwaysShown(false);
+        return format.format(num);
+    }
+
+    /**
+     * Formats a time given in millisecond. The output will be "X hours Y min Z sec", unless X, Y or Z is 0 in which
+     * case that part of the string will be omitted.
+     * <p/>
+     * Created on May 3, 2004 by Fabian Depry
+     * @param timeInMilli time in milli-seconds
+     * @return a <code>String</code> representing the formatted time...
+     */
+    public static String formatTime(long timeInMilli) {
+        long hourBasis = 60;
+
+        StringBuilder formattedTime = new StringBuilder();
+
+        long secTmp = timeInMilli / 1000;
+        long sec = secTmp % hourBasis;
+        long minTmp = secTmp / hourBasis;
+        long min = minTmp % hourBasis;
+        long hour = minTmp / hourBasis;
+
+        if (hour > 0) {
+            formattedTime.append(hour).append(" hour");
+            if (hour > 1)
+                formattedTime.append("s");
+        }
+
+        if (min > 0) {
+            if (formattedTime.length() > 0)
+                formattedTime.append(", ");
+            formattedTime.append(min).append(" minute");
+            if (min > 1)
+                formattedTime.append("s");
+        }
+
+        if (sec > 0) {
+            if (formattedTime.length() > 0)
+                formattedTime.append(", ");
+            formattedTime.append(sec).append(" second");
+            if (sec > 1)
+                formattedTime.append("s");
+        }
+
+        if (formattedTime.length() > 0)
+            return formattedTime.toString();
+
+        return "< 1 second";
+    }
+
+    /**
+     * Takes a string with a byte count and converts it into a "nice" representation of size.
+     * <p/>
+     * 124 b <br>
+     * 34 KB <br>
+     * 12 MB <br>
+     * 2 GB
+     * <p/>
+     * Created on May 281, 2004 by Chuck May
+     * @param size size to format
+     * @return <code>String</code> with the formatted size
+     */
+    public static String formatFileSize(long size) {
+        if (size < 1024)
+            return size + " B";
+        else if (size < 1024 * 1024)
+            return new DecimalFormat("#.# KB").format((double)size / 1024);
+        else if (size < 1024 * 1024 * 1024)
+            return new DecimalFormat("#.# MB").format((double)size / 1024 / 1024);
+
+        return new DecimalFormat("#.# GB").format((double)size / 1024 / 1024 / 1024);
     }
 
     public static void main(String[] args) {

@@ -80,9 +80,9 @@ public class PatientFlatReader implements AutoCloseable {
                     return null;
             }
 
-            Map<String, String> firstLineGroupingValues = extractGroupingValues(_previousLine, _reader.getLineNumber() - 1, _groupingItems);
+            Map<String, String> firstLineGroupingValues = extractGroupingValues(_previousLine, _reader.getLineNumber(), _groupingItems);
             lines.add(_previousLine);
-            lineNumbers.add(_reader.getLineNumber() - 1);
+            lineNumbers.add(_reader.getLineNumber());
             _previousLine = _reader.readLine();
             while (_previousLine != null) {
                 boolean samePatient = firstLineGroupingValues.equals(extractGroupingValues(_previousLine, _reader.getLineNumber(), _groupingItems));
@@ -202,9 +202,9 @@ public class PatientFlatReader implements AutoCloseable {
                         reportError(entity, lineNumber, "invalid value, expected exactly " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef,
                                 item.getValue());
                     else if (itemDef.getDataType() != null && !NaaccrDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(itemDef.getDataType()).matcher(item.getValue()).matches())
-                        reportError(entity, lineNumber, "invalid value according to the definition of data type '" + itemDef.getDataType() + "'", itemDef, item.getValue());
+                        reportError(entity, lineNumber, "invalid value for data type '" + itemDef.getDataType() + "'", itemDef, item.getValue());
                     else if (itemDef.getRegexValidation() != null && !itemDef.getRegexValidation().matcher(item.getValue()).matches())
-                        reportError(entity, lineNumber, "invalid value according to specific item validation", itemDef, item.getValue());
+                        reportError(entity, lineNumber, "invalid value", itemDef, item.getValue());
                 }
             }
         }

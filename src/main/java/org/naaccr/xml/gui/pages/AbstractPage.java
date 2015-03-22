@@ -14,7 +14,7 @@ import javax.swing.border.MatteBorder;
 
 public abstract class AbstractPage extends JPanel {
 
-    public AbstractPage(String id, String description) {
+    public AbstractPage() {
         this.setOpaque(true);
         this.setLayout(new BorderLayout());
         this.setBorder(null);

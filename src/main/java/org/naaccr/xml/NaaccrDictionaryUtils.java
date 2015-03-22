@@ -42,7 +42,7 @@ public final class NaaccrDictionaryUtils {
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_ALPHA, Pattern.compile("^[A-Z]+$"));
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DIGITS, Pattern.compile("^[0-9]+$"));
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_MIXED, Pattern.compile("^[A-Z0-9]+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_NUMERIC, Pattern.compile("^([A-Za-z]|\\s)+$"));
+        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_NUMERIC, Pattern.compile("^[0-9]+(\\.[0-9]+)?$"));
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_TEXT, Pattern.compile("^.+$"));
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)[0-9][0-9]((0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])?)?$"));
     }
@@ -161,6 +161,10 @@ public final class NaaccrDictionaryUtils {
      * @throws IOException if the dictionary could not be read
      */
     public static NaaccrDictionary readDictionary(File file) throws IOException {
+        if (file == null)
+            throw new IOException("File is required to load dictionary.");
+        if (!file.exists())
+            throw new IOException("File must exist to load dictionary.");
         try (FileReader reader = new FileReader(file)) {
             return readDictionary(reader);
         }
@@ -195,9 +199,7 @@ public final class NaaccrDictionaryUtils {
      * @throws IOException if the dictionary could not be written
      */
     public static void writeDictionary(NaaccrDictionary dictionary, Writer writer) throws IOException {
-        // TODO do we really want this formatting? It's really not standard, and adds a lot of complexity to this class...
         instanciateXStream().marshal(dictionary, new NaaccrPrettyPrintWriter(dictionary, writer));
-        //instanciateXStream().toXML(dictionary, writer);
     }
 
     private static XStream instanciateXStream() {
@@ -289,15 +291,5 @@ public final class NaaccrDictionaryUtils {
                 return "parentXmlElement".equals(attribute);
             return false;
         }
-    }
-
-
-    // TODO remove this testing method...
-    public static void main(String[] args) throws IOException {
-        NaaccrDictionary dict = getBaseDictionaryByVersion("140");
-        System.out.println("Read " + dict.getItems().size() + " items from base dictionary...");
-        System.out.println(dict.getItemByNaaccrId("vendorName").getTrim());
-        //dict = getDefaultUserDictionary("140");
-        //System.out.println("Read " + dict.getItems().size() + " items from default user dictionary...");
     }
 }
