@@ -3,17 +3,34 @@
  */
 package org.naaccr.xml.gui.pages;
 
-import java.awt.BorderLayout;
+import java.io.File;
 
-import javax.swing.JLabel;
+import org.naaccr.xml.NaaccrIOException;
+import org.naaccr.xml.NaaccrStreamObserver;
+import org.naaccr.xml.NaaccrXmlOptions;
+import org.naaccr.xml.NaaccrXmlUtils;
+import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
+import org.naaccr.xml.gui.StandaloneOptions;
 
-public class XmlToFlatPage extends AbstractPage {
-
-    public XmlToFlatPage() {
-        super();
-
-        this.add(new JLabel("Coming soon..."), BorderLayout.CENTER);
-
-    }
+public class XmlToFlatPage extends AbstractProcessingPage {
     
+    @Override
+    protected String getSourceLabelText() {
+        return "Source XML File:";
+    }
+
+    @Override
+    protected String getTargetLabelText() {
+        return "Target Flat File:";
+    }
+
+    @Override
+    protected StandaloneOptions createOptions() {
+        return new StandaloneOptions(false, true, true, false);
+    }
+
+    @Override
+    protected void runProcessing(File source, File target, NaaccrXmlOptions options, NaaccrDictionary dictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
+        NaaccrXmlUtils.xmlToFlat(source, target, options, dictionary, observer);
+    }
 }

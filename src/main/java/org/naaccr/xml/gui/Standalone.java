@@ -75,7 +75,7 @@ public class Standalone extends JFrame {
         toolbar.add(Box.createVerticalStrut(15));
         toolbar.add(createToolbarButton("XML to Flat", "xml_to_flat.png", "xml-to-flat", "transform a NAACCR XML file inot the corresponding Flat file."));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("Dictionaries", "dictionary.png", "dictionaries", "standard (base) NAACCR dictionaries."));
+        toolbar.add(createToolbarButton("Dictionary", "dictionary.png", "dictionary", "standard NAACCR dictionaries."));
         toolbar.add(Box.createVerticalStrut(15));
         toolbar.add(createToolbarButton("Samples", "samples.png", "samples", "examples of typicial NAACCR XML files."));
         this.getContentPane().add(toolbar, BorderLayout.WEST);
@@ -86,7 +86,7 @@ public class Standalone extends JFrame {
         _centerPnl.setLayout(_layout);
         _centerPnl.add("flat-to-xml", new FlatToXmlPage());
         _centerPnl.add("xml-to-flat", new XmlToFlatPage());
-        _centerPnl.add("dictionaries", new DictionariesPage());
+        _centerPnl.add("dictionary", new DictionariesPage());
         _centerPnl.add("samples", new SamplesPage());
         this.getContentPane().add(_centerPnl, BorderLayout.CENTER);
 
@@ -122,7 +122,7 @@ public class Standalone extends JFrame {
         btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                _currentPageIdLbl.setText(text + ": ");
+                _currentPageIdLbl.setText(text + " : ");
                 _currentPageDescLbl.setText(description);
                 _layout.show(_centerPnl, pageId);
                 for (JButton btn : _buttons)

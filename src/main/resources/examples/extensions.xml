@@ -1,35 +1,24 @@
-<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  This example shows how extensions can be used. The thing to understand about 
-  extensions is that to be properly used, they require the library itself to be 
-  extended; it's not enough to provide a user-defined dictionary... Without 
-  extending the library, then there will be an error when reading the file, unless
-  the option to ignore unkown tags is turned on...
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<?xml version="1.0" encoding="UTF-8" ?>
 
-
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" recordType="I" timeGenerated="2015-03-13T12:09:19-0400">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" 
+        recordType="I" 
+        timeGenerated="2015-03-13T12:09:19-0400">
     <Patient>
         <Item naaccrId="patientIdNumber" naaccrNum="20">00000001</Item>
         <EditsReport>
-            <EditFailure id="EDIT-1" message="Message 1"/>
+            <EditFailure id="EDIT-1" message="This patient failed this edit..."/>
         </EditsReport>
     </Patient>
     <Patient>
         <Item naaccrId="patientIdNumber" naaccrNum="20">00000002</Item>
+        <EditsReport>
+            <EditFailure id="EDIT-1" message="This patient failed this edit..."/>
+        </EditsReport>
         <Tumor>
             <Item naaccrId="primarySite" naaccrNum="400">C456</Item>
             <EditsReport>
-                <EditFailure id="EDIT-2" message="Message 2"/>
+                <EditFailure id="EDIT-2" message="This tumor failed this edit..."/>
             </EditsReport>
         </Tumor>
-        <EditsReport>
-            <EditFailure id="EDIT-1" message="Message 1"/>
-        </EditsReport>
-    </Patient>
-    <Patient>
-        <Item naaccrId="patientIdNumber" naaccrNum="20">00000003</Item>
-        <EditsReport>
-            <EditFailure id="EDIT-3" message="Message 3"/>
-        </EditsReport>
     </Patient>
 </NaaccrData>
