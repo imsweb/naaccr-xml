@@ -134,12 +134,14 @@ public class PatientFlatReader implements AutoCloseable {
 
     protected Patient createPatientFromLines(List<String> lines, List<Integer> lineNumbers) throws NaaccrIOException {
         Patient patient = new Patient();
+        patient.setLineNumber(lineNumbers.get(0));
 
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
             Integer lineNumber = lineNumbers.get(i);
 
             Tumor tumor = new Tumor();
+            tumor.setLineNumber(lineNumber);
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
                 if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement())) {
                     if (i == 0)

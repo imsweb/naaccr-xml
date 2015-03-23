@@ -15,14 +15,20 @@ import org.naaccr.xml.NaaccrValidationError;
  * <ol>
  *     <li>Entity has a collection of items on it</li>
  *     <li>Entity has a collection of validation errors on it</li>
+ *     <li>Entity has a line number on it (might not always be available)</li>
  * </ol>
  * This class also defines some utility methods to read/write those collections...
  */
 public class AbstractEntity {
 
+    // the items corresponding to this entity
     protected List<Item> _items;
-    
+
+    // the validation errors for this entity (for a patient, this collection would NOT contain the tumor errors...)
     protected List<NaaccrValidationError> _errors;
+
+    // the line number for this entity; available only when reading from a file
+    protected Integer _lineNumber;
 
     // caches to improve lookup performances
     protected Map<String, Item> _cachedById;
@@ -55,5 +61,13 @@ public class AbstractEntity {
         if (_errors == null)
             _errors = new ArrayList<>();
         return _errors;
+    }
+
+    public Integer getLineNumber() {
+        return _lineNumber;
+    }
+
+    public void setLineNumber(Integer lineNumber) {
+        _lineNumber = lineNumber;
     }
 }

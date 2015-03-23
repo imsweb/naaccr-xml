@@ -4,11 +4,13 @@
 package org.naaccr.xml.gui.pages;
 
 import java.io.File;
+import java.util.List;
 
 import org.naaccr.xml.NaaccrIOException;
 import org.naaccr.xml.NaaccrStreamObserver;
 import org.naaccr.xml.NaaccrXmlOptions;
 import org.naaccr.xml.NaaccrXmlUtils;
+import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.gui.StandaloneOptions;
 
@@ -32,5 +34,13 @@ public class FlatToXmlPage extends AbstractProcessingPage {
     @Override
     protected void runProcessing(File source, File target, NaaccrXmlOptions options, NaaccrDictionary dictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
         NaaccrXmlUtils.flatToXml(source, target, options, dictionary, observer);
+    }
+
+    @Override
+    protected int calculateProgressOffset(List<Patient> patients) {
+        int offset = 0;
+        for (Patient patient : patients)
+            offset += patient.getTumors().size();
+        return offset;
     }
 }

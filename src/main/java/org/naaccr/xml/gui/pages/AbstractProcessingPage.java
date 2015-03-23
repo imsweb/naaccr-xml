@@ -476,10 +476,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        int count = _processingBar.getValue();
-                        for (Patient patient : patients)
-                            count += patient.getTumors().size();
-                        _processingBar.setValue(count);
+                        _processingBar.setValue(_processingBar.getValue() + calculateProgressOffset(patients));
                         if (_textArea.getLineCount() < 10000)
                             _textArea.append(buf.toString());
                         else if (_processingErrorsLbl.getText().trim().isEmpty()) {
@@ -496,6 +493,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     }
     
     protected abstract void runProcessing(File source, File target, NaaccrXmlOptions options, NaaccrDictionary dictionary, NaaccrStreamObserver observer) throws NaaccrIOException;
+
+    protected abstract int calculateProgressOffset(List<Patient> patients);
 
     private void reportError(String error) {
         _centerPnl.setVisible(true);

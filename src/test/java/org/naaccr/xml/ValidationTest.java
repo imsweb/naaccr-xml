@@ -19,6 +19,7 @@ import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
 
 // TODO FPD beef up these tests; add cases for options, user dictionary and observer...
+// TODO FPD add tests for line number on main entities...
 public class ValidationTest {
 
     @Test
