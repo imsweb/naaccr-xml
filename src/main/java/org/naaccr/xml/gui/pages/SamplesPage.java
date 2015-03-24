@@ -45,7 +45,7 @@ public class SamplesPage extends AbstractPage {
         JPanel northPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         northPnl.setBorder(new EmptyBorder(10, 10, 0, 0));
         Vector<String> data = new Vector<>(samples.keySet());
-        final JComboBox selectionBox = new JComboBox(data);
+        final JComboBox selectionBox = new JComboBox<>(data);
         northPnl.add(selectionBox);
         northPnl.add(Box.createHorizontalStrut(25));
         _descLbl = Standalone.createItalicLabel("");

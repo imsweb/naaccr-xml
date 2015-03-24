@@ -14,17 +14,55 @@ import java.util.Set;
 public class NaaccrFormat {
 
     // version constants
+    public static String NAACCR_VERSION_150 = "150";
     public static String NAACCR_VERSION_140 = "140";
 
     // list of supported versions
     private static final List<String> _SUPPORTED_VERSIONS = new ArrayList<>();
 
     static {
+        _SUPPORTED_VERSIONS.add(NAACCR_VERSION_150);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_140);
     }
 
     public static boolean isVersionSupported(String version) {
         return _SUPPORTED_VERSIONS.contains(version);
+    }
+
+    public static Set<String> getSupportedVersions() {
+        return new HashSet<>(_SUPPORTED_VERSIONS);
+    }
+
+    // format constants
+    public static String NAACCR_FORMAT_15_ABSTRACT = "naaccr-150-abstract";
+    public static String NAACCR_FORMAT_15_MODIFIED = "naaccr-150-modified";
+    public static String NAACCR_FORMAT_15_CONFIDENTIAL = "naaccr-150-confidential";
+    public static String NAACCR_FORMAT_15_INCIDENCE = "naaccr-150-incidence";
+    public static String NAACCR_FORMAT_14_ABSTRACT = "naaccr-140-abstract";
+    public static String NAACCR_FORMAT_14_MODIFIED = "naaccr-140-modified";
+    public static String NAACCR_FORMAT_14_CONFIDENTIAL = "naaccr-140-confidential";
+    public static String NAACCR_FORMAT_14_INCIDENCE = "naaccr-140-incidence";
+
+    // list of supported formats
+    private static final List<String> _SUPPORTED_FORMATS = new ArrayList<>();
+
+    static {
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_15_ABSTRACT);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_15_MODIFIED);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_15_CONFIDENTIAL);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_15_INCIDENCE);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_14_ABSTRACT);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_14_MODIFIED);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_14_CONFIDENTIAL);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_14_INCIDENCE);
+    }
+
+    public static boolean isFormatSupported(String format) {
+        return _SUPPORTED_FORMATS.contains(format);
+    }
+
+    public static Set<String> getSupportedFormats() {
+        return new HashSet<>(_SUPPORTED_FORMATS);
     }
 
     // record type constants
@@ -46,35 +84,15 @@ public class NaaccrFormat {
     public static boolean isRecordTypeSupported(String recordType) {
         return _SUPPORTED_REC_TYPES.contains(recordType);
     }
-    
-    // format constants
-    public static String NAACCR_FORMAT_14_ABSTRACT = "naaccr-140-abstract";
-    public static String NAACCR_FORMAT_14_MODIFIED = "naaccr-140-modified";
-    public static String NAACCR_FORMAT_14_CONFIDENTIAL = "naaccr-140-confidential";
-    public static String NAACCR_FORMAT_14_INCIDENCE = "naaccr-140-incidence";
 
-    // list of supported formats
-    private static final List<String> _SUPPORTED_FORMATS = new ArrayList<>();
-
-    static {
-        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_14_ABSTRACT);
-        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_14_MODIFIED);
-        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_14_CONFIDENTIAL);
-        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_14_INCIDENCE);
+    public static Set<String> getSupportedRecordTypes() {
+        return new HashSet<>(_SUPPORTED_REC_TYPES);
     }
 
-    public static boolean isFormatSupported(String format) {
-        return _SUPPORTED_FORMATS.contains(format);
-    }
-    
-    public static Set<String> getSupportedFormats() {
-        return new HashSet<>(_SUPPORTED_FORMATS);
-    }
-    
     public static NaaccrFormat getInstance(String format) {
         return new NaaccrFormat(format);
     }
-    
+
     public static NaaccrFormat getInstance(String naaccrVersion, String recordType) {
         return new NaaccrFormat(getFormatFromVersionAndType(naaccrVersion, recordType));
     }
@@ -82,7 +100,7 @@ public class NaaccrFormat {
     private String _naaccrVersion;
 
     private String _recordType;
-    
+
     private int _lineLength;
 
     private NaaccrFormat(String format) {
@@ -93,7 +111,7 @@ public class NaaccrFormat {
         if (!isVersionSupported(parts[1]))
             throw new RuntimeException("Unsupported version: " + parts[1]);
         _naaccrVersion = parts[1];
-        
+
         switch (parts[2]) {
             case "abstract":
                 _recordType = "A";
@@ -115,7 +133,7 @@ public class NaaccrFormat {
                 throw new RuntimeException("Unsupported format: " + parts[2]);
         }
     }
-    
+
     private static String getFormatFromVersionAndType(String version, String type) {
         String format;
         switch (type) {

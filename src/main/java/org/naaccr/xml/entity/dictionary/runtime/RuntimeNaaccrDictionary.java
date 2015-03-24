@@ -34,17 +34,17 @@ public class RuntimeNaaccrDictionary {
 
         // use the default user dictionary if one is not provided...
         if (userDictionary == null)
-            userDictionary = NaaccrDictionaryUtils.getDefaultUserDictionary(baseDictionary.getNaaccrVersion());
+            userDictionary = NaaccrDictionaryUtils.getDefaultUserDictionaryByVersion(baseDictionary.getNaaccrVersion());
 
         _baseDictionaryUri = baseDictionary.getDictionaryUri();
         _userDictionaryUri = userDictionary.getDictionaryUri();
         _format = NaaccrFormat.getInstance(baseDictionary.getNaaccrVersion(), recordType);
         _items = new ArrayList<>();
         for (NaaccrDictionaryItem item : baseDictionary.getItems())
-            if (Arrays.asList(item.getRecordTypes().split(",")).contains(recordType))
+            if (item.getRecordTypes() == null || Arrays.asList(item.getRecordTypes().split(",")).contains(recordType))
                 _items.add(new RuntimeNaaccrDictionaryItem(item));
         for (NaaccrDictionaryItem item : userDictionary.getItems())
-            if (Arrays.asList(item.getRecordTypes().split(",")).contains(recordType))
+            if (item.getRecordTypes() == null || Arrays.asList(item.getRecordTypes().split(",")).contains(recordType))
                 _items.add(new RuntimeNaaccrDictionaryItem(item));
 
         // sort the fields by starting columns

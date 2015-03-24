@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-gaps-140.xml"
-            naaccrVersion="140"
-            description="NAACCR 14 default user dictionary">
+<NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-gaps-150.xml"
+            naaccrVersion="150"
+            description="NAACCR 15 default user dictionary">
     <ItemDefs>
         <ItemDef naaccrId="reserved00"
             naaccrNum="37"
@@ -119,8 +119,8 @@
         <ItemDef naaccrId="reserved09"
             naaccrNum="1740"
             naaccrName="Reserved 09"
-            startColumn="2292"
-            length="48"
+            startColumn="2326"
+            length="14"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             trim="none"/>

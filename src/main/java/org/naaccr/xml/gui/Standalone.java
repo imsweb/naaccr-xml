@@ -93,7 +93,6 @@ public class Standalone extends JFrame {
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, final Throwable e) {
-                //e.printStackTrace(); // TODO FPD
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {

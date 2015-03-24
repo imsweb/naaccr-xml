@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
@@ -24,6 +25,11 @@ import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
 /**
  * This utillity class can be used to read/write dictionaries, whether they are internal to the library, or provided by the user...
+ * <br/><br/>
+ * Note that there is no method to get all the supported dictionaries; instead one needs to use the getSupportedVersions() available in
+ * the NaaccrFormat class, and from there use the getBaseDictionaryByVersion() in this class.
+ * <br/><br/>
+ * There is no caching done in this class; dictionaries are loaded from XML as requested.
  */
 public final class NaaccrDictionaryUtils {
 
@@ -56,7 +62,6 @@ public final class NaaccrDictionaryUtils {
     public static final String NAACCR_PADDING_LEFT_BLANK = "leftBlank";
     public static final String NAACCR_PADDING_RIGHT_ZERO = "rightZero";
     public static final String NAACCR_PADDING_LEFT_ZERO = "leftZero";
-
 
     // the Patterns for the internal dictionaries URI
     public static final Pattern _PATTERN_DICTIONARY_URI = Pattern.compile("http://naaccr\\.org/naaccrxml/naaccr-dictionary(-gaps)?-(.+?)\\.xml");
@@ -93,7 +98,7 @@ public final class NaaccrDictionaryUtils {
         else
             return "http://naaccr.org/naaccrxml/naaccr-dictionary-gaps-" + version + ".xml";
     }
-    
+
     /**
      * Returns the base dictionary for the requested URI.
      * @param uri URI, required
@@ -132,7 +137,7 @@ public final class NaaccrDictionaryUtils {
     public static NaaccrDictionary getDefaultUserDictionaryByUri(String uri) {
         if (uri == null)
             throw new RuntimeException("URI is required for getting the default user dictionary.");
-        return getDefaultUserDictionary(extractVersionFromUri(uri));
+        return getDefaultUserDictionaryByVersion(extractVersionFromUri(uri));
     }
 
     /**
@@ -141,7 +146,7 @@ public final class NaaccrDictionaryUtils {
      * @return the corresponding default user dictionary, throws a runtime exception if not found
      */
     @SuppressWarnings("ConstantConditions")
-    public static NaaccrDictionary getDefaultUserDictionary(String naaccrVersion) {
+    public static NaaccrDictionary getDefaultUserDictionaryByVersion(String naaccrVersion) {
         if (naaccrVersion == null)
             throw new RuntimeException("Version is required for getting the default user dictionary.");
         if (!NaaccrFormat.isVersionSupported(naaccrVersion))
@@ -169,7 +174,7 @@ public final class NaaccrDictionaryUtils {
             return readDictionary(reader);
         }
     }
-    
+
     /**
      * Reads a dictionary from the provided reader.
      * @param reader reader, cannot be null
@@ -177,7 +182,12 @@ public final class NaaccrDictionaryUtils {
      * @throws IOException if the dictionary could not be read
      */
     public static NaaccrDictionary readDictionary(Reader reader) throws IOException {
-        return (NaaccrDictionary)instanciateXStream().fromXML(reader);
+        NaaccrDictionary dictionary = (NaaccrDictionary)instanciateXStream().fromXML(reader);
+
+        boolean isBaseDictionary = dictionary.getDictionaryUri() != null && _PATTERN_DICTIONARY_URI.matcher(dictionary.getDictionaryUri()).matches();
+        validateDictionary(dictionary, isBaseDictionary);
+
+        return dictionary;
     }
 
     /**
@@ -191,7 +201,7 @@ public final class NaaccrDictionaryUtils {
             writeDictionary(dictionary, writer);
         }
     }
-    
+
     /**
      * Writes the given dictionary to the provided writer.
      * @param dictionary dictionary to write, cannot be null
@@ -202,6 +212,89 @@ public final class NaaccrDictionaryUtils {
         instanciateXStream().marshal(dictionary, new NaaccrPrettyPrintWriter(dictionary, writer));
     }
 
+    /**
+     * Validates the provided dictionary
+     * @param dictionary dictionary to validate, can't be null
+     * @param isBaseDictionary true if the dictionary is a base dictionary, false otherwise
+     */
+    public static void validateDictionary(NaaccrDictionary dictionary, boolean isBaseDictionary) throws IOException {
+
+        if (dictionary.getDictionaryUri() == null || dictionary.getDictionaryUri().trim().isEmpty())
+            throw new IOException("'dictionaryUri' attribute is required");
+        if (dictionary.getNaaccrVersion() == null || dictionary.getNaaccrVersion().trim().isEmpty())
+            throw new IOException("'naaccrVersion' attribute is required");
+        if (dictionary.getItems().isEmpty())
+            throw new IOException("a dictionary must contain at least one item definition");
+
+        for (NaaccrDictionaryItem item : dictionary.getItems()) {
+            if (item.getNaaccrId() == null || item.getNaaccrId().trim().isEmpty())
+                throw new IOException("'naaccrId' attribute is required");
+            if (item.getNaaccrNum() == null)
+                throw new IOException("'naaccrNum' attribute is required");
+            if (item.getLength() == null)
+                throw new IOException("'length' attribute is required");
+            if (item.getStartColumn() == null)
+                throw new IOException("'startColumn' attribute is required");
+            if (item.getParentXmlElement() == null || item.getParentXmlElement().trim().isEmpty())
+                throw new IOException("'parentXmlElement' attribute is required");
+            if (!NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(item.getParentXmlElement()) && !NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(item.getParentXmlElement())
+                    && !NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(item.getParentXmlElement()))
+                throw new IOException("invalid value for 'parentXmlElement' attribute: " + item.getParentXmlElement());
+            if (item.getDataType() != null && (!NAACCR_DATA_TYPE_ALPHA.equals(item.getDataType()) && !NAACCR_DATA_TYPE_DIGITS.equals(item.getDataType()) && !NAACCR_DATA_TYPE_MIXED.equals(
+                    item.getDataType())) && !NAACCR_DATA_TYPE_NUMERIC.equals(item.getDataType()) && !NAACCR_DATA_TYPE_TEXT.equals(item.getDataType()) && !NAACCR_DATA_TYPE_DATE.equals(
+                    item.getDataType()))
+                throw new IOException("invalid value for 'dataType' attribute: " + item.getDataType());
+            if (item.getPadding() != null && (!NAACCR_PADDING_LEFT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_LEFT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_RIGHT_BLANK.equals(
+                    item.getPadding()) && !NAACCR_PADDING_RIGHT_ZERO.equals(item.getPadding())))
+                throw new IOException("invalid value for 'padding' attribute: " + item.getPadding());
+            if (item.getTrim() != null && (!NAACCR_TRIM_ALL.equals(item.getTrim()) && !NAACCR_TRIM_NONE.equals(item.getTrim())))
+                throw new IOException("invalid value for 'trim' attribute: " + item.getTrim());
+            if (item.getRegexValidation() != null) {
+                try {
+                    //noinspection ResultOfMethodCallIgnored
+                    Pattern.compile(item.getRegexValidation());
+                }
+                catch (PatternSyntaxException e) {
+                    throw new IOException("invalid value for 'regexValidation' attribute: " + item.getRegexValidation());
+                }
+            }
+        }
+
+        // user dictionary specific validation
+        if (!isBaseDictionary) {
+
+            // we are going to need these...
+            NaaccrDictionary baseDictionary = getBaseDictionaryByVersion(dictionary.getNaaccrVersion());
+            NaaccrDictionary defaultUserDictionary = getDefaultUserDictionaryByVersion(dictionary.getNaaccrVersion());
+
+            for (NaaccrDictionaryItem item : dictionary.getItems()) {
+
+                // can't use an internal ID
+                if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null || defaultUserDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
+                    throw new IOException("invalid value for 'naaccrId' attribute: " + item.getNaaccrId() + "; this ID is used in the standard dictionary");
+
+                // range must be very specific for a user dictionary...
+                if (item.getNaaccrNum() < 9500 || item.getNaaccrNum() > 99999)
+                    throw new IOException("invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999");
+
+                // this is tricky, but an item must fall into the columns of one of the items defined in the corresponding items defined in the default user dictionary
+                boolean fallInAllowedRange = false;
+                for (NaaccrDictionaryItem defaultItem : defaultUserDictionary.getItems()) {
+                    if (item.getStartColumn() >= defaultItem.getStartColumn() && item.getStartColumn() + item.getLength() <= defaultItem.getStartColumn() + defaultItem.getLength()) {
+                        fallInAllowedRange = true;
+                        break;
+                    }
+                }
+                if (!fallInAllowedRange)
+                    throw new IOException("invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps");
+            }
+        }
+    }
+
+    /**
+     * Helper method to create the XStream object used to read and write XML.
+     * @return a configured <code>XStream</code> object
+     */
     private static XStream instanciateXStream() {
         XStream xstream = new XStream();
 
@@ -232,6 +325,9 @@ public final class NaaccrDictionaryUtils {
         return xstream;
     }
 
+    /**
+     * This class is used to properly format dictionaries when they are written (mainly the indentation and the line feeds).
+     */
     private static class NaaccrPrettyPrintWriter extends PrettyPrintWriter {
 
         // why isn't the internal writer protected instead of private??? I hate when people do that!
@@ -244,6 +340,12 @@ public final class NaaccrDictionaryUtils {
         public NaaccrPrettyPrintWriter(NaaccrDictionary dictionary, Writer writer) {
             super(writer, new char[] {' ', ' ', ' ', ' '});
             _dictionary = dictionary;
+            try {
+                writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n\r\n");
+            }
+            catch (IOException e) {
+                // ignore this one, the exception will happen again anyway...
+            }
         }
 
         @Override

@@ -3,12 +3,50 @@
  */
 package org.naaccr.xml;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.regex.Pattern;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 
 public class NaaccrDictionaryUtilsTest {
+
+    @Test
+    public void testReadDictionary() throws IOException {
+
+        // get a base dictionary
+        NaaccrDictionary baseDictionary1 = NaaccrDictionaryUtils.getBaseDictionaryByVersion(NaaccrFormat.NAACCR_VERSION_140);
+        NaaccrDictionary baseDictionary2 = NaaccrDictionaryUtils.getBaseDictionaryByUri(baseDictionary1.getDictionaryUri());
+        Assert.assertEquals(baseDictionary1.getDictionaryUri(), baseDictionary2.getDictionaryUri());
+        Assert.assertEquals(baseDictionary1.getNaaccrVersion(), baseDictionary2.getNaaccrVersion());
+        Assert.assertEquals(baseDictionary1.getItems().size(), baseDictionary2.getItems().size());
+
+        // get a default user dictionary
+        NaaccrDictionary defaultUserDictionary1 = NaaccrDictionaryUtils.getDefaultUserDictionaryByVersion(NaaccrFormat.NAACCR_VERSION_140);
+        NaaccrDictionary defaultUserDictionary2 = NaaccrDictionaryUtils.getDefaultUserDictionaryByUri(baseDictionary1.getDictionaryUri());
+        Assert.assertEquals(defaultUserDictionary1.getDictionaryUri(), defaultUserDictionary2.getDictionaryUri());
+        Assert.assertEquals(defaultUserDictionary1.getNaaccrVersion(), defaultUserDictionary2.getNaaccrVersion());
+        Assert.assertEquals(defaultUserDictionary1.getItems().size(), defaultUserDictionary2.getItems().size());
+
+        // read a provided user dictionary
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("testing-user-dictionary-140.xml"))) {
+            NaaccrDictionary defaultUserDictionary = NaaccrDictionaryUtils.readDictionary(reader);
+            Assert.assertEquals(3, defaultUserDictionary.getItems().size());
+        }
+
+        // try to read a user dictionary with an error (bad start column)
+        boolean exceptionHappend = false;
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("testing-user-dictionary-140-bad1.xml"))) {
+            NaaccrDictionaryUtils.readDictionary(reader);
+        }
+        catch (IOException e) {
+            exceptionHappend = true;
+        }
+        Assert.assertTrue(exceptionHappend);
+    }
 
     @Test
     public void testValidationRegex() {

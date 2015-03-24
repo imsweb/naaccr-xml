@@ -18,26 +18,31 @@ import au.com.bytecode.opencsv.CSVReader;
 public class CsvToXmlDictionaryLab {
 
     public static void main(String[] args) throws IOException {
+        handleVersion("140", "14");
+        handleVersion("150", "15");
+    }
+
+    private static void handleVersion(String version, String formattedVersion) throws IOException {
 
         // create base XML dictionary from CSV...
-        NaaccrDictionary dictionary = readDictionaryFromCsv(new FileReader(new File(System.getProperty("user.dir") + "/docs/fabian/naaccr-dictionary-140.csv")));
-        System.out.println("Read " + dictionary.getItems().size() + " items from base CSV dictionary...");
-        dictionary.setDictionaryUri("http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml");
-        dictionary.setNaaccrVersion("140");
-        dictionary.setDescription("NAACCR 14 base dictionary.");
-        File outputFile = new File(System.getProperty("user.dir") + "/src/main/resources/naaccr-dictionary-140.xml");
+        NaaccrDictionary dictionary = readDictionaryFromCsv(new FileReader(new File(System.getProperty("user.dir") + "/docs/fabian/naaccr-dictionary-" + version + ".csv")));
+        System.out.println("Read " + dictionary.getItems().size() + " items from base CSV dictionary for " + version);
+        dictionary.setDictionaryUri("http://naaccr.org/naaccrxml/naaccr-dictionary-" + version + ".xml");
+        dictionary.setNaaccrVersion(version);
+        dictionary.setDescription("NAACCR " + formattedVersion + " base dictionary");
+        File outputFile = new File(System.getProperty("user.dir") + "/src/main/resources/naaccr-dictionary-" + version + ".xml");
         FileWriter writer = new FileWriter(outputFile);
         NaaccrDictionaryUtils.writeDictionary(dictionary, writer);
         writer.close();
         System.out.println("Wrote " + outputFile.getPath());
 
         // create default user XML dictionary from CSV...
-        dictionary = readDictionaryFromCsv(new FileReader(new File(System.getProperty("user.dir") + "/docs/fabian/naaccr-dictionary-gaps-140.csv")));
-        System.out.println("Read " + dictionary.getItems().size() + " items from default user CSV dictionary...");
-        dictionary.setDictionaryUri("http://naaccr.org/naaccrxml/naaccr-dictionary-gaps-140.xml");
-        dictionary.setNaaccrVersion("140");
-        dictionary.setDescription("NAACCR 14 default user dictionary.");
-        outputFile = new File(System.getProperty("user.dir") + "/src/main/resources/naaccr-dictionary-gaps-140.xml");
+        dictionary = readDictionaryFromCsv(new FileReader(new File(System.getProperty("user.dir") + "/docs/fabian/naaccr-dictionary-gaps-" + version + ".csv")));
+        System.out.println("Read " + dictionary.getItems().size() + " items from default user CSV dictionary for " + version);
+        dictionary.setDictionaryUri("http://naaccr.org/naaccrxml/naaccr-dictionary-gaps-" + version + ".xml");
+        dictionary.setNaaccrVersion(version);
+        dictionary.setDescription("NAACCR " + formattedVersion + " default user dictionary");
+        outputFile = new File(System.getProperty("user.dir") + "/src/main/resources/naaccr-dictionary-gaps-" + version + ".xml");
         writer = new FileWriter(outputFile);
         NaaccrDictionaryUtils.writeDictionary(dictionary, writer);
         writer.close();
