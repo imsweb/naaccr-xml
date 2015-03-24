@@ -61,8 +61,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected JTextField _sourceFld, _targetFld, _dictionaryFld;
     protected JProgressBar _analysisBar, _processingBar;
     protected JLabel _errorLbl, _formatLbl, _numLinesLbl, _fileSizeLbl, _processingErrorsLbl;
-    protected SwingWorker<Void, Void> _analysisWorker;
-    protected SwingWorker<Void, Patient> _processingWorker;
+    protected transient SwingWorker<Void, Void> _analysisWorker;
+    protected transient SwingWorker<Void, Patient> _processingWorker;
     protected JTextArea _textArea;
     protected StandaloneOptions _guiOptions;
 
@@ -100,7 +100,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         sourceFilePnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         sourceFilePnl.add(Standalone.createBoldLabel(getSourceLabelText()));
         sourceFilePnl.add(Box.createHorizontalStrut(10));
-        _sourceFld = new JTextField(75);
+        _sourceFld = new JTextField(60);
         _sourceFld.setBackground(Color.WHITE);
         sourceFilePnl.add(_sourceFld);
         sourceFilePnl.add(Box.createHorizontalStrut(10));
@@ -239,7 +239,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
         JPanel optionsPnl = new JPanel(new BorderLayout());
         Font font = new JLabel().getFont();
-        optionsPnl.setBorder(new TitledBorder(null, "Options", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, font.deriveFont(Font.BOLD), Color.BLACK));
+        optionsPnl.setBorder(new TitledBorder(null, "Processing Options", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, font.deriveFont(Font.BOLD), Color.BLACK));
         _guiOptions = createOptions();
         _guiOptions.setBorder(new EmptyBorder(10, 20, 10, 10));
         optionsPnl.add(_guiOptions);
@@ -362,7 +362,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             @Override
             protected Void doInBackground() throws Exception {
                 File file = new File(_sourceFld.getText());
-                String format = NaaccrXmlUtils.getFormatFromFlatFile(file);
+                String format = getFormatForInputFile(file);
                 if (!NaaccrFormat.isFormatSupported(format))
                     reportError("unknown or unsupported file format");
                 else {
@@ -406,6 +406,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         };
         _analysisWorker.execute();
     }
+
+    protected abstract String getFormatForInputFile(File file);
 
     private void performProcessing() {
         _northProcessingPnl.setVisible(true);
@@ -476,7 +478,11 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        _processingBar.setValue(_processingBar.getValue() + calculateProgressOffset(patients));
+                        // technically this should use the "endLineNumber", not the "startLineNumber", but that's close enough for a progress bar...
+                        int processedLineNumber = 0;
+                        for (Patient patient : patients)
+                            processedLineNumber = Math.max(processedLineNumber, patient.getStartLineNumber());
+                        _processingBar.setValue(processedLineNumber);
                         if (_textArea.getLineCount() < 10000)
                             _textArea.append(buf.toString());
                         else if (_processingErrorsLbl.getText().trim().isEmpty()) {
@@ -486,15 +492,11 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                     }
                 });
             }
-        }
-
-        ;
+        };
         _processingWorker.execute();
     }
     
     protected abstract void runProcessing(File source, File target, NaaccrXmlOptions options, NaaccrDictionary dictionary, NaaccrStreamObserver observer) throws NaaccrIOException;
-
-    protected abstract int calculateProgressOffset(List<Patient> patients);
 
     private void reportError(String error) {
         _centerPnl.setVisible(true);

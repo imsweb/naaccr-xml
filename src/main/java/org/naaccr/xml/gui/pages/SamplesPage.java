@@ -35,19 +35,19 @@ public class SamplesPage extends AbstractPage {
         this.setBorder(new MatteBorder(0, 0, 1, 1, Color.GRAY));
 
         final Map<String, String> samples = new LinkedHashMap<>();
-        samples.put("attributes-id-only.xml", "Only the NAACCR ID's are required in the XML file; they are used to uniquely identify the items.");
-        samples.put("attributes-both.xml", "The NAACCR Numbers can also be provided in addition to the NAACCR ID's.");
-        samples.put("items-above-patient-level.xml", "Some items are defined only once on the top of the file, outside the 'patient' tags.");
-        samples.put("state-requestor-items-old.xml", "The State Requestor item can still be used as a 1,000 character fields as it was in the NAACCR flat files.");
-        samples.put("state-requestor-items-new.xml", "A better way to use the State Requestor item is to override its definition in a user-defined dictionary.");
-        samples.put("extensions.xml", "Extensions are an advanced feature that allows customized XML to be embedded into the standard syntax.");
+        samples.put("attributes-id-only.xml", "Only the NAACCR ID's are required in the XML file; they are used to uniquely identify the items. ");
+        samples.put("attributes-both.xml", "The NAACCR Numbers can also be provided in addition to the NAACCR ID's. ");
+        samples.put("items-above-patient-level.xml", "Some items are defined only once on the top of the file, outside the 'patient' tags. ");
+        samples.put("state-requestor-items-old.xml", "The State Requestor item can still be used as a 1,000 character field... ");
+        samples.put("state-requestor-items-new.xml", "A better way to use the State Requestor item is to override its definition in a user-defined dictionary. ");
+        samples.put("extensions.xml", "Extensions are an advanced feature that allows customized XML to be embedded into the standard syntax. ");
         
         JPanel northPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         northPnl.setBorder(new EmptyBorder(10, 10, 0, 0));
         Vector<String> data = new Vector<>(samples.keySet());
         final JComboBox selectionBox = new JComboBox<>(data);
         northPnl.add(selectionBox);
-        northPnl.add(Box.createHorizontalStrut(25));
+        northPnl.add(Box.createHorizontalStrut(15));
         _descLbl = Standalone.createItalicLabel("");
         northPnl.add(_descLbl);
         this.add(northPnl, BorderLayout.NORTH);

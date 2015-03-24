@@ -85,7 +85,7 @@ public class PatientFlatReader implements AutoCloseable {
             lineNumbers.add(_reader.getLineNumber());
             _previousLine = _reader.readLine();
             while (_previousLine != null) {
-                boolean samePatient = firstLineGroupingValues.equals(extractGroupingValues(_previousLine, _reader.getLineNumber(), _groupingItems));
+                boolean samePatient = !_groupingItems.isEmpty() && firstLineGroupingValues.equals(extractGroupingValues(_previousLine, _reader.getLineNumber(), _groupingItems));
                 if (samePatient) {
                     lines.add(_previousLine);
                     lineNumbers.add(_reader.getLineNumber());
@@ -134,14 +134,14 @@ public class PatientFlatReader implements AutoCloseable {
 
     protected Patient createPatientFromLines(List<String> lines, List<Integer> lineNumbers) throws NaaccrIOException {
         Patient patient = new Patient();
-        patient.setLineNumber(lineNumbers.get(0));
+        patient.setStartLineNumber(lineNumbers.get(0));
 
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
             Integer lineNumber = lineNumbers.get(i);
 
             Tumor tumor = new Tumor();
-            tumor.setLineNumber(lineNumber);
+            tumor.setStartLineNumber(lineNumber);
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
                 if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement())) {
                     if (i == 0)

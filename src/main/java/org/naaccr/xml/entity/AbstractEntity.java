@@ -28,7 +28,7 @@ public class AbstractEntity {
     protected List<NaaccrValidationError> _errors;
 
     // the line number for this entity; available only when reading from a file
-    protected Integer _lineNumber;
+    protected Integer _startLineNumber;
 
     // caches to improve lookup performances
     protected Map<String, Item> _cachedById;
@@ -63,11 +63,11 @@ public class AbstractEntity {
         return _errors;
     }
 
-    public Integer getLineNumber() {
-        return _lineNumber;
+    public Integer getStartLineNumber() {
+        return _startLineNumber;
     }
 
-    public void setLineNumber(Integer lineNumber) {
-        _lineNumber = lineNumber;
+    public void setStartLineNumber(Integer startLineNumber) {
+        _startLineNumber = startLineNumber;
     }
 }

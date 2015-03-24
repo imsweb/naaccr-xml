@@ -1,13 +1,4 @@
-<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  Here is an example with an item outside of the patient tags, and another version 
-  where it is added as an attribute instead...
-  Some items like vendor name makes a lot of sense. What about the NAACCR version 
-  and the record type? Do they belong in those extra items, or are they better 
-  as attribute? Currently, the Java library requires the users to provide both 
-  before starting to read the file; there is a utility method to extract the two 
-  attributes though...
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" recordType="I" timeGenerated="2015-03-13T12:09:19-0400">
     <Item naaccrId="vendorName">VENDOR 1.0</Item>

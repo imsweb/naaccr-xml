@@ -41,6 +41,11 @@ import org.naaccr.xml.gui.pages.SamplesPage;
 import org.naaccr.xml.gui.pages.XmlToFlatPage;
 
 // icons: https://www.iconfinder.com/iconsets/ellegant
+// TODO FPD add a validation page that starts with a simple editable XML file, but allows to load another XML file (should give a warning for large files)
+// TODO FDP use darker icons for non-seleted pages
+// TODO FPD what about help and about? Might need a menu with "File" and "Help"
+// TODO FPD change processing page so it shows the created file path and it's size, on the top of the warnings (instead of hiding the progress bar panel)
+// TODO FPD should the processing page show the number of patient/tumors for XML files instead of the number of lines?
 public class Standalone extends JFrame {
     
     private CardLayout _layout;
@@ -50,7 +55,8 @@ public class Standalone extends JFrame {
 
     public Standalone() {
         this.setTitle("NAACCR XML Utility v0.4");
-        this.setPreferredSize(new Dimension(1000, 700));
+        // TODO FPD check for screen size...
+        this.setPreferredSize(new Dimension(1100, 700));
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
 

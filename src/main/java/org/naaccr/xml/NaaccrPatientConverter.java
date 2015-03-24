@@ -61,7 +61,7 @@ public class NaaccrPatientConverter implements Converter {
             reportSyntaxError("unexpected tag: " + reader.getNodeName());
 
         Patient patient = new Patient();
-        patient.setLineNumber(_context.getParser().getLineNumber());
+        patient.setStartLineNumber(_context.getParser().getLineNumber());
         int patItemCount = 0, tumorCount = 0;
         boolean seenPatientExtension = false;
 
@@ -81,7 +81,7 @@ public class NaaccrPatientConverter implements Converter {
             // handle tumors
             else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(reader.getNodeName())) {
                 Tumor tumor = new Tumor();
-                tumor.setLineNumber(_context.getParser().getLineNumber());
+                tumor.setStartLineNumber(_context.getParser().getLineNumber());
                 tumorCount++;
                 int tumorItemCount = 0;
                 boolean seenTumorExtension = false;
