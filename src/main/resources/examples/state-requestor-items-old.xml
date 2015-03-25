@@ -4,7 +4,9 @@
         recordType="I" 
         timeGenerated="2015-03-13T12:09:19-0400">
     <Patient>
-        <Item naaccrId="stateRequestorItems">123ABC                                 etc...</Item>
+        <Tumor>
+            <Item naaccrId="stateRequestorItems">123ABC                                 etc...</Item>
+        </Tumor>
     </Patient>
 </NaaccrData>
 
