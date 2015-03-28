@@ -53,7 +53,7 @@ public class PatientXmlReader implements AutoCloseable {
         // create the XML reader
         _reader = configuration.getDriver().createReader(reader);
         if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
-            throw new NaaccrIOException("Was expecting " + NaaccrXmlUtils.NAACCR_XML_TAG_ROOT + " root tag but got " + _reader.getNodeName(), configuration.getParser().getLineNumber());
+            throw new NaaccrIOException("was expecting " + NaaccrXmlUtils.NAACCR_XML_TAG_ROOT + " root tag but got " + _reader.getNodeName(), configuration.getParser().getLineNumber());
 
         // create the root data holder (it will be use for every fields except the patients)
         _rootData = new NaaccrData(); // TODO FPD what if the root object has been extended?
@@ -61,27 +61,27 @@ public class PatientXmlReader implements AutoCloseable {
         // read the standard attribute: base dictionary
         _rootData.setBaseDictionaryUri(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
         if (_rootData.getBaseDictionaryUri() == null)
-            throw new NaaccrIOException("The " + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT + " attribute is required", configuration.getParser().getLineNumber());
+            throw new NaaccrIOException("the " + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT + " attribute is required", configuration.getParser().getLineNumber());
         NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByUri(_rootData.getBaseDictionaryUri());
         if (baseDictionary == null)
-            throw new NaaccrIOException("Unknown base dictionary: " + _rootData.getBaseDictionaryUri(), configuration.getParser().getLineNumber());
+            throw new NaaccrIOException("unknown base dictionary: " + _rootData.getBaseDictionaryUri(), configuration.getParser().getLineNumber());
 
         // read the standard attribute: user dictionary
         _rootData.setUserDictionaryUri(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT));
         if (_rootData.getUserDictionaryUri() != null && (userDictionary == null || !_rootData.getUserDictionaryUri().equals(userDictionary.getDictionaryUri())))
-            throw new NaaccrIOException("Unknown user dictionary: " + _rootData.getUserDictionaryUri(), configuration.getParser().getLineNumber());
+            throw new NaaccrIOException("unknown user dictionary: " + _rootData.getUserDictionaryUri(), configuration.getParser().getLineNumber());
 
         // read the standard attribute: record type            
         _rootData.setRecordType(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE));
         if (!NaaccrFormat.isRecordTypeSupported(_rootData.getRecordType()))
-            throw new NaaccrIOException("Invalid record type: " + _rootData.getRecordType(), configuration.getParser().getLineNumber());
+            throw new NaaccrIOException("invalid record type: " + _rootData.getRecordType(), configuration.getParser().getLineNumber());
 
         // read the standard attribute: time generated
         try {
             _rootData.setTimeGenerated(new SimpleDateFormat(NaaccrXmlUtils.GENERATED_TIME_FORMAT).parse(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED)));
         }
         catch (ParseException e) {
-            throw new NaaccrIOException("Bad format for " + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED + " attributes (expects " + NaaccrXmlUtils.GENERATED_TIME_FORMAT + ")",
+            throw new NaaccrIOException("bad format for " + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED + " attributes (expects " + NaaccrXmlUtils.GENERATED_TIME_FORMAT + ")",
                     configuration.getParser().getLineNumber());
         }
 
@@ -105,13 +105,18 @@ public class PatientXmlReader implements AutoCloseable {
 
         // check order of the tags
         if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM) && !_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT))
-            throw new NaaccrIOException("Unexpected tag: " + _reader.getNodeName(), configuration.getParser().getLineNumber());
+            throw new NaaccrIOException("unexpected tag: " + _reader.getNodeName(), configuration.getParser().getLineNumber());
 
         // read the root items
+        Set<String> itemsAlreadySeen = new HashSet<>();
         while (_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM)) {
             String rawId = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID);
             String rawNum = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM);
             configuration.getPatientConverter().readItem(_rootData, "/NaaccrData", NaaccrXmlUtils.NAACCR_XML_TAG_ROOT, rawId, rawNum, _reader.getValue());
+            if (rawId != null && itemsAlreadySeen.contains(rawId))
+                throw new NaaccrIOException("item '" + rawId + "' should be unique within the " + NaaccrXmlUtils.NAACCR_XML_TAG_ROOT + " tags");
+            else
+                itemsAlreadySeen.add(rawId);
             _reader.moveUp();
             _reader.moveDown();
         }
@@ -123,7 +128,7 @@ public class PatientXmlReader implements AutoCloseable {
         }
 
         if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT))
-            throw new NaaccrIOException("Unexpected tag: " + _reader.getNodeName(), configuration.getParser().getLineNumber());
+            throw new NaaccrIOException("unexpected tag: " + _reader.getNodeName(), configuration.getParser().getLineNumber());
 
         // need to expose xstream so the other methods can use it...
         _xstream = configuration.getXstream();

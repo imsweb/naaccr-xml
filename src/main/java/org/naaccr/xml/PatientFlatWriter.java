@@ -48,9 +48,9 @@ public class PatientFlatWriter implements AutoCloseable {
 
         // let's cache the record type and naaccr version items; we are going to use them a lot...
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
-            if (item.getNaaccrId().equals(NaaccrXmlUtils.FLAT_FIILE_FORMAT_ITEM_REC_TYPE))
+            if (item.getNaaccrId().equals(NaaccrXmlUtils.FLAT_FILE_FORMAT_ITEM_REC_TYPE))
                 _recordTypeItem = item;
-            if (item.getNaaccrId().equals(NaaccrXmlUtils.FLAT_FIILE_FORMAT_ITEM_NAACCR_VERSION))
+            if (item.getNaaccrId().equals(NaaccrXmlUtils.FLAT_FILE_FORMAT_ITEM_NAACCR_VERSION))
                 _naaccrVersionItem = item;
             if (_recordTypeItem != null && _naaccrVersionItem != null)
                 break;

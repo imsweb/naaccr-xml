@@ -67,7 +67,7 @@ public class PatientFlatReader implements AutoCloseable {
     /**
      * Reads the next patient on this stream.
      * @return the next available patient, null if not such patient
-     * @throws IOException
+     * @throws NaaccrIOException
      */
     public Patient readPatient() throws NaaccrIOException {
         List<String> lines = new ArrayList<>();

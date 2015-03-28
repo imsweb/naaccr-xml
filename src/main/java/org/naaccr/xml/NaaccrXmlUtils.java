@@ -15,8 +15,6 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -50,8 +48,8 @@ public class NaaccrXmlUtils {
     public static final String DEFAULT_TUMOR_GROUPING_ITEM = "patientIdNumber";
 
     // items used to determine the format of a flat file line
-    public static final String FLAT_FIILE_FORMAT_ITEM_REC_TYPE = "recordType";
-    public static final String FLAT_FIILE_FORMAT_ITEM_NAACCR_VERSION = "naaccrRecordVersion";
+    public static final String FLAT_FILE_FORMAT_ITEM_REC_TYPE = "recordType";
+    public static final String FLAT_FILE_FORMAT_ITEM_NAACCR_VERSION = "naaccrRecordVersion";
 
     /**
      * Translates a flat data file into an XML data file.
@@ -180,7 +178,7 @@ public class NaaccrXmlUtils {
      * Reads an NAACCR flat file data file and returns the corresponding data.
      * <br/>
      * ATTENTION: THIS METHOD WILL RETURN THE FULL CONTENT OF THE FILE AND IS NOT SUITABLE FOR LARGE FILE; CONSIDER USING A STREAM INSTEAD.
-     * @param xmlFile source XML data file, must exists
+     * @param flatFile source flat file, must exists
      * @param options optional validating options
      * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @param observer an optional observer, useful to keep track of the progress
@@ -211,7 +209,6 @@ public class NaaccrXmlUtils {
      * ATTENTION: THIS METHOD REQUIRES THE ENTIRE DATA OBJECT TO BE IN MEMORY; CONSIDER USING A STREAM INSTEAD.
      * @param data a <code>NaaccrData</code> object, cannot be null
      * @param flatFile target flat data file
-     * @param format expected NAACCR format
      * @param options optional validating options
      * @param userDictionary an optional user-defined dictionary (will be merged with the base dictionary)
      * @param observer an optional observer, useful to keep track of the progress
@@ -235,7 +232,7 @@ public class NaaccrXmlUtils {
     }
 
     /**
-     * Returns the NAACCR format of the given flat file.
+     * Returns the NAACCR format of the given flat file, based on it's first data line.
      * @param flatFile provided data file
      * @return the NAACCR format, null if it cannot be determined
      */
@@ -253,7 +250,10 @@ public class NaaccrXmlUtils {
 
     /**
      * Returns the NAACCR format of the given line in a flat file.
-     * @param flatFile provided data line
+     * <br/>
+     * This method assumes that the record type is available in column 1 (length 1) and 
+     * the NAACCR version is available in column 17 (length 3)...
+     * @param line provided data line
      * @return the NAACCR format, null if it cannot be determined
      */
     public static String getFormatFromFlatFileLine(String line) {
@@ -288,34 +288,22 @@ public class NaaccrXmlUtils {
 
     /**
      * Returns the NAACCR format of the given XML reader.
-     * @param xmlReader provided reader
+     * @param xmlReader provided reader, cannot be null
      * @return the NAACCR format, null if it cannot be determined
      */
     public static String getFormatFromXmlReader(Reader xmlReader) {
 
-        Pattern patternDictionary = Pattern.compile("baseDictionaryUri=\"(.+?)\"");
-        Pattern patternType = Pattern.compile("recordType=\"(.+?)\"");
-
-        String version = null, type = null;
-        try (BufferedReader reader = new BufferedReader(xmlReader)) {
-            // this isn't going to work if the file is big and doesn't contain any new lines, which is technically allowed in XML...
-            String line = reader.readLine();
-            while (line != null && (version == null || type == null)) {
-                Matcher matcherDictionary = patternDictionary.matcher(line);
-                if (matcherDictionary.find())
-                    version = NaaccrDictionaryUtils.extractVersionFromUri(matcherDictionary.group(1));
-                Matcher matcherType = patternType.matcher(line);
-                if (matcherType.find())
-                    type = matcherType.group(1);
-                line = reader.readLine();
+        try (PatientXmlReader reader = new PatientXmlReader(xmlReader, null, null)) {
+            NaaccrData rootData = reader.getRootData();
+            if (rootData.getBaseDictionaryUri() != null && rootData.getRecordType() != null) {
+                String version = NaaccrDictionaryUtils.extractVersionFromUri(rootData.getBaseDictionaryUri());
+                if (NaaccrFormat.isVersionSupported(version) && NaaccrFormat.isRecordTypeSupported(rootData.getRecordType()))
+                    return NaaccrFormat.getInstance(version, rootData.getRecordType()).toString();
             }
         }
-        catch (IOException e) {
-            // ignore, the result will be null
+        catch (NaaccrIOException e) {
+            // ignored, the result will be null, which is appropriate...
         }
-
-        if (version != null && NaaccrFormat.isVersionSupported(version) && type != null && NaaccrFormat.isRecordTypeSupported(type))
-            return NaaccrFormat.getInstance(version, type).toString();
 
         return null;
     }
