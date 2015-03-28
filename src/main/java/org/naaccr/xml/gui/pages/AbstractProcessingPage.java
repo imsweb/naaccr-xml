@@ -222,7 +222,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         targetFieldPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         targetFieldPnl.add(Standalone.createBoldLabel(getTargetLabelText()));
         targetFieldPnl.add(Box.createHorizontalStrut(10));
-        _targetFld = new JTextField(75);
+        _targetFld = new JTextField(60);
         targetFieldPnl.add(_targetFld);
         targetFieldPnl.add(Box.createHorizontalStrut(10));
         JButton browseBtn = new JButton("Browse...");
@@ -250,7 +250,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         dictionaryPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         dictionaryPnl.add(Standalone.createBoldLabel("User Dictionary:"));
         dictionaryPnl.add(Box.createHorizontalStrut(10));
-        _dictionaryFld = new JTextField(75);
+        _dictionaryFld = new JTextField(60);
         _dictionaryFld.setBackground(Color.WHITE);
         dictionaryPnl.add(_dictionaryFld);
         dictionaryPnl.add(Box.createHorizontalStrut(10));

@@ -10,6 +10,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.Thread.UncaughtExceptionHandler;
@@ -42,12 +44,12 @@ import org.naaccr.xml.gui.pages.XmlToFlatPage;
 
 // icons: https://www.iconfinder.com/iconsets/ellegant
 // TODO FPD add a validation page that starts with a simple editable XML file, but allows to load another XML file (should give a warning for large files)
-// TODO FDP use darker icons for non-seleted pages
+// TODO FDP use darker icons for non-selected pages
 // TODO FPD what about help and about? Might need a menu with "File" and "Help"
 // TODO FPD change processing page so it shows the created file path and it's size, on the top of the warnings (instead of hiding the progress bar panel)
 // TODO FPD should the processing page show the number of patient/tumors for XML files instead of the number of lines?
 public class Standalone extends JFrame {
-    
+
     private CardLayout _layout;
     private JPanel _centerPnl;
     private JLabel _currentPageIdLbl, _currentPageDescLbl;
@@ -55,8 +57,7 @@ public class Standalone extends JFrame {
 
     public Standalone() {
         this.setTitle("NAACCR XML Utility v0.4");
-        // TODO FPD check for screen size...
-        this.setPreferredSize(new Dimension(1100, 700));
+        this.setMinimumSize(new Dimension(1000, 700));
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
 
@@ -69,13 +70,13 @@ public class Standalone extends JFrame {
         _currentPageDescLbl = new JLabel();
         northPnl.add(_currentPageDescLbl);
         this.add(northPnl, BorderLayout.NORTH);
-        
+
         JToolBar toolbar = new JToolBar();
         toolbar.setOpaque(true);
         toolbar.setBackground(new Color(167, 191, 205));
         toolbar.setFloatable(false);
         toolbar.setBorder(new CompoundBorder(new MatteBorder(0, 1, 1, 1, Color.GRAY), new EmptyBorder(5, 10, 5, 10)));
-        
+
         toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
         toolbar.add(createToolbarButton("Flat to XML", "flat_to_xml.png", "flat-to-xml", "transform a NAACCR Flat file into the corresponding NAACCR XML file."));
         toolbar.add(Box.createVerticalStrut(15));
@@ -109,7 +110,12 @@ public class Standalone extends JFrame {
             }
         });
         
-        _buttons.get(0).doClick();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                _buttons.get(0).doClick();
+            }
+        });
     }
 
     private JButton createToolbarButton(final String text, String icon, final String pageId, final String description) {
@@ -137,7 +143,7 @@ public class Standalone extends JFrame {
         _buttons.add(btn);
         return btn;
     }
-    
+
     public static JLabel createItalicLabel(String text) {
         JLabel lbl = new JLabel(text);
         lbl.setFont(lbl.getFont().deriveFont(Font.ITALIC));
@@ -249,12 +255,20 @@ public class Standalone extends JFrame {
         }
 
         final JFrame frame = new Standalone();
+        
+        // try to be smart about the initial size of the frame
+        frame.pack();
+        frame.setPreferredSize(new Dimension(Math.min(frame.getPreferredSize().width, 1100), Math.min(frame.getPreferredSize().height, 700)));
+        frame.pack();
+
+        // start in the middle of the screen
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Point center = new Point(screenSize.width / 2, screenSize.height / 2);
+        frame.setLocation(center.x - frame.getWidth() / 2, center.y - frame.getHeight() / 2);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                frame.pack();
-                frame.setLocation(200, 200);
                 frame.setVisible(true);
             }
         });
