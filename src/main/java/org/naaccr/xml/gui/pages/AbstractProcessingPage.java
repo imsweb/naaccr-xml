@@ -120,7 +120,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _northLayout = new CardLayout();
         _northPnl.setLayout(_northLayout);
         _northPnl.add(_PANEL_ID_NO_FILE, buildNoFileSelectedPanel());
-        _northPnl.add(_PANEL_ID_ANALYSIS_RESULTS, buildAnalysResultsPanel());
+        _northPnl.add(_PANEL_ID_ANALYSIS_RESULTS, buildAnalysisResultsPanel());
         northPnl.add(_northPnl, BorderLayout.SOUTH);
         this.add(northPnl, BorderLayout.NORTH);
 
@@ -189,7 +189,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         return wrapperPnl;
     }
 
-    private JPanel buildAnalysResultsPanel() {
+    private JPanel buildAnalysisResultsPanel() {
         JPanel pnl = new JPanel();
         pnl.setBorder(new EmptyBorder(15, 0, 15, 0));
         pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));

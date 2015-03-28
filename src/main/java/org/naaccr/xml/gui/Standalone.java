@@ -78,21 +78,21 @@ public class Standalone extends JFrame {
         toolbar.setBorder(new CompoundBorder(new MatteBorder(0, 1, 1, 1, Color.GRAY), new EmptyBorder(5, 10, 5, 10)));
 
         toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
-        toolbar.add(createToolbarButton("Flat to XML", "flat_to_xml.png", "flat-to-xml", "transform a NAACCR Flat file into the corresponding NAACCR XML file."));
+        toolbar.add(createToolbarButton("Flat to XML", "flat_to_xml", "transform a NAACCR Flat file into the corresponding NAACCR XML file."));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("XML to Flat", "xml_to_flat.png", "xml-to-flat", "transform a NAACCR XML file inot the corresponding Flat file."));
+        toolbar.add(createToolbarButton("XML to Flat", "xml_to_flat", "transform a NAACCR XML file inot the corresponding Flat file."));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("Dictionary", "dictionary.png", "dictionary", "standard NAACCR dictionaries."));
+        toolbar.add(createToolbarButton("Dictionary", "dictionary", "standard NAACCR dictionaries."));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("Samples", "samples.png", "samples", "examples of typicial NAACCR XML files."));
+        toolbar.add(createToolbarButton("Samples", "samples", "examples of typicial NAACCR XML files."));
         this.getContentPane().add(toolbar, BorderLayout.WEST);
 
         _centerPnl = new JPanel();
         _centerPnl.setBorder(null);
         _layout = new CardLayout();
         _centerPnl.setLayout(_layout);
-        _centerPnl.add("flat-to-xml", new FlatToXmlPage());
-        _centerPnl.add("xml-to-flat", new XmlToFlatPage());
+        _centerPnl.add("flat_to_xml", new FlatToXmlPage());
+        _centerPnl.add("xml_to_flat", new XmlToFlatPage());
         _centerPnl.add("dictionary", new DictionariesPage());
         _centerPnl.add("samples", new SamplesPage());
         this.getContentPane().add(_centerPnl, BorderLayout.CENTER);
@@ -118,9 +118,10 @@ public class Standalone extends JFrame {
         });
     }
 
-    private JButton createToolbarButton(final String text, String icon, final String pageId, final String description) {
+    @SuppressWarnings("ConstantConditions")
+    private JButton createToolbarButton(final String text, final String pageId, final String description) {
         JButton btn = new JButton();
-        btn.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("icons/" + icon)));
+        btn.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("icons/" + pageId + "_inactive.png")));
         btn.setOpaque(false);
         btn.setFocusPainted(false);
         btn.setFocusable(false);
@@ -129,15 +130,23 @@ public class Standalone extends JFrame {
         btn.setForeground(Color.GRAY);
         btn.setVerticalTextPosition(SwingConstants.BOTTOM);
         btn.setHorizontalTextPosition(SwingConstants.CENTER);
-        btn.setActionCommand(text);
+        btn.setActionCommand(pageId);
         btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 _currentPageIdLbl.setText(text + " : ");
                 _currentPageDescLbl.setText(description);
                 _layout.show(_centerPnl, pageId);
-                for (JButton btn : _buttons)
-                    btn.setForeground(btn.getActionCommand().equals(text) ? Color.BLACK : Color.GRAY);
+                for (JButton btn : _buttons) {
+                    if (btn.getActionCommand().equals(pageId)) {
+                        btn.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("icons/" + btn.getActionCommand() + "_active.png")));
+                        btn.setForeground(Color.BLACK);
+                    }
+                    else {
+                        btn.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("icons/" + btn.getActionCommand() + "_inactive.png")));
+                        btn.setForeground(Color.GRAY);
+                    }
+                }
             }
         });
         _buttons.add(btn);

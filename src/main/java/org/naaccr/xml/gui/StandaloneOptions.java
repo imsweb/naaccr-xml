@@ -53,13 +53,13 @@ public class StandaloneOptions extends JPanel {
 
         if (readFlat) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-            _reportMismatchBox = new JCheckBox(" When grouping the tumors, report values mismatch.");
+            _reportMismatchBox = new JCheckBox(" When grouping the tumors, report value mismatch.");
             _reportMismatchBox.setSelected(true);
             pnl.add(_reportMismatchBox);
             contentPnl.add(pnl);
             contentPnl.add(Box.createVerticalStrut(3));
-            contentPnl.add(addHelpRow("If this option is checked, the items of the tumors grouped together but having different values will be reported as errors."));
-            contentPnl.add(addHelpRow("This option has no effect if the tumor are not grouped."));
+            contentPnl.add(addHelpRow("If this option is checked, the items of the tumors grouped together, but having different values will be reported as warnings."));
+            contentPnl.add(addHelpRow("This option has no effect if the tumors are not grouped."));
             contentPnl.add(Box.createVerticalStrut(15));
         }
 
@@ -81,7 +81,7 @@ public class StandaloneOptions extends JPanel {
             pnl.add(_ignoreUnkItemsBox);
             contentPnl.add(pnl);
             contentPnl.add(Box.createVerticalStrut(3));
-            contentPnl.add(addHelpRow("If this option is checked, unknown items will be ignored. Otherwise an error will be reported."));
+            contentPnl.add(addHelpRow("If this option is checked, unknown items will be ignored. Otherwise a warning will be reported."));
             contentPnl.add(Box.createVerticalStrut(15));
         }
 
@@ -93,7 +93,7 @@ public class StandaloneOptions extends JPanel {
             contentPnl.add(pnl);
             contentPnl.add(Box.createVerticalStrut(3));
             contentPnl.add(addHelpRow("If this option is checked, the NAACCR Numbers will be written to the file in addition to the NAACCR IDs."));
-            contentPnl.add(addHelpRow("Otherwise only the NAACCR ID (which are required) will be written as attributes."));
+            contentPnl.add(addHelpRow("Otherwise only the NAACCR ID (which ia required) is written as an attribute."));
             contentPnl.add(Box.createVerticalStrut(15));
         }
     }
