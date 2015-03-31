@@ -13,7 +13,11 @@ version of the dictionary used by the library.
 Using the library
 -----------------
 
-There are three ways to use this library.
+There are three ways to use this library:
+
+1. Using streams
+2. Using utility methods
+3. Using the Graphical User Interface
 
 ### Using streams
 This is the recommended way to use the library; 4 streams are provided:
@@ -25,69 +29,21 @@ This is the recommended way to use the library; 4 streams are provided:
 The readers provide a ***readPatient()*** method that returns the next patient available, or null if the end of the stream is reached.
 The writers provide a ***writePatient(patient)*** method.
 
-Transforming a flat file into the corresponding XML file and vice-versa becomes very simple with those streams; just create the reader and writer  
-you need and write every patient you read... 
+Transforming a flat file into the corresponding XML file and vice-versa becomes very simple with those streams; just create the streams and write every patient you read...
 
 ### Using utility methods
-There are few higher-level utility methods in the [NaaccrXmlUtils](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/NaaccrXmlUtils.java) class:
+A few higher-level utility methods have been defined in the [NaaccrXmlUtils](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/NaaccrXmlUtils.java) class (only the required parameters are shown for clarity):
 
-```java
-    /**
-     * Translates a flat data file into an XML data file.
-     * @param flatFile source flat data file, must exists
-     * @param xmlFile target XML data file
-     * @param format expected NAACCR format
-     * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
-     * @return the number of written patients
-     * @throws IOException
-     */
-    public static int flatToXml(File flatFile, File xmlFile, String format, NaaccrDictionary nonStandardDictionary)
-```
-
-```java
-    /**
-     * Translates an XML data file into a flat data file.
-     * @param xmlFile source XML data file, must exists
-     * @param flatFile target flat data file
-     * @param format expected NAACCR format
-     * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
-     * @return the number of written records
-     * @throws IOException
-     */
-    public static int xmlToFlat(File xmlFile, File flatFile, String format, NaaccrDictionary nonStandardDictionary)
-```
-
-```java
-    /**
-     * Reads an NAACCR XML data file and returns the corresponding data.
-     * <br/>
-     * ATTENTION: THIS METHOD WILL RETURN THE FULL CONTENT OF THE FILE AND IS NOT SUITABLE FOR LARGE FILE; CONSIDER USING A STREAM INSTEAD.
-     * @param xmlFile source XML data file, must exists
-     * @param format expected NAACCR format
-     * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
-     * @throws IOException
-     * @returns a <code>NaaccrDataExchange</code> object, never null
-     */
-    public static NaaccrDataExchange readXmlFile(File xmlFile, String format, NaaccrDictionary nonStandardDictionary)
-```
-
-```java
-    /**
-     * Writes the provided data to the requested XML file.
-     * <br/>
-     * ATTENTION: THIS METHOD REQUIRES THE ENTIRE DATA OBJECT TO BE IN MEMORY; CONSIDER USING A STREAM INSTEAD.
-     * @param data a <code>NaaccrDataExchange</code> object, cannot be null
-     * @param xmlFile target XML data file
-     * @param format expected NAACCR format
-     * @param nonStandardDictionary a user-defined dictionary for non-standard items (will be merged with the standard dictionary)
-     * @throws IOException
-     */
-    public static void writeXmlFile(NaaccrDataExchange data, File xmlFile, String format, NaaccrDictionary nonStandardDictionary) throws IOException
-```
+* void ***flatToXml***(File flatFile, File xmlFile, ...)
+* void ***xmlToFlat***(File xmlFile, File flatFile, ...)
+* NaaccrData ***readXmlFile***(File xmlFile, ...)
+* void ***writeXmlFile***(NaaccrData data, File xmlFile, ...)
+* NaaccrData ***readFlatFile***(File flatFile, ...)
+* void ***writeFlatFile***(NaaccrData data, File flatFile, ...)
 
 There are other utility methods, but those are the main ones.
 
-### Using the GUI
+### Using the Graphical User Interface
 
 The library contains an experimental GUI that wraps some of the utility methods and provides a more user-friendly environment for translating files.
 
