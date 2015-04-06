@@ -6,8 +6,14 @@ package org.naaccr.xml;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NaaccrXmlOptions {
+/**
+ * This class encapsulates the options that a reader/writer can use to customize its operations.
+ */
+public class NaaccrOptions {
 
+    /**
+     * The different ways of handling an unknown item.
+     */
     public static final String ITEM_HANDLING_ERROR = "error";
     public static final String ITEM_HANDLING_IGNORE = "ignore";
     public static final String ITEM_HANDLING_PROCESS = "process";
@@ -45,7 +51,7 @@ public class NaaccrXmlOptions {
     /**
      * Default constructor.
      */
-    public NaaccrXmlOptions() {
+    public NaaccrOptions() {
         _validateValues = true;
         _unknownItemHandling = ITEM_HANDLING_ERROR;
         _itemsToExclude = new ArrayList<>();

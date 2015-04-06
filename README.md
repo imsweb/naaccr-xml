@@ -34,14 +34,24 @@ Transforming a flat file into the corresponding XML file and vice-versa becomes 
 ### Using utility methods
 A few higher-level utility methods have been defined in the [NaaccrXmlUtils](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/NaaccrXmlUtils.java) class (only the required parameters are shown for clarity):
 
-* void ***flatToXml***(File flatFile, File xmlFile, ...)
-* void ***xmlToFlat***(File xmlFile, File flatFile, ...)
-* NaaccrData ***readXmlFile***(File xmlFile, ...)
-* void ***writeXmlFile***(NaaccrData data, File xmlFile, ...)
-* NaaccrData ***readFlatFile***(File flatFile, ...)
-* void ***writeFlatFile***(NaaccrData data, File flatFile, ...)
+** Reading methods **
+* NaaccrData ***readXmlFile*** (File xmlFile, ...)
+* NaaccrData ***readFlatFile*** (File flatFile, ...)
+
+** Writing methods **
+* void ***writeXmlFile*** (NaaccrData data, File xmlFile, ...)
+* void ***writeFlatFile*** (NaaccrData data, File flatFile, ...)
+
+** Translation methods **
+* void ***flatToXml*** (File flatFile, File xmlFile, ...)
+* void ***xmlToFlat*** (File xmlFile, File flatFile, ...)
 
 There are other utility methods, but those are the main ones.
+
+All those methods accept the following optional parameters (optional in the sense that null can be passed to the method):
+* [NaaccrXmlOptions](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/NaaccrXmlOptions.java) - options for customizing the read/write and errors reporting operations
+* [NaaccrDictionary](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/entity/dictionary/NaaccrDictionary.java) - a user-defined dictionary (if none is provided, the default user-defined dictionary will be used)
+* [NaaccrObserver](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/NaaccrObserver.java) - an observer allowing to report progress as the files are being processed.
 
 ### Using the Graphical User Interface
 

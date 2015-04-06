@@ -1,16 +1,19 @@
 /*
  * Copyright (C) 2015 Information Management Services, Inc.
  */
-package org.naaccr.xml;
+package org.naaccr.xml.runtime;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import org.naaccr.xml.NaaccrOptions;
+import org.naaccr.xml.NaaccrValidationError;
+import org.naaccr.xml.NaaccrXmlDictionaryUtils;
+import org.naaccr.xml.NaaccrXmlUtils;
 import org.naaccr.xml.entity.AbstractEntity;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
-import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
 
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
@@ -19,6 +22,9 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
+/**
+ * This class is telling the library how to read/write patients from/to XML.
+ */
 public class NaaccrPatientConverter implements Converter {
 
     protected NaaccrStreamContext _context;
@@ -33,7 +39,7 @@ public class NaaccrPatientConverter implements Converter {
 
     @Override
     public boolean canConvert(Class type) {
-        return type.equals(Patient.class);
+        return Patient.class.isAssignableFrom(type);
     }
 
     @Override
@@ -45,14 +51,14 @@ public class NaaccrPatientConverter implements Converter {
         for (Item item : patient.getItems())
             writeItem(item, writer);
 
-        // TODO FPD this would be the place to write the patient extension...
+        // TODO this would be the place to write the patient extension...
 
         for (Tumor tumor : patient.getTumors()) {
             writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
             for (Item item : tumor.getItems())
                 writeItem(item, writer);
 
-            // TODO FPD this would be the place to write the tumor extension...
+            // TODO this would be the place to write the tumor extension...
 
             writer.endNode();
         }
@@ -112,9 +118,9 @@ public class NaaccrPatientConverter implements Converter {
                     }
                     // handle tumor extension
                     else {
-                        // TODO FPD this would be the place to read the tumor extension; for now it's ignored...
-                        reader.moveDown();
+                        // TODO this would be the place to read the tumor extension; for now it's ignored...
                         reader.moveUp();
+                        reader.moveDown();
                     }
 
                     reader.moveUp();
@@ -125,9 +131,9 @@ public class NaaccrPatientConverter implements Converter {
             else {
                 if (tumorCount > 0)
                     reportSyntaxError("unexpected tag: " + reader.getNodeName());
-                // TODO FPD this would be the place to read the patient extension; for now it's ignored...
-                reader.moveDown();
+                // TODO this would be the place to read the patient extension; for now it's ignored...
                 reader.moveUp();
+                reader.moveDown();
             }
 
             reader.moveUp();
@@ -136,7 +142,7 @@ public class NaaccrPatientConverter implements Converter {
         return patient;
     }
 
-    void writeItem(Item item, HierarchicalStreamWriter writer) {
+    public void writeItem(Item item, HierarchicalStreamWriter writer) {
 
         // don't bother if the item has no value!
         if (item.getValue() == null || item.getValue().isEmpty())
@@ -162,7 +168,7 @@ public class NaaccrPatientConverter implements Converter {
         writer.endNode();
     }
 
-    void readItem(AbstractEntity entity, String currentPath, String parentTag, String rawId, String rawNum, String value) {
+    public void readItem(AbstractEntity entity, String currentPath, String parentTag, String rawId, String rawNum, String value) {
         int lineNumber = _context.getParser().getLineNumber();
 
         // if there is no value at all, don't bother
@@ -185,13 +191,13 @@ public class NaaccrPatientConverter implements Converter {
             item.setNaaccrNum(itemDef.getNaaccrNum());
         }
         else {
-            if (NaaccrXmlOptions.ITEM_HANDLING_PROCESS.equals(_context.getOptions().getUnknownItemHandling()))
+            if (NaaccrOptions.ITEM_HANDLING_PROCESS.equals(_context.getOptions().getUnknownItemHandling()))
                 item.setNaaccrId(rawId);
-            else if (NaaccrXmlOptions.ITEM_HANDLING_ERROR.equals(_context.getOptions().getUnknownItemHandling())) {
+            else if (NaaccrOptions.ITEM_HANDLING_ERROR.equals(_context.getOptions().getUnknownItemHandling())) {
                 reportError(entity, lineNumber, currentPath, "unknown '" + NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID + "' attribute value: " + rawId);
                 return;
             }
-            else if (NaaccrXmlOptions.ITEM_HANDLING_IGNORE.equals(_context.getOptions().getUnknownItemHandling()))
+            else if (NaaccrOptions.ITEM_HANDLING_IGNORE.equals(_context.getOptions().getUnknownItemHandling()))
                 return;
             else
                 throw new RuntimeException("Unknown option: " + _context.getOptions().getUnknownItemHandling());
@@ -230,7 +236,7 @@ public class NaaccrPatientConverter implements Converter {
                 else if (exactLengthRequired(itemDef.getDataType()) && item.getValue().length() != itemDef.getLength())
                     reportError(entity, lineNumber, currentPath, "invalid value, expected exactly " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef,
                             item.getValue());
-                else if (itemDef.getDataType() != null && !NaaccrDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(itemDef.getDataType()).matcher(item.getValue()).matches())
+                else if (itemDef.getDataType() != null && !NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(itemDef.getDataType()).matcher(item.getValue()).matches())
                     reportError(entity, lineNumber, currentPath, "invalid value for data type '" + itemDef.getDataType() + "'", itemDef, item.getValue());
                 else if (itemDef.getRegexValidation() != null && !itemDef.getRegexValidation().matcher(item.getValue()).matches())
                     reportError(entity, lineNumber, currentPath, "invalid value", itemDef, item.getValue());
@@ -242,18 +248,14 @@ public class NaaccrPatientConverter implements Converter {
     }
 
     protected boolean exactLengthRequired(String type) {
-        boolean result = NaaccrDictionaryUtils.NAACCR_DATA_TYPE_ALPHA.equals(type);
-        result |= NaaccrDictionaryUtils.NAACCR_DATA_TYPE_DIGITS.equals(type);
-        result |= NaaccrDictionaryUtils.NAACCR_DATA_TYPE_MIXED.equals(type);
+        boolean result = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_ALPHA.equals(type);
+        result |= NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS.equals(type);
+        result |= NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_MIXED.equals(type);
         return result;
     }
 
     protected void reportError(AbstractEntity entity, int line, String path, String msg) {
         reportError(entity, line, path, msg, null, null);
-    }
-
-    protected void reportError(AbstractEntity entity, int line, String path, String msg, RuntimeNaaccrDictionaryItem def) {
-        reportError(entity, line, path, msg, def, null);
     }
 
     protected void reportError(AbstractEntity entity, int line, String path, String msg, RuntimeNaaccrDictionaryItem def, String value) {

@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2015 Information Management Services, Inc.
  */
-package org.naaccr.xml;
+package org.naaccr.xml.runtime;
 
-import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
+import org.naaccr.xml.NaaccrOptions;
 import org.xmlpull.v1.XmlPullParser;
 
 public class NaaccrStreamContext {
 
     protected RuntimeNaaccrDictionary _dictionary;
 
-    protected NaaccrXmlOptions _options;
+    protected NaaccrOptions _options;
 
     protected XmlPullParser _parser;
 
@@ -22,11 +22,11 @@ public class NaaccrStreamContext {
         _dictionary = dictionary;
     }
 
-    public NaaccrXmlOptions getOptions() {
+    public NaaccrOptions getOptions() {
         return _options;
     }
 
-    public void setOptions(NaaccrXmlOptions options) {
+    public void setOptions(NaaccrOptions options) {
         _options = options;
     }
 

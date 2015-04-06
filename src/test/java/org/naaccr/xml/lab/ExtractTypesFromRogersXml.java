@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.naaccr.xml.NaaccrDictionaryUtils;
+import org.naaccr.xml.NaaccrXmlDictionaryUtils;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
 public class ExtractTypesFromRogersXml {
@@ -44,7 +44,7 @@ public class ExtractTypesFromRogersXml {
         File csv = new File(System.getProperty("user.dir") + "/build/types-comparison.csv");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(csv))) {
             writer.write("Item Num,Item ID,Old Type,New Type\r\n");
-            for (NaaccrDictionaryItem item : NaaccrDictionaryUtils.getBaseDictionaryByVersion("140").getItems()) {
+            for (NaaccrDictionaryItem item : NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("140").getItems()) {
                 String oldType = oldTypes.get(item.getStartColumn().toString());
                 if (oldType != null)
                     writer.write(item.getNaaccrNum() + "," + item.getNaaccrId() + "," + oldType + "," + (item.getDataType() == null ? "<blank>" : item.getDataType()) + "\r\n");

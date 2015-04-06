@@ -17,16 +17,19 @@ import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
-import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
-import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
+import org.naaccr.xml.runtime.RuntimeNaaccrDictionary;
+import org.naaccr.xml.runtime.RuntimeNaaccrDictionaryItem;
 
+/**
+ * This class can be used to wrap a generic reader into a patient reader handling the NAACCR flat-file format.
+ */
 public class PatientFlatReader implements AutoCloseable {
 
     protected LineNumberReader _reader;
 
     protected NaaccrData _rootData;
 
-    protected NaaccrXmlOptions _options;
+    protected NaaccrOptions _options;
 
     protected RuntimeNaaccrDictionary _dictionary;
 
@@ -34,9 +37,9 @@ public class PatientFlatReader implements AutoCloseable {
 
     protected String _previousLine;
 
-    public PatientFlatReader(Reader reader, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
+    public PatientFlatReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         _reader = new LineNumberReader(reader);
-        _options = options == null ? new NaaccrXmlOptions() : options;
+        _options = options == null ? new NaaccrOptions() : options;
 
         try {
             _previousLine = _reader.readLine();
@@ -45,7 +48,7 @@ public class PatientFlatReader implements AutoCloseable {
             throw new NaaccrIOException(e.getMessage());
         }
         NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromFlatFileLine(_previousLine));
-        NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByVersion(naaccrFormat.getNaaccrVersion());
+        NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(naaccrFormat.getNaaccrVersion());
         _dictionary = new RuntimeNaaccrDictionary(naaccrFormat.getRecordType(), baseDictionary, userDictionary);
         _rootData = new NaaccrData(naaccrFormat.toString());
 
@@ -187,7 +190,7 @@ public class PatientFlatReader implements AutoCloseable {
             String trimmedValue = value.trim();
 
             // apply trimming rule (no trimming rule means trim all)
-            if (trimmedValue.isEmpty() || itemDef.getTrim() == null || NaaccrDictionaryUtils.NAACCR_TRIM_ALL.equals(itemDef.getTrim()))
+            if (trimmedValue.isEmpty() || itemDef.getTrim() == null || NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL.equals(itemDef.getTrim()))
                 value = trimmedValue;
 
             if (!value.isEmpty()) {
@@ -203,7 +206,7 @@ public class PatientFlatReader implements AutoCloseable {
                     else if (exactLengthRequired(itemDef.getDataType()) && item.getValue().length() != itemDef.getLength())
                         reportError(entity, lineNumber, "invalid value, expected exactly " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef,
                                 item.getValue());
-                    else if (itemDef.getDataType() != null && !NaaccrDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(itemDef.getDataType()).matcher(item.getValue()).matches())
+                    else if (itemDef.getDataType() != null && !NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(itemDef.getDataType()).matcher(item.getValue()).matches())
                         reportError(entity, lineNumber, "invalid value for data type '" + itemDef.getDataType() + "'", itemDef, item.getValue());
                     else if (itemDef.getRegexValidation() != null && !itemDef.getRegexValidation().matcher(item.getValue()).matches())
                         reportError(entity, lineNumber, "invalid value", itemDef, item.getValue());
@@ -215,9 +218,9 @@ public class PatientFlatReader implements AutoCloseable {
     }
 
     protected boolean exactLengthRequired(String type) {
-        boolean result = NaaccrDictionaryUtils.NAACCR_DATA_TYPE_ALPHA.equals(type);
-        result |= NaaccrDictionaryUtils.NAACCR_DATA_TYPE_DIGITS.equals(type);
-        result |= NaaccrDictionaryUtils.NAACCR_DATA_TYPE_MIXED.equals(type);
+        boolean result = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_ALPHA.equals(type);
+        result |= NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS.equals(type);
+        result |= NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_MIXED.equals(type);
         return result;
     }
 

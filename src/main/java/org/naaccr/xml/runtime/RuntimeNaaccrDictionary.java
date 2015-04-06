@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2015 Information Management Services, Inc.
  */
-package org.naaccr.xml.entity.dictionary.runtime;
+package org.naaccr.xml.runtime;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.naaccr.xml.NaaccrDictionaryUtils;
 import org.naaccr.xml.NaaccrFormat;
+import org.naaccr.xml.NaaccrXmlDictionaryUtils;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
@@ -34,7 +34,7 @@ public class RuntimeNaaccrDictionary {
 
         // use the default user dictionary if one is not provided...
         if (userDictionary == null)
-            userDictionary = NaaccrDictionaryUtils.getDefaultUserDictionaryByVersion(baseDictionary.getNaaccrVersion());
+            userDictionary = NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(baseDictionary.getNaaccrVersion());
 
         _baseDictionaryUri = baseDictionary.getDictionaryUri();
         _userDictionaryUri = userDictionary.getDictionaryUri();

@@ -13,16 +13,19 @@ import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
-import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
-import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionaryItem;
+import org.naaccr.xml.runtime.RuntimeNaaccrDictionary;
+import org.naaccr.xml.runtime.RuntimeNaaccrDictionaryItem;
 
+/**
+ * This class can be used to wrap a generic writer into a patient writer handling the NAACCR flat-file format.
+ */
 public class PatientFlatWriter implements AutoCloseable {
 
     protected BufferedWriter _writer;
 
     protected NaaccrData _rootData;
 
-    protected NaaccrXmlOptions _options;
+    protected NaaccrOptions _options;
 
     protected RuntimeNaaccrDictionary _dictionary;
 
@@ -32,18 +35,18 @@ public class PatientFlatWriter implements AutoCloseable {
         this(writer, data, null, null);
     }
 
-    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrXmlOptions options) throws NaaccrIOException {
+    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrOptions options) throws NaaccrIOException {
         this(writer, data, options, null);
     }
 
-    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
+    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         _writer = new BufferedWriter(writer);
         _rootData = data;
-        _options = options == null ? new NaaccrXmlOptions() : options;
+        _options = options == null ? new NaaccrOptions() : options;
 
         // TODO FPD add better validation
 
-        NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByUri(data.getBaseDictionaryUri());
+        NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(data.getBaseDictionaryUri());
         _dictionary = new RuntimeNaaccrDictionary(data.getRecordType(), baseDictionary, userDictionary);
 
         // let's cache the record type and naaccr version items; we are going to use them a lot...

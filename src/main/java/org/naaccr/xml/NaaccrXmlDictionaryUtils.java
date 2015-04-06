@@ -31,7 +31,7 @@ import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
  * <br/><br/>
  * There is no caching done in this class; dictionaries are loaded from XML as requested.
  */
-public final class NaaccrDictionaryUtils {
+public final class NaaccrXmlDictionaryUtils {
 
     // the different data types
     public static final String NAACCR_DATA_TYPE_ALPHA = "alpha"; // uppercase letters, A-Z, no spaces, full length needs to be filled in
@@ -69,7 +69,7 @@ public final class NaaccrDictionaryUtils {
     /**
      * Private constructor, no instanciation...
      */
-    private NaaccrDictionaryUtils() {
+    private NaaccrXmlDictionaryUtils() {
     }
 
     /**

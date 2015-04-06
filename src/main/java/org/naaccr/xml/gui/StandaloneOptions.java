@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import org.naaccr.xml.NaaccrXmlOptions;
+import org.naaccr.xml.NaaccrOptions;
 import org.naaccr.xml.NaaccrXmlUtils;
 
 public class StandaloneOptions extends JPanel {
@@ -111,8 +111,8 @@ public class StandaloneOptions extends JPanel {
         return helpPnl;
     }
     
-    public NaaccrXmlOptions getOptions() {
-        NaaccrXmlOptions options = new NaaccrXmlOptions();
+    public NaaccrOptions getOptions() {
+        NaaccrOptions options = new NaaccrOptions();
 
         if (_readFlat) {
             if (_groupTumorBox.isSelected())
@@ -129,9 +129,9 @@ public class StandaloneOptions extends JPanel {
 
         if (_readXml) {
             if (_ignoreUnkItemsBox.isSelected())
-                options.setUnknownItemHandling(NaaccrXmlOptions.ITEM_HANDLING_IGNORE);
+                options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_IGNORE);
             else
-                options.setUnknownItemHandling(NaaccrXmlOptions.ITEM_HANDLING_ERROR);
+                options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_ERROR);
         }
 
         if (_writeXml)

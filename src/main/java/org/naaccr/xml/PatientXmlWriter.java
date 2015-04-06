@@ -14,12 +14,17 @@ import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
-import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
+import org.naaccr.xml.runtime.NaaccrStreamConfiguration;
+import org.naaccr.xml.runtime.NaaccrStreamContext;
+import org.naaccr.xml.runtime.RuntimeNaaccrDictionary;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
+/**
+ * This class can be used to wrap a generic writer into a patient writer handling the NAACCR XML format.
+ */
 public class PatientXmlWriter implements AutoCloseable {
 
     protected HierarchicalStreamWriter _writer;
@@ -30,25 +35,25 @@ public class PatientXmlWriter implements AutoCloseable {
         this(writer, rootData, null, null, null);
     }
 
-    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrXmlOptions options) throws NaaccrIOException {
+    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options) throws NaaccrIOException {
         this(writer, rootData, options, null, null);
     }
 
-    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
+    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         this(writer, rootData, options, userDictionary, null);
     }
     
-    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
+    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
 
         // we always need options
         if (options == null)
-            options = new NaaccrXmlOptions();
+            options = new NaaccrOptions();
 
         // we always need a configuration
         if (configuration == null)
             configuration = new NaaccrStreamConfiguration();
 
-        NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByUri(rootData.getBaseDictionaryUri());
+        NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(rootData.getBaseDictionaryUri());
 
         // create the writer
         _writer = new PrettyPrintWriter(writer, new char[] {' ', ' ', ' ', ' '});

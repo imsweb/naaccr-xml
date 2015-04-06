@@ -34,12 +34,12 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
-import org.naaccr.xml.NaaccrDictionaryUtils;
 import org.naaccr.xml.NaaccrFormat;
 import org.naaccr.xml.NaaccrIOException;
-import org.naaccr.xml.NaaccrStreamObserver;
+import org.naaccr.xml.NaaccrObserver;
+import org.naaccr.xml.NaaccrOptions;
 import org.naaccr.xml.NaaccrValidationError;
-import org.naaccr.xml.NaaccrXmlOptions;
+import org.naaccr.xml.NaaccrXmlDictionaryUtils;
 import org.naaccr.xml.NaaccrXmlUtils;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
@@ -425,9 +425,9 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
                 NaaccrDictionary userDictionary = null;
                 if (!_dictionaryFld.getText().isEmpty())
-                    userDictionary = NaaccrDictionaryUtils.readDictionary(new File(_dictionaryFld.getText()));
+                    userDictionary = NaaccrXmlDictionaryUtils.readDictionary(new File(_dictionaryFld.getText()));
 
-                runProcessing(srcFile, targetFile, _guiOptions.getOptions(), userDictionary, new NaaccrStreamObserver() {
+                runProcessing(srcFile, targetFile, _guiOptions.getOptions(), userDictionary, new NaaccrObserver() {
                     @Override
                     public void patientRead(Patient patient) {
                         publish(patient);
@@ -496,7 +496,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _processingWorker.execute();
     }
     
-    protected abstract void runProcessing(File source, File target, NaaccrXmlOptions options, NaaccrDictionary dictionary, NaaccrStreamObserver observer) throws NaaccrIOException;
+    protected abstract void runProcessing(File source, File target, NaaccrOptions options, NaaccrDictionary dictionary, NaaccrObserver observer) throws NaaccrIOException;
 
     private void reportError(String error) {
         _centerPnl.setVisible(true);

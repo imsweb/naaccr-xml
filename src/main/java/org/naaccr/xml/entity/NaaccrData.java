@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.naaccr.xml.NaaccrDictionaryUtils;
 import org.naaccr.xml.NaaccrFormat;
+import org.naaccr.xml.NaaccrXmlDictionaryUtils;
 
 public class NaaccrData extends AbstractEntity {
 
@@ -32,7 +32,7 @@ public class NaaccrData extends AbstractEntity {
     public NaaccrData(String format) {
         this();
         NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(format);
-        _baseDictionaryUri = NaaccrDictionaryUtils.createUriFromVersion(naaccrFormat.getNaaccrVersion(), true);
+        _baseDictionaryUri = NaaccrXmlDictionaryUtils.createUriFromVersion(naaccrFormat.getNaaccrVersion(), true);
         _recordType = naaccrFormat.getRecordType();
         _timeGenerated = new Date();
     }

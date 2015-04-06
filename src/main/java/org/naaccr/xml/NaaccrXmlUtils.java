@@ -24,6 +24,10 @@ import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 
 // TODO use a properties file with the exceptions so they can be shared with the DLL?
 // TODO investigate using abstract base reader/writer that would be parametrized classes...
+
+/**
+ * This utility class provides static methods for reading, writing and translating to/from XML and flat file NAACCR files.
+ */
 public class NaaccrXmlUtils {
 
     // structure tags in the XML
@@ -42,12 +46,13 @@ public class NaaccrXmlUtils {
     public static final String NAACCR_XML_ITEM_ATT_ID = "naaccrId";
     public static final String NAACCR_XML_ITEM_ATT_NUM = "naaccrNum";
 
-    public static final String GENERATED_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ"; // TODO verify the format...
+    // date format for hte generated time attribute
+    public static final String GENERATED_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ"; // TODO I don't think this format is exactly the ISO timestamp defined by XML...
 
-    // item to use by default to group the tumors together
+    // item to use by default to group the tumors together (item #20)
     public static final String DEFAULT_TUMOR_GROUPING_ITEM = "patientIdNumber";
 
-    // items used to determine the format of a flat file line
+    // items used to determine the format of a flat file line (items #10 and #50)
     public static final String FLAT_FILE_FORMAT_ITEM_REC_TYPE = "recordType";
     public static final String FLAT_FILE_FORMAT_ITEM_NAACCR_VERSION = "naaccrRecordVersion";
 
@@ -60,7 +65,7 @@ public class NaaccrXmlUtils {
      * @param observer an optional observer, useful to keep track of the progress
      * @throws NaaccrIOException if there is problem reading/writing the file
      */
-    public static void flatToXml(File flatFile, File xmlFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
+    public static void flatToXml(File flatFile, File xmlFile, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrObserver observer) throws NaaccrIOException {
         if (flatFile == null)
             throw new NaaccrIOException("Source flat file is required");
         if (!flatFile.exists())
@@ -93,7 +98,7 @@ public class NaaccrXmlUtils {
      * @param observer an optional observer, useful to keep track of the progress
      * @throws NaaccrIOException if there is problem reading/writing the file
      */
-    public static void xmlToFlat(File xmlFile, File flatFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
+    public static void xmlToFlat(File xmlFile, File flatFile, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrObserver observer) throws NaaccrIOException {
         if (xmlFile == null)
             throw new NaaccrIOException("Source XML file is required");
         if (!xmlFile.exists())
@@ -127,7 +132,7 @@ public class NaaccrXmlUtils {
      * @param observer an optional observer, useful to keep track of the progress
      * @throws NaaccrIOException if there is problem reading/writing the file
      */
-    public static NaaccrData readXmlFile(File xmlFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
+    public static NaaccrData readXmlFile(File xmlFile, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrObserver observer) throws NaaccrIOException {
         if (xmlFile == null)
             throw new NaaccrIOException("Source XML file is required");
         if (!xmlFile.exists())
@@ -157,7 +162,7 @@ public class NaaccrXmlUtils {
      * @param observer an optional observer, useful to keep track of the progress
      * @throws NaaccrIOException if there is problem reading/writing the file
      */
-    public static void writeXmlFile(NaaccrData data, File xmlFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
+    public static void writeXmlFile(NaaccrData data, File xmlFile, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrObserver observer) throws NaaccrIOException {
         if (data == null)
             throw new NaaccrIOException("Data is required");
         if (!xmlFile.getParentFile().exists())
@@ -184,7 +189,7 @@ public class NaaccrXmlUtils {
      * @param observer an optional observer, useful to keep track of the progress
      * @throws NaaccrIOException if there is problem reading/writing the file
      */
-    public static NaaccrData readFlatFile(File flatFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
+    public static NaaccrData readFlatFile(File flatFile, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrObserver observer) throws NaaccrIOException {
         if (flatFile == null)
             throw new NaaccrIOException("Source flat file is required");
         if (!flatFile.exists())
@@ -214,7 +219,7 @@ public class NaaccrXmlUtils {
      * @param observer an optional observer, useful to keep track of the progress
      * @throws NaaccrIOException if there is problem reading/writing the file
      */
-    public static void writeFlatFile(NaaccrData data, File flatFile, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamObserver observer) throws NaaccrIOException {
+    public static void writeFlatFile(NaaccrData data, File flatFile, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrObserver observer) throws NaaccrIOException {
         if (data == null)
             throw new NaaccrIOException("Data is required");
         if (!flatFile.getParentFile().exists())
@@ -296,7 +301,7 @@ public class NaaccrXmlUtils {
         try (PatientXmlReader reader = new PatientXmlReader(xmlReader, null, null)) {
             NaaccrData rootData = reader.getRootData();
             if (rootData.getBaseDictionaryUri() != null && rootData.getRecordType() != null) {
-                String version = NaaccrDictionaryUtils.extractVersionFromUri(rootData.getBaseDictionaryUri());
+                String version = NaaccrXmlDictionaryUtils.extractVersionFromUri(rootData.getBaseDictionaryUri());
                 if (NaaccrFormat.isVersionSupported(version) && NaaccrFormat.isRecordTypeSupported(rootData.getRecordType()))
                     return NaaccrFormat.getInstance(version, rootData.getRecordType()).toString();
             }
@@ -308,7 +313,12 @@ public class NaaccrXmlUtils {
         return null;
     }
 
-    // takes care of the file encoding and compression...
+    /**
+     * Returns a generic reader for the provided file, taking care of the optional GZ compression.
+     * @param file file to create the reader from, cannot be null
+     * @return a generic reader to the file, never null
+     * @throws NaaccrIOException if the reader cannot be created
+     */
     public static Reader createReader(File file) throws NaaccrIOException {
         try {
             InputStream is = new FileInputStream(file);
@@ -323,7 +333,12 @@ public class NaaccrXmlUtils {
         }
     }
 
-    // takes care of the file encoding and compression...
+    /**
+     * Returns a generic writer for the provided file, taking care of the optional GZ compression.
+     * @param file file to create the writer from, cannot be null
+     * @return a generic writer to the file, never null
+     * @throws NaaccrIOException if the writer cannot be created
+     */
     public static Writer createWriter(File file) throws NaaccrIOException {
         try {
             OutputStream os = new FileOutputStream(file);

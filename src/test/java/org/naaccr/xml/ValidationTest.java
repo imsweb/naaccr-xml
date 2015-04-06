@@ -61,7 +61,7 @@ public class ValidationTest {
     @Test
     public void testWritingXml() throws IOException {
         NaaccrData data = new NaaccrData();
-        data.setBaseDictionaryUri(NaaccrDictionaryUtils.createUriFromVersion("140", true));
+        data.setBaseDictionaryUri(NaaccrXmlDictionaryUtils.createUriFromVersion("140", true));
         data.setRecordType("I");
         data.setTimeGenerated(new Date());
         data.getItems().add(createItem("vendorName", "VENDOR"));

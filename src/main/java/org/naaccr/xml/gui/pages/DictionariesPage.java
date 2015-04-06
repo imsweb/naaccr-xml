@@ -24,8 +24,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import org.apache.commons.io.IOUtils;
-import org.naaccr.xml.NaaccrDictionaryUtils;
 import org.naaccr.xml.NaaccrFormat;
+import org.naaccr.xml.NaaccrXmlDictionaryUtils;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.gui.Standalone;
 
@@ -41,9 +41,9 @@ public class DictionariesPage extends AbstractPage {
 
         final Map<String, NaaccrDictionary> dictionaries = new HashMap<>();
         for (String version : NaaccrFormat.getSupportedVersions()) {
-            NaaccrDictionary dictionary = NaaccrDictionaryUtils.getBaseDictionaryByVersion(version);
+            NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(version);
             dictionaries.put(dictionary.getDescription(), dictionary);
-            NaaccrDictionary userDictionary = NaaccrDictionaryUtils.getDefaultUserDictionaryByVersion(version);
+            NaaccrDictionary userDictionary = NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(version);
             dictionaries.put(userDictionary.getDescription(), userDictionary);
         }
 
@@ -87,7 +87,7 @@ public class DictionariesPage extends AbstractPage {
             }
         });
 
-        NaaccrDictionary dictionary = NaaccrDictionaryUtils.getBaseDictionaryByVersion("140");
+        NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("140");
         selectionBox.setSelectedItem(dictionary.getDescription());
         _descLbl.setText(dictionary.getDictionaryUri() + " ");
         try {

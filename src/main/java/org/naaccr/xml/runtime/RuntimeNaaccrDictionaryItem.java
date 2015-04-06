@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2015 Information Management Services, Inc.
  */
-package org.naaccr.xml.entity.dictionary.runtime;
+package org.naaccr.xml.runtime;
 
 import java.util.regex.Pattern;
 

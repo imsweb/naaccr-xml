@@ -9,7 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.naaccr.xml.NaaccrDictionaryUtils;
+import org.naaccr.xml.NaaccrXmlDictionaryUtils;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
@@ -32,7 +32,7 @@ public class CsvToXmlDictionaryLab {
         dictionary.setDescription("NAACCR " + formattedVersion + " base dictionary");
         File outputFile = new File(System.getProperty("user.dir") + "/src/main/resources/naaccr-dictionary-" + version + ".xml");
         FileWriter writer = new FileWriter(outputFile);
-        NaaccrDictionaryUtils.writeDictionary(dictionary, writer);
+        NaaccrXmlDictionaryUtils.writeDictionary(dictionary, writer);
         writer.close();
         System.out.println("Wrote " + outputFile.getPath());
 
@@ -44,7 +44,7 @@ public class CsvToXmlDictionaryLab {
         dictionary.setDescription("NAACCR " + formattedVersion + " default user dictionary");
         outputFile = new File(System.getProperty("user.dir") + "/src/main/resources/naaccr-dictionary-gaps-" + version + ".xml");
         writer = new FileWriter(outputFile);
-        NaaccrDictionaryUtils.writeDictionary(dictionary, writer);
+        NaaccrXmlDictionaryUtils.writeDictionary(dictionary, writer);
         writer.close();
         System.out.println("Wrote " + outputFile.getPath());
     }
@@ -76,7 +76,7 @@ public class CsvToXmlDictionaryLab {
                     item.setRegexValidation(line[9]);
                 if (line.length > 10 && line[10] != null && !line[10].isEmpty())
                     item.setDataType(line[10]);
-                if (item.getDataType() != null && !NaaccrDictionaryUtils.NAACCR_DATA_TYPES_REGEX.containsKey(item.getDataType()))
+                if (item.getDataType() != null && !NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.containsKey(item.getDataType()))
                     throw new RuntimeException("Unsupported data type: " + item.getDataType());
                 // section is not used anymore
                 if (line.length > 12 && line[12] != null && !line[12].isEmpty())

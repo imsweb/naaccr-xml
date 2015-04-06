@@ -1,8 +1,9 @@
 /*
  * Copyright (C) 2015 Information Management Services, Inc.
  */
-package org.naaccr.xml;
+package org.naaccr.xml.runtime;
 
+import org.naaccr.xml.NaaccrXmlUtils;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;

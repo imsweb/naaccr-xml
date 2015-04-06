@@ -12,12 +12,17 @@ import java.util.Set;
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
-import org.naaccr.xml.entity.dictionary.runtime.RuntimeNaaccrDictionary;
+import org.naaccr.xml.runtime.NaaccrStreamConfiguration;
+import org.naaccr.xml.runtime.NaaccrStreamContext;
+import org.naaccr.xml.runtime.RuntimeNaaccrDictionary;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 
+/**
+ * This class can be used to wrap a generic reader into a patient reader handling the NAACCR XML format.
+ */
 public class PatientXmlReader implements AutoCloseable {
 
     protected NaaccrData _rootData;
@@ -32,19 +37,19 @@ public class PatientXmlReader implements AutoCloseable {
         this(reader, null, null, null);
     }
 
-    public PatientXmlReader(Reader reader, NaaccrXmlOptions options) throws NaaccrIOException {
+    public PatientXmlReader(Reader reader, NaaccrOptions options) throws NaaccrIOException {
         this(reader, options, null, null);
     }
 
-    public PatientXmlReader(Reader reader, NaaccrXmlOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
+    public PatientXmlReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         this(reader, options, userDictionary, null);
     }
 
-    public PatientXmlReader(Reader reader, NaaccrXmlOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
+    public PatientXmlReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
 
         // we always need options
         if (options == null)
-            options = new NaaccrXmlOptions();
+            options = new NaaccrOptions();
 
         // we always need a configuration
         if (configuration == null)
@@ -62,7 +67,7 @@ public class PatientXmlReader implements AutoCloseable {
         _rootData.setBaseDictionaryUri(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
         if (_rootData.getBaseDictionaryUri() == null)
             throw new NaaccrIOException("the " + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT + " attribute is required", configuration.getParser().getLineNumber());
-        NaaccrDictionary baseDictionary = NaaccrDictionaryUtils.getBaseDictionaryByUri(_rootData.getBaseDictionaryUri());
+        NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(_rootData.getBaseDictionaryUri());
         if (baseDictionary == null)
             throw new NaaccrIOException("unknown base dictionary: " + _rootData.getBaseDictionaryUri(), configuration.getParser().getLineNumber());
 
@@ -123,8 +128,8 @@ public class PatientXmlReader implements AutoCloseable {
 
         // for now, ignore the root extension...
         if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT)) {
-            _reader.moveDown();
             _reader.moveUp();
+            _reader.moveDown();
         }
 
         if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT))
