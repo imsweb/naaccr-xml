@@ -54,7 +54,7 @@ public class StandaloneOptions extends JPanel {
         if (readFlat) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
             _reportMismatchBox = new JCheckBox(" When grouping the tumors, report value mismatch.");
-            _reportMismatchBox.setSelected(true);
+            _reportMismatchBox.setSelected(false);
             pnl.add(_reportMismatchBox);
             contentPnl.add(pnl);
             contentPnl.add(Box.createVerticalStrut(3));

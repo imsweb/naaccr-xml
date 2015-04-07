@@ -39,7 +39,7 @@ public class NaaccrOptions {
     private List<String> _tumorGroupingItems;
 
     /**
-     * When reading from flat file, whether or not errors need to be reported for patient-level mismatch. Default to true.
+     * When reading from flat file, whether or not errors need to be reported for patient-level mismatch. Default to false.
      */
     private Boolean _reportLevelMismatch;
 
@@ -57,7 +57,7 @@ public class NaaccrOptions {
         _itemsToExclude = new ArrayList<>();
         _tumorGroupingItems = new ArrayList<>();
         _tumorGroupingItems.add(NaaccrXmlUtils.DEFAULT_TUMOR_GROUPING_ITEM);
-        _reportLevelMismatch = true;
+        _reportLevelMismatch = false;
         _writeItemNumber = false;
     }
 
