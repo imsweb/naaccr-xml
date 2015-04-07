@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
 
@@ -226,9 +227,12 @@ public final class NaaccrXmlDictionaryUtils {
         if (dictionary.getItems().isEmpty())
             throw new IOException("a dictionary must contain at least one item definition");
 
+        Pattern idPattern = Pattern.compile("^[a-z][a-zA-Z0-9]+$");
         for (NaaccrDictionaryItem item : dictionary.getItems()) {
             if (item.getNaaccrId() == null || item.getNaaccrId().trim().isEmpty())
                 throw new IOException("'naaccrId' attribute is required");
+            if (!idPattern.matcher(item.getNaaccrId()).matches())
+                throw new IOException("'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + item.getNaaccrId());
             if (item.getNaaccrNum() == null)
                 throw new IOException("'naaccrNum' attribute is required");
             if (item.getLength() == null)
@@ -289,6 +293,25 @@ public final class NaaccrXmlDictionaryUtils {
                     throw new IOException("invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps");
             }
         }
+    }
+
+    /**
+     * Utility method to create a NAACCR ID from a display name.
+     * @param name display name
+     * @return NAACCR ID (which can be used as a property name)
+     */
+    public static String createNaaccrIdFromItemName(String name) {
+        if (name == null || name.isEmpty())
+            return "";
+
+        String[] parts = StringUtils.split(name.replaceAll("\\s+|-+|/", " ").replaceAll("\\(.+\\)|_|[\\W&&[^\\s]]", ""), ' ');
+
+        StringBuilder buf = new StringBuilder();
+        buf.append(StringUtils.uncapitalize(parts[0].toLowerCase()));
+        for (int i = 1; i < parts.length; i++)
+            buf.append(StringUtils.capitalize(parts[i].toLowerCase()));
+
+        return buf.toString();
     }
 
     /**

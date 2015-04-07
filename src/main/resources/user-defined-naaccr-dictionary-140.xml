@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-gaps-140.xml"
+<NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/user-defined-naaccr-dictionary-140.xml"
             naaccrVersion="140"
             description="NAACCR 14 default user dictionary">
     <ItemDefs>

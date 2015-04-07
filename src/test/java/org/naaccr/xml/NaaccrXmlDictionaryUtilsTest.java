@@ -139,5 +139,13 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertFalse(pattern.matcher("20101315").matches());
         Assert.assertFalse(pattern.matcher("20100632").matches());
     }
-    
+
+    @Test
+    public void testCreateNaaccrIdFromItemName() {
+        Assert.assertEquals("", NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName(""));
+        Assert.assertEquals("testTestTest", NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName("Test Test Test"));
+        Assert.assertEquals("testSomethingElse123", NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName("test: (ignored);   some_thing # else --123!!!"));
+
+
+    }
 }

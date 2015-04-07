@@ -49,7 +49,7 @@ public class CsvToXmlDictionaryLab {
         System.out.println("Wrote " + outputFile.getPath());
     }
 
-    private static NaaccrDictionary readDictionaryFromCsv(Reader reader) throws IOException {
+    public static NaaccrDictionary readDictionaryFromCsv(Reader reader) throws IOException {
         NaaccrDictionary dictionary = new NaaccrDictionary();
 
         // always skip first line
@@ -59,7 +59,7 @@ public class CsvToXmlDictionaryLab {
                     throw new IOException("Wrong number of fields, expected between 3 and 15, got " + line.length + " (Item ID " + line[0] + ")");
 
                 NaaccrDictionaryItem item = new NaaccrDictionaryItem();
-                item.setNaaccrId(line[0]);
+                item.setNaaccrId(NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName(line[3])); // not using the CSV version anymore...
                 if (line[1] != null && !line[1].isEmpty())
                     item.setNaaccrNum(Integer.valueOf(line[1]));
                 item.setLength(Integer.valueOf(line[2]));
