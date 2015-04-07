@@ -64,7 +64,7 @@ public final class NaaccrXmlDictionaryUtils {
     public static final String NAACCR_PADDING_LEFT_ZERO = "leftZero";
 
     // the Patterns for the internal dictionaries URI
-    public static final Pattern _PATTERN_DICTIONARY_URI = Pattern.compile("http://naaccr\\.org/naaccrxml/naaccr-dictionary(-gaps)?-(.+?)\\.xml");
+    public static final Pattern _PATTERN_DICTIONARY_URI = Pattern.compile("http://naaccr\\.org/naaccrxml/(user-defined-)?naaccr-dictionary-(.+?)\\.xml");
 
     /**
      * Private constructor, no instanciation...
@@ -96,7 +96,7 @@ public final class NaaccrXmlDictionaryUtils {
         if (isBase)
             return "http://naaccr.org/naaccrxml/naaccr-dictionary-" + version + ".xml";
         else
-            return "http://naaccr.org/naaccrxml/naaccr-dictionary-gaps-" + version + ".xml";
+            return "http://naaccr.org/naaccrxml/user-defined-naaccr-dictionary-" + version + ".xml";
     }
 
     /**
@@ -151,7 +151,7 @@ public final class NaaccrXmlDictionaryUtils {
             throw new RuntimeException("Version is required for getting the default user dictionary.");
         if (!NaaccrFormat.isVersionSupported(naaccrVersion))
             throw new RuntimeException("Unsupported default user dictionary version: " + naaccrVersion);
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-gaps-" + naaccrVersion + ".xml").openStream())) {
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResource("user-defined-naaccr-dictionary-" + naaccrVersion + ".xml").openStream())) {
             return readDictionary(reader);
         }
         catch (IOException e) {

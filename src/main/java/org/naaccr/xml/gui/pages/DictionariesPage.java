@@ -75,8 +75,8 @@ public class DictionariesPage extends AbstractPage {
                 NaaccrDictionary dictionary = dictionaries.get(s);
                 _descLbl.setText(dictionary.getDictionaryUri() + " ");
                 try {
-                    if (dictionary.getDictionaryUri().contains("gap"))
-                        area.setText(IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-gaps-" + dictionary.getNaaccrVersion() + ".xml"), "UTF-8"));
+                    if (dictionary.getDictionaryUri().contains("user-defined"))
+                        area.setText(IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("user-defined-naaccr-dictionary-" + dictionary.getNaaccrVersion() + ".xml"), "UTF-8"));
                     else
                         area.setText(IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-" + dictionary.getNaaccrVersion() + ".xml"), "UTF-8"));
                 }

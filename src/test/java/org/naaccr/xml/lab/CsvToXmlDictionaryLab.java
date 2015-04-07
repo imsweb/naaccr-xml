@@ -37,12 +37,12 @@ public class CsvToXmlDictionaryLab {
         System.out.println("Wrote " + outputFile.getPath());
 
         // create default user XML dictionary from CSV...
-        dictionary = readDictionaryFromCsv(new FileReader(new File(System.getProperty("user.dir") + "/docs/fabian/naaccr-dictionary-gaps-" + version + ".csv")));
+        dictionary = readDictionaryFromCsv(new FileReader(new File(System.getProperty("user.dir") + "/docs/fabian/user-defined-naaccr-dictionary-" + version + ".csv")));
         System.out.println("Read " + dictionary.getItems().size() + " items from default user CSV dictionary for " + version);
-        dictionary.setDictionaryUri("http://naaccr.org/naaccrxml/naaccr-dictionary-gaps-" + version + ".xml");
+        dictionary.setDictionaryUri("http://naaccr.org/naaccrxml/user-defined-naaccr-dictionary-" + version + ".xml");
         dictionary.setNaaccrVersion(version);
         dictionary.setDescription("NAACCR " + formattedVersion + " default user dictionary");
-        outputFile = new File(System.getProperty("user.dir") + "/src/main/resources/naaccr-dictionary-gaps-" + version + ".xml");
+        outputFile = new File(System.getProperty("user.dir") + "/src/main/resources/user-defined-naaccr-dictionary-" + version + ".xml");
         writer = new FileWriter(outputFile);
         NaaccrXmlDictionaryUtils.writeDictionary(dictionary, writer);
         writer.close();
