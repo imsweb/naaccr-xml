@@ -296,7 +296,15 @@ public final class NaaccrXmlDictionaryUtils {
     }
 
     /**
-     * Utility method to create a NAACCR ID from a display name.
+     * Utility method to create a NAACCR ID from a display name:
+     * <ol>
+     *   <li>Spaces, dashes, slashes periods and underscores are considered as word separators and replaced by a single space</li>
+     *   <li>Anything in parenthesis is removed (along with the parenthesis)</li>
+     *   <li>Any non-digit and non-letter character is removed</li>
+     *   <li>The result is split by spaces</li>
+     *   <li>The first part is un-capitalized, the other parts are capitalized</li>
+     *   <li>All the parts are concatenated together</li>
+     * </ol>
      * @param name display name
      * @return NAACCR ID (which can be used as a property name)
      */
@@ -304,7 +312,7 @@ public final class NaaccrXmlDictionaryUtils {
         if (name == null || name.isEmpty())
             return "";
 
-        String[] parts = StringUtils.split(name.replaceAll("\\s+|-+|/", " ").replaceAll("\\(.+\\)|_|[\\W&&[^\\s]]", ""), ' ');
+        String[] parts = StringUtils.split(name.replaceAll("\\s+|-+|/|_|\\.", " ").replaceAll("\\(.+\\)|[\\W&&[^\\s]]", ""), ' ');
 
         StringBuilder buf = new StringBuilder();
         buf.append(StringUtils.uncapitalize(parts[0].toLowerCase()));
