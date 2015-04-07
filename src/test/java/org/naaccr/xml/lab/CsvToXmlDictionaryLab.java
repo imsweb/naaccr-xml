@@ -58,7 +58,6 @@ public class CsvToXmlDictionaryLab {
                 if (line.length < 3 || line.length > 17)
                     throw new IOException("Wrong number of fields, expected between 3 and 15, got " + line.length + " (Item ID " + line[0] + ")");
 
-                // TODO add validation, trim values, be safer since it could be a user-defined dictionary...
                 NaaccrDictionaryItem item = new NaaccrDictionaryItem();
                 item.setNaaccrId(line[0]);
                 if (line[1] != null && !line[1].isEmpty())
@@ -90,6 +89,10 @@ public class CsvToXmlDictionaryLab {
 
                 if (item.getRecordTypes() == null)
                     item.setRecordTypes("A,M,C,I");
+
+                // this is temporary until the data types are looked at and fixed...
+                item.setDataType(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
+                item.setRegexValidation(null);
 
                 dictionary.getItems().add(item);
             }
