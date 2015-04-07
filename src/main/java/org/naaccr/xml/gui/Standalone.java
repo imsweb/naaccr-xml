@@ -42,12 +42,11 @@ import org.naaccr.xml.gui.pages.FlatToXmlPage;
 import org.naaccr.xml.gui.pages.SamplesPage;
 import org.naaccr.xml.gui.pages.XmlToFlatPage;
 
-// icons: https://www.iconfinder.com/iconsets/ellegant
-// TODO FPD add a validation page that starts with a simple editable XML file, but allows to load another XML file (should give a warning for large files)
-// TODO FDP use darker icons for non-selected pages
-// TODO FPD what about help and about? Might need a menu with "File" and "Help"
-// TODO FPD change processing page so it shows the created file path and it's size, on the top of the warnings (instead of hiding the progress bar panel)
-// TODO FPD should the processing page show the number of patient/tumors for XML files instead of the number of lines?
+// TODO add a validation page that starts with a simple editable XML file, but allows to load another XML file (should give a warning for large files)
+// TODO what about help and about? Might need a menu with "File" and "Help"
+// TODO change processing page so it shows the created file path and it's size, on the top of the warnings (instead of hiding the progress bar panel)
+// TODO should the processing page show the number of patient/tumors for XML files instead of the number of lines?
+// TODO once the processing is done, if there is no warning, the text area should display a success message (requested by a task force member)
 public class Standalone extends JFrame {
 
     private CardLayout _layout;
