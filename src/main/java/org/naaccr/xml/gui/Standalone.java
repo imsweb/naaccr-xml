@@ -79,11 +79,11 @@ public class Standalone extends JFrame {
         toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
         toolbar.add(createToolbarButton("Flat to XML", "flat_to_xml", "transform a NAACCR Flat file into the corresponding NAACCR XML file."));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("XML to Flat", "xml_to_flat", "transform a NAACCR XML file inot the corresponding Flat file."));
+        toolbar.add(createToolbarButton("XML to Flat", "xml_to_flat", "transform a NAACCR XML file into the corresponding Flat file."));
         toolbar.add(Box.createVerticalStrut(15));
         toolbar.add(createToolbarButton("Dictionary", "dictionary", "standard NAACCR dictionaries."));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("Samples", "samples", "examples of typicial NAACCR XML files."));
+        toolbar.add(createToolbarButton("Samples", "samples", "examples of typical NAACCR XML files."));
         this.getContentPane().add(toolbar, BorderLayout.WEST);
 
         _centerPnl = new JPanel();
@@ -185,6 +185,7 @@ public class Standalone extends JFrame {
      * @param timeInMilli time in milli-seconds
      * @return a <code>String</code> representing the formatted time...
      */
+    @SuppressWarnings("UnusedDeclaration")
     public static String formatTime(long timeInMilli) {
         long hourBasis = 60;
 
