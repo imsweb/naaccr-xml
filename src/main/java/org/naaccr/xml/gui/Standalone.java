@@ -39,14 +39,11 @@ import javax.swing.border.MatteBorder;
 
 import org.naaccr.xml.gui.pages.DictionariesPage;
 import org.naaccr.xml.gui.pages.FlatToXmlPage;
-import org.naaccr.xml.gui.pages.SamplesPage;
 import org.naaccr.xml.gui.pages.XmlToFlatPage;
+import org.naaccr.xml.gui.pages.XmlValidationPage;
 
-// TODO add a validation page that starts with a simple editable XML file, but allows to load another XML file (should give a warning for large files)
 // TODO what about help and about? Might need a menu with "File" and "Help"
-// TODO change processing page so it shows the created file path and it's size, on the top of the warnings (instead of hiding the progress bar panel)
-// TODO should the processing page show the number of patient/tumors for XML files instead of the number of lines?
-// TODO once the processing is done, if there is no warning, the text area should display a success message (requested by a task force member)
+// TODO when selecting a bad XML file, there is a nasty exception instead of a nice "unknown format" message...
 public class Standalone extends JFrame {
 
     private CardLayout _layout;
@@ -77,13 +74,15 @@ public class Standalone extends JFrame {
         toolbar.setBorder(new CompoundBorder(new MatteBorder(0, 1, 1, 1, Color.GRAY), new EmptyBorder(5, 10, 5, 10)));
 
         toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
-        toolbar.add(createToolbarButton("Flat to XML", "flat_to_xml", "transform a NAACCR Flat file into the corresponding NAACCR XML file."));
+        toolbar.add(createToolbarButton("Flat to XML", "flat_to_xml", "transform a given NAACCR Flat file into the corresponding NAACCR XML file"));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("XML to Flat", "xml_to_flat", "transform a NAACCR XML file into the corresponding Flat file."));
+        toolbar.add(createToolbarButton("XML to Flat", "xml_to_flat", "transform a given NAACCR XML file into the corresponding Flat file"));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("Dictionary", "dictionary", "standard NAACCR dictionaries."));
+        toolbar.add(createToolbarButton("Dictionary", "dictionary", "view the standard NAACCR dictionaries used to process NAACCR XML data"));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("Samples", "samples", "examples of typical NAACCR XML files."));
+        toolbar.add(createToolbarButton("XML Validation", "validate", "validate a given NAACCR XML file"));
+        //toolbar.add(Box.createVerticalStrut(15));
+        //toolbar.add(createToolbarButton("Samples", "samples", "examples of typical NAACCR XML files."));
         this.getContentPane().add(toolbar, BorderLayout.WEST);
 
         _centerPnl = new JPanel();
@@ -93,7 +92,8 @@ public class Standalone extends JFrame {
         _centerPnl.add("flat_to_xml", new FlatToXmlPage());
         _centerPnl.add("xml_to_flat", new XmlToFlatPage());
         _centerPnl.add("dictionary", new DictionariesPage());
-        _centerPnl.add("samples", new SamplesPage());
+        _centerPnl.add("validate", new XmlValidationPage());
+        //_centerPnl.add("samples", new SamplesPage());
         this.getContentPane().add(_centerPnl, BorderLayout.CENTER);
 
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
