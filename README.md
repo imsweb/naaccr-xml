@@ -34,15 +34,15 @@ Transforming a flat file into the corresponding XML file and vice-versa becomes 
 ### Using utility methods
 A few higher-level utility methods have been defined in the [NaaccrXmlUtils](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/NaaccrXmlUtils.java) class (only the required parameters are shown for clarity):
 
-** Reading methods **
+*Reading methods*
 * NaaccrData ***readXmlFile*** (File xmlFile, ...)
 * NaaccrData ***readFlatFile*** (File flatFile, ...)
 
-** Writing methods **
+*Writing methods*
 * void ***writeXmlFile*** (NaaccrData data, File xmlFile, ...)
 * void ***writeFlatFile*** (NaaccrData data, File flatFile, ...)
 
-** Translation methods **
+*Translation methods*
 * void ***flatToXml*** (File flatFile, File xmlFile, ...)
 * void ***xmlToFlat*** (File xmlFile, File flatFile, ...)
 
@@ -63,14 +63,14 @@ To start the GUI, just double-click the JAR file created from this project; it w
 Convention for the item's ID (naaccrId attribute)
 -------------------------------------------------
 
-The IDs are genereated from the corresponding item names using the following logic:
+The IDs are generated from the corresponding item names using the following logic:
 
-* Spaces, dashes, slashes periods and underscores are considered as word separators and replaced by a single space
-* Anything in parenthesis is removed (along with the parenthesis)
-* Any non-digit and non-letter character is removed
-* The result is split by spaces
-* The first part is un-capitalized, the other parts are capitalized
-* All the parts are concatenated together
+1. Spaces, dashes, slashes periods and underscores are considered as word separators and replaced by a single space
+2. Anything in parenthesis is removed (along with the parenthesis)
+3. Any non-digit and non-letter character is removed
+4. The result is split by spaces
+5. The first part is un-capitalized, the other parts are capitalized
+6. All the parts are concatenated back together
 
-The dictionary utility class contains a method that generates the ID for a given name, see ** createNaaccrIdFromItemName ** in
-[NaaccrDictionaryUtils](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/NaaccrXmlDictionaryUtils.java)
+The dictionary utility class contains a method that generates the ID for a given name, see the ***createNaaccrIdFromItemName(String)*** method in
+[NaaccrDictionaryUtils](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/NaaccrXmlDictionaryUtils.java).
