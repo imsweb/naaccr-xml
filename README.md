@@ -59,3 +59,18 @@ The library contains an experimental GUI that wraps some of the utility methods 
 
 To start the GUI, just double-click the JAR file created from this project; it will invoke the main GUI class 
 ([Standlone](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/gui/Standalone.java)).
+
+Convention for the item's ID (naaccrId attribute)
+-------------------------------------------------
+
+The IDs are genereated from the corresponding item names using the following logic:
+
+* Spaces, dashes, slashes periods and underscores are considered as word separators and replaced by a single space
+* Anything in parenthesis is removed (along with the parenthesis)
+* Any non-digit and non-letter character is removed
+* The result is split by spaces
+* The first part is un-capitalized, the other parts are capitalized
+* All the parts are concatenated together
+
+The dictionary utility class contains a method that generates the ID for a given name, see ** createNaaccrIdFromItemName ** in
+[NaaccrDictionaryUtils](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/NaaccrXmlDictionaryUtils.java)
