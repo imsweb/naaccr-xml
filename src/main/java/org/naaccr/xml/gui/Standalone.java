@@ -52,7 +52,7 @@ public class Standalone extends JFrame {
     private List<JButton> _buttons = new ArrayList<>();
 
     public Standalone() {
-        this.setTitle("NAACCR XML Utility v0.5");
+        this.setTitle("NAACCR XML Utility v0.6");
         this.setMinimumSize(new Dimension(1000, 700));
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
