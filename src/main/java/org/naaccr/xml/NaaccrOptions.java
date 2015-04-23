@@ -19,32 +19,32 @@ public class NaaccrOptions {
     public static final String ITEM_HANDLING_PROCESS = "process";
 
     /**
-     * If set to false, no validation of the values will take place. Defaults to true.
+     * When reading data, if set to false, no validation of the values will take place. Defaults to true.
      */
-    private Boolean _validateValues; // TODO FPD
+    private Boolean _validateReadValues;
 
     /**
-     * How to handle unknown items (items with an ID that is not defined in the dictionary). See the handling constants.
+     * When reading data (from XML format), how to handle unknown items (items with an ID that is not defined in the dictionary). See the handling constants.
      */
-    private String _unknownItemHandling; // TODO FPD
+    private String _unknownItemHandling;
 
     /**
-     * When reading/writing a file, the item IDs to ignore. Defaults to not ignoring any items.
+     * When reading/writing data, the item IDs to ignore. Defaults to not ignoring any items (empty list).
      */
     private List<String> _itemsToExclude;
 
     /**
-     * When reading from flat file, which item IDs to use to group the tumors into patient. If empty, not grouping takes place. Defaults to using the Patient ID Number.
+     * When reading data (from flat format), which item IDs to use to group the tumors into patients. If empty, no grouping takes place. Defaults to using the Patient ID Number.
      */
     private List<String> _tumorGroupingItems;
 
     /**
-     * When reading from flat file, whether or not errors need to be reported for patient-level mismatch. Default to false.
+     * When reading data (from flat format), whether or not errors need to be reported for patient-level values mismatch. Default to false.
      */
     private Boolean _reportLevelMismatch;
 
     /**
-     * If set to true, both the NAACCR ID and NAACCR Number will be written to the created XML files. Defaults to false.
+     * When writing data (to XML format), if set to true, both the NAACCR ID and NAACCR Number will be written (otherwise only the ID is written). Defaults to false.
      */
     private Boolean _writeItemNumber;
 
@@ -52,7 +52,7 @@ public class NaaccrOptions {
      * Default constructor.
      */
     public NaaccrOptions() {
-        _validateValues = true;
+        _validateReadValues = true;
         _unknownItemHandling = ITEM_HANDLING_ERROR;
         _itemsToExclude = new ArrayList<>();
         _tumorGroupingItems = new ArrayList<>();
@@ -61,20 +61,20 @@ public class NaaccrOptions {
         _writeItemNumber = false;
     }
 
+    public Boolean getValidateReadValues() {
+        return _validateReadValues;
+    }
+
+    public void setValidateReadValues(Boolean validateReadValues) {
+        _validateReadValues = validateReadValues;
+    }
+
     public String getUnknownItemHandling() {
         return _unknownItemHandling;
     }
 
     public void setUnknownItemHandling(String unknownItemHandling) {
         _unknownItemHandling = unknownItemHandling;
-    }
-
-    public Boolean getValidateValues() {
-        return _validateValues;
-    }
-
-    public void setValidateValues(Boolean validateValues) {
-        _validateValues = validateValues;
     }
 
     public List<String> getItemsToExclude() {

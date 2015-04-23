@@ -125,7 +125,7 @@ public class StandaloneOptions extends JPanel {
             options.setReportLevelMismatch(_reportMismatchBox.isSelected());
 
         if (_readFlat || _readXml)
-            options.setValidateValues(_validateValuesBox.isSelected());
+            options.setValidateReadValues(_validateValuesBox.isSelected());
 
         if (_readXml) {
             if (_ignoreUnkItemsBox.isSelected())

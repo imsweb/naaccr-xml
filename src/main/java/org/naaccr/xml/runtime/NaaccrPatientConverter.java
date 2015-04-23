@@ -51,14 +51,14 @@ public class NaaccrPatientConverter implements Converter {
         for (Item item : patient.getItems())
             writeItem(item, writer);
 
-        // TODO this would be the place to write the patient extension...
+        // TODO [EXTENSIONS] this would be the place to write the patient extension...
 
         for (Tumor tumor : patient.getTumors()) {
             writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
             for (Item item : tumor.getItems())
                 writeItem(item, writer);
 
-            // TODO this would be the place to write the tumor extension...
+            // TODO [EXTENSIONS] this would be the place to write the tumor extension...
 
             writer.endNode();
         }
@@ -118,7 +118,7 @@ public class NaaccrPatientConverter implements Converter {
                     }
                     // handle tumor extension
                     else {
-                        // TODO this would be the place to read the tumor extension; for now it's ignored...
+                        // TODO [EXTENSIONS] this would be the place to read the tumor extension; for now it's ignored...
                         reader.moveUp();
                         reader.moveDown();
                     }
@@ -131,7 +131,7 @@ public class NaaccrPatientConverter implements Converter {
             else {
                 if (tumorCount > 0)
                     reportSyntaxError("unexpected tag: " + reader.getNodeName());
-                // TODO this would be the place to read the patient extension; for now it's ignored...
+                // TODO [EXTENSIONS] this would be the place to read the patient extension; for now it's ignored...
                 reader.moveUp();
                 reader.moveDown();
             }
@@ -229,7 +229,7 @@ public class NaaccrPatientConverter implements Converter {
                 reportSyntaxError("invalid parent XML tag; was expecting '" + itemDef.getParentXmlElement() + "' but got '" + parentTag + "'");
 
             // value should be valid
-            if (item.getValue() != null && _context.getOptions().getValidateValues()) {
+            if (item.getValue() != null && _context.getOptions().getValidateReadValues()) {
                 if (item.getValue().length() > itemDef.getLength())
                     reportError(entity, lineNumber, currentPath, "value too long, expected at most " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef,
                             item.getValue());

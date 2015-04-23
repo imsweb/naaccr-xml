@@ -60,8 +60,8 @@ public class PatientXmlReader implements AutoCloseable {
         if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
             throw new NaaccrIOException("was expecting " + NaaccrXmlUtils.NAACCR_XML_TAG_ROOT + " root tag but got " + _reader.getNodeName(), configuration.getParser().getLineNumber());
 
-        // create the root data holder (it will be use for every fields except the patients)
-        _rootData = new NaaccrData(); // TODO FPD what if the root object has been extended?
+        // create the root data holder (it will be use for every field except the list of patients)
+        _rootData = createRootData();
 
         // read the standard attribute: base dictionary
         _rootData.setBaseDictionaryUri(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
@@ -183,5 +183,13 @@ public class PatientXmlReader implements AutoCloseable {
     public void close() {
         _reader.moveUp();
         _reader.close();
+    }
+
+    /**
+     * Creates the root object.
+     * @return the new root object, never null
+     */
+    protected NaaccrData createRootData() {
+        return new NaaccrData();
     }
 }

@@ -244,19 +244,19 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         targetFieldPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         targetFieldPnl.add(Standalone.createBoldLabel(getTargetLabelText()));
         targetFieldPnl.add(Box.createHorizontalStrut(10));
-        _targetFld = new JTextField(60);
-        targetFieldPnl.add(_targetFld);
-        targetFieldPnl.add(Box.createHorizontalStrut(10));
-        JButton browseBtn = new JButton("Browse...");
-        browseBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (_fileChooser.showDialog(AbstractProcessingPage.this, "Select") == JFileChooser.APPROVE_OPTION)
-                    _targetFld.setText(_fileChooser.getSelectedFile().getAbsolutePath());
-            }
-        });
-        targetFieldPnl.add(browseBtn);
         if (showTargetInput()) {
+            _targetFld = new JTextField(60);
+            targetFieldPnl.add(_targetFld);
+            targetFieldPnl.add(Box.createHorizontalStrut(10));
+            JButton browseBtn = new JButton("Browse...");
+            browseBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (_fileChooser.showDialog(AbstractProcessingPage.this, "Select") == JFileChooser.APPROVE_OPTION)
+                        _targetFld.setText(_fileChooser.getSelectedFile().getAbsolutePath());
+                }
+            });
+            targetFieldPnl.add(browseBtn);
             pnl.add(targetFieldPnl);
             pnl.add(Box.createVerticalStrut(15));
         }
@@ -444,7 +444,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                         _analysisBar.setIndeterminate(false);
                         _centerPnl.setVisible(true);
                         _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_OPTIONS);
-                        _targetFld.setText(invertFilename(new File(_sourceFld.getText())));
+                        if (_targetFld != null)
+                            _targetFld.setText(invertFilename(new File(_sourceFld.getText())));
                     }
                 }
                 return null;
@@ -472,7 +473,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected abstract String getFormatForInputFile(File file);
 
     private void performProcessing() {
-        if (new File(_targetFld.getText()).exists()) {
+        if (_targetFld != null && new File(_targetFld.getText()).exists()) {
             int result = JOptionPane.showConfirmDialog(this, "Target file already exists, are you sure you want to replace it?", "Confirmation", JOptionPane.YES_NO_OPTION);
             if (result != JOptionPane.YES_OPTION)
                 return;
@@ -490,7 +491,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             @Override
             protected Void doInBackground() throws Exception {
                 File srcFile = new File(_sourceFld.getText());
-                File targetFile = new File(_targetFld.getText());
+                File targetFile = _targetFld == null ? null : new File(_targetFld.getText());
 
                 NaaccrDictionary userDictionary = null;
                 if (!_dictionaryFld.getText().isEmpty())
@@ -509,8 +510,9 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 });
 
                 String time = Standalone.formatTime(System.currentTimeMillis() - start);
-                String size = Standalone.formatFileSize(targetFile.length());
-                _processingResultLbl.setText(getProcessingResultText(targetFile.getPath(), time, size));
+                String size = targetFile == null ? null : Standalone.formatFileSize(targetFile.length());
+                String path = targetFile == null ? null : targetFile.getPath();
+                _processingResultLbl.setText(getProcessingResultText(path, time, size));
                 _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_RESULTS);
 
                 if (_warningsTextArea.getText().isEmpty()) {
@@ -576,7 +578,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     }
 
     protected abstract void runProcessing(File source, File target, NaaccrOptions options, NaaccrDictionary dictionary, NaaccrObserver observer) throws NaaccrIOException;
-    
+
     protected String getProcessingResultText(String path, String time, String size) {
         return "Successfully created \"" + path + "\" (" + size + ") in " + time;
     }

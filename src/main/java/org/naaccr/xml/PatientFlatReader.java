@@ -187,9 +187,9 @@ public class PatientFlatReader implements AutoCloseable {
 
         if (end <= line.length()) {
             String value = line.substring(start, end);
-            String trimmedValue = value.trim();
 
             // apply trimming rule (no trimming rule means trim all)
+            String trimmedValue = value.trim();
             if (trimmedValue.isEmpty() || itemDef.getTrim() == null || NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL.equals(itemDef.getTrim()))
                 value = trimmedValue;
 
@@ -199,7 +199,7 @@ public class PatientFlatReader implements AutoCloseable {
                 item.setNaaccrNum(itemDef.getNaaccrNum());
                 item.setValue(value);
 
-                if (entity != null && _options.getValidateValues()) {
+                if (entity != null && _options.getValidateReadValues()) {
                     if (item.getValue().length() > itemDef.getLength())
                         reportError(entity, lineNumber, "value too long, expected at most " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef,
                                 item.getValue());

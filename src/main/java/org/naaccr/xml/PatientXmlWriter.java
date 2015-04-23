@@ -58,7 +58,7 @@ public class PatientXmlWriter implements AutoCloseable {
         // create the writer
         _writer = new PrettyPrintWriter(writer, new char[] {' ', ' ', ' ', ' '});
 
-        // write the header // TODO FPD look into a header writer, I think there is a class that does that already...
+        // would be better to use a "header writer", I think XStream has one actually; that would be better...
         try {
             writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));
         }
