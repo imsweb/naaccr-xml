@@ -55,10 +55,17 @@ All those methods accept the following optional parameters (optional in the sens
 
 ### Using the Graphical User Interface
 
-The library contains an experimental GUI that wraps some of the utility methods and provides a more user-friendly environment for translating files.
+The library contains an experimental GUI that wraps some of the utility methods and provides a more user-friendly environment for processing files.
 
 To start the GUI, just double-click the JAR file created from this project; it will invoke the main GUI class 
 ([Standlone](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/gui/Standalone.java)).
+
+You can also type the following in a DOS prompt, after navigating to the folder containing the JAR file:
+```
+java -jar naaccr-xml-XXX.jar
+```
+Where XXX is the downloaded version.
+
 
 Convention for the item's ID (naaccrId attribute)
 -------------------------------------------------
