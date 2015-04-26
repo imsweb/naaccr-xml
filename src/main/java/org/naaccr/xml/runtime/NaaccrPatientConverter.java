@@ -6,6 +6,7 @@ package org.naaccr.xml.runtime;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.naaccr.xml.NaaccrErrorUtils;
 import org.naaccr.xml.NaaccrOptions;
 import org.naaccr.xml.NaaccrValidationError;
 import org.naaccr.xml.NaaccrXmlDictionaryUtils;
@@ -153,17 +154,17 @@ public class NaaccrPatientConverter implements Converter {
             reportSyntaxError("NAACCR ID is required when writing an item");
         if (_context.getOptions().getItemsToExclude().contains(item.getNaaccrId()))
             return;
-        RuntimeNaaccrDictionaryItem itemDef = _context.getDictionary().getItemByNaaccrId(item.getNaaccrId());
-        if (itemDef == null)
+        RuntimeNaaccrDictionaryItem def = _context.getDictionary().getItemByNaaccrId(item.getNaaccrId());
+        if (def == null)
             reportSyntaxError("unable to find item definition for NAACCR ID " + item.getNaaccrId());
-        if (item.getNaaccrNum() != null && !item.getNaaccrNum().equals(itemDef.getNaaccrNum()))
+        if (item.getNaaccrNum() != null && !item.getNaaccrNum().equals(def.getNaaccrNum()))
             reportSyntaxError("provided NAACCR Number '" + item.getNaaccrNum() + "' doesn't correspond to the provided NAACCR ID '" + item.getNaaccrId() + "'");
 
         // write the item
         writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
-        writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID, itemDef.getNaaccrId());
-        if (itemDef.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
-            writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, itemDef.getNaaccrNum().toString());
+        writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID, def.getNaaccrId());
+        if (def.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
+            writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, def.getNaaccrNum().toString());
         writer.setValue(item.getValue());
         writer.endNode();
     }
@@ -185,16 +186,16 @@ public class NaaccrPatientConverter implements Converter {
         rawId = rawId.trim();
         if (_context.getOptions().getItemsToExclude().contains(rawId))
             return;
-        RuntimeNaaccrDictionaryItem itemDef = _context.getDictionary().getItemByNaaccrId(rawId);
-        if (itemDef != null) {
-            item.setNaaccrId(itemDef.getNaaccrId());
-            item.setNaaccrNum(itemDef.getNaaccrNum());
+        RuntimeNaaccrDictionaryItem def = _context.getDictionary().getItemByNaaccrId(rawId);
+        if (def != null) {
+            item.setNaaccrId(def.getNaaccrId());
+            item.setNaaccrNum(def.getNaaccrNum());
         }
         else {
             if (NaaccrOptions.ITEM_HANDLING_PROCESS.equals(_context.getOptions().getUnknownItemHandling()))
                 item.setNaaccrId(rawId);
             else if (NaaccrOptions.ITEM_HANDLING_ERROR.equals(_context.getOptions().getUnknownItemHandling())) {
-                reportError(entity, lineNumber, currentPath, "unknown '" + NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID + "' attribute value: " + rawId);
+                reportError(entity, lineNumber, currentPath, null, null, NaaccrErrorUtils.CODE_BAD_NAACCR_ID, rawId);
                 return;
             }
             else if (NaaccrOptions.ITEM_HANDLING_IGNORE.equals(_context.getOptions().getUnknownItemHandling()))
@@ -208,9 +209,9 @@ public class NaaccrPatientConverter implements Converter {
             rawNum = rawNum.trim();
             if (!rawNum.isEmpty()) {
                 try {
-                    if (itemDef != null) {
-                        if (!Integer.valueOf(rawNum).equals(itemDef.getNaaccrNum()))
-                            reportError(entity, lineNumber, currentPath, "invalid '" + NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM + "' attribute value: " + rawNum);
+                    if (def != null) {
+                        if (!Integer.valueOf(rawNum).equals(def.getNaaccrNum()))
+                            reportError(entity, lineNumber, currentPath, null, null, NaaccrErrorUtils.CODE_BAD_NAACCR_NUM, rawNum, def.getNaaccrId());
                     }
                     else
                         item.setNaaccrNum(Integer.valueOf(rawNum));
@@ -222,24 +223,22 @@ public class NaaccrPatientConverter implements Converter {
         }
 
         // the rest of the validation will happen only if we actually find the item definition...
-        if (itemDef != null) {
+        if (def != null) {
 
             // item should be under the proper patient level
-            if (!parentTag.equals(itemDef.getParentXmlElement()))
-                reportSyntaxError("invalid parent XML tag; was expecting '" + itemDef.getParentXmlElement() + "' but got '" + parentTag + "'");
+            if (!parentTag.equals(def.getParentXmlElement()))
+                reportSyntaxError("invalid parent XML tag; was expecting '" + def.getParentXmlElement() + "' but got '" + parentTag + "'");
 
             // value should be valid
             if (item.getValue() != null && _context.getOptions().getValidateReadValues()) {
-                if (item.getValue().length() > itemDef.getLength())
-                    reportError(entity, lineNumber, currentPath, "value too long, expected at most " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef,
-                            item.getValue());
-                else if (exactLengthRequired(itemDef.getDataType()) && item.getValue().length() != itemDef.getLength())
-                    reportError(entity, lineNumber, currentPath, "invalid value, expected exactly " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef,
-                            item.getValue());
-                else if (itemDef.getDataType() != null && !NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(itemDef.getDataType()).matcher(item.getValue()).matches())
-                    reportError(entity, lineNumber, currentPath, "invalid value for data type '" + itemDef.getDataType() + "'", itemDef, item.getValue());
-                else if (itemDef.getRegexValidation() != null && !itemDef.getRegexValidation().matcher(item.getValue()).matches())
-                    reportError(entity, lineNumber, currentPath, "invalid value", itemDef, item.getValue());
+                if (item.getValue().length() > def.getLength())
+                    reportError(entity, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_LONG, def.getLength(), item.getValue().length());
+                else if (NaaccrXmlDictionaryUtils.isFullLengthRequiredForType(def.getDataType()) && item.getValue().length() != def.getLength())
+                    reportError(entity, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_SHORT, def.getLength(), item.getValue().length());
+                else if (def.getDataType() != null && !NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(def.getDataType()).matcher(item.getValue()).matches())
+                    reportError(entity, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
+                else if (def.getRegexValidation() != null && !def.getRegexValidation().matcher(item.getValue()).matches())
+                    reportError(entity, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getRegexValidation());
             }
 
         }
@@ -247,20 +246,8 @@ public class NaaccrPatientConverter implements Converter {
         entity.getItems().add(item);
     }
 
-    protected boolean exactLengthRequired(String type) {
-        boolean result = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_ALPHA.equals(type);
-        result |= NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS.equals(type);
-        result |= NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_MIXED.equals(type);
-        return result;
-    }
-
-    protected void reportError(AbstractEntity entity, int line, String path, String msg) {
-        reportError(entity, line, path, msg, null, null);
-    }
-
-    protected void reportError(AbstractEntity entity, int line, String path, String msg, RuntimeNaaccrDictionaryItem def, String value) {
-        NaaccrValidationError error = new NaaccrValidationError();
-        error.setMessage(msg);
+    protected void reportError(AbstractEntity entity, int line, String path, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {
+        NaaccrValidationError error = new NaaccrValidationError(code, msgValues);
         error.setLineNumber(line);
         error.setPath(path);
         if (def != null) {
@@ -272,7 +259,7 @@ public class NaaccrPatientConverter implements Converter {
         entity.getValidationErrors().add(error);
     }
 
-    protected void reportSyntaxError(String message) {
+    protected void reportSyntaxError(String message) throws ConversionException {
         ConversionException ex = new ConversionException(message);
         ex.add("message", message);
         throw ex;

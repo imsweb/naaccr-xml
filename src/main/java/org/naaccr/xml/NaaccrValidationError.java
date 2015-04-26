@@ -4,6 +4,8 @@
 package org.naaccr.xml;
 
 public class NaaccrValidationError {
+    
+    protected String _code;
 
     protected String _message;
 
@@ -16,13 +18,25 @@ public class NaaccrValidationError {
     protected Integer _naaccrNum;
     
     protected String _value;
+    
+    public NaaccrValidationError(String code, Object... msgValues) {
+        _message = NaaccrErrorUtils.getValidationError(code, msgValues);
+    }
+
+    public String getCode() {
+        return _code;
+    }
+
+    public void setCode(String code) {
+        _code = code;
+    }
 
     public String getMessage() {
         return _message;
     }
 
     public void setMessage(String message) {
-        _message = message;
+        throw new RuntimeException("Forbidden method, use the constructor along with the NaaccrValidationErrorUtils class!");
     }
 
     public Integer getLineNumber() {

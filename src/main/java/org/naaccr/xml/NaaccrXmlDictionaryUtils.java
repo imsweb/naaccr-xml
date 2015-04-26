@@ -74,6 +74,18 @@ public final class NaaccrXmlDictionaryUtils {
     }
 
     /**
+     * Returns whether values for a given data type need to have the same length as their definition
+     * @param type given data type
+     * @return true if the values of that type needs to be fully filled-in
+     */
+    public static boolean isFullLengthRequiredForType(String type) {
+        boolean result = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_ALPHA.equals(type);
+        result |= NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS.equals(type);
+        result |= NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_MIXED.equals(type);
+        return result;
+    }
+
+    /**
      * Extracts the NAACCR version from an internal dictionary URI.
      * @param uri internal dictionary URI
      * @return the corrsponding NAACCR version, null if it can't be extracted

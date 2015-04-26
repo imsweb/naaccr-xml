@@ -145,27 +145,21 @@ public class PatientFlatReader implements AutoCloseable {
 
             Tumor tumor = new Tumor();
             tumor.setStartLineNumber(lineNumber);
-            for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
-                if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement())) {
+            for (RuntimeNaaccrDictionaryItem def : _dictionary.getItems()) {
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(def.getParentXmlElement())) {
                     if (i == 0)
-                        addItemFromLine(patient, line, lineNumber, itemDef);
+                        addItemFromLine(patient, line, lineNumber, def);
                     else if (_options.getReportLevelMismatch()) {
-                        Item currentTumorItem = createItemFromLine(null, line, lineNumber, itemDef);
-                        String patValue = patient.getItemValue(itemDef.getNaaccrId());
+                        Item currentTumorItem = createItemFromLine(null, line, lineNumber, def);
+                        String patValue = patient.getItemValue(def.getNaaccrId());
                         String tumorValue = currentTumorItem == null ? null : currentTumorItem.getValue();
                         boolean same = patValue == null ? tumorValue == null : patValue.equals(tumorValue);
-                        if (!same) {
-                            NaaccrValidationError error = new NaaccrValidationError();
-                            error.setMessage("item '" + itemDef.getNaaccrId() + "' is defined at the patient level but has different values for the tumors");
-                            error.setLineNumber(lineNumbers.get(i));
-                            error.setNaaccrId(itemDef.getNaaccrId());
-                            error.setNaaccrNum(itemDef.getNaaccrNum());
-                            patient.getValidationErrors().add(error);
-                        }
+                        if (!same)
+                            reportError(patient, lineNumber, def, null, NaaccrErrorUtils.CODE_VAL_PAT_VS_TUM, def.getNaaccrId());
                     }
                 }
-                else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
-                    addItemFromLine(tumor, line, lineNumber, itemDef);
+                else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(def.getParentXmlElement()))
+                    addItemFromLine(tumor, line, lineNumber, def);
             }
             patient.getTumors().add(tumor);
         }
@@ -173,43 +167,42 @@ public class PatientFlatReader implements AutoCloseable {
         return patient;
     }
 
-    protected void addItemFromLine(AbstractEntity entity, String line, Integer lineNumber, RuntimeNaaccrDictionaryItem itemDef) {
-        Item item = createItemFromLine(entity, line, lineNumber, itemDef);
-        if (item != null && !_options.getItemsToExclude().contains(itemDef.getNaaccrId()))
+    protected void addItemFromLine(AbstractEntity entity, String line, Integer lineNumber, RuntimeNaaccrDictionaryItem def) {
+        Item item = createItemFromLine(entity, line, lineNumber, def);
+        if (item != null && !_options.getItemsToExclude().contains(def.getNaaccrId()))
             entity.getItems().add(item);
     }
 
-    protected Item createItemFromLine(AbstractEntity entity, String line, Integer lineNumber, RuntimeNaaccrDictionaryItem itemDef) {
+    protected Item createItemFromLine(AbstractEntity entity, String line, Integer lineNumber, RuntimeNaaccrDictionaryItem def) {
         Item item = null;
 
-        int start = itemDef.getStartColumn() - 1; // dictionary is 1-based; Java substring is 0-based...
-        int end = start + itemDef.getLength();
+        int start = def.getStartColumn() - 1; // dictionary is 1-based; Java substring is 0-based...
+        int end = start + def.getLength();
 
         if (end <= line.length()) {
             String value = line.substring(start, end);
 
             // apply trimming rule (no trimming rule means trim all)
             String trimmedValue = value.trim();
-            if (trimmedValue.isEmpty() || itemDef.getTrim() == null || NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL.equals(itemDef.getTrim()))
+            if (trimmedValue.isEmpty() || def.getTrim() == null || NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL.equals(def.getTrim()))
                 value = trimmedValue;
 
             if (!value.isEmpty()) {
                 item = new Item();
-                item.setNaaccrId(itemDef.getNaaccrId());
-                item.setNaaccrNum(itemDef.getNaaccrNum());
+                item.setNaaccrId(def.getNaaccrId());
+                item.setNaaccrNum(def.getNaaccrNum());
                 item.setValue(value);
 
+                // value should be valid
                 if (entity != null && _options.getValidateReadValues()) {
-                    if (item.getValue().length() > itemDef.getLength())
-                        reportError(entity, lineNumber, "value too long, expected at most " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef,
-                                item.getValue());
-                    else if (exactLengthRequired(itemDef.getDataType()) && item.getValue().length() != itemDef.getLength())
-                        reportError(entity, lineNumber, "invalid value, expected exactly " + itemDef.getLength() + " character(s) but got " + item.getValue().length(), itemDef,
-                                item.getValue());
-                    else if (itemDef.getDataType() != null && !NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(itemDef.getDataType()).matcher(item.getValue()).matches())
-                        reportError(entity, lineNumber, "invalid value for data type '" + itemDef.getDataType() + "'", itemDef, item.getValue());
-                    else if (itemDef.getRegexValidation() != null && !itemDef.getRegexValidation().matcher(item.getValue()).matches())
-                        reportError(entity, lineNumber, "invalid value", itemDef, item.getValue());
+                    if (item.getValue().length() > def.getLength())
+                        reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_LONG, def.getLength(), item.getValue().length());
+                    else if (NaaccrXmlDictionaryUtils.isFullLengthRequiredForType(def.getDataType()) && item.getValue().length() != def.getLength())
+                        reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_SHORT, def.getLength(), item.getValue().length());
+                    else if (def.getDataType() != null && !NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(def.getDataType()).matcher(item.getValue()).matches())
+                        reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
+                    else if (def.getRegexValidation() != null && !def.getRegexValidation().matcher(item.getValue()).matches())
+                        reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getRegexValidation());
                 }
             }
         }
@@ -217,16 +210,8 @@ public class PatientFlatReader implements AutoCloseable {
         return item;
     }
 
-    protected boolean exactLengthRequired(String type) {
-        boolean result = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_ALPHA.equals(type);
-        result |= NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS.equals(type);
-        result |= NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_MIXED.equals(type);
-        return result;
-    }
-
-    protected void reportError(AbstractEntity entity, int line, String msg, RuntimeNaaccrDictionaryItem def, String value) {
-        NaaccrValidationError error = new NaaccrValidationError();
-        error.setMessage(msg);
+    protected void reportError(AbstractEntity entity, int line, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {
+        NaaccrValidationError error = new NaaccrValidationError(code, msgValues);
         error.setLineNumber(line);
         if (def != null) {
             error.setNaaccrId(def.getNaaccrId());
