@@ -14,6 +14,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -23,8 +24,12 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
@@ -42,20 +47,38 @@ import org.naaccr.xml.gui.pages.FlatToXmlPage;
 import org.naaccr.xml.gui.pages.XmlToFlatPage;
 import org.naaccr.xml.gui.pages.XmlValidationPage;
 
-// TODO what about help and about? Might need a menu with "File" and "Help"
 // TODO when selecting a bad XML file, there is a nasty exception instead of a nice "unknown format" message...
-public class Standalone extends JFrame {
+public class Standalone extends JFrame implements ActionListener {
 
+    public static final String VERSION = "v0.6 (beta)";
+    
     private CardLayout _layout;
     private JPanel _centerPnl;
     private JLabel _currentPageIdLbl, _currentPageDescLbl;
     private List<JButton> _buttons = new ArrayList<>();
 
     public Standalone() {
-        this.setTitle("NAACCR XML Utility v0.6");
+        this.setTitle("NAACCR XML Utility " + VERSION);
         this.setMinimumSize(new Dimension(1000, 700));
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
+
+        JMenuBar bar = new JMenuBar();
+        JMenu fileMenu = new JMenu(" File ");
+        fileMenu.setMnemonic(KeyEvent.VK_F);
+        bar.add(fileMenu);
+        JMenuItem exitItem = new JMenuItem("Exit       ");
+        exitItem.setActionCommand("menu-exit");
+        exitItem.addActionListener(this);
+        fileMenu.add(exitItem);
+        JMenu helpMenu = new JMenu(" Help ");
+        helpMenu.setMnemonic(KeyEvent.VK_H);
+        JMenuItem aboutItem = new JMenuItem("About       ");
+        aboutItem.setActionCommand("menu-about");
+        aboutItem.addActionListener(this);
+        helpMenu.add(aboutItem);
+        bar.add(helpMenu);
+        this.setJMenuBar(bar);
 
         JPanel northPnl = new JPanel(new FlowLayout(FlowLayout.LEADING));
         northPnl.setBackground(new Color(133, 180, 205));
@@ -150,6 +173,27 @@ public class Standalone extends JFrame {
         });
         _buttons.add(btn);
         return btn;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String cmd = e.getActionCommand();
+        if ("menu-exit".equals(cmd))
+            System.exit(0);
+        else if ("menu-about".equals(cmd)) {
+            final JDialog dlg = new AboutDialog(this);
+            dlg.pack();
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            Point center = new Point(screenSize.width / 2, screenSize.height / 2);
+            dlg.setLocation(center.x - dlg.getWidth() / 2, center.y - dlg.getHeight() / 2);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    dlg.setVisible(true);
+                }
+            });
+        }
+            
     }
 
     public static JLabel createItalicLabel(String text) {
