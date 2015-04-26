@@ -12,9 +12,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.LineNumberReader;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -25,16 +28,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
+import org.naaccr.xml.NaaccrErrorUtils;
 import org.naaccr.xml.NaaccrFormat;
 import org.naaccr.xml.NaaccrIOException;
 import org.naaccr.xml.NaaccrObserver;
@@ -67,11 +71,16 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected JPanel _northPnl, _centerPnl, _northProcessingPnl;
     protected JTextField _sourceFld, _targetFld, _dictionaryFld;
     protected JProgressBar _analysisBar, _processingBar;
-    protected JLabel _analysisErrorLbl, _processingErrorLbl, _processingWarningLbl, _processingResultLbl, _formatLbl, _numLinesLbl, _fileSizeLbl;
+    protected JLabel _analysisErrorLbl, _processingErrorLbl, _processingResultLbl, _formatLbl, _numLinesLbl, _fileSizeLbl;
+    protected JTextArea _warningsTextArea, _warningsSummaryTextArea;
+    protected JTabbedPane _warningsPane;
+    protected StandaloneOptions _guiOptions;
+
     protected transient SwingWorker<Void, Void> _analysisWorker;
     protected transient SwingWorker<Void, Patient> _processingWorker;
-    protected JTextArea _warningsTextArea;
-    protected StandaloneOptions _guiOptions;
+
+    protected boolean _maxWarningsReached = false, _maxWarningsDiscAdded = false;
+    protected Map<String, AtomicInteger> _warningStats = new HashMap<>();
 
     public AbstractProcessingPage() {
         super();
@@ -326,18 +335,31 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         pnl.add(_northProcessingPnl, BorderLayout.NORTH);
 
         JPanel centerPnl = new JPanel(new BorderLayout());
-        JPanel textAreaLabelPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        textAreaLabelPnl.add(Standalone.createBoldLabel("Processing warnings"));
-        textAreaLabelPnl.add(Box.createHorizontalStrut(15));
-        _processingWarningLbl = new JLabel("");
-        textAreaLabelPnl.add(_processingWarningLbl);
-        centerPnl.add(textAreaLabelPnl, BorderLayout.NORTH);
-        _warningsTextArea = new JTextArea();
+        _warningsPane = new JTabbedPane();
+        centerPnl.add(_warningsPane, BorderLayout.CENTER);
+        
+        JPanel warningsPnl = new JPanel(new BorderLayout());
+        warningsPnl.setBorder(null);
+        _warningsTextArea = new JTextArea("Processing not starting...");
+        _warningsTextArea.setForeground(Color.GRAY);
         _warningsTextArea.setEditable(false);
         _warningsTextArea.setBorder(new EmptyBorder(2, 3, 2, 3));
-        JScrollPane pane = new JScrollPane(_warningsTextArea);
-        pane.setBorder(new CompoundBorder(new EmptyBorder(5, 0, 0, 0), new LineBorder(Color.LIGHT_GRAY)));
-        centerPnl.add(pane, BorderLayout.CENTER);
+        JScrollPane warningsPane = new JScrollPane(_warningsTextArea);
+        warningsPane.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        warningsPnl.add(warningsPane, BorderLayout.CENTER);
+        _warningsPane.add("Warnings", warningsPnl);
+
+        JPanel summaryPnl = new JPanel(new BorderLayout());
+        summaryPnl.setBorder(null);
+        _warningsSummaryTextArea = new JTextArea("Processing not starting...");
+        _warningsSummaryTextArea.setForeground(Color.GRAY);
+        _warningsSummaryTextArea.setEditable(false);
+        _warningsSummaryTextArea.setBorder(new EmptyBorder(2, 3, 2, 3));
+        JScrollPane summaryPane = new JScrollPane(_warningsSummaryTextArea);
+        summaryPane.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        summaryPnl.add(summaryPane, BorderLayout.CENTER);
+        _warningsPane.add("Summary", summaryPnl);
+
         pnl.add(centerPnl, BorderLayout.CENTER);
 
         return pnl;
@@ -481,12 +503,16 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
         _northProcessingPnl.setVisible(true);
         _warningsTextArea.setText(null);
+        _warningsSummaryTextArea.setText("Processing not done...");
         _warningsTextArea.setForeground(new Color(150, 0, 0));
         _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_PROCESSING);
         _processingBar.setMinimum(0);
         _processingBar.setMaximum(Integer.valueOf(_numLinesLbl.getText().replaceAll(",", "")));
         _processingBar.setValue(0);
-        _processingWarningLbl.setText("");
+
+        _maxWarningsReached = _maxWarningsDiscAdded = false;
+        _warningStats.clear();
+
         _processingWorker = new SwingWorker<Void, Patient>() {
             @Override
             protected Void doInBackground() throws Exception {
@@ -525,14 +551,20 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
             @Override
             protected void done() {
+                _warningsSummaryTextArea.setForeground(Color.BLACK);
                 try {
                     get();
+                    StringBuilder buf = new StringBuilder("Validation warning counts:\n\n");
+                    for (String code : NaaccrErrorUtils.getAllValidationErrors().keySet())
+                        buf.append("   ").append(code).append(": ").append(_warningStats.containsKey(code) ? Standalone.formatNumber(_warningStats.get(code).get()) : "0").append("\n");
+                    _warningsSummaryTextArea.setText(buf.toString());
                 }
                 catch (CancellationException | InterruptedException e) {
-                    // ignored
+                    _warningsSummaryTextArea.append("Processing interrupted...");
                 }
                 catch (ExecutionException e) {
                     reportProcessingError(e.getCause().getMessage());
+                    _warningsSummaryTextArea.append("Processing error...");
                 }
                 finally {
                     _processingWorker = null;
@@ -542,8 +574,11 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             @Override
             protected void process(final List<Patient> patients) {
                 final StringBuilder buf = new StringBuilder();
+                
+                // extract errors
                 for (Patient patient : patients) {
                     for (NaaccrValidationError error : patient.getAllValidationErrors()) {
+                        // this will be shown in the warnings view
                         buf.append("Line ").append(error.getLineNumber());
                         if (error.getNaaccrId() != null) {
                             buf.append(", item '").append(error.getNaaccrId()).append("'");
@@ -554,8 +589,17 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                         if (error.getValue() != null && !error.getValue().isEmpty())
                             buf.append(": ").append(error.getValue());
                         buf.append("\n");
+                        
+                        // this will be used in the summary view
+                        AtomicInteger count = _warningStats.get(error.getCode());
+                        if (count == null)
+                            _warningStats.put(error.getCode(), new AtomicInteger(1));
+                        else
+                            count.incrementAndGet();
                     }
                 }
+                
+                // update GUI (process bar and text area
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -564,12 +608,13 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                         for (Patient patient : patients)
                             processedLineNumber = Math.max(processedLineNumber, patient.getStartLineNumber());
                         _processingBar.setValue(processedLineNumber);
-                        if (_warningsTextArea.getLineCount() < 10000)
+                        if (!_maxWarningsReached) {
                             _warningsTextArea.append(buf.toString());
-                        else if (_processingWarningLbl.getText().trim().isEmpty()) {
-                            _processingWarningLbl.setText("(reached maximum number of warnings that can be displayed)");
-                            _warningsTextArea.append("...");
+                            if (_warningsTextArea.getLineCount() > 10000)
+                                _maxWarningsReached = true;
                         }
+                        else if (!_maxWarningsDiscAdded)
+                            _warningsTextArea.append("Reached maximum number of warnings that can be displayed; use the summary instead (available once the processing is done)...");
                     }
                 });
             }

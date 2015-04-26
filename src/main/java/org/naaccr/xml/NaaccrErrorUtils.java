@@ -13,13 +13,13 @@ import java.util.Map;
 public class NaaccrErrorUtils {
 
     // the possible validation errors
-    public static final String CODE_BAD_NAACCR_ID = "BAD_NAACCR_ID";
-    public static final String CODE_BAD_NAACCR_NUM = "BAD_NAACCR_NUM";
-    public static final String CODE_VAL_TOO_LONG = "VALUE_TOO_LONG";
-    public static final String CODE_VAL_TOO_SHORT = "VALUE_TOO_SHORT";
-    public static final String CODE_VAL_DATA_TYPE = "VALUE_BAD_FOR_TYPE";
-    public static final String CODE_VAL_REGEX = "VALUE_BAD_FOR_REGEX";
-    public static final String CODE_VAL_PAT_VS_TUM = "PAT_VS_TUM_LEVEL";
+    public static final String CODE_BAD_NAACCR_ID = "Unknown NAACCR ID";
+    public static final String CODE_BAD_NAACCR_NUM = "Wrong NAACCR Number";
+    public static final String CODE_VAL_TOO_LONG = "Value too long";
+    public static final String CODE_VAL_TOO_SHORT = "Value too short";
+    public static final String CODE_VAL_DATA_TYPE = "Value invalid for data type";
+    public static final String CODE_VAL_REGEX = "Value invalid for regular expression";
+    public static final String CODE_VAL_PAT_VS_TUM = "Patient value not consistent among tumors";
 
     // data structure that holds the corresponding error messages (using a linked hash map to keep the original order)
     private static final Map<String, String> _MESSAGES = new LinkedHashMap<>();
