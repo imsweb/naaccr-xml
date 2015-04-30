@@ -11,7 +11,6 @@ public class NaaccrErrorUtilsTest {
     @Test
     public void testGetValidationError() {
         Assert.assertEquals("unknown NAACCR ID: ${0}", NaaccrErrorUtils.getValidationError(NaaccrErrorUtils.CODE_BAD_NAACCR_ID));
-        Assert.assertEquals("unknown NAACCR ID: ${0}", NaaccrErrorUtils.getValidationError(NaaccrErrorUtils.CODE_BAD_NAACCR_ID, (String[])null));
         Assert.assertEquals("unknown NAACCR ID: {blank}", NaaccrErrorUtils.getValidationError(NaaccrErrorUtils.CODE_BAD_NAACCR_ID, (String)null));
         Assert.assertEquals("unknown NAACCR ID: ", NaaccrErrorUtils.getValidationError(NaaccrErrorUtils.CODE_BAD_NAACCR_ID, ""));
         Assert.assertEquals("unknown NAACCR ID: xyz", NaaccrErrorUtils.getValidationError(NaaccrErrorUtils.CODE_BAD_NAACCR_ID, "xyz"));
