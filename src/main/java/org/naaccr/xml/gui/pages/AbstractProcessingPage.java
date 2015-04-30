@@ -501,7 +501,9 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 return;
         }
 
+        _processingResultLbl.setText(null);
         _northProcessingPnl.setVisible(true);
+        _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_PROGRESS);
         _warningsTextArea.setText(null);
         _warningsSummaryTextArea.setText("Processing not done...");
         _warningsTextArea.setForeground(new Color(150, 0, 0));
