@@ -47,21 +47,22 @@ public class NaaccrPatientConverter implements Converter {
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
         if (!(source instanceof Patient))
             reportSyntaxError("Unexpected object type: " + source.getClass().getName());
-
-        Patient patient = (Patient)source;
-        for (Item item : patient.getItems())
-            writeItem(item, writer);
-
-        // TODO [EXTENSIONS] this would be the place to write the patient extension...
-
-        for (Tumor tumor : patient.getTumors()) {
-            writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
-            for (Item item : tumor.getItems())
+        else {
+            Patient patient = (Patient)source;
+            for (Item item : patient.getItems())
                 writeItem(item, writer);
 
-            // TODO [EXTENSIONS] this would be the place to write the tumor extension...
+            // TODO [EXTENSIONS] this would be the place to write the patient extension...
 
-            writer.endNode();
+            for (Tumor tumor : patient.getTumors()) {
+                writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+                for (Item item : tumor.getItems())
+                    writeItem(item, writer);
+
+                // TODO [EXTENSIONS] this would be the place to write the tumor extension...
+
+                writer.endNode();
+            }
         }
     }
 
@@ -157,16 +158,18 @@ public class NaaccrPatientConverter implements Converter {
         RuntimeNaaccrDictionaryItem def = _context.getDictionary().getItemByNaaccrId(item.getNaaccrId());
         if (def == null)
             reportSyntaxError("unable to find item definition for NAACCR ID " + item.getNaaccrId());
-        if (item.getNaaccrNum() != null && !item.getNaaccrNum().equals(def.getNaaccrNum()))
-            reportSyntaxError("provided NAACCR Number '" + item.getNaaccrNum() + "' doesn't correspond to the provided NAACCR ID '" + item.getNaaccrId() + "'");
+        else {
+            if (item.getNaaccrNum() != null && !item.getNaaccrNum().equals(def.getNaaccrNum()))
+                reportSyntaxError("provided NAACCR Number '" + item.getNaaccrNum() + "' doesn't correspond to the provided NAACCR ID '" + item.getNaaccrId() + "'");
 
-        // write the item
-        writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
-        writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID, def.getNaaccrId());
-        if (def.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
-            writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, def.getNaaccrNum().toString());
-        writer.setValue(item.getValue());
-        writer.endNode();
+            // write the item
+            writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
+            writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID, def.getNaaccrId());
+            if (def.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
+                writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, def.getNaaccrNum().toString());
+            writer.setValue(item.getValue());
+            writer.endNode();
+        }
     }
 
     public void readItem(AbstractEntity entity, String currentPath, String parentTag, String rawId, String rawNum, String value) {
@@ -183,7 +186,8 @@ public class NaaccrPatientConverter implements Converter {
         // the NAACCR ID is required
         if (rawId == null)
             reportSyntaxError("attribute '" + NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID + "' is required");
-        rawId = rawId.trim();
+        else
+            rawId = rawId.trim();
         if (_context.getOptions().getItemsToExclude().contains(rawId))
             return;
         RuntimeNaaccrDictionaryItem def = _context.getDictionary().getItemByNaaccrId(rawId);

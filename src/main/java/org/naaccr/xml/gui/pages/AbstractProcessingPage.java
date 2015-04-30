@@ -12,9 +12,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -81,6 +85,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
     protected boolean _maxWarningsReached = false, _maxWarningsDiscAdded = false;
     protected Map<String, AtomicInteger> _warningStats = new HashMap<>();
+    protected Map<String, Set<String>> _warningStatsDetails = new HashMap<>();
 
     public AbstractProcessingPage() {
         super();
@@ -337,7 +342,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         JPanel centerPnl = new JPanel(new BorderLayout());
         _warningsPane = new JTabbedPane();
         centerPnl.add(_warningsPane, BorderLayout.CENTER);
-        
+
         JPanel warningsPnl = new JPanel(new BorderLayout());
         warningsPnl.setBorder(null);
         _warningsTextArea = new JTextArea("Processing not starting...");
@@ -505,8 +510,9 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _northProcessingPnl.setVisible(true);
         _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_PROGRESS);
         _warningsTextArea.setText(null);
-        _warningsSummaryTextArea.setText("Processing not done...");
         _warningsTextArea.setForeground(new Color(150, 0, 0));
+        _warningsSummaryTextArea.setText("Processing not done...");
+        _warningsSummaryTextArea.setForeground(Color.GRAY);
         _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_PROCESSING);
         _processingBar.setMinimum(0);
         _processingBar.setMaximum(Integer.valueOf(_numLinesLbl.getText().replaceAll(",", "")));
@@ -514,18 +520,19 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
         _maxWarningsReached = _maxWarningsDiscAdded = false;
         _warningStats.clear();
+        _warningStatsDetails.clear();
 
         _processingWorker = new SwingWorker<Void, Patient>() {
             @Override
             protected Void doInBackground() throws Exception {
                 File srcFile = new File(_sourceFld.getText());
-                File targetFile = _targetFld == null ? null : new File(_targetFld.getText());
+                final File targetFile = _targetFld == null ? null : new File(_targetFld.getText());
 
                 NaaccrDictionary userDictionary = null;
                 if (!_dictionaryFld.getText().isEmpty())
                     userDictionary = NaaccrXmlDictionaryUtils.readDictionary(new File(_dictionaryFld.getText()));
 
-                long start = System.currentTimeMillis();
+                final long start = System.currentTimeMillis();
                 runProcessing(srcFile, targetFile, _guiOptions.getOptions(), userDictionary, new NaaccrObserver() {
                     @Override
                     public void patientRead(Patient patient) {
@@ -537,16 +544,17 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                     }
                 });
 
-                String time = Standalone.formatTime(System.currentTimeMillis() - start);
-                String size = targetFile == null ? null : Standalone.formatFileSize(targetFile.length());
-                String path = targetFile == null ? null : targetFile.getPath();
-                _processingResultLbl.setText(getProcessingResultText(path, time, size));
-                _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_RESULTS);
-
-                if (_warningsTextArea.getText().isEmpty()) {
-                    _warningsTextArea.setForeground(Color.GRAY);
-                    _warningsTextArea.setText("Found no warning, well done!");
-                }
+                // update GUI
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        String time = Standalone.formatTime(System.currentTimeMillis() - start);
+                        String size = targetFile == null ? null : Standalone.formatFileSize(targetFile.length());
+                        String path = targetFile == null ? null : targetFile.getPath();
+                        _processingResultLbl.setText(getProcessingResultText(path, time, size));
+                        _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_RESULTS);
+                    }
+                });
 
                 return null;
             }
@@ -556,17 +564,34 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 _warningsSummaryTextArea.setForeground(Color.BLACK);
                 try {
                     get();
+
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (_warningsTextArea.getText().isEmpty()) {
+                                _warningsTextArea.setForeground(Color.GRAY);
+                                _warningsTextArea.setText("Found no warning, well done!");
+                            }
+                        }
+                    });
+
                     StringBuilder buf = new StringBuilder("Validation warning counts:\n\n");
-                    for (String code : NaaccrErrorUtils.getAllValidationErrors().keySet())
+                    for (String code : NaaccrErrorUtils.getAllValidationErrors().keySet()) {
                         buf.append("   ").append(code).append(": ").append(_warningStats.containsKey(code) ? Standalone.formatNumber(_warningStats.get(code).get()) : "0").append("\n");
+                        if (_warningStatsDetails.containsKey(code)) {
+                            List<String> list = new ArrayList<>(_warningStatsDetails.get(code));
+                            Collections.sort(list);
+                            buf.append("      ").append(list).append("\n");
+                        }
+                    }
                     _warningsSummaryTextArea.setText(buf.toString());
                 }
                 catch (CancellationException | InterruptedException e) {
-                    _warningsSummaryTextArea.append("Processing interrupted...");
+                    _warningsSummaryTextArea.setText("Processing interrupted...");
                 }
                 catch (ExecutionException e) {
                     reportProcessingError(e.getCause().getMessage());
-                    _warningsSummaryTextArea.append("Processing error...");
+                    _warningsSummaryTextArea.setText("Processing error...");
                 }
                 finally {
                     _processingWorker = null;
@@ -576,7 +601,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             @Override
             protected void process(final List<Patient> patients) {
                 final StringBuilder buf = new StringBuilder();
-                
+
                 // extract errors
                 for (Patient patient : patients) {
                     for (NaaccrValidationError error : patient.getAllValidationErrors()) {
@@ -591,17 +616,27 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                         if (error.getValue() != null && !error.getValue().isEmpty())
                             buf.append(": ").append(error.getValue());
                         buf.append("\n");
-                        
+
                         // this will be used in the summary view
                         AtomicInteger count = _warningStats.get(error.getCode());
                         if (count == null)
                             _warningStats.put(error.getCode(), new AtomicInteger(1));
                         else
                             count.incrementAndGet();
+
+                        // let's also keep track of more detailed information
+                        if (error.getNaaccrId() != null) {
+                            Set<String> set = _warningStatsDetails.get(error.getCode());
+                            if (set == null) {
+                                set = new HashSet<>();
+                                _warningStatsDetails.put(error.getCode(), set);
+                            }
+                            set.add(error.getNaaccrId());
+                        }
                     }
                 }
-                
-                // update GUI (process bar and text area
+
+                // update GUI (process bar and text area)
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {

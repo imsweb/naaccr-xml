@@ -20,6 +20,7 @@ public class NaaccrValidationError {
     protected String _value;
     
     public NaaccrValidationError(String code, Object... msgValues) {
+        _code = code;
         _message = NaaccrErrorUtils.getValidationError(code, msgValues);
     }
 
