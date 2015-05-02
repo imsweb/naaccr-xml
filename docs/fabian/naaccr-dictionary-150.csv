@@ -382,7 +382,7 @@
 "seerCodingSysOriginal","2130","1","SEER Coding Sys--Original","","","A,M,C,I","1931","Tumor","","digits","Edit Overrides / Conversion History / System Admin","","","","",""
 "cocCodingSysCurrent","2140","2","CoC Coding Sys--Current","","","A,M,C,I","1932","Tumor","","digits","Edit Overrides / Conversion History / System Admin","","","","",""
 "cocCodingSysOriginal","2150","2","CoC Coding Sys--Original","","","A,M,C,I","1934","Tumor","","digits","Edit Overrides / Conversion History / System Admin","","","","",""
-"vendorName","2170","10","Vendor Name","","","A,M,C,I","1936","NaaccrData","","text","Edit Overrides / Conversion History / System Admin","","","","",""
+"vendorName","2170","10","Vendor Name","","","A,M,C,I","1936","Tumor","","text","Edit Overrides / Conversion History / System Admin","","","","",""
 "seerTypeOfFollowUp","2180","1","SEER Type of Follow-Up","","","A,M,C,I","1946","Tumor","","digits","Edit Overrides / Conversion History / System Admin","","","","",""
 "seerRecordNumber","2190","2","SEER Record Number","","","A,M,C,I","1947","Tumor","","numeric","Edit Overrides / Conversion History / System Admin","","","","",""
 "diagnosticProc7387","2200","2","Diagnostic Proc 73-87","","","A,M,C,I","1949","Tumor","","alpha","Edit Overrides / Conversion History / System Admin","","","","",""

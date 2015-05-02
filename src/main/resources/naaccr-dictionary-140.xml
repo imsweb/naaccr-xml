@@ -2700,7 +2700,7 @@
             startColumn="1936"
             length="10"
             recordTypes="A,M,C,I"
-            parentXmlElement="NaaccrData"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="seerTypeOfFollowUp"
             naaccrNum="2180"
             naaccrName="SEER Type of Follow-Up"
