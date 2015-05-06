@@ -602,19 +602,26 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                                 _warningsTextArea.setForeground(Color.GRAY);
                                 _warningsTextArea.setText("Found no warning, well done!");
                             }
+
+                            if (_warningStats.isEmpty())
+                                _warningsSummaryTextArea.setText("Found no warning, well done!");
+                            else {
+                                StringBuilder buf = new StringBuilder("Validation warning counts (0 counts not displayed):\n\n");
+                                for (String code : NaaccrErrorUtils.getAllValidationErrors().keySet()) {
+                                    int count = _warningStats.containsKey(code) ? _warningStats.get(code).get() : 0;
+                                    if (count > 0) {
+                                        buf.append("   ").append(code).append(": ").append(Standalone.formatNumber(count)).append("\n");
+                                        if (_warningStatsDetails.containsKey(code)) {
+                                            List<String> list = new ArrayList<>(_warningStatsDetails.get(code));
+                                            Collections.sort(list);
+                                            buf.append("      ").append(list).append("\n");
+                                        }
+                                    }
+                                }
+                                _warningsSummaryTextArea.setText(buf.toString());
+                            }
                         }
                     });
-
-                    StringBuilder buf = new StringBuilder("Validation warning counts:\n\n");
-                    for (String code : NaaccrErrorUtils.getAllValidationErrors().keySet()) {
-                        buf.append("   ").append(code).append(": ").append(_warningStats.containsKey(code) ? Standalone.formatNumber(_warningStats.get(code).get()) : "0").append("\n");
-                        if (_warningStatsDetails.containsKey(code)) {
-                            List<String> list = new ArrayList<>(_warningStatsDetails.get(code));
-                            Collections.sort(list);
-                            buf.append("      ").append(list).append("\n");
-                        }
-                    }
-                    _warningsSummaryTextArea.setText(buf.toString());
                 }
                 catch (CancellationException | InterruptedException e) {
                     _warningsSummaryTextArea.setText("Processing interrupted...");
