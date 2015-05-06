@@ -88,7 +88,7 @@ public class PatientFlatReader implements AutoCloseable {
             lineNumbers.add(_reader.getLineNumber());
             _previousLine = _reader.readLine();
             while (_previousLine != null) {
-                boolean samePatient = !_groupingItems.isEmpty() && firstLineGroupingValues.equals(extractGroupingValues(_previousLine, _reader.getLineNumber(), _groupingItems));
+                boolean samePatient = !firstLineGroupingValues.isEmpty() && firstLineGroupingValues.equals(extractGroupingValues(_previousLine, _reader.getLineNumber(), _groupingItems));
                 if (samePatient) {
                     lines.add(_previousLine);
                     lineNumbers.add(_reader.getLineNumber());
@@ -146,7 +146,17 @@ public class PatientFlatReader implements AutoCloseable {
             Tumor tumor = new Tumor();
             tumor.setStartLineNumber(lineNumber);
             for (RuntimeNaaccrDictionaryItem def : _dictionary.getItems()) {
-                if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(def.getParentXmlElement())) {
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(def.getParentXmlElement())) {
+                    if (_options.getReportLevelMismatch()) {
+                        Item currentTumorItem = createItemFromLine(null, line, lineNumber, def);
+                        String rootValue = _rootData.getItemValue(def.getNaaccrId());
+                        String tumorValue = currentTumorItem == null ? null : currentTumorItem.getValue();
+                        boolean same = rootValue == null ? tumorValue == null : rootValue.equals(tumorValue);
+                        if (!same)
+                            reportError(tumor, lineNumber, def, null, NaaccrErrorUtils.CODE_VAL_ROOT_VS_TUM, def.getNaaccrId());
+                    }
+                }
+                else if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(def.getParentXmlElement())) {
                     if (i == 0)
                         addItemFromLine(patient, line, lineNumber, def);
                     else if (_options.getReportLevelMismatch()) {
@@ -155,7 +165,7 @@ public class PatientFlatReader implements AutoCloseable {
                         String tumorValue = currentTumorItem == null ? null : currentTumorItem.getValue();
                         boolean same = patValue == null ? tumorValue == null : patValue.equals(tumorValue);
                         if (!same)
-                            reportError(patient, lineNumber, def, null, NaaccrErrorUtils.CODE_VAL_PAT_VS_TUM, def.getNaaccrId());
+                            reportError(tumor, lineNumber, def, null, NaaccrErrorUtils.CODE_VAL_PAT_VS_TUM, def.getNaaccrId());
                     }
                 }
                 else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(def.getParentXmlElement()))

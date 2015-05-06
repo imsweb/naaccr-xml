@@ -20,6 +20,7 @@ public class NaaccrErrorUtils {
     public static final String CODE_VAL_DATA_TYPE = "Value invalid for data type";
     public static final String CODE_VAL_REGEX = "Value invalid for regular expression";
     public static final String CODE_VAL_PAT_VS_TUM = "Patient value not consistent among tumors";
+    public static final String CODE_VAL_ROOT_VS_TUM = "NaaccrData value not consistent among tumors";
 
     // data structure that holds the corresponding error messages (using a linked hash map to keep the original order)
     private static final Map<String, String> _MESSAGES = new LinkedHashMap<>();
@@ -31,7 +32,8 @@ public class NaaccrErrorUtils {
         _MESSAGES.put(CODE_VAL_TOO_SHORT, "value too short, expected exactly ${0} character(s) but got ${1}");
         _MESSAGES.put(CODE_VAL_DATA_TYPE, "invalid value according to data type '${0}'");
         _MESSAGES.put(CODE_VAL_REGEX, "invalid value according to regular expression '${0}'");
-        _MESSAGES.put(CODE_VAL_PAT_VS_TUM, "item '${0}' is a patient-level item but has different values for some of the tumors");
+        _MESSAGES.put(CODE_VAL_PAT_VS_TUM, "item '${0}' is a patient-level and should have the same value for all the records of the patient");
+        _MESSAGES.put(CODE_VAL_ROOT_VS_TUM, "item '${0}' is a root-level item and should have the same value for all the records of the transmitted data");
     }
 
     /**
