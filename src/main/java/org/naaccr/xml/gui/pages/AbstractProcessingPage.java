@@ -471,10 +471,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             @Override
             protected Void doInBackground() throws Exception {
                 File file = new File(_sourceFld.getText());
-                String format = getFormatForInputFile(file);
-                if (!NaaccrFormat.isFormatSupported(format))
-                    reportAnalysisError("unknown or unsupported file format");
-                else {
+                NaaccrFormat format = getFormatForInputFile(file);
+                if (format != null) { // if it's null, an error has already been reported to the user
                     int numLines = 0;
                     try (LineNumberReader reader = new LineNumberReader(NaaccrXmlUtils.createReader(file))) {
                         String line = reader.readLine();
@@ -483,9 +481,9 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                             line = reader.readLine();
                         }
                         if (file.getName().toLowerCase().endsWith(".gz"))
-                            _formatLbl.setText("Compressed " + NaaccrFormat.getInstance(format).getDisplayName());
+                            _formatLbl.setText("Compressed " + format.getDisplayName());
                         else
-                            _formatLbl.setText(NaaccrFormat.getInstance(format).getDisplayName());
+                            _formatLbl.setText(format.getDisplayName());
                         _numLinesLbl.setText(Standalone.formatNumber(numLines));
                         _fileSizeLbl.setText(Standalone.formatFileSize(file.length()));
                         _northLayout.show(_northPnl, _NORTH_PANEL_ID_ANALYSIS_RESULTS);
@@ -521,7 +519,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _analysisWorker.execute();
     }
 
-    protected abstract String getFormatForInputFile(File file);
+    protected abstract NaaccrFormat getFormatForInputFile(File file);
 
     private void performProcessing() {
         if (_targetFld != null && new File(_targetFld.getText()).exists()) {
@@ -697,14 +695,14 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         return "Successfully created \"" + path + "\" (" + size + ") in " + time;
     }
 
-    private void reportAnalysisError(String error) {
+    protected void reportAnalysisError(String error) {
         _centerPnl.setVisible(false);
         _analysisBar.setIndeterminate(false);
         _analysisErrorLbl.setText(error == null || error.isEmpty() ? "unexpected error" : error);
         _northLayout.show(_northPnl, _NORTH_PANEL_ID_ERROR);
     }
 
-    private void reportProcessingError(String error) {
+    protected void reportProcessingError(String error) {
         _processingErrorLbl.setText(error == null || error.isEmpty() ? "unexpected error" : error);
         _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_ERROR);
     }

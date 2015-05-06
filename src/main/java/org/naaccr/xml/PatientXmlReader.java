@@ -66,18 +66,23 @@ public class PatientXmlReader implements AutoCloseable {
         // read the standard attribute: base dictionary
         _rootData.setBaseDictionaryUri(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
         if (_rootData.getBaseDictionaryUri() == null)
-            throw new NaaccrIOException("the " + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT + " attribute is required", configuration.getParser().getLineNumber());
-        NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(_rootData.getBaseDictionaryUri());
-        if (baseDictionary == null)
-            throw new NaaccrIOException("unknown base dictionary: " + _rootData.getBaseDictionaryUri(), configuration.getParser().getLineNumber());
+            throw new NaaccrIOException("the \"" + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT + "\" attribute is required", configuration.getParser().getLineNumber());
+        String version = NaaccrXmlDictionaryUtils.extractVersionFromUri(_rootData.getBaseDictionaryUri());
+        if (version == null || version.trim().isEmpty())
+            throw new NaaccrIOException("unable to extract NAACCR version from base dictionary URI \"" + _rootData.getBaseDictionaryUri() + "\"", configuration.getParser().getLineNumber());
+        if (!NaaccrFormat.isVersionSupported(version))
+            throw new NaaccrIOException("invalid/unsupported NAACCR version: " + version, configuration.getParser().getLineNumber());
+        NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(version);
 
         // read the standard attribute: user dictionary
         _rootData.setUserDictionaryUri(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT));
         if (_rootData.getUserDictionaryUri() != null && (userDictionary == null || !_rootData.getUserDictionaryUri().equals(userDictionary.getDictionaryUri())))
-            throw new NaaccrIOException("unknown user dictionary: " + _rootData.getUserDictionaryUri(), configuration.getParser().getLineNumber());
+            throw new NaaccrIOException("unknown/invalid user dictionary: " + _rootData.getUserDictionaryUri(), configuration.getParser().getLineNumber());
 
         // read the standard attribute: record type            
         _rootData.setRecordType(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE));
+        if (_rootData.getRecordType() == null || _rootData.getRecordType().trim().isEmpty())
+            throw new NaaccrIOException("the \"" + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE + "\" attribute is required", configuration.getParser().getLineNumber());
         if (!NaaccrFormat.isRecordTypeSupported(_rootData.getRecordType()))
             throw new NaaccrIOException("invalid record type: " + _rootData.getRecordType(), configuration.getParser().getLineNumber());
 
@@ -119,7 +124,7 @@ public class PatientXmlReader implements AutoCloseable {
             String rawNum = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM);
             configuration.getPatientConverter().readItem(_rootData, "/NaaccrData", NaaccrXmlUtils.NAACCR_XML_TAG_ROOT, rawId, rawNum, _reader.getValue());
             if (rawId != null && itemsAlreadySeen.contains(rawId))
-                throw new NaaccrIOException("item '" + rawId + "' should be unique within the " + NaaccrXmlUtils.NAACCR_XML_TAG_ROOT + " tags");
+                throw new NaaccrIOException("item '" + rawId + "' should be unique within the \"" + NaaccrXmlUtils.NAACCR_XML_TAG_ROOT + "\" tags");
             else
                 itemsAlreadySeen.add(rawId);
             _reader.moveUp();

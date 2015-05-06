@@ -5,11 +5,14 @@ package org.naaccr.xml.gui.pages;
 
 import java.io.File;
 
+import org.naaccr.xml.NaaccrFormat;
 import org.naaccr.xml.NaaccrIOException;
 import org.naaccr.xml.NaaccrObserver;
 import org.naaccr.xml.NaaccrOptions;
+import org.naaccr.xml.NaaccrXmlDictionaryUtils;
 import org.naaccr.xml.NaaccrXmlUtils;
 import org.naaccr.xml.PatientXmlReader;
+import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.naaccr.xml.gui.StandaloneOptions;
@@ -49,8 +52,22 @@ public class XmlValidationPage extends AbstractProcessingPage {
     }
 
     @Override
-    protected String getFormatForInputFile(File file) {
-        return NaaccrXmlUtils.getFormatFromXmlFile(file);
+    protected NaaccrFormat getFormatForInputFile(File file) {
+
+        // make sure the file exists
+        if (file == null || !file.exists()) {
+            reportAnalysisError("unable to find selected file");
+            return null;
+        }
+
+        try (PatientXmlReader reader = new PatientXmlReader(NaaccrXmlUtils.createReader(file), null, null)) {
+            NaaccrData rootData = reader.getRootData(); // all the validation happens when creating the root object in the reader...
+            return NaaccrFormat.getInstance(NaaccrXmlDictionaryUtils.extractVersionFromUri(rootData.getBaseDictionaryUri()), rootData.getRecordType());
+        }
+        catch (NaaccrIOException e) {
+            reportAnalysisError("line " + e.getLineNumber() + ", " + e.getMessage());
+            return null;
+        }
     }
 
     @Override

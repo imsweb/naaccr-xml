@@ -35,6 +35,8 @@ public class PatientFlatReader implements AutoCloseable {
 
     protected List<RuntimeNaaccrDictionaryItem> _groupingItems;
 
+    protected NaaccrFormat _format;
+
     protected String _previousLine;
 
     public PatientFlatReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
@@ -45,12 +47,34 @@ public class PatientFlatReader implements AutoCloseable {
             _previousLine = _reader.readLine();
         }
         catch (IOException e) {
-            throw new NaaccrIOException(e.getMessage());
+            throw new NaaccrIOException("unable to read first line");
         }
-        NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromFlatFileLine(_previousLine));
-        NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(naaccrFormat.getNaaccrVersion());
-        _dictionary = new RuntimeNaaccrDictionary(naaccrFormat.getRecordType(), baseDictionary, userDictionary);
-        _rootData = new NaaccrData(naaccrFormat.toString());
+
+        if (_previousLine == null || _previousLine.isEmpty())
+            throw new NaaccrIOException("first line is empty");
+
+        // make sure the NAACCR version is valid
+        String version = _previousLine.length() < 19 ? "" : _previousLine.substring(16, 19).trim();
+        if (version.isEmpty())
+            throw new NaaccrIOException("blank NAACCR version on first record");
+        if (!NaaccrFormat.isVersionSupported(version))
+            throw new NaaccrIOException("invalid/unsupported NAACCR version on first record: " + version);
+
+        // make sure the record type is valid
+        String type = _previousLine.substring(0, 1).trim();
+        if (type.isEmpty())
+            throw new NaaccrIOException("blank record type on first record");
+        if (!NaaccrFormat.isRecordTypeSupported(type))
+            throw new NaaccrIOException("invalid/unsupported record type on first record: " + type);
+
+        _format = NaaccrFormat.getInstance(version, type);
+        NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(_format.getNaaccrVersion());
+        _dictionary = new RuntimeNaaccrDictionary(_format.getRecordType(), baseDictionary, userDictionary);
+        _rootData = new NaaccrData(_format.toString());
+
+        // make sure first line has the correct length
+        if (_previousLine.length() != _format.getLineLength())
+            throw new NaaccrIOException("invalid line length for first record, expected " + _format.getLineLength() + " but got " + _previousLine.length());
 
         // read the root items
         if (_previousLine != null)
@@ -142,6 +166,9 @@ public class PatientFlatReader implements AutoCloseable {
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
             Integer lineNumber = lineNumbers.get(i);
+
+            if (line.length() != _format.getLineLength())
+                reportError(patient, lineNumber, null, null, NaaccrErrorUtils.CODE_BADE_LINE_LENGTH, _format.getLineLength(), line.length());
 
             Tumor tumor = new Tumor();
             tumor.setStartLineNumber(lineNumber);
