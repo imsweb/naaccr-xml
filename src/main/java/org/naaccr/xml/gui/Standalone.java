@@ -59,7 +59,7 @@ public class Standalone extends JFrame implements ActionListener {
 
     public Standalone() {
         this.setTitle("NAACCR XML Utility " + VERSION);
-        this.setMinimumSize(new Dimension(1000, 700));
+        this.setMinimumSize(new Dimension(1100, 700));
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
 

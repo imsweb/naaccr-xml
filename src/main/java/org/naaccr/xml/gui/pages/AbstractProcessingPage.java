@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -57,6 +58,9 @@ import org.naaccr.xml.gui.StandaloneOptions;
 
 public abstract class AbstractProcessingPage extends AbstractPage {
 
+    protected static final String _COMPRESSION_NONE = "None";
+    protected static final String _COMPRESSION_GZIP = "GZip";
+
     protected static final String _NORTH_PANEL_ID_NO_FILE = "no-file";
     protected static final String _NORTH_PANEL_ID_ANALYSIS = "analysis-progress";
     protected static final String _NORTH_PANEL_ID_ANALYSIS_RESULTS = "analysis-results";
@@ -74,6 +78,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected CardLayout _northLayout, _centerLayout, _northProcessingLayout;
     protected JPanel _northPnl, _centerPnl, _northProcessingPnl;
     protected JTextField _sourceFld, _targetFld, _dictionaryFld;
+    protected JComboBox<String> _compressionBox;
     protected JProgressBar _analysisBar, _processingBar;
     protected JLabel _analysisErrorLbl, _processingErrorLbl, _processingResultLbl, _formatLbl, _numLinesLbl, _fileSizeLbl;
     protected JTextArea _warningsTextArea, _warningsSummaryTextArea;
@@ -120,11 +125,11 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         sourceFilePnl.setBorder(null);
         sourceFilePnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         sourceFilePnl.add(Standalone.createBoldLabel(getSourceLabelText()));
-        sourceFilePnl.add(Box.createHorizontalStrut(10));
+        sourceFilePnl.add(Box.createHorizontalStrut(5));
         _sourceFld = new JTextField(60);
         _sourceFld.setBackground(Color.WHITE);
         sourceFilePnl.add(_sourceFld);
-        sourceFilePnl.add(Box.createHorizontalStrut(10));
+        sourceFilePnl.add(Box.createHorizontalStrut(5));
         JButton browseBtn = new JButton("Browse...");
         browseBtn.addActionListener(new ActionListener() {
             @Override
@@ -252,16 +257,16 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         pnl.setBorder(new EmptyBorder(10, 0, 0, 0));
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
 
-        JPanel targetFieldPnl = new JPanel();
-        targetFieldPnl.setOpaque(false);
-        targetFieldPnl.setBorder(null);
-        targetFieldPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        targetFieldPnl.add(Standalone.createBoldLabel(getTargetLabelText()));
-        targetFieldPnl.add(Box.createHorizontalStrut(10));
         if (showTargetInput()) {
+            JPanel targetFieldPnl = new JPanel();
+            targetFieldPnl.setOpaque(false);
+            targetFieldPnl.setBorder(null);
+            targetFieldPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+            targetFieldPnl.add(Standalone.createBoldLabel(getTargetLabelText()));
+            targetFieldPnl.add(Box.createHorizontalStrut(5));
             _targetFld = new JTextField(60);
             targetFieldPnl.add(_targetFld);
-            targetFieldPnl.add(Box.createHorizontalStrut(10));
+            targetFieldPnl.add(Box.createHorizontalStrut(5));
             JButton browseBtn = new JButton("Browse...");
             browseBtn.addActionListener(new ActionListener() {
                 @Override
@@ -271,6 +276,22 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 }
             });
             targetFieldPnl.add(browseBtn);
+            targetFieldPnl.add(Box.createHorizontalStrut(10));
+            targetFieldPnl.add(Standalone.createBoldLabel("Compression:"));
+            targetFieldPnl.add(Box.createHorizontalStrut(5));
+            _compressionBox = new JComboBox<>(new String[] {_COMPRESSION_NONE, _COMPRESSION_GZIP});
+            _compressionBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!_targetFld.getText().isEmpty()) {
+                        if (_COMPRESSION_GZIP.equals(_compressionBox.getSelectedItem()) && !_targetFld.getText().endsWith(".gz"))
+                            _targetFld.setText(_targetFld.getText() + ".gz");
+                        if (_COMPRESSION_NONE.equals(_compressionBox.getSelectedItem()) && _targetFld.getText().endsWith(".gz"))
+                            _targetFld.setText(_targetFld.getText().replace(".gz", ""));
+                    }
+                }
+            });
+            targetFieldPnl.add(_compressionBox);
             pnl.add(targetFieldPnl);
             pnl.add(Box.createVerticalStrut(15));
         }
@@ -471,8 +492,11 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                         _analysisBar.setIndeterminate(false);
                         _centerPnl.setVisible(true);
                         _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_OPTIONS);
-                        if (_targetFld != null)
+                        if (_targetFld != null) {
                             _targetFld.setText(invertFilename(new File(_sourceFld.getText())));
+                            if (_targetFld.getText().endsWith(".gz"))
+                                _compressionBox.setSelectedItem(_COMPRESSION_GZIP);
+                        }
                     }
                 }
                 return null;
@@ -526,7 +550,15 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             @Override
             protected Void doInBackground() throws Exception {
                 File srcFile = new File(_sourceFld.getText());
-                final File targetFile = _targetFld == null ? null : new File(_targetFld.getText());
+                String targetFilename = null;
+                if (_targetFld != null) {
+                    targetFilename = _targetFld.getText();
+                    if (_COMPRESSION_GZIP.equals(_compressionBox.getSelectedItem()) && !targetFilename.endsWith(".gz"))
+                        targetFilename = targetFilename + ".gz";
+                    if (_COMPRESSION_NONE.equals(_compressionBox.getSelectedItem()) && targetFilename.endsWith(".gz"))
+                        targetFilename = targetFilename.replace(".gz", "");
+                }
+                final File targetFile = targetFilename == null ? null : new File(targetFilename);
 
                 NaaccrDictionary userDictionary = null;
                 if (!_dictionaryFld.getText().isEmpty())
