@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
-<NaaccrDictionary xmlns="http://naaccr.org/naaccrxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://naaccr.org/naaccrxml/naaccr_meta.xsd" 
-	dictionaryUri="http://naaccr.org/naaccrxml/Extension.xml" description="Example of extension" >
+
+<!-- This is an example for using extension, this isn't a real file being released with the project... -->
+
+<NaaccrDictionary xmlns="http://naaccr.org/naaccrxml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" dictionaryUri="http://naaccr.org/naaccrxml/Extension.xml" description="Example of extension">
 	<ItemDefs>
 		<ItemDef naaccrId="screeningDate" naaccrNum="510" naaccrName="Screening Date" 
 			parentXmlElement="Tumor" dataType="date" startColumn="313" length="8" 

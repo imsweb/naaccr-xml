@@ -56,7 +56,7 @@
 		<xsd:enumeration value="none" />
 		<xsd:enumeration value="all" />
 	</xsd:restriction>
-	
+</xsd:simpleType>	
 
 <xsd:element name="ItemDef" >
 	<xsd:complexType>
