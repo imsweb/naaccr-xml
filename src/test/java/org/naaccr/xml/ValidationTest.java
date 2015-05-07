@@ -95,7 +95,7 @@ public class ValidationTest {
         File flatFile1 = new File(System.getProperty("user.dir") + "/build/test.txt");
         NaaccrXmlUtils.writeFlatFile(data1, flatFile1, null, null, null);
         data1 = NaaccrXmlUtils.readFlatFile(flatFile1, null, null, null);
-        Assert.assertEquals("VENDOR", data1.getItemValue("vendorName"));
+        Assert.assertEquals("0000000001", data1.getItemValue("registryId"));
 
         File xmlFile2 = new File(System.getProperty("user.dir") + "/build/test.xml");
         NaaccrXmlUtils.flatToXml(flatFile1, xmlFile2, null, null, null);

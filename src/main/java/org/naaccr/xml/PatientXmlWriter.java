@@ -19,6 +19,7 @@ import org.naaccr.xml.runtime.NaaccrStreamContext;
 import org.naaccr.xml.runtime.RuntimeNaaccrDictionary;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
@@ -42,72 +43,96 @@ public class PatientXmlWriter implements AutoCloseable {
     public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         this(writer, rootData, options, userDictionary, null);
     }
-    
+
     public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
 
-        // we always need options
-        if (options == null)
-            options = new NaaccrOptions();
-
-        // we always need a configuration
-        if (configuration == null)
-            configuration = new NaaccrStreamConfiguration();
-
-        NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(rootData.getBaseDictionaryUri());
-
-        // create the writer
-        _writer = new PrettyPrintWriter(writer, new char[] {' ', ' ', ' ', ' '});
-
-        // would be better to use a "header writer", I think XStream has one actually; that would be better...
         try {
-            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));
-        }
-        catch (IOException e) {
-            throw new NaaccrIOException(e.getMessage());
-        }
+            // we always need options
+            if (options == null)
+                options = new NaaccrOptions();
 
-        // write standard attributes
-        _writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT);
-        _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT, rootData.getBaseDictionaryUri());
-        if (rootData.getUserDictionaryUri() != null)
-            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT, rootData.getUserDictionaryUri());
-        _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE, rootData.getRecordType());
-        _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, new SimpleDateFormat(NaaccrXmlUtils.GENERATED_TIME_FORMAT).format(rootData.getTimeGenerated()));
+            // we always need a configuration
+            if (configuration == null)
+                configuration = new NaaccrStreamConfiguration();
 
-        // write non-standard attributes
-        Set<String> standardAttributes = new HashSet<>();
-        standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT);
-        standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT);
-        standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE);
-        standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
-        for (Entry<String, String> entry : rootData.getExtraRootParameters().entrySet())
+            NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(rootData.getBaseDictionaryUri());
+
+            // create the writer
+            _writer = new PrettyPrintWriter(writer, new char[] {' ', ' ', ' ', ' '});
+
+            // would be better to use a "header writer", I think XStream has one actually; that would be better...
+            try {
+                writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));
+            }
+            catch (IOException e) {
+                throw new NaaccrIOException(e.getMessage());
+            }
+
+            // write standard attributes
+            _writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT);
+            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT, rootData.getBaseDictionaryUri());
+            if (rootData.getUserDictionaryUri() != null)
+                _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT, rootData.getUserDictionaryUri());
+            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE, rootData.getRecordType());
+            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, new SimpleDateFormat(NaaccrXmlUtils.GENERATED_TIME_FORMAT).format(rootData.getTimeGenerated()));
+
+            // write non-standard attributes
+            Set<String> standardAttributes = new HashSet<>();
+            standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT);
+            standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT);
+            standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE);
+            standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
+            for (Entry<String, String> entry : rootData.getExtraRootParameters().entrySet())
                 if (!standardAttributes.contains(entry.getKey()))
                     _writer.addAttribute(entry.getKey(), entry.getValue());
 
-        // now we are ready to create our reading context and make it available to the patient converter
-        NaaccrStreamContext context = new NaaccrStreamContext();
-        context.setDictionary(new RuntimeNaaccrDictionary(rootData.getRecordType(), baseDictionary, userDictionary));
-        context.setOptions(options);
-        context.setParser(configuration.getParser());
-        configuration.getPatientConverter().setContext(context);
+            // now we are ready to create our reading context and make it available to the patient converter
+            NaaccrStreamContext context = new NaaccrStreamContext();
+            context.setDictionary(new RuntimeNaaccrDictionary(rootData.getRecordType(), baseDictionary, userDictionary));
+            context.setOptions(options);
+            context.setParser(configuration.getParser());
+            configuration.getPatientConverter().setContext(context);
 
-        // write the root items
-        for (Item item : rootData.getItems())
-            configuration.getPatientConverter().writeItem(item, _writer);
+            // write the root items
+            for (Item item : rootData.getItems())
+                configuration.getPatientConverter().writeItem(item, _writer);
 
-        // for now, ignore the root extension...
+            // for now, ignore the root extension...
 
-        // need to expose xstream so the other methods can use it...
-        _xstream = configuration.getXstream();
+            // need to expose xstream so the other methods can use it...
+            _xstream = configuration.getXstream();
+        }
+        catch (ConversionException ex) {
+            throw convertSyntaxException(ex);
+        }
     }
 
     public void writePatient(Patient patient) throws NaaccrIOException {
-        _xstream.marshal(patient, _writer);
+        try {
+            _xstream.marshal(patient, _writer);
+        }
+        catch (ConversionException ex) {
+            throw convertSyntaxException(ex);
+        }
     }
 
     @Override
     public void close() {
         _writer.endNode();
         _writer.close();
+    }
+
+    /**
+     * We don't want to expose the conversion exceptions, so let's translate them into our own exception...
+     */
+    private NaaccrIOException convertSyntaxException(ConversionException ex) {
+        String msg = ex.get("message");
+        if (msg == null)
+            msg = ex.getMessage();
+        NaaccrIOException e = new NaaccrIOException(msg);
+        if (ex.get("lineNumber") != null)
+            e.setLineNumber(Integer.valueOf(ex.get("lineNumber")));
+        e.setPath(ex.get("path"));
+        return e;
     }
 }
