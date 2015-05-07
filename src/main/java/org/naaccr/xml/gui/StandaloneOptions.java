@@ -59,7 +59,7 @@ public class StandaloneOptions extends JPanel {
             contentPnl.add(pnl);
             contentPnl.add(Box.createVerticalStrut(3));
             contentPnl.add(addHelpRow("If this option is checked, the items of the tumors grouped together, but having different values will be reported as warnings."));
-            contentPnl.add(addHelpRow("This option has no effect if the tumors are not grouped."));
+            contentPnl.add(addHelpRow("The few items defined as root-items (like registry ID) but having different values for different patients will also be reported."));
             contentPnl.add(Box.createVerticalStrut(15));
         }
 

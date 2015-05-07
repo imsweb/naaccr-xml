@@ -39,7 +39,7 @@ public class NaaccrOptions {
     private List<String> _tumorGroupingItems;
 
     /**
-     * When reading data (from flat format), whether or not errors need to be reported for patient-level values mismatch. Default to false.
+     * When reading data (from flat format), whether or not errors need to be reported for patient-level or root-level values mismatch. Default to false.
      */
     private Boolean _reportLevelMismatch;
 

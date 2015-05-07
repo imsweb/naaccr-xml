@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -57,6 +58,9 @@ import org.naaccr.xml.gui.StandaloneOptions;
 
 public abstract class AbstractProcessingPage extends AbstractPage {
 
+    protected static final String _COMPRESSION_NONE = "None";
+    protected static final String _COMPRESSION_GZIP = "GZip";
+
     protected static final String _NORTH_PANEL_ID_NO_FILE = "no-file";
     protected static final String _NORTH_PANEL_ID_ANALYSIS = "analysis-progress";
     protected static final String _NORTH_PANEL_ID_ANALYSIS_RESULTS = "analysis-results";
@@ -74,6 +78,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected CardLayout _northLayout, _centerLayout, _northProcessingLayout;
     protected JPanel _northPnl, _centerPnl, _northProcessingPnl;
     protected JTextField _sourceFld, _targetFld, _dictionaryFld;
+    protected JComboBox<String> _compressionBox;
     protected JProgressBar _analysisBar, _processingBar;
     protected JLabel _analysisErrorLbl, _processingErrorLbl, _processingResultLbl, _formatLbl, _numLinesLbl, _fileSizeLbl;
     protected JTextArea _warningsTextArea, _warningsSummaryTextArea;
@@ -120,11 +125,11 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         sourceFilePnl.setBorder(null);
         sourceFilePnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         sourceFilePnl.add(Standalone.createBoldLabel(getSourceLabelText()));
-        sourceFilePnl.add(Box.createHorizontalStrut(10));
+        sourceFilePnl.add(Box.createHorizontalStrut(5));
         _sourceFld = new JTextField(60);
         _sourceFld.setBackground(Color.WHITE);
         sourceFilePnl.add(_sourceFld);
-        sourceFilePnl.add(Box.createHorizontalStrut(10));
+        sourceFilePnl.add(Box.createHorizontalStrut(5));
         JButton browseBtn = new JButton("Browse...");
         browseBtn.addActionListener(new ActionListener() {
             @Override
@@ -252,16 +257,16 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         pnl.setBorder(new EmptyBorder(10, 0, 0, 0));
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
 
-        JPanel targetFieldPnl = new JPanel();
-        targetFieldPnl.setOpaque(false);
-        targetFieldPnl.setBorder(null);
-        targetFieldPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        targetFieldPnl.add(Standalone.createBoldLabel(getTargetLabelText()));
-        targetFieldPnl.add(Box.createHorizontalStrut(10));
         if (showTargetInput()) {
+            JPanel targetFieldPnl = new JPanel();
+            targetFieldPnl.setOpaque(false);
+            targetFieldPnl.setBorder(null);
+            targetFieldPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+            targetFieldPnl.add(Standalone.createBoldLabel(getTargetLabelText()));
+            targetFieldPnl.add(Box.createHorizontalStrut(5));
             _targetFld = new JTextField(60);
             targetFieldPnl.add(_targetFld);
-            targetFieldPnl.add(Box.createHorizontalStrut(10));
+            targetFieldPnl.add(Box.createHorizontalStrut(5));
             JButton browseBtn = new JButton("Browse...");
             browseBtn.addActionListener(new ActionListener() {
                 @Override
@@ -271,6 +276,22 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 }
             });
             targetFieldPnl.add(browseBtn);
+            targetFieldPnl.add(Box.createHorizontalStrut(10));
+            targetFieldPnl.add(Standalone.createBoldLabel("Compression:"));
+            targetFieldPnl.add(Box.createHorizontalStrut(5));
+            _compressionBox = new JComboBox<>(new String[] {_COMPRESSION_NONE, _COMPRESSION_GZIP});
+            _compressionBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!_targetFld.getText().isEmpty()) {
+                        if (_COMPRESSION_GZIP.equals(_compressionBox.getSelectedItem()) && !_targetFld.getText().endsWith(".gz"))
+                            _targetFld.setText(_targetFld.getText() + ".gz");
+                        if (_COMPRESSION_NONE.equals(_compressionBox.getSelectedItem()) && _targetFld.getText().endsWith(".gz"))
+                            _targetFld.setText(_targetFld.getText().replace(".gz", ""));
+                    }
+                }
+            });
+            targetFieldPnl.add(_compressionBox);
             pnl.add(targetFieldPnl);
             pnl.add(Box.createVerticalStrut(15));
         }
@@ -450,10 +471,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             @Override
             protected Void doInBackground() throws Exception {
                 File file = new File(_sourceFld.getText());
-                String format = getFormatForInputFile(file);
-                if (!NaaccrFormat.isFormatSupported(format))
-                    reportAnalysisError("unknown or unsupported file format");
-                else {
+                NaaccrFormat format = getFormatForInputFile(file);
+                if (format != null) { // if it's null, an error has already been reported to the user
                     int numLines = 0;
                     try (LineNumberReader reader = new LineNumberReader(NaaccrXmlUtils.createReader(file))) {
                         String line = reader.readLine();
@@ -462,17 +481,20 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                             line = reader.readLine();
                         }
                         if (file.getName().toLowerCase().endsWith(".gz"))
-                            _formatLbl.setText("Compressed " + NaaccrFormat.getInstance(format).getDisplayName());
+                            _formatLbl.setText("Compressed " + format.getDisplayName());
                         else
-                            _formatLbl.setText(NaaccrFormat.getInstance(format).getDisplayName());
+                            _formatLbl.setText(format.getDisplayName());
                         _numLinesLbl.setText(Standalone.formatNumber(numLines));
                         _fileSizeLbl.setText(Standalone.formatFileSize(file.length()));
                         _northLayout.show(_northPnl, _NORTH_PANEL_ID_ANALYSIS_RESULTS);
                         _analysisBar.setIndeterminate(false);
                         _centerPnl.setVisible(true);
                         _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_OPTIONS);
-                        if (_targetFld != null)
+                        if (_targetFld != null) {
                             _targetFld.setText(invertFilename(new File(_sourceFld.getText())));
+                            if (_targetFld.getText().endsWith(".gz"))
+                                _compressionBox.setSelectedItem(_COMPRESSION_GZIP);
+                        }
                     }
                 }
                 return null;
@@ -497,7 +519,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _analysisWorker.execute();
     }
 
-    protected abstract String getFormatForInputFile(File file);
+    protected abstract NaaccrFormat getFormatForInputFile(File file);
 
     private void performProcessing() {
         if (_targetFld != null && new File(_targetFld.getText()).exists()) {
@@ -526,7 +548,15 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             @Override
             protected Void doInBackground() throws Exception {
                 File srcFile = new File(_sourceFld.getText());
-                final File targetFile = _targetFld == null ? null : new File(_targetFld.getText());
+                String targetFilename = null;
+                if (_targetFld != null) {
+                    targetFilename = _targetFld.getText();
+                    if (_COMPRESSION_GZIP.equals(_compressionBox.getSelectedItem()) && !targetFilename.endsWith(".gz"))
+                        targetFilename = targetFilename + ".gz";
+                    if (_COMPRESSION_NONE.equals(_compressionBox.getSelectedItem()) && targetFilename.endsWith(".gz"))
+                        targetFilename = targetFilename.replace(".gz", "");
+                }
+                final File targetFile = targetFilename == null ? null : new File(targetFilename);
 
                 NaaccrDictionary userDictionary = null;
                 if (!_dictionaryFld.getText().isEmpty())
@@ -572,19 +602,26 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                                 _warningsTextArea.setForeground(Color.GRAY);
                                 _warningsTextArea.setText("Found no warning, well done!");
                             }
+
+                            if (_warningStats.isEmpty())
+                                _warningsSummaryTextArea.setText("Found no warning, well done!");
+                            else {
+                                StringBuilder buf = new StringBuilder("Validation warning counts (0 counts not displayed):\n\n");
+                                for (String code : NaaccrErrorUtils.getAllValidationErrors().keySet()) {
+                                    int count = _warningStats.containsKey(code) ? _warningStats.get(code).get() : 0;
+                                    if (count > 0) {
+                                        buf.append("   ").append(code).append(": ").append(Standalone.formatNumber(count)).append("\n");
+                                        if (_warningStatsDetails.containsKey(code)) {
+                                            List<String> list = new ArrayList<>(_warningStatsDetails.get(code));
+                                            Collections.sort(list);
+                                            buf.append("      ").append(list).append("\n");
+                                        }
+                                    }
+                                }
+                                _warningsSummaryTextArea.setText(buf.toString());
+                            }
                         }
                     });
-
-                    StringBuilder buf = new StringBuilder("Validation warning counts:\n\n");
-                    for (String code : NaaccrErrorUtils.getAllValidationErrors().keySet()) {
-                        buf.append("   ").append(code).append(": ").append(_warningStats.containsKey(code) ? Standalone.formatNumber(_warningStats.get(code).get()) : "0").append("\n");
-                        if (_warningStatsDetails.containsKey(code)) {
-                            List<String> list = new ArrayList<>(_warningStatsDetails.get(code));
-                            Collections.sort(list);
-                            buf.append("      ").append(list).append("\n");
-                        }
-                    }
-                    _warningsSummaryTextArea.setText(buf.toString());
                 }
                 catch (CancellationException | InterruptedException e) {
                     _warningsSummaryTextArea.setText("Processing interrupted...");
@@ -665,14 +702,14 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         return "Successfully created \"" + path + "\" (" + size + ") in " + time;
     }
 
-    private void reportAnalysisError(String error) {
+    protected void reportAnalysisError(String error) {
         _centerPnl.setVisible(false);
         _analysisBar.setIndeterminate(false);
         _analysisErrorLbl.setText(error == null || error.isEmpty() ? "unexpected error" : error);
         _northLayout.show(_northPnl, _NORTH_PANEL_ID_ERROR);
     }
 
-    private void reportProcessingError(String error) {
+    protected void reportProcessingError(String error) {
         _processingErrorLbl.setText(error == null || error.isEmpty() ? "unexpected error" : error);
         _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_ERROR);
     }
