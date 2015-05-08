@@ -684,11 +684,13 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                         _processingBar.setValue(processedLineNumber);
                         if (!_maxWarningsReached) {
                             _warningsTextArea.append(buf.toString());
-                            if (_warningsTextArea.getLineCount() > 10000)
+                            if (_warningsTextArea.getLineCount() > 5000)
                                 _maxWarningsReached = true;
                         }
-                        else if (!_maxWarningsDiscAdded)
+                        else if (!_maxWarningsDiscAdded) {
                             _warningsTextArea.append("Reached maximum number of warnings that can be displayed; use the summary instead (available once the processing is done)...");
+                            _maxWarningsDiscAdded = true;
+                        }
                     }
                 });
             }
