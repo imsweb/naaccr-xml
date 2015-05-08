@@ -525,6 +525,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _analysisBar.setIndeterminate(true);
 
         final File srcFile = new File(_sourceFld.getText());
+        final long start = System.currentTimeMillis();
 
         _analysisWorker = new SwingWorker<Void, Void>() {
             @Override
@@ -547,7 +548,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                     get();
                     _analysisBar.setMinimum(0);
                     _analysisBar.setIndeterminate(true);
-                    performProcessing(srcFile);
+                    performProcessing(srcFile, System.currentTimeMillis() - start);
                 }
                 catch (CancellationException | InterruptedException e) {
                     // ignored
@@ -563,7 +564,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _analysisWorker.execute();
     }
 
-    private void performProcessing(final File srcFile) {
+    private void performProcessing(final File srcFile, final long analysisTime) {
 
         _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_PROGRESS);
 
@@ -608,10 +609,10 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        String time = Standalone.formatTime(System.currentTimeMillis() - start);
+                        long processingTime = System.currentTimeMillis() - start;
                         String size = targetFile == null ? null : Standalone.formatFileSize(targetFile.length());
                         String path = targetFile == null ? null : targetFile.getPath();
-                        _processingResultLbl.setText(getProcessingResultText(path, time, size));
+                        _processingResultLbl.setText(getProcessingResultText(path, analysisTime, processingTime, size));
                         _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_RESULTS);
                     }
                 });
@@ -732,8 +733,11 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
     protected abstract void runProcessing(File source, File target, NaaccrOptions options, NaaccrDictionary dictionary, NaaccrObserver observer) throws NaaccrIOException;
 
-    protected String getProcessingResultText(String path, String time, String size) {
-        return "Successfully created \"" + path + "\" (" + size + ") in " + time;
+    protected String getProcessingResultText(String path, long analysisTime, long processingTime, String size) {
+        String analysis = Standalone.formatTime(analysisTime);
+        String processing = Standalone.formatTime(processingTime);
+        String total = Standalone.formatTime(analysisTime + processingTime);
+        return "Successfully created \"" + path + "\" (" + size + ") in " + total + " (anaysis: " + analysis + ", processing: " + processing +")";
     }
 
     protected void reportAnalysisError(String error) {
