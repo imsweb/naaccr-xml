@@ -62,13 +62,13 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected static final String _COMPRESSION_GZIP = "GZip";
 
     protected static final String _NORTH_PANEL_ID_NO_FILE = "no-file";
-    protected static final String _NORTH_PANEL_ID_ANALYSIS = "analysis-progress";
-    protected static final String _NORTH_PANEL_ID_ANALYSIS_RESULTS = "analysis-results";
-    protected static final String _NORTH_PANEL_ID_ERROR = "analysis-error";
+    protected static final String _NORTH_PANEL_ID_ERROR = "pre-analysis-error";
+    protected static final String _NORTH_PANEL_ID_ANALYSIS_RESULTS = "pre-analysis-results";
 
     protected static final String _CENTER_PANEL_ID_OPTIONS = "options";
     protected static final String _CENTER_PANEL_ID_PROCESSING = "processing";
 
+    protected static final String _NORTH_PROCESSING_PANEL_ID_ANALYSIS = "processing-analsyis";
     protected static final String _NORTH_PROCESSING_PANEL_ID_PROGRESS = "processing-progress";
     protected static final String _NORTH_PROCESSING_PANEL_ID_RESULTS = "processing-results";
     protected static final String _NORTH_PROCESSING_PANEL_ID_INTERRUPTED = "processing-interrupted";
@@ -136,7 +136,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             public void actionPerformed(ActionEvent e) {
                 if (_fileChooser.showDialog(AbstractProcessingPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
                     _sourceFld.setText(_fileChooser.getSelectedFile().getAbsolutePath());
-                    performAnalysis();
+                    performPreAnalysis();
                 }
             }
         });
@@ -147,7 +147,6 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _northLayout = new CardLayout();
         _northPnl.setLayout(_northLayout);
         _northPnl.add(_NORTH_PANEL_ID_NO_FILE, buildNoFileSelectedPanel());
-        _northPnl.add(_NORTH_PANEL_ID_ANALYSIS, buildAnalysisPanel());
         _northPnl.add(_NORTH_PANEL_ID_ANALYSIS_RESULTS, buildAnalysisResultsPanel());
         _northPnl.add(_NORTH_PANEL_ID_ERROR, buildAnalysisErrorPanel());
         inputFilePnl.add(_northPnl, BorderLayout.SOUTH);
@@ -176,47 +175,9 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         return pnl;
     }
 
-    private JPanel buildAnalysisPanel() {
-        JPanel pnl = new JPanel(new BorderLayout());
-        pnl.setBorder(new EmptyBorder(10, 25, 0, 0));
-
-        JPanel lblPnl = new JPanel();
-        lblPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        lblPnl.setBorder(null);
-        lblPnl.add(Standalone.createItalicLabel("Analyzing file (this can take a while, especially when reading network resources)..."));
-        pnl.add(lblPnl, BorderLayout.NORTH);
-
-        JPanel contentPnl = new JPanel(new BorderLayout());
-        JPanel progressPnl = new JPanel(new BorderLayout());
-        progressPnl.setBorder(new EmptyBorder(5, 0, 5, 0));
-        _analysisBar = new JProgressBar();
-        progressPnl.add(_analysisBar, BorderLayout.CENTER);
-        contentPnl.add(progressPnl, BorderLayout.CENTER);
-
-        JPanel controlsPnl = new JPanel();
-        controlsPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        controlsPnl.setBorder(new EmptyBorder(0, 10, 0, 0));
-        JButton cancelBtn = new JButton("Cancel");
-        cancelBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (_analysisWorker != null)
-                    _analysisWorker.cancel(true);
-                _analysisWorker = null;
-                _sourceFld.setText(null);
-                _northLayout.show(_northPnl, _NORTH_PANEL_ID_NO_FILE);
-            }
-        });
-        controlsPnl.add(cancelBtn);
-        contentPnl.add(controlsPnl, BorderLayout.EAST);
-        pnl.add(contentPnl, BorderLayout.CENTER);
-
-        return pnl;
-    }
-
     private JPanel buildAnalysisResultsPanel() {
         JPanel pnl = new JPanel();
-        pnl.setBorder(new EmptyBorder(15, 25, 0, 0));
+        pnl.setBorder(new EmptyBorder(15, 25, 10, 0));
         pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
 
         pnl.add(Standalone.createBoldLabel("Source File format: "));
@@ -253,9 +214,19 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     }
 
     private JPanel buildOptionsPanel() {
-        JPanel pnl = new JPanel();
-        pnl.setBorder(new EmptyBorder(10, 0, 0, 0));
-        pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
+        JPanel pnl = new JPanel(new BorderLayout());
+
+        JPanel headerPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        headerPnl.setBorder(new EmptyBorder(10, 0, 15, 0));
+        JLabel headerLbl = Standalone.createBoldLabel("Please review and/or change the following options. Once you are ready, click the process button at the bottom of the page.");
+        headerLbl.setForeground(new Color(150, 0, 0));
+        headerPnl.add(headerLbl);
+        pnl.add(headerPnl, BorderLayout.NORTH);
+
+        JPanel allOptionsPnl = new JPanel();
+        allOptionsPnl.setBorder(new EmptyBorder(0, 15, 0, 0));
+        allOptionsPnl.setLayout(new BoxLayout(allOptionsPnl, BoxLayout.Y_AXIS));
+        pnl.add(allOptionsPnl, BorderLayout.CENTER);
 
         if (showTargetInput()) {
             JPanel targetFieldPnl = new JPanel();
@@ -292,8 +263,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 }
             });
             targetFieldPnl.add(_compressionBox);
-            pnl.add(targetFieldPnl);
-            pnl.add(Box.createVerticalStrut(15));
+            allOptionsPnl.add(targetFieldPnl);
+            allOptionsPnl.add(Box.createVerticalStrut(15));
         }
 
         JPanel optionsPnl = new JPanel(new BorderLayout());
@@ -302,7 +273,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _guiOptions = createOptions();
         _guiOptions.setBorder(new EmptyBorder(10, 20, 10, 10));
         optionsPnl.add(_guiOptions);
-        pnl.add(optionsPnl);
+        allOptionsPnl.add(optionsPnl);
 
         JPanel dictionaryPnl = new JPanel();
         dictionaryPnl.setBorder(new EmptyBorder(15, 0, 0, 0));
@@ -322,7 +293,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             }
         });
         dictionaryPnl.add(dictionaryBrowseBtn);
-        pnl.add(dictionaryPnl);
+        allOptionsPnl.add(dictionaryPnl);
 
         JPanel controlsPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         controlsPnl.setBorder(new EmptyBorder(50, 250, 0, 0));
@@ -331,11 +302,11 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         processBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                performProcessing();
+                performAnalysis();
             }
         });
         controlsPnl.add(processBtn);
-        pnl.add(controlsPnl);
+        allOptionsPnl.add(controlsPnl);
 
         JPanel wrapperPnl = new JPanel(new BorderLayout());
         wrapperPnl.add(pnl, BorderLayout.NORTH);
@@ -354,6 +325,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _northProcessingPnl = new JPanel();
         _northProcessingLayout = new CardLayout();
         _northProcessingPnl.setLayout(_northProcessingLayout);
+        _northProcessingPnl.add(_NORTH_PROCESSING_PANEL_ID_ANALYSIS, buildProcessingAnalysisPanel());
         _northProcessingPnl.add(_NORTH_PROCESSING_PANEL_ID_PROGRESS, buildProcessingProgressPanel());
         _northProcessingPnl.add(_NORTH_PROCESSING_PANEL_ID_RESULTS, buildProcessingResultsPanel());
         _northProcessingPnl.add(_NORTH_PROCESSING_PANEL_ID_INTERRUPTED, buildProcessingInterruptedPanel());
@@ -391,8 +363,50 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         return pnl;
     }
 
+    private JPanel buildProcessingAnalysisPanel() {
+        JPanel pnl = new JPanel(new BorderLayout());
+        pnl.setBorder(new EmptyBorder(0, 0, 10, 0));
+
+        JPanel lblPnl = new JPanel();
+        lblPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        lblPnl.setBorder(null);
+        lblPnl.add(Standalone.createItalicLabel("Analyzing file (this can take a while, especially when reading network resources)..."));
+        pnl.add(lblPnl, BorderLayout.NORTH);
+
+        JPanel contentPnl = new JPanel(new BorderLayout());
+        JPanel progressPnl = new JPanel(new BorderLayout());
+        progressPnl.setBorder(new EmptyBorder(5, 0, 5, 0));
+        _analysisBar = new JProgressBar();
+        progressPnl.add(_analysisBar, BorderLayout.CENTER);
+        contentPnl.add(progressPnl, BorderLayout.CENTER);
+
+        JPanel controlsPnl = new JPanel();
+        controlsPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        controlsPnl.setBorder(new EmptyBorder(0, 10, 0, 0));
+        JButton cancelBtn = new JButton("Cancel");
+        cancelBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (_analysisWorker != null)
+                    _analysisWorker.cancel(true);
+                _analysisWorker = null;
+                _analysisBar.setMinimum(0);
+                _analysisBar.setIndeterminate(true);
+                _sourceFld.setText(null);
+                _centerPnl.setVisible(false);
+                _northLayout.show(_northPnl, _NORTH_PANEL_ID_NO_FILE);
+            }
+        });
+        controlsPnl.add(cancelBtn);
+        contentPnl.add(controlsPnl, BorderLayout.EAST);
+        pnl.add(contentPnl, BorderLayout.CENTER);
+
+        return pnl;
+    }
+
     private JPanel buildProcessingProgressPanel() {
         JPanel pnl = new JPanel(new BorderLayout());
+        pnl.setBorder(new EmptyBorder(0, 0, 10, 0));
 
         JPanel lblPnl = new JPanel();
         lblPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -429,6 +443,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
     private JPanel buildProcessingResultsPanel() {
         JPanel pnl = new JPanel();
+        pnl.setBorder(new EmptyBorder(10, 0, 0, 0));
         pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
 
         _processingResultLbl = new JLabel(" ");
@@ -462,40 +477,66 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         return pnl;
     }
 
-    private void performAnalysis() {
+    private void performPreAnalysis() {
         _centerPnl.setVisible(false);
-        _northLayout.show(_northPnl, _NORTH_PANEL_ID_ANALYSIS);
+
+        File file = new File(_sourceFld.getText());
+        NaaccrFormat format = getFormatForInputFile(file);
+        if (format != null) { // if it's null, an error has already been reported to the user
+            if (file.getName().toLowerCase().endsWith(".gz"))
+                _formatLbl.setText("Compressed " + format.getDisplayName());
+            else
+                _formatLbl.setText(format.getDisplayName());
+            _numLinesLbl.setText("<not evaluated yet>");
+            _fileSizeLbl.setText(Standalone.formatFileSize(file.length()));
+            _northLayout.show(_northPnl, _NORTH_PANEL_ID_ANALYSIS_RESULTS);
+
+            _centerPnl.setVisible(true);
+            _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_OPTIONS);
+            if (_targetFld != null) {
+                _targetFld.setText(invertFilename(new File(_sourceFld.getText())));
+                if (_targetFld.getText().endsWith(".gz"))
+                    _compressionBox.setSelectedItem(_COMPRESSION_GZIP);
+            }
+        }
+    }
+
+    protected abstract NaaccrFormat getFormatForInputFile(File file);
+
+    private void performAnalysis() {
+        if (_targetFld != null && new File(_targetFld.getText()).exists()) {
+            int result = JOptionPane.showConfirmDialog(this, "Target file already exists, are you sure you want to replace it?", "Confirmation", JOptionPane.YES_NO_OPTION);
+            if (result != JOptionPane.YES_OPTION)
+                return;
+        }
+
+        _centerPnl.setVisible(true);
+        _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_PROCESSING);
+        _processingResultLbl.setText(null);
+        _northProcessingPnl.setVisible(true);
+        _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_ANALYSIS);
+
+        _warningsTextArea.setText(null);
+        _warningsTextArea.setForeground(new Color(150, 0, 0));
+        _warningsSummaryTextArea.setText("Processing not done...");
+        _warningsSummaryTextArea.setForeground(Color.GRAY);
+
         _analysisBar.setMinimum(0);
         _analysisBar.setIndeterminate(true);
+
+        final File srcFile = new File(_sourceFld.getText());
+
         _analysisWorker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                File file = new File(_sourceFld.getText());
-                NaaccrFormat format = getFormatForInputFile(file);
-                if (format != null) { // if it's null, an error has already been reported to the user
-                    int numLines = 0;
-                    try (LineNumberReader reader = new LineNumberReader(NaaccrXmlUtils.createReader(file))) {
-                        String line = reader.readLine();
-                        while (line != null) {
-                            numLines++;
-                            line = reader.readLine();
-                        }
-                        if (file.getName().toLowerCase().endsWith(".gz"))
-                            _formatLbl.setText("Compressed " + format.getDisplayName());
-                        else
-                            _formatLbl.setText(format.getDisplayName());
-                        _numLinesLbl.setText(Standalone.formatNumber(numLines));
-                        _fileSizeLbl.setText(Standalone.formatFileSize(file.length()));
-                        _northLayout.show(_northPnl, _NORTH_PANEL_ID_ANALYSIS_RESULTS);
-                        _analysisBar.setIndeterminate(false);
-                        _centerPnl.setVisible(true);
-                        _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_OPTIONS);
-                        if (_targetFld != null) {
-                            _targetFld.setText(invertFilename(new File(_sourceFld.getText())));
-                            if (_targetFld.getText().endsWith(".gz"))
-                                _compressionBox.setSelectedItem(_COMPRESSION_GZIP);
-                        }
+                int numLines = 0;
+                try (LineNumberReader reader = new LineNumberReader(NaaccrXmlUtils.createReader(srcFile))) {
+                    String line = reader.readLine();
+                    while (line != null) {
+                        numLines++;
+                        line = reader.readLine();
                     }
+                    _numLinesLbl.setText(Standalone.formatNumber(numLines));
                 }
                 return null;
             }
@@ -504,6 +545,9 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             protected void done() {
                 try {
                     get();
+                    _analysisBar.setMinimum(0);
+                    _analysisBar.setIndeterminate(true);
+                    performProcessing(srcFile);
                 }
                 catch (CancellationException | InterruptedException e) {
                     // ignored
@@ -519,23 +563,10 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _analysisWorker.execute();
     }
 
-    protected abstract NaaccrFormat getFormatForInputFile(File file);
+    private void performProcessing(final File srcFile) {
 
-    private void performProcessing() {
-        if (_targetFld != null && new File(_targetFld.getText()).exists()) {
-            int result = JOptionPane.showConfirmDialog(this, "Target file already exists, are you sure you want to replace it?", "Confirmation", JOptionPane.YES_NO_OPTION);
-            if (result != JOptionPane.YES_OPTION)
-                return;
-        }
-
-        _processingResultLbl.setText(null);
-        _northProcessingPnl.setVisible(true);
         _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_PROGRESS);
-        _warningsTextArea.setText(null);
-        _warningsTextArea.setForeground(new Color(150, 0, 0));
-        _warningsSummaryTextArea.setText("Processing not done...");
-        _warningsSummaryTextArea.setForeground(Color.GRAY);
-        _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_PROCESSING);
+
         _processingBar.setMinimum(0);
         _processingBar.setMaximum(Integer.valueOf(_numLinesLbl.getText().replaceAll(",", "")));
         _processingBar.setValue(0);
@@ -547,7 +578,6 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _processingWorker = new SwingWorker<Void, Patient>() {
             @Override
             protected Void doInBackground() throws Exception {
-                File srcFile = new File(_sourceFld.getText());
                 String targetFilename = null;
                 if (_targetFld != null) {
                     targetFilename = _targetFld.getText();
@@ -591,7 +621,6 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
             @Override
             protected void done() {
-                _warningsSummaryTextArea.setForeground(Color.BLACK);
                 try {
                     get();
 
@@ -603,9 +632,12 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                                 _warningsTextArea.setText("Found no warning, well done!");
                             }
 
-                            if (_warningStats.isEmpty())
+                            if (_warningStats.isEmpty()) {
+                                _warningsTextArea.setForeground(Color.GRAY);
                                 _warningsSummaryTextArea.setText("Found no warning, well done!");
+                            }
                             else {
+                                _warningsSummaryTextArea.setForeground(Color.BLACK);
                                 StringBuilder buf = new StringBuilder("Validation warning counts (0 counts not displayed):\n\n");
                                 for (String code : NaaccrErrorUtils.getAllValidationErrors().keySet()) {
                                     int count = _warningStats.containsKey(code) ? _warningStats.get(code).get() : 0;
