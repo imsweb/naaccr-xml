@@ -68,7 +68,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected static final String _CENTER_PANEL_ID_OPTIONS = "options";
     protected static final String _CENTER_PANEL_ID_PROCESSING = "processing";
 
-    protected static final String _NORTH_PROCESSING_PANEL_ID_ANALYSIS = "processing-analsyis";
+    protected static final String _NORTH_PROCESSING_PANEL_ID_ANALYSIS = "processing-analysis";
     protected static final String _NORTH_PROCESSING_PANEL_ID_PROGRESS = "processing-progress";
     protected static final String _NORTH_PROCESSING_PANEL_ID_RESULTS = "processing-results";
     protected static final String _NORTH_PROCESSING_PANEL_ID_INTERRUPTED = "processing-interrupted";
