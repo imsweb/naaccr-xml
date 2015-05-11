@@ -4,12 +4,12 @@
 	<xsd:complexType>
 		<xsd:sequence>
 			<xsd:element ref="tns:ItemDefs" minOccurs="1" maxOccurs="1" />
-			<xsd:any minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+			<xsd:any minOccurs="0" maxOccurs="unbounded" processContents="lax" namespace="##other" />
 		</xsd:sequence>
 		<xsd:attribute name="dictionaryUri" use="required" type="xsd:anyURI"/>
 		<xsd:attribute name="naaccrVersion" use="optional" />
 		<xsd:attribute name="description" use="optional" />
-		<xsd:anyAttribute processContents="lax" />
+		<xsd:anyAttribute processContents="lax" namespace="##other" />
 	</xsd:complexType>
 </xsd:element>
 
@@ -56,12 +56,12 @@
 		<xsd:enumeration value="none" />
 		<xsd:enumeration value="all" />
 	</xsd:restriction>
-</xsd:simpleType>	
+</xsd:simpleType>
 
 <xsd:element name="ItemDef" >
 	<xsd:complexType>
 		<xsd:sequence>
-			<xsd:any minOccurs="0" maxOccurs="unbounded" processContents="lax" />
+			<xsd:any minOccurs="0" maxOccurs="unbounded" processContents="lax" namespace="##other" />
 		</xsd:sequence>
 		<xsd:attribute name="naaccrId" use="required" type="xsd:ID" />
 		<xsd:attribute name="naaccrNum" use="required" type="xsd:integer" />

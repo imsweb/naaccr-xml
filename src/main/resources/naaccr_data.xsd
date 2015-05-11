@@ -13,7 +13,7 @@
 	<xsd:complexType>
 		<xsd:sequence>
 			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
-			<xsd:any minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
 			<xsd:element ref="tns:Patient" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
 		<xsd:attribute name="baseDictionaryUri" use="required" type="xsd:anyURI"/>
@@ -29,7 +29,7 @@
 	<xsd:complexType>
 		<xsd:sequence>
 			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
-			<xsd:any minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
 			<xsd:element ref="tns:Tumor" minOccurs="1" maxOccurs="unbounded" />
 		</xsd:sequence>
 		<xsd:anyAttribute />
@@ -40,7 +40,7 @@
 	<xsd:complexType>
 		<xsd:sequence>
 			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
-			<xsd:any minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
 		</xsd:sequence>
 		<xsd:anyAttribute />
 	</xsd:complexType>
