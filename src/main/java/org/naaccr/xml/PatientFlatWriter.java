@@ -9,6 +9,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
@@ -101,8 +102,6 @@ public class PatientFlatWriter implements AutoCloseable {
                     int length = itemDef.getLength();
                     int end = start + length - 1;
 
-                    // TODO this code doesn't handle padding yet...
-
                     // adjust for the "leading" gap
                     if (start > currentIndex)
                         for (int i = 0; i < start - currentIndex; i++)
@@ -153,6 +152,20 @@ public class PatientFlatWriter implements AutoCloseable {
             value = tumor.getItemValue(itemDef.getNaaccrId());
         else
             throw new NaaccrIOException("Unsupported parent element: " + itemDef.getParentXmlElement());
+
+        // handle the padding
+        if (value != null && !value.isEmpty() && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef.getLength()) {
+            if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(itemDef.getPadding()))
+                value = StringUtils.leftPad(value, itemDef.getLength(), ' ');
+            else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(itemDef.getPadding()))
+                value = StringUtils.rightPad(value, itemDef.getLength(), ' ');
+            else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(itemDef.getPadding()))
+                value = StringUtils.leftPad(value, itemDef.getLength(), '0');
+            else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_ZERO.equals(itemDef.getPadding()))
+                value = StringUtils.rightPad(value, itemDef.getLength(), '0');
+            else
+                throw new RuntimeException("Unknown padding option: " + itemDef.getPadding());
+        }
 
         return value;
     }

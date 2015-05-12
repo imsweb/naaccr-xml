@@ -71,7 +71,7 @@ public class NaaccrXmlUtilsTest {
 
     @Test
     public void testReadingXml() throws IOException {
-        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-regular-file.xml");
+        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml");
 
         // get the format from the file (not necessary, one could hard-code it in the reading call)
         String format = NaaccrXmlUtils.getFormatFromXmlFile(file);
@@ -136,7 +136,7 @@ public class NaaccrXmlUtilsTest {
 
     @Test
     public void testFlatToXmlAndXmlToFlat() throws IOException {
-        File xmlFile1 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-regular-file.xml");
+        File xmlFile1 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml");
         NaaccrData data1 = NaaccrXmlUtils.readXmlFile(xmlFile1, null, null, null);
 
         File flatFile1 = new File(System.getProperty("user.dir") + "/build/test.txt");
@@ -162,7 +162,7 @@ public class NaaccrXmlUtilsTest {
     public void testGetFormatFromXmlFile() {
 
         // regular file
-        File file1 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-regular-file.xml");
+        File file1 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file1));
 
         // this one contains non-standard tags
@@ -174,20 +174,20 @@ public class NaaccrXmlUtilsTest {
     public void testXsdAgainstLibrary() {
 
         // regular file - not valid with XSD because doesn't define the namespace
-        assertValidXmlFileForLibrary("data/validation-standard-file.xml");
-        assertInvalidXmlFileForXsd("data/validation-standard-file.xml");
+        assertValidXmlFileForLibrary("validation-standard-file.xml");
+        assertInvalidXmlFileForXsd("validation-standard-file.xml");
 
         // extensions - not valid with XSD because doesn't define the namespace (and extensions wouldn't be valid anyway)
-        assertValidXmlFileForLibrary("data/validation-non-standard-tags.xml");
-        assertInvalidXmlFileForXsd("data/validation-non-standard-tags.xml");
+        assertValidXmlFileForLibrary("validation-non-standard-tags.xml");
+        assertInvalidXmlFileForXsd("validation-non-standard-tags.xml");
 
         // a regular file that defines the namespace but doesn't use prefixes, should be valid in both (since we allow "any" attributes)
-        assertValidXmlFileForLibrary("data/validation-namespace-without-prefix.xml");
-        assertValidXmlFileForXsd("data/validation-namespace-without-prefix.xml");
+        assertValidXmlFileForLibrary("validation-namespace-without-prefix.xml");
+        assertValidXmlFileForXsd("validation-namespace-without-prefix.xml");
 
         // a regular file that defines the namespace and uses prefix; we don't support htat in the library...
-        assertValidXmlFileForXsd("data/validation-namespace-with-prefix.xml");
-        assertInvalidXmlFileForLibrary("data/validation-namespace-with-prefix.xml");
+        assertValidXmlFileForXsd("validation-namespace-with-prefix.xml");
+        assertInvalidXmlFileForLibrary("validation-namespace-with-prefix.xml");
     }
 
     private void assertValidXmlFileForXsd(String xmlFile) {
@@ -196,7 +196,7 @@ public class NaaccrXmlUtilsTest {
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(schemaXsd);
             Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlFile)));
+            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/" + xmlFile)));
         }
         catch (Exception e) {
             Assert.fail("Was expected a valid file, but it invalid: " + e.getMessage());
@@ -209,7 +209,7 @@ public class NaaccrXmlUtilsTest {
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(schemaXsd);
             Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlFile)));
+            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/" + xmlFile)));
         }
         catch (Exception e) {
             return;
