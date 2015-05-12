@@ -12,7 +12,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.basic.DateConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
@@ -28,6 +27,7 @@ public class NaaccrStreamConfiguration {
     
     public NaaccrStreamConfiguration() {
         _parser = createParser();
+
         _driver = new XppDriver() {
             @Override
             protected synchronized XmlPullParser createParser() throws XmlPullParserException {
@@ -68,9 +68,6 @@ public class NaaccrStreamConfiguration {
         // all collections should be wrap into collection tags, but it's nicer to omit them in the XML; we have to tell XStream though
         xstream.addImplicitCollection(NaaccrData.class, "_items", Item.class);
         xstream.addImplicitCollection(NaaccrData.class, "_patients", Patient.class);
-
-        // handle special date format
-        xstream.registerConverter(new DateConverter(NaaccrXmlUtils.GENERATED_TIME_FORMAT, new String[] {}));
 
         // handle patients
         xstream.registerConverter(patientConverter);

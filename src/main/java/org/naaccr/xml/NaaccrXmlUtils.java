@@ -46,9 +46,6 @@ public class NaaccrXmlUtils {
     public static final String NAACCR_XML_ITEM_ATT_ID = "naaccrId";
     public static final String NAACCR_XML_ITEM_ATT_NUM = "naaccrNum";
 
-    // date format for hte generated time attribute
-    public static final String GENERATED_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ"; // TODO I don't think this format is exactly the ISO timestamp defined by XML...
-
     // item to use by default to group the tumors together (item #20)
     public static final String DEFAULT_TUMOR_GROUPING_ITEM = "patientIdNumber";
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<naaccr:NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" recordType="I" timeGenerated="2015-03-13T12:09:19.0Z" xmlns:naaccr="http://naaccr.org/naaccrxml">
+    <naaccr:Item naaccrId="registryId">0000000001</naaccr:Item>
+    <naaccr:Patient>
+        <naaccr:Item naaccrId="patientIdNumber">00000001</naaccr:Item>
+        <naaccr:Tumor>
+            <naaccr:Item naaccrId="primarySite">C123</naaccr:Item>
+        </naaccr:Tumor>
+    </naaccr:Patient>
+</naaccr:NaaccrData>

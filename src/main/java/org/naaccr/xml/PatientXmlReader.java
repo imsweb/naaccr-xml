@@ -4,10 +4,10 @@
 package org.naaccr.xml;
 
 import java.io.Reader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
@@ -88,12 +88,14 @@ public class PatientXmlReader implements AutoCloseable {
                 throw new NaaccrIOException("invalid record type: " + _rootData.getRecordType(), configuration.getParser().getLineNumber());
 
             // read the standard attribute: time generated
+            String generatedTime = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
+            if (generatedTime == null)
+                throw new NaaccrIOException("the \"" + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED + "\" attribute is required", configuration.getParser().getLineNumber());
             try {
-                _rootData.setTimeGenerated(new SimpleDateFormat(NaaccrXmlUtils.GENERATED_TIME_FORMAT).parse(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED)));
+                _rootData.setTimeGenerated(DatatypeConverter.parseDateTime(generatedTime).getTime());
             }
-            catch (ParseException e) {
-                throw new NaaccrIOException("bad format for " + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED + " attributes (expects " + NaaccrXmlUtils.GENERATED_TIME_FORMAT + ")",
-                        configuration.getParser().getLineNumber());
+            catch (IllegalArgumentException e) {
+                throw new NaaccrIOException("invalid time generated value: " + generatedTime, configuration.getParser().getLineNumber());
             }
 
             // read the non-standard attributes

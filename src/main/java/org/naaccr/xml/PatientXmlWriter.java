@@ -5,10 +5,12 @@ package org.naaccr.xml;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.NaaccrData;
@@ -70,11 +72,19 @@ public class PatientXmlWriter implements AutoCloseable {
 
             // write standard attributes
             _writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT);
+            if (rootData.getBaseDictionaryUri() == null)
+                throw new NaaccrIOException("base dictionary URI is required");
             _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT, rootData.getBaseDictionaryUri());
             if (rootData.getUserDictionaryUri() != null)
                 _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT, rootData.getUserDictionaryUri());
+            if (rootData.getRecordType() == null)
+                throw new NaaccrIOException("record type is required");
             _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE, rootData.getRecordType());
-            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, new SimpleDateFormat(NaaccrXmlUtils.GENERATED_TIME_FORMAT).format(rootData.getTimeGenerated()));
+            if (rootData.getTimeGenerated() == null)
+                throw new NaaccrIOException("time generated is required");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(rootData.getTimeGenerated());
+            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, DatatypeConverter.printDateTime(cal));
 
             // write non-standard attributes
             Set<String> standardAttributes = new HashSet<>();
