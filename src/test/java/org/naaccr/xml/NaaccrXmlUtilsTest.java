@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,9 +15,10 @@ import java.util.List;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.DatatypeConverter;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,8 +26,6 @@ import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.Tumor;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 
 // TODO FPD beef up these tests; add cases for options, user dictionary and observer...
 // TODO FPD add tests for line number on main entities...
@@ -71,7 +71,7 @@ public class NaaccrXmlUtilsTest {
 
     @Test
     public void testReadingXml() throws IOException {
-        File file = new File(System.getProperty("user.dir") + "/src/test/resources/validation-test-1.xml");
+        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-regular-file.xml");
 
         // get the format from the file (not necessary, one could hard-code it in the reading call)
         String format = NaaccrXmlUtils.getFormatFromXmlFile(file);
@@ -136,7 +136,7 @@ public class NaaccrXmlUtilsTest {
 
     @Test
     public void testFlatToXmlAndXmlToFlat() throws IOException {
-        File xmlFile1 = new File(System.getProperty("user.dir") + "/src/test/resources/validation-test-1.xml");
+        File xmlFile1 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-regular-file.xml");
         NaaccrData data1 = NaaccrXmlUtils.readXmlFile(xmlFile1, null, null, null);
 
         File flatFile1 = new File(System.getProperty("user.dir") + "/build/test.txt");
@@ -160,44 +160,81 @@ public class NaaccrXmlUtilsTest {
 
     @Test
     public void testGetFormatFromXmlFile() {
-        
-        // all the attributes on one line
-        File file1 = new File(System.getProperty("user.dir") + "/src/test/resources/validation-test-1.xml");
+
+        // regular file
+        File file1 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-regular-file.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file1));
 
-        // all the attributes on several lines
-        File file2 = new File(System.getProperty("user.dir") + "/src/test/resources/validation-test-2.xml");
+        // this one contains non-standard tags
+        File file2 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-non-standard-tags.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file2));
     }
 
     @Test
-    public void testAgainstXsd() throws Exception {
-        /**
-        URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_data.xsd");
-        Source xmlFile = new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("validation-test-3.xml"));
-        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = schemaFactory.newSchema(schemaXsd);
-        Validator validator = schema.newValidator();
+    public void testXsdAgainstLibrary() {
+
+        // regular file - not valid with XSD because doesn't define the namespace
+        assertValidXmlFileForLibrary("data/validation-standard-file.xml");
+        assertInvalidXmlFileForXsd("data/validation-standard-file.xml");
+
+        // extensions - not valid with XSD because doesn't define the namespace (and extensions wouldn't be valid anyway)
+        assertValidXmlFileForLibrary("data/validation-non-standard-tags.xml");
+        assertInvalidXmlFileForXsd("data/validation-non-standard-tags.xml");
+
+        // a regular file that defines the namespace but doesn't use prefixes, should be valid in both (since we allow "any" attributes)
+        assertValidXmlFileForLibrary("data/validation-namespace-without-prefix.xml");
+        assertValidXmlFileForXsd("data/validation-namespace-without-prefix.xml");
+
+        // a regular file that defines the namespace and uses prefix; we don't support htat in the library...
+        assertValidXmlFileForXsd("data/validation-namespace-with-prefix.xml");
+        assertInvalidXmlFileForLibrary("data/validation-namespace-with-prefix.xml");
+    }
+
+    private void assertValidXmlFileForXsd(String xmlFile) {
         try {
-            validator.validate(xmlFile);
-            System.out.println(xmlFile.getSystemId() + " is valid");
-        } catch (SAXException e) {
-            System.out.println(xmlFile.getSystemId() + " is NOT valid");
-            System.out.println("Reason: " + e.getLocalizedMessage());
+            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_data.xsd");
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = schemaFactory.newSchema(schemaXsd);
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlFile)));
         }
-         */
+        catch (Exception e) {
+            Assert.fail("Was expected a valid file, but it invalid: " + e.getMessage());
+        }
+    }
 
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        factory.setValidating(false);
-        factory.setNamespaceAware(true);
-        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        factory.setSchema(schemaFactory.newSchema(Thread.currentThread().getContextClassLoader().getResource("naaccr_data.xsd")));
-        SAXParser parser = factory.newSAXParser();
-        XMLReader reader = parser.getXMLReader();
-        //reader.setErrorHandler(new SimpleErrorHandler());
-        reader.parse(new InputSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("validation-namespace-with-prefix.xml")));
+    private void assertInvalidXmlFileForXsd(String xmlFile) {
+        try {
+            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_data.xsd");
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = schemaFactory.newSchema(schemaXsd);
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlFile)));
+        }
+        catch (Exception e) {
+            return;
+        }
+        Assert.fail("Was expected an invalid file, but it was valid");
+    }
 
-        File xmlFile = new File(System.getProperty("user.dir") + "/src/test/resources/validation-namespace-with-prefix.xml");
-        NaaccrXmlUtils.readXmlFile(xmlFile, null, null, null);
+    private void assertValidXmlFileForLibrary(String xmlFile) {
+        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/" + xmlFile);
+        try {
+            NaaccrXmlUtils.readXmlFile(file, null, null, null);
+        }
+        catch (NaaccrIOException e) {
+            Assert.fail("Was expected a valid file, but it invalid: " + e.getMessage());
+        }
+    }
+
+    private void assertInvalidXmlFileForLibrary(String xmlFile) {
+        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/" + xmlFile);
+        try {
+            NaaccrXmlUtils.readXmlFile(file, null, null, null);
+        }
+        catch (NaaccrIOException e) {
+            return;
+        }
+        Assert.fail("Was expected an invalid file, but it was valid");
     }
 }

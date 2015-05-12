@@ -22,9 +22,6 @@ import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 
-// TODO use a properties file with the exceptions so they can be shared with the DLL?
-// TODO investigate using abstract base reader/writer that would be parametrized classes...
-
 /**
  * This utility class provides static methods for reading, writing and translating to/from XML and flat file NAACCR files.
  */
