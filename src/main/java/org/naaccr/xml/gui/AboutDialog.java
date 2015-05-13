@@ -41,7 +41,7 @@ public class AboutDialog extends JDialog {
         centerPnl.setBorder(new CompoundBorder(new LineBorder(Color.GRAY), new EmptyBorder(10, 25, 10, 25)));
         contentPnl.add(centerPnl, BorderLayout.CENTER);
         
-        centerPnl.add(buildTextPnl("NAACCR XML Utilities", true));
+        centerPnl.add(buildTextPnl("NAACCR XML Utility", true));
         centerPnl.add(buildTextPnl(Standalone.VERSION, false));
         centerPnl.add(Box.createVerticalStrut(25));
         centerPnl.add(buildTextPnl("Provided by the", false));
