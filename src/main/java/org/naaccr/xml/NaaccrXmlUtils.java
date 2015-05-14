@@ -345,7 +345,7 @@ public class NaaccrXmlUtils {
             if (file.getName().endsWith(".gz"))
                 os = new GZIPOutputStream(os);
             else if (file.getName().endsWith(".xz"))
-                os = new XZOutputStream(os, new LZMA2Options(8));
+                os = new XZOutputStream(os, new LZMA2Options(3));
 
             return new OutputStreamWriter(os, StandardCharsets.UTF_8);
         }
