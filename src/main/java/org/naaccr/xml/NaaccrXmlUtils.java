@@ -21,6 +21,9 @@ import java.util.zip.GZIPOutputStream;
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
+import org.tukaani.xz.LZMA2Options;
+import org.tukaani.xz.XZInputStream;
+import org.tukaani.xz.XZOutputStream;
 
 /**
  * This utility class provides static methods for reading, writing and translating to/from XML and flat file NAACCR files.
@@ -319,6 +322,8 @@ public class NaaccrXmlUtils {
 
             if (file.getName().endsWith(".gz"))
                 is = new GZIPInputStream(is);
+            else if (file.getName().endsWith(".xz"))
+                is = new XZInputStream(is);
 
             return new InputStreamReader(is, StandardCharsets.UTF_8);
         }
@@ -339,6 +344,8 @@ public class NaaccrXmlUtils {
 
             if (file.getName().endsWith(".gz"))
                 os = new GZIPOutputStream(os);
+            else if (file.getName().endsWith(".xz"))
+                os = new XZOutputStream(os, new LZMA2Options(8));
 
             return new OutputStreamWriter(os, StandardCharsets.UTF_8);
         }

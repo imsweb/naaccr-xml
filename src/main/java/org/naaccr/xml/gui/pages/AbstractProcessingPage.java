@@ -60,6 +60,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
     protected static final String _COMPRESSION_NONE = "None";
     protected static final String _COMPRESSION_GZIP = "GZip";
+    protected static final String _COMPRESSION_XZ = "XZ (LZMA)";
 
     protected static final String _NORTH_PANEL_ID_NO_FILE = "no-file";
     protected static final String _NORTH_PANEL_ID_ERROR = "pre-analysis-error";
@@ -250,16 +251,12 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             targetFieldPnl.add(Box.createHorizontalStrut(10));
             targetFieldPnl.add(Standalone.createBoldLabel("Compression:"));
             targetFieldPnl.add(Box.createHorizontalStrut(5));
-            _compressionBox = new JComboBox<>(new String[] {_COMPRESSION_NONE, _COMPRESSION_GZIP});
+            _compressionBox = new JComboBox<>(new String[] {_COMPRESSION_NONE, _COMPRESSION_GZIP, _COMPRESSION_XZ});
             _compressionBox.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (!_targetFld.getText().isEmpty()) {
-                        if (_COMPRESSION_GZIP.equals(_compressionBox.getSelectedItem()) && !_targetFld.getText().endsWith(".gz"))
-                            _targetFld.setText(_targetFld.getText() + ".gz");
-                        if (_COMPRESSION_NONE.equals(_compressionBox.getSelectedItem()) && _targetFld.getText().endsWith(".gz"))
-                            _targetFld.setText(_targetFld.getText().replace(".gz", ""));
-                    }
+                    if (!_targetFld.getText().isEmpty())
+                        _targetFld.setText(fixFileExtension(_targetFld.getText(), (String)_compressionBox.getSelectedItem()));
                 }
             });
             targetFieldPnl.add(_compressionBox);
@@ -483,7 +480,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         File file = new File(_sourceFld.getText());
         NaaccrFormat format = getFormatForInputFile(file);
         if (format != null) { // if it's null, an error has already been reported to the user
-            if (file.getName().toLowerCase().endsWith(".gz"))
+            if (file.getName().toLowerCase().endsWith(".gz") || file.getName().toLowerCase().endsWith(".xz"))
                 _formatLbl.setText("Compressed " + format.getDisplayName());
             else
                 _formatLbl.setText(format.getDisplayName());
@@ -497,6 +494,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 _targetFld.setText(invertFilename(new File(_sourceFld.getText())));
                 if (_targetFld.getText().endsWith(".gz"))
                     _compressionBox.setSelectedItem(_COMPRESSION_GZIP);
+                else if (_targetFld.getText().endsWith(".xz"))
+                    _compressionBox.setSelectedItem(_COMPRESSION_XZ);
             }
         }
     }
@@ -579,15 +578,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _processingWorker = new SwingWorker<Void, Patient>() {
             @Override
             protected Void doInBackground() throws Exception {
-                String targetFilename = null;
-                if (_targetFld != null) {
-                    targetFilename = _targetFld.getText();
-                    if (_COMPRESSION_GZIP.equals(_compressionBox.getSelectedItem()) && !targetFilename.endsWith(".gz"))
-                        targetFilename = targetFilename + ".gz";
-                    if (_COMPRESSION_NONE.equals(_compressionBox.getSelectedItem()) && targetFilename.endsWith(".gz"))
-                        targetFilename = targetFilename.replace(".gz", "");
-                }
-                final File targetFile = targetFilename == null ? null : new File(targetFilename);
+                final File targetFile = _targetFld == null ? null : new File(fixFileExtension(_targetFld.getText(), (String)_compressionBox.getSelectedItem()));
 
                 NaaccrDictionary userDictionary = null;
                 if (!_dictionaryFld.getText().isEmpty())
@@ -750,5 +741,30 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected void reportProcessingError(String error) {
         _processingErrorLbl.setText(error == null || error.isEmpty() ? "unexpected error" : error);
         _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_ERROR);
+    }
+
+    private String fixFileExtension(String filename, String compression) {
+        String result = filename;
+
+        if (_COMPRESSION_GZIP.equals(compression)) {
+            if (result.endsWith(".xz"))
+                result = result.replace(".xz", "");
+            if (!result.endsWith(".gz"))
+                result = result + ".gz";
+        }
+        else if (_COMPRESSION_XZ.equals(compression)) {
+            if (result.endsWith(".gz"))
+                result = result.replace(".gz", "");
+            if (!result.endsWith(".xz"))
+                 result = result + ".xz";
+        }
+        else if (_COMPRESSION_NONE.equals(compression)) {
+            if (result.endsWith(".gz"))
+                result = result.replace(".gz", "");
+            else if (result.endsWith(".xz"))
+                result = filename.replace(".xz", "");
+        }
+
+        return result;
     }
 }
