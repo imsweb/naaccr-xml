@@ -165,8 +165,8 @@ public class NaaccrXmlUtilsTest {
         File file1 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file1));
 
-        // this one contains non-standard tags
-        File file2 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-non-standard-tags.xml");
+        // this one contains extensions
+        File file2 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-extension-missing-namespace.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file2));
     }
 

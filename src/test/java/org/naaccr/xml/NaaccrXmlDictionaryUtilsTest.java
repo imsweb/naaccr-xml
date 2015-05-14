@@ -166,7 +166,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         //assertValidXmlFileForXsd("user-defined-naaccr-dictionary-140.xml");
 
         assertValidXmlFileForLibrary("naaccr-dictionary-150.xml");
-        assertValidXmlFileForLibrary("user-definednaaccr-dictionary-150.xml");
+        assertValidXmlFileForLibrary("user-defined-naaccr-dictionary-150.xml");
         //assertValidXmlFileForXsd("naaccr-dictionary-150.xml");
         //assertValidXmlFileForXsd("user-defined-naaccr-dictionary-150.xml");
     }
