@@ -107,7 +107,6 @@ public class PatientXmlReader implements AutoCloseable {
             for (int i = 0; i < _reader.getAttributeCount(); i++)
                 if (!standardAttributes.contains(_reader.getAttributeName(i)))
                     _rootData.getExtraRootParameters().put(_reader.getAttributeName(i), _reader.getAttribute(i));
-            _reader.moveDown();
 
             // now we are ready to create our reading context and make it available to the patient converter
             _context = new NaaccrStreamContext();
@@ -116,9 +115,10 @@ public class PatientXmlReader implements AutoCloseable {
             _context.setParser(configuration.getParser());
             configuration.getPatientConverter().setContext(_context);
 
-            // check order of the tags
-            if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM) && !_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT))
-                throw new NaaccrIOException("unexpected tag: " + _reader.getNodeName(), configuration.getParser().getLineNumber());
+            // handle the case where no patients nor items are provided
+            if (!_reader.hasMoreChildren())
+                return;
+            _reader.moveDown();
 
             // read the root items
             Set<String> itemsAlreadySeen = new HashSet<>();
@@ -131,15 +131,26 @@ public class PatientXmlReader implements AutoCloseable {
                 else
                     itemsAlreadySeen.add(rawId);
                 _reader.moveUp();
-                _reader.moveDown();
+                if (_reader.hasMoreChildren())
+                    _reader.moveDown();
             }
+
+            // if we are back at the root level, there is no more children, and we are done
+            if (_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
+                return;
 
             // for now, ignore the root extension...
             if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT)) {
                 _reader.moveUp();
-                _reader.moveDown();
+                if (_reader.hasMoreChildren())
+                    _reader.moveDown();
             }
 
+            // if we are back at the root level, there is no more children, and we are done
+            if (_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
+                return;
+
+            // at this point, either we are done (and the method already return) or there should be a patient tag
             if (!_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT))
                 throw new NaaccrIOException("unexpected tag: " + _reader.getNodeName(), configuration.getParser().getLineNumber());
 

@@ -175,11 +175,7 @@ public class NaaccrXmlUtilsTest {
 
         // regular file - not valid with XSD because doesn't define the namespace
         assertValidXmlFileForLibrary("validation-standard-file.xml");
-        assertInvalidXmlFileForXsd("validation-standard-file.xml");
-
-        // extensions - not valid with XSD because doesn't define the namespace (and extensions wouldn't be valid anyway)
-        assertValidXmlFileForLibrary("validation-non-standard-tags.xml");
-        assertInvalidXmlFileForXsd("validation-non-standard-tags.xml");
+        assertNotValidXmlFileForXsd("validation-standard-file.xml");
 
         // a regular file that defines the namespace but doesn't use prefixes, should be valid in both (since we allow "any" attributes)
         assertValidXmlFileForLibrary("validation-namespace-without-prefix.xml");
@@ -187,7 +183,36 @@ public class NaaccrXmlUtilsTest {
 
         // a regular file that defines the namespace and uses prefix; we don't support htat in the library...
         assertValidXmlFileForXsd("validation-namespace-with-prefix.xml");
-        assertInvalidXmlFileForLibrary("validation-namespace-with-prefix.xml");
+        assertNotValidXmlFileForLibrary("validation-namespace-with-prefix.xml");
+
+        // this file has no items
+        assertValidXmlFileForLibrary("validation-no-items.xml");
+        assertValidXmlFileForXsd("validation-no-items.xml");
+
+        // this file has no patient
+        assertValidXmlFileForLibrary("validation-no-patients.xml");
+        assertValidXmlFileForXsd("validation-no-patients.xml");
+
+        // this file has no tumors
+        assertValidXmlFileForLibrary("validation-no-tumors.xml");
+        assertValidXmlFileForXsd("validation-no-tumors.xml");
+
+        // extensions - not valid with XSD because doesn't define the namespace (and extensions wouldn't be valid anyway)
+        assertValidXmlFileForLibrary("validation-extension-missing-namespace.xml");
+        assertNotValidXmlFileForXsd("validation-extension-missing-namespace.xml");
+
+        // this file has a root extension that should be ignored
+        assertValidXmlFileForLibrary("validation-extension-root.xml");
+        assertValidXmlFileForXsd("validation-extension-root.xml");
+
+        // this file has a patient extension that should be ignored
+        assertValidXmlFileForLibrary("validation-extension-patient.xml");
+        assertValidXmlFileForXsd("validation-extension-patient.xml");
+
+        // this file has a tumor extension that should be ignored
+        assertValidXmlFileForLibrary("validation-extension-tumor.xml");
+        assertValidXmlFileForXsd("validation-extension-tumor.xml");
+
     }
 
     private void assertValidXmlFileForXsd(String xmlFile) {
@@ -199,11 +224,11 @@ public class NaaccrXmlUtilsTest {
             validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/" + xmlFile)));
         }
         catch (Exception e) {
-            Assert.fail("Was expected a valid file, but it invalid: " + e.getMessage());
+            Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
         }
     }
 
-    private void assertInvalidXmlFileForXsd(String xmlFile) {
+    private void assertNotValidXmlFileForXsd(String xmlFile) {
         try {
             URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_data.xsd");
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -223,11 +248,11 @@ public class NaaccrXmlUtilsTest {
             NaaccrXmlUtils.readXmlFile(file, null, null, null);
         }
         catch (NaaccrIOException e) {
-            Assert.fail("Was expected a valid file, but it invalid: " + e.getMessage());
+            Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
         }
     }
 
-    private void assertInvalidXmlFileForLibrary(String xmlFile) {
+    private void assertNotValidXmlFileForLibrary(String xmlFile) {
         File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/" + xmlFile);
         try {
             NaaccrXmlUtils.readXmlFile(file, null, null, null);

@@ -118,12 +118,7 @@ public class NaaccrPatientConverter implements Converter {
                         else
                             itemsAlreadySeen.add(rawId);
                     }
-                    // handle tumor extension
-                    else {
-                        // TODO [EXTENSIONS] this would be the place to read the tumor extension; for now it's ignored...
-                        reader.moveUp();
-                        reader.moveDown();
-                    }
+                    // TODO [EXTENSIONS] this would be the place to read the tumor extension; for now it's ignored...
 
                     reader.moveUp();
                 }

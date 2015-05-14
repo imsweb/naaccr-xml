@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" recordType="I" timeGenerated="2015-03-13T12:09:19.0Z" xmlns="http://naaccr.org/naaccrxml" xmlns:other="http://whatever.org">
+    <Item naaccrId="registryId">0000000001</Item>
+    <other:MyOuterTag>
+        <other:MyInnterTag>Something</other:MyInnterTag>
+    </other:MyOuterTag>
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000001</Item>
+        <Tumor>
+            <Item naaccrId="primarySite">C123</Item>
+        </Tumor>
+    </Patient>
+</NaaccrData>

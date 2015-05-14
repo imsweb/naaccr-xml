@@ -15,6 +15,9 @@
         </MySpecialPatientData>
         <Tumor>
             <Item naaccrId="primarySite">C456</Item>
+            <MySpecialTumorData>
+                <Item naaccrId="myTumorItem">VALUE</Item>
+            </MySpecialTumorData>
         </Tumor>
     </Patient>
     <Patient>

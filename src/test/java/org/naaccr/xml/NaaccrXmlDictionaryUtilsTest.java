@@ -3,10 +3,18 @@
  */
 package org.naaccr.xml;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URL;
 import java.util.regex.Pattern;
+
+import javax.xml.XMLConstants;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -145,7 +153,44 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertEquals("", NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName(""));
         Assert.assertEquals("testTestTest", NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName("Test Test Test"));
         Assert.assertEquals("testSomeThingElse123", NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName("test: (ignored);   some_thing # else --123!!!"));
+    }
 
+    @Test
+    public void testXsdAgainstLibrary() {
 
+        // I can't validate the dictionary files against the XSD because it requires them to define a namespace, which they don't know right now...
+
+        assertValidXmlFileForLibrary("naaccr-dictionary-140.xml");
+        assertValidXmlFileForLibrary("user-defined-naaccr-dictionary-140.xml");
+        //assertValidXmlFileForXsd("naaccr-dictionary-140.xml");
+        //assertValidXmlFileForXsd("user-defined-naaccr-dictionary-140.xml");
+
+        assertValidXmlFileForLibrary("naaccr-dictionary-150.xml");
+        assertValidXmlFileForLibrary("user-definednaaccr-dictionary-150.xml");
+        //assertValidXmlFileForXsd("naaccr-dictionary-150.xml");
+        //assertValidXmlFileForXsd("user-defined-naaccr-dictionary-150.xml");
+    }
+
+    private void assertValidXmlFileForXsd(String xmlFile) {
+        try {
+            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_meta.xsd");
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = schemaFactory.newSchema(schemaXsd);
+            Validator validator = schema.newValidator();
+            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlFile)));
+        }
+        catch (Exception e) {
+            Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
+        }
+    }
+
+    private void assertValidXmlFileForLibrary(String xmlFile) {
+        File file = new File(System.getProperty("user.dir") + "/src/main/resources/" + xmlFile);
+        try {
+            NaaccrXmlDictionaryUtils.readDictionary(file);
+        }
+        catch (IOException e) {
+            Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
+        }
     }
 }
