@@ -169,10 +169,28 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     private JPanel buildNoFileSelectedPanel() {
         JPanel pnl = new JPanel();
         pnl.setBorder(new EmptyBorder(10, 10, 0, 0));
-        pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
 
-        pnl.add(Standalone.createItalicLabel("No file selected; please use the Browse button to select one. The file can be uncompressed or GZipped."));
+        pnl.add(buildTextPnl("No file selected; please use the Browse button to select one."));
+        pnl.add(Box.createVerticalStrut(25));
+        pnl.add(buildTextPnl("The following NAACCR versions are supported:"));
+        pnl.add(buildTextPnl("             NAACCR 14"));
+        pnl.add(buildTextPnl("             NAACCR 15"));
+        pnl.add(Box.createVerticalStrut(5));
+        pnl.add(buildTextPnl("Note that this utility is not a data conversion tool, it simply is a NAACCR Flat vs XML format conversion tool."));
+        pnl.add(buildTextPnl("That means the created file (Flat or XML) will always have the same NAACCR version as its source."));
+        pnl.add(Box.createVerticalStrut(25));
+        pnl.add(buildTextPnl("The following compressions are supported:"));
+        pnl.add(buildTextPnl("             GZip (.gz)"));
+        pnl.add(buildTextPnl("             XZ (.xz) - this compression will usually produce smaller files than GZip but will take longer to process"));
+        pnl.add(buildTextPnl("             Uncompressed - anything not ending in .gz or .xz will be treated as uncompressed)"));
 
+        return pnl;
+    }
+
+    private JPanel buildTextPnl(String text) {
+        JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 2));
+        pnl.add(new JLabel(text));
         return pnl;
     }
 

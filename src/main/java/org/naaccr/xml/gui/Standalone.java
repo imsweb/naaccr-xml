@@ -97,9 +97,9 @@ public class Standalone extends JFrame implements ActionListener {
         toolbar.setBorder(new CompoundBorder(new MatteBorder(0, 1, 1, 1, Color.GRAY), new EmptyBorder(5, 10, 5, 10)));
 
         toolbar.setLayout(new BoxLayout(toolbar, BoxLayout.Y_AXIS));
-        toolbar.add(createToolbarButton("Flat to XML", "flat_to_xml", "transform a given NAACCR Flat file into the corresponding NAACCR XML file"));
+        toolbar.add(createToolbarButton("Flat to XML", "flat_to_xml", "transform a given NAACCR Flat file (fixed-columns) into the corresponding NAACCR XML file"));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("XML to Flat", "xml_to_flat", "transform a given NAACCR XML file into the corresponding Flat file"));
+        toolbar.add(createToolbarButton("XML to Flat", "xml_to_flat", "transform a given NAACCR XML file into the corresponding Flat file (fixed-columns)"));
         toolbar.add(Box.createVerticalStrut(15));
         toolbar.add(createToolbarButton("Dictionary", "dictionary", "view the standard NAACCR dictionaries used to process NAACCR XML data"));
         toolbar.add(Box.createVerticalStrut(15));

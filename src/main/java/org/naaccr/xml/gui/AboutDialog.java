@@ -48,7 +48,7 @@ public class AboutDialog extends JDialog {
         centerPnl.add(Box.createVerticalStrut(3));
         centerPnl.add(buildTextPnl("NAACCR XML Task Force", true));
         centerPnl.add(Box.createVerticalStrut(25));
-        centerPnl.add(buildTextPnl("Developed by the", false));
+        centerPnl.add(buildTextPnl("Developed by", false));
         centerPnl.add(Box.createVerticalStrut(3));
         centerPnl.add(buildTextPnl("Information Management Services, Inc.", true));
         centerPnl.add(Box.createVerticalStrut(6));
