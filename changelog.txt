@@ -1,0 +1,15 @@
+Version 0.6
+
+  - Added support for XZ compression.
+  - Added the XSD files to the released JAR file.
+  - Added proper support for padding values in the library.
+  - Now presenting the options before the analysis phase in the GUI.
+  - Added an About dialog.
+  - Now displaying a summary of the validation errors in the GUI.
+  - Switched to a centralized class of validation errors.
+
+Version 0.5
+
+  - Now using a deterministic way to create the NAACCR IDs from the item names.
+  - Added a Validate XML page.
+  - Removed Samples page.
