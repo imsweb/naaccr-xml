@@ -66,6 +66,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected static final String _NORTH_PANEL_ID_ERROR = "pre-analysis-error";
     protected static final String _NORTH_PANEL_ID_ANALYSIS_RESULTS = "pre-analysis-results";
 
+    protected static final String _CENTER_PANEL_ID_HELP = "help";
     protected static final String _CENTER_PANEL_ID_OPTIONS = "options";
     protected static final String _CENTER_PANEL_ID_PROCESSING = "processing";
 
@@ -156,23 +157,35 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _centerPnl = new JPanel();
         _centerLayout = new CardLayout();
         _centerPnl.setLayout(_centerLayout);
+        _centerPnl.add(_CENTER_PANEL_ID_HELP, buildHelpPanel());
         _centerPnl.add(_CENTER_PANEL_ID_OPTIONS, buildOptionsPanel());
         _centerPnl.add(_CENTER_PANEL_ID_PROCESSING, buildProcessingPanel());
         this.add(_centerPnl, BorderLayout.CENTER);
-        _centerPnl.setVisible(false);
     }
 
     protected abstract String getSourceLabelText();
 
     protected abstract String getTargetLabelText();
 
+    private JPanel buildTextPnl(String text) {
+        JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 2));
+        pnl.add(new JLabel(text));
+        return pnl;
+    }
+
     private JPanel buildNoFileSelectedPanel() {
+        JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        pnl.setBorder(new EmptyBorder(10, 10, 0, 0));
+        pnl.add(buildTextPnl("No file selected; please use the Browse button to select one."));
+
+        return pnl;
+    }
+
+    private JPanel buildHelpPanel() {
         JPanel pnl = new JPanel();
         pnl.setBorder(new EmptyBorder(10, 10, 0, 0));
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
 
-        pnl.add(buildTextPnl("No file selected; please use the Browse button to select one."));
-        pnl.add(Box.createVerticalStrut(25));
         pnl.add(buildTextPnl("The following NAACCR versions are supported:"));
         pnl.add(buildTextPnl("             NAACCR 14"));
         pnl.add(buildTextPnl("             NAACCR 15"));
@@ -185,13 +198,9 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         pnl.add(buildTextPnl("             XZ (.xz) - this compression will usually produce smaller files than GZip but will take longer to process"));
         pnl.add(buildTextPnl("             Uncompressed - anything not ending in .gz or .xz will be treated as uncompressed)"));
 
-        return pnl;
-    }
-
-    private JPanel buildTextPnl(String text) {
-        JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 2));
-        pnl.add(new JLabel(text));
-        return pnl;
+        JPanel wrapperPnl = new JPanel(new BorderLayout());
+        wrapperPnl.add(pnl, BorderLayout.NORTH);
+        return wrapperPnl;
     }
 
     private JPanel buildAnalysisResultsPanel() {
@@ -408,8 +417,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 _analysisBar.setMinimum(0);
                 _analysisBar.setIndeterminate(true);
                 _sourceFld.setText(null);
-                _centerPnl.setVisible(false);
                 _northLayout.show(_northPnl, _NORTH_PANEL_ID_NO_FILE);
+                _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_HELP);
             }
         });
         controlsPnl.add(cancelBtn);
@@ -446,7 +455,9 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 if (_processingWorker != null)
                     _processingWorker.cancel(true);
                 _processingWorker = null;
-                _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_INTERRUPTED);
+                _sourceFld.setText(null);
+                _northLayout.show(_northPnl, _NORTH_PANEL_ID_NO_FILE);
+                _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_HELP);
             }
         });
         controlsPnl.add(cancelBtn);
@@ -494,7 +505,6 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
     private void performPreAnalysis() {
         _centerPnl.setVisible(false);
-
         File file = new File(_sourceFld.getText());
         NaaccrFormat format = getFormatForInputFile(file);
         if (format != null) { // if it's null, an error has already been reported to the user
@@ -505,7 +515,6 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             _numLinesLbl.setText("<not evaluated yet>");
             _fileSizeLbl.setText(Standalone.formatFileSize(file.length()));
             _northLayout.show(_northPnl, _NORTH_PANEL_ID_ANALYSIS_RESULTS);
-
             _centerPnl.setVisible(true);
             _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_OPTIONS);
             if (_targetFld != null) {
@@ -730,7 +739,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                                 _maxWarningsReached = true;
                         }
                         else if (!_maxWarningsDiscAdded) {
-                            _warningsTextArea.append("Reached maximum number of warnings that can be displayed; use the summary instead (available once the processing is done)...");
+                            _warningsTextArea.append(
+                                    "Reached maximum number of warnings that can be displayed; use the summary instead (available once the processing is done)...");
                             _maxWarningsDiscAdded = true;
                         }
                     }
@@ -746,7 +756,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         String analysis = Standalone.formatTime(analysisTime);
         String processing = Standalone.formatTime(processingTime);
         String total = Standalone.formatTime(analysisTime + processingTime);
-        return "Successfully created \"" + path + "\" (" + size + ") in " + total + " (anaysis: " + analysis + ", processing: " + processing +")";
+        return "Successfully created \"" + path + "\" (" + size + ") in " + total + " (anaysis: " + analysis + ", processing: " + processing + ")";
     }
 
     protected void reportAnalysisError(String error) {
@@ -774,7 +784,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             if (result.endsWith(".gz"))
                 result = result.replace(".gz", "");
             if (!result.endsWith(".xz"))
-                 result = result + ".xz";
+                result = result + ".xz";
         }
         else if (_COMPRESSION_NONE.equals(compression)) {
             if (result.endsWith(".gz"))

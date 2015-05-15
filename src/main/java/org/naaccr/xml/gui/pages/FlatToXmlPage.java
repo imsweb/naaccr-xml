@@ -62,7 +62,7 @@ public class FlatToXmlPage extends AbstractProcessingPage {
         // make sure the NAACCR version is valid
         String version = firstLine.length() < 19 ? "" : firstLine.substring(16, 19).trim();
         if (version.isEmpty()) {
-            reportAnalysisError("blank NAACCR version on first record");
+            reportAnalysisError("unable to get NAACCR version from first record");
             return null;
         }
         if (!NaaccrFormat.isVersionSupported(version)) {
@@ -73,7 +73,7 @@ public class FlatToXmlPage extends AbstractProcessingPage {
         // make sure the record type is valid
         String type = firstLine.substring(0, 1).trim();
         if (type.isEmpty()) {
-            reportAnalysisError("blank record type on first record");
+            reportAnalysisError("unable to get record type from first record");
             return null;
         }
         if (!NaaccrFormat.isRecordTypeSupported(type)) {
