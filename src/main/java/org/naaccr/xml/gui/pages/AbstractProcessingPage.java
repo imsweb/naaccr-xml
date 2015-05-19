@@ -175,9 +175,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
     private JPanel buildNoFileSelectedPanel() {
         JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        pnl.setBorder(new EmptyBorder(10, 10, 0, 0));
+        pnl.setBorder(new EmptyBorder(10, 10, 20, 0));
         pnl.add(buildTextPnl("No file selected; please use the Browse button to select one."));
-
         return pnl;
     }
 
@@ -320,8 +319,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         allOptionsPnl.add(dictionaryPnl);
 
         JPanel controlsPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        controlsPnl.setBorder(new EmptyBorder(50, 250, 0, 0));
-        controlsPnl.add(Box.createHorizontalStrut(50));
+        controlsPnl.setBorder(new EmptyBorder(25, 300, 10, 0));
         JButton processBtn = new JButton("Process Source File");
         processBtn.addActionListener(new ActionListener() {
             @Override
@@ -331,6 +329,9 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         });
         controlsPnl.add(processBtn);
         allOptionsPnl.add(controlsPnl);
+
+        // need this to make sure process button is visible; shouldn't need it, but I can't make it work otherwise!
+        pnl.add(new JLabel(" "), BorderLayout.SOUTH);
 
         JPanel wrapperPnl = new JPanel(new BorderLayout());
         wrapperPnl.add(pnl, BorderLayout.NORTH);

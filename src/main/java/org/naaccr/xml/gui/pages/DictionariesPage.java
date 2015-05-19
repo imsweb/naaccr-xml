@@ -62,6 +62,7 @@ public class DictionariesPage extends AbstractPage {
         centerPnl.setBorder(new EmptyBorder(10, 0, 0, 0));
         final JTextArea area = new JTextArea();
         area.setEditable(false);
+        area.setRows(25);
         area.setOpaque(true);
         JScrollPane pane = new JScrollPane(area);
         pane.setBorder(new MatteBorder(1, 0, 0, 0, Color.LIGHT_GRAY));

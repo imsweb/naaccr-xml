@@ -18,7 +18,7 @@ public abstract class AbstractPage extends JPanel {
         this.setOpaque(true);
         this.setLayout(new BorderLayout());
         this.setBorder(null);
-        this.setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 1, Color.GRAY), new EmptyBorder(10, 10, 10, 10)));
+        this.setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 1, Color.GRAY), new EmptyBorder(10, 10, 10, 25)));
     }
     
     protected String invertFilename(File file) {

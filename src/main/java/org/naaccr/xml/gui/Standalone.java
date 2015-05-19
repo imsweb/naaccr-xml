@@ -47,11 +47,10 @@ import org.naaccr.xml.gui.pages.FlatToXmlPage;
 import org.naaccr.xml.gui.pages.XmlToFlatPage;
 import org.naaccr.xml.gui.pages.XmlValidationPage;
 
-// TODO when selecting a bad XML file, there is a nasty exception instead of a nice "unknown format" message...
 public class Standalone extends JFrame implements ActionListener {
 
     public static final String VERSION = "v0.6 (beta)";
-    
+
     private CardLayout _layout;
     private JPanel _centerPnl;
     private JLabel _currentPageIdLbl, _currentPageDescLbl;
@@ -59,7 +58,6 @@ public class Standalone extends JFrame implements ActionListener {
 
     public Standalone() {
         this.setTitle("NAACCR XML Utility " + VERSION);
-        this.setMinimumSize(new Dimension(1100, 700));
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
 
@@ -128,7 +126,7 @@ public class Standalone extends JFrame implements ActionListener {
                 });
             }
         });
-        
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -190,7 +188,7 @@ public class Standalone extends JFrame implements ActionListener {
                 }
             });
         }
-            
+
     }
 
     public static JLabel createItalicLabel(String text) {
@@ -305,10 +303,6 @@ public class Standalone extends JFrame implements ActionListener {
         }
 
         final JFrame frame = new Standalone();
-        
-        // try to be smart about the initial size of the frame
-        frame.pack();
-        frame.setPreferredSize(new Dimension(Math.min(frame.getPreferredSize().width, 1100), Math.min(frame.getPreferredSize().height, 700)));
         frame.pack();
 
         // start in the middle of the screen
