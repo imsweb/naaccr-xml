@@ -3,15 +3,10 @@
  */
 package org.naaccr.xml;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.xml.bind.DatatypeConverter;
-
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import org.naaccr.xml.entity.Item;
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
@@ -20,10 +15,13 @@ import org.naaccr.xml.runtime.NaaccrStreamConfiguration;
 import org.naaccr.xml.runtime.NaaccrStreamContext;
 import org.naaccr.xml.runtime.RuntimeNaaccrDictionary;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.ConversionException;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
+import javax.xml.bind.DatatypeConverter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * This class can be used to wrap a generic writer into a patient writer handling the NAACCR XML format.
@@ -64,7 +62,7 @@ public class PatientXmlWriter implements AutoCloseable {
 
             // would be better to use a "header writer", I think XStream has one actually; that would be better...
             try {
-                writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));
+                writer.write("<?xml version=\"1.0\"?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));
             }
             catch (IOException e) {
                 throw new NaaccrIOException(e.getMessage());
@@ -80,11 +78,12 @@ public class PatientXmlWriter implements AutoCloseable {
             if (rootData.getRecordType() == null)
                 throw new NaaccrIOException("record type is required");
             _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE, rootData.getRecordType());
-            if (rootData.getTimeGenerated() == null)
-                throw new NaaccrIOException("time generated is required");
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(rootData.getTimeGenerated());
-            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, DatatypeConverter.printDateTime(cal));
+            if (rootData.getTimeGenerated() != null) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(rootData.getTimeGenerated());
+                _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, DatatypeConverter.printDateTime(cal));
+            }
+            _writer.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
 
             // write non-standard attributes
             Set<String> standardAttributes = new HashSet<>();

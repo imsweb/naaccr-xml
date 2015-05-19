@@ -3,27 +3,17 @@
  */
 package org.naaccr.xml;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.tukaani.xz.LZMA2Options;
 import org.tukaani.xz.XZInputStream;
 import org.tukaani.xz.XZOutputStream;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * This utility class provides static methods for reading, writing and translating to/from XML and flat file NAACCR files.
@@ -53,6 +43,8 @@ public class NaaccrXmlUtils {
     public static final String FLAT_FILE_FORMAT_ITEM_REC_TYPE = "recordType";
     public static final String FLAT_FILE_FORMAT_ITEM_NAACCR_VERSION = "naaccrRecordVersion";
 
+    // target namespace
+    public static final String NAACCR_XML_NAMESPACE = "http://naaccr.org/naaccrxml";
     /**
      * Translates a flat data file into an XML data file.
      * @param flatFile source flat data file, must exists

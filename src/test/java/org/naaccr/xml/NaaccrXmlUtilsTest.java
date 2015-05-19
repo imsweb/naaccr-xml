@@ -3,6 +3,19 @@
  */
 package org.naaccr.xml;
 
+import org.junit.Assert;
+import org.junit.Test;
+import org.naaccr.xml.entity.Item;
+import org.naaccr.xml.entity.NaaccrData;
+import org.naaccr.xml.entity.Patient;
+import org.naaccr.xml.entity.Tumor;
+
+import javax.xml.XMLConstants;
+import javax.xml.bind.DatatypeConverter;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -12,20 +25,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.xml.XMLConstants;
-import javax.xml.bind.DatatypeConverter;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.naaccr.xml.entity.Item;
-import org.naaccr.xml.entity.NaaccrData;
-import org.naaccr.xml.entity.Patient;
-import org.naaccr.xml.entity.Tumor;
 
 // TODO FPD beef up these tests; add cases for options, user dictionary and observer...
 // TODO FPD add tests for line number on main entities...
@@ -173,17 +172,17 @@ public class NaaccrXmlUtilsTest {
     @Test
     public void testXsdAgainstLibrary() {
 
-        // regular file - not valid with XSD because doesn't define the namespace
+        // regular file
         assertValidXmlFileForLibrary("validation-standard-file.xml");
-        assertNotValidXmlFileForXsd("validation-standard-file.xml");
+        assertValidXmlFileForXsd("validation-standard-file.xml");
 
-        // a regular file that defines the namespace but doesn't use prefixes, should be valid in both (since we allow "any" attributes)
+        // a regular file that defines the namespace but doesn't use prefixes, should be valid in both
         assertValidXmlFileForLibrary("validation-namespace-without-prefix.xml");
         assertValidXmlFileForXsd("validation-namespace-without-prefix.xml");
 
-        // a regular file that defines the namespace and uses prefix; we don't support htat in the library...
-        assertValidXmlFileForXsd("validation-namespace-with-prefix.xml");
+        // a regular file that defines the namespace and uses prefix; we don't support that in the library...
         assertNotValidXmlFileForLibrary("validation-namespace-with-prefix.xml");
+        assertValidXmlFileForXsd("validation-namespace-with-prefix.xml");
 
         // this file has no items
         assertValidXmlFileForLibrary("validation-no-items.xml");

@@ -3,26 +3,19 @@
  */
 package org.naaccr.xml;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.Writer;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.core.util.QuickWriter;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
+import org.apache.commons.lang3.StringUtils;
+import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
+import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
+
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
-import org.apache.commons.lang3.StringUtils;
-import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
-import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.core.util.QuickWriter;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
 /**
  * This utillity class can be used to read/write dictionaries, whether they are internal to the library, or provided by the user...
@@ -384,7 +377,7 @@ public final class NaaccrXmlDictionaryUtils {
             super(writer, new char[] {' ', ' ', ' ', ' '});
             _dictionary = dictionary;
             try {
-                writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n\r\n");
+                writer.write("<?xml version=\"1.0\"?>\r\n\r\n");
             }
             catch (IOException e) {
                 // ignore this one, the exception will happen again anyway...
@@ -415,8 +408,11 @@ public final class NaaccrXmlDictionaryUtils {
             super.addAttribute(key, value);
             if ("naaccrId".equals(key))
                 _currentItemId = value;
-            if (!"description".equals(key) && !isLastAttribute(key))
+            if (!isLastAttribute(key))
                 _internalWriter.write("\r\n           ");
+            // this isn't going to work well for user-define dictionaries bc desc is optional...
+            if ("description".equals(key))
+                super.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
         }
 
         private boolean isLastAttribute(String attribute) {

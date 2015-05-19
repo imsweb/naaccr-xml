@@ -3,12 +3,9 @@
  */
 package org.naaccr.xml;
 
-import java.io.Reader;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.xml.bind.DatatypeConverter;
-
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
@@ -16,9 +13,10 @@ import org.naaccr.xml.runtime.NaaccrStreamConfiguration;
 import org.naaccr.xml.runtime.NaaccrStreamContext;
 import org.naaccr.xml.runtime.RuntimeNaaccrDictionary;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.ConversionException;
-import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import javax.xml.bind.DatatypeConverter;
+import java.io.Reader;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class can be used to wrap a generic reader into a patient reader handling the NAACCR XML format.
@@ -104,7 +102,7 @@ public class PatientXmlReader implements AutoCloseable {
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE);
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
             for (int i = 0; i < _reader.getAttributeCount(); i++)
-                if (!standardAttributes.contains(_reader.getAttributeName(i)))
+                if (!standardAttributes.contains(_reader.getAttributeName(i)) && !_reader.getAttributeName(i).startsWith("xmlns"))
                     _rootData.getExtraRootParameters().put(_reader.getAttributeName(i), _reader.getAttribute(i));
 
             // now we are ready to create our reading context and make it available to the patient converter

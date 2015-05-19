@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0"?>
 
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/user-defined-naaccr-dictionary-150.xml"
             naaccrVersion="150"
-            description="NAACCR 15 default user dictionary">
+            description="NAACCR 15 default user dictionary"
+            xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>
         <ItemDef naaccrId="reserved00"
             naaccrNum="37"
