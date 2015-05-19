@@ -89,13 +89,12 @@ public class PatientXmlReader implements AutoCloseable {
 
             // read the standard attribute: time generated
             String generatedTime = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
-            if (generatedTime == null)
-                throw new NaaccrIOException("the \"" + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED + "\" attribute is required", configuration.getParser().getLineNumber());
-            try {
-                _rootData.setTimeGenerated(DatatypeConverter.parseDateTime(generatedTime).getTime());
-            }
-            catch (IllegalArgumentException e) {
-                throw new NaaccrIOException("invalid time generated value: " + generatedTime, configuration.getParser().getLineNumber());
+            if (generatedTime != null) {
+                try {
+                    _rootData.setTimeGenerated(DatatypeConverter.parseDateTime(generatedTime).getTime());
+                } catch (IllegalArgumentException e) {
+                    throw new NaaccrIOException("invalid time generated value: " + generatedTime, configuration.getParser().getLineNumber());
+                }
             }
 
             // read the non-standard attributes
