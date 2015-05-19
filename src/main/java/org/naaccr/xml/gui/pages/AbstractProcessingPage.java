@@ -523,6 +523,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                     _compressionBox.setSelectedItem(_COMPRESSION_GZIP);
                 else if (_targetFld.getText().endsWith(".xz"))
                     _compressionBox.setSelectedItem(_COMPRESSION_XZ);
+                else
+                    _compressionBox.setSelectedItem(_COMPRESSION_NONE);
             }
         }
     }
