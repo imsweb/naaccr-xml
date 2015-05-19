@@ -104,8 +104,6 @@ public class Standalone extends JFrame implements ActionListener {
         toolbar.add(createToolbarButton("Dictionary", "dictionary", "view the standard NAACCR dictionaries used to process NAACCR XML data"));
         toolbar.add(Box.createVerticalStrut(15));
         toolbar.add(createToolbarButton("XML Validation", "validate", "validate a given NAACCR XML file"));
-        //toolbar.add(Box.createVerticalStrut(15));
-        //toolbar.add(createToolbarButton("Samples", "samples", "examples of typical NAACCR XML files."));
         this.getContentPane().add(toolbar, BorderLayout.WEST);
 
         _centerPnl = new JPanel();
@@ -116,7 +114,6 @@ public class Standalone extends JFrame implements ActionListener {
         _centerPnl.add("xml_to_flat", new XmlToFlatPage());
         _centerPnl.add("dictionary", new DictionariesPage());
         _centerPnl.add("validate", new XmlValidationPage());
-        //_centerPnl.add("samples", new SamplesPage());
         this.getContentPane().add(_centerPnl, BorderLayout.CENTER);
 
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
