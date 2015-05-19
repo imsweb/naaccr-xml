@@ -1,0 +1,129 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>NAACCR XML Utility Help</title>
+    <style>
+        .wrapper {
+            margin: 0 25px 0 25px;
+        }
+
+        .lvl1 {
+            padding: 0;
+            margin: 0 0 0 25px;
+        }
+
+        .indent1 {
+            padding: 0;
+            margin: 0 0 0 25px;
+        }
+
+        h2 {
+            display: inline-block;
+            color: #002C4C;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <h1>NAACCR XML Utility</h1>
+    <hr/>
+
+    <div id="toc"><h2>Table of Contents</h2></div>
+    <div class="lvl1"><a href="#intro">Introduction</a></div>
+    <div class="lvl1"><a href="#versions">Supported NAACCR versions</a></div>
+    <div class="lvl1"><a href="#compressions">Supported compression algorithms</a></div>
+    <div class="lvl1"><a href="#flattoxml">Converting a Flat file to an XML file</a></div>
+    <div class="lvl1"><a href="#xmltoflat">Converting an XML file to Flat file</a></div>
+    <div class="lvl1"><a href="#validation">Validating a NAACCR XML file</a></div>
+    <div class="lvl1"><a href="#dictionaries">Viewing the NAACCR dictionaries</a></div>
+
+    <div id="intro"><h2>Introduction</h2></div>
+    <div class="indent1">
+        This tool can be used to transform a NAACCR flat-file (fixed column) into the corresponding NAACCR XML format and vice-versa.
+        It can also be used to validate a given NAACCR XML file.
+        <br/><br/>
+        <b>This tool is not a data conversion tool; it simply translates one format into another.</b>
+    </div>
+
+    <div id="versions"><h2>Supported NAACCR versions</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div></div>
+    <div class="indent1">
+        The following NAACCR versions are curently supported:
+        <ul>
+            <li>NAACCR 15</li>
+            <li>NAACCR 14</li>
+        </ul>
+        The Abstract, Modified, Confidential and Incidence flavors are supported for those versions.
+    </div>
+
+    <div id="compressions"><h2>Supported compression algorithms</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div></div>
+    <div class="indent1">
+        The following compression algorithms are supported:
+        <ul>
+            <li><a href="http://www.gzip.org/#intro">GZip</a> (.gz)</li>
+            <li><a href="http://tukaani.org/xz/">XZ</a> (.xz)</li>
+        </ul>
+        Several software can be found online to compress/uncompress a given file.
+        For example, <a href="http://www.7-zip.org/">7-Zip</a> is a free standalone program that will handle the two compression methods.
+        <br/><br/>
+        The utility tool allows you to select the compression as part of the conversion options.
+        <br/>
+        By default, the compression is set to the same one as the source file, but that can be changed by using the compression drop-down.
+    </div>
+
+    <div id="flattoxml"><h2>Converting a Flat file to an XML file</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div></div>
+    <div class="indent1">
+        Follow the following steps to convert a flat file into the corresponding XML format:
+        <ol>
+            <li>In the left navigation bar, select the <b>Flat to XML</b> button.</li>
+            <li>Use the <b>Browse</b> button and select the source data file you would like to convert.</li>
+            <li>Review the target file and the compression drop-down; change the values if the default ones are not what you need.</li>
+            <li>Review the processing options.</li>
+            <li>If you need to, provide a user-defined dictionary.</li>
+            <li>Click the <b>Process Source File</b> button.</li>
+            <li>The file will first be analyzed, and the processing will start automatically if no issues are detected during the analysis.</li>
+            <li>The interface will show the created file, its size and the processing time; it might also show some warnings gathered during the processing.</li>
+        </ol>
+    </div>
+
+    <div id="xmltoflat"><h2>Converting an XML file to Flat file</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div></div>
+    <div class="indent1">
+        Follow the following steps to convert an XML file into the corresponding flat-file format:
+        <ol>
+            <li>In the left navigation bar, select the <b>XML to Flat</b> button.</li>
+            <li>Use the <b>Browse</b> button and select the source data file you would like to convert.</li>
+            <li>Review the target file and the compression drop-down; change the values if the default ones are not what you need.</li>
+            <li>Review the processing options.</li>
+            <li>If you need to, provide a user-defined dictionary.</li>
+            <li>Click the <b>Process Source File</b> button.</li>
+            <li>The file will first be analyzed, and the processing will start automatically if no issues are detected during the analysis.</li>
+            <li>The interface will show the created file, its size and the processing time; it might also show some warnings gathered during the processing.</li>
+        </ol>
+    </div>
+
+    <div id="validation"><h2>Validating a NAACCR XML file</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div></div>
+    <div class="indent1">
+        Follow the following steps to validate a given NAACCR XML file:
+        <ol>
+            <li>In the left navigation bar, select the <b>XML Validation</b> button.</li>
+            <li>Use the <b>Browse</b> button and select the source data file you would like to validate.</li>
+            <li>Review the target file and the compression drop-down; change the values if the default ones are not what you need.</li>
+            <li>Review the processing options.</li>
+            <li>If you need to, provide a user-defined dictionary.</li>
+            <li>Click the <b>Process Source File</b> button.</li>
+            <li>The file will first be analyzed, and the processing will start automatically if no issues are detected during the analysis.</li>
+            <li>The interface will show the created file, its size and the processing time; it might also show some warnings gathered during the processing.</li>
+        </ol>
+    </div>
+
+    <div id="dictionaries"><h2>Viewing the NAACCR dictionaries</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div></div>
+    <div class="indent1">
+        Follow the following steps to view one of the NAACCR dictionaries:
+        <ol>
+            <li>In the left navigation bar, select the <b>Dictionary</b> button.</li>
+            <li>Select one of the dictionaries in the drop-down.</li>
+        </ol>
+    </div>
+
+</div>
+</body>
+</html>

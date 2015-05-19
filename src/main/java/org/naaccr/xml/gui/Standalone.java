@@ -6,6 +6,7 @@ package org.naaccr.xml.gui;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -15,6 +16,11 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -42,6 +48,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
+import org.apache.commons.io.IOUtils;
 import org.naaccr.xml.gui.pages.DictionariesPage;
 import org.naaccr.xml.gui.pages.FlatToXmlPage;
 import org.naaccr.xml.gui.pages.XmlToFlatPage;
@@ -71,7 +78,12 @@ public class Standalone extends JFrame implements ActionListener {
         fileMenu.add(exitItem);
         JMenu helpMenu = new JMenu(" Help ");
         helpMenu.setMnemonic(KeyEvent.VK_H);
-        JMenuItem aboutItem = new JMenuItem("About       ");
+        JMenuItem helpItem = new JMenuItem("View Help       ");
+        helpItem.setActionCommand("menu-help");
+        helpItem.addActionListener(this);
+        helpMenu.add(helpItem);
+        helpMenu.addSeparator();
+        JMenuItem aboutItem = new JMenuItem("About");
         aboutItem.setActionCommand("menu-about");
         aboutItem.addActionListener(this);
         helpMenu.add(aboutItem);
@@ -175,6 +187,21 @@ public class Standalone extends JFrame implements ActionListener {
         String cmd = e.getActionCommand();
         if ("menu-exit".equals(cmd))
             System.exit(0);
+        else if ("menu-help".equals(cmd)) {
+            try {
+                File targetFile = File.createTempFile("naaccr-xml-help", ".html");
+                targetFile.deleteOnExit();
+                InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("help/help.html");
+                OutputStream os = new FileOutputStream(targetFile);
+                IOUtils.copy(is, os);
+                is.close();
+                os.close();
+                Desktop.getDesktop().open(targetFile);
+            }
+            catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Unable to display help.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
         else if ("menu-about".equals(cmd)) {
             final JDialog dlg = new AboutDialog(this);
             dlg.pack();
@@ -188,7 +215,6 @@ public class Standalone extends JFrame implements ActionListener {
                 }
             });
         }
-
     }
 
     public static JLabel createItalicLabel(String text) {
