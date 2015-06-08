@@ -26,8 +26,21 @@ public class CsvToXmlDictionaryLab {
 
     private static void handleVersion(String version, String formattedVersion) throws IOException {
 
+        // first read the data types
+        Map<String, String> dataTypes = new HashMap<>();
+        try (CSVReader csvReader = new CSVReader(new FileReader(new File(System.getProperty("user.dir") + "/docs/fabian/data-types-" + version + ".csv")), ',', '"', '\\', 1, false)) {
+            for (String[] line : csvReader.readAll()) {
+                if (!line[4].trim().isEmpty()) {
+                    String type = line[4].trim();
+                    if ("integer".equals(type))
+                        type = "text";
+                    dataTypes.put(line[0].trim(), type);
+                }
+            }
+        }
+
         // create base XML dictionary from CSV...
-        NaaccrDictionary dictionary = readDictionaryFromCsv(new FileReader(new File(System.getProperty("user.dir") + "/docs/fabian/naaccr-dictionary-" + version + ".csv")));
+        NaaccrDictionary dictionary = readDictionaryFromCsv(new FileReader(new File(System.getProperty("user.dir") + "/docs/fabian/naaccr-dictionary-" + version + ".csv")), dataTypes);
         System.out.println("Read " + dictionary.getItems().size() + " items from base CSV dictionary for " + version);
         dictionary.setDictionaryUri("http://naaccr.org/naaccrxml/naaccr-dictionary-" + version + ".xml");
         dictionary.setNaaccrVersion(version);
@@ -39,7 +52,7 @@ public class CsvToXmlDictionaryLab {
         System.out.println("Wrote " + outputFile.getPath());
 
         // create default user XML dictionary from CSV...
-        dictionary = readDictionaryFromCsv(new FileReader(new File(System.getProperty("user.dir") + "/docs/fabian/user-defined-naaccr-dictionary-" + version + ".csv")));
+        dictionary = readDictionaryFromCsv(new FileReader(new File(System.getProperty("user.dir") + "/docs/fabian/user-defined-naaccr-dictionary-" + version + ".csv")), dataTypes);
         System.out.println("Read " + dictionary.getItems().size() + " items from default user CSV dictionary for " + version);
         dictionary.setDictionaryUri("http://naaccr.org/naaccrxml/user-defined-naaccr-dictionary-" + version + ".xml");
         dictionary.setNaaccrVersion(version);
@@ -51,12 +64,8 @@ public class CsvToXmlDictionaryLab {
         System.out.println("Wrote " + outputFile.getPath());
     }
 
-    public static NaaccrDictionary readDictionaryFromCsv(Reader reader) throws IOException {
+    public static NaaccrDictionary readDictionaryFromCsv(Reader reader, Map<String, String> dataTypes) throws IOException {
         NaaccrDictionary dictionary = new NaaccrDictionary();
-        
-        // first read the data types; those were provided 
-        Map<String, String> dataTypes = new HashMap<>();
-        
 
         // always skip first line
         try (CSVReader csvReader = new CSVReader(reader, ',', '"', '\\', 1, false)) {
@@ -81,8 +90,13 @@ public class CsvToXmlDictionaryLab {
                     item.setRegexValidation(line[9]);
                 if (line.length > 10 && line[10] != null && !line[10].isEmpty())
                     item.setDataType(line[10]);
-                if (item.getDataType() != null && !NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.containsKey(item.getDataType()))
-                    throw new RuntimeException("Unsupported data type: " + item.getDataType());
+                if (dataTypes.containsKey(item.getNaaccrId())) {
+                    item.setDataType(dataTypes.get(item.getNaaccrId()));
+                    if (item.getDataType() != null && !NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.containsKey(item.getDataType()))
+                        throw new RuntimeException("Unsupported data type: " + item.getDataType() + " for " + item.getNaaccrId());
+                }
+                else
+                    item.setDataType(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
                 // section is not used anymore
                 if (line.length > 12 && line[12] != null && !line[12].isEmpty())
                     item.setSourceOfStandard(line[12]);
@@ -97,8 +111,7 @@ public class CsvToXmlDictionaryLab {
                     item.setRecordTypes("A,M,C,I");
 
                 // this is temporary until the data types are looked at and fixed...
-                item.setDataType(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
-                item.setRegexValidation(null);
+                //item.setRegexValidation(null);
 
                 dictionary.getItems().add(item);
             }
