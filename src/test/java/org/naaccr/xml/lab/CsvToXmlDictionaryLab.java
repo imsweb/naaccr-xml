@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.naaccr.xml.NaaccrXmlDictionaryUtils;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
@@ -51,6 +53,10 @@ public class CsvToXmlDictionaryLab {
 
     public static NaaccrDictionary readDictionaryFromCsv(Reader reader) throws IOException {
         NaaccrDictionary dictionary = new NaaccrDictionary();
+        
+        // first read the data types; those were provided 
+        Map<String, String> dataTypes = new HashMap<>();
+        
 
         // always skip first line
         try (CSVReader csvReader = new CSVReader(reader, ',', '"', '\\', 1, false)) {
