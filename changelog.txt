@@ -1,3 +1,10 @@
+Version 0.7
+
+  - Fixed window sizing issues and other minor bugs.
+  - Added a simple Help page.
+  - The 'timeGenerated' attribute is now optional.
+  - Library is now writing a namespace in the root attributes, to comply with the XSD.
+
 Version 0.6
 
   - Added support for XZ compression.
