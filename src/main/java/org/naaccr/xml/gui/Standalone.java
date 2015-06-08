@@ -56,7 +56,7 @@ import org.naaccr.xml.gui.pages.XmlValidationPage;
 
 public class Standalone extends JFrame implements ActionListener {
 
-    public static final String VERSION = "v0.6 (beta)";
+    public static final String VERSION = "v0.7 (beta)";
 
     private CardLayout _layout;
     private JPanel _centerPnl;
