@@ -82,9 +82,12 @@ public class FlatToXmlPage extends AbstractProcessingPage {
         }
 
         // make sure the format is valid (it should at this point)
-        NaaccrFormat format = NaaccrFormat.getInstance(version, type);
-        if (format == null) {
-            reportAnalysisError("invalid/unsupported format");
+        NaaccrFormat format;
+        try {
+            format = NaaccrFormat.getInstance(version, type);
+        }
+        catch (RuntimeException ex) {
+            reportAnalysisError(ex.getMessage());
             return null;
         }
 
