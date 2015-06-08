@@ -3,17 +3,27 @@
  */
 package org.naaccr.xml;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
 import org.naaccr.xml.entity.NaaccrData;
 import org.naaccr.xml.entity.Patient;
 import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
 import org.tukaani.xz.LZMA2Options;
 import org.tukaani.xz.XZInputStream;
 import org.tukaani.xz.XZOutputStream;
-
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * This utility class provides static methods for reading, writing and translating to/from XML and flat file NAACCR files.
@@ -64,7 +74,7 @@ public class NaaccrXmlUtils {
 
         // create the reader and writer and let them do all the work!
         try (PatientFlatReader reader = new PatientFlatReader(createReader(flatFile), options, userDictionary)) {
-            try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlFile), reader.getRootData())) {
+            try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlFile), reader.getRootData(), options, userDictionary)) {
                 Patient patient = reader.readPatient();
                 while (patient != null && !Thread.currentThread().isInterrupted()) {
                     if (observer != null)
