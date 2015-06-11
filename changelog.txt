@@ -1,5 +1,6 @@
 Version 0.8
 
+  - Added LICENSE file to the created JAR.
   - Fixed some data types in both dictionaries.
 
 Version 0.7
