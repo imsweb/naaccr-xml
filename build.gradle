@@ -27,6 +27,9 @@ dependencies {
 
 // customize the manifest
 jar {
+    from 'LICENSE'
+    from 'VERSION'
+    from 'changelog.txt'
     manifest {
         attributes('Implementation-Title': project.name,
                 'Implementation-Version': version,
