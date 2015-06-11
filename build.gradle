@@ -38,7 +38,7 @@ jar {
     }
 }
 
-// I really shouldn't have to do that, but for some reason, shadowJar doesn't copy the few extra file I add to the single JAR...
+// I really shouldn't have to do this, but for some reason, shadowJar doesn't copy the few extra files I add to the single JAR...
 shadowJar {
     transform(IncludeResourceTransformer) {
         file = project.file('changelog.txt')
