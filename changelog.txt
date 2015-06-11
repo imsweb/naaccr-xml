@@ -1,3 +1,7 @@
+Version 0.8
+
+  - Fixed some data types in both dictionaries.
+
 Version 0.7
 
   - Fixed window sizing issues and other minor bugs.
