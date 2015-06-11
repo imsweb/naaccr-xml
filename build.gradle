@@ -52,6 +52,8 @@ shadowJar {
         file = project.file('VERSION')
         resource = 'VERSION'
     }
+    exclude('XMLPULL_1_1_3_1_VERSION')
+    exclude('XPP3_1.1.4c_MIN_VERSION')
 }
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
