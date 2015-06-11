@@ -3,23 +3,18 @@ NAACCR XML
 
 This project is an attempt from the NAACCR XML Task Force to map the NAACCR flat-file format to an XML one.
 
-### New to GitHub?
-
-Since the project is public, you can view any files it contains using your browser.
-
-The [/src/main/resources](https://github.com/depryf/naaccr-xml/tree/master/src/main/resources) folder contains the latest 
-version of the dictionary used by the library.
+More information about the Task Force and the documents it created can be found on this website: [http://naaccrxml.org/](http://naaccrxml.org/).
 
 Using the library
 -----------------
 
 There are three ways to use this library:
 
-1. Using streams
-2. Using utility methods
-3. Using the Graphical User Interface
+1. Using the stream classes
+2. Using the NAACCR XML Utility class (NaaccrXmlUtils)
+3. Using the Graphical User Interface (Standlone)
 
-### Using streams
+### Using the stream classes
 This is the recommended way to use the library; 4 streams are provided:
 * [PatientXmlReader](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/PatientXmlReader.java)
 * [PatientXmlWriter](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/PatientXmlWriter.java)
@@ -29,9 +24,9 @@ This is the recommended way to use the library; 4 streams are provided:
 The readers provide a ***readPatient()*** method that returns the next patient available, or null if the end of the stream is reached.
 The writers provide a ***writePatient(patient)*** method.
 
-Transforming a flat file into the corresponding XML file and vice-versa becomes very simple with those streams; just create the streams and write every patient you read...
+Transforming a flat file into the corresponding XML file and vice-versa becomes very simple with those streams; just create the stream and write every patient you read...
 
-### Using utility methods
+### Using the NAACCR XML Utility class (NaaccrXmlUtils)
 A few higher-level utility methods have been defined in the [NaaccrXmlUtils](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/NaaccrXmlUtils.java) class (only the required parameters are shown for clarity):
 
 *Reading methods*
@@ -53,7 +48,7 @@ All those methods accept the following optional parameters (optional in the sens
 * [NaaccrDictionary](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/entity/dictionary/NaaccrDictionary.java) - a user-defined dictionary (if none is provided, the default user-defined dictionary will be used)
 * [NaaccrObserver](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/NaaccrObserver.java) - an observer allowing to report progress as the files are being processed.
 
-### Using the Graphical User Interface
+### Using the Graphical User Interface (Standlone)
 
 The library contains an experimental GUI that wraps some of the utility methods and provides a more user-friendly environment for processing files.
 
@@ -62,15 +57,21 @@ To start the GUI, just double-click the JAR file created from this project; it w
 
 You can also type the following in a DOS prompt, after navigating to the folder containing the JAR file:
 ```
-java -jar naaccr-xml-XXX.jar
+java -jar naaccr-xml-X.X.jar
 ```
-Where XXX is the downloaded version.
+Where X.X is the downloaded version.
 
+Dealing with dictionaries
+-------------------------
 
-Convention for the item's ID (naaccrId attribute)
--------------------------------------------------
+The project contains two dictionaries for each supported NAACCR versions: the main dictionary and the default user defined dictionary; here are the ones for NAACCR 15:
+* [naaccr-dictionary-150.xml](https://github.com/depryf/naaccr-xml/blob/master/src/main/resources/naaccr-dictionary-150.xml)
+* [user-defined-naaccr-dictionary-150.xml](https://github.com/depryf/naaccr-xml/blob/master/src/main/resources/user-defined-naaccr-dictionary-150.xml)
 
-The IDs are generated from the corresponding item names using the following logic:
+In addition, the project also contains a utility class ([NaaccrXmlDictionaryUtils](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/NaaccrXmlDictionaryUtils.java))
+ to read, write and validate a given dictionary file. Note that there is no syntax differences between a base dictionary and a user-defined one.
+
+That utility class also contains a method to create a NAACCR ID (used for the "naaccrId" attribute) from a given item name using the following rules:
 
 1. Spaces, dashes, slashes periods and underscores are considered as word separators and replaced by a single space
 2. Anything in parenthesis is removed (along with the parenthesis)
@@ -79,5 +80,9 @@ The IDs are generated from the corresponding item names using the following logi
 5. The first part is un-capitalized, the other parts are capitalized
 6. All the parts are concatenated back together
 
-The dictionary utility class contains a method that generates the ID for a given name, see the ***createNaaccrIdFromItemName(String)*** method in
-[NaaccrDictionaryUtils](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/NaaccrXmlDictionaryUtils.java).
+XML Schemas
+-----------
+
+The following schemas are available in the project:
+* [naaccr_data.xsd](https://github.com/depryf/naaccr-xml/blob/master/src/main/resources/naaccr_data.xsd) - W3C Schema for the data files
+* [naaccr_dictionary.xsd](https://github.com/depryf/naaccr-xml/blob/master/src/main/resources/naaccr_dictionary.xsd) - W3C Schema for the dictionary files
