@@ -1,10 +1,10 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.IncludeResourceTransformer
 
 // apply the script plugins
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '1.2.0'
+    id 'com.github.johnrengelman.shadow' version '1.2.1'
 }
-
 // project information
 group = 'org.naaccr'
 version = file('VERSION').text
@@ -17,12 +17,12 @@ repositories {
 
 // project dependencies
 dependencies {
-    compile 'au.com.bytecode:opencsv:2.4'
     compile 'commons-io:commons-io:2.4'
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'com.thoughtworks.xstream:xstream:1.4.7'
     compile 'org.tukaani:xz:1.5'
     testCompile 'junit:junit:4.11'
+    testCompile 'au.com.bytecode:opencsv:2.4'
 }
 
 // customize the manifest
@@ -35,6 +35,22 @@ jar {
                 'Implementation-Version': version,
                 'Main-Class': 'org.naaccr.xml.gui.Standalone',
                 'Class-Path': configurations.compile.collect { it.getName() }.join(' '))
+    }
+}
+
+// I really shouldn't have to do that, but for some reason, shadowJar doesn't copy the few extra file I add to the single JAR...
+shadowJar {
+    transform(IncludeResourceTransformer) {
+        file = project.file('changelog.txt')
+        resource = 'changelog.txt'
+    }
+    transform(IncludeResourceTransformer) {
+        file = project.file('LICENSE')
+        resource = 'LICENSE'
+    }
+    transform(IncludeResourceTransformer) {
+        file = project.file('VERSION')
+        resource = 'VERSION'
     }
 }
 
