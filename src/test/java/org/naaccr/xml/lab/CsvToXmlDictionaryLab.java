@@ -29,14 +29,9 @@ public class CsvToXmlDictionaryLab {
         // first read the data types
         Map<String, String> dataTypes = new HashMap<>();
         try (CSVReader csvReader = new CSVReader(new FileReader(new File(System.getProperty("user.dir") + "/docs/fabian/data-types-" + version + ".csv")), ',', '"', '\\', 1, false)) {
-            for (String[] line : csvReader.readAll()) {
-                if (!line[4].trim().isEmpty()) {
-                    String type = line[4].trim();
-                    if ("integer".equals(type))
-                        type = "text";
-                    dataTypes.put(line[0].trim(), type);
-                }
-            }
+            for (String[] line : csvReader.readAll())
+                if (!line[4].trim().isEmpty())
+                    dataTypes.put(line[0].trim(), line[4].trim());
         }
 
         // create base XML dictionary from CSV...
