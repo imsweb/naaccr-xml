@@ -8,11 +8,12 @@ More information about the Task Force and the documents it created can be found 
 Using the library
 -----------------
 
-There are three ways to use this library:
+There are four ways to use this library:
 
 1. Using the stream classes
 2. Using the NAACCR XML Utility class (NaaccrXmlUtils)
 3. Using the Graphical User Interface (Standlone)
+4. Using the no-GUI batch class (BatchProcessor)
 
 ### Using the stream classes
 This is the recommended way to use the library; 4 streams are provided:
@@ -60,6 +61,20 @@ You can also type the following in a DOS prompt, after navigating to the folder 
 java -jar naaccr-xml-X.X.jar
 ```
 Where X.X is the downloaded version.
+
+### Using the no-GUI batch class (BatchProcessor)
+
+The library also contains an experimental no-GUI class that can be used to process files in batch. See [BatchProcessor](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/BatchProcessor.java).
+
+Here is an example of how to start it:
+```
+java -cp naaccr-xml-X.X.jar org.naaccr.xml.BatchProcessor options.properties
+```
+Where X.X is the downloaded version.
+
+This assumes the options file is in the same folder as the JAR file (but it can put anywhere and a full path can be provided on the command line).
+
+See the code itself for a description of each individual option.
 
 Dealing with dictionaries
 -------------------------

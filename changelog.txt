@@ -1,3 +1,7 @@
+Version 0.9
+
+  - Added a non-gui batch mode (org.naaccr.xml.BatchProcessor).
+
 Version 0.8
 
   - Added LICENSE file to the created JAR.
