@@ -60,21 +60,22 @@ You can also type the following in a DOS prompt, after navigating to the folder 
 ```
 java -jar naaccr-xml-X.X.jar
 ```
-Where X.X is the downloaded version.
+where X.X is the downloaded version.
 
 ### Using the no-GUI batch class (BatchProcessor)
 
-The library also contains an experimental no-GUI class that can be used to process files in batch. See [BatchProcessor](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/BatchProcessor.java).
+The library also contains an experimental no-GUI class that can be used to process files in batch
+([BatchProcessor](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/BatchProcessor.java)).
 
 Here is an example of how to start it:
 ```
 java -cp naaccr-xml-X.X.jar org.naaccr.xml.BatchProcessor options.properties
 ```
-Where X.X is the downloaded version.
+where X.X is the downloaded version.
 
-This assumes the options file is in the same folder as the JAR file (but it can put anywhere and a full path can be provided on the command line).
+This assumes the options file is in the same folder as the JAR file (but it can be anywhere and a full path can be provided on the command line).
 
-See the code itself for a description of each individual option.
+See the [BatchProcessor](https://github.com/depryf/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/BatchProcessor.java) class for a description of each individual option.
 
 Dealing with dictionaries
 -------------------------
