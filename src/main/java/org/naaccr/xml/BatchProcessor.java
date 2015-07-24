@@ -61,6 +61,9 @@ public final class BatchProcessor {
     // whether or not a report file (report.txt) should be created in the output folder: true or false (defaults to false)
     private static final String _OPTION_OUTPUT_CREATE_REPORT = "output.create-report";
 
+    // the report name (optional, defaults to report.txt)
+    private static final String _OPTION_OUTPUT_REPORT_NAME = "output.report-name";
+
     // whether or not the file names should be de-identified (defaults to false)
     private static final String _OPTION_OUTPUT_DEIDENTIFY_FILES = "output.de-identify-files";
 
@@ -104,6 +107,7 @@ public final class BatchProcessor {
             throw new RuntimeException("Invalid outupt folder.");
         boolean cleanCreatedFiles = opt.getProperty(_OPTION_OUTPUT_CLEAN_CREATED_FILES) == null ? false : Boolean.valueOf(opt.getProperty(_OPTION_OUTPUT_CLEAN_CREATED_FILES));
         boolean createReport = opt.getProperty(_OPTION_OUTPUT_CREATE_REPORT) == null ? false : Boolean.valueOf(opt.getProperty(_OPTION_OUTPUT_CREATE_REPORT));
+        String reportName = opt.getProperty(_OPTION_OUTPUT_REPORT_NAME) == null ? "report.txt" : opt.getProperty(_OPTION_OUTPUT_REPORT_NAME);
         boolean deidentify = opt.getProperty(_OPTION_OUTPUT_DEIDENTIFY_FILES) == null ? false : Boolean.valueOf(opt.getProperty(_OPTION_OUTPUT_DEIDENTIFY_FILES));
 
         // gather the files to process
@@ -113,15 +117,14 @@ public final class BatchProcessor {
             for (File file : files) {
                 if (file.isDirectory())
                     continue;
-                if (incRegex != null) {
-                    if (incRegex.matcher(file.getName()).matches())
-                        toProcess.add(file);
+                boolean add = true;
+                if (incRegex != null || excRegex != null) {
+                    if (incRegex != null && !incRegex.matcher(file.getName()).matches())
+                        add = false;
+                    if (excRegex != null && excRegex.matcher(file.getName()).matches())
+                        add = false;
                 }
-                else if (excRegex != null) {
-                    if (!excRegex.matcher(file.getName()).matches())
-                        toProcess.add(file);
-                }
-                else
+                if (add)
                     toProcess.add(file);
             }
         }
@@ -152,7 +155,7 @@ public final class BatchProcessor {
 
         // write the report
         if (createReport) {
-            FileWriter reportWriter = new FileWriter(new File(outputDir, "report.txt"));
+            FileWriter reportWriter = new FileWriter(new File(outputDir, reportName));
 
             reportWriter.write("Report created on " + new Date() + "\n\n");
             reportWriter.write("total number of files: " + formatNumber(toProcess.size()) + "\n");
