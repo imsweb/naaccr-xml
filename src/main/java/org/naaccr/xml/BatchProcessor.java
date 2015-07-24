@@ -52,6 +52,9 @@ public final class BatchProcessor {
     // the number of threads to use (optional, defaults to Min(num-processors + 1, 5))
     private static final String _OPTION_PROCESSING_NUM_THREADS = "processing.num-threads";
 
+    // compression for the created data files; gz, xz, none, as-input (optional, defaults to as-input)
+    private static final String _OPTION_PROCESSING_COMPRESSION = "processing.compression";
+
     // full path to the folder where the files should be created (required)
     private static final String _OPTION_OUTPUT_FOLDER = "output.folder";
 
@@ -89,7 +92,7 @@ public final class BatchProcessor {
         if (mode == null)
             throw new RuntimeException("Option " + _OPTION_PROCESSING_MODE + " is required.");
         if (!"flat-to-xml".equals(mode) && !"xml-to-flat".equals(mode))
-            throw new RuntimeException("Invalid mode (must be flat-to-xml or xml-to-flag).");
+            throw new RuntimeException("Invalid mode (must be flat-to-xml or xml-to-flat).");
         String rawErrorCodes = opt.getProperty(_OPTION_PROCESSING_ERROR_CODES);
         List<String> errorCodes = null;
         if (rawErrorCodes != null && !rawErrorCodes.isEmpty()) {
@@ -102,6 +105,9 @@ public final class BatchProcessor {
             numThreads = Integer.valueOf(opt.getProperty(_OPTION_PROCESSING_NUM_THREADS));
         if (opt.getProperty(_OPTION_OUTPUT_FOLDER) == null || opt.getProperty(_OPTION_OUTPUT_FOLDER).isEmpty())
             throw new RuntimeException("Option " + _OPTION_OUTPUT_FOLDER + " is required.");
+        String compression = opt.getProperty(_OPTION_PROCESSING_COMPRESSION);
+        if (compression != null && !compression.equals("gz") && !compression.equals("xz") && !compression.equals("none") && !compression.equals("as-input"))
+            throw new RuntimeException("Invalid compression (must be gz, xz, none, or as-input).");
         File outputDir = new File(opt.getProperty(_OPTION_OUTPUT_FOLDER));
         if (!outputDir.exists())
             throw new RuntimeException("Invalid outupt folder.");
@@ -139,7 +145,8 @@ public final class BatchProcessor {
         long start = System.currentTimeMillis();
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
         for (File inputFile : toProcess) {
-            File outputFile = new File(outputDir, invertFilename(inputFile));
+            String outputFilename = invertFilename(inputFile, compression);
+            File outputFile = new File(outputDir, outputFilename);
             if (inputFile.equals(outputFile))
                 throw new RuntimeException("Was about to write output file into the input file, this can't be good!");
             if (cleanCreatedFiles)
@@ -213,7 +220,8 @@ public final class BatchProcessor {
         return opt;
     }
 
-    private static String invertFilename(File file) {
+    private static String invertFilename(File file, String compression) {
+        // first invert the filename
         String[] name = file.getName().split("\\.");
         if (name.length < 2)
             return null;
@@ -229,7 +237,29 @@ public final class BatchProcessor {
         result.append(extension.equalsIgnoreCase("xml") ? "txt" : "xml");
         if (compressed)
             result.append(".gz");
-        return new File(file.getParentFile(), result.toString()).getName();
+
+        // then update the extension using the requested compression
+        String newName = result.toString();
+        if ("gz".equals(compression)) {
+            if (newName.endsWith(".xz"))
+                newName = newName.replace(".xz", "");
+            if (!newName.endsWith(".gz"))
+                newName = newName + ".gz";
+        }
+        else if ("xz".equals(compression)) {
+            if (newName.endsWith(".gz"))
+                newName = newName.replace(".gz", "");
+            if (!newName.endsWith(".xz"))
+                newName = newName + ".xz";
+        }
+        else if ("none".equals(compression)) {
+            if (newName.endsWith(".gz"))
+                newName = newName.replace(".gz", "");
+            else if (newName.endsWith(".xz"))
+                newName = newName.replace(".xz", "");
+        }
+
+        return new File(file.getParentFile(), newName).getName();
     }
 
     private static final class FileProcessor implements Runnable {
