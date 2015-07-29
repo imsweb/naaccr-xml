@@ -3,12 +3,11 @@
  */
 package org.naaccr.xml.lab;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.sun.xml.internal.messaging.saaj.packaging.mime.util.LineInputStream;
 
 public class BatchProcessorReportParser {
 
@@ -18,10 +17,10 @@ public class BatchProcessorReportParser {
         //Pattern p1 = Pattern.compile("created size: (\\d+(\\.\\d)?) (MB|KB)");
         //Pattern p1 = Pattern.compile("processing time: (((\\d+) minute(s)?, )?((\\d+) second(s)?)|< 1 second)");
         Pattern p1 = Pattern.compile("((Patient value not consistent among tumors: ((\\d|,)+) cases)|no warning found)");
-        Pattern p2 = Pattern.compile("(involved item\\(s\\): \\d+ \\[(.+)\\])");
+        //Pattern p2 = Pattern.compile("(involved item\\(s\\): \\d+ \\[(.+)\\])");
 
-        try (LineInputStream is = new LineInputStream(new FileInputStream(reportFile))) {
-            String line = is.readLine();
+        try (BufferedReader reader = new BufferedReader(new FileReader(reportFile))) {
+            String line = reader.readLine();
             while (line != null) {
                 int idx = 0;
                 Matcher m1 = p1.matcher(line);
@@ -60,7 +59,7 @@ public class BatchProcessorReportParser {
                         System.out.println("0");
                     idx = m1.end(1);
                 }
-                line = is.readLine();
+                line = reader.readLine();
             }
         }
     }
