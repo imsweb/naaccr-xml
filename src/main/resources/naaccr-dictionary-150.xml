@@ -3818,8 +3818,7 @@
             startColumn="4405"
             length="8"
             recordTypes="A,M,C"
-            parentXmlElement="Tumor"
-            padding="leftZero"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="npiPhysicianFollowUp"
             naaccrNum="2475"
             naaccrName="NPI--Physician--Follow-Up"
@@ -3835,8 +3834,7 @@
             startColumn="4423"
             length="8"
             recordTypes="A,M,C"
-            parentXmlElement="Tumor"
-            padding="leftZero"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="npiPhysicianPrimarySurg"
             naaccrNum="2485"
             naaccrName="NPI--Physician--Primary Surg"
@@ -3869,8 +3867,7 @@
             startColumn="4459"
             length="8"
             recordTypes="A,M,C"
-            parentXmlElement="Tumor"
-            padding="leftZero"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="npiPhysician4"
             naaccrNum="2505"
             naaccrName="NPI--Physician 4"
@@ -3886,8 +3883,7 @@
             startColumn="4477"
             length="8"
             recordTypes="A,M,C"
-            parentXmlElement="Tumor"
-            padding="leftZero"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="pathReportingFacId1"
             naaccrNum="7010"
             naaccrName="Path Reporting Fac ID 1"
