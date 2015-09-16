@@ -3,22 +3,29 @@
  */
 package org.naaccr.xml;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.core.util.QuickWriter;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-import org.apache.commons.lang3.StringUtils;
-import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
-import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.apache.commons.lang3.StringUtils;
+import org.naaccr.xml.entity.dictionary.NaaccrDictionary;
+import org.naaccr.xml.entity.dictionary.NaaccrDictionaryItem;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.core.util.QuickWriter;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
+
 /**
- * This utillity class can be used to read/write dictionaries, whether they are internal to the library, or provided by the user...
+ * This utility class can be used to read/write dictionaries, whether they are internal to the library, or provided by the user...
  * <br/><br/>
  * Note that there is no method to get all the supported dictionaries; instead one needs to use the getSupportedVersions() available in
  * the NaaccrFormat class, and from there use the getBaseDictionaryByVersion() in this class.
@@ -47,11 +54,11 @@ public final class NaaccrXmlDictionaryUtils {
         NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)[0-9][0-9]((0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])?)?$"));
     }
 
-    // trimming rules
+    // trimming rules (default is all)
     public static final String NAACCR_TRIM_ALL = "all";
     public static final String NAACCR_TRIM_NONE = "none";
 
-    // padding rules
+    // padding rules (default is rightBlank)
     public static final String NAACCR_PADDING_RIGHT_BLANK = "rightBlank";
     public static final String NAACCR_PADDING_LEFT_BLANK = "leftBlank";
     public static final String NAACCR_PADDING_RIGHT_ZERO = "rightZero";
@@ -81,7 +88,7 @@ public final class NaaccrXmlDictionaryUtils {
     /**
      * Extracts the NAACCR version from an internal dictionary URI.
      * @param uri internal dictionary URI
-     * @return the corrsponding NAACCR version, null if it can't be extracted
+     * @return the corresponding NAACCR version, null if it can't be extracted
      */
     public static String extractVersionFromUri(String uri) {
         if (uri == null)
@@ -168,7 +175,7 @@ public final class NaaccrXmlDictionaryUtils {
     /**
      * Reads a dictionary from the provided file.
      * @param file file, cannot be null
-     * @return the corresonding dictionary
+     * @return the corresponding dictionary
      * @throws IOException if the dictionary could not be read
      */
     public static NaaccrDictionary readDictionary(File file) throws IOException {
@@ -303,12 +310,12 @@ public final class NaaccrXmlDictionaryUtils {
     /**
      * Utility method to create a NAACCR ID from a display name:
      * <ol>
-     *   <li>Spaces, dashes, slashes periods and underscores are considered as word separators and replaced by a single space</li>
-     *   <li>Anything in parenthesis is removed (along with the parenthesis)</li>
-     *   <li>Any non-digit and non-letter character is removed</li>
-     *   <li>The result is split by spaces</li>
-     *   <li>The first part is un-capitalized, the other parts are capitalized</li>
-     *   <li>All the parts are concatenated together</li>
+     * <li>Spaces, dashes, slashes periods and underscores are considered as word separators and replaced by a single space</li>
+     * <li>Anything in parenthesis is removed (along with the parenthesis)</li>
+     * <li>Any non-digit and non-letter character is removed</li>
+     * <li>The result is split by spaces</li>
+     * <li>The first part is un-capitalized, the other parts are capitalized</li>
+     * <li>All the parts are concatenated together</li>
      * </ol>
      * @param name display name
      * @return NAACCR ID (which can be used as a property name)
@@ -415,6 +422,11 @@ public final class NaaccrXmlDictionaryUtils {
                 super.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
         }
 
+        /**
+         * This complex logic is needed because we wanted a non-standard formatting for the XML (in terms of indentations)...
+         * @param attribute attribute to consider
+         * @return true if the provided attribute is the last one on the line, false otherwise. 
+         */
         private boolean isLastAttribute(String attribute) {
             NaaccrDictionaryItem item = _dictionary.getItemByNaaccrId(_currentItemId);
             if (item == null)
@@ -428,9 +440,7 @@ public final class NaaccrXmlDictionaryUtils {
                 return "regexValidation".equals(attribute);
             if (item.getDataType() != null && !NAACCR_DATA_TYPE_TEXT.equals(item.getDataType()))
                 return "dataType".equals(attribute);
-            if (item.getParentXmlElement() != null)
-                return "parentXmlElement".equals(attribute);
-            return false;
+            return item.getParentXmlElement() != null && "parentXmlElement".equals(attribute);
         }
     }
 }
