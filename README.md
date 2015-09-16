@@ -69,7 +69,7 @@ The library also contains an experimental no-GUI class that can be used to proce
 
 Here is an example of how to start it:
 ```
-java -cp naaccr-xml-X.X.jar org.naaccr.xml.BatchProcessor options.properties
+java -cp naaccr-xml-X.X.jar BatchProcessor options.properties
 ```
 where X.X is the downloaded version.
 

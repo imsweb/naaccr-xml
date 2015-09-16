@@ -1,6 +1,6 @@
 Version 0.9
 
-  - Added a non-gui batch mode (org.naaccr.xml.BatchProcessor).
+  - Added a non-gui batch mode (BatchProcessor).
 
 Version 0.8
 

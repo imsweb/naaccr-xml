@@ -33,7 +33,7 @@ jar {
     manifest {
         attributes('Implementation-Title': project.name,
                 'Implementation-Version': version,
-                'Main-Class': 'org.naaccr.xml.gui.Standalone',
+                'Main-Class': 'Standalone',
                 'Class-Path': configurations.compile.collect { it.getName() }.join(' '))
     }
 }
