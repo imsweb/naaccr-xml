@@ -50,7 +50,7 @@ import javax.swing.border.MatteBorder;
 
 import org.apache.commons.io.IOUtils;
 
-import com.imsweb.naaccrxml.gui.pages.DictionariesPage;
+import com.imsweb.naaccrxml.gui.pages.DictionariesPage2;
 import com.imsweb.naaccrxml.gui.pages.FlatToXmlPage;
 import com.imsweb.naaccrxml.gui.pages.XmlToFlatPage;
 import com.imsweb.naaccrxml.gui.pages.XmlValidationPage;
@@ -123,7 +123,7 @@ public class Standalone extends JFrame implements ActionListener {
         _centerPnl.setLayout(_layout);
         _centerPnl.add("flat_to_xml", new FlatToXmlPage());
         _centerPnl.add("xml_to_flat", new XmlToFlatPage());
-        _centerPnl.add("dictionary", new DictionariesPage());
+        _centerPnl.add("dictionary", new DictionariesPage2());
         _centerPnl.add("validate", new XmlValidationPage());
         this.getContentPane().add(_centerPnl, BorderLayout.CENTER);
 
@@ -217,7 +217,7 @@ public class Standalone extends JFrame implements ActionListener {
             });
         }
     }
-
+    
     public static JLabel createItalicLabel(String text) {
         JLabel lbl = new JLabel(text);
         lbl.setFont(lbl.getFont().deriveFont(Font.ITALIC));
