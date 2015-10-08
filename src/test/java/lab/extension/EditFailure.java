@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2015 Information Management Services, Inc.
  */
-package com.imsweb.naaccrxml.extension;
+package lab.extension;
 
 public class EditFailure {
 

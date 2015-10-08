@@ -5,7 +5,6 @@ package com.imsweb.naaccrxml;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import org.junit.Assert;
@@ -19,13 +18,13 @@ public class PatientFlatReaderTest {
     public void testPatientLevelMismatch() throws IOException {
 
         // create a testing file with two records having a different value for a root-level item
-        StringBuilder rec1 = createEmptyRecord();
+        StringBuilder rec1 = TestingUtils.createEmptyRecord("150", "I");
         rec1.replace(41, 49, "00000001"); // patient ID number
         rec1.replace(189, 190, "1"); // computed ethnicity
-        StringBuilder rec2 = createEmptyRecord();
+        StringBuilder rec2 = TestingUtils.createEmptyRecord("150", "I");
         rec2.replace(41, 49, "00000001"); // patient ID number
         rec2.replace(189, 190, "2"); // computed ethnicity
-        File file = createFile("test-pat-level.txt", rec1.toString(), rec2.toString());
+        File file = TestingUtils.createAndPopulateFile("test-pat-level.txt", rec1.toString(), rec2.toString());
 
         // create the option object we are going to use
         NaaccrOptions options = new NaaccrOptions();
@@ -49,11 +48,11 @@ public class PatientFlatReaderTest {
     public void testRootLevelMismatch() throws IOException {
 
         // create a testing file with two records having a different value for a root-level item
-        StringBuilder rec1 = createEmptyRecord();
+        StringBuilder rec1 = TestingUtils.createEmptyRecord("150", "I");
         rec1.replace(19, 29, "0000000001"); // registry ID
-        StringBuilder rec2 = createEmptyRecord();
+        StringBuilder rec2 = TestingUtils.createEmptyRecord("150", "I");
         rec2.replace(19, 29, "0000000002"); // registry ID
-        File file = createFile("test-root-level.txt", rec1.toString(), rec2.toString());
+        File file = TestingUtils.createAndPopulateFile("test-root-level.txt", rec1.toString(), rec2.toString());
 
         // create the option object we are going to use
         NaaccrOptions options = new NaaccrOptions();
@@ -76,30 +75,5 @@ public class PatientFlatReaderTest {
 
         Assert.assertNull(reader.readPatient());
         reader.close();
-    }
-
-    private StringBuilder createEmptyRecord() {
-        StringBuilder buf = new StringBuilder();
-        for (int i = 0; i < 3339; i++)
-            buf.append(" ");
-        buf.replace(0, 1, "I");
-        buf.replace(16, 19, "150");
-        return buf;
-    }
-
-    private File createFile(String filename, String... records) throws IOException {
-        File tmpDir = new File(System.getProperty("user.dir") + "/build/test-tmp");
-        if (!tmpDir.exists() && !tmpDir.mkdirs())
-            throw new IOException("Unable to create tmp dir...");
-
-        File file = new File(tmpDir, filename);
-        FileWriter writer = new FileWriter(file);
-        for (String rec : records) {
-            writer.write(rec);
-            writer.write("\n");
-        }
-        writer.close();
-
-        return file;
     }
 }
