@@ -57,7 +57,8 @@ import com.imsweb.naaccrxml.gui.pages.XmlValidationPage;
 
 public class Standalone extends JFrame implements ActionListener {
 
-    public static final String VERSION = "v0.9 (beta)";
+    // would be nice to read this from the Manifest file in the JAR...
+    public static final String VERSION = "v1.0";
 
     private CardLayout _layout;
     private JPanel _centerPnl;
