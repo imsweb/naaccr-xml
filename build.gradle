@@ -1,21 +1,21 @@
-import com.github.jengelman.gradle.plugins.shadow.transformers.IncludeResourceTransformer
+import org.gradle.internal.jvm.Jvm
 
-// apply the script plugins
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '1.2.1'
+    id 'com.bmuschko.nexus' version '2.3.1'
 }
-// project information
-group = 'org.naaccr'
-version = file('VERSION').text
-description = 'Attempt from the NAACCR XML Task Force to map the NAACCR flat-file format to an XML one.'
 
-// repository for the dependencies
+group = 'com.imsweb'
+version = file('VERSION').text
+description = 'This library provides support for the NAACCR XML format.'
+
+println "Starting build using ${Jvm.current()}"
+
 repositories {
     mavenCentral()
 }
 
-// project dependencies
 dependencies {
     compile 'commons-io:commons-io:2.4'
     compile 'org.apache.commons:commons-lang3:3.3.2'
@@ -25,11 +25,11 @@ dependencies {
     testCompile 'au.com.bytecode:opencsv:2.4'
 }
 
+// enforce UTF-8 for all compilation tasks
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
 // customize the manifest
 jar {
-    from 'LICENSE'
-    from 'VERSION'
-    from 'changelog.txt'
     manifest {
         attributes('Implementation-Title': project.name,
                 'Implementation-Version': version,
@@ -38,22 +38,42 @@ jar {
     }
 }
 
-// I really shouldn't have to do this, but for some reason, shadowJar doesn't copy the few extra files I add to the single JAR...
+// we don't want these files in the "all" jar, it's confusing
 shadowJar {
-    transform(IncludeResourceTransformer) {
-        file = project.file('changelog.txt')
-        resource = 'changelog.txt'
-    }
-    transform(IncludeResourceTransformer) {
-        file = project.file('LICENSE')
-        resource = 'LICENSE'
-    }
-    transform(IncludeResourceTransformer) {
-        file = project.file('VERSION')
-        resource = 'VERSION'
-    }
     exclude('XMLPULL_1_1_3_1_VERSION')
     exclude('XPP3_1.1.4c_MIN_VERSION')
+}
+
+// needed to deploy to Maven Central
+modifyPom {
+    project {
+        name 'NAACCR XML'
+        description 'This library provides supprot for the NAACCR XML format.'
+        url 'https://github.com/imsweb/naaccr-xml'
+        inceptionYear '2015'
+
+        scm {
+            url 'https://github.com/imsweb/naaccr-xml'
+            connection 'scm:https://github.com/imsweb/naaccr-xml.git'
+            developerConnection 'scm:git@github.com:imsweb/naaccr-xml.git'
+        }
+
+        licenses {
+            license {
+                name 'A modified BSD License (BSD)'
+                url 'https://github.com/imsweb/naaccr-xml/blob/master/LICENSE'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'depryf'
+                name 'Fabian Depry'
+                email 'depryf@imsweb.com'
+            }
+        }
+    }
 }
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
