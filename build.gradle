@@ -21,7 +21,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'com.thoughtworks.xstream:xstream:1.4.7'
     compile 'org.tukaani:xz:1.5'
-    testCompile 'junit:junit:4.11'
+    testCompile 'junit:junit:4.12'
     testCompile 'au.com.bytecode:opencsv:2.4'
 }
 
@@ -58,5 +58,5 @@ shadowJar {
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2'
+    gradleVersion = '2.7'
 }
