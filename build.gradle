@@ -2,8 +2,10 @@ import org.gradle.internal.jvm.Jvm
 
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '1.2.1'
+    id 'checkstyle'
+    id 'findbugs'
     id 'com.bmuschko.nexus' version '2.3.1'
+    id 'com.github.johnrengelman.shadow' version '1.2.1'
 }
 
 group = 'com.imsweb'
@@ -47,6 +49,19 @@ jar {
 shadowJar {
     exclude('XMLPULL_1_1_3_1_VERSION')
     exclude('XPP3_1.1.4c_MIN_VERSION')
+}
+
+// checkstyle plugin settings
+checkstyle {
+    ignoreFailures = true
+    configFile = file('config/checkstyle/checkstyle.xml')
+}
+
+// findbugs plugin settings
+findbugs {
+    ignoreFailures = true
+    effort = 'max'
+    excludeFilter = file('config/findbugs/findbugs-exclude.xml')
 }
 
 // needed to deploy to Maven Central
