@@ -14,6 +14,7 @@ import java.util.Set;
 public class NaaccrFormat {
 
     // version constants
+    public static String NAACCR_VERSION_160 = "160";
     public static String NAACCR_VERSION_150 = "150";
     public static String NAACCR_VERSION_140 = "140";
 
@@ -21,6 +22,7 @@ public class NaaccrFormat {
     private static final List<String> _SUPPORTED_VERSIONS = new ArrayList<>();
 
     static {
+        _SUPPORTED_VERSIONS.add(NAACCR_VERSION_160);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_150);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_140);
     }
@@ -34,6 +36,10 @@ public class NaaccrFormat {
     }
 
     // format constants
+    public static String NAACCR_FORMAT_16_ABSTRACT = "naaccr-160-abstract";
+    public static String NAACCR_FORMAT_16_MODIFIED = "naaccr-160-modified";
+    public static String NAACCR_FORMAT_16_CONFIDENTIAL = "naaccr-160-confidential";
+    public static String NAACCR_FORMAT_16_INCIDENCE = "naaccr-160-incidence";
     public static String NAACCR_FORMAT_15_ABSTRACT = "naaccr-150-abstract";
     public static String NAACCR_FORMAT_15_MODIFIED = "naaccr-150-modified";
     public static String NAACCR_FORMAT_15_CONFIDENTIAL = "naaccr-150-confidential";
@@ -47,6 +53,10 @@ public class NaaccrFormat {
     private static final List<String> _SUPPORTED_FORMATS = new ArrayList<>();
 
     static {
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_16_ABSTRACT);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_16_MODIFIED);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_16_CONFIDENTIAL);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_16_INCIDENCE);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_15_ABSTRACT);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_15_MODIFIED);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_15_CONFIDENTIAL);
@@ -115,7 +125,7 @@ public class NaaccrFormat {
         switch (parts[2]) {
             case "abstract":
                 _recordType = "A";
-                _lineLength = 22824; // this will have to change when we start supporting more formats
+                _lineLength = 22824;
                 break;
             case "modified":
                 _recordType = "M";

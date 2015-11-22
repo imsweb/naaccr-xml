@@ -3,25 +3,21 @@
  */
 package lab;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
-
 import au.com.bytecode.opencsv.CSVReader;
-
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CsvToXmlDictionaryLab {
 
     public static void main(String[] args) throws IOException {
         handleVersion("140", "14");
         handleVersion("150", "15");
+        handleVersion("160", "16");
     }
 
     private static void handleVersion(String version, String formattedVersion) throws IOException {
