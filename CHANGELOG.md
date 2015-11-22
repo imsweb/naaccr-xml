@@ -2,6 +2,7 @@
 
 **Version 1.0**
 
+  - Added support for NAACCR 16.
   - Renamed root packages from "org.naaccr.xml" to "com.imsweb.naaccrxml"
   - Changed padding rules for the 5 physician fields so they are not 0-padded anymore.
   - Added a non-gui batch mode (BatchProcessor).
