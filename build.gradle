@@ -68,7 +68,7 @@ findbugs {
 modifyPom {
     project {
         name 'NAACCR XML'
-        description 'This library provides supprot for the NAACCR XML format.'
+        description 'This library provides support for the NAACCR XML format.'
         url 'https://github.com/imsweb/naaccr-xml'
         inceptionYear '2015'
 
