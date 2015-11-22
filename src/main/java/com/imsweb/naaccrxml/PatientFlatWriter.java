@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,6 +33,8 @@ public class PatientFlatWriter implements AutoCloseable {
     protected RuntimeNaaccrDictionary _dictionary;
 
     protected RuntimeNaaccrDictionaryItem _naaccrVersionItem, _recordTypeItem;
+
+    private static final Pattern _NEW_LINES_PATTERN = Pattern.compile("\r?\n");
 
     public PatientFlatWriter(Writer writer, NaaccrData data) throws NaaccrIOException {
         this(writer, data, null, null);
@@ -167,6 +170,10 @@ public class PatientFlatWriter implements AutoCloseable {
             else
                 throw new RuntimeException("Unknown padding option: " + itemDef.getPadding());
         }
+
+        // handle new lines (can't have that in flat files)
+        if (value != null && !value.isEmpty())
+            value = _NEW_LINES_PATTERN.matcher(value).replaceAll(" ");
 
         return value;
     }
