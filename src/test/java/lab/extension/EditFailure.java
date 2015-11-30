@@ -5,13 +5,13 @@ package lab.extension;
 
 public class EditFailure {
 
-    private String value;
+    private String _value;
 
     public String getValue() {
-        return value;
+        return _value;
     }
 
     public void setValue(String val) {
-        this.value = val;
+        _value = val;
     }
 }

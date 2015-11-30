@@ -7,14 +7,14 @@ import com.imsweb.naaccrxml.entity.Tumor;
 
 public class ExtendedTumor extends Tumor {
 
-    private EditsReport editsReport;
+    private EditsReport _editsReport;
 
     public EditsReport getEditsReport() {
-        return editsReport;
+        return _editsReport;
     }
 
     public void setEditsReport(EditsReport val) {
-        editsReport = val;
+        _editsReport = val;
     }
     
 }

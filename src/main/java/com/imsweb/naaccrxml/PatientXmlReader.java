@@ -92,7 +92,8 @@ public class PatientXmlReader implements AutoCloseable {
             if (generatedTime != null) {
                 try {
                     _rootData.setTimeGenerated(DatatypeConverter.parseDateTime(generatedTime).getTime());
-                } catch (IllegalArgumentException e) {
+                }
+                catch (IllegalArgumentException e) {
                     throw new NaaccrIOException("invalid time generated value: " + generatedTime, configuration.getParser().getLineNumber());
                 }
             }

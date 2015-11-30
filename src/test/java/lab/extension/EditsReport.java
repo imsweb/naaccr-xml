@@ -8,12 +8,12 @@ import java.util.List;
 
 public class EditsReport {
 
-    private List<EditFailure> failures;
+    private List<EditFailure> _failures;
 
     public List<EditFailure> getFailures() {
-        if (failures == null)
-            failures = new ArrayList<>();
-        return failures;
+        if (_failures == null)
+            _failures = new ArrayList<>();
+        return _failures;
     }
     
 }
