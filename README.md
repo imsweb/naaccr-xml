@@ -1,12 +1,21 @@
-NAACCR XML
-==========
+# NAACCR XML
 
-This project is an attempt from the NAACCR XML Task Force to map the NAACCR flat-file format to an XML one.
+[![Build Status](https://travis-ci.org/imsweb/naaccr-xml.svg?branch=master)](https://travis-ci.org/imsweb/naaccr-xml)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml)
 
-More information about the Task Force and the documents it created can be found on this website: [http://naaccrxml.org/](http://naaccrxml.org/).
+This library provides support for the NAACCR XML format.
 
-Using the library
------------------
+Information about the format and the Task Force that developped it can be found on this website: [http://naaccrxml.org/](http://naaccrxml.org/).
+
+## Download
+
+The library will soon be available on [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.imsweb%22%20AND%20a%3A%22naaccr-xml%22).
+
+To include it to your Maven or Gradle project, use the group ID `com.imsweb` and the artifact ID `naaccr-xml`.
+
+You can check out the [release page](https://github.com/imsweb/naaccr-xml/releases) for a list of the releases and their changes.
+
+## Usage
 
 There are four ways to use this library:
 
@@ -77,8 +86,7 @@ This assumes the options file is in the same folder as the JAR file (but it can 
 
 See the [BatchProcessor](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/org/naaccr/xml/BatchProcessor.java) class for a description of each individual option.
 
-Dealing with dictionaries
--------------------------
+## Dealing with dictionaries
 
 The project contains two dictionaries for each supported NAACCR versions: the main dictionary and the default user defined dictionary; here are the ones for NAACCR 15:
 * [naaccr-dictionary-150.xml](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/naaccr-dictionary-150.xml)
@@ -96,8 +104,7 @@ That utility class also contains a method to create a NAACCR ID (used for the "n
 5. The first part is un-capitalized, the other parts are capitalized
 6. All the parts are concatenated back together
 
-XML Schemas
------------
+## XML Schemas
 
 The following schemas are available in the project:
 * [naaccr_data.xsd](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/naaccr_data.xsd) - W3C Schema for the data files
