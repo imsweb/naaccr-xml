@@ -4,9 +4,14 @@
 package com.imsweb.naaccrxml;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -102,7 +107,7 @@ public final class BatchProcessor {
         }
         int numThreads = Math.min(Runtime.getRuntime().availableProcessors() + 1, 5);
         if (opt.getProperty(_OPTION_PROCESSING_NUM_THREADS) != null && !opt.getProperty(_OPTION_PROCESSING_NUM_THREADS).isEmpty())
-            numThreads = Integer.valueOf(opt.getProperty(_OPTION_PROCESSING_NUM_THREADS));
+            numThreads = Integer.parseInt(opt.getProperty(_OPTION_PROCESSING_NUM_THREADS));
         if (opt.getProperty(_OPTION_OUTPUT_FOLDER) == null || opt.getProperty(_OPTION_OUTPUT_FOLDER).isEmpty())
             throw new RuntimeException("Option " + _OPTION_OUTPUT_FOLDER + " is required.");
         String compression = opt.getProperty(_OPTION_PROCESSING_COMPRESSION);
@@ -162,7 +167,7 @@ public final class BatchProcessor {
 
         // write the report
         if (createReport) {
-            FileWriter reportWriter = new FileWriter(new File(outputDir, reportName));
+            Writer reportWriter = new OutputStreamWriter(new FileOutputStream(new File(outputDir, reportName)), StandardCharsets.UTF_8);
 
             reportWriter.write("Report created on " + new Date() + "\n\n");
             reportWriter.write("total number of files: " + formatNumber(toProcess.size()) + "\n");
@@ -206,11 +211,9 @@ public final class BatchProcessor {
         if (args.length != 0) {
             File file = new File(args[0]);
             if (file.exists()) {
-                try {
-                    FileReader reader = new FileReader(file);
+                try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
                     opt = new Properties();
                     opt.load(reader);
-                    reader.close();
                 }
                 catch (IOException e) {
                     opt = null;
@@ -334,7 +337,8 @@ public final class BatchProcessor {
             }
 
             if (_deleteOutputFiles)
-                _outputFile.delete();
+                if (!_outputFile.delete())
+                    System.err.println("Unable to delete " + _outputFile.getPath());
         }
     }
 

@@ -320,8 +320,9 @@ public class NaaccrXmlUtils {
      * @throws NaaccrIOException if the reader cannot be created
      */
     public static Reader createReader(File file) throws NaaccrIOException {
+        InputStream is = null;
         try {
-            InputStream is = new FileInputStream(file);
+            is = new FileInputStream(file);
 
             if (file.getName().endsWith(".gz"))
                 is = new GZIPInputStream(is);
@@ -331,6 +332,14 @@ public class NaaccrXmlUtils {
             return new InputStreamReader(is, StandardCharsets.UTF_8);
         }
         catch (IOException e) {
+            if (is != null) {
+                try {
+                    is.close();
+                }
+                catch (IOException e1) {
+                    // give up
+                }
+            }
             throw new NaaccrIOException(e.getMessage());
         }
     }
@@ -342,8 +351,9 @@ public class NaaccrXmlUtils {
      * @throws NaaccrIOException if the writer cannot be created
      */
     public static Writer createWriter(File file) throws NaaccrIOException {
+        OutputStream os = null;
         try {
-            OutputStream os = new FileOutputStream(file);
+            os = new FileOutputStream(file);
 
             if (file.getName().endsWith(".gz"))
                 os = new GZIPOutputStream(os);
@@ -353,6 +363,14 @@ public class NaaccrXmlUtils {
             return new OutputStreamWriter(os, StandardCharsets.UTF_8);
         }
         catch (IOException e) {
+            if (os != null) {
+                try {
+                    os.close();
+                }
+                catch (IOException e1) {
+                    // give up
+                }
+            }
             throw new NaaccrIOException(e.getMessage());
         }
     }

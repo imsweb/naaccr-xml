@@ -7,14 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URL;
 import java.util.regex.Pattern;
-
-import javax.xml.XMLConstants;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -61,7 +54,7 @@ public class NaaccrXmlDictionaryUtilsTest {
     public void testValidationRegex() {
 
         //  "alpha": uppercase letters, A-Z, no spaces, full length needs to be filled in
-        Pattern pattern = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_ALPHA);
+        Pattern pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_ALPHA);
         Assert.assertTrue(pattern.matcher("A").matches());
         Assert.assertTrue(pattern.matcher("AVALUE").matches());
         Assert.assertFalse(pattern.matcher("A VALUE").matches());
@@ -75,7 +68,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertFalse(pattern.matcher("A!").matches());
 
         // "digits": digits, 0-9, no spaces, full length needs to be filled in
-        pattern = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS);
+        pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS);
         Assert.assertTrue(pattern.matcher("1").matches());
         Assert.assertTrue(pattern.matcher("123").matches());
         Assert.assertFalse(pattern.matcher("12 3").matches());
@@ -88,7 +81,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertFalse(pattern.matcher("1!").matches());
 
         // "mixed": uppercase letters or digits, A-Z,0-9, no spaces, full length needs to be filled in
-        pattern = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_MIXED);
+        pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_MIXED);
         Assert.assertTrue(pattern.matcher("A").matches());
         Assert.assertTrue(pattern.matcher("AVALUE").matches());
         Assert.assertFalse(pattern.matcher("A VALUE").matches());
@@ -102,7 +95,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertFalse(pattern.matcher("A!").matches());
 
         // "numeric": digits, 0-9 with optional period, no spaces but value can be smaller than the length
-        pattern = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_NUMERIC);
+        pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_NUMERIC);
         Assert.assertTrue(pattern.matcher("1").matches());
         Assert.assertTrue(pattern.matcher("123").matches());
         Assert.assertFalse(pattern.matcher("12 3").matches());
@@ -119,7 +112,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertFalse(pattern.matcher("1.").matches());
 
         // "text": no checking on this value
-        pattern = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
+        pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
         Assert.assertTrue(pattern.matcher("A").matches());
         Assert.assertTrue(pattern.matcher("AVALUE").matches());
         Assert.assertTrue(pattern.matcher("A VALUE").matches());
@@ -133,7 +126,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertTrue(pattern.matcher("A!").matches());
         
         // "date": digits, YYYY or YYYYMM or YYYYMMDD
-        pattern = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DATE);
+        pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DATE);
         Assert.assertTrue(pattern.matcher("20100615").matches());
         Assert.assertTrue(pattern.matcher("201006").matches());
         Assert.assertTrue(pattern.matcher("2010").matches());
@@ -172,6 +165,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         //assertValidXmlFileForXsd("user-defined-naaccr-dictionary-150.xml");
     }
 
+    /**
     private void assertValidXmlFileForXsd(String xmlFile) {
         try {
             URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_dictionary.xsd");
@@ -184,6 +178,7 @@ public class NaaccrXmlDictionaryUtilsTest {
             Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
         }
     }
+     */
 
     private void assertValidXmlFileForLibrary(String xmlFile) {
         File file = new File(System.getProperty("user.dir") + "/src/main/resources/" + xmlFile);

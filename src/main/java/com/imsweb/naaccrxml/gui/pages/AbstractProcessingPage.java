@@ -600,7 +600,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_PROGRESS);
 
         _processingBar.setMinimum(0);
-        _processingBar.setMaximum(Integer.valueOf(_numLinesLbl.getText().replaceAll(",", "")));
+        _processingBar.setMaximum(Integer.parseInt(_numLinesLbl.getText().replaceAll(",", "")));
         _processingBar.setValue(0);
 
         _maxWarningsReached = _maxWarningsDiscAdded = false;

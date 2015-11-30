@@ -14,9 +14,9 @@ import java.util.Set;
 public class NaaccrFormat {
 
     // version constants
-    public static String NAACCR_VERSION_160 = "160";
-    public static String NAACCR_VERSION_150 = "150";
-    public static String NAACCR_VERSION_140 = "140";
+    public static final String NAACCR_VERSION_160 = "160";
+    public static final String NAACCR_VERSION_150 = "150";
+    public static final String NAACCR_VERSION_140 = "140";
 
     // list of supported versions
     private static final List<String> _SUPPORTED_VERSIONS = new ArrayList<>();
@@ -36,18 +36,18 @@ public class NaaccrFormat {
     }
 
     // format constants
-    public static String NAACCR_FORMAT_16_ABSTRACT = "naaccr-160-abstract";
-    public static String NAACCR_FORMAT_16_MODIFIED = "naaccr-160-modified";
-    public static String NAACCR_FORMAT_16_CONFIDENTIAL = "naaccr-160-confidential";
-    public static String NAACCR_FORMAT_16_INCIDENCE = "naaccr-160-incidence";
-    public static String NAACCR_FORMAT_15_ABSTRACT = "naaccr-150-abstract";
-    public static String NAACCR_FORMAT_15_MODIFIED = "naaccr-150-modified";
-    public static String NAACCR_FORMAT_15_CONFIDENTIAL = "naaccr-150-confidential";
-    public static String NAACCR_FORMAT_15_INCIDENCE = "naaccr-150-incidence";
-    public static String NAACCR_FORMAT_14_ABSTRACT = "naaccr-140-abstract";
-    public static String NAACCR_FORMAT_14_MODIFIED = "naaccr-140-modified";
-    public static String NAACCR_FORMAT_14_CONFIDENTIAL = "naaccr-140-confidential";
-    public static String NAACCR_FORMAT_14_INCIDENCE = "naaccr-140-incidence";
+    public static final String NAACCR_FORMAT_16_ABSTRACT = "naaccr-160-abstract";
+    public static final String NAACCR_FORMAT_16_MODIFIED = "naaccr-160-modified";
+    public static final String NAACCR_FORMAT_16_CONFIDENTIAL = "naaccr-160-confidential";
+    public static final String NAACCR_FORMAT_16_INCIDENCE = "naaccr-160-incidence";
+    public static final String NAACCR_FORMAT_15_ABSTRACT = "naaccr-150-abstract";
+    public static final String NAACCR_FORMAT_15_MODIFIED = "naaccr-150-modified";
+    public static final String NAACCR_FORMAT_15_CONFIDENTIAL = "naaccr-150-confidential";
+    public static final String NAACCR_FORMAT_15_INCIDENCE = "naaccr-150-incidence";
+    public static final String NAACCR_FORMAT_14_ABSTRACT = "naaccr-140-abstract";
+    public static final String NAACCR_FORMAT_14_MODIFIED = "naaccr-140-modified";
+    public static final String NAACCR_FORMAT_14_CONFIDENTIAL = "naaccr-140-confidential";
+    public static final String NAACCR_FORMAT_14_INCIDENCE = "naaccr-140-incidence";
 
     // list of supported formats
     private static final List<String> _SUPPORTED_FORMATS = new ArrayList<>();
@@ -76,10 +76,10 @@ public class NaaccrFormat {
     }
 
     // record type constants
-    public static String NAACCR_REC_TYPE_ABSTRACT = "A";
-    public static String NAACCR_REC_TYPE_MODIFIED = "M";
-    public static String NAACCR_REC_TYPE_CONFIDENTIAL = "C";
-    public static String NAACCR_REC_TYPE_INCIDENCE = "I";
+    public static final String NAACCR_REC_TYPE_ABSTRACT = "A";
+    public static final String NAACCR_REC_TYPE_MODIFIED = "M";
+    public static final String NAACCR_REC_TYPE_CONFIDENTIAL = "C";
+    public static final String NAACCR_REC_TYPE_INCIDENCE = "I";
 
     // list of supported record types
     private static final List<String> _SUPPORTED_REC_TYPES = new ArrayList<>();

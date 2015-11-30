@@ -3,14 +3,19 @@
  */
 package lab;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
+
 import au.com.bytecode.opencsv.CSVReader;
+
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
-
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CsvToXmlDictionaryLab {
 
@@ -83,7 +88,7 @@ public class CsvToXmlDictionaryLab {
                     item.setDataType(line[10]);
                 if (dataTypes.containsKey(item.getNaaccrId())) {
                     item.setDataType(dataTypes.get(item.getNaaccrId()));
-                    if (item.getDataType() != null && !NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.containsKey(item.getDataType()))
+                    if (item.getDataType() != null && NaaccrXmlDictionaryUtils.getDataTypePattern(item.getDataType()) == null)
                         throw new RuntimeException("Unsupported data type: " + item.getDataType() + " for " + item.getNaaccrId());
                 }
                 else
