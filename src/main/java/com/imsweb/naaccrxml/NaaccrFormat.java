@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * A format encapsulates a NAACCR version and a record type. It also makes the flat-file line length available based on those two fields.
  */
-public class NaaccrFormat {
+public final class NaaccrFormat {
 
     // version constants
     public static final String NAACCR_VERSION_160 = "160";
