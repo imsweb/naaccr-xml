@@ -26,10 +26,10 @@ There are four ways to use this library:
 
 ### Using the stream classes
 This is the recommended way to use the library; 4 streams are provided:
-* [PatientXmlReader](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb.naaccrxml/PatientXmlReader.java)
-* [PatientXmlWriter](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb.naaccrxml/PatientXmlWriter.java)
-* [PatientFlatReader](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb.naaccrxml/PatientFlatReader.java)
-* [PatientFlatWriter](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb.naaccrxml/PatientFlatWriter.java)
+* [PatientXmlReader](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/PatientXmlReader.java)
+* [PatientXmlWriter](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/PatientXmlWriter.java)
+* [PatientFlatReader](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/PatientFlatReader.java)
+* [PatientFlatWriter](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/PatientFlatWriter.java)
 
 The readers provide a ***readPatient()*** method that returns the next patient available, or null if the end of the stream is reached.
 The writers provide a ***writePatient(patient)*** method.
@@ -37,7 +37,7 @@ The writers provide a ***writePatient(patient)*** method.
 Transforming a flat file into the corresponding XML file and vice-versa becomes very simple with those streams; just create the stream and write every patient you read...
 
 ### Using the NAACCR XML Utility class (NaaccrXmlUtils)
-A few higher-level utility methods have been defined in the [NaaccrXmlUtils](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb.naaccrxml/NaaccrXmlUtils.java) class (only the required parameters are shown for clarity):
+A few higher-level utility methods have been defined in the [NaaccrXmlUtils](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrXmlUtils.java) class (only the required parameters are shown for clarity):
 
 *Reading methods*
 * NaaccrData ***readXmlFile*** (File xmlFile, ...)
@@ -54,16 +54,16 @@ A few higher-level utility methods have been defined in the [NaaccrXmlUtils](htt
 There are other utility methods, but those are the main ones.
 
 All those methods accept the following optional parameters (optional in the sense that null can be passed to the method):
-* [NaaccrXmlOptions](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb.naaccrxml/NaaccrXmlOptions.java) - options for customizing the read/write and errors reporting operations
-* [NaaccrDictionary](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb.naaccrxml/entity/dictionary/NaaccrDictionary.java) - a user-defined dictionary (if none is provided, the default user-defined dictionary will be used)
-* [NaaccrObserver](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb.naaccrxml/NaaccrObserver.java) - an observer allowing to report progress as the files are being processed.
+* [NaaccrXmlOptions](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrXmlOptions.java) - options for customizing the read/write and errors reporting operations
+* [NaaccrDictionary](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/entity/dictionary/NaaccrDictionary.java) - a user-defined dictionary (if none is provided, the default user-defined dictionary will be used)
+* [NaaccrObserver](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrObserver.java) - an observer allowing to report progress as the files are being processed.
 
 ### Using the Graphical User Interface (Standlone)
 
 The library contains an experimental GUI that wraps some of the utility methods and provides a more user-friendly environment for processing files.
 
 To start the GUI, just double-click the JAR file created from this project; it will invoke the main GUI class 
-([Standlone](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb.naaccrxml/gui/Standalone.java)).
+([Standlone](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/gui/Standalone.java)).
 
 You can also type the following in a DOS prompt, after navigating to the folder containing the JAR file:
 ```
@@ -74,7 +74,7 @@ where X.X is the downloaded version.
 ### Using the no-GUI batch class (BatchProcessor)
 
 The library also contains an experimental no-GUI class that can be used to process files in batch
-([BatchProcessor](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb.naaccrxml/BatchProcessor.java)).
+([BatchProcessor](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/BatchProcessor.java)).
 
 Here is an example of how to start it:
 ```
@@ -84,7 +84,7 @@ where X.X is the downloaded version.
 
 This assumes the options file is in the same folder as the JAR file (but it can be anywhere and a full path can be provided on the command line).
 
-See the [BatchProcessor](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb.naaccrxml/BatchProcessor.java) class for a description of each individual option.
+See the [BatchProcessor](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/BatchProcessor.java) class for a description of each individual option.
 
 ## Dealing with dictionaries
 
@@ -92,7 +92,7 @@ The project contains two dictionaries for each supported NAACCR versions: the ma
 * [naaccr-dictionary-150.xml](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/naaccr-dictionary-150.xml)
 * [user-defined-naaccr-dictionary-150.xml](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/user-defined-naaccr-dictionary-150.xml)
 
-In addition, the project also contains a utility class ([NaaccrXmlDictionaryUtils](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb.naaccrxml/NaaccrXmlDictionaryUtils.java))
+In addition, the project also contains a utility class ([NaaccrXmlDictionaryUtils](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrXmlDictionaryUtils.java))
  to read, write and validate a given dictionary file. Note that there is no syntax differences between a base dictionary and a user-defined one.
 
 That utility class also contains a method to create a NAACCR ID (used for the "naaccrId" attribute) from a given item name using the following rules:
