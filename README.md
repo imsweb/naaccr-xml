@@ -5,7 +5,7 @@
 
 This library provides support for the NAACCR XML format.
 
-Information about the format and the Task Force that developped it can be found on [http://naaccrxml.org/](http://naaccrxml.org/).
+Information about the format and the Task Force that developed it can be found on [http://naaccrxml.org/](http://naaccrxml.org/).
 
 ## Download
 
@@ -21,7 +21,7 @@ There are four ways to use this library:
 
 1. Using the stream classes
 2. Using the NAACCR XML Utility class (NaaccrXmlUtils)
-3. Using the Graphical User Interface (Standlone)
+3. Using the Graphical User Interface (Standalone)
 4. Using the no-GUI batch class (BatchProcessor)
 
 ### Using the stream classes
@@ -58,12 +58,12 @@ All those methods accept the following optional parameters (optional in the sens
 * [NaaccrDictionary](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/entity/dictionary/NaaccrDictionary.java) - a user-defined dictionary (if none is provided, the default user-defined dictionary will be used)
 * [NaaccrObserver](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrObserver.java) - an observer allowing to report progress as the files are being processed.
 
-### Using the Graphical User Interface (Standlone)
+### Using the Graphical User Interface (Standalone)
 
 The library contains an experimental GUI that wraps some of the utility methods and provides a more user-friendly environment for processing files.
 
 To start the GUI, just double-click the JAR file created from this project; it will invoke the main GUI class 
-([Standlone](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/gui/Standalone.java)).
+([Standalone](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/gui/Standalone.java)).
 
 You can also type the following in a DOS prompt, after navigating to the folder containing the JAR file:
 ```
