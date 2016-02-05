@@ -5,7 +5,7 @@
 
 This library provides support for the NAACCR XML format.
 
-Information about the format and the Task Force that developped it can be found on this website: [http://naaccrxml.org/](http://naaccrxml.org/).
+Information about the format and the Task Force that developped it can be found on [http://naaccrxml.org/](http://naaccrxml.org/).
 
 ## Download
 
