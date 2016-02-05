@@ -86,6 +86,14 @@ This assumes the options file is in the same folder as the JAR file (but it can 
 
 See the [BatchProcessor](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/BatchProcessor.java) class for a description of each individual option.
 
+Here is how a typical options file would look like:
+
+```properties
+input.folder=C:\\input
+processing.mode=flat-to-xml
+output.folder=C:\\output
+```
+
 ## Dealing with dictionaries
 
 The project contains two dictionaries for each supported NAACCR versions: the main dictionary and the default user defined dictionary; here are the ones for NAACCR 15:
