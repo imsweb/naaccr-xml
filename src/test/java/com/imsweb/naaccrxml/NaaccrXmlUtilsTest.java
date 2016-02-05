@@ -88,7 +88,7 @@ public class NaaccrXmlUtilsTest {
         Assert.assertEquals(2, data.getPatients().size());
 
         // read the file using a stream
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file))) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file), null, null, null)) {
             data = reader.getRootData();
             Assert.assertNotNull(data.getBaseDictionaryUri());
             Assert.assertNull(data.getUserDictionaryUri());

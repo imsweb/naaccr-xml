@@ -25,26 +25,37 @@ import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
  */
 public class PatientXmlReader implements AutoCloseable {
 
+    // the root data
     protected NaaccrData _rootData;
 
-    protected HierarchicalStreamReader _reader;
-
+    // XStream object responsible for reading patient objects
     protected XStream _xstream;
 
+    // underlined reader
+    protected HierarchicalStreamReader _reader;
+
+    // context for this reader (some stuff got a bit convoluted and using a context made them a cleaner)
     protected NaaccrStreamContext _context;
 
-    public PatientXmlReader(Reader reader) throws NaaccrIOException {
-        this(reader, null, null, null);
-    }
-
-    public PatientXmlReader(Reader reader, NaaccrOptions options) throws NaaccrIOException {
-        this(reader, options, null, null);
-    }
-
+    /**
+     * Constructor.
+     * @param reader required underlined reader
+     * @param options optional options
+     * @param userDictionary optional user-defined dictionary
+     * @throws NaaccrIOException
+     */
     public PatientXmlReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         this(reader, options, userDictionary, null);
     }
 
+    /**
+     * Constructor.
+     * @param reader required underlined reader
+     * @param options optional options
+     * @param userDictionary optional user-defined dictionary
+     * @param configuration optional stream configuration
+     * @throws NaaccrIOException
+     */
     public PatientXmlReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
 
         try {

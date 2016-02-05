@@ -24,32 +24,38 @@ import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionaryItem;
  */
 public class PatientFlatWriter implements AutoCloseable {
 
+    // the underlined writer
     protected BufferedWriter _writer;
 
+    // the root data to write for each line
     protected NaaccrData _rootData;
 
+    // the options requested to use when writing the patients
     protected NaaccrOptions _options;
 
+    // the runtime dictionary (combination of base and user-defined dictionaries)
     protected RuntimeNaaccrDictionary _dictionary;
 
+    // cached special data items
     protected RuntimeNaaccrDictionaryItem _naaccrVersionItem, _recordTypeItem;
 
+    // cached pattern for new lines
     private static final Pattern _NEW_LINES_PATTERN = Pattern.compile("\r?\n");
 
-    public PatientFlatWriter(Writer writer, NaaccrData data) throws NaaccrIOException {
-        this(writer, data, null, null);
-    }
-
-    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrOptions options) throws NaaccrIOException {
-        this(writer, data, options, null);
-    }
-
+    /**
+     * Constructor.
+     * @param writer required underlined writer
+     * @param data required root data
+     * @param options optional options
+     * @param userDictionary optional user-defined dictionary
+     * @throws NaaccrIOException
+     */
     public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         _writer = new BufferedWriter(writer);
         _rootData = data;
         _options = options == null ? new NaaccrOptions() : options;
 
-        // TODO FPD add better validation
+        // there should be better validation here...
 
         NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(data.getBaseDictionaryUri());
         _dictionary = new RuntimeNaaccrDictionary(data.getRecordType(), baseDictionary, userDictionary);
@@ -65,6 +71,11 @@ public class PatientFlatWriter implements AutoCloseable {
         }
     }
 
+    /**
+     * Write the given patient on this stream.
+     * @param patient patient to write (can't be null)
+     * @throws NaaccrIOException
+     */
     public void writePatient(Patient patient) throws NaaccrIOException {
         for (String line : createLinesFromPatient(_rootData, patient)) {
             try {

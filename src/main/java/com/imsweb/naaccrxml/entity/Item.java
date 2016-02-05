@@ -11,6 +11,24 @@ public class Item {
     
     private String _value;
 
+    /**
+     * Default constructor.
+     */
+    public Item() {
+    }
+
+    /**
+     * Full constructor.
+     * @param naaccrId required NAACCR ID
+     * @param naaccrNum optional NAACCR Number
+     * @param value optional value
+     */
+    public Item(String naaccrId, Integer naaccrNum, String value) {
+        _naaccrId = naaccrId;
+        _naaccrNum = naaccrNum;
+        _value = value;
+    }
+
     public String getNaaccrId() {
         return _naaccrId;
     }
