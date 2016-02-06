@@ -3,14 +3,16 @@
  */
 package com.imsweb.naaccrxml;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
+import com.imsweb.naaccrxml.entity.NaaccrData;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.imsweb.naaccrxml.entity.Patient;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class PatientXmlReaderTest {
 
@@ -62,4 +64,129 @@ public class PatientXmlReaderTest {
         reader.close();
     }
 
+    @Test
+    public void testRootData() throws IOException {
+
+        File file = TestingUtils.getDataFile("xml-reader-root-data-1.xml");
+        PatientXmlReader reader = new PatientXmlReader(new FileReader(file), null, null, null);
+        NaaccrData data = reader.getRootData();
+        Assert.assertNotNull(data.getBaseDictionaryUri());
+        Assert.assertNull(data.getUserDictionaryUri());
+        Assert.assertNotNull(data.getRecordType());
+        Assert.assertNull(data.getTimeGenerated());
+        Assert.assertEquals(0, data.getItems().size());
+        reader.close();
+
+        file = TestingUtils.getDataFile("xml-reader-root-data-2.xml");
+        reader = new PatientXmlReader(new FileReader(file), null, null, null);
+        data = reader.getRootData();
+        Assert.assertNotNull(data.getBaseDictionaryUri());
+        Assert.assertNull(data.getUserDictionaryUri());
+        Assert.assertNotNull(data.getRecordType());
+        Assert.assertNotNull(data.getTimeGenerated());
+        Assert.assertEquals(1, data.getItems().size());
+        reader.close();
+    }
+
+    @Test
+    public void testOptions() throws IOException {
+
+        NaaccrOptions options = new NaaccrOptions();
+
+        // only valid items are validated, so setting it to false shouldn't affect the test...
+        options.setValidateReadValues(false);
+
+        // we want to process the unknown item
+        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_PROCESS);
+        File file = TestingUtils.getDataFile("xml-reader-options.xml");
+        PatientXmlReader reader = new PatientXmlReader(new FileReader(file), options, null, null);
+        Patient patient = reader.readPatient();
+        Assert.assertEquals("X", patient.getItemValue("unknown"));
+        Assert.assertTrue(patient.getValidationErrors().isEmpty());
+        reader.close();
+
+        // we want to ignore the unknown item
+        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_IGNORE);
+        file = TestingUtils.getDataFile("xml-reader-options.xml");
+        reader = new PatientXmlReader(new FileReader(file), options, null, null);
+        patient = reader.readPatient();
+        Assert.assertNull(patient.getItemValue("unknown"));
+        Assert.assertTrue(patient.getValidationErrors().isEmpty());
+        reader.close();
+
+        // we want to report an error for the unknown item
+        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_ERROR);
+        file = TestingUtils.getDataFile("xml-reader-options.xml");
+        reader = new PatientXmlReader(new FileReader(file), options, null, null);
+        patient = reader.readPatient();
+        Assert.assertNull(patient.getItemValue("unknown"));
+        Assert.assertFalse(patient.getValidationErrors().isEmpty());
+        reader.close();
+    }
+
+    @Test
+    public void testValidation() throws IOException {
+
+        // validation is on by default...
+
+        File file = TestingUtils.getDataFile("xml-reader-validation.xml");
+        PatientXmlReader reader = new PatientXmlReader(new FileReader(file), null, null, null);
+        Patient patient = reader.readPatient();
+        Assert.assertEquals(1, patient.getTumors().size());
+        Assert.assertFalse(patient.getTumors().get(0).getValidationErrors().isEmpty());
+        // even if the value is bad, its still being made available in the patient (if possible)
+        Assert.assertEquals("XXXX", patient.getTumors().get(0).getItem("primarySite").getValue());
+        // the validation error shouldn't be available on the patient...
+        Assert.assertTrue(patient.getValidationErrors().isEmpty());
+        // ... unless the "get-all-errors" method is used
+        Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
+        reader.close();
+    }
+
+    @Test
+    public void testUserDefinedDictionary() throws IOException {
+
+        NaaccrDictionary dict = new NaaccrDictionary();
+        dict.setNaaccrVersion("150");
+        dict.setDictionaryUri("whatever");
+        dict.setDescription("Another whatever...");
+        NaaccrDictionaryItem item = new NaaccrDictionaryItem();
+        item.setNaaccrId("myVariable");
+        item.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+        item.setNaaccrNum(10000);
+        item.setRecordTypes("A,M,C,I");
+        item.setDataType(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_NUMERIC);
+        item.setLength(2);
+        item.setStartColumn(2340);
+        item.setNaaccrName("My Variable");
+        item.setSourceOfStandard("ME");
+        item.setPadding("0");
+        item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_NONE);
+        item.setRegexValidation("0[0-8]");
+        dict.getItems().add(item);
+        Assert.assertNotNull(dict.getItemByNaaccrId("myVariable"));
+        Assert.assertNotNull(dict.getItemByNaaccrNum(10000));
+
+        // regular value for the extra variable
+        File file = TestingUtils.getDataFile("xml-reader-user-dict-1.xml");
+        PatientXmlReader reader = new PatientXmlReader(new FileReader(file), null, dict, null);
+        Patient patient = reader.readPatient();
+        Assert.assertEquals("01", patient.getTumors().get(0).getItemValue("myVariable"));
+        reader.close();
+
+        // padding (and trimming) only applies to reading from flat-file, not XML...
+        file = TestingUtils.getDataFile("xml-reader-user-dict-2.xml");
+        reader = new PatientXmlReader(new FileReader(file), null, dict, null);
+        patient = reader.readPatient();
+        Assert.assertEquals("1", patient.getTumors().get(0).getItemValue("myVariable"));
+        reader.close();
+
+        // value is not correct according to the provided regex
+        file = TestingUtils.getDataFile("xml-reader-user-dict-3.xml");
+        reader = new PatientXmlReader(new FileReader(file), null, dict, null);
+        patient = reader.readPatient();
+        Assert.assertEquals("09", patient.getTumors().get(0).getItemValue("myVariable"));
+        Assert.assertFalse(patient.getTumors().get(0).getValidationErrors().isEmpty());
+        reader.close();
+    }
 }
