@@ -3,16 +3,15 @@
  */
 package com.imsweb.naaccrxml;
 
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.regex.Pattern;
-
-import org.junit.Assert;
-import org.junit.Test;
-
-import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 
 public class NaaccrXmlDictionaryUtilsTest {
 
@@ -34,14 +33,14 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertEquals(defaultUserDictionary1.getItems().size(), defaultUserDictionary2.getItems().size());
 
         // read a provided user dictionary
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("testing-user-dictionary-140.xml"))) {
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140.xml"))) {
             NaaccrDictionary defaultUserDictionary = NaaccrXmlDictionaryUtils.readDictionary(reader);
             Assert.assertEquals(3, defaultUserDictionary.getItems().size());
         }
 
         // try to read a user dictionary with an error (bad start column)
         boolean exceptionHappend = false;
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("testing-user-dictionary-140-bad1.xml"))) {
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140-bad1.xml"))) {
             NaaccrXmlDictionaryUtils.readDictionary(reader);
         }
         catch (IOException e) {
