@@ -3,6 +3,19 @@
  */
 package com.imsweb.naaccrxml;
 
+import com.imsweb.naaccrxml.entity.Item;
+import com.imsweb.naaccrxml.entity.NaaccrData;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
+import org.junit.Assert;
+import org.junit.Test;
+
+import javax.xml.XMLConstants;
+import javax.xml.bind.DatatypeConverter;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -12,21 +25,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.xml.XMLConstants;
-import javax.xml.bind.DatatypeConverter;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
-
-import org.junit.Assert;
-import org.junit.Test;
-
-import com.imsweb.naaccrxml.entity.Item;
-import com.imsweb.naaccrxml.entity.NaaccrData;
-import com.imsweb.naaccrxml.entity.Patient;
-import com.imsweb.naaccrxml.entity.Tumor;
 
 // TODO FPD beef up these tests; add cases for options, user dictionary and observer...
 // TODO FPD add tests for line number on main entities...
@@ -129,7 +127,7 @@ public class NaaccrXmlUtilsTest {
 
         // write the file using a steam
         file = new File(System.getProperty("user.dir") + "/build/test-writing-2.xml");
-        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null)) {
             for (Patient patient : data.getPatients())
                 writer.writePatient(patient);
         }

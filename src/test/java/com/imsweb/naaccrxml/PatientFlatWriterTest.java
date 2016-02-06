@@ -3,20 +3,19 @@
  */
 package com.imsweb.naaccrxml;
 
+import com.imsweb.naaccrxml.entity.Item;
+import com.imsweb.naaccrxml.entity.NaaccrData;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import com.imsweb.naaccrxml.entity.Item;
-import com.imsweb.naaccrxml.entity.NaaccrData;
-import com.imsweb.naaccrxml.entity.Patient;
-import com.imsweb.naaccrxml.entity.Tumor;
-
-public class PatientFlatFileWriterTest {
+public class PatientFlatWriterTest {
 
     @Test
     public void testWriter() throws IOException {
