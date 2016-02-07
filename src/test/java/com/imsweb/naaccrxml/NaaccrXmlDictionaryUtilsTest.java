@@ -3,15 +3,19 @@
  */
 package com.imsweb.naaccrxml;
 
-import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.Writer;
 import java.util.regex.Pattern;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 public class NaaccrXmlDictionaryUtilsTest {
 
@@ -39,14 +43,61 @@ public class NaaccrXmlDictionaryUtilsTest {
         }
 
         // try to read a user dictionary with an error (bad start column)
-        boolean exceptionHappend = false;
+        boolean exceptionAppend = false;
         try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140-bad1.xml"))) {
             NaaccrXmlDictionaryUtils.readDictionary(reader);
         }
         catch (IOException e) {
-            exceptionHappend = true;
+            exceptionAppend = true;
         }
-        Assert.assertTrue(exceptionHappend);
+        Assert.assertTrue(exceptionAppend);
+    }
+
+    @Test
+    public void testWriteDictionary() throws IOException {
+
+        NaaccrDictionary dict = new NaaccrDictionary();
+        dict.setNaaccrVersion("140");
+        dict.setDictionaryUri("whatever");
+        dict.setDescription("Another whatever");
+        NaaccrDictionaryItem item = new NaaccrDictionaryItem();
+        item.setNaaccrId("myVariable");
+        item.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+        item.setNaaccrNum(10000);
+        item.setRecordTypes("A,M,C,I");
+        item.setDataType(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_NUMERIC);
+        item.setLength(2);
+        item.setStartColumn(2340);
+        item.setNaaccrName("My Variable");
+        item.setSourceOfStandard("ME");
+        item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
+        item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_NONE);
+        item.setRegexValidation("0[0-8]");
+        dict.getItems().add(item);
+
+        // write using a writer
+        File file = TestingUtils.createFile("dict-write-test.xml");
+        try (Writer writer = new FileWriter(file)) {
+            NaaccrXmlDictionaryUtils.writeDictionary(dict, writer);
+        }
+        NaaccrDictionary newDict = NaaccrXmlDictionaryUtils.readDictionary(file);
+        Assert.assertEquals("140", newDict.getNaaccrVersion());
+        Assert.assertEquals("whatever", newDict.getDictionaryUri());
+        Assert.assertEquals("Another whatever", newDict.getDescription());
+        Assert.assertEquals(1, newDict.getItems().size());
+        Assert.assertNotNull(newDict.getItemByNaaccrId("myVariable"));
+        Assert.assertNotNull(newDict.getItemByNaaccrNum(10000));
+
+        // write using a file
+        NaaccrXmlDictionaryUtils.writeDictionary(dict, file);
+        newDict = NaaccrXmlDictionaryUtils.readDictionary(file);
+        Assert.assertEquals("140", newDict.getNaaccrVersion());
+        Assert.assertEquals("whatever", newDict.getDictionaryUri());
+        Assert.assertEquals("Another whatever", newDict.getDescription());
+        Assert.assertEquals(1, newDict.getItems().size());
+        Assert.assertNotNull(newDict.getItemByNaaccrId("myVariable"));
+        Assert.assertNotNull(newDict.getItemByNaaccrNum(10000));
+
     }
 
     @Test

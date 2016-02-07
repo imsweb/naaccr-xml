@@ -3,16 +3,17 @@
  */
 package com.imsweb.naaccrxml;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 
 public class PatientXmlReaderTest {
 
@@ -160,7 +161,7 @@ public class PatientXmlReaderTest {
         item.setStartColumn(2340);
         item.setNaaccrName("My Variable");
         item.setSourceOfStandard("ME");
-        item.setPadding("0");
+        item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
         item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_NONE);
         item.setRegexValidation("0[0-8]");
         dict.getItems().add(item);
