@@ -40,7 +40,7 @@ jar {
                 'Built-By': System.getProperty('user.name'),
                 'Built-Date': new Date(),
                 'Built-JDK': System.getProperty('java.version'),
-                'Main-Class': 'Standalone',
+                'Main-Class': 'com.imsweb.naaccrxml.gui.Standalone',
                 'Class-Path': configurations.compile.collect { it.getName() }.join(' '))
     }
 }

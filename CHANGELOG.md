@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 1.1**
+
+  - Fixed wrong path to the main GUI class in the JAR's manifest.
+
 **Version 1.0**
 
   - Added support for NAACCR 16.
