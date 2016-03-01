@@ -15,6 +15,8 @@ To include it to your Maven or Gradle project, use the group ID `com.imsweb` and
 
 You can check out the [release page](https://github.com/imsweb/naaccr-xml/releases) for a list of the releases and their changes.
 
+This library requires Java7 or later.
+
 ## Usage
 
 There are four ways to use this library:
