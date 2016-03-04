@@ -9,7 +9,7 @@ Information about the format and the Task Force that developed it can be found o
 
 ## Download
 
-The library will soon be available on [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.imsweb%22%20AND%20a%3A%22naaccr-xml%22).
+The library is available on [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.imsweb%22%20AND%20a%3A%22naaccr-xml%22).
 
 To include it to your Maven or Gradle project, use the group ID `com.imsweb` and the artifact ID `naaccr-xml`.
 
