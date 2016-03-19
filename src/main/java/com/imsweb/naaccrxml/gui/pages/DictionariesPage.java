@@ -250,6 +250,24 @@ public class DictionariesPage extends AbstractPage {
         }
 
         @Override
+        public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+
+            NaaccrDictionaryWrapper that = (NaaccrDictionaryWrapper)o;
+
+            return _dictionary.equals(that._dictionary);
+
+        }
+
+        @Override
+        public int hashCode() {
+            return _dictionary.hashCode();
+        }
+
+        @Override
         public String toString() {
             return _dictionary.getDescription();
         }
