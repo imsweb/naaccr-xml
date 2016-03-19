@@ -5,34 +5,166 @@ package com.imsweb.naaccrxml;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 
 public class PatientFlatReaderTest {
 
     @Test
+    public void testReader() throws IOException {
+
+        // file with one record (one patient with one tumor)
+        StringBuilder rec1 = TestingUtils.createEmptyRecord("150", "I", null);
+        rec1.replace(29, 39, "0000000001"); // registry ID (Root level)
+        rec1.replace(41, 49, "00000001"); // patient ID number (Patient level)
+        rec1.replace(539, 543, "C123"); // primarySite (Tumor level)
+        File file = TestingUtils.createAndPopulateFile("test-flat-reader-one-rec.txt", rec1);
+        PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, null);
+        Assert.assertEquals("0000000001", reader.getRootData().getItem("registryId").getValue());
+        Patient patient = reader.readPatient();
+        Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
+        Assert.assertEquals(1, patient.getTumors().size());
+        Assert.assertEquals("C123", patient.getTumors().get(0).getItem("primarySite").getValue());
+        Assert.assertNull(reader.readPatient());
+        reader.close();
+
+        // file with two records for different patients (two patients with each one tumor)
+        StringBuilder rec2 = TestingUtils.createEmptyRecord("150", "I", null);
+        rec2.replace(29, 39, "0000000001"); // registry ID (Root level)
+        rec2.replace(41, 49, "00000002"); // patient ID number (Patient level)
+        rec2.replace(539, 543, "C456"); // primarySite (Tumor level)
+        file = TestingUtils.createAndPopulateFile("test-flat-reader-two-rec-diff.txt", rec1, rec2);
+        reader = new PatientFlatReader(new FileReader(file), null, null);
+        Assert.assertEquals("0000000001", reader.getRootData().getItem("registryId").getValue());
+        patient = reader.readPatient();
+        Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
+        Assert.assertEquals(1, patient.getTumors().size());
+        Assert.assertEquals("C123", patient.getTumors().get(0).getItem("primarySite").getValue());
+        patient = reader.readPatient();
+        Assert.assertEquals("00000002", patient.getItem("patientIdNumber").getValue());
+        Assert.assertEquals(1, patient.getTumors().size());
+        Assert.assertEquals("C456", patient.getTumors().get(0).getItem("primarySite").getValue());
+        Assert.assertNull(reader.readPatient());
+        reader.close();
+
+        // file with two records for the same patient (one patient with two tumors)
+        rec2.replace(41, 49, "00000001"); // patient ID number (Patient level)
+        file = TestingUtils.createAndPopulateFile("test-flat-reader-two-rec-same.txt", rec1, rec2);
+        reader = new PatientFlatReader(new FileReader(file), null, null);
+        Assert.assertEquals("0000000001", reader.getRootData().getItem("registryId").getValue());
+        patient = reader.readPatient();
+        Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
+        Assert.assertEquals(2, patient.getTumors().size());
+        Assert.assertEquals("C123", patient.getTumors().get(0).getItem("primarySite").getValue());
+        Assert.assertEquals("C456", patient.getTumors().get(1).getItem("primarySite").getValue());
+        Assert.assertNull(reader.readPatient());
+        reader.close();
+    }
+
+    @Test
+    public void testReaderBadConditions() throws IOException {
+
+        // empty file
+        File file = TestingUtils.createAndPopulateFile("test-flat-reader-empty.txt");
+        try {
+            new PatientFlatReader(new FileReader(file), null, null);
+            Assert.fail("Should have been an exception!");
+        }
+        catch (NaaccrIOException e) {
+            // expected...
+        }
+
+        // one line that is empty
+        file = TestingUtils.createAndPopulateFile("test-flat-reader-blank.txt", new StringBuilder());
+        try {
+            new PatientFlatReader(new FileReader(file), null, null);
+            Assert.fail("Should have been an exception!");
+        }
+        catch (NaaccrIOException e) {
+            // expected...
+        }
+
+        StringBuilder line = TestingUtils.createEmptyRecord("150", "I", null);
+
+        // line doesn't have the record type
+        line.replace(0, 1, " ");
+        file = TestingUtils.createAndPopulateFile("test-flat-reader-missing-type.txt", line);
+        try {
+            new PatientFlatReader(new FileReader(file), null, null);
+            Assert.fail("Should have been an exception!");
+        }
+        catch (NaaccrIOException e) {
+            // expected...
+        }
+
+        // line has an invalid record type
+        line.replace(0, 1, "X");
+        file = TestingUtils.createAndPopulateFile("test-flat-reader-invalid-type.txt", line);
+        try {
+            new PatientFlatReader(new FileReader(file), null, null);
+            Assert.fail("Should have been an exception!");
+        }
+        catch (NaaccrIOException e) {
+            // expected...
+        }
+
+        // line doesn't have the NAACCR version
+        line.replace(0, 1, "I");
+        line.replace(16, 19, "   ");
+        file = TestingUtils.createAndPopulateFile("test-flat-reader-missing-version.txt", line);
+        try {
+            new PatientFlatReader(new FileReader(file), null, null);
+            Assert.fail("Should have been an exception!");
+        }
+        catch (NaaccrIOException e) {
+            // expected...
+        }
+
+        // line has an invalid NAACCR version
+        line.replace(16, 19, "XXX");
+        file = TestingUtils.createAndPopulateFile("test-flat-reader-invalid-version.txt", line);
+        try {
+            new PatientFlatReader(new FileReader(file), null, null);
+            Assert.fail("Should have been an exception!");
+        }
+        catch (NaaccrIOException e) {
+            // expected...
+        }
+
+        // line is too long
+        line.replace(16, 19, "150");
+        line.append("X");
+        file = TestingUtils.createAndPopulateFile("test-flat-reader-invalid-version.txt", line);
+        try {
+            new PatientFlatReader(new FileReader(file), null, null);
+            Assert.fail("Should have been an exception!");
+        }
+        catch (NaaccrIOException e) {
+            // expected...
+        }
+    }
+
+    @Test
     public void testPatientLevelMismatch() throws IOException {
 
-        // create a testing file with two records having a different value for a root-level item
-        StringBuilder rec1 = createEmptyRecord();
-        rec1.replace(41, 49, "00000001"); // patient ID number
-        rec1.replace(189, 190, "1"); // computed ethnicity
-        StringBuilder rec2 = createEmptyRecord();
-        rec2.replace(41, 49, "00000001"); // patient ID number
-        rec2.replace(189, 190, "2"); // computed ethnicity
-        File file = createFile("test-pat-level.txt", rec1.toString(), rec2.toString());
-
-        // create the option object we are going to use
+        // we need to turn the miss-match checking on...
         NaaccrOptions options = new NaaccrOptions();
         options.setReportLevelMismatch(true);
-        options.setValidateReadValues(false);
 
-        // lets read the patients; first one should be used to populate the root data; second one should report a failure for the mismatch
+        // create a testing file with two records having a different value for a patient-level item
+        StringBuilder rec1 = TestingUtils.createEmptyRecord("150", "I", "00000001");
+        rec1.replace(189, 190, "1"); // computed ethnicity
+        StringBuilder rec2 = TestingUtils.createEmptyRecord("150", "I", "00000001");
+        rec2.replace(189, 190, "2"); // computed ethnicity
+        File file = TestingUtils.createAndPopulateFile("test-flat-reader-pat-mismatch.txt", rec1, rec2);
+
+        // lets read the patient, it should contain two tumors
         PatientFlatReader reader = new PatientFlatReader(new FileReader(file), options, null);
 
         Patient pat1 = reader.readPatient();
@@ -48,17 +180,16 @@ public class PatientFlatReaderTest {
     @Test
     public void testRootLevelMismatch() throws IOException {
 
-        // create a testing file with two records having a different value for a root-level item
-        StringBuilder rec1 = createEmptyRecord();
-        rec1.replace(19, 29, "0000000001"); // registry ID
-        StringBuilder rec2 = createEmptyRecord();
-        rec2.replace(19, 29, "0000000002"); // registry ID
-        File file = createFile("test-root-level.txt", rec1.toString(), rec2.toString());
-
-        // create the option object we are going to use
+        // we need to turn the miss-match checking on...
         NaaccrOptions options = new NaaccrOptions();
         options.setReportLevelMismatch(true);
-        options.setValidateReadValues(false);
+
+        // create a testing file with two records having a different value for a root-level item
+        StringBuilder rec1 = TestingUtils.createEmptyRecord("150", "I", null);
+        rec1.replace(19, 29, "0000000001"); // registry ID
+        StringBuilder rec2 = TestingUtils.createEmptyRecord("150", "I", null);
+        rec2.replace(19, 29, "0000000002"); // registry ID
+        File file = TestingUtils.createAndPopulateFile("test-flat-reader-root-mismatch.txt", rec1, rec2);
 
         // lets read the patients; first one should be used to populate the root data; second one should report a failure for the mismatch
         PatientFlatReader reader = new PatientFlatReader(new FileReader(file), options, null);
@@ -78,28 +209,52 @@ public class PatientFlatReaderTest {
         reader.close();
     }
 
-    private StringBuilder createEmptyRecord() {
-        StringBuilder buf = new StringBuilder();
-        for (int i = 0; i < 3339; i++)
-            buf.append(" ");
-        buf.replace(0, 1, "I");
-        buf.replace(16, 19, "150");
-        return buf;
+    @Test
+    public void testValidation() throws IOException {
+
+        // validation is on by default...
+
+        StringBuilder rec1 = TestingUtils.createEmptyRecord("150", "I", "00000001");
+        rec1.replace(539, 543, "XXXX"); // primarySite
+        File file = TestingUtils.createAndPopulateFile("test-flat-reader-validation.txt", rec1);
+        PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, null);
+        Patient patient = reader.readPatient();
+        Assert.assertEquals(1, patient.getTumors().size());
+        Assert.assertFalse(patient.getTumors().get(0).getValidationErrors().isEmpty());
+        // even if the value is bad, its still being made available in the patient (if possible)
+        Assert.assertEquals("XXXX", patient.getTumors().get(0).getItem("primarySite").getValue());
+        // the validation error shouldn't be available on the patient...
+        Assert.assertTrue(patient.getValidationErrors().isEmpty());
+        // ... unless the "get-all-errors" method is used
+        Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
+        reader.close();
     }
 
-    private File createFile(String filename, String... records) throws IOException {
-        File tmpDir = new File(System.getProperty("user.dir") + "/build/test-tmp");
-        if (!tmpDir.exists() && !tmpDir.mkdirs())
-            throw new IOException("Unable to create tmp dir...");
+    @Test
+    public void testUserDefinedDictionary() throws IOException {
 
-        File file = new File(tmpDir, filename);
-        FileWriter writer = new FileWriter(file);
-        for (String rec : records) {
-            writer.write(rec);
-            writer.write("\n");
-        }
-        writer.close();
+        StringBuilder rec1 = TestingUtils.createEmptyRecord("150", "I", "00000001");
+        rec1.replace(2339, 2340, "X"); // state requestor items
+        File file = TestingUtils.createAndPopulateFile("test-flat-reader-user-dict.txt", rec1);
 
-        return file;
+        // first, let's use the default user dictionary (so null)
+        PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, null);
+        Tumor tumor = reader.readPatient().getTumors().get(0);
+        Assert.assertEquals(1000, tumor.getItem("stateRequestorItems").getValue().length());
+        Assert.assertTrue(tumor.getItem("stateRequestorItems").getValue().startsWith("X"));
+
+        // the result should be the same if we pass the same default dictionary to the method
+        reader = new PatientFlatReader(new FileReader(file), null, NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion("150"));
+        tumor = reader.readPatient().getTumors().get(0);
+        Assert.assertEquals(1000, tumor.getItem("stateRequestorItems").getValue().length());
+        Assert.assertTrue(tumor.getItem("stateRequestorItems").getValue().startsWith("X"));
+
+        // if we pass an "empty" user dictionary, then the state requestor item should be ignored, resulting in a null item...
+        NaaccrDictionary dict = new NaaccrDictionary();
+        dict.setNaaccrVersion("150");
+        dict.setDictionaryUri("whatever");
+        reader = new PatientFlatReader(new FileReader(file), null, dict);
+        tumor = reader.readPatient().getTumors().get(0);
+        Assert.assertNull(tumor.getItem("stateRequestorItems"));
     }
 }

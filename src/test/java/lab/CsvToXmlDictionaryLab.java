@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2015 Information Management Services, Inc.
  */
-package com.imsweb.naaccrxml.lab;
+package lab;
 
 import java.io.File;
 import java.io.FileReader;
@@ -22,6 +22,7 @@ public class CsvToXmlDictionaryLab {
     public static void main(String[] args) throws IOException {
         handleVersion("140", "14");
         handleVersion("150", "15");
+        handleVersion("160", "16");
     }
 
     private static void handleVersion(String version, String formattedVersion) throws IOException {
@@ -87,7 +88,7 @@ public class CsvToXmlDictionaryLab {
                     item.setDataType(line[10]);
                 if (dataTypes.containsKey(item.getNaaccrId())) {
                     item.setDataType(dataTypes.get(item.getNaaccrId()));
-                    if (item.getDataType() != null && !NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.containsKey(item.getDataType()))
+                    if (item.getDataType() != null && NaaccrXmlDictionaryUtils.getDataTypePattern(item.getDataType()) == null)
                         throw new RuntimeException("Unsupported data type: " + item.getDataType() + " for " + item.getNaaccrId());
                 }
                 else
@@ -108,7 +109,7 @@ public class CsvToXmlDictionaryLab {
                 // this is temporary until the data types are looked at and fixed...
                 //item.setRegexValidation(null);
 
-                dictionary.getItems().add(item);
+                dictionary.addItem(item);
             }
         }
 

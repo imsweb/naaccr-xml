@@ -1,19 +1,19 @@
 /*
  * Copyright (C) 2015 Information Management Services, Inc.
  */
-package com.imsweb.naaccrxml.extension;
+package lab.extension;
 
 import com.imsweb.naaccrxml.entity.Patient;
 
 public class ExtendedPatient extends Patient {
     
-    private EditsReport editsReport;
+    private EditsReport _editsReport;
 
     public EditsReport getEditsReport() {
-        return editsReport;
+        return _editsReport;
     }
 
     public void setEditsReport(EditsReport val) {
-        editsReport = val;
+        _editsReport = val;
     }
 }

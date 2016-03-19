@@ -186,6 +186,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
 
         pnl.add(buildTextPnl("The following NAACCR versions are supported:"));
+        pnl.add(buildTextPnl("             NAACCR 16"));
         pnl.add(buildTextPnl("             NAACCR 15"));
         pnl.add(buildTextPnl("             NAACCR 14"));
         pnl.add(buildTextPnl("The Abstract, Modified, Confidential and Incidence flavors are supported for those versions."));
@@ -195,7 +196,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         pnl.add(Box.createVerticalStrut(25));
         pnl.add(buildTextPnl("The following compressions are supported:"));
         pnl.add(buildTextPnl("             GZip (\".gz\" extension)"));
-        pnl.add(buildTextPnl("             XZ (\".xz\" extension; this compression will usually produce smaller files than GZip but will take longer to process"));
+        pnl.add(buildTextPnl("             XZ (\".xz\" extension; this compression will usually produce smaller files than GZip but will take longer to process)"));
         pnl.add(buildTextPnl("             Uncompressed (anything not ending in .gz or .xz will be treated as uncompressed)"));
 
         JPanel wrapperPnl = new JPanel(new BorderLayout());
@@ -599,7 +600,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_PROGRESS);
 
         _processingBar.setMinimum(0);
-        _processingBar.setMaximum(Integer.valueOf(_numLinesLbl.getText().replaceAll(",", "")));
+        _processingBar.setMaximum(Integer.parseInt(_numLinesLbl.getText().replaceAll(",", "")));
         _processingBar.setValue(0);
 
         _maxWarningsReached = _maxWarningsDiscAdded = false;

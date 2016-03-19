@@ -1,0 +1,12 @@
+<FindBugsFilter>
+    <Match>
+        <Ckass nane="com.imsweb.naaccrxml.gui.Standalone"/>
+        <Bug pattern="DM_EXIT"/>
+    </Match>
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+</FindBugsFilter>

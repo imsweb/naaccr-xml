@@ -25,20 +25,34 @@ import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionaryItem;
  */
 public class PatientFlatReader implements AutoCloseable {
 
+    // the underlined line reader
     protected LineNumberReader _reader;
 
+    // the root data (determined by the first line of the reader)
     protected NaaccrData _rootData;
 
+    // the options requested to use when reading the patients
     protected NaaccrOptions _options;
 
+    // the runtime dictionary (combination of base and user-defined dictionaries)
     protected RuntimeNaaccrDictionary _dictionary;
 
+    // the cached items that need to be used to know whether tumors belong to the same patient
     protected List<RuntimeNaaccrDictionaryItem> _groupingItems;
 
+    // the NAACCR format to use
     protected NaaccrFormat _format;
 
+    // reference to the previous data line in the reader
     protected String _previousLine;
 
+    /**
+     * Constructor
+     * @param reader required underlined reader
+     * @param options optional options
+     * @param userDictionary optional user-defined dictionary
+     * @throws NaaccrIOException
+     */
     public PatientFlatReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         _reader = new LineNumberReader(reader);
         _options = options == null ? new NaaccrOptions() : options;
@@ -77,10 +91,9 @@ public class PatientFlatReader implements AutoCloseable {
             throw new NaaccrIOException("invalid line length for first record, expected " + _format.getLineLength() + " but got " + _previousLine.length());
 
         // read the root items
-        if (_previousLine != null)
-            for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
-                if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(itemDef.getParentXmlElement()))
-                    addItemFromLine(_rootData, _previousLine, _reader.getLineNumber(), itemDef);
+        for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems())
+            if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(itemDef.getParentXmlElement()))
+                addItemFromLine(_rootData, _previousLine, _reader.getLineNumber(), itemDef);
 
         // let's cache the grouping items, we are going to need them a lot...
         _groupingItems = new ArrayList<>();
@@ -198,7 +211,7 @@ public class PatientFlatReader implements AutoCloseable {
                 else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(def.getParentXmlElement()))
                     addItemFromLine(tumor, line, lineNumber, def);
             }
-            patient.getTumors().add(tumor);
+            patient.addTumor(tumor);
         }
 
         return patient;
@@ -207,7 +220,7 @@ public class PatientFlatReader implements AutoCloseable {
     protected void addItemFromLine(AbstractEntity entity, String line, Integer lineNumber, RuntimeNaaccrDictionaryItem def) {
         Item item = createItemFromLine(entity, line, lineNumber, def);
         if (item != null && !_options.getItemsToExclude().contains(def.getNaaccrId()))
-            entity.getItems().add(item);
+            entity.addItem(item);
     }
 
     protected Item createItemFromLine(AbstractEntity entity, String line, Integer lineNumber, RuntimeNaaccrDictionaryItem def) {
@@ -225,18 +238,16 @@ public class PatientFlatReader implements AutoCloseable {
                 value = trimmedValue;
 
             if (!value.isEmpty()) {
-                item = new Item();
-                item.setNaaccrId(def.getNaaccrId());
-                item.setNaaccrNum(def.getNaaccrNum());
-                item.setValue(value);
+                // create the item
+                item = new Item(def.getNaaccrId(), def.getNaaccrNum(), value);
 
-                // value should be valid
+                // validate the value
                 if (entity != null && _options.getValidateReadValues()) {
                     if (item.getValue().length() > def.getLength())
                         reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_LONG, def.getLength(), item.getValue().length());
                     else if (NaaccrXmlDictionaryUtils.isFullLengthRequiredForType(def.getDataType()) && item.getValue().length() != def.getLength())
                         reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_SHORT, def.getLength(), item.getValue().length());
-                    else if (def.getDataType() != null && !NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(def.getDataType()).matcher(item.getValue()).matches())
+                    else if (def.getDataType() != null && !NaaccrXmlDictionaryUtils.getDataTypePattern(def.getDataType()).matcher(item.getValue()).matches())
                         reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
                     else if (def.getRegexValidation() != null && !def.getRegexValidation().matcher(item.getValue()).matches())
                         reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getRegexValidation());
@@ -256,6 +267,6 @@ public class PatientFlatReader implements AutoCloseable {
         }
         if (value != null && !value.isEmpty())
             error.setValue(value);
-        entity.getValidationErrors().add(error);
+        entity.addValidationError(error);
     }
 }

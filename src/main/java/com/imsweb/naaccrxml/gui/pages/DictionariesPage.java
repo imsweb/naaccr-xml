@@ -89,11 +89,11 @@ public class DictionariesPage extends AbstractPage {
             }
         });
 
-        NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("140");
+        NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("160");
         selectionBox.setSelectedItem(dictionary.getDescription());
         _descLbl.setText(dictionary.getDictionaryUri() + " ");
         try {
-            area.setText(IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-140.xml"), "UTF-8"));
+            area.setText(IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-160.xml"), "UTF-8"));
         }
         catch (IOException ex) {
             area.setText("Unable to read dictionary...");

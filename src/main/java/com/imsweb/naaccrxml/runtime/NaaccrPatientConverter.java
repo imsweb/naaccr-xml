@@ -122,7 +122,7 @@ public class NaaccrPatientConverter implements Converter {
 
                     reader.moveUp();
                 }
-                patient.getTumors().add(tumor);
+                patient.addTumor(tumor);
             }
             // handle patient extension
             else {
@@ -234,7 +234,7 @@ public class NaaccrPatientConverter implements Converter {
                     reportError(entity, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_LONG, def.getLength(), item.getValue().length());
                 else if (NaaccrXmlDictionaryUtils.isFullLengthRequiredForType(def.getDataType()) && item.getValue().length() != def.getLength())
                     reportError(entity, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_SHORT, def.getLength(), item.getValue().length());
-                else if (def.getDataType() != null && !NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(def.getDataType()).matcher(item.getValue()).matches())
+                else if (def.getDataType() != null && !NaaccrXmlDictionaryUtils.getDataTypePattern(def.getDataType()).matcher(item.getValue()).matches())
                     reportError(entity, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
                 else if (def.getRegexValidation() != null && !def.getRegexValidation().matcher(item.getValue()).matches())
                     reportError(entity, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getRegexValidation());
@@ -242,7 +242,7 @@ public class NaaccrPatientConverter implements Converter {
 
         }
 
-        entity.getItems().add(item);
+        entity.addItem(item);
     }
 
     protected void reportError(AbstractEntity entity, int line, String path, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {
@@ -255,7 +255,7 @@ public class NaaccrPatientConverter implements Converter {
         }
         if (value != null && !value.isEmpty())
             error.setValue(value);
-        entity.getValidationErrors().add(error);
+        entity.addValidationError(error);
     }
 
     protected void reportSyntaxError(String message) throws ConversionException {

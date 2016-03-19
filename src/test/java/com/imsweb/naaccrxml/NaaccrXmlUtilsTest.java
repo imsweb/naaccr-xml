@@ -7,18 +7,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.DatatypeConverter;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -88,7 +82,7 @@ public class NaaccrXmlUtilsTest {
         Assert.assertEquals(2, data.getPatients().size());
 
         // read the file using a stream
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file))) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file), null, null, null)) {
             data = reader.getRootData();
             Assert.assertNotNull(data.getBaseDictionaryUri());
             Assert.assertNull(data.getUserDictionaryUri());
@@ -112,16 +106,16 @@ public class NaaccrXmlUtilsTest {
         data.setBaseDictionaryUri(NaaccrXmlDictionaryUtils.createUriFromVersion("140", true));
         data.setRecordType("I");
         data.setTimeGenerated(new Date());
-        data.getItems().add(createItem("vendorName", "VENDOR"));
+        data.addItem(createItem("vendorName", "VENDOR"));
         Patient patient1 = new Patient();
-        patient1.getItems().add(createItem("patientIdNumber", "00000001"));
+        patient1.addItem(createItem("patientIdNumber", "00000001"));
         Tumor tumor1 = new Tumor();
-        tumor1.getItems().add(createItem("primarySite", "C123"));
-        patient1.getTumors().add(tumor1);
-        data.getPatients().add(patient1);
+        tumor1.addItem(createItem("primarySite", "C123"));
+        patient1.addTumor(tumor1);
+        data.addPatient(patient1);
         Patient patient2 = new Patient();
-        patient2.getItems().add(createItem("patientIdNumber", "00000002"));
-        data.getPatients().add(patient2);
+        patient2.addItem(createItem("patientIdNumber", "00000002"));
+        data.addPatient(patient2);
 
         // write the entire file at once
         File file = new File(System.getProperty("user.dir") + "/build/test-writing-1.xml");
@@ -129,7 +123,7 @@ public class NaaccrXmlUtilsTest {
 
         // write the file using a steam
         file = new File(System.getProperty("user.dir") + "/build/test-writing-2.xml");
-        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null)) {
             for (Patient patient : data.getPatients())
                 writer.writePatient(patient);
         }
@@ -169,98 +163,5 @@ public class NaaccrXmlUtilsTest {
         // this one contains extensions
         File file2 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-extension-missing-namespace.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file2));
-    }
-
-    @Test
-    public void testXsdAgainstLibrary() {
-
-        // regular file
-        assertValidXmlFileForLibrary("validation-standard-file.xml");
-        assertValidXmlFileForXsd("validation-standard-file.xml");
-
-        // a regular file that defines the namespace but doesn't use prefixes, should be valid in both
-        assertValidXmlFileForLibrary("validation-namespace-without-prefix.xml");
-        assertValidXmlFileForXsd("validation-namespace-without-prefix.xml");
-
-        // a regular file that defines the namespace and uses prefix; we don't support that in the library...
-        assertNotValidXmlFileForLibrary("validation-namespace-with-prefix.xml");
-        assertValidXmlFileForXsd("validation-namespace-with-prefix.xml");
-
-        // this file has no items
-        assertValidXmlFileForLibrary("validation-no-items.xml");
-        assertValidXmlFileForXsd("validation-no-items.xml");
-
-        // this file has no patient
-        assertValidXmlFileForLibrary("validation-no-patients.xml");
-        assertValidXmlFileForXsd("validation-no-patients.xml");
-
-        // this file has no tumors
-        assertValidXmlFileForLibrary("validation-no-tumors.xml");
-        assertValidXmlFileForXsd("validation-no-tumors.xml");
-
-        // extensions - not valid with XSD because doesn't define the namespace (and extensions wouldn't be valid anyway)
-        assertValidXmlFileForLibrary("validation-extension-missing-namespace.xml");
-        assertNotValidXmlFileForXsd("validation-extension-missing-namespace.xml");
-
-        // this file has a root extension that should be ignored
-        assertValidXmlFileForLibrary("validation-extension-root.xml");
-        assertValidXmlFileForXsd("validation-extension-root.xml");
-
-        // this file has a patient extension that should be ignored
-        assertValidXmlFileForLibrary("validation-extension-patient.xml");
-        assertValidXmlFileForXsd("validation-extension-patient.xml");
-
-        // this file has a tumor extension that should be ignored
-        assertValidXmlFileForLibrary("validation-extension-tumor.xml");
-        assertValidXmlFileForXsd("validation-extension-tumor.xml");
-
-    }
-
-    private void assertValidXmlFileForXsd(String xmlFile) {
-        try {
-            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_data.xsd");
-            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = schemaFactory.newSchema(schemaXsd);
-            Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/" + xmlFile)));
-        }
-        catch (Exception e) {
-            Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
-        }
-    }
-
-    private void assertNotValidXmlFileForXsd(String xmlFile) {
-        try {
-            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_data.xsd");
-            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = schemaFactory.newSchema(schemaXsd);
-            Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/" + xmlFile)));
-        }
-        catch (Exception e) {
-            return;
-        }
-        Assert.fail("Was expected an invalid file, but it was valid");
-    }
-
-    private void assertValidXmlFileForLibrary(String xmlFile) {
-        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/" + xmlFile);
-        try {
-            NaaccrXmlUtils.readXmlFile(file, null, null, null);
-        }
-        catch (NaaccrIOException e) {
-            Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
-        }
-    }
-
-    private void assertNotValidXmlFileForLibrary(String xmlFile) {
-        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/" + xmlFile);
-        try {
-            NaaccrXmlUtils.readXmlFile(file, null, null, null);
-        }
-        catch (NaaccrIOException e) {
-            return;
-        }
-        Assert.fail("Was expected an invalid file, but it was valid");
     }
 }

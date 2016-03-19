@@ -1,0 +1,5 @@
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-150.xml" recordType="I">
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000001</Item>
+    </Patient>
+</NaaccrData>

@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2015 Information Management Services, Inc.
  */
-package com.imsweb.naaccrxml.lab;
+package lab;
 
 import java.io.File;
 import java.io.FileReader;

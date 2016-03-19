@@ -4,22 +4,18 @@
 package com.imsweb.naaccrxml;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URL;
+import java.io.Writer;
 import java.util.regex.Pattern;
-
-import javax.xml.XMLConstants;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 public class NaaccrXmlDictionaryUtilsTest {
 
@@ -41,27 +37,74 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertEquals(defaultUserDictionary1.getItems().size(), defaultUserDictionary2.getItems().size());
 
         // read a provided user dictionary
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("testing-user-dictionary-140.xml"))) {
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140.xml"))) {
             NaaccrDictionary defaultUserDictionary = NaaccrXmlDictionaryUtils.readDictionary(reader);
             Assert.assertEquals(3, defaultUserDictionary.getItems().size());
         }
 
         // try to read a user dictionary with an error (bad start column)
-        boolean exceptionHappend = false;
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("testing-user-dictionary-140-bad1.xml"))) {
+        boolean exceptionAppend = false;
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140-bad1.xml"))) {
             NaaccrXmlDictionaryUtils.readDictionary(reader);
         }
         catch (IOException e) {
-            exceptionHappend = true;
+            exceptionAppend = true;
         }
-        Assert.assertTrue(exceptionHappend);
+        Assert.assertTrue(exceptionAppend);
+    }
+
+    @Test
+    public void testWriteDictionary() throws IOException {
+
+        NaaccrDictionary dict = new NaaccrDictionary();
+        dict.setNaaccrVersion("140");
+        dict.setDictionaryUri("whatever");
+        dict.setDescription("Another whatever");
+        NaaccrDictionaryItem item = new NaaccrDictionaryItem();
+        item.setNaaccrId("myVariable");
+        item.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+        item.setNaaccrNum(10000);
+        item.setRecordTypes("A,M,C,I");
+        item.setDataType(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_NUMERIC);
+        item.setLength(2);
+        item.setStartColumn(2340);
+        item.setNaaccrName("My Variable");
+        item.setSourceOfStandard("ME");
+        item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
+        item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_NONE);
+        item.setRegexValidation("0[0-8]");
+        dict.addItem(item);
+
+        // write using a writer
+        File file = TestingUtils.createFile("dict-write-test.xml");
+        try (Writer writer = new FileWriter(file)) {
+            NaaccrXmlDictionaryUtils.writeDictionary(dict, writer);
+        }
+        NaaccrDictionary newDict = NaaccrXmlDictionaryUtils.readDictionary(file);
+        Assert.assertEquals("140", newDict.getNaaccrVersion());
+        Assert.assertEquals("whatever", newDict.getDictionaryUri());
+        Assert.assertEquals("Another whatever", newDict.getDescription());
+        Assert.assertEquals(1, newDict.getItems().size());
+        Assert.assertNotNull(newDict.getItemByNaaccrId("myVariable"));
+        Assert.assertNotNull(newDict.getItemByNaaccrNum(10000));
+
+        // write using a file
+        NaaccrXmlDictionaryUtils.writeDictionary(dict, file);
+        newDict = NaaccrXmlDictionaryUtils.readDictionary(file);
+        Assert.assertEquals("140", newDict.getNaaccrVersion());
+        Assert.assertEquals("whatever", newDict.getDictionaryUri());
+        Assert.assertEquals("Another whatever", newDict.getDescription());
+        Assert.assertEquals(1, newDict.getItems().size());
+        Assert.assertNotNull(newDict.getItemByNaaccrId("myVariable"));
+        Assert.assertNotNull(newDict.getItemByNaaccrNum(10000));
+
     }
 
     @Test
     public void testValidationRegex() {
 
         //  "alpha": uppercase letters, A-Z, no spaces, full length needs to be filled in
-        Pattern pattern = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_ALPHA);
+        Pattern pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_ALPHA);
         Assert.assertTrue(pattern.matcher("A").matches());
         Assert.assertTrue(pattern.matcher("AVALUE").matches());
         Assert.assertFalse(pattern.matcher("A VALUE").matches());
@@ -75,7 +118,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertFalse(pattern.matcher("A!").matches());
 
         // "digits": digits, 0-9, no spaces, full length needs to be filled in
-        pattern = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS);
+        pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS);
         Assert.assertTrue(pattern.matcher("1").matches());
         Assert.assertTrue(pattern.matcher("123").matches());
         Assert.assertFalse(pattern.matcher("12 3").matches());
@@ -88,7 +131,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertFalse(pattern.matcher("1!").matches());
 
         // "mixed": uppercase letters or digits, A-Z,0-9, no spaces, full length needs to be filled in
-        pattern = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_MIXED);
+        pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_MIXED);
         Assert.assertTrue(pattern.matcher("A").matches());
         Assert.assertTrue(pattern.matcher("AVALUE").matches());
         Assert.assertFalse(pattern.matcher("A VALUE").matches());
@@ -102,7 +145,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertFalse(pattern.matcher("A!").matches());
 
         // "numeric": digits, 0-9 with optional period, no spaces but value can be smaller than the length
-        pattern = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_NUMERIC);
+        pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_NUMERIC);
         Assert.assertTrue(pattern.matcher("1").matches());
         Assert.assertTrue(pattern.matcher("123").matches());
         Assert.assertFalse(pattern.matcher("12 3").matches());
@@ -119,7 +162,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertFalse(pattern.matcher("1.").matches());
 
         // "text": no checking on this value
-        pattern = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
+        pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
         Assert.assertTrue(pattern.matcher("A").matches());
         Assert.assertTrue(pattern.matcher("AVALUE").matches());
         Assert.assertTrue(pattern.matcher("A VALUE").matches());
@@ -133,7 +176,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertTrue(pattern.matcher("A!").matches());
         
         // "date": digits, YYYY or YYYYMM or YYYYMMDD
-        pattern = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPES_REGEX.get(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DATE);
+        pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DATE);
         Assert.assertTrue(pattern.matcher("20100615").matches());
         Assert.assertTrue(pattern.matcher("201006").matches());
         Assert.assertTrue(pattern.matcher("2010").matches());
@@ -172,6 +215,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         //assertValidXmlFileForXsd("user-defined-naaccr-dictionary-150.xml");
     }
 
+    /**
     private void assertValidXmlFileForXsd(String xmlFile) {
         try {
             URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_dictionary.xsd");
@@ -184,6 +228,7 @@ public class NaaccrXmlDictionaryUtilsTest {
             Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
         }
     }
+     */
 
     private void assertValidXmlFileForLibrary(String xmlFile) {
         File file = new File(System.getProperty("user.dir") + "/src/main/resources/" + xmlFile);

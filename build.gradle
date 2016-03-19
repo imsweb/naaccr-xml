@@ -1,62 +1,114 @@
-import com.github.jengelman.gradle.plugins.shadow.transformers.IncludeResourceTransformer
+import org.gradle.internal.jvm.Jvm
 
-// apply the script plugins
 plugins {
     id 'java'
+    id 'checkstyle'
+    id 'findbugs'
+    id 'com.bmuschko.nexus' version '2.3.1'
     id 'com.github.johnrengelman.shadow' version '1.2.1'
 }
-// project information
-group = 'org.naaccr'
-version = file('VERSION').text
-description = 'Attempt from the NAACCR XML Task Force to map the NAACCR flat-file format to an XML one.'
 
-// repository for the dependencies
+group = 'com.imsweb'
+version = file('VERSION').text
+description = 'This library provides support for the NAACCR XML format.'
+
+println "Starting build using ${Jvm.current()}"
+
 repositories {
     mavenCentral()
 }
 
-// project dependencies
 dependencies {
     compile 'commons-io:commons-io:2.4'
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'com.thoughtworks.xstream:xstream:1.4.7'
     compile 'org.tukaani:xz:1.5'
-    testCompile 'junit:junit:4.11'
+    testCompile 'junit:junit:4.12'
     testCompile 'au.com.bytecode:opencsv:2.4'
 }
 
+// enforce UTF-8 for all compilation tasks
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
 // customize the manifest
 jar {
-    from 'LICENSE'
-    from 'VERSION'
-    from 'changelog.txt'
     manifest {
         attributes('Implementation-Title': project.name,
                 'Implementation-Version': version,
-                'Main-Class': 'Standalone',
+                'Implementation-Vendor': 'Information Management Services Inc.',
+                'Created-By': System.properties['java.vm.version'] + ' (' + System.properties['java.vm.vendor'] + ')',
+                'Built-By': System.getProperty('user.name'),
+                'Built-Date': new Date(),
+                'Built-JDK': System.getProperty('java.version'),
+                'Main-Class': 'com.imsweb.naaccrxml.gui.Standalone',
                 'Class-Path': configurations.compile.collect { it.getName() }.join(' '))
+    }
+    from ('VERSION') {
+        rename 'VERSION', 'NAACCR-XML-VERSION'
+    }
+    from ('LICENSE') {
+        rename 'LICENSE', 'NAACCR-XML-LICENSE'
     }
 }
 
-// I really shouldn't have to do this, but for some reason, shadowJar doesn't copy the few extra files I add to the single JAR...
+// we don't want these files in the "all" jar, it's confusing
 shadowJar {
-    transform(IncludeResourceTransformer) {
-        file = project.file('changelog.txt')
-        resource = 'changelog.txt'
-    }
-    transform(IncludeResourceTransformer) {
-        file = project.file('LICENSE')
-        resource = 'LICENSE'
-    }
-    transform(IncludeResourceTransformer) {
-        file = project.file('VERSION')
-        resource = 'VERSION'
-    }
     exclude('XMLPULL_1_1_3_1_VERSION')
     exclude('XPP3_1.1.4c_MIN_VERSION')
+    from ('VERSION') {
+        rename 'VERSION', 'NAACCR-XML-VERSION'
+    }
+    from ('LICENSE') {
+        rename 'LICENSE', 'NAACCR-XML-LICENSE'
+    }
+}
+
+// checkstyle plugin settings
+checkstyle {
+    ignoreFailures = true
+    configFile = file('config/checkstyle/checkstyle.xml')
+}
+
+// findbugs plugin settings
+findbugs {
+    ignoreFailures = true
+    effort = 'max'
+    excludeFilter = file('config/findbugs/findbugs-exclude.xml')
+}
+
+// needed to deploy to Maven Central
+modifyPom {
+    project {
+        name 'NAACCR XML'
+        description 'This library provides support for the NAACCR XML format.'
+        url 'https://github.com/imsweb/naaccr-xml'
+        inceptionYear '2015'
+
+        scm {
+            url 'https://github.com/imsweb/naaccr-xml'
+            connection 'scm:https://github.com/imsweb/naaccr-xml.git'
+            developerConnection 'scm:git@github.com:imsweb/naaccr-xml.git'
+        }
+
+        licenses {
+            license {
+                name 'A modified BSD License (BSD)'
+                url 'https://github.com/imsweb/naaccr-xml/blob/master/LICENSE'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'depryf'
+                name 'Fabian Depry'
+                email 'depryf@imsweb.com'
+            }
+        }
+    }
 }
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2'
+    gradleVersion = '2.7'
 }

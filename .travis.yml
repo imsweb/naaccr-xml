@@ -1,0 +1,11 @@
+language: java
+
+jdk:
+- oraclejdk7
+
+before_install:
+- chmod +x gradlew
+
+notifications:
+  email:
+  - depryf@imsweb.com

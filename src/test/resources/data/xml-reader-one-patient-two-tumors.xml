@@ -1,0 +1,11 @@
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" recordType="I">
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000001</Item>
+        <Tumor>
+            <Item naaccrId="primarySite">C123</Item>
+        </Tumor>
+        <Tumor>
+            <Item naaccrId="primarySite">C456</Item>
+        </Tumor>
+    </Patient>
+</NaaccrData>

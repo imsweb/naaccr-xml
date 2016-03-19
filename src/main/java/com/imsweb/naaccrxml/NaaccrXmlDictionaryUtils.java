@@ -4,12 +4,14 @@
 package com.imsweb.naaccrxml;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -44,15 +46,15 @@ public final class NaaccrXmlDictionaryUtils {
     public static final String NAACCR_DATA_TYPE_DATE = "date"; // digits, YYYY or YYYYMM or YYYYMMDD
 
     // regular expression for each data type
-    public static final Map<String, Pattern> NAACCR_DATA_TYPES_REGEX = new HashMap<>();
+    private static final Map<String, Pattern> _NAACCR_DATA_TYPES_REGEX = new HashMap<>();
 
     static {
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_ALPHA, Pattern.compile("^[A-Z]+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DIGITS, Pattern.compile("^[0-9]+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_MIXED, Pattern.compile("^[A-Z0-9]+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_NUMERIC, Pattern.compile("^[0-9]+(\\.[0-9]+)?$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_TEXT, Pattern.compile("^.+$"));
-        NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)[0-9][0-9]((0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])?)?$"));
+        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_ALPHA, Pattern.compile("^[A-Z]+$"));
+        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DIGITS, Pattern.compile("^[0-9]+$"));
+        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_MIXED, Pattern.compile("^[A-Z0-9]+$"));
+        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_NUMERIC, Pattern.compile("^[0-9]+(\\.[0-9]+)?$"));
+        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_TEXT, Pattern.compile("^.+$"));
+        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)[0-9][0-9]((0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])?)?$"));
     }
 
     // trimming rules (default is all)
@@ -75,14 +77,23 @@ public final class NaaccrXmlDictionaryUtils {
     }
 
     /**
+     * Returns the pattern for the provided data type, null if not found.
+     * @param dataType requested data type
+     * @return corresponding pattern, maybe null
+     */
+    public static Pattern getDataTypePattern(String dataType) {
+        return _NAACCR_DATA_TYPES_REGEX.get(dataType);
+    }
+
+    /**
      * Returns whether values for a given data type need to have the same length as their definition
      * @param type given data type
      * @return true if the values of that type needs to be fully filled-in
      */
     public static boolean isFullLengthRequiredForType(String type) {
-        boolean result = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_ALPHA.equals(type);
-        result |= NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS.equals(type);
-        result |= NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_MIXED.equals(type);
+        boolean result = NAACCR_DATA_TYPE_ALPHA.equals(type);
+        result |= NAACCR_DATA_TYPE_DIGITS.equals(type);
+        result |= NAACCR_DATA_TYPE_MIXED.equals(type);
         return result;
     }
 
@@ -135,7 +146,8 @@ public final class NaaccrXmlDictionaryUtils {
             throw new RuntimeException("Version is required for getting the base dictionary.");
         if (!NaaccrFormat.isVersionSupported(naaccrVersion))
             throw new RuntimeException("Unsupported base dictionary version: " + naaccrVersion);
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResource("naaccr-dictionary-" + naaccrVersion + ".xml").openStream())) {
+        String resName = "naaccr-dictionary-" + naaccrVersion + ".xml";
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResource(resName).openStream(), StandardCharsets.UTF_8)) {
             return readDictionary(reader);
         }
         catch (IOException e) {
@@ -165,7 +177,8 @@ public final class NaaccrXmlDictionaryUtils {
             throw new RuntimeException("Version is required for getting the default user dictionary.");
         if (!NaaccrFormat.isVersionSupported(naaccrVersion))
             throw new RuntimeException("Unsupported default user dictionary version: " + naaccrVersion);
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResource("user-defined-naaccr-dictionary-" + naaccrVersion + ".xml").openStream())) {
+        String resName = "user-defined-naaccr-dictionary-" + naaccrVersion + ".xml";
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResource(resName).openStream(), StandardCharsets.UTF_8)) {
             return readDictionary(reader);
         }
         catch (IOException e) {
@@ -184,7 +197,7 @@ public final class NaaccrXmlDictionaryUtils {
             throw new IOException("File is required to load dictionary.");
         if (!file.exists())
             throw new IOException("File must exist to load dictionary.");
-        try (FileReader reader = new FileReader(file)) {
+        try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
             return readDictionary(reader);
         }
     }
@@ -192,14 +205,20 @@ public final class NaaccrXmlDictionaryUtils {
     /**
      * Reads a dictionary from the provided reader.
      * @param reader reader, cannot be null
-     * @return the corresonding dictionary
+     * @return the corresponding dictionary
      * @throws IOException if the dictionary could not be read
      */
     public static NaaccrDictionary readDictionary(Reader reader) throws IOException {
         NaaccrDictionary dictionary = (NaaccrDictionary)instanciateXStream().fromXML(reader);
 
-        boolean isBaseDictionary = dictionary.getDictionaryUri() != null && _PATTERN_DICTIONARY_URI.matcher(dictionary.getDictionaryUri()).matches();
-        validateDictionary(dictionary, isBaseDictionary);
+        String error;
+        if (dictionary.getDictionaryUri() != null && _PATTERN_DICTIONARY_URI.matcher(dictionary.getDictionaryUri()).matches())
+            error = validateBaseDictionary(dictionary);
+        else
+            error = validateUserDictionary(dictionary);
+
+        if (error != null)
+            throw new IOException(error);
 
         return dictionary;
     }
@@ -211,7 +230,7 @@ public final class NaaccrXmlDictionaryUtils {
      * @throws IOException if the dictionary could not be written
      */
     public static void writeDictionary(NaaccrDictionary dictionary, File file) throws IOException {
-        try (FileWriter writer = new FileWriter(file)) {
+        try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
             writeDictionary(dictionary, writer);
         }
     }
@@ -227,52 +246,71 @@ public final class NaaccrXmlDictionaryUtils {
     }
 
     /**
+     * Validates the provided base dictionary.
+     * @param dictionary dictionary to validate, can't be null
+     * @return null if the dictionary is valid, the error message otherwise
+     */
+    public static String validateBaseDictionary(NaaccrDictionary dictionary) {
+        return validateDictionary(dictionary, true);
+    }
+
+    /**
+     * Validates the provided user dictionary.
+     * @param dictionary dictionary to validate, can't be null
+     * @return null if the dictionary is valid, the error message otherwise
+     */
+    public static String validateUserDictionary(NaaccrDictionary dictionary) {
+        return validateDictionary(dictionary, false);
+    }
+
+    /**
      * Validates the provided dictionary
      * @param dictionary dictionary to validate, can't be null
      * @param isBaseDictionary true if the dictionary is a base dictionary, false otherwise
+     * @return null if the dictionary is valid, the error message otherwise
      */
-    public static void validateDictionary(NaaccrDictionary dictionary, boolean isBaseDictionary) throws IOException {
+    private static String validateDictionary(NaaccrDictionary dictionary, boolean isBaseDictionary) {
 
         if (dictionary.getDictionaryUri() == null || dictionary.getDictionaryUri().trim().isEmpty())
-            throw new IOException("'dictionaryUri' attribute is required");
+            return "'dictionaryUri' attribute is required";
         if (dictionary.getNaaccrVersion() == null || dictionary.getNaaccrVersion().trim().isEmpty())
-            throw new IOException("'naaccrVersion' attribute is required");
+            return "'naaccrVersion' attribute is required";
         if (dictionary.getItems().isEmpty())
-            throw new IOException("a dictionary must contain at least one item definition");
+            return "a dictionary must contain at least one item definition";
 
         Pattern idPattern = Pattern.compile("^[a-z][a-zA-Z0-9]+$");
         for (NaaccrDictionaryItem item : dictionary.getItems()) {
             if (item.getNaaccrId() == null || item.getNaaccrId().trim().isEmpty())
-                throw new IOException("'naaccrId' attribute is required");
+                return "'naaccrId' attribute is required";
             if (!idPattern.matcher(item.getNaaccrId()).matches())
-                throw new IOException("'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + item.getNaaccrId());
+                return "'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + item.getNaaccrId();
             if (item.getNaaccrNum() == null)
-                throw new IOException("'naaccrNum' attribute is required");
+                return "'naaccrNum' attribute is required";
             if (item.getLength() == null)
-                throw new IOException("'length' attribute is required");
+                return "'length' attribute is required";
             if (item.getStartColumn() == null)
-                throw new IOException("'startColumn' attribute is required");
+                return "'startColumn' attribute is required";
             if (item.getParentXmlElement() == null || item.getParentXmlElement().trim().isEmpty())
-                throw new IOException("'parentXmlElement' attribute is required");
+                return "'parentXmlElement' attribute is required";
             if (!NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(item.getParentXmlElement()) && !NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(item.getParentXmlElement())
                     && !NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(item.getParentXmlElement()))
-                throw new IOException("invalid value for 'parentXmlElement' attribute: " + item.getParentXmlElement());
+                return "invalid value for 'parentXmlElement' attribute: " + item.getParentXmlElement();
             if (item.getDataType() != null && (!NAACCR_DATA_TYPE_ALPHA.equals(item.getDataType()) && !NAACCR_DATA_TYPE_DIGITS.equals(item.getDataType()) && !NAACCR_DATA_TYPE_MIXED.equals(
                     item.getDataType())) && !NAACCR_DATA_TYPE_NUMERIC.equals(item.getDataType()) && !NAACCR_DATA_TYPE_TEXT.equals(item.getDataType()) && !NAACCR_DATA_TYPE_DATE.equals(
                     item.getDataType()))
-                throw new IOException("invalid value for 'dataType' attribute: " + item.getDataType());
+                return "invalid value for 'dataType' attribute: " + item.getDataType();
             if (item.getPadding() != null && (!NAACCR_PADDING_LEFT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_LEFT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_RIGHT_BLANK.equals(
                     item.getPadding()) && !NAACCR_PADDING_RIGHT_ZERO.equals(item.getPadding())))
-                throw new IOException("invalid value for 'padding' attribute: " + item.getPadding());
+                return "invalid value for 'padding' attribute: " + item.getPadding();
             if (item.getTrim() != null && (!NAACCR_TRIM_ALL.equals(item.getTrim()) && !NAACCR_TRIM_NONE.equals(item.getTrim())))
-                throw new IOException("invalid value for 'trim' attribute: " + item.getTrim());
+                return "invalid value for 'trim' attribute: " + item.getTrim();
             if (item.getRegexValidation() != null) {
                 try {
                     //noinspection ResultOfMethodCallIgnored
                     Pattern.compile(item.getRegexValidation());
                 }
                 catch (PatternSyntaxException e) {
-                    throw new IOException("invalid value for 'regexValidation' attribute: " + item.getRegexValidation());
+                    return "invalid value for 'regexValidation' attribute: " + item.getRegexValidation();
                 }
             }
         }
@@ -288,11 +326,11 @@ public final class NaaccrXmlDictionaryUtils {
 
                 // can't use an internal ID
                 if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null || defaultUserDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
-                    throw new IOException("invalid value for 'naaccrId' attribute: " + item.getNaaccrId() + "; this ID is used in the standard dictionary");
+                    return "invalid value for 'naaccrId' attribute: " + item.getNaaccrId() + "; this ID is used in the standard dictionary";
 
                 // range must be very specific for a user dictionary...
                 if (item.getNaaccrNum() < 9500 || item.getNaaccrNum() > 99999)
-                    throw new IOException("invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999");
+                    return "invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999";
 
                 // this is tricky, but an item must fall into the columns of one of the items defined in the corresponding items defined in the default user dictionary
                 boolean fallInAllowedRange = false;
@@ -303,9 +341,11 @@ public final class NaaccrXmlDictionaryUtils {
                     }
                 }
                 if (!fallInAllowedRange)
-                    throw new IOException("invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps");
+                    return "invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps";
             }
         }
+
+        return null;
     }
 
     /**
@@ -426,7 +466,7 @@ public final class NaaccrXmlDictionaryUtils {
         /**
          * This complex logic is needed because we wanted a non-standard formatting for the XML (in terms of indentations)...
          * @param attribute attribute to consider
-         * @return true if the provided attribute is the last one on the line, false otherwise. 
+         * @return true if the provided attribute is the last one on the line, false otherwise.
          */
         private boolean isLastAttribute(String attribute) {
             NaaccrDictionaryItem item = _dictionary.getItemByNaaccrId(_currentItemId);

@@ -12,6 +12,7 @@ import javax.xml.bind.DatatypeConverter;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.StreamException;
 
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
@@ -25,26 +26,37 @@ import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
  */
 public class PatientXmlReader implements AutoCloseable {
 
+    // the root data
     protected NaaccrData _rootData;
 
-    protected HierarchicalStreamReader _reader;
-
+    // XStream object responsible for reading patient objects
     protected XStream _xstream;
 
+    // underlined reader
+    protected HierarchicalStreamReader _reader;
+
+    // context for this reader (some stuff got a bit convoluted and using a context made them a cleaner)
     protected NaaccrStreamContext _context;
 
-    public PatientXmlReader(Reader reader) throws NaaccrIOException {
-        this(reader, null, null, null);
-    }
-
-    public PatientXmlReader(Reader reader, NaaccrOptions options) throws NaaccrIOException {
-        this(reader, options, null, null);
-    }
-
+    /**
+     * Constructor.
+     * @param reader required underlined reader
+     * @param options optional options
+     * @param userDictionary optional user-defined dictionary
+     * @throws NaaccrIOException
+     */
     public PatientXmlReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         this(reader, options, userDictionary, null);
     }
 
+    /**
+     * Constructor.
+     * @param reader required underlined reader
+     * @param options optional options
+     * @param userDictionary optional user-defined dictionary
+     * @param configuration optional stream configuration
+     * @throws NaaccrIOException
+     */
     public PatientXmlReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
 
         try {
@@ -92,7 +104,8 @@ public class PatientXmlReader implements AutoCloseable {
             if (generatedTime != null) {
                 try {
                     _rootData.setTimeGenerated(DatatypeConverter.parseDateTime(generatedTime).getTime());
-                } catch (IllegalArgumentException e) {
+                }
+                catch (IllegalArgumentException e) {
                     throw new NaaccrIOException("invalid time generated value: " + generatedTime, configuration.getParser().getLineNumber());
                 }
             }
@@ -105,7 +118,7 @@ public class PatientXmlReader implements AutoCloseable {
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
             for (int i = 0; i < _reader.getAttributeCount(); i++)
                 if (!standardAttributes.contains(_reader.getAttributeName(i)) && !_reader.getAttributeName(i).startsWith("xmlns"))
-                    _rootData.getExtraRootParameters().put(_reader.getAttributeName(i), _reader.getAttribute(i));
+                    _rootData.addExtraRootParameters(_reader.getAttributeName(i), _reader.getAttribute(i));
 
             // now we are ready to create our reading context and make it available to the patient converter
             _context = new NaaccrStreamContext();
@@ -158,6 +171,9 @@ public class PatientXmlReader implements AutoCloseable {
         }
         catch (ConversionException ex) {
             throw convertSyntaxException(ex);
+        }
+        catch (StreamException ex) {
+            throw new NaaccrIOException("invalid XML syntax, unable to find root tag");
         }
     }
 

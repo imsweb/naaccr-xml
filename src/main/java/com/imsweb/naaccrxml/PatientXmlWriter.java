@@ -3,20 +3,6 @@
  */
 package com.imsweb.naaccrxml;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.xml.bind.DatatypeConverter;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.ConversionException;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-
 import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
@@ -24,28 +10,49 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamContext;
 import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
+
+import javax.xml.bind.DatatypeConverter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * This class can be used to wrap a generic writer into a patient writer handling the NAACCR XML format.
  */
 public class PatientXmlWriter implements AutoCloseable {
 
-    protected HierarchicalStreamWriter _writer;
-
+    // XStream object responsible for reading patient objects
     protected XStream _xstream;
 
-    public PatientXmlWriter(Writer writer, NaaccrData rootData) throws NaaccrIOException {
-        this(writer, rootData, null, null, null);
-    }
+    // the underlined writer
+    protected HierarchicalStreamWriter _writer;
 
-    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options) throws NaaccrIOException {
-        this(writer, rootData, options, null, null);
-    }
-
+    /**
+     * Constructor.
+     * @param writer required underlined writer
+     * @param options optional options
+     * @param userDictionary optional user-defined dictionary
+     * @throws NaaccrIOException
+     */
     public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         this(writer, rootData, options, userDictionary, null);
     }
 
+    /**
+     * Constructor.
+     * @param writer required underlined writer
+     * @param options optional options
+     * @param userDictionary optional user-defined dictionary
+     * @param configuration optional stream configuration
+     * @throws NaaccrIOException
+     */
     public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
 
         try {
@@ -118,6 +125,10 @@ public class PatientXmlWriter implements AutoCloseable {
         }
     }
 
+    /**
+     * Writes the given patient on this stream.
+     * @throws NaaccrIOException
+     */
     public void writePatient(Patient patient) throws NaaccrIOException {
         try {
             _xstream.marshal(patient, _writer);
@@ -134,9 +145,9 @@ public class PatientXmlWriter implements AutoCloseable {
     }
 
     /**
-     * We don't want to expose the conversion exceptions, so let's translate them into our own exception...
+     * We don't want to expose the conversion exceptions, so let's translate them into our own exceptions...
      */
-    private NaaccrIOException convertSyntaxException(ConversionException ex) {
+    protected NaaccrIOException convertSyntaxException(ConversionException ex) {
         String msg = ex.get("message");
         if (msg == null)
             msg = ex.getMessage();
