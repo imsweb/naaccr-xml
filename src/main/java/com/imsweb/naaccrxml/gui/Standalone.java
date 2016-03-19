@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,7 +59,7 @@ import com.imsweb.naaccrxml.gui.pages.XmlValidationPage;
 public class Standalone extends JFrame implements ActionListener {
 
     // would be nice to read this from the Manifest file in the JAR...
-    public static final String VERSION = "v1.2";
+    public static final String VERSION = getVersion();
 
     private CardLayout _layout;
     private JPanel _centerPnl;
@@ -147,6 +148,34 @@ public class Standalone extends JFrame implements ActionListener {
                 _buttons.get(0).doClick();
             }
         });
+    }
+
+    private static String getVersion() {
+        String version = null;
+
+        // this will make it work when running from the JAR file
+        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("NAACCR-XML-VERSION")) {
+            if (is != null)
+                version = IOUtils.readLines(is).get(0);
+        }
+        catch (IOException e) {
+            version = null;
+        }
+
+        // this will make it work when running from an IDE
+        if (version == null) {
+            try (FileInputStream is = new FileInputStream(System.getProperty("user.dir") + File.separator + "VERSION")) {
+                version = IOUtils.readLines(is).get(0);
+            }
+            catch (IOException e) {
+                version = null;
+            }
+        }
+
+        if (version == null)
+            version = "??";
+
+        return "v" + version;
     }
 
     @SuppressWarnings("ConstantConditions")
