@@ -1,6 +1,6 @@
 ## NAACCR XML Version History
 
-**Version 1.1**
+**Version 1.2**
 
   - Improved the dictionary page in the standalone GUI.
   - Stopped using exception when validating a dictionary.
