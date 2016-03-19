@@ -2,6 +2,7 @@
 
 **Version 1.1**
 
+  - Improved the dictionary page in the standalone GUI.
   - Stopped using exception when validating a dictionary.
   - Fixed bug related to caching items on each abstract entities.
   - Fixed two bad item ID (and name) in NAACCR 16 dictionary.
