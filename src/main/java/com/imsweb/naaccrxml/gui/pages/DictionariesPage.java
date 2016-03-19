@@ -10,8 +10,6 @@ import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,6 +32,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -159,15 +159,29 @@ public class DictionariesPage extends AbstractPage {
         tableControlsPnl.add(new JLabel("Filter Items:"));
         tableControlsPnl.add(Box.createHorizontalStrut(5));
         final JTextField filterFld = new JTextField(25);
-        filterFld.addKeyListener(new KeyAdapter() {
+        filterFld.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void keyTyped(KeyEvent e) {
+            public void insertUpdate(DocumentEvent e) {
                 try {
                     _itemsSorter.setRowFilter(RowFilter.regexFilter("(?i)" + filterFld.getText(), 0, 1, 2));
                 }
                 catch (PatternSyntaxException ex) {
                     // ignored
                 }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                try {
+                    _itemsSorter.setRowFilter(RowFilter.regexFilter("(?i)" + filterFld.getText(), 0, 1, 2));
+                }
+                catch (PatternSyntaxException ex) {
+                    // ignored
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
             }
         });
         tableControlsPnl.add(filterFld);
