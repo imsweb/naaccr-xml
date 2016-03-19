@@ -65,7 +65,8 @@ public class XmlValidationPage extends AbstractProcessingPage {
             return NaaccrFormat.getInstance(NaaccrXmlDictionaryUtils.extractVersionFromUri(rootData.getBaseDictionaryUri()), rootData.getRecordType());
         }
         catch (NaaccrIOException e) {
-            reportAnalysisError("line " + e.getLineNumber() + ", " + e.getMessage());
+            String lineNum = e.getLineNumber() != null ? e.getLineNumber().toString() : "N/A";
+            reportAnalysisError("line " + lineNum + ": " + e.getMessage());
             return null;
         }
     }

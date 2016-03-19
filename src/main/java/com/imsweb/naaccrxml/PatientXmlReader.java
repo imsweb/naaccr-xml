@@ -12,6 +12,7 @@ import javax.xml.bind.DatatypeConverter;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.StreamException;
 
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
@@ -170,6 +171,9 @@ public class PatientXmlReader implements AutoCloseable {
         }
         catch (ConversionException ex) {
             throw convertSyntaxException(ex);
+        }
+        catch (StreamException ex) {
+            throw new NaaccrIOException("invalid XML syntax, unable to find root tag");
         }
     }
 
