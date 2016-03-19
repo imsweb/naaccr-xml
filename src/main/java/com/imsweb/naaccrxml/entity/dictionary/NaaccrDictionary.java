@@ -4,6 +4,7 @@
 package com.imsweb.naaccrxml.entity.dictionary;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,12 @@ public class NaaccrDictionary {
     // caches to improve lookup performances
     private Map<String, NaaccrDictionaryItem> _cachedById;
     private Map<Integer, NaaccrDictionaryItem> _cachedByNumber;
+    
+    public NaaccrDictionary() {
+        _items = new ArrayList<>();
+        _cachedById = new HashMap<>();
+        _cachedByNumber = new HashMap<>();
+    }
 
     public String getDictionaryUri() {
         return _dictionaryUri;
@@ -47,29 +54,43 @@ public class NaaccrDictionary {
     }
 
     public List<NaaccrDictionaryItem> getItems() {
-        if (_items == null)
-            _items = new ArrayList<>();
-        return _items;
+        return Collections.unmodifiableList(_items);
+    }
+    
+    public void setItems(List<NaaccrDictionaryItem> items) {
+        if (items != null) {
+            _items = items;
+            for (NaaccrDictionaryItem item : items) {
+                _cachedById.put(item.getNaaccrId(), item);
+                _cachedByNumber.put(item.getNaaccrNum(), item);
+            }
+        }
+    }
+    
+    public void addItem(NaaccrDictionaryItem item) {
+        _items.add(item);
+        if (item.getNaaccrId() != null)
+            _cachedById.put(item.getNaaccrId(), item);
+        if (item.getNaaccrNum() != null)
+            _cachedByNumber.put(item.getNaaccrNum(), item);
     }
 
     public NaaccrDictionaryItem getItemByNaaccrId(String id) {
+        // I don't know how/why, but it seems XStreams by-passes the default constructor, so I have to deal with a null cache here...
         if (_cachedById == null) {
-            Map<String, NaaccrDictionaryItem> cache = new HashMap<>();
+            _cachedById = new HashMap<>();
             for (NaaccrDictionaryItem item : _items)
-                if (item.getNaaccrId() != null)
-                    cache.put(item.getNaaccrId(), item);
-            _cachedById = cache;
+                _cachedById.put(item.getNaaccrId(), item);
         }
         return _cachedById.get(id);
     }
 
     public NaaccrDictionaryItem getItemByNaaccrNum(Integer number) {
+        // I don't know how/why, but it seems XStreams by-passes the default constructor, so I have to deal with a null cache here...
         if (_cachedByNumber == null) {
-            Map<Integer, NaaccrDictionaryItem> cache = new HashMap<>();
+            _cachedByNumber = new HashMap<>();
             for (NaaccrDictionaryItem item : _items)
-                if (item.getNaaccrNum() != null)
-                    cache.put(item.getNaaccrNum(), item);
-            _cachedByNumber = cache;
+                _cachedByNumber.put(item.getNaaccrNum(), item);
         }
         return _cachedByNumber.get(number);
     }

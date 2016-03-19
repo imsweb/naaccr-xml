@@ -219,7 +219,7 @@ public final class NaaccrXmlDictionaryUtils {
 
         if (error != null)
             throw new IOException(error);
-        
+
         return dictionary;
     }
 
@@ -262,7 +262,7 @@ public final class NaaccrXmlDictionaryUtils {
     public static String validateUserDictionary(NaaccrDictionary dictionary) {
         return validateDictionary(dictionary, false);
     }
-    
+
     /**
      * Validates the provided dictionary
      * @param dictionary dictionary to validate, can't be null
@@ -276,41 +276,41 @@ public final class NaaccrXmlDictionaryUtils {
         if (dictionary.getNaaccrVersion() == null || dictionary.getNaaccrVersion().trim().isEmpty())
             return "'naaccrVersion' attribute is required";
         if (dictionary.getItems().isEmpty())
-            return"a dictionary must contain at least one item definition";
+            return "a dictionary must contain at least one item definition";
 
         Pattern idPattern = Pattern.compile("^[a-z][a-zA-Z0-9]+$");
         for (NaaccrDictionaryItem item : dictionary.getItems()) {
             if (item.getNaaccrId() == null || item.getNaaccrId().trim().isEmpty())
-                return"'naaccrId' attribute is required";
+                return "'naaccrId' attribute is required";
             if (!idPattern.matcher(item.getNaaccrId()).matches())
-                return"'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + item.getNaaccrId();
+                return "'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + item.getNaaccrId();
             if (item.getNaaccrNum() == null)
-                return"'naaccrNum' attribute is required";
+                return "'naaccrNum' attribute is required";
             if (item.getLength() == null)
-                return"'length' attribute is required";
+                return "'length' attribute is required";
             if (item.getStartColumn() == null)
-                return"'startColumn' attribute is required";
+                return "'startColumn' attribute is required";
             if (item.getParentXmlElement() == null || item.getParentXmlElement().trim().isEmpty())
-                return"'parentXmlElement' attribute is required";
+                return "'parentXmlElement' attribute is required";
             if (!NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(item.getParentXmlElement()) && !NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(item.getParentXmlElement())
                     && !NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(item.getParentXmlElement()))
-                return"invalid value for 'parentXmlElement' attribute: " + item.getParentXmlElement();
+                return "invalid value for 'parentXmlElement' attribute: " + item.getParentXmlElement();
             if (item.getDataType() != null && (!NAACCR_DATA_TYPE_ALPHA.equals(item.getDataType()) && !NAACCR_DATA_TYPE_DIGITS.equals(item.getDataType()) && !NAACCR_DATA_TYPE_MIXED.equals(
                     item.getDataType())) && !NAACCR_DATA_TYPE_NUMERIC.equals(item.getDataType()) && !NAACCR_DATA_TYPE_TEXT.equals(item.getDataType()) && !NAACCR_DATA_TYPE_DATE.equals(
                     item.getDataType()))
-                return"invalid value for 'dataType' attribute: " + item.getDataType();
+                return "invalid value for 'dataType' attribute: " + item.getDataType();
             if (item.getPadding() != null && (!NAACCR_PADDING_LEFT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_LEFT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_RIGHT_BLANK.equals(
                     item.getPadding()) && !NAACCR_PADDING_RIGHT_ZERO.equals(item.getPadding())))
-                return"invalid value for 'padding' attribute: " + item.getPadding();
+                return "invalid value for 'padding' attribute: " + item.getPadding();
             if (item.getTrim() != null && (!NAACCR_TRIM_ALL.equals(item.getTrim()) && !NAACCR_TRIM_NONE.equals(item.getTrim())))
-                return"invalid value for 'trim' attribute: " + item.getTrim();
+                return "invalid value for 'trim' attribute: " + item.getTrim();
             if (item.getRegexValidation() != null) {
                 try {
                     //noinspection ResultOfMethodCallIgnored
                     Pattern.compile(item.getRegexValidation());
                 }
                 catch (PatternSyntaxException e) {
-                    return"invalid value for 'regexValidation' attribute: " + item.getRegexValidation();
+                    return "invalid value for 'regexValidation' attribute: " + item.getRegexValidation();
                 }
             }
         }
@@ -326,11 +326,11 @@ public final class NaaccrXmlDictionaryUtils {
 
                 // can't use an internal ID
                 if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null || defaultUserDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
-                    return"invalid value for 'naaccrId' attribute: " + item.getNaaccrId() + "; this ID is used in the standard dictionary";
+                    return "invalid value for 'naaccrId' attribute: " + item.getNaaccrId() + "; this ID is used in the standard dictionary";
 
                 // range must be very specific for a user dictionary...
                 if (item.getNaaccrNum() < 9500 || item.getNaaccrNum() > 99999)
-                    return"invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999";
+                    return "invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999";
 
                 // this is tricky, but an item must fall into the columns of one of the items defined in the corresponding items defined in the default user dictionary
                 boolean fallInAllowedRange = false;
@@ -341,10 +341,10 @@ public final class NaaccrXmlDictionaryUtils {
                     }
                 }
                 if (!fallInAllowedRange)
-                    return"invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps";
+                    return "invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps";
             }
         }
-        
+
         return null;
     }
 

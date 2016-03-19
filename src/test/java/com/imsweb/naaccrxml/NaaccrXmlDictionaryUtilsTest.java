@@ -73,7 +73,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
         item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_NONE);
         item.setRegexValidation("0[0-8]");
-        dict.getItems().add(item);
+        dict.addItem(item);
 
         // write using a writer
         File file = TestingUtils.createFile("dict-write-test.xml");

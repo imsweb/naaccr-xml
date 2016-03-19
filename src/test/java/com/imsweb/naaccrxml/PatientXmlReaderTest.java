@@ -176,7 +176,7 @@ public class PatientXmlReaderTest {
         item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
         item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_NONE);
         item.setRegexValidation("0[0-8]");
-        dict.getItems().add(item);
+        dict.addItem(item);
         Assert.assertNotNull(dict.getItemByNaaccrId("myVariable"));
         Assert.assertNotNull(dict.getItemByNaaccrNum(10000));
 

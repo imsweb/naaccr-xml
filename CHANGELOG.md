@@ -2,6 +2,12 @@
 
 **Version 1.1**
 
+  - Stopped using exception when validating a dictionary.
+  - Fixed bug related to caching items on each abstract entities.
+  - Fixed two bad item ID (and name) in NAACCR 16 dictionary.
+
+**Version 1.1**
+
   - Fixed wrong path to the main GUI class in the JAR's manifest.
 
 **Version 1.0**

@@ -109,7 +109,7 @@ public class CsvToXmlDictionaryLab {
                 // this is temporary until the data types are looked at and fixed...
                 //item.setRegexValidation(null);
 
-                dictionary.getItems().add(item);
+                dictionary.addItem(item);
             }
         }
 
