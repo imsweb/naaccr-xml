@@ -3,17 +3,18 @@
  */
 package com.imsweb.naaccrxml;
 
-import com.imsweb.naaccrxml.entity.Item;
-import com.imsweb.naaccrxml.entity.NaaccrData;
-import com.imsweb.naaccrxml.entity.Patient;
-import com.imsweb.naaccrxml.entity.Tumor;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.imsweb.naaccrxml.entity.Item;
+import com.imsweb.naaccrxml.entity.NaaccrData;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
 public class PatientFlatWriterTest {
 
@@ -22,13 +23,13 @@ public class PatientFlatWriterTest {
 
         // create the root data
         NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_INCIDENCE);
-        data.getItems().add(new Item("registryId", null, "0000000001"));
+        data.addItem(new Item("registryId", null, "0000000001"));
 
         // a patient with no tumor
         File file = TestingUtils.createFile("test-flat-writer-no-tumor.txt");
         PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, null, null);
         Patient patient = new Patient();
-        patient.getItems().add(new Item("patientIdNumber", null, "00000001"));
+        patient.addItem(new Item("patientIdNumber", null, "00000001"));
         writer.writePatient(patient);
         writer.close();
         List<String> lines = TestingUtils.readFile(file);
@@ -43,10 +44,10 @@ public class PatientFlatWriterTest {
         file = TestingUtils.createFile("test-flat-writer-one-tumor.txt");
         writer = new PatientFlatWriter(new FileWriter(file), data, null, null);
         patient = new Patient();
-        patient.getItems().add(new Item("patientIdNumber", null, "00000001"));
+        patient.addItem(new Item("patientIdNumber", null, "00000001"));
         Tumor tumor1 = new Tumor();
-        tumor1.getItems().add(new Item("primarySite", null, "C123"));
-        patient.getTumors().add(tumor1);
+        tumor1.addItem(new Item("primarySite", null, "C123"));
+        patient.addTumor(tumor1);
         writer.writePatient(patient);
         writer.close();
         lines = TestingUtils.readFile(file);
@@ -61,13 +62,13 @@ public class PatientFlatWriterTest {
         file = TestingUtils.createFile("test-flat-writer-two-tumors.txt");
         writer = new PatientFlatWriter(new FileWriter(file), data, null, null);
         patient = new Patient();
-        patient.getItems().add(new Item("patientIdNumber", null, "00000001"));
+        patient.addItem(new Item("patientIdNumber", null, "00000001"));
         tumor1 = new Tumor();
-        tumor1.getItems().add(new Item("primarySite", null, "C123"));
-        patient.getTumors().add(tumor1);
+        tumor1.addItem(new Item("primarySite", null, "C123"));
+        patient.addTumor(tumor1);
         tumor1 = new Tumor();
-        tumor1.getItems().add(new Item("primarySite", null, "C456"));
-        patient.getTumors().add(tumor1);
+        tumor1.addItem(new Item("primarySite", null, "C456"));
+        patient.addTumor(tumor1);
         writer.writePatient(patient);
         writer.close();
         lines = TestingUtils.readFile(file);
@@ -87,16 +88,16 @@ public class PatientFlatWriterTest {
         file = TestingUtils.createFile("test-flat-writer-two-patients.txt");
         writer = new PatientFlatWriter(new FileWriter(file), data, null, null);
         Patient patient1 = new Patient();
-        patient1.getItems().add(new Item("patientIdNumber", null, "00000001"));
+        patient1.addItem(new Item("patientIdNumber", null, "00000001"));
         tumor1 = new Tumor();
-        tumor1.getItems().add(new Item("primarySite", null, "C123"));
-        patient1.getTumors().add(tumor1);
+        tumor1.addItem(new Item("primarySite", null, "C123"));
+        patient1.addTumor(tumor1);
         writer.writePatient(patient1);
         Patient patient2 = new Patient();
-        patient2.getItems().add(new Item("patientIdNumber", null, "00000002"));
+        patient2.addItem(new Item("patientIdNumber", null, "00000002"));
         Tumor tumor2 = new Tumor();
-        tumor2.getItems().add(new Item("primarySite", null, "C456"));
-        patient2.getTumors().add(tumor2);
+        tumor2.addItem(new Item("primarySite", null, "C456"));
+        patient2.addTumor(tumor2);
         writer.writePatient(patient2);
         writer.close();
         lines = TestingUtils.readFile(file);
@@ -118,12 +119,12 @@ public class PatientFlatWriterTest {
 
         // create the root data
         NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_INCIDENCE);
-        data.getItems().add(new Item("registryId", null, "0000000001"));
+        data.addItem(new Item("registryId", null, "0000000001"));
 
         File file = TestingUtils.createFile("test-flat-writer-values-with-new-lines.txt");
         PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, null, null);
         Patient patient = new Patient();
-        patient.getItems().add(new Item("patientIdNumber", null, "000000\r\n1"));
+        patient.addItem(new Item("patientIdNumber", null, "000000\r\n1"));
         writer.writePatient(patient);
         writer.close();
         List<String> lines = TestingUtils.readFile(file);

@@ -122,7 +122,7 @@ public class NaaccrPatientConverter implements Converter {
 
                     reader.moveUp();
                 }
-                patient.getTumors().add(tumor);
+                patient.addTumor(tumor);
             }
             // handle patient extension
             else {
@@ -242,7 +242,7 @@ public class NaaccrPatientConverter implements Converter {
 
         }
 
-        entity.getItems().add(item);
+        entity.addItem(item);
     }
 
     protected void reportError(AbstractEntity entity, int line, String path, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {
@@ -255,7 +255,7 @@ public class NaaccrPatientConverter implements Converter {
         }
         if (value != null && !value.isEmpty())
             error.setValue(value);
-        entity.getValidationErrors().add(error);
+        entity.addValidationError(error);
     }
 
     protected void reportSyntaxError(String message) throws ConversionException {

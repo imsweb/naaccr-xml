@@ -4,6 +4,7 @@
 package com.imsweb.naaccrxml.entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +16,9 @@ import com.imsweb.naaccrxml.NaaccrValidationError;
  * <ol>
  *     <li>Entity has a collection of items on it</li>
  *     <li>Entity has a collection of validation errors on it</li>
- *     <li>Entity has a line number on it (might not always be available)</li>
+ *     <li>Entity has a line number on it (might not always be populated)</li>
  * </ol>
- * This class also defines some utility methods to read/write those collections...
+ * This class also defines some utility methods to read/write those variables...
  */
 public class AbstractEntity {
 
@@ -34,6 +35,15 @@ public class AbstractEntity {
     protected Map<String, Item> _cachedById;
 
     /**
+     * Default constructor.
+     */
+    public AbstractEntity() {
+        _items = new ArrayList<>();
+        _errors = new ArrayList<>();
+        _cachedById = new HashMap<>();
+    }
+
+    /**
      * Returns all the items defined on this entity.
      * <br/><br/>
      * This method will only return the items that actually have a value. To iterates over all the items, regardless of their
@@ -41,9 +51,19 @@ public class AbstractEntity {
      * @return the list of items that are contained in this entity
      */
     public List<Item> getItems() {
-        if (_items == null)
-            _items = new ArrayList<>();
-        return _items;
+        return Collections.unmodifiableList(_items);
+    }
+
+    /**
+     * Adds an item to this entity.
+     * <br/><br/>
+     * This method makes no validation on the item or its value; for example, it doesn't check that an item with the same ID has already been added.
+     * The caller can check before adding the item, or wait until the full patient is validated, which will fail for duplicate items.
+     * @param item item to add, cannot be null
+     */
+    public void addItem(Item item) {
+        _items.add(item);
+        _cachedById.put(item.getNaaccrId(), item);
     }
 
     /**
@@ -55,13 +75,6 @@ public class AbstractEntity {
      * @return the corresponding item, sometimes null
      */
     public Item getItem(String id) {
-        if (_cachedById == null) {
-            Map<String, Item> cache = new HashMap<>();
-            for (Item item : getItems())
-                if (item.getNaaccrId() != null)
-                    cache.put(item.getNaaccrId(), item);
-            _cachedById = cache;
-        }
         return _cachedById.get(id);
     }
 
@@ -82,9 +95,15 @@ public class AbstractEntity {
      * @return collection of validation error, maybe empty but never null
      */
     public List<NaaccrValidationError> getValidationErrors() {
-        if (_errors == null)
-            _errors = new ArrayList<>();
-        return _errors;
+        return Collections.unmodifiableList(_errors);
+    }
+
+    /**
+     * Adds a validation error on the current entity.
+     * @param error error to add, cannot be null
+     */
+    public void addValidationError(NaaccrValidationError error) {
+        _errors.add(error);
     }
 
     /**

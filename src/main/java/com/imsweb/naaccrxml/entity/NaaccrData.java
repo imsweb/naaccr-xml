@@ -4,6 +4,7 @@
 package com.imsweb.naaccrxml.entity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,9 @@ public class NaaccrData extends AbstractEntity {
     private List<Patient> _patients;
     
     public NaaccrData() {
+        super();
+        _extraRootParameters = new HashMap<>();
+        _patients = new ArrayList<>();
     }
     
     public NaaccrData(String format) {
@@ -70,14 +74,18 @@ public class NaaccrData extends AbstractEntity {
     }
 
     public Map<String, String> getExtraRootParameters() {
-        if (_extraRootParameters == null)
-            _extraRootParameters = new HashMap<>();
-        return _extraRootParameters;
+        return Collections.unmodifiableMap(_extraRootParameters);
+    }
+
+    public void addExtraRootParameters(String key, String value) {
+        _extraRootParameters.put(key, value);
     }
     
     public List<Patient> getPatients() {
-        if (_patients == null)
-            _patients = new ArrayList<>();
-        return _patients;
+        return Collections.unmodifiableList(_patients);
+    }
+    
+    public void addPatient(Patient patient) {
+        _patients.add(patient);
     }
 }

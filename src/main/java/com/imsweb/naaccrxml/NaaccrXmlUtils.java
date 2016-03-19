@@ -144,7 +144,7 @@ public class NaaccrXmlUtils {
             while (patient != null && !Thread.currentThread().isInterrupted()) {
                 if (observer != null)
                     observer.patientRead(patient);
-                rootData.getPatients().add(patient);
+                rootData.addPatient(patient);
                 patient = reader.readPatient();
             }
             return rootData;
@@ -201,7 +201,7 @@ public class NaaccrXmlUtils {
             while (patient != null && !Thread.currentThread().isInterrupted()) {
                 if (observer != null)
                     observer.patientRead(patient);
-                data.getPatients().add(patient);
+                data.addPatient(patient);
                 patient = reader.readPatient();
             }
             return data;

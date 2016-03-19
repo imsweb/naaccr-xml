@@ -117,7 +117,7 @@ public class PatientXmlReader implements AutoCloseable {
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
             for (int i = 0; i < _reader.getAttributeCount(); i++)
                 if (!standardAttributes.contains(_reader.getAttributeName(i)) && !_reader.getAttributeName(i).startsWith("xmlns"))
-                    _rootData.getExtraRootParameters().put(_reader.getAttributeName(i), _reader.getAttribute(i));
+                    _rootData.addExtraRootParameters(_reader.getAttributeName(i), _reader.getAttribute(i));
 
             // now we are ready to create our reading context and make it available to the patient converter
             _context = new NaaccrStreamContext();

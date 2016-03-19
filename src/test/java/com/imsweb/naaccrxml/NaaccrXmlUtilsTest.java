@@ -3,14 +3,6 @@
  */
 package com.imsweb.naaccrxml;
 
-import com.imsweb.naaccrxml.entity.Item;
-import com.imsweb.naaccrxml.entity.NaaccrData;
-import com.imsweb.naaccrxml.entity.Patient;
-import com.imsweb.naaccrxml.entity.Tumor;
-import org.junit.Assert;
-import org.junit.Test;
-
-import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -19,6 +11,16 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.xml.bind.DatatypeConverter;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.imsweb.naaccrxml.entity.Item;
+import com.imsweb.naaccrxml.entity.NaaccrData;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
 // TODO FPD beef up these tests; add cases for options, user dictionary and observer...
 // TODO FPD add tests for line number on main entities...
@@ -104,16 +106,16 @@ public class NaaccrXmlUtilsTest {
         data.setBaseDictionaryUri(NaaccrXmlDictionaryUtils.createUriFromVersion("140", true));
         data.setRecordType("I");
         data.setTimeGenerated(new Date());
-        data.getItems().add(createItem("vendorName", "VENDOR"));
+        data.addItem(createItem("vendorName", "VENDOR"));
         Patient patient1 = new Patient();
-        patient1.getItems().add(createItem("patientIdNumber", "00000001"));
+        patient1.addItem(createItem("patientIdNumber", "00000001"));
         Tumor tumor1 = new Tumor();
-        tumor1.getItems().add(createItem("primarySite", "C123"));
-        patient1.getTumors().add(tumor1);
-        data.getPatients().add(patient1);
+        tumor1.addItem(createItem("primarySite", "C123"));
+        patient1.addTumor(tumor1);
+        data.addPatient(patient1);
         Patient patient2 = new Patient();
-        patient2.getItems().add(createItem("patientIdNumber", "00000002"));
-        data.getPatients().add(patient2);
+        patient2.addItem(createItem("patientIdNumber", "00000002"));
+        data.addPatient(patient2);
 
         // write the entire file at once
         File file = new File(System.getProperty("user.dir") + "/build/test-writing-1.xml");

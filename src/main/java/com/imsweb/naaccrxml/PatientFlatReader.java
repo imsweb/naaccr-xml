@@ -211,7 +211,7 @@ public class PatientFlatReader implements AutoCloseable {
                 else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(def.getParentXmlElement()))
                     addItemFromLine(tumor, line, lineNumber, def);
             }
-            patient.getTumors().add(tumor);
+            patient.addTumor(tumor);
         }
 
         return patient;
@@ -220,7 +220,7 @@ public class PatientFlatReader implements AutoCloseable {
     protected void addItemFromLine(AbstractEntity entity, String line, Integer lineNumber, RuntimeNaaccrDictionaryItem def) {
         Item item = createItemFromLine(entity, line, lineNumber, def);
         if (item != null && !_options.getItemsToExclude().contains(def.getNaaccrId()))
-            entity.getItems().add(item);
+            entity.addItem(item);
     }
 
     protected Item createItemFromLine(AbstractEntity entity, String line, Integer lineNumber, RuntimeNaaccrDictionaryItem def) {
@@ -267,6 +267,6 @@ public class PatientFlatReader implements AutoCloseable {
         }
         if (value != null && !value.isEmpty())
             error.setValue(value);
-        entity.getValidationErrors().add(error);
+        entity.addValidationError(error);
     }
 }
