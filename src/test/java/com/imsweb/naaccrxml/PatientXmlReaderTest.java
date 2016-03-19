@@ -130,9 +130,10 @@ public class PatientXmlReaderTest {
 
         // validation is on by default...
 
-        File file = TestingUtils.getDataFile("xml-reader-validation.xml");
+        File file = TestingUtils.getDataFile("xml-reader-validation-1.xml");
         PatientXmlReader reader = new PatientXmlReader(new FileReader(file), null, null, null);
         Patient patient = reader.readPatient();
+        reader.close();
         Assert.assertEquals(1, patient.getTumors().size());
         Assert.assertFalse(patient.getTumors().get(0).getValidationErrors().isEmpty());
         // even if the value is bad, its still being made available in the patient (if possible)
@@ -141,6 +142,17 @@ public class PatientXmlReaderTest {
         Assert.assertTrue(patient.getValidationErrors().isEmpty());
         // ... unless the "get-all-errors" method is used
         Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
+
+        // this file has a duplicate item for the patient
+        file = TestingUtils.getDataFile("xml-reader-validation-2.xml");
+        reader = new PatientXmlReader(new FileReader(file), null, null, null);
+        try {
+            patient = reader.readPatient();
+            Assert.fail("Should have been an exception!");
+        }
+        catch (NaaccrIOException e) {
+            // expected
+        }
         reader.close();
     }
 
