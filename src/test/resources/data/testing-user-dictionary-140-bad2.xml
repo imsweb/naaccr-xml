@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<NaaccrDictionary dictionaryUri="http://mycompany.org/my-very-own-naaccr-dictionary.xml" naaccrVersion="140">
+    <ItemDefs>
+        <ItemDef naaccrId="npcrSpecificField" naaccrNum="10000" naaccrName="NPCR Specific Field" startColumn="1306" length="75" recordTypes="A,M,C,I" parentXmlElement="Tumor" trim="none"/>
+    </ItemDefs>
+</NaaccrDictionary>

@@ -14,6 +14,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -324,24 +325,44 @@ public final class NaaccrXmlDictionaryUtils {
 
             for (NaaccrDictionaryItem item : dictionary.getItems()) {
 
-                // can't use an internal ID
-                if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null || defaultUserDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
+                // can't use an internal base ID, ever
+                if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
                     return "invalid value for 'naaccrId' attribute: " + item.getNaaccrId() + "; this ID is used in the standard dictionary";
 
-                // range must be very specific for a user dictionary...
-                if (item.getNaaccrNum() < 9500 || item.getNaaccrNum() > 99999)
-                    return "invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999";
-
-                // this is tricky, but an item must fall into the columns of one of the items defined in the corresponding items defined in the default user dictionary
-                boolean fallInAllowedRange = false;
-                for (NaaccrDictionaryItem defaultItem : defaultUserDictionary.getItems()) {
-                    if (item.getStartColumn() >= defaultItem.getStartColumn() && item.getStartColumn() + item.getLength() <= defaultItem.getStartColumn() + defaultItem.getLength()) {
-                        fallInAllowedRange = true;
-                        break;
-                    }
+                // if an internal default user dictionary ID is used, then there are a bunch of attributes it can't re-defined.
+                NaaccrDictionaryItem defaultUserItem = defaultUserDictionary.getItemByNaaccrId(item.getNaaccrId());
+                if (defaultUserItem != null) {
+                    if (!Objects.equals(defaultUserItem.getNaaccrNum(), item.getNaaccrNum()))
+                        return "invalid value for 'naaccrNum' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getNaaccrNum();
+                    if (!Objects.equals(defaultUserItem.getNaaccrName(), item.getNaaccrName()))
+                        return "invalid value for 'naaccrName' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getNaaccrName();
+                    if (!Objects.equals(defaultUserItem.getStartColumn(), item.getStartColumn()))
+                        return "invalid value for 'startColumn' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getStartColumn();
+                    if (!Objects.equals(defaultUserItem.getLength(), item.getLength()))
+                        return "invalid value for 'length' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getLength();
+                    if (!Objects.equals(defaultUserItem.getRecordTypes(), item.getRecordTypes()))
+                        return "invalid value for 'recordTypes' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getRecordTypes();
+                    if (!Objects.equals(defaultUserItem.getParentXmlElement(), item.getParentXmlElement()))
+                        return "invalid value for 'parentXmlElement' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getParentXmlElement();
+                    if (!Objects.equals(defaultUserItem.getDataType(), item.getDataType()))
+                        return "invalid value for 'dataType' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getDataType();
                 }
-                if (!fallInAllowedRange)
-                    return "invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps";
+                else {
+                    // range must be very specific for a user dictionary...
+                    if (item.getNaaccrNum() < 9500 || item.getNaaccrNum() > 99999)
+                        return "invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999";
+
+                    // this is tricky, but an item must fall into the columns of one of the items defined in the corresponding items defined in the default user dictionary
+                    boolean fallInAllowedRange = false;
+                    for (NaaccrDictionaryItem defaultItem : defaultUserDictionary.getItems()) {
+                        if (item.getStartColumn() >= defaultItem.getStartColumn() && item.getStartColumn() + item.getLength() <= defaultItem.getStartColumn() + defaultItem.getLength()) {
+                            fallInAllowedRange = true;
+                            break;
+                        }
+                    }
+                    if (!fallInAllowedRange)
+                        return "invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps";
+                }
             }
         }
 

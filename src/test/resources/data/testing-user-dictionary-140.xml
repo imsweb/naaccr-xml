@@ -5,5 +5,8 @@
         <ItemDef naaccrId="myVariable1" naaccrNum="10001" naaccrName="My Variable 1" startColumn="2340" length="1" recordTypes="A,M,C,I" parentXmlElement="Tumor"/>
         <ItemDef naaccrId="myVariable2" naaccrNum="10002" naaccrName="My Variable 2" startColumn="2341" length="1" recordTypes="A,M,C,I" parentXmlElement="Patient"/>
         <ItemDef naaccrId="myVariable3" naaccrNum="10003" naaccrName="My Variable 3" startColumn="2342" length="1" recordTypes="A,M,C,I" parentXmlElement="NaaccrData"/>
+
+        <!-- following was added to test an issue reported in the user dictionary validation -->
+        <ItemDef naaccrId="npcrSpecificField" naaccrNum="3720" naaccrName="NPCR Specific Field" startColumn="1306" length="75" recordTypes="A,M,C,I" parentXmlElement="Tumor" trim="none"/>
     </ItemDefs>
 </NaaccrDictionary>

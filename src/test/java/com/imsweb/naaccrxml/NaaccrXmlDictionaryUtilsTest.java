@@ -39,12 +39,22 @@ public class NaaccrXmlDictionaryUtilsTest {
         // read a provided user dictionary
         try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140.xml"))) {
             NaaccrDictionary defaultUserDictionary = NaaccrXmlDictionaryUtils.readDictionary(reader);
-            Assert.assertEquals(3, defaultUserDictionary.getItems().size());
+            Assert.assertEquals(4, defaultUserDictionary.getItems().size());
         }
 
         // try to read a user dictionary with an error (bad start column)
         boolean exceptionAppend = false;
         try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140-bad1.xml"))) {
+            NaaccrXmlDictionaryUtils.readDictionary(reader);
+        }
+        catch (IOException e) {
+            exceptionAppend = true;
+        }
+        Assert.assertTrue(exceptionAppend);
+
+        // try to read a user dictionary with another error (NPCR item definition redefines the NAACCR number)
+        exceptionAppend = false;
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140-bad2.xml"))) {
             NaaccrXmlDictionaryUtils.readDictionary(reader);
         }
         catch (IOException e) {
