@@ -344,8 +344,11 @@ public final class NaaccrXmlDictionaryUtils {
                         return "invalid value for 'recordTypes' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getRecordTypes();
                     if (!Objects.equals(defaultUserItem.getParentXmlElement(), item.getParentXmlElement()))
                         return "invalid value for 'parentXmlElement' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getParentXmlElement();
-                    if (!Objects.equals(defaultUserItem.getDataType(), item.getDataType()))
-                        return "invalid value for 'dataType' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getDataType();
+                    // I really hate that the defaults are not loaded right away in the Java bean; I think that was a mistake!
+                    String defaultUserItemType = defaultUserItem.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : defaultUserItem.getDataType();
+                    String itemType = item.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : item.getDataType();
+                    if (!Objects.equals(defaultUserItemType, itemType))
+                        return "invalid value for 'dataType' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItemType;
                 }
                 else {
                     // range must be very specific for a user dictionary...
