@@ -65,7 +65,7 @@ public class XsdSchemaTest {
     @SuppressWarnings("ConstantConditions")
     private void assertValidXmlFileForXsd(String xmlFile) {
         try {
-            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("xsd/naaccr_data.xsd");
+            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("xsd/naaccr_data_1.0.xsd");
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(schemaXsd);
             Validator validator = schema.newValidator();
@@ -79,7 +79,7 @@ public class XsdSchemaTest {
     @SuppressWarnings("ConstantConditions")
     private void assertNotValidXmlFileForXsd(String xmlFile) {
         try {
-            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("xsd/naaccr_data.xsd");
+            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("xsd/naaccr_data_1.0.xsd");
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(schemaXsd);
             Validator validator = schema.newValidator();
