@@ -48,12 +48,12 @@ public class TestingUtils {
      * @throws IOException
      */
     public static File createFile(String filename) throws IOException {
-        
+
         // create the tmp folder
         File tmpDir = new File(System.getProperty("user.dir") + "/build/test-tmp");
         if (!tmpDir.exists() && !tmpDir.mkdirs())
             throw new IOException("Unable to create tmp dir...");
-        
+
         // there is no need to physically create the file, it will be created when something is written to it...
         File file = new File(tmpDir, filename);
         file.deleteOnExit();
@@ -80,9 +80,6 @@ public class TestingUtils {
 
     /**
      * Reads the lines from the given file.
-     * @param file file to read
-     * @return the contained lines
-     * @throws IOException
      */
     public static List<String> readFile(File file) throws IOException {
         List<String> lines = new ArrayList<>();
@@ -94,5 +91,15 @@ public class TestingUtils {
             }
         }
         return lines;
+    }
+
+    /**
+     * Reads the content of the given file as one big string.
+     */
+    public static String readFileAsOneString(File file) throws IOException {
+        StringBuilder buf = new StringBuilder();
+        for (String line : readFile(file))
+            buf.append(line).append("\n");
+        return buf.toString();
     }
 }

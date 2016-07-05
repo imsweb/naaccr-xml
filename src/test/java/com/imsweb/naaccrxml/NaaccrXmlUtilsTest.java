@@ -7,12 +7,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.xml.bind.DatatypeConverter;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,45 +24,49 @@ import com.imsweb.naaccrxml.entity.Tumor;
 public class NaaccrXmlUtilsTest {
 
     @Test
-    public void testDateFormat() throws ParseException {
-        // following examples are from http://books.xmlschemata.org/relaxng/ch19-77049.html
+    public void testFlatToXml() throws IOException {
+        File xmlFile = new File(System.getProperty("user.dir") + "/build/test.xml");
 
-        assertValidDateValue("2001-10-26T21:32:52");
-        assertValidDateValue("2001-10-26T21:32:52+02:00");
-        assertValidDateValue("2001-10-26T19:32:52Z");
-        assertValidDateValue("2001-10-26T19:32:52+00:00");
-        assertValidDateValue("-2001-10-26T21:32:52");
-        assertValidDateValue("2001-10-26T21:32:52.12679");
+        // it's not great to use another write method for testing this one, but it's convenient, so whatever...
+        NaaccrData data = NaaccrXmlUtils.readXmlFile(new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml"), null, null, null);
+        File flatFile = new File(System.getProperty("user.dir") + "/build/test.txt");
+        NaaccrXmlUtils.writeFlatFile(data, flatFile, null, null, null);
 
-        // weird, the link says that the following is invalid, but the Java framework seems to accept it...
-        assertValidDateValue("2001-10-26");
-
-        assertInvalidDateValue("2001-10-26T21:32");
-        assertInvalidDateValue("2001-10-26T25:32:52+02:00");
-        assertInvalidDateValue("01-10-26T21:32");
-    }
-
-    private void assertValidDateValue(String dateValue) {
-        try {
-            DatatypeConverter.parseDateTime(dateValue);
-        }
-        catch (IllegalArgumentException e) {
-            Assert.fail("Value should be valid, but isn't: " + dateValue);
-        }
-    }
-
-    private void assertInvalidDateValue(String dateValue) {
-        try {
-            DatatypeConverter.parseDateTime(dateValue);
-        }
-        catch (IllegalArgumentException e) {
-            return;
-        }
-        Assert.fail("Value should be invalid, but isn't: " + dateValue);
+        // convert flat to XML; make sure the conversion worked by reading the data back
+        NaaccrXmlUtils.flatToXml(flatFile, xmlFile, null, null, null);
+        NaaccrData data2 = NaaccrXmlUtils.readXmlFile(xmlFile, null, null, null);
+        Assert.assertEquals(data.getBaseDictionaryUri(), data2.getBaseDictionaryUri());
+        Assert.assertEquals(data.getPatients().size(), data2.getPatients().size());
+        
+        // same test, but use an option; make sure the item numbers are written
+        NaaccrOptions options = new NaaccrOptions();
+        options.setWriteItemNumber(true);
+        Assert.assertFalse(TestingUtils.readFileAsOneString(xmlFile).contains("naaccrNum="));
+        NaaccrXmlUtils.flatToXml(flatFile, xmlFile, options, null, null);
+        Assert.assertTrue(TestingUtils.readFileAsOneString(xmlFile).contains("naaccrNum="));
+        
+        // same test, but use an user-defined dictionary
+        // TODO FPD
     }
 
     @Test
-    public void testReadingXml() throws IOException {
+    public void testXmlToFlat() throws IOException {
+        File flatFile = new File(System.getProperty("user.dir") + "/build/test.txt");
+
+        // it's not great to use another write method for testing this one, but it's convenient, so whatever...
+        NaaccrData data = NaaccrXmlUtils.readXmlFile(new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml"), null, null, null);
+        File xmlFile = new File(System.getProperty("user.dir") + "/build/test.xml");
+        NaaccrXmlUtils.writeXmlFile(data, xmlFile, null, null, null);
+
+        // convert XML to flat; make sure the conversion worked by reading the data back
+        NaaccrXmlUtils.xmlToFlat(xmlFile, flatFile, null, null, null);
+        NaaccrData data2 = NaaccrXmlUtils.readFlatFile(flatFile, null, null, null);
+        Assert.assertEquals(data.getBaseDictionaryUri(), data2.getBaseDictionaryUri());
+        Assert.assertEquals(data.getPatients().size(), data2.getPatients().size());
+    }
+
+    @Test
+    public void testReadXmlFile() throws IOException {
         File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml");
 
         // get the format from the file (not necessary, one could hard-code it in the reading call)
@@ -101,20 +102,20 @@ public class NaaccrXmlUtilsTest {
     }
 
     @Test
-    public void testWritingXml() throws IOException {
+    public void testWriteXmlFile() throws IOException {
         NaaccrData data = new NaaccrData();
         data.setBaseDictionaryUri(NaaccrXmlDictionaryUtils.createUriFromVersion("140", true));
         data.setRecordType("I");
         data.setTimeGenerated(new Date());
-        data.addItem(createItem("vendorName", "VENDOR"));
+        data.addItem(new Item("vendorName", null, "VENDOR"));
         Patient patient1 = new Patient();
-        patient1.addItem(createItem("patientIdNumber", "00000001"));
+        patient1.addItem(new Item("patientIdNumber", null, "00000001"));
         Tumor tumor1 = new Tumor();
-        tumor1.addItem(createItem("primarySite", "C123"));
+        tumor1.addItem(new Item("primarySite", null, "C123"));
         patient1.addTumor(tumor1);
         data.addPatient(patient1);
         Patient patient2 = new Patient();
-        patient2.addItem(createItem("patientIdNumber", "00000002"));
+        patient2.addItem(new Item("patientIdNumber", null, "00000002"));
         data.addPatient(patient2);
 
         // write the entire file at once
@@ -127,30 +128,6 @@ public class NaaccrXmlUtilsTest {
             for (Patient patient : data.getPatients())
                 writer.writePatient(patient);
         }
-    }
-
-    @Test
-    public void testFlatToXmlAndXmlToFlat() throws IOException {
-        File xmlFile1 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml");
-        NaaccrData data1 = NaaccrXmlUtils.readXmlFile(xmlFile1, null, null, null);
-
-        File flatFile1 = new File(System.getProperty("user.dir") + "/build/test.txt");
-        NaaccrXmlUtils.writeFlatFile(data1, flatFile1, null, null, null);
-        data1 = NaaccrXmlUtils.readFlatFile(flatFile1, null, null, null);
-        Assert.assertEquals("0000000001", data1.getItemValue("registryId"));
-
-        File xmlFile2 = new File(System.getProperty("user.dir") + "/build/test.xml");
-        NaaccrXmlUtils.flatToXml(flatFile1, xmlFile2, null, null, null);
-
-        File flatFile2 = new File(System.getProperty("user.dir") + "/build/test2.txt");
-        NaaccrXmlUtils.xmlToFlat(xmlFile2, flatFile2, null, null, null);
-    }
-
-    private Item createItem(String id, String value) {
-        Item item = new Item();
-        item.setNaaccrId(id);
-        item.setValue(value);
-        return item;
     }
 
     @Test
