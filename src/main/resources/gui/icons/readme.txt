@@ -1,4 +1,4 @@
-Free icons set: https://www.iconfinder.com/iconsets/ellegant
+Free gui.icons set: https://www.iconfinder.com/iconsets/ellegant
 
 Downloaded PNG transparent ones.
 

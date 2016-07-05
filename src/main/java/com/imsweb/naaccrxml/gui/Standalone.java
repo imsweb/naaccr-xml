@@ -181,7 +181,7 @@ public class Standalone extends JFrame implements ActionListener {
     @SuppressWarnings("ConstantConditions")
     private JButton createToolbarButton(final String text, final String pageId, final String description) {
         JButton btn = new JButton();
-        btn.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("icons/" + pageId + "_inactive.png")));
+        btn.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("gui/icons/" + pageId + "_inactive.png")));
         btn.setOpaque(false);
         btn.setFocusPainted(false);
         btn.setFocusable(false);
@@ -199,11 +199,11 @@ public class Standalone extends JFrame implements ActionListener {
                 _layout.show(_centerPnl, pageId);
                 for (JButton btn : _buttons) {
                     if (btn.getActionCommand().equals(pageId)) {
-                        btn.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("icons/" + btn.getActionCommand() + "_active.png")));
+                        btn.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("gui/icons/" + btn.getActionCommand() + "_active.png")));
                         btn.setForeground(Color.BLACK);
                     }
                     else {
-                        btn.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("icons/" + btn.getActionCommand() + "_inactive.png")));
+                        btn.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("gui/icons/" + btn.getActionCommand() + "_inactive.png")));
                         btn.setForeground(Color.GRAY);
                     }
                 }
@@ -222,7 +222,7 @@ public class Standalone extends JFrame implements ActionListener {
             try {
                 File targetFile = File.createTempFile("naaccr-xml-help", ".html");
                 targetFile.deleteOnExit();
-                InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("help/help.html");
+                InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("gui/help/help.html");
                 OutputStream os = new FileOutputStream(targetFile);
                 IOUtils.copy(is, os);
                 is.close();
