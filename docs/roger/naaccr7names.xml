@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<NAACCRDataExchange xmlns="http://naaccr.org/naaccrfile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://naaccr.org/naaccrfile/naaccr7.xsd" 
-NAACCRVersion="140" XSDVersion="1.0" description="Anonymous extract using item names" datePrepared="2014-12-18T16:19:13" >
+<NAACCRDataExchange xmlns="http://naaccr.org/naaccrfile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" NAACCRVersion="140" XSDVersion="1.0" description="Anonymous extract using item names" datePrepared="2014-12-18T16:19:13">
 	<Dictionary releaseDate="2014-12-18T16:19:14" >
 		<ItemDefs>
 			<ItemDef itemNo="10" itemName="RecType" longName="Record Type" 

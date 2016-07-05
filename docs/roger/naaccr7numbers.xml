@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<NAACCRDataExchange xmlns="http://naaccr.org/naaccrfile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://naaccr.org/naaccrfile/naaccr7.xsd" 
+<NAACCRDataExchange xmlns="http://naaccr.org/naaccrfile" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 <NAACCRVersion="140" XSDVersion="1.0" description="Anonymous extract using item numbers" datePrepared="2014-12-18T16:55:14" >
 	<Patient>
 		<Item itemNo="220">1</Item>

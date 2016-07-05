@@ -21,7 +21,7 @@ public class ExtractDataTypesLab {
         Pattern p2 = Pattern.compile("datatype=\"(.+?)\"");
         Pattern p3 = Pattern.compile("regex=\"(.+?)\"");
         
-        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("roger/naaccr7dict.xml");
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("docs/roger/naaccr7dict.xml");
         try (LineNumberReader reader = new LineNumberReader(new InputStreamReader(is))) {
             try (FileWriter writer = new FileWriter(file)) {
                 String currentItemNum = null;
