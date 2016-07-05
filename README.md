@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/imsweb/naaccr-xml.svg?branch=master)](https://travis-ci.org/imsweb/naaccr-xml)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml)
 
-This library provides support for the NAACCR XML format.
+This library provides support for the NAACCR XML format. It implements version 1.0 of the format specifications.
 
 Information about the format and the Task Force that developed it can be found on [http://naaccrxml.org/](http://naaccrxml.org/).
 
@@ -98,9 +98,9 @@ output.folder=C:\\output
 
 ## Dealing with dictionaries
 
-The project contains two dictionaries for each supported NAACCR versions: the main dictionary and the default user defined dictionary; here are the ones for NAACCR 15:
-* [naaccr-dictionary-150.xml](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/naaccr-dictionary-150.xml)
-* [user-defined-naaccr-dictionary-150.xml](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/user-defined-naaccr-dictionary-150.xml)
+The project contains two dictionaries for each supported NAACCR versions: the main dictionary and the default user defined dictionary; here are the ones for NAACCR 16:
+* [naaccr-dictionary-160.xml](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/naaccr-dictionary-160.xml)
+* [user-defined-naaccr-dictionary-160.xml](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/user-defined-naaccr-dictionary-160.xml)
 
 In addition, the project also contains a utility class ([NaaccrXmlDictionaryUtils](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrXmlDictionaryUtils.java))
  to read, write and validate a given dictionary file. Note that there is no syntax differences between a base dictionary and a user-defined one.
@@ -117,5 +117,5 @@ That utility class also contains a method to create a NAACCR ID (used for the "n
 ## XML Schemas
 
 The following schemas are available in the project:
-* [naaccr_data.xsd](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/naaccr_data.xsd) - W3C Schema for the data files
-* [naaccr_dictionary.xsd](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/naaccr_dictionary.xsd) - W3C Schema for the dictionary files
+* [naaccr_data.xsd](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/xsd/naaccr_data_1.0.xsd) - W3C Schema for the data files
+* [naaccr_dictionary.xsd](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/xsd/naaccr_dictionary_1.0.xsd) - W3C Schema for the dictionary files

@@ -1,15 +1,16 @@
 package com.imsweb.naaccrxml;
 
-import org.junit.Assert;
-import org.junit.Test;
+import java.io.File;
+import java.net.URL;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import java.io.File;
-import java.net.URL;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * The purpose of this test is to make sure that the built-in validation behaves the same way as the 3WC XSD schema one.
@@ -64,7 +65,7 @@ public class XsdSchemaTest {
     @SuppressWarnings("ConstantConditions")
     private void assertValidXmlFileForXsd(String xmlFile) {
         try {
-            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_data.xsd");
+            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("xsd/naaccr_data.xsd");
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(schemaXsd);
             Validator validator = schema.newValidator();
@@ -78,7 +79,7 @@ public class XsdSchemaTest {
     @SuppressWarnings("ConstantConditions")
     private void assertNotValidXmlFileForXsd(String xmlFile) {
         try {
-            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_data.xsd");
+            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("xsd/naaccr_data.xsd");
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(schemaXsd);
             Validator validator = schema.newValidator();
