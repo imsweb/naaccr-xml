@@ -151,8 +151,14 @@ public class NaaccrXmlUtilsTest {
 
     @Test
     public void testGetFormatFromFlatFile() {
-        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/fake-naaccr14-1-rec.txt");
+        
+        // regular file
+        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/fake-naaccr14inc-1-rec.txt");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromFlatFile(file));
+
+        // not a valid file
+        file = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml");
+        Assert.assertNull(NaaccrXmlUtils.getFormatFromFlatFile(file));
     }
     
     @Test
