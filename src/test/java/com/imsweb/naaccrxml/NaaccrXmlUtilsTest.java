@@ -3,13 +3,18 @@
  */
 package com.imsweb.naaccrxml;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,14 +43,14 @@ public class NaaccrXmlUtilsTest {
         NaaccrData data2 = NaaccrXmlUtils.readXmlFile(xmlFile, null, null, null);
         Assert.assertEquals(data.getBaseDictionaryUri(), data2.getBaseDictionaryUri());
         Assert.assertEquals(data.getPatients().size(), data2.getPatients().size());
-        
+
         // same test, but use an option; make sure the item numbers are written
         NaaccrOptions options = new NaaccrOptions();
         options.setWriteItemNumber(true);
         Assert.assertFalse(TestingUtils.readFileAsOneString(xmlFile).contains("naaccrNum="));
         NaaccrXmlUtils.flatToXml(flatFile, xmlFile, options, null, null);
         Assert.assertTrue(TestingUtils.readFileAsOneString(xmlFile).contains("naaccrNum="));
-        
+
         // same test, but use a user-defined dictionary (we have to re-write the flat-file to use the extra variable)
         NaaccrDictionary dict = TestingUtils.createUserDictionary();
         data.getPatients().get(0).getTumors().get(0).addItem(new Item("myVariable", null, "01"));
@@ -151,7 +156,7 @@ public class NaaccrXmlUtilsTest {
 
     @Test
     public void testGetFormatFromFlatFile() {
-        
+
         // regular file
         File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/fake-naaccr14inc-1-rec.txt");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromFlatFile(file));
@@ -160,7 +165,7 @@ public class NaaccrXmlUtilsTest {
         file = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml");
         Assert.assertNull(NaaccrXmlUtils.getFormatFromFlatFile(file));
     }
-    
+
     @Test
     public void testGetFormatFromXmlFile() {
 
@@ -171,5 +176,60 @@ public class NaaccrXmlUtilsTest {
         // this one contains extensions
         File file2 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-extension-missing-namespace.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file2));
+    }
+
+    @Test
+    public void testGetAttributesFromXmlFile() {
+
+        // a regular file which includes an extra attribute
+        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/read-attributes-1.xml");
+        Map<String, String> attr = NaaccrXmlUtils.getAttributesFromXmlFile(file);
+        Assert.assertEquals("http://naaccr.org/naaccrxml/naaccr-dictionary-150.xml", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
+        Assert.assertNull(attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT));
+        Assert.assertEquals("I", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE));
+        Assert.assertEquals("2015-03-13T12:09:19.0Z", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED));
+        Assert.assertEquals("whatever", attr.get("myOwnExtraAttribute"));
+
+        // another good file with less attributes
+        file = new File(System.getProperty("user.dir") + "/src/test/resources/data/read-attributes-2.xml");
+        attr = NaaccrXmlUtils.getAttributesFromXmlFile(file);
+        Assert.assertEquals("http://naaccr.org/naaccrxml/naaccr-dictionary-150.xml", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
+        Assert.assertEquals("I", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE));
+
+        // a bad file (missing required attributes)
+        file = new File(System.getProperty("user.dir") + "/src/test/resources/data/read-attributes-3.xml");
+        Assert.assertTrue(NaaccrXmlUtils.getAttributesFromXmlFile(file).isEmpty());
+
+        // a complete garbage file
+        file = new File(System.getProperty("user.dir") + "/src/test/resources/data/read-attributes-4.xml");
+        Assert.assertTrue(NaaccrXmlUtils.getAttributesFromXmlFile(file).isEmpty());
+    }
+
+    @Test
+    public void testGetAttributesFromXmlReader() throws IOException {
+
+        // peek at the attributes using a reader that does support marking
+        InputStreamReader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/read-attributes-1.xml"), StandardCharsets.UTF_8);
+        try (BufferedReader bufferedReader = new BufferedReader(reader)) {
+            Assert.assertFalse(NaaccrXmlUtils.getAttributesFromXmlReader(bufferedReader).isEmpty());
+            // at this point, we should still be able to consume the file (which contains a single patient)
+            try (PatientXmlReader xmlReader = new PatientXmlReader(bufferedReader, null, null)) {
+                Assert.assertNotNull(xmlReader.readPatient());
+                Assert.assertNull(xmlReader.readPatient());
+            }
+        }
+
+        // peek at the attributes using a reader that doesn't support marking
+        try (Reader reader2 = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/read-attributes-1.xml"), StandardCharsets.UTF_8)) {
+            Assert.assertFalse(NaaccrXmlUtils.getAttributesFromXmlReader(reader2).isEmpty());
+            // at this point, we should't be able to consume the data anymore
+            try {
+                PatientXmlReader xmlReader = new PatientXmlReader(reader2, null, null);
+                Assert.fail("There should have been an exception!");
+            }
+            catch (Exception e) {
+                // ignored, expected
+            }
+        }
     }
 }

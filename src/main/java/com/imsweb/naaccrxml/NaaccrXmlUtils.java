@@ -15,6 +15,9 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -22,9 +25,12 @@ import org.tukaani.xz.LZMA2Options;
 import org.tukaani.xz.XZInputStream;
 import org.tukaani.xz.XZOutputStream;
 
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 
 /**
  * This utility class provides static methods for reading, writing and translating to/from XML and flat file NAACCR files.
@@ -56,6 +62,7 @@ public class NaaccrXmlUtils {
 
     // target namespace
     public static final String NAACCR_XML_NAMESPACE = "http://naaccr.org/naaccrxml";
+
     /**
      * Translates a flat data file into an XML data file.
      * @param flatFile source flat data file, must exists
@@ -256,7 +263,7 @@ public class NaaccrXmlUtils {
     /**
      * Returns the NAACCR format of the given line in a flat file.
      * <br/>
-     * This method assumes that the record type is available in column 1 (length 1) and 
+     * This method assumes that the record type is available in column 1 (length 1) and
      * the NAACCR version is available in column 17 (length 3)...
      * @param line provided data line
      * @return the NAACCR format, null if it cannot be determined
@@ -283,10 +290,10 @@ public class NaaccrXmlUtils {
         if (xmlFile == null || !xmlFile.exists())
             return null;
 
-        try {
-            return getFormatFromXmlReader(createReader(xmlFile));
+        try (Reader reader = createReader(xmlFile)) {
+            return getFormatFromXmlReader(reader);
         }
-        catch (NaaccrIOException e) {
+        catch (IOException | RuntimeException e) {
             return null;
         }
     }
@@ -297,20 +304,64 @@ public class NaaccrXmlUtils {
      * @return the NAACCR format, null if it cannot be determined
      */
     public static String getFormatFromXmlReader(Reader xmlReader) {
-
-        try (PatientXmlReader reader = new PatientXmlReader(xmlReader, null, null)) {
-            NaaccrData rootData = reader.getRootData();
-            if (rootData.getBaseDictionaryUri() != null && rootData.getRecordType() != null) {
-                String version = NaaccrXmlDictionaryUtils.extractVersionFromUri(rootData.getBaseDictionaryUri());
-                if (NaaccrFormat.isVersionSupported(version) && NaaccrFormat.isRecordTypeSupported(rootData.getRecordType()))
-                    return NaaccrFormat.getInstance(version, rootData.getRecordType()).toString();
-            }
-        }
-        catch (NaaccrIOException e) {
-            // ignored, the result will be null, which is appropriate...
+        Map<String, String> attributes = getAttributesFromXmlReader(xmlReader);
+        String baseDictUri = attributes.get(NAACCR_XML_ROOT_ATT_BASE_DICT);
+        String recordType = attributes.get(NAACCR_XML_ROOT_ATT_REC_TYPE);
+        if (baseDictUri != null && recordType != null) {
+            String version = NaaccrXmlDictionaryUtils.extractVersionFromUri(baseDictUri);
+            if (NaaccrFormat.isVersionSupported(version) && NaaccrFormat.isRecordTypeSupported(recordType))
+                return NaaccrFormat.getInstance(version, recordType).toString();
         }
 
         return null;
+    }
+
+    /**
+     * Returns all the available attributes from the given XML file.
+     * @param xmlFile provided data file
+     * @return the available attributes in a map, maybe empty but never null
+     */
+    public static Map<String, String> getAttributesFromXmlFile(File xmlFile) {
+        if (xmlFile == null || !xmlFile.exists())
+            return Collections.emptyMap();
+
+        try (Reader reader = createReader(xmlFile)) {
+            return getAttributesFromXmlReader(reader);
+        }
+        catch (IOException | RuntimeException e) {
+            return Collections.emptyMap();
+        }
+    }
+
+    /**
+     * Returns all the available attributes from the given XML reader.
+     * <br/><br/>
+     * If peeking is supported by the provided reader, this method won't consume the reader.
+     * <br/><br/>
+     * The reader is not closed after calling this method.
+     * @param xmlReader provided reader, cannot be null
+     * @return the available attributes in a map, maybe empty but never null
+     */
+    public static Map<String, String> getAttributesFromXmlReader(Reader xmlReader) {
+        Map<String, String> result = new HashMap<>();
+        if (xmlReader == null)
+            return result;
+
+        try {
+            if (xmlReader.markSupported())
+                xmlReader.mark(8192); // this is the default buffer size for a BufferedReader; should be more than enough to get all available attributes...
+            HierarchicalStreamReader xstreamReader = new NaaccrStreamConfiguration().getDriver().createReader(xmlReader);
+            if (xstreamReader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
+                for (int i = 0; i < xstreamReader.getAttributeCount(); i++)
+                    result.put(xstreamReader.getAttributeName(i), xstreamReader.getAttribute(i));
+            if (xmlReader.markSupported())
+                xmlReader.reset();
+        }
+        catch (IOException | RuntimeException e) {
+            // ignored, result will be empty
+        }
+
+        return result;
     }
 
     /**
