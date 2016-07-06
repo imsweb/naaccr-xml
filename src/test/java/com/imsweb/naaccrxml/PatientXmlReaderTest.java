@@ -13,7 +13,6 @@ import org.junit.Test;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
-import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 public class PatientXmlReaderTest {
 
@@ -159,24 +158,7 @@ public class PatientXmlReaderTest {
     @Test
     public void testUserDefinedDictionary() throws IOException {
 
-        NaaccrDictionary dict = new NaaccrDictionary();
-        dict.setNaaccrVersion("150");
-        dict.setDictionaryUri("whatever");
-        dict.setDescription("Another whatever...");
-        NaaccrDictionaryItem item = new NaaccrDictionaryItem();
-        item.setNaaccrId("myVariable");
-        item.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
-        item.setNaaccrNum(10000);
-        item.setRecordTypes("A,M,C,I");
-        item.setDataType(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_NUMERIC);
-        item.setLength(2);
-        item.setStartColumn(2340);
-        item.setNaaccrName("My Variable");
-        item.setSourceOfStandard("ME");
-        item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
-        item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_NONE);
-        item.setRegexValidation("0[0-8]");
-        dict.addItem(item);
+        NaaccrDictionary dict = TestingUtils.createUserDictionary();
         Assert.assertNotNull(dict.getItemByNaaccrId("myVariable"));
         Assert.assertNotNull(dict.getItemByNaaccrNum(10000));
 

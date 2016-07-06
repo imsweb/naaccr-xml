@@ -9,8 +9,38 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
+
 public class TestingUtils {
 
+    /**
+     * Create a user-defined dictionary that can be used in various unit tests.
+     */
+    public static NaaccrDictionary createUserDictionary() {
+        NaaccrDictionary dict = new NaaccrDictionary();
+        dict.setNaaccrVersion("150");
+        dict.setDictionaryUri("whatever");
+        dict.setDescription("Another whatever...");
+        
+        NaaccrDictionaryItem item = new NaaccrDictionaryItem();
+        item.setNaaccrId("myVariable");
+        item.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+        item.setNaaccrNum(10000);
+        item.setRecordTypes("A,M,C,I");
+        item.setDataType(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_NUMERIC);
+        item.setLength(2);
+        item.setStartColumn(2340);
+        item.setNaaccrName("My Variable");
+        item.setSourceOfStandard("ME");
+        item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
+        item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_NONE);
+        item.setRegexValidation("0[0-8]");
+        dict.addItem(item);
+        
+        return dict;
+    }
+    
     /**
      * Returns the testing data file with the requested name.
      * @param name file name
@@ -27,7 +57,7 @@ public class TestingUtils {
      * Returns an empty record as a string buffer, for the given NAACCR version and record type.
      * @param version NAACCR version
      * @param recType record type
-     * @param patientIdNumber
+     * @param patientIdNumber patient ID number
      * @return corresponding empty record
      */
     public static StringBuilder createEmptyRecord(String version, String recType, String patientIdNumber) {

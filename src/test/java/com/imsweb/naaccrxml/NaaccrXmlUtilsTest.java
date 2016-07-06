@@ -18,6 +18,7 @@ import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 
 // TODO FPD beef up these tests; add cases for options, user dictionary and observer...
 // TODO FPD add tests for line number on main entities...
@@ -45,8 +46,12 @@ public class NaaccrXmlUtilsTest {
         NaaccrXmlUtils.flatToXml(flatFile, xmlFile, options, null, null);
         Assert.assertTrue(TestingUtils.readFileAsOneString(xmlFile).contains("naaccrNum="));
         
-        // same test, but use an user-defined dictionary
-        // TODO FPD
+        // same test, but use a user-defined dictionary (we have to re-write the flat-file to use the extra variable)
+        NaaccrDictionary dict = TestingUtils.createUserDictionary();
+        data.getPatients().get(0).getTumors().get(0).addItem(new Item("myVariable", null, "01"));
+        NaaccrXmlUtils.writeFlatFile(data, flatFile, null, dict, null);
+        NaaccrXmlUtils.flatToXml(flatFile, xmlFile, null, dict, null);
+        Assert.assertTrue(TestingUtils.readFileAsOneString(xmlFile).contains("myVariable"));
     }
 
     @Test
@@ -63,6 +68,20 @@ public class NaaccrXmlUtilsTest {
         NaaccrData data2 = NaaccrXmlUtils.readFlatFile(flatFile, null, null, null);
         Assert.assertEquals(data.getBaseDictionaryUri(), data2.getBaseDictionaryUri());
         Assert.assertEquals(data.getPatients().size(), data2.getPatients().size());
+
+        // same test, but use an option; make sure the item numbers are written
+        NaaccrOptions options = new NaaccrOptions();
+        options.getItemsToExclude().add("primarySite");
+        Assert.assertTrue(TestingUtils.readFileAsOneString(flatFile).contains("C123"));
+        NaaccrXmlUtils.xmlToFlat(xmlFile, flatFile, options, null, null);
+        Assert.assertFalse(TestingUtils.readFileAsOneString(flatFile).contains("C123"));
+
+        // same test, but use a user-defined dictionary (we have to re-write the xml-file to use the extra variable)
+        NaaccrDictionary dict = TestingUtils.createUserDictionary();
+        data.getPatients().get(0).getTumors().get(0).addItem(new Item("myVariable", null, "01"));
+        NaaccrXmlUtils.writeXmlFile(data, xmlFile, null, dict, null);
+        NaaccrXmlUtils.xmlToFlat(xmlFile, flatFile, null, dict, null);
+        Assert.assertTrue(TestingUtils.readFileAsOneString(xmlFile).contains("01"));
     }
 
     @Test
@@ -130,6 +149,12 @@ public class NaaccrXmlUtilsTest {
         }
     }
 
+    @Test
+    public void testGetFormatFromFlatFile() {
+        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/fake-naaccr14-1-rec.txt");
+        Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromFlatFile(file));
+    }
+    
     @Test
     public void testGetFormatFromXmlFile() {
 
