@@ -123,6 +123,12 @@ public class PatientXmlReaderTest {
         patient = reader.readPatient();
         Assert.assertNull(patient.getItemValue("unknown"));
         Assert.assertFalse(patient.getValidationErrors().isEmpty());
+        NaaccrValidationError error = patient.getValidationErrors().get(0);
+        Assert.assertNotNull(error.getMessage());
+        Assert.assertNotNull(error.getLineNumber());
+        Assert.assertNull(error.getNaaccrId());
+        Assert.assertNull(error.getNaaccrNum());
+        Assert.assertNull(error.getValue());
         reader.close();
     }
 

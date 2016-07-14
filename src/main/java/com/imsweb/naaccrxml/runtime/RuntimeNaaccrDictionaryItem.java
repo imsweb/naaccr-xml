@@ -47,79 +47,39 @@ public class RuntimeNaaccrDictionaryItem {
         return _naaccrId;
     }
 
-    public void setNaaccrId(String naaccrId) {
-        _naaccrId = naaccrId;
-    }
-
     public Integer getNaaccrNum() {
         return _naaccrNum;
-    }
-
-    public void setNaaccrNum(Integer naaccrNum) {
-        _naaccrNum = naaccrNum;
     }
 
     public Integer getStartColumn() {
         return _startColumn;
     }
 
-    public void setStartColumn(Integer startColumn) {
-        _startColumn = startColumn;
-    }
-
     public Integer getLength() {
         return _length;
-    }
-
-    public void setLength(Integer length) {
-        _length = length;
     }
 
     public Boolean getAllowUnlimitedText() {
         return _allowUnlimitedText;
     }
 
-    public void setAllowUnlimitedText(Boolean allowUnlimitedText) {
-        _allowUnlimitedText = allowUnlimitedText;
-    }
-
     public String getParentXmlElement() {
         return _parentXmlElement;
-    }
-
-    public void setParentXmlElement(String parentXmlElement) {
-        _parentXmlElement = parentXmlElement;
     }
 
     public Pattern getRegexValidation() {
         return _regexValidation;
     }
 
-    public void setRegexValidation(Pattern regexValidation) {
-        _regexValidation = regexValidation;
-    }
-
     public String getDataType() {
         return _dataType;
-    }
-
-    public void setDataType(String dataType) {
-        _dataType = dataType;
     }
 
     public String getPadding() {
         return _padding;
     }
 
-    public void setPadding(String padding) {
-        _padding = padding;
-    }
-
     public String getTrim() {
         return _trim;
-    }
-
-    public void setTrim(String trim) {
-        _trim = trim;
     }
 }

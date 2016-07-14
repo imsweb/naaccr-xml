@@ -16,4 +16,8 @@ public class NaaccrErrorUtilsTest {
         Assert.assertEquals("unknown NAACCR ID: xyz", NaaccrErrorUtils.getValidationError(NaaccrErrorUtils.CODE_BAD_NAACCR_ID, "xyz"));
     }
     
+    @Test
+    public void testGetAllValidationErrors() {
+        Assert.assertFalse(NaaccrErrorUtils.getAllValidationErrors().isEmpty());
+    }
 }
