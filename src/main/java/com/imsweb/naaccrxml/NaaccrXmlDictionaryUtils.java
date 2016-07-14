@@ -211,6 +211,9 @@ public final class NaaccrXmlDictionaryUtils {
      */
     public static NaaccrDictionary readDictionary(Reader reader) throws IOException {
         NaaccrDictionary dictionary = (NaaccrDictionary)instanciateXStream().fromXML(reader);
+        
+        if (dictionary.getSpecificationVersion() == null)
+            dictionary.setSpecificationVersion(SpecificationVersion.SPEC_1_0);
 
         String error;
         if (dictionary.getDictionaryUri() != null && _PATTERN_DICTIONARY_URI.matcher(dictionary.getDictionaryUri()).matches())
@@ -411,6 +414,7 @@ public final class NaaccrXmlDictionaryUtils {
 
         xstream.aliasAttribute(NaaccrDictionary.class, "_dictionaryUri", "dictionaryUri");
         xstream.aliasAttribute(NaaccrDictionary.class, "_naaccrVersion", "naaccrVersion");
+        xstream.aliasAttribute(NaaccrDictionary.class, "_specificationVersion", "specificationVersion");
         xstream.aliasAttribute(NaaccrDictionary.class, "_description", "description");
         xstream.aliasAttribute(NaaccrDictionary.class, "_items", "ItemDefs");
 
