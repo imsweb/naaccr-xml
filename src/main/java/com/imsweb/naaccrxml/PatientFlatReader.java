@@ -219,6 +219,11 @@ public class PatientFlatReader implements AutoCloseable {
     }
 
     protected void addItemFromLine(AbstractEntity entity, String line, Integer lineNumber, RuntimeNaaccrDictionaryItem def) {
+
+        // as of spec 1.1, the start column is optional for user-defined items, so let's ignore those
+        if (def.getStartColumn() == null)
+            return;
+
         Item item = createItemFromLine(entity, line, lineNumber, def);
         if (item != null && !_options.getItemsToExclude().contains(def.getNaaccrId()))
             entity.addItem(item);

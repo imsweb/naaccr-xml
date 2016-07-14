@@ -21,4 +21,18 @@ public class SpecificationVersionTest {
         Assert.assertFalse(SpecificationVersion.isSpecificationSupported(" "));
         Assert.assertFalse(SpecificationVersion.isSpecificationSupported("hum?"));
     }
+    
+    @Test
+    public void testCompareVersions() {
+        Assert.assertEquals(0, SpecificationVersion.compareVersions("1.0", "1.0"));
+        Assert.assertEquals(0, SpecificationVersion.compareVersions("2.0", "2.0"));
+        Assert.assertEquals(-1, SpecificationVersion.compareVersions("1.0", "2.0"));
+        Assert.assertEquals(1, SpecificationVersion.compareVersions("2.0", "1.0"));
+        Assert.assertEquals(-1, SpecificationVersion.compareVersions("2.0", "2.1"));
+        Assert.assertEquals(1, SpecificationVersion.compareVersions("2.1", "2.0"));
+        Assert.assertEquals(-1, SpecificationVersion.compareVersions("1.0", "2.1"));
+        Assert.assertEquals(1, SpecificationVersion.compareVersions("2.1", "1.0"));
+        Assert.assertEquals(-1, SpecificationVersion.compareVersions("1.2", "2.1"));
+        Assert.assertEquals(1, SpecificationVersion.compareVersions("2.1", "1.2"));
+    }
 }

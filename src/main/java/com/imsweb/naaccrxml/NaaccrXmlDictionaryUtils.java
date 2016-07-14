@@ -211,7 +211,7 @@ public final class NaaccrXmlDictionaryUtils {
      */
     public static NaaccrDictionary readDictionary(Reader reader) throws IOException {
         NaaccrDictionary dictionary = (NaaccrDictionary)instanciateXStream().fromXML(reader);
-        
+
         if (dictionary.getSpecificationVersion() == null)
             dictionary.setSpecificationVersion(SpecificationVersion.SPEC_1_0);
 
@@ -285,10 +285,18 @@ public final class NaaccrXmlDictionaryUtils {
      */
     private static String validateDictionary(NaaccrDictionary dictionary, boolean isBaseDictionary, String naaccrVersion) {
 
+        // some of the validation is based on the specification version; assume 1.0 if it's not available
+        String specVersion = dictionary.getSpecificationVersion() == null ? SpecificationVersion.SPEC_1_0 : dictionary.getSpecificationVersion();
+        if (!SpecificationVersion.isSpecificationSupported(specVersion))
+            return "'specificationVersion' attribute is not valid";
+        
         if (dictionary.getDictionaryUri() == null || dictionary.getDictionaryUri().trim().isEmpty())
             return "'dictionaryUri' attribute is required";
-        if (isBaseDictionary && (dictionary.getNaaccrVersion() == null || dictionary.getNaaccrVersion().trim().isEmpty()))
+        
+        boolean allowBlankNaaccrVersion = !isBaseDictionary && SpecificationVersion.compareVersions(specVersion, SpecificationVersion.SPEC_1_1) >= 0;
+        if (!allowBlankNaaccrVersion && (dictionary.getNaaccrVersion() == null || dictionary.getNaaccrVersion().trim().isEmpty()))
             return "'naaccrVersion' attribute is required";
+        
         if (dictionary.getItems().isEmpty())
             return "a dictionary must contain at least one item definition";
 
@@ -302,7 +310,8 @@ public final class NaaccrXmlDictionaryUtils {
                 return "'naaccrNum' attribute is required";
             if (item.getLength() == null)
                 return "'length' attribute is required";
-            if (item.getStartColumn() == null)
+            boolean allowBlankStartCol = !isBaseDictionary && SpecificationVersion.compareVersions(specVersion, SpecificationVersion.SPEC_1_1) >= 0;
+            if (!allowBlankStartCol && item.getStartColumn() == null)
                 return "'startColumn' attribute is required";
             if (item.getParentXmlElement() == null || item.getParentXmlElement().trim().isEmpty())
                 return "'parentXmlElement' attribute is required";
@@ -351,7 +360,7 @@ public final class NaaccrXmlDictionaryUtils {
                             return "invalid value for 'naaccrNum' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getNaaccrNum();
                         if (!Objects.equals(defaultUserItem.getNaaccrName(), item.getNaaccrName()))
                             return "invalid value for 'naaccrName' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getNaaccrName();
-                        if (!Objects.equals(defaultUserItem.getStartColumn(), item.getStartColumn()))
+                        if (item.getStartColumn() != null && !Objects.equals(defaultUserItem.getStartColumn(), item.getStartColumn()))
                             return "invalid value for 'startColumn' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getStartColumn();
                         if (!Objects.equals(defaultUserItem.getLength(), item.getLength()))
                             return "invalid value for 'length' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getLength();
@@ -371,15 +380,17 @@ public final class NaaccrXmlDictionaryUtils {
                             return "invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999";
 
                         // this is tricky, but an item must fall into the columns of one of the items defined in the corresponding items defined in the default user dictionary
-                        boolean fallInAllowedRange = false;
-                        for (NaaccrDictionaryItem defaultItem : defaultUserDictionary.getItems()) {
-                            if (item.getStartColumn() >= defaultItem.getStartColumn() && item.getStartColumn() + item.getLength() <= defaultItem.getStartColumn() + defaultItem.getLength()) {
-                                fallInAllowedRange = true;
-                                break;
+                        if (item.getStartColumn() != null) {
+                            boolean fallInAllowedRange = false;
+                            for (NaaccrDictionaryItem defaultItem : defaultUserDictionary.getItems()) {
+                                if (item.getStartColumn() >= defaultItem.getStartColumn() && item.getStartColumn() + item.getLength() <= defaultItem.getStartColumn() + defaultItem.getLength()) {
+                                    fallInAllowedRange = true;
+                                    break;
+                                }
                             }
+                            if (!fallInAllowedRange)
+                                return "invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps";
                         }
-                        if (!fallInAllowedRange)
-                            return "invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps";
                     }
                 }
             }

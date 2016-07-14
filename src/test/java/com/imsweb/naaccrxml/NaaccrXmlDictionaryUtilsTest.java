@@ -20,6 +20,24 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 public class NaaccrXmlDictionaryUtilsTest {
 
     @Test
+    public void testInternalDictionaries() throws IOException {
+        for (String version : NaaccrFormat.getSupportedVersions()) {
+
+            // make sure internal base dictionaries are valid
+            try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-" + version + ".xml"))) {
+                NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
+                Assert.assertNull(NaaccrXmlDictionaryUtils.validateBaseDictionary(dict));
+            }
+
+            // make sure internal default user dictionaries are valid
+            try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("user-defined-naaccr-dictionary-" + version + ".xml"))) {
+                NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
+                Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+            }
+        }
+    }
+
+    @Test
     public void testReadDictionary() throws IOException {
 
         // get a base dictionary
@@ -65,7 +83,7 @@ public class NaaccrXmlDictionaryUtilsTest {
             exceptionAppend = true;
         }
         Assert.assertTrue(exceptionAppend);
-        
+
         // this one defines an item in a bad location, but it doesn't define a NAACCR version, so no exception, but if a NAACCR version is provided, the validation should fail
         try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140-bad3.xml"))) {
             NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
@@ -196,7 +214,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertTrue(pattern.matcher("A123").matches());
         Assert.assertTrue(pattern.matcher("123A").matches());
         Assert.assertTrue(pattern.matcher("A!").matches());
-        
+
         // "date": digits, YYYY or YYYYMM or YYYYMMDD
         pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DATE);
         Assert.assertTrue(pattern.matcher("20100615").matches());
@@ -238,18 +256,18 @@ public class NaaccrXmlDictionaryUtilsTest {
     }
 
     /**
-    private void assertValidXmlFileForXsd(String xmlFile) {
-        try {
-            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_dictionary.xsd");
-            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = schemaFactory.newSchema(schemaXsd);
-            Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlFile)));
-        }
-        catch (Exception e) {
-            Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
-        }
-    }
+     * private void assertValidXmlFileForXsd(String xmlFile) {
+     * try {
+     * URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_dictionary.xsd");
+     * SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+     * Schema schema = schemaFactory.newSchema(schemaXsd);
+     * Validator validator = schema.newValidator();
+     * validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlFile)));
+     * }
+     * catch (Exception e) {
+     * Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
+     * }
+     * }
      */
 
     private void assertValidXmlFileForLibrary(String xmlFile) {

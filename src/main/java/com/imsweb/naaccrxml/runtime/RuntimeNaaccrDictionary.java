@@ -49,10 +49,14 @@ public class RuntimeNaaccrDictionary {
             if (item.getRecordTypes() == null || Arrays.asList(item.getRecordTypes().split(",")).contains(recordType))
                 _items.add(new RuntimeNaaccrDictionaryItem(item));
 
-        // sort the fields by starting columns
+        // sort the fields by starting columns (no start columns go to the end)
         Collections.sort(_items, new Comparator<RuntimeNaaccrDictionaryItem>() {
             @Override
             public int compare(RuntimeNaaccrDictionaryItem o1, RuntimeNaaccrDictionaryItem o2) {
+                if (o1.getStartColumn() == null)
+                    return 1;
+                if (o2.getStartColumn() == null)
+                    return -1;
                 return o1.getStartColumn().compareTo(o2.getStartColumn());
             }
         });

@@ -6,6 +6,8 @@ package com.imsweb.naaccrxml;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
 
 import org.junit.Assert;
@@ -15,6 +17,7 @@ import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 
 public class PatientFlatWriterTest {
 
@@ -112,6 +115,41 @@ public class PatientFlatWriterTest {
         Assert.assertEquals("0000000001", lines.get(1).substring(29, 39)); // registry ID
         Assert.assertEquals("00000002", lines.get(1).substring(41, 49)); // patient ID
         Assert.assertEquals("C456", lines.get(1).substring(539, 543)); // primary site
+    }
+
+    @Test
+    public void testUserDefinedDictionary() throws IOException {
+
+        // we will use this root data (it's only used to initialize the reader, so the patient doesn't need to be added to it...)
+        NaaccrData root = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_ABSTRACT);
+
+        // we will use this patient
+        Patient patient = new Patient();
+        patient.addItem(new Item("patientIdNumber", null, "00000001"));
+
+        // we will write this file
+        File file = TestingUtils.createFile("test-flat-writer-user-dict.xml");
+
+        // first, let's use the default user dictionary (so null)
+        try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), root, null, null)) {
+            writer.writePatient(patient);
+            Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("00000001"));
+        }
+
+        // the result should be the same if we pass the same default dictionary to the method
+        NaaccrDictionary dict = NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(NaaccrFormat.NAACCR_VERSION_150);
+        try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), root, null, dict)) {
+            writer.writePatient(patient);
+            Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("00000001"));
+        }
+
+        // using a dictionary with items that are not tied to a start location; those should be ignored...
+        try (Reader dictReader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary.xml"))) {
+            try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), root, null, NaaccrXmlDictionaryUtils.readDictionary(dictReader))) {
+                writer.writePatient(patient);
+                Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("00000001"));
+            }
+        }
     }
 
     @Test
