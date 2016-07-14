@@ -7,7 +7,7 @@
 			<xsd:any minOccurs="0" maxOccurs="unbounded" processContents="lax" namespace="##other" />
 		</xsd:sequence>
 		<xsd:attribute name="dictionaryUri" use="required" type="xsd:anyURI"/>
-		<xsd:attribute name="naaccrVersion" use="required" />
+		<xsd:attribute name="naaccrVersion" use="optional" />
         <xsd:attribute name="specificationVersion" use="optional" default="1.0" />
 		<xsd:attribute name="description" use="optional" />
 		<xsd:anyAttribute processContents="lax" namespace="##other" />

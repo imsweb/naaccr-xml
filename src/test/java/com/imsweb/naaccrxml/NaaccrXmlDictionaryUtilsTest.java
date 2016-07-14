@@ -65,6 +65,14 @@ public class NaaccrXmlDictionaryUtilsTest {
             exceptionAppend = true;
         }
         Assert.assertTrue(exceptionAppend);
+        
+        // this one defines an item in a bad location, but it doesn't define a NAACCR version, so no exception, but if a NAACCR version is provided, the validation should fail
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140-bad3.xml"))) {
+            NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
+            Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+            Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict, "140"));
+            Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict, "160"));
+        }
     }
 
     @Test
