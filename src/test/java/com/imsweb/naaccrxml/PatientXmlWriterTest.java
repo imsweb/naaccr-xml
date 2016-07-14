@@ -19,13 +19,13 @@ public class PatientXmlWriterTest {
 
         // create the root data
         NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_INCIDENCE);
-        data.addItem(new Item("registryId", null, "0000000001"));
+        data.addItem(new Item("registryId", "0000000001"));
 
         // a patient with no tumor
         File file = TestingUtils.createFile("test-xml-writer-no-tumor.xml");
         PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null);
         Patient patient = new Patient();
-        patient.addItem(new Item("patientIdNumber", null, "00000001"));
+        patient.addItem(new Item("patientIdNumber", "00000001"));
         writer.writePatient(patient);
         writer.close();
         patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().get(0);
@@ -38,9 +38,9 @@ public class PatientXmlWriterTest {
         file = TestingUtils.createFile("test-flat-writer-one-tumor.txt");
         writer = new PatientXmlWriter(new FileWriter(file), data, null, null);
         patient = new Patient();
-        patient.addItem(new Item("patientIdNumber", null, "00000001"));
+        patient.addItem(new Item("patientIdNumber", "00000001"));
         Tumor tumor1 = new Tumor();
-        tumor1.addItem(new Item("primarySite", null, "C123"));
+        tumor1.addItem(new Item("primarySite", "C123"));
         patient.addTumor(tumor1);
         writer.writePatient(patient);
         writer.close();
@@ -52,12 +52,12 @@ public class PatientXmlWriterTest {
         file = TestingUtils.createFile("test-flat-writer-two-tumors.txt");
         writer = new PatientXmlWriter(new FileWriter(file), data, null, null);
         patient = new Patient();
-        patient.addItem(new Item("patientIdNumber", null, "00000001"));
+        patient.addItem(new Item("patientIdNumber", "00000001"));
         tumor1 = new Tumor();
-        tumor1.addItem(new Item("primarySite", null, "C123"));
+        tumor1.addItem(new Item("primarySite", "C123"));
         patient.addTumor(tumor1);
         tumor1 = new Tumor();
-        tumor1.addItem(new Item("primarySite", null, "C456"));
+        tumor1.addItem(new Item("primarySite", "C456"));
         patient.addTumor(tumor1);
         writer.writePatient(patient);
         writer.close();
@@ -70,15 +70,15 @@ public class PatientXmlWriterTest {
         file = TestingUtils.createFile("test-flat-writer-two-patients.txt");
         writer = new PatientXmlWriter(new FileWriter(file), data, null, null);
         Patient patient1 = new Patient();
-        patient1.addItem(new Item("patientIdNumber", null, "00000001"));
+        patient1.addItem(new Item("patientIdNumber", "00000001"));
         tumor1 = new Tumor();
-        tumor1.addItem(new Item("primarySite", null, "C123"));
+        tumor1.addItem(new Item("primarySite", "C123"));
         patient1.addTumor(tumor1);
         writer.writePatient(patient1);
         Patient patient2 = new Patient();
-        patient2.addItem(new Item("patientIdNumber", null, "00000002"));
+        patient2.addItem(new Item("patientIdNumber", "00000002"));
         Tumor tumor2 = new Tumor();
-        tumor2.addItem(new Item("primarySite", null, "C456"));
+        tumor2.addItem(new Item("primarySite", "C456"));
         patient2.addTumor(tumor2);
         writer.writePatient(patient2);
         writer.close();

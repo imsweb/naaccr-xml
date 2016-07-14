@@ -454,6 +454,7 @@ public final class NaaccrXmlDictionaryUtils {
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "_regexValidation", "regexValidation");
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "_padding", "padding");
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "_trim", "trim");
+        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_allowUnlimitedText", "allowUnlimitedText");
 
         xstream.omitField(NaaccrDictionary.class, "_cachedById");
         xstream.omitField(NaaccrDictionary.class, "_cachedByNumber");

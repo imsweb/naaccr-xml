@@ -699,7 +699,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 for (Patient patient : patients) {
                     for (NaaccrValidationError error : patient.getAllValidationErrors()) {
                         // this will be shown in the warnings view
-                        buf.append("Line ").append(error.getLineNumber());
+                        buf.append("Line ").append(error.getLineNumber() == null ? "?" : error.getLineNumber());
                         if (error.getNaaccrId() != null) {
                             buf.append(", item '").append(error.getNaaccrId()).append("'");
                             if (error.getNaaccrNum() != null)

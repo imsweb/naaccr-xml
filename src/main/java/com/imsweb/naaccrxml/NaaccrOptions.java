@@ -19,7 +19,7 @@ public class NaaccrOptions {
     public static final String ITEM_HANDLING_PROCESS = "process";
 
     /**
-     * When reading data, if set to false, no validation of the values will take place. Defaults to true.
+     * When reading data, if set to false, no validation of the values will take place (this applies only to data types, the length is always validated). Defaults to true.
      */
     private Boolean _validateReadValues;
 
@@ -49,6 +49,11 @@ public class NaaccrOptions {
     private Boolean _writeItemNumber;
 
     /**
+     * When writing data (to flat format), whether or not errors need to be reported for values too long (if set to false, they will be silently truncated). Default to false.
+     */
+    private Boolean _reportValuesTooLong;
+
+    /**
      * Default constructor.
      */
     public NaaccrOptions() {
@@ -59,6 +64,7 @@ public class NaaccrOptions {
         _tumorGroupingItems.add(NaaccrXmlUtils.DEFAULT_TUMOR_GROUPING_ITEM);
         _reportLevelMismatch = false;
         _writeItemNumber = false;
+        _reportValuesTooLong = false;
     }
 
     public Boolean getValidateReadValues() {
@@ -107,5 +113,13 @@ public class NaaccrOptions {
 
     public void setWriteItemNumber(Boolean writeItemNumber) {
         _writeItemNumber = writeItemNumber;
+    }
+
+    public Boolean getReportValuesTooLong() {
+        return _reportValuesTooLong;
+    }
+
+    public void setReportValuesTooLong(Boolean reportValuesTooLong) {
+        _reportValuesTooLong = reportValuesTooLong;
     }
 }

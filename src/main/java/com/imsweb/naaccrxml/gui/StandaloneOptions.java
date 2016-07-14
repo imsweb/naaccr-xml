@@ -22,7 +22,7 @@ public class StandaloneOptions extends JPanel {
 
     private boolean _readFlat, _writeFlat, _readXml, _writeXml;
     
-    private JCheckBox _groupTumorBox, _reportMismatchBox, _validateValuesBox, _ignoreUnkItemsBox, _writeNumBox;
+    private JCheckBox _groupTumorBox, _reportMismatchBox, _validateValuesBox, _ignoreUnkItemsBox, _writeNumBox, _reportValTooLongBox;
     
     public StandaloneOptions(boolean readFlat, boolean writeFlat, boolean readXml, boolean writeXml) {
         _readFlat = readFlat;
@@ -96,6 +96,19 @@ public class StandaloneOptions extends JPanel {
             contentPnl.add(addHelpRow("Otherwise only the NAACCR ID (which ia required) is written as an attribute."));
             contentPnl.add(Box.createVerticalStrut(15));
         }
+        
+        if (writeFlat) {
+            JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+            _reportValTooLongBox = new JCheckBox(" When writing the items, report an error if a value is too long.");
+            _reportValTooLongBox.setSelected(false);
+            pnl.add(_reportValTooLongBox);
+            contentPnl.add(pnl);
+            contentPnl.add(Box.createVerticalStrut(3));
+            contentPnl.add(addHelpRow("If this option is checked, a warning will be reported if an item in the XML has a value that is too long for the flat file."));
+            contentPnl.add(addHelpRow("Otherwise the value will be silently cut-off to the maximum length allowed."));
+            contentPnl.add(addHelpRow("Note that this option doesn't affect items that allow unlimited-text; those will be silently cut-off regardless."));
+            contentPnl.add(Box.createVerticalStrut(15));
+        }
     }
 
     private JPanel addHelpRow(String text) {
@@ -136,6 +149,9 @@ public class StandaloneOptions extends JPanel {
 
         if (_writeXml)
             options.setWriteItemNumber(_writeNumBox.isSelected());
+        
+        if (_writeFlat)
+            options.setReportValuesTooLong(_reportValTooLongBox.isSelected());
         
         return options;
     }

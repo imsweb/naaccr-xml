@@ -17,6 +17,8 @@ public class RuntimeNaaccrDictionaryItem {
 
     private Integer _length;
 
+    private Boolean _allowUnlimitedText;
+
     private String _parentXmlElement;
 
     private Pattern _regexValidation;
@@ -32,6 +34,7 @@ public class RuntimeNaaccrDictionaryItem {
         _naaccrNum = item.getNaaccrNum();
         _startColumn = item.getStartColumn();
         _length = item.getLength();
+        _allowUnlimitedText = item.getAllowUnlimitedText();
         _parentXmlElement = item.getParentXmlElement();
         if (item.getRegexValidation() != null)
             _regexValidation = Pattern.compile(item.getRegexValidation());
@@ -70,6 +73,14 @@ public class RuntimeNaaccrDictionaryItem {
 
     public void setLength(Integer length) {
         _length = length;
+    }
+
+    public Boolean getAllowUnlimitedText() {
+        return _allowUnlimitedText;
+    }
+
+    public void setAllowUnlimitedText(Boolean allowUnlimitedText) {
+        _allowUnlimitedText = allowUnlimitedText;
     }
 
     public String getParentXmlElement() {

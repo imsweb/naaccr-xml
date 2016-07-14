@@ -4313,7 +4313,8 @@
             naaccrNum="2520"
             naaccrName="Text--DX Proc--PE"
             startColumn="5565"
-            length="1000"
+            length="1000" 
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textDxProcXRayScan"
@@ -4321,6 +4322,7 @@
             naaccrName="Text--DX Proc--X-ray/Scan"
             startColumn="6565"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textDxProcScopes"
@@ -4328,6 +4330,7 @@
             naaccrName="Text--DX Proc--Scopes"
             startColumn="7565"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textDxProcLabTests"
@@ -4335,6 +4338,7 @@
             naaccrName="Text--DX Proc--Lab Tests"
             startColumn="8565"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textDxProcOp"
@@ -4342,13 +4346,15 @@
             naaccrName="Text--DX Proc--Op"
             startColumn="9565"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textDxProcPath"
             naaccrNum="2570"
             naaccrName="Text--DX Proc--Path"
             startColumn="10565"
-            length="1000"
+            length="1000" 
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textPrimarySiteTitle"
@@ -4370,6 +4376,7 @@
             naaccrName="Text--Staging"
             startColumn="11765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextSurgery"
@@ -4377,6 +4384,7 @@
             naaccrName="RX Text--Surgery"
             startColumn="12765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextRadiation"
@@ -4384,6 +4392,7 @@
             naaccrName="RX Text--Radiation (Beam)"
             startColumn="13765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextRadiationOther"
@@ -4391,6 +4400,7 @@
             naaccrName="RX Text--Radiation Other"
             startColumn="14765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextChemo"
@@ -4398,6 +4408,7 @@
             naaccrName="RX Text--Chemo"
             startColumn="15765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextHormone"
@@ -4405,6 +4416,7 @@
             naaccrName="RX Text--Hormone"
             startColumn="16765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextBrm"
@@ -4412,6 +4424,7 @@
             naaccrName="RX Text--BRM"
             startColumn="17765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextOther"
@@ -4419,6 +4432,7 @@
             naaccrName="RX Text--Other"
             startColumn="18765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textRemarks"
@@ -4426,6 +4440,7 @@
             naaccrName="Text--Remarks"
             startColumn="19765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textPlaceOfDiagnosis"

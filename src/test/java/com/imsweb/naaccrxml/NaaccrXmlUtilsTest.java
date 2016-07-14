@@ -53,7 +53,7 @@ public class NaaccrXmlUtilsTest {
 
         // same test, but use a user-defined dictionary (we have to re-write the flat-file to use the extra variable)
         NaaccrDictionary dict = TestingUtils.createUserDictionary();
-        data.getPatients().get(0).getTumors().get(0).addItem(new Item("myVariable", null, "01"));
+        data.getPatients().get(0).getTumors().get(0).addItem(new Item("myVariable", "01"));
         NaaccrXmlUtils.writeFlatFile(data, flatFile, null, dict, null);
         NaaccrXmlUtils.flatToXml(flatFile, xmlFile, null, dict, null);
         Assert.assertTrue(TestingUtils.readFileAsOneString(xmlFile).contains("myVariable"));
@@ -83,7 +83,7 @@ public class NaaccrXmlUtilsTest {
 
         // same test, but use a user-defined dictionary (we have to re-write the xml-file to use the extra variable)
         NaaccrDictionary dict = TestingUtils.createUserDictionary();
-        data.getPatients().get(0).getTumors().get(0).addItem(new Item("myVariable", null, "01"));
+        data.getPatients().get(0).getTumors().get(0).addItem(new Item("myVariable", "01"));
         NaaccrXmlUtils.writeXmlFile(data, xmlFile, null, dict, null);
         NaaccrXmlUtils.xmlToFlat(xmlFile, flatFile, null, dict, null);
         Assert.assertTrue(TestingUtils.readFileAsOneString(xmlFile).contains("01"));
@@ -131,15 +131,15 @@ public class NaaccrXmlUtilsTest {
         data.setBaseDictionaryUri(NaaccrXmlDictionaryUtils.createUriFromVersion("140", true));
         data.setRecordType("I");
         data.setTimeGenerated(new Date());
-        data.addItem(new Item("vendorName", null, "VENDOR"));
+        data.addItem(new Item("vendorName", "VENDOR"));
         Patient patient1 = new Patient();
         patient1.addItem(new Item("patientIdNumber", null, "00000001"));
         Tumor tumor1 = new Tumor();
-        tumor1.addItem(new Item("primarySite", null, "C123"));
+        tumor1.addItem(new Item("primarySite", "C123"));
         patient1.addTumor(tumor1);
         data.addPatient(patient1);
         Patient patient2 = new Patient();
-        patient2.addItem(new Item("patientIdNumber", null, "00000002"));
+        patient2.addItem(new Item("patientIdNumber", "00000002"));
         data.addPatient(patient2);
 
         // write the entire file at once

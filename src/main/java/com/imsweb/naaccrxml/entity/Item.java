@@ -4,17 +4,27 @@
 package com.imsweb.naaccrxml.entity;
 
 public class Item {
-    
+
     private String _naaccrId;
-    
+
     private Integer _naaccrNum;
-    
+
     private String _value;
 
     /**
      * Default constructor.
      */
     public Item() {
+    }
+
+    /**
+     * Partial constructor.
+     * @param naaccrId required NAACCR ID
+     * @param value optional value
+     */
+    public Item(String naaccrId, String value) {
+        _naaccrId = naaccrId;
+        _value = value;
     }
 
     /**
@@ -36,7 +46,7 @@ public class Item {
     public void setNaaccrId(String naaccrId) {
         _naaccrId = naaccrId;
     }
-    
+
     public Integer getNaaccrNum() {
         return _naaccrNum;
     }
@@ -52,5 +62,5 @@ public class Item {
     public void setValue(String value) {
         _value = value;
     }
-    
+
 }

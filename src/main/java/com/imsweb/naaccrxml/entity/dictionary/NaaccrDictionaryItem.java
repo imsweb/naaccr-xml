@@ -18,6 +18,8 @@ public class NaaccrDictionaryItem {
 
     private Integer _length;
 
+    private Boolean _allowUnlimitedText;
+
     private String _recordTypes;
 
     private String _sourceOfStandard;
@@ -70,6 +72,14 @@ public class NaaccrDictionaryItem {
 
     public void setLength(Integer length) {
         _length = length;
+    }
+
+    public Boolean getAllowUnlimitedText() {
+        return _allowUnlimitedText;
+    }
+
+    public void setAllowUnlimitedText(Boolean allowUnlimitedText) {
+        _allowUnlimitedText = allowUnlimitedText;
     }
 
     public String getRecordTypes() {
