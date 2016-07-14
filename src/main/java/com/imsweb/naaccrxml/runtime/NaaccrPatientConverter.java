@@ -50,14 +50,14 @@ public class NaaccrPatientConverter implements Converter {
         else {
             Patient patient = (Patient)source;
             for (Item item : patient.getItems())
-                writeItem(item, writer);
+                writeItem(patient, item, writer);
 
             // TODO [EXTENSIONS] this would be the place to write the patient extension...
 
             for (Tumor tumor : patient.getTumors()) {
                 writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
                 for (Item item : tumor.getItems())
-                    writeItem(item, writer);
+                    writeItem(tumor, item, writer);
 
                 // TODO [EXTENSIONS] this would be the place to write the tumor extension...
 
@@ -139,7 +139,7 @@ public class NaaccrPatientConverter implements Converter {
         return patient;
     }
 
-    public void writeItem(Item item, HierarchicalStreamWriter writer) {
+    public void writeItem(AbstractEntity entity, Item item, HierarchicalStreamWriter writer) {
 
         // don't bother if the item has no value!
         if (item.getValue() == null || item.getValue().isEmpty())
@@ -150,19 +150,28 @@ public class NaaccrPatientConverter implements Converter {
             reportSyntaxError("NAACCR ID is required when writing an item");
         if (_context.getOptions().getItemsToExclude().contains(item.getNaaccrId()))
             return;
-        RuntimeNaaccrDictionaryItem def = _context.getDictionary().getItemByNaaccrId(item.getNaaccrId());
-        if (def == null)
+        RuntimeNaaccrDictionaryItem itemDef = _context.getDictionary().getItemByNaaccrId(item.getNaaccrId());
+        if (itemDef == null)
             reportSyntaxError("unable to find item definition for NAACCR ID " + item.getNaaccrId());
         else {
-            if (item.getNaaccrNum() != null && !item.getNaaccrNum().equals(def.getNaaccrNum()))
+            if (item.getNaaccrNum() != null && !item.getNaaccrNum().equals(itemDef.getNaaccrNum()))
                 reportSyntaxError("provided NAACCR Number '" + item.getNaaccrNum() + "' doesn't correspond to the provided NAACCR ID '" + item.getNaaccrId() + "'");
 
             // write the item
             writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
-            writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID, def.getNaaccrId());
-            if (def.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
-                writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, def.getNaaccrNum().toString());
-            writer.setValue(item.getValue());
+            writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID, itemDef.getNaaccrId());
+            if (itemDef.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
+                writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, itemDef.getNaaccrNum().toString());
+            
+            // do we need to truncate the value?
+            String value = item.getValue();
+            if (value.length() > itemDef.getLength()) {
+                if (!Boolean.TRUE.equals(itemDef.getAllowUnlimitedText()) && _context.getOptions().getReportValuesTooLong())
+                    reportError(entity, null, null, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());
+                value = value.substring(0, itemDef.getLength());
+            }
+            
+            writer.setValue(value);
             writer.endNode();
         }
     }
@@ -246,7 +255,7 @@ public class NaaccrPatientConverter implements Converter {
         entity.addItem(item);
     }
 
-    protected void reportError(AbstractEntity entity, int line, String path, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {
+    protected void reportError(AbstractEntity entity, Integer line, String path, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {
         NaaccrValidationError error = new NaaccrValidationError(code, msgValues);
         error.setLineNumber(line);
         error.setPath(path);

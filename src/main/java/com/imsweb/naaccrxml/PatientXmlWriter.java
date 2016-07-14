@@ -118,7 +118,7 @@ public class PatientXmlWriter implements AutoCloseable {
 
             // write the root items
             for (Item item : rootData.getItems())
-                configuration.getPatientConverter().writeItem(item, _writer);
+                configuration.getPatientConverter().writeItem(rootData, item, _writer);
 
             // for now, ignore the root extension...
 

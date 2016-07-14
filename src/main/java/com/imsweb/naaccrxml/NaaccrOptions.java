@@ -49,7 +49,7 @@ public class NaaccrOptions {
     private Boolean _writeItemNumber;
 
     /**
-     * When writing data (to flat format), whether or not errors need to be reported for values too long (if set to false, they will be silently truncated). Default to false.
+     * When writing data, whether or not errors need to be reported for values too long (values will always be truncated, this only affect the error reporting mechanism). Defaults to false.
      */
     private Boolean _reportValuesTooLong;
 
