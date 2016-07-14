@@ -3,6 +3,20 @@
  */
 package com.imsweb.naaccrxml;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.xml.bind.DatatypeConverter;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
+
 import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
@@ -10,18 +24,6 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamContext;
 import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.ConversionException;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-
-import javax.xml.bind.DatatypeConverter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * This class can be used to wrap a generic writer into a patient writer handling the NAACCR XML format.
@@ -92,6 +94,9 @@ public class PatientXmlWriter implements AutoCloseable {
                 cal.setTime(rootData.getTimeGenerated());
                 _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, DatatypeConverter.printDateTime(cal));
             }
+            else
+                _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, DatatypeConverter.printDateTime(Calendar.getInstance()));
+            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION, NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
             _writer.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
 
             // write non-standard attributes

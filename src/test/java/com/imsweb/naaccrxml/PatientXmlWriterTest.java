@@ -30,6 +30,9 @@ public class PatientXmlWriterTest {
         writer.close();
         patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().get(0);
         Assert.assertEquals("00000001", patient.getItemValue("patientIdNumber"));
+        String xmlAsString = TestingUtils.readFileAsOneString(file);
+        Assert.assertTrue(xmlAsString.contains("specificationVersion=\"" + NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION + "\""));
+        Assert.assertTrue(xmlAsString.contains("timeGenerated="));
 
         // a patient with one tumor
         file = TestingUtils.createFile("test-flat-writer-one-tumor.txt");

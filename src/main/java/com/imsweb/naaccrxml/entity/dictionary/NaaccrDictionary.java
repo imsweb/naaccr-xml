@@ -15,6 +15,8 @@ public class NaaccrDictionary {
 
     private String _naaccrVersion;
 
+    private String _specificationVersion;
+
     private String _description;
 
     private List<NaaccrDictionaryItem> _items;
@@ -22,7 +24,7 @@ public class NaaccrDictionary {
     // caches to improve lookup performances
     private Map<String, NaaccrDictionaryItem> _cachedById;
     private Map<Integer, NaaccrDictionaryItem> _cachedByNumber;
-    
+
     public NaaccrDictionary() {
         _items = new ArrayList<>();
         _cachedById = new HashMap<>();
@@ -45,6 +47,14 @@ public class NaaccrDictionary {
         _naaccrVersion = naaccrVersion;
     }
 
+    public String getSpecificationVersion() {
+        return _specificationVersion;
+    }
+
+    public void setSpecificationVersion(String specificationVersion) {
+        _specificationVersion = specificationVersion;
+    }
+
     public String getDescription() {
         return _description;
     }
@@ -56,7 +66,7 @@ public class NaaccrDictionary {
     public List<NaaccrDictionaryItem> getItems() {
         return Collections.unmodifiableList(_items);
     }
-    
+
     public void setItems(List<NaaccrDictionaryItem> items) {
         if (items != null) {
             _items = items;
@@ -66,7 +76,7 @@ public class NaaccrDictionary {
             }
         }
     }
-    
+
     public void addItem(NaaccrDictionaryItem item) {
         _items.add(item);
         if (item.getNaaccrId() != null)

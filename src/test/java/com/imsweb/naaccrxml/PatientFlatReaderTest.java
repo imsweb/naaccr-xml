@@ -26,6 +26,7 @@ public class PatientFlatReaderTest {
         rec1.replace(539, 543, "C123"); // primarySite (Tumor level)
         File file = TestingUtils.createAndPopulateFile("test-flat-reader-one-rec.txt", rec1);
         PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, null);
+        Assert.assertEquals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION, reader.getRootData().getSpecificationVersion());
         Assert.assertEquals("0000000001", reader.getRootData().getItem("registryId").getValue());
         Patient patient = reader.readPatient();
         Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());

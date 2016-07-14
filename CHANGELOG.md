@@ -1,5 +1,12 @@
 ## NAACCR XML Version History
 
+**Version 2.0**
+
+ - Added optional attribute "allowUnlimitedText" to the dictionary item tag (specification 1.1).
+ - Made start column optional in user-defined dictionaries (specification 1.1).
+ - Made NAACCR version optional in user-defined dictionaries  specification 1.1).
+ - Added optional attribute "specificationVersion" to the root dictionary and data XML tags, now set to 1.1 by default.
+
 **Version 1.3**
 
  - Fixed a bug in the dictionary validation preventing a standard item from the default user dictionary to be re-defined.

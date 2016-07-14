@@ -74,6 +74,7 @@ public class PatientXmlReaderTest {
         Assert.assertNull(data.getUserDictionaryUri());
         Assert.assertNotNull(data.getRecordType());
         Assert.assertNull(data.getTimeGenerated());
+        Assert.assertEquals("1.0", data.getSpecificationVersion());
         Assert.assertEquals(0, data.getItems().size());
         reader.close();
 
@@ -84,6 +85,7 @@ public class PatientXmlReaderTest {
         Assert.assertNull(data.getUserDictionaryUri());
         Assert.assertNotNull(data.getRecordType());
         Assert.assertNotNull(data.getTimeGenerated());
+        Assert.assertEquals("1.1", data.getSpecificationVersion());
         Assert.assertEquals(1, data.getItems().size());
         reader.close();
     }

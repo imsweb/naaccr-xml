@@ -85,6 +85,7 @@ public class PatientFlatReader implements AutoCloseable {
         NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(_format.getNaaccrVersion());
         _dictionary = new RuntimeNaaccrDictionary(_format.getRecordType(), baseDictionary, userDictionary);
         _rootData = new NaaccrData(_format.toString());
+        _rootData.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
 
         // make sure first line has the correct length
         if (_previousLine.length() != _format.getLineLength())
