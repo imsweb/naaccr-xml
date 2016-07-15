@@ -190,6 +190,7 @@ public class PatientFlatWriter implements AutoCloseable {
         if (value != null && !value.isEmpty())
             value = _NEW_LINES_PATTERN.matcher(value).replaceAll(" ");
 
+        // for flat-file values, we always have to truncate, so the "allowUnlimitedText" is used only to know if we have to report an error
         if (value != null && value.length() > itemDef.getLength()) {
             if (!Boolean.TRUE.equals(itemDef.getAllowUnlimitedText()) && _options.getReportValuesTooLong())
                 reportError(entityToUse, null, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());

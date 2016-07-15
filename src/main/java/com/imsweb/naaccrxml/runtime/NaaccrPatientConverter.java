@@ -162,15 +162,15 @@ public class NaaccrPatientConverter implements Converter {
             writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID, itemDef.getNaaccrId());
             if (itemDef.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
                 writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, itemDef.getNaaccrNum().toString());
-            
+
             // do we need to truncate the value?
             String value = item.getValue();
-            if (value.length() > itemDef.getLength()) {
-                if (!Boolean.TRUE.equals(itemDef.getAllowUnlimitedText()) && _context.getOptions().getReportValuesTooLong())
+            if (value.length() > itemDef.getLength() && !Boolean.TRUE.equals(itemDef.getAllowUnlimitedText())) {
+                if (_context.getOptions().getReportValuesTooLong())
                     reportError(entity, null, null, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());
                 value = value.substring(0, itemDef.getLength());
             }
-            
+
             writer.setValue(value);
             writer.endNode();
         }

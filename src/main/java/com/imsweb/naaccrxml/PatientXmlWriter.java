@@ -84,8 +84,11 @@ public class PatientXmlWriter implements AutoCloseable {
             if (rootData.getBaseDictionaryUri() == null)
                 throw new NaaccrIOException("base dictionary URI is required");
             _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT, rootData.getBaseDictionaryUri());
-            if (rootData.getUserDictionaryUri() != null)
-                _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT, rootData.getUserDictionaryUri());
+            if (userDictionary != null) {
+                if (rootData.getUserDictionaryUri() != null && !rootData.getUserDictionaryUri().equals(userDictionary.getDictionaryUri()))
+                    throw new NaaccrIOException("Provided dictionary has a different URI than the one in the rootData");
+                _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT, userDictionary.getDictionaryUri());
+            }
             if (rootData.getRecordType() == null)
                 throw new NaaccrIOException("record type is required");
             _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE, rootData.getRecordType());
