@@ -9,6 +9,7 @@
 
 **Version 1.3**
 
+ - Fixed some bad data types in all base dictionaries.
  - Fixed a bug in the dictionary validation preventing a standard item from the default user dictionary to be re-defined.
 
 **Version 1.2**
