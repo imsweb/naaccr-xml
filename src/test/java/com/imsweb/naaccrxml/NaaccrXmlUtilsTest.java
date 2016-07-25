@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -75,11 +76,14 @@ public class NaaccrXmlUtilsTest {
         Assert.assertEquals(data.getPatients().size(), data2.getPatients().size());
 
         // same test, but use an option; make sure the item numbers are written
-        NaaccrOptions options = new NaaccrOptions();
-        options.getItemsToExclude().add("primarySite");
         Assert.assertTrue(TestingUtils.readFileAsOneString(flatFile).contains("C123"));
+        NaaccrOptions options = new NaaccrOptions();
+        options.setItemsToExclude(Collections.singletonList("primarySite"));
         NaaccrXmlUtils.xmlToFlat(xmlFile, flatFile, options, null, null);
         Assert.assertFalse(TestingUtils.readFileAsOneString(flatFile).contains("C123"));
+        options.setItemsToInclude(Collections.singletonList("primarySite"));
+        NaaccrXmlUtils.xmlToFlat(xmlFile, flatFile, options, null, null);
+        Assert.assertTrue(TestingUtils.readFileAsOneString(flatFile).contains("C123"));
 
         // same test, but use a user-defined dictionary (we have to re-write the xml-file to use the extra variable)
         NaaccrDictionary dict = TestingUtils.createUserDictionary();

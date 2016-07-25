@@ -97,10 +97,12 @@ public class PatientFlatReader implements AutoCloseable {
 
         // let's cache the grouping items, we are going to need them a lot...
         _groupingItems = new ArrayList<>();
-        for (String id : _options.getTumorGroupingItems()) {
-            RuntimeNaaccrDictionaryItem item = _dictionary.getItemByNaaccrId(id);
-            if (item != null)
-                _groupingItems.add(item);
+        if (_options.getTumorGroupingItems() != null) {
+            for (String id : _options.getTumorGroupingItems()) {
+                RuntimeNaaccrDictionaryItem item = _dictionary.getItemByNaaccrId(id);
+                if (item != null)
+                    _groupingItems.add(item);
+            }
         }
     }
 
@@ -219,7 +221,7 @@ public class PatientFlatReader implements AutoCloseable {
 
     protected void addItemFromLine(AbstractEntity entity, String line, Integer lineNumber, RuntimeNaaccrDictionaryItem def) {
         Item item = createItemFromLine(entity, line, lineNumber, def);
-        if (item != null && !_options.getItemsToExclude().contains(def.getNaaccrId()))
+        if (item != null && _options.processItem(def.getNaaccrId()))
             entity.addItem(item);
     }
 

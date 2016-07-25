@@ -29,12 +29,17 @@ public class NaaccrOptions {
     private String _unknownItemHandling;
 
     /**
-     * When reading/writing data, the item IDs to ignore. Defaults to not ignoring any items (empty list).
+     * When reading/writing data, the item IDs to process, anything other items will be ignored. Defaults to null which means process all items.
+     */
+    private List<String> _itemsToInclude;
+
+    /**
+     * When reading/writing data, the item IDs to ignore. Defaults to null, which means to not ignore any items.
      */
     private List<String> _itemsToExclude;
 
     /**
-     * When reading data (from flat format), which item IDs to use to group the tumors into patients. If empty, no grouping takes place. Defaults to using the Patient ID Number.
+     * When reading data (from flat format), which item IDs to use to group the tumors into patients. If null/empty, no grouping takes place. Defaults to using the Patient ID Number.
      */
     private List<String> _tumorGroupingItems;
 
@@ -59,7 +64,6 @@ public class NaaccrOptions {
     public NaaccrOptions() {
         _validateReadValues = true;
         _unknownItemHandling = ITEM_HANDLING_ERROR;
-        _itemsToExclude = new ArrayList<>();
         _tumorGroupingItems = new ArrayList<>();
         _tumorGroupingItems.add(NaaccrXmlUtils.DEFAULT_TUMOR_GROUPING_ITEM);
         _reportLevelMismatch = false;
@@ -89,6 +93,14 @@ public class NaaccrOptions {
 
     public void setItemsToExclude(List<String> itemsToExclude) {
         _itemsToExclude = itemsToExclude;
+    }
+
+    public List<String> getItemsToInclude() {
+        return _itemsToInclude;
+    }
+
+    public void setItemsToInclude(List<String> itemsToInclude) {
+        _itemsToInclude = itemsToInclude;
     }
 
     public List<String> getTumorGroupingItems() {
@@ -121,5 +133,14 @@ public class NaaccrOptions {
 
     public void setApplyPaddingRules(Boolean applyPaddingRules) {
         _applyPaddingRules = applyPaddingRules;
+    }
+
+    /**
+     * Convenience method that computes if a given item needs to be ignored, based on the include/exclude lists.
+     * @param naaccrId NAACCR ID
+     * @return true if the corresponding item needs to be processed.
+     */
+    public boolean processItem(String naaccrId) {
+        return _itemsToInclude != null && _itemsToInclude.contains(naaccrId) || !(_itemsToExclude != null && _itemsToExclude.contains(naaccrId));
     }
 }

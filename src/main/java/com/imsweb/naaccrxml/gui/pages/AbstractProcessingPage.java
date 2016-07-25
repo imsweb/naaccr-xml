@@ -761,7 +761,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         String analysis = Standalone.formatTime(analysisTime);
         String processing = Standalone.formatTime(processingTime);
         String total = Standalone.formatTime(analysisTime + processingTime);
-        return "Successfully created \"" + path + "\" (" + size + ") in " + total + " (anaysis: " + analysis + ", processing: " + processing + ")";
+        return "Successfully created \"" + path + "\" (" + size + ") in " + total + " (analysis: " + analysis + ", processing: " + processing + ")";
     }
 
     protected void reportAnalysisError(String error) {
