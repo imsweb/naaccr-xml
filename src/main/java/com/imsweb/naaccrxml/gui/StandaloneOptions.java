@@ -22,7 +22,7 @@ public class StandaloneOptions extends JPanel {
 
     private boolean _readFlat, _writeFlat, _readXml, _writeXml;
     
-    private JCheckBox _groupTumorBox, _reportMismatchBox, _validateValuesBox, _ignoreUnkItemsBox, _writeNumBox;
+    private JCheckBox _groupTumorBox, _reportMismatchBox, _validateValuesBox, _ignoreUnkItemsBox, _writeNumBox, _applyPaddingBox;
     
     public StandaloneOptions(boolean readFlat, boolean writeFlat, boolean readXml, boolean writeXml) {
         _readFlat = readFlat;
@@ -96,6 +96,17 @@ public class StandaloneOptions extends JPanel {
             contentPnl.add(addHelpRow("Otherwise only the NAACCR ID (which ia required) is written as an attribute."));
             contentPnl.add(Box.createVerticalStrut(15));
         }
+        
+        if (writeFlat || writeXml) {
+            JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+            _applyPaddingBox = new JCheckBox(" When writing the values, apply padding rules (this might change the actual values being written).");
+            _applyPaddingBox.setSelected(false);
+            pnl.add(_applyPaddingBox);
+            contentPnl.add(pnl);
+            contentPnl.add(Box.createVerticalStrut(3));
+            contentPnl.add(addHelpRow("If this option is checked, items defining a padding rule (usually left 0-padded) will have their value modified to honor the definition."));
+            contentPnl.add(Box.createVerticalStrut(15));
+        }
     }
 
     private JPanel addHelpRow(String text) {
@@ -136,6 +147,10 @@ public class StandaloneOptions extends JPanel {
 
         if (_writeXml)
             options.setWriteItemNumber(_writeNumBox.isSelected());
+
+        if (_writeFlat || _writeXml) {
+            options.setApplyPaddingRules(_applyPaddingBox.isSelected());
+        }
         
         return options;
     }

@@ -6,6 +6,8 @@ package com.imsweb.naaccrxml.runtime;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -162,7 +164,23 @@ public class NaaccrPatientConverter implements Converter {
             writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID, def.getNaaccrId());
             if (def.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
                 writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, def.getNaaccrNum().toString());
-            writer.setValue(item.getValue());
+
+            // handle the padding
+            String value = item.getValue();
+            if (Boolean.TRUE.equals(_context.getOptions().getApplyPaddingRules()) && def.getLength() != null && def.getPadding() != null && value.length() < def.getLength()) {
+                if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(def.getPadding()))
+                    value = StringUtils.leftPad(value, def.getLength(), ' ');
+                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(def.getPadding()))
+                    value = StringUtils.rightPad(value, def.getLength(), ' ');
+                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(def.getPadding()))
+                    value = StringUtils.leftPad(value, def.getLength(), '0');
+                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_ZERO.equals(def.getPadding()))
+                    value = StringUtils.rightPad(value, def.getLength(), '0');
+                else
+                    throw new RuntimeException("Unknown padding option: " + def.getPadding());
+            }
+
+            writer.setValue(value);
             writer.endNode();
         }
     }
