@@ -99,7 +99,7 @@ public class StandaloneOptions extends JPanel {
         
         if (writeFlat || writeXml) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-            _applyPaddingBox = new JCheckBox(" When writing the values, apply padding rules (this might change the actual values being written).");
+            _applyPaddingBox = new JCheckBox(" When writing the items, apply padding rules (this might change the actual values being written).");
             _applyPaddingBox.setSelected(false);
             pnl.add(_applyPaddingBox);
             contentPnl.add(pnl);

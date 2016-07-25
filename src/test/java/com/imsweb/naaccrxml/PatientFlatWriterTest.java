@@ -118,6 +118,40 @@ public class PatientFlatWriterTest {
     }
 
     @Test
+    public void testOptions() throws IOException {
+
+        NaaccrOptions options = new NaaccrOptions();
+
+        NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(TestingUtils.getDataFile("testing-user-dictionary.xml"));
+
+        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_INCIDENCE);
+        Patient patient = new Patient();
+        patient.addItem(new Item("patientIdNumber", "00000001"));
+        Tumor tumor = new Tumor();
+        patient.addTumor(tumor);
+        data.addPatient(patient);
+
+        File file = TestingUtils.createFile("test-flat-writer-options.txt");
+
+        // option is set to pad the values
+        options.setApplyPaddingRules(true);
+        data.addItem(new Item("npiRegistryId", "1"));
+        try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, options, dict)) {
+            writer.writePatient(patient);
+        }
+        Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("0000000001"));
+
+        // same test, but option is set to NOT pad the values
+        options.setApplyPaddingRules(false);
+        data.addItem(new Item("npiRegistryId", "1"));
+        try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, options, dict)) {
+            writer.writePatient(patient);
+        }
+        Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("1"));
+        Assert.assertFalse(TestingUtils.readFileAsOneString(file).contains("0000000001"));
+    }
+    
+    @Test
     public void testUserDefinedDictionary() throws IOException {
 
         // we will use this root data (it's only used to initialize the reader, so the patient doesn't need to be added to it...)

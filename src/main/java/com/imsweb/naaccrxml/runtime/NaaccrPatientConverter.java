@@ -164,23 +164,23 @@ public class NaaccrPatientConverter implements Converter {
             writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID, itemDef.getNaaccrId());
             if (itemDef.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
                 writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, itemDef.getNaaccrNum().toString());
-            
+
             String value = item.getValue();
 
             // handle the padding
-            if (Boolean.TRUE.equals(_context.getOptions().getApplyPaddingRules()) && def.getLength() != null && def.getPadding() != null && value.length() < def.getLength()) {
-                if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(def.getPadding()))
-                    value = StringUtils.leftPad(value, def.getLength(), ' ');
-                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(def.getPadding()))
-                    value = StringUtils.rightPad(value, def.getLength(), ' ');
-                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(def.getPadding()))
-                    value = StringUtils.leftPad(value, def.getLength(), '0');
-                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_ZERO.equals(def.getPadding()))
-                    value = StringUtils.rightPad(value, def.getLength(), '0');
+            if (Boolean.TRUE.equals(_context.getOptions().getApplyPaddingRules()) && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef.getLength()) {
+                if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(itemDef.getPadding()))
+                    value = StringUtils.leftPad(value, itemDef.getLength(), ' ');
+                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(itemDef.getPadding()))
+                    value = StringUtils.rightPad(value, itemDef.getLength(), ' ');
+                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(itemDef.getPadding()))
+                    value = StringUtils.leftPad(value, itemDef.getLength(), '0');
+                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_ZERO.equals(itemDef.getPadding()))
+                    value = StringUtils.rightPad(value, itemDef.getLength(), '0');
                 else
-                    throw new RuntimeException("Unknown padding option: " + def.getPadding());
+                    throw new RuntimeException("Unknown padding option: " + itemDef.getPadding());
             }
-            
+
             // do we need to truncate the value?
             if (value.length() > itemDef.getLength() && !Boolean.TRUE.equals(itemDef.getAllowUnlimitedText())) {
                 if (_context.getOptions().getReportValuesTooLong())

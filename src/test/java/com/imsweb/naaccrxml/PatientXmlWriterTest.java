@@ -136,6 +136,23 @@ public class PatientXmlWriterTest {
         }
         Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("YY"));
         Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
+        
+        // option is set to pad the values
+        options.setApplyPaddingRules(true);
+        data.addItem(new Item("npiRegistryId", "1"));
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
+            writer.writePatient(patient);
+        }
+        Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("0000000001"));
+
+        // same test, but option is set to NOT pad the values
+        options.setApplyPaddingRules(false);
+        data.addItem(new Item("npiRegistryId", "1"));
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
+            writer.writePatient(patient);
+        }
+        Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("1"));
+        Assert.assertFalse(TestingUtils.readFileAsOneString(file).contains("0000000001"));
     }
 
     @Test
