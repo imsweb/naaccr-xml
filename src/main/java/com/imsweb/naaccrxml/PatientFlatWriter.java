@@ -127,7 +127,7 @@ public class PatientFlatWriter implements AutoCloseable {
                             line.append(' ');
                     currentIndex = start;
 
-                    String value = getValueForItem(itemDef, root, patient, tumor);
+                    String value = getValueForItem(itemDef, root, patient, tumor, Boolean.TRUE.equals(_options.getApplyPaddingRules()));
                     if (value != null) {
                         line.append(value);
                         currentIndex = start + value.length();
@@ -158,7 +158,7 @@ public class PatientFlatWriter implements AutoCloseable {
         return lines;
     }
 
-    protected String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, NaaccrData root, Patient patient, Tumor tumor) throws NaaccrIOException {
+    protected String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, NaaccrData root, Patient patient, Tumor tumor, boolean applyPadding) throws NaaccrIOException {
         String value;
 
         AbstractEntity entityToUse;
@@ -173,7 +173,7 @@ public class PatientFlatWriter implements AutoCloseable {
         value = entityToUse.getItemValue(itemDef.getNaaccrId());
 
         // handle the padding
-        if (value != null && !value.isEmpty() && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef.getLength()) {
+        if (applyPadding && value != null && !value.isEmpty() && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef.getLength()) {
             if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(itemDef.getPadding()))
                 value = StringUtils.leftPad(value, itemDef.getLength(), ' ');
             else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(itemDef.getPadding()))

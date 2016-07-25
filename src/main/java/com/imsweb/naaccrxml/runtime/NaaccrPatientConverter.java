@@ -6,6 +6,8 @@ package com.imsweb.naaccrxml.runtime;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -162,9 +164,24 @@ public class NaaccrPatientConverter implements Converter {
             writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID, itemDef.getNaaccrId());
             if (itemDef.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
                 writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, itemDef.getNaaccrNum().toString());
-
-            // do we need to truncate the value?
+            
             String value = item.getValue();
+
+            // handle the padding
+            if (Boolean.TRUE.equals(_context.getOptions().getApplyPaddingRules()) && def.getLength() != null && def.getPadding() != null && value.length() < def.getLength()) {
+                if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(def.getPadding()))
+                    value = StringUtils.leftPad(value, def.getLength(), ' ');
+                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(def.getPadding()))
+                    value = StringUtils.rightPad(value, def.getLength(), ' ');
+                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(def.getPadding()))
+                    value = StringUtils.leftPad(value, def.getLength(), '0');
+                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_ZERO.equals(def.getPadding()))
+                    value = StringUtils.rightPad(value, def.getLength(), '0');
+                else
+                    throw new RuntimeException("Unknown padding option: " + def.getPadding());
+            }
+            
+            // do we need to truncate the value?
             if (value.length() > itemDef.getLength() && !Boolean.TRUE.equals(itemDef.getAllowUnlimitedText())) {
                 if (_context.getOptions().getReportValuesTooLong())
                     reportError(entity, null, null, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());
