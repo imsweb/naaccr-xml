@@ -150,7 +150,7 @@ public class NaaccrPatientConverter implements Converter {
         // get the item definition
         if (item.getNaaccrId() == null)
             reportSyntaxError("NAACCR ID is required when writing an item");
-        if (_context.getOptions().getItemsToExclude().contains(item.getNaaccrId()))
+        if (!_context.getOptions().processItem(item.getNaaccrId()))
             return;
         RuntimeNaaccrDictionaryItem itemDef = _context.getDictionary().getItemByNaaccrId(item.getNaaccrId());
         if (itemDef == null)
@@ -209,7 +209,7 @@ public class NaaccrPatientConverter implements Converter {
             reportSyntaxError("attribute '" + NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID + "' is required");
         else
             rawId = rawId.trim();
-        if (_context.getOptions().getItemsToExclude().contains(rawId))
+        if (!_context.getOptions().processItem(rawId))
             return;
         RuntimeNaaccrDictionaryItem def = _context.getDictionary().getItemByNaaccrId(rawId);
         if (def != null) {

@@ -111,7 +111,7 @@ public class PatientFlatWriter implements AutoCloseable {
             int currentIndex = 1;
             StringBuilder line = new StringBuilder();
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
-                if (_options.getItemsToExclude().contains(itemDef.getNaaccrId()))
+                if (!_options.processItem(itemDef.getNaaccrId()))
                     continue;
                 // as of spec 1.1, the start column is optional for user-defined items, so let's ignore those
                 if (itemDef.getStartColumn() == null)

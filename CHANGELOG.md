@@ -11,6 +11,7 @@
 **Version 1.3**
 
  - Added new option to control whether or not the padding rules should be applied, by default they won't be applied (since they actually change data and it's rarely desired).
+ - Added new option to specify which items need to be processed (this option is not available in the GUI yet).
  - Fixed some bad data types in all base dictionaries.
  - Fixed a bug in the dictionary validation preventing a standard item from the default user dictionary to be re-defined.
 
