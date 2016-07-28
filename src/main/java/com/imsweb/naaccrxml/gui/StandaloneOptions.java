@@ -6,24 +6,42 @@ package com.imsweb.naaccrxml.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.imsweb.naaccrxml.NaaccrOptions;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 public class StandaloneOptions extends JPanel {
 
+    // available "modes"
     private boolean _readFlat, _writeFlat, _readXml, _writeXml;
-    
+
+    // global GUI components
     private JCheckBox _groupTumorBox, _reportMismatchBox, _validateValuesBox, _ignoreUnkItemsBox, _writeNumBox, _applyPaddingBox, _reportValTooLongBox;
-    
+    private JTextField _itemListFld;
+    private JRadioButton _itemsIncludeBtn, _itemsExcludeBtn;
+
+    /**
+     * Constructor.
+     */
     public StandaloneOptions(boolean readFlat, boolean writeFlat, boolean readXml, boolean writeXml) {
         _readFlat = readFlat;
         _writeFlat = writeFlat;
@@ -96,7 +114,7 @@ public class StandaloneOptions extends JPanel {
             contentPnl.add(addHelpRow("Otherwise only the NAACCR ID (which ia required) is written as an attribute."));
             contentPnl.add(Box.createVerticalStrut(15));
         }
-        
+
         if (writeFlat || writeXml) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
             _applyPaddingBox = new JCheckBox(" When writing the items, apply padding rules (this might change the actual values being written).");
@@ -107,7 +125,7 @@ public class StandaloneOptions extends JPanel {
             contentPnl.add(addHelpRow("If this option is checked, items defining a padding rule (usually left 0-padded) will have their value modified to honor the definition."));
             contentPnl.add(Box.createVerticalStrut(15));
         }
-        
+
         if (writeFlat) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
             _reportValTooLongBox = new JCheckBox(" When writing the items, report an error if a value is too long.");
@@ -120,12 +138,33 @@ public class StandaloneOptions extends JPanel {
             contentPnl.add(addHelpRow("Note that this option doesn't affect items that allow unlimited-text; those will be silently cut-off regardless."));
             contentPnl.add(Box.createVerticalStrut(15));
         }
+
+        if (readFlat || readXml || writeFlat || writeXml) {
+            JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+            pnl.add(new JLabel("Exclude/Include following items: "));
+            _itemListFld = new JTextField(55);
+            pnl.add(_itemListFld);
+            pnl.add(Box.createHorizontalStrut(15));
+            _itemsExcludeBtn = new JRadioButton("Exclusion list");
+            pnl.add(_itemsExcludeBtn);
+            pnl.add(Box.createHorizontalStrut(5));
+            _itemsIncludeBtn = new JRadioButton("Inclusion list");
+            pnl.add(_itemsIncludeBtn);
+            ButtonGroup group = new ButtonGroup();
+            group.add(_itemsExcludeBtn);
+            group.add(_itemsIncludeBtn);
+            _itemsExcludeBtn.setSelected(true);
+            contentPnl.add(pnl);
+            contentPnl.add(Box.createVerticalStrut(3));
+            contentPnl.add(addHelpRow("Comma-separated list of items (NAACCR ID or NAACCR Number) to exclude/include when reading or writing the file."));
+            contentPnl.add(Box.createVerticalStrut(15));
+        }
     }
 
     private JPanel addHelpRow(String text) {
         return addHelpRow(text, Color.BLACK);
     }
-    
+
     private JPanel addHelpRow(String text, Color color) {
         JPanel helpPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         helpPnl.setBorder(new EmptyBorder(0, 50, 0, 0));
@@ -134,8 +173,8 @@ public class StandaloneOptions extends JPanel {
         helpPnl.add(lbl);
         return helpPnl;
     }
-    
-    public NaaccrOptions getOptions() {
+
+    public NaaccrOptions getOptions(NaaccrDictionary baseDictionary, NaaccrDictionary userDictionary) {
         NaaccrOptions options = new NaaccrOptions();
 
         if (_readFlat) {
@@ -144,7 +183,7 @@ public class StandaloneOptions extends JPanel {
             else
                 options.setTumorGroupingItems(Collections.<String>emptyList());
         }
-        
+
         if (_readFlat)
             options.setReportLevelMismatch(_reportMismatchBox.isSelected());
 
@@ -163,10 +202,38 @@ public class StandaloneOptions extends JPanel {
 
         if (_writeFlat || _writeXml)
             options.setApplyPaddingRules(_applyPaddingBox.isSelected());
-        
+
         if (_writeFlat)
             options.setReportValuesTooLong(_reportValTooLongBox.isSelected());
-        
+
+        if (_readFlat || _readXml || _writeFlat || _writeXml) {
+            String itemsStr = _itemListFld.getText().replace(" ", "");
+            if (!itemsStr.isEmpty()) {
+
+                // build a quick access lookup
+                Map<String, String> itemNumToItemId = new HashMap<>();
+                if (baseDictionary != null)
+                    for (NaaccrDictionaryItem item : baseDictionary.getItems())
+                        if (item.getNaaccrNum() != null)
+                            itemNumToItemId.put(item.getNaaccrNum().toString(), item.getNaaccrId());
+                if (userDictionary != null)
+                    for (NaaccrDictionaryItem item : userDictionary.getItems())
+                        if (item.getNaaccrNum() != null)
+                            itemNumToItemId.put(item.getNaaccrNum().toString(), item.getNaaccrId());
+
+                // gather the items
+                List<String> naaccrIds = new ArrayList<>();
+                for (String s : StringUtils.split(itemsStr, ','))
+                    naaccrIds.add(itemNumToItemId.containsKey(s) ? itemNumToItemId.get(s) : s);
+
+                // set the items on the options
+                if (_itemsExcludeBtn.isSelected())
+                    options.setItemsToExclude(naaccrIds);
+                else
+                    options.setItemsToInclude(naaccrIds);
+            }
+        }
+
         return options;
     }
 }

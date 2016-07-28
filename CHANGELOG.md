@@ -2,6 +2,7 @@
 
 **Version 2.0**
 
+ - Added included/excluded list of items to the options of the standalone GUI.
  - Fixed a bug where values too long were not correctly reported as errors, or not correctly truncated.
  - Added optional attribute "allowUnlimitedText" to the dictionary item tag (specification 1.1).
  - Made start column optional in user-defined dictionaries (specification 1.1).

@@ -155,6 +155,10 @@ public class NaaccrOptions {
      * @return true if the corresponding item needs to be processed.
      */
     public boolean processItem(String naaccrId) {
-        return _itemsToInclude != null && _itemsToInclude.contains(naaccrId) || !(_itemsToExclude != null && _itemsToExclude.contains(naaccrId));
+        if (_itemsToInclude != null)
+            return _itemsToInclude.contains(naaccrId);
+        else if (_itemsToExclude != null)
+            return !_itemsToExclude.contains(naaccrId);
+        return true;
     }
 }
