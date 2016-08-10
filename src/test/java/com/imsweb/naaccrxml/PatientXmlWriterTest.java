@@ -19,7 +19,7 @@ public class PatientXmlWriterTest {
     public void testWriter() throws IOException {
 
         // create the root data
-        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_INCIDENCE);
+        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT);
         data.addItem(new Item("registryId", "0000000001"));
 
         // a patient with no tumor
@@ -89,6 +89,26 @@ public class PatientXmlWriterTest {
         patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().get(1);
         Assert.assertEquals("00000002", patient.getItemValue("patientIdNumber"));
         Assert.assertEquals("C456", patient.getTumors().get(0).getItemValue("primarySite"));
+        
+        // test some special characters
+        file = TestingUtils.createFile("test-xml-writer-special-chars.xml");
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null)) {
+            patient = new Patient();
+            patient.addItem(new Item("patientIdNumber", "00000001"));
+            Tumor tumor = new Tumor();
+            tumor.addItem(new Item("rxTextSurgery", "This would be lines with some special characters: <\n>\n\"\n'\n&\n~\n@\n#\n%\n^\n*\n()\n{}\n\n[]\n,\n;\n.\n|\n\\\n/\n`\nDONE!"));
+            patient.addTumor(tumor);
+            writer.writePatient(patient);
+        }
+        xmlAsString = TestingUtils.readFileAsOneString(file);
+        Assert.assertTrue(xmlAsString.contains("&lt;"));
+        Assert.assertTrue(xmlAsString.contains("&gt;"));
+        Assert.assertTrue(xmlAsString.contains("&quot;"));
+        Assert.assertTrue(xmlAsString.contains("&apos;"));
+        Assert.assertTrue(xmlAsString.contains("&amp;"));
+        Assert.assertTrue(xmlAsString.contains("~"));
+        Assert.assertTrue(xmlAsString.contains("`"));
+        // no need to test all of them...
     }
 
     @Test
