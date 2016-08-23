@@ -184,7 +184,7 @@ public class NaaccrPatientConverter implements Converter {
             // do we need to truncate the value?
             if (value.length() > itemDef.getLength() && !Boolean.TRUE.equals(itemDef.getAllowUnlimitedText())) {
                 if (_context.getOptions().getReportValuesTooLong())
-                    reportError(entity, null, null, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());
+                    reportError(item, null, null, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());
                 value = value.substring(0, itemDef.getLength());
             }
 
@@ -203,6 +203,7 @@ public class NaaccrPatientConverter implements Converter {
         // create the item
         Item item = new Item();
         item.setValue(value);
+        item.setStartLineNumber(lineNumber);
 
         // the NAACCR ID is required
         if (rawId == null)
@@ -236,7 +237,7 @@ public class NaaccrPatientConverter implements Converter {
                 try {
                     if (def != null) {
                         if (!Integer.valueOf(rawNum).equals(def.getNaaccrNum()))
-                            reportError(entity, lineNumber, currentPath, null, null, NaaccrErrorUtils.CODE_BAD_NAACCR_NUM, rawNum, def.getNaaccrId());
+                            reportError(item, lineNumber, currentPath, null, null, NaaccrErrorUtils.CODE_BAD_NAACCR_NUM, rawNum, def.getNaaccrId());
                     }
                     else
                         item.setNaaccrNum(Integer.valueOf(rawNum));
@@ -257,14 +258,14 @@ public class NaaccrPatientConverter implements Converter {
             // value should be valid
             if (item.getValue() != null) {
                 if (item.getValue().length() > def.getLength() && (!Boolean.TRUE.equals(def.getAllowUnlimitedText())))
-                    reportError(entity, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_LONG, def.getLength(), item.getValue().length());
+                    reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_LONG, def.getLength(), item.getValue().length());
                 if (_context.getOptions().getValidateReadValues()) {
                     if (NaaccrXmlDictionaryUtils.isFullLengthRequiredForType(def.getDataType()) && item.getValue().length() != def.getLength())
-                        reportError(entity, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_SHORT, def.getLength(), item.getValue().length());
+                        reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_SHORT, def.getLength(), item.getValue().length());
                     else if (def.getDataType() != null && !NaaccrXmlDictionaryUtils.getDataTypePattern(def.getDataType()).matcher(item.getValue()).matches())
-                        reportError(entity, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
+                        reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
                     else if (def.getRegexValidation() != null && !def.getRegexValidation().matcher(item.getValue()).matches())
-                        reportError(entity, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getRegexValidation());
+                        reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getRegexValidation());
                 }
             }
         }
@@ -272,7 +273,7 @@ public class NaaccrPatientConverter implements Converter {
         entity.addItem(item);
     }
 
-    protected void reportError(AbstractEntity entity, Integer line, String path, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {
+    protected void reportError(Object obj, Integer line, String path, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {
         NaaccrValidationError error = new NaaccrValidationError(code, msgValues);
         error.setLineNumber(line);
         error.setPath(path);
@@ -282,7 +283,13 @@ public class NaaccrPatientConverter implements Converter {
         }
         if (value != null && !value.isEmpty())
             error.setValue(value);
-        entity.addValidationError(error);
+
+        if (obj instanceof AbstractEntity)
+            ((AbstractEntity)obj).addValidationError(error);
+        else if (obj instanceof Item)
+            ((Item)obj).setValidationError(error);
+        else
+            throw new RuntimeException("Unsupported type: " + obj.getClass().getName());
     }
 
     protected void reportSyntaxError(String message) throws ConversionException {

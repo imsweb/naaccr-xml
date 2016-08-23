@@ -34,6 +34,7 @@ public class PatientFlatReaderTest {
         Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
         Assert.assertEquals(1, patient.getTumors().size());
         Assert.assertEquals("C123", patient.getTumors().get(0).getItem("primarySite").getValue());
+        Assert.assertEquals(1, patient.getTumors().get(0).getItem("primarySite").getStartLineNumber().intValue());
         Assert.assertNull(reader.readPatient());
         reader.close();
 
@@ -49,10 +50,12 @@ public class PatientFlatReaderTest {
         Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
         Assert.assertEquals(1, patient.getTumors().size());
         Assert.assertEquals("C123", patient.getTumors().get(0).getItem("primarySite").getValue());
+        Assert.assertEquals(1, patient.getTumors().get(0).getItem("primarySite").getStartLineNumber().intValue());
         patient = reader.readPatient();
         Assert.assertEquals("00000002", patient.getItem("patientIdNumber").getValue());
         Assert.assertEquals(1, patient.getTumors().size());
         Assert.assertEquals("C456", patient.getTumors().get(0).getItem("primarySite").getValue());
+        Assert.assertEquals(2, patient.getTumors().get(0).getItem("primarySite").getStartLineNumber().intValue());
         Assert.assertNull(reader.readPatient());
         reader.close();
 

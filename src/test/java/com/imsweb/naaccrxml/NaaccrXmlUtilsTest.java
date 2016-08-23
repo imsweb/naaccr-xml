@@ -26,8 +26,6 @@ import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 
-// TODO FPD beef up these tests; add cases for options, user dictionary and observer...
-// TODO FPD add tests for line number on main entities...
 public class NaaccrXmlUtilsTest {
 
     @Test
@@ -137,7 +135,7 @@ public class NaaccrXmlUtilsTest {
         data.setTimeGenerated(new Date());
         data.addItem(new Item("vendorName", "VENDOR"));
         Patient patient1 = new Patient();
-        patient1.addItem(new Item("patientIdNumber", null, "00000001"));
+        patient1.addItem(new Item("patientIdNumber", null, "00000001", null));
         Tumor tumor1 = new Tumor();
         tumor1.addItem(new Item("primarySite", "C123"));
         patient1.addTumor(tumor1);
@@ -228,7 +226,7 @@ public class NaaccrXmlUtilsTest {
             Assert.assertFalse(NaaccrXmlUtils.getAttributesFromXmlReader(reader2).isEmpty());
             // at this point, we should't be able to consume the data anymore
             try {
-                PatientXmlReader xmlReader = new PatientXmlReader(reader2, null, null);
+                new PatientXmlReader(reader2, null, null);
                 Assert.fail("There should have been an exception!");
             }
             catch (Exception e) {

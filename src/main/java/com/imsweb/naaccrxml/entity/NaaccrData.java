@@ -13,6 +13,9 @@ import java.util.Map;
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 
+/**
+ * Corresponds to the "NaaccrData" element in the XML.
+ */
 public class NaaccrData extends AbstractEntity {
 
     private String _baseDictionaryUri;

@@ -2,6 +2,8 @@
 
 **Version 2.0**
 
+ - Added line number on the item object; populated only when reading items.
+ - Validation errors for specific items are now reported directly on those items instead of the parent entity.
  - Added included/excluded list of items to the options of the standalone GUI.
  - Fixed a bug where values too long were not correctly reported as errors, or not correctly truncated.
  - Added optional attribute "allowUnlimitedText" to the dictionary item tag (specification 1.1).

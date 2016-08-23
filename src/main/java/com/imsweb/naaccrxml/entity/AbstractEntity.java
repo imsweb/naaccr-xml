@@ -15,7 +15,7 @@ import com.imsweb.naaccrxml.NaaccrValidationError;
  * Encapsulates the logic about the complex entities.
  * <ol>
  *     <li>Entity has a collection of items on it</li>
- *     <li>Entity has a collection of validation errors on it</li>
+ *     <li>Entity has a collection of validation errors on it (most errors are attached to individual items so it will be rare that this collection contains any)</li>
  *     <li>Entity has a line number on it (might not always be populated)</li>
  * </ol>
  * This class also defines some utility methods to read/write those variables...
@@ -25,7 +25,7 @@ public class AbstractEntity {
     // the items corresponding to this entity
     protected List<Item> _items;
 
-    // the validation errors for this entity (for a patient, this collection would NOT contain the tumor errors...)
+    // the validation errors for this entity (most errors are attached to individual items; to gather all errors for an entity, use the getAllValidationErrors() method)
     protected List<NaaccrValidationError> _errors;
 
     // the line number for this entity; available only when reading from a file
@@ -91,7 +91,7 @@ public class AbstractEntity {
     }
 
     /**
-     * Returns the validation error for the current entity.
+     * Returns the validation error for the current entity (for a patient entity, it would NOT return any error from the tumors, nor the errors on the patient's items).
      * @return collection of validation error, maybe empty but never null
      */
     public List<NaaccrValidationError> getValidationErrors() {

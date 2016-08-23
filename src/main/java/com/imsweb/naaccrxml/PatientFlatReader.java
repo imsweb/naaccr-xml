@@ -247,7 +247,7 @@ public class PatientFlatReader implements AutoCloseable {
 
             if (!value.isEmpty()) {
                 // create the item
-                item = new Item(def.getNaaccrId(), def.getNaaccrNum(), value);
+                item = new Item(def.getNaaccrId(), def.getNaaccrNum(), value, lineNumber);
 
                 // validate the value
                 if (entity != null) {

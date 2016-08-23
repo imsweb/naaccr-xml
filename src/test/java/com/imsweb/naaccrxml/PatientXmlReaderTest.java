@@ -22,6 +22,7 @@ public class PatientXmlReaderTest {
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-one-patient-no-tumor.xml")), null, null, null)) {
             Patient patient = reader.readPatient();
             Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
+            Assert.assertEquals(3, patient.getItem("patientIdNumber").getStartLineNumber().intValue());
             Assert.assertEquals(0, patient.getTumors().size());
             Assert.assertNull(reader.readPatient());
         }
@@ -51,10 +52,12 @@ public class PatientXmlReaderTest {
             Assert.assertEquals("00000001", patient1.getItem("patientIdNumber").getValue());
             Assert.assertEquals(1, patient1.getTumors().size());
             Assert.assertEquals("C123", patient1.getTumors().get(0).getItem("primarySite").getValue());
+            Assert.assertEquals(6, patient1.getTumors().get(0).getItem("primarySite").getStartLineNumber().intValue());
             Patient patient2 = reader.readPatient();
             Assert.assertEquals("00000002", patient2.getItem("patientIdNumber").getValue());
             Assert.assertEquals(1, patient2.getTumors().size());
             Assert.assertEquals("C456", patient2.getTumors().get(0).getItem("primarySite").getValue());
+            Assert.assertEquals(12, patient2.getTumors().get(0).getItem("primarySite").getStartLineNumber().intValue());
             Assert.assertNull(reader.readPatient());
         }
 
@@ -84,7 +87,12 @@ public class PatientXmlReaderTest {
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-validation-1.xml")), null, null, null)) {
             Patient patient = reader.readPatient();
             Assert.assertEquals(1, patient.getTumors().size());
-            Assert.assertFalse(patient.getTumors().get(0).getValidationErrors().isEmpty());
+            // error should have been reported on the item
+            Assert.assertNotNull(patient.getTumors().get(0).getItem("primarySite").getValidationError());
+            // it shouldn't be available on the tumor...
+            Assert.assertTrue(patient.getTumors().get(0).getValidationErrors().isEmpty());
+            // ... unless the "get-all-errors" method is used
+            Assert.assertFalse(patient.getTumors().get(0).getAllValidationErrors().isEmpty());
             // even if the value is bad, its still being made available in the patient (if possible)
             Assert.assertEquals("XXXX", patient.getTumors().get(0).getItem("primarySite").getValue());
             // the validation error shouldn't be available on the patient...
@@ -109,8 +117,8 @@ public class PatientXmlReaderTest {
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-too-long.xml")), null, dict, null)) {
             Patient patient = reader.readPatient();
             Assert.assertEquals("XX", patient.getItemValue("myVariable2"));
-            Assert.assertFalse(patient.getValidationErrors().isEmpty());
-            NaaccrValidationError error = patient.getValidationErrors().get(0);
+            Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
+            NaaccrValidationError error = patient.getAllValidationErrors().get(0);
             Assert.assertTrue(error.getMessage().contains("long"));
         }
     }
@@ -173,11 +181,13 @@ public class PatientXmlReaderTest {
             Assert.assertEquals("1", patient.getTumors().get(0).getItemValue("myVariable"));
         }
 
-        // value is not correct according to the provided regex
+        // value is not correct according to the provided regex (error should be reported on the item itself)
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-3.xml")), null, dict, null)) {
             Patient patient = reader.readPatient();
             Assert.assertEquals("09", patient.getTumors().get(0).getItemValue("myVariable"));
-            Assert.assertFalse(patient.getTumors().get(0).getValidationErrors().isEmpty());
+            Assert.assertNotNull(patient.getTumors().get(0).getItem("myVariable").getValidationError());
+            Assert.assertFalse(patient.getTumors().get(0).getAllValidationErrors().isEmpty());
+            Assert.assertTrue(patient.getTumors().get(0).getValidationErrors().isEmpty());
         }
     }
 }
