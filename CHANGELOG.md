@@ -10,6 +10,7 @@
  - Made start column optional in user-defined dictionaries (specification 1.1).
  - Made NAACCR version optional in user-defined dictionaries  specification 1.1).
  - Added optional attribute "specificationVersion" to the root dictionary and data XML tags, now set to 1.1 by default.
+ - Library now requires Java 8 at minimum.
 
 **Version 1.3**
 
