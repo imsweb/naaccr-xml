@@ -2,6 +2,7 @@
 
 **Version 2.0**
 
+ - Removed "any-attribute" from the XSD since those are not properly supported; only kept the one for the NaaccrData tag.
  - Added line number on the item object; populated only when reading items.
  - Validation errors for specific items are now reported directly on those items instead of the parent entity.
  - Added included/excluded list of items to the options of the standalone GUI.
@@ -10,6 +11,7 @@
  - Made start column optional in user-defined dictionaries (specification 1.1).
  - Made NAACCR version optional in user-defined dictionaries  specification 1.1).
  - Added optional attribute "specificationVersion" to the root dictionary and data XML tags, now set to 1.1 by default.
+ - Updated XStream library to version 1.4.9.
  - Library now requires Java 8 at minimum.
 
 **Version 1.3**
