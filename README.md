@@ -3,9 +3,9 @@
 [![Build Status](https://travis-ci.org/imsweb/naaccr-xml.svg?branch=master)](https://travis-ci.org/imsweb/naaccr-xml)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml)
 
-This library provides support for the NAACCR XML format. It implements version 1.0 of the format specifications.
+This library provides support for the NAACCR XML format. It implements version 1.1 of the format specification.
 
-Information about the format and the Task Force that developed it can be found on [http://naaccrxml.org/](http://naaccrxml.org/).
+Information about the format and the Work Group that developed it can be found here: [http://naaccrxml.org/](http://naaccrxml.org/).
 
 ## Download
 
@@ -15,7 +15,7 @@ To include it to your Maven or Gradle project, use the group ID `com.imsweb` and
 
 You can check out the [release page](https://github.com/imsweb/naaccr-xml/releases) for a list of the releases and their changes.
 
-This library requires Java7 or later.
+This library requires Java 8 or a more recent version.
 
 ## Usage
 
