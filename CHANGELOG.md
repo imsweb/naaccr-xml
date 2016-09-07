@@ -11,7 +11,9 @@
  - Made start column optional in user-defined dictionaries (specification 1.1).
  - Made NAACCR version optional in user-defined dictionaries  specification 1.1).
  - Added optional attribute "specificationVersion" to the root dictionary and data XML tags, now set to 1.1 by default.
- - Updated XStream library to version 1.4.9.
+ - Updated commons-lang3 dependency to version 2.5.
+ - Updated commons-io dependency to version 3.4.
+ - Updated XStream dependency to version 1.4.9.
  - Library now requires Java 8 at minimum.
 
 **Version 1.3**

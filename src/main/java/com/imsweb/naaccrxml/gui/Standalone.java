@@ -22,7 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.Thread.UncaughtExceptionHandler;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -129,25 +129,12 @@ public class Standalone extends JFrame implements ActionListener {
         _centerPnl.add("validate", new XmlValidationPage());
         this.getContentPane().add(_centerPnl, BorderLayout.CENTER);
 
-        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread t, final Throwable e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        String msg = "An unexpected error happened, it is recommended to close the application.\n\n   Error: " + (e.getMessage() == null ? "null access" : e.getMessage());
-                        JOptionPane.showMessageDialog(Standalone.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                });
-            }
-        });
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> SwingUtilities.invokeLater(() -> {
+            String msg = "An unexpected error happened, it is recommended to close the application.\n\n   Error: " + (e.getMessage() == null ? "null access" : e.getMessage());
+            JOptionPane.showMessageDialog(Standalone.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+        }));
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                _buttons.get(0).doClick();
-            }
-        });
+        SwingUtilities.invokeLater(() -> _buttons.get(0).doClick());
     }
 
     private static String getVersion() {
@@ -156,7 +143,7 @@ public class Standalone extends JFrame implements ActionListener {
         // this will make it work when running from the JAR file
         try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("NAACCR-XML-VERSION")) {
             if (is != null)
-                version = IOUtils.readLines(is).get(0);
+                version = IOUtils.readLines(is, StandardCharsets.US_ASCII).get(0);
         }
         catch (IOException e) {
             version = null;
@@ -165,7 +152,7 @@ public class Standalone extends JFrame implements ActionListener {
         // this will make it work when running from an IDE
         if (version == null) {
             try (FileInputStream is = new FileInputStream(System.getProperty("user.dir") + File.separator + "VERSION")) {
-                version = IOUtils.readLines(is).get(0);
+                version = IOUtils.readLines(is, StandardCharsets.US_ASCII).get(0);
             }
             catch (IOException e) {
                 version = null;
@@ -191,21 +178,18 @@ public class Standalone extends JFrame implements ActionListener {
         btn.setVerticalTextPosition(SwingConstants.BOTTOM);
         btn.setHorizontalTextPosition(SwingConstants.CENTER);
         btn.setActionCommand(pageId);
-        btn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                _currentPageIdLbl.setText(text + " : ");
-                _currentPageDescLbl.setText(description);
-                _layout.show(_centerPnl, pageId);
-                for (JButton btn : _buttons) {
-                    if (btn.getActionCommand().equals(pageId)) {
-                        btn.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("gui/icons/" + btn.getActionCommand() + "_active.png")));
-                        btn.setForeground(Color.BLACK);
-                    }
-                    else {
-                        btn.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("gui/icons/" + btn.getActionCommand() + "_inactive.png")));
-                        btn.setForeground(Color.GRAY);
-                    }
+        btn.addActionListener(e -> {
+            _currentPageIdLbl.setText(text + " : ");
+            _currentPageDescLbl.setText(description);
+            _layout.show(_centerPnl, pageId);
+            for (JButton btn1 : _buttons) {
+                if (btn1.getActionCommand().equals(pageId)) {
+                    btn1.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("gui/icons/" + btn1.getActionCommand() + "_active.png")));
+                    btn1.setForeground(Color.BLACK);
+                }
+                else {
+                    btn1.setIcon(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("gui/icons/" + btn1.getActionCommand() + "_inactive.png")));
+                    btn1.setForeground(Color.GRAY);
                 }
             }
         });
@@ -239,12 +223,7 @@ public class Standalone extends JFrame implements ActionListener {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             Point center = new Point(screenSize.width / 2, screenSize.height / 2);
             dlg.setLocation(center.x - dlg.getWidth() / 2, center.y - dlg.getHeight() / 2);
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    dlg.setVisible(true);
-                }
-            });
+            SwingUtilities.invokeLater(() -> dlg.setVisible(true));
         }
     }
     
@@ -367,11 +346,6 @@ public class Standalone extends JFrame implements ActionListener {
         Point center = new Point(screenSize.width / 2, screenSize.height / 2);
         frame.setLocation(center.x - frame.getWidth() / 2, center.y - frame.getHeight() / 2);
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                frame.setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> frame.setVisible(true));
     }
 }
