@@ -3,6 +3,20 @@
  */
 package com.imsweb.naaccrxml;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.xml.bind.DatatypeConverter;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
+
 import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
@@ -10,18 +24,6 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamContext;
 import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.ConversionException;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-
-import javax.xml.bind.DatatypeConverter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * This class can be used to wrap a generic writer into a patient writer handling the NAACCR XML format.
@@ -82,8 +84,11 @@ public class PatientXmlWriter implements AutoCloseable {
             if (rootData.getBaseDictionaryUri() == null)
                 throw new NaaccrIOException("base dictionary URI is required");
             _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT, rootData.getBaseDictionaryUri());
-            if (rootData.getUserDictionaryUri() != null)
-                _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT, rootData.getUserDictionaryUri());
+            if (userDictionary != null) {
+                if (rootData.getUserDictionaryUri() != null && !rootData.getUserDictionaryUri().equals(userDictionary.getDictionaryUri()))
+                    throw new NaaccrIOException("Provided dictionary has a different URI than the one in the rootData");
+                _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT, userDictionary.getDictionaryUri());
+            }
             if (rootData.getRecordType() == null)
                 throw new NaaccrIOException("record type is required");
             _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE, rootData.getRecordType());
@@ -92,6 +97,9 @@ public class PatientXmlWriter implements AutoCloseable {
                 cal.setTime(rootData.getTimeGenerated());
                 _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, DatatypeConverter.printDateTime(cal));
             }
+            else
+                _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, DatatypeConverter.printDateTime(Calendar.getInstance()));
+            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION, NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
             _writer.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
 
             // write non-standard attributes
@@ -113,7 +121,7 @@ public class PatientXmlWriter implements AutoCloseable {
 
             // write the root items
             for (Item item : rootData.getItems())
-                configuration.getPatientConverter().writeItem(item, _writer);
+                configuration.getPatientConverter().writeItem(rootData, item, _writer);
 
             // for now, ignore the root extension...
 

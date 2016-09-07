@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.imsweb.naaccrxml.entity.AbstractEntity;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
@@ -112,6 +113,9 @@ public class PatientFlatWriter implements AutoCloseable {
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
                 if (!_options.processItem(itemDef.getNaaccrId()))
                     continue;
+                // as of spec 1.1, the start column is optional for user-defined items, so let's ignore those
+                if (itemDef.getStartColumn() == null)
+                    continue;
                 if (itemDef.getParentXmlElement() != null && itemDef.getStartColumn() != null && itemDef.getLength() != null) {
                     int start = itemDef.getStartColumn();
                     int length = itemDef.getLength();
@@ -125,8 +129,6 @@ public class PatientFlatWriter implements AutoCloseable {
 
                     String value = getValueForItem(itemDef, root, patient, tumor, Boolean.TRUE.equals(_options.getApplyPaddingRules()));
                     if (value != null) {
-                        if (value.length() > length)
-                            value = value.substring(0, length);
                         line.append(value);
                         currentIndex = start + value.length();
                     }
@@ -159,14 +161,16 @@ public class PatientFlatWriter implements AutoCloseable {
     protected String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, NaaccrData root, Patient patient, Tumor tumor, boolean applyPadding) throws NaaccrIOException {
         String value;
 
+        AbstractEntity entityToUse;
         if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(itemDef.getParentXmlElement()))
-            value = root.getItemValue(itemDef.getNaaccrId());
+            entityToUse = root;
         else if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(itemDef.getParentXmlElement()))
-            value = patient.getItemValue(itemDef.getNaaccrId());
+            entityToUse = patient;
         else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(itemDef.getParentXmlElement()))
-            value = tumor.getItemValue(itemDef.getNaaccrId());
+            entityToUse = tumor;
         else
-            throw new NaaccrIOException("Unsupported parent element: " + itemDef.getParentXmlElement());
+            throw new NaaccrIOException("unsupported parent element: " + itemDef.getParentXmlElement());
+        value = entityToUse.getItemValue(itemDef.getNaaccrId());
 
         // handle the padding
         if (applyPadding && value != null && !value.isEmpty() && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef.getLength()) {
@@ -186,6 +190,25 @@ public class PatientFlatWriter implements AutoCloseable {
         if (value != null && !value.isEmpty())
             value = _NEW_LINES_PATTERN.matcher(value).replaceAll(" ");
 
+        // for flat-file values, we always have to truncate, so the "allowUnlimitedText" is used only to know if we have to report an error
+        if (value != null && value.length() > itemDef.getLength()) {
+            if (!Boolean.TRUE.equals(itemDef.getAllowUnlimitedText()) && _options.getReportValuesTooLong())
+                reportError(entityToUse, null, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());
+            value = value.substring(0, itemDef.getLength());
+        }
+
         return value;
+    }
+
+    protected void reportError(AbstractEntity entity, Integer line, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {
+        NaaccrValidationError error = new NaaccrValidationError(code, msgValues);
+        error.setLineNumber(line);
+        if (def != null) {
+            error.setNaaccrId(def.getNaaccrId());
+            error.setNaaccrNum(def.getNaaccrNum());
+        }
+        if (value != null && !value.isEmpty())
+            error.setValue(value);
+        entity.addValidationError(error);
     }
 }

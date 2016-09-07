@@ -13,26 +13,31 @@ import java.util.Map;
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 
+/**
+ * Corresponds to the "NaaccrData" element in the XML.
+ */
 public class NaaccrData extends AbstractEntity {
 
     private String _baseDictionaryUri;
 
     private String _userDictionaryUri;
-    
+
     private String _recordType;
 
     private Date _timeGenerated;
-    
+
+    private String _specificationVersion;
+
     private Map<String, String> _extraRootParameters;
 
     private List<Patient> _patients;
-    
+
     public NaaccrData() {
         super();
         _extraRootParameters = new HashMap<>();
         _patients = new ArrayList<>();
     }
-    
+
     public NaaccrData(String format) {
         this();
         NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(format);
@@ -73,6 +78,14 @@ public class NaaccrData extends AbstractEntity {
         _timeGenerated = timeGenerated;
     }
 
+    public String getSpecificationVersion() {
+        return _specificationVersion;
+    }
+
+    public void setSpecificationVersion(String specificationVersion) {
+        _specificationVersion = specificationVersion;
+    }
+
     public Map<String, String> getExtraRootParameters() {
         return Collections.unmodifiableMap(_extraRootParameters);
     }
@@ -80,11 +93,11 @@ public class NaaccrData extends AbstractEntity {
     public void addExtraRootParameters(String key, String value) {
         _extraRootParameters.put(key, value);
     }
-    
+
     public List<Patient> getPatients() {
         return Collections.unmodifiableList(_patients);
     }
-    
+
     public void addPatient(Patient patient) {
         _patients.add(patient);
     }

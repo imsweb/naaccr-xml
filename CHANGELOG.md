@@ -1,5 +1,17 @@
 ## NAACCR XML Version History
 
+**Version 2.0**
+
+ - Added line number on the item object; populated only when reading items.
+ - Validation errors for specific items are now reported directly on those items instead of the parent entity.
+ - Added included/excluded list of items to the options of the standalone GUI.
+ - Fixed a bug where values too long were not correctly reported as errors, or not correctly truncated.
+ - Added optional attribute "allowUnlimitedText" to the dictionary item tag (specification 1.1).
+ - Made start column optional in user-defined dictionaries (specification 1.1).
+ - Made NAACCR version optional in user-defined dictionaries  specification 1.1).
+ - Added optional attribute "specificationVersion" to the root dictionary and data XML tags, now set to 1.1 by default.
+ - Library now requires Java 8 at minimum.
+
 **Version 1.3**
 
  - Added new option to control whether or not the padding rules should be applied, by default they won't be applied (since they actually change data and it's rarely desired).

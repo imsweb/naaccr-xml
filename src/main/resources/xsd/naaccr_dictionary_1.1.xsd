@@ -1,0 +1,77 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://naaccr.org/naaccrxml" targetNamespace="http://naaccr.org/naaccrxml" >
+
+<xsd:element name="NaaccrDictionary">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:ItemDefs" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+		<xsd:attribute name="dictionaryUri" use="required" type="xsd:anyURI"/>
+		<xsd:attribute name="naaccrVersion" use="optional" />
+        <xsd:attribute name="specificationVersion" use="optional" default="1.0" />
+		<xsd:attribute name="description" use="optional" />
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="ItemDefs">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:ItemDef"  minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:anyAttribute processContents="lax" />
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:simpleType name="parentType">
+	<xsd:restriction base="xsd:string">
+		<xsd:enumeration value="NaaccrData" />
+		<xsd:enumeration value="Patient" />
+		<xsd:enumeration value="Tumor" />
+	</xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="datatypeType">
+	<xsd:restriction base="xsd:string">
+		<xsd:enumeration value="digits" /> 	<!-- ^\d{n}$ -->
+		<xsd:enumeration value="mixed" />  	<!-- ^[A-Z\d]{n}$ -->
+		<xsd:enumeration value="alpha" />  	<!-- ^[A-Z]{n}$ -->
+		<xsd:enumeration value="numeric" />  	<!-- ^\d+(\.d+)?$ -->
+		<xsd:enumeration value="date" />  	<!-- ^(18|19|20)\d\d((0[1-9]|1[012])(0[1-9]|[12]\d|3[01])?)?$ -->
+		<xsd:enumeration value="text" />  	<!-- ^[.]{1,n}$ -->
+	</xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="paddingType">
+	<xsd:restriction base="xsd:string">
+		<xsd:enumeration value="rightBlank" />
+		<xsd:enumeration value="leftBlank" />
+		<xsd:enumeration value="rightZero" />
+		<xsd:enumeration value="leftZero" />
+	</xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="trimType">
+	<xsd:restriction base="xsd:string">
+		<xsd:enumeration value="none" />
+		<xsd:enumeration value="all" />
+	</xsd:restriction>
+</xsd:simpleType>
+
+<xsd:element name="ItemDef" >
+	<xsd:complexType>
+		<xsd:attribute name="naaccrId" use="required" type="xsd:ID" />
+		<xsd:attribute name="naaccrNum" use="required" type="xsd:integer" />
+		<xsd:attribute name="naaccrName" use="optional" type="xsd:string" />
+		<xsd:attribute name="parentXmlElement" use="required" type="tns:parentType" />
+		<xsd:attribute name="dataType" use="optional" default="text" type="tns:datatypeType" />
+		<xsd:attribute name="padding" use="optional" default="rightBlank" type="tns:paddingType" />
+		<xsd:attribute name="trim" use="optional" default="all" type="tns:trimType" />
+		<xsd:attribute name="regexValidation" use="optional" type="xsd:string" />
+		<xsd:attribute name="startColumn" use="optional" type="xsd:integer" />
+		<xsd:attribute name="length" use="required" type="xsd:integer" />
+        <xsd:attribute name="allowUnlimitedText" use="optional" type="xsd:boolean" />
+		<xsd:attribute name="sourceOfStandard" use="optional" type="xsd:string" />
+		<xsd:attribute name="recordTypes" use="optional" type="xsd:string" />
+	</xsd:complexType>
+</xsd:element>
+
+</xsd:schema>

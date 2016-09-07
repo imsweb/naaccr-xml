@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<NaaccrDataExchange naaccrVersion="140" recordType="I">
+<NaaccrData naaccrVersion="140" recordType="I">
     <Patient>
         <Item naaccrId="patientIdNumber">0000001</Item>
     </Patient>
@@ -14,4 +14,4 @@
     <Patient>
         <Item naaccrId="patientIdNumber">0000003</Item>
     </Patient>
-</NaaccrDataExchange>
+</NaaccrData>

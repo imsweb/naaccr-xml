@@ -12,15 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
+import com.imsweb.naaccrxml.NaaccrIOException;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 public class RuntimeNaaccrDictionary {
-
-    private String _baseDictionaryUri;
-
-    private String _userDictionaryUri;
 
     private NaaccrFormat _format;
 
@@ -28,16 +25,21 @@ public class RuntimeNaaccrDictionary {
 
     // caches used to improve lookup performances
     private Map<String, RuntimeNaaccrDictionaryItem> _cachedById;
-    private Map<Integer, RuntimeNaaccrDictionaryItem> _cachedByNumber;
 
-    public RuntimeNaaccrDictionary(String recordType, NaaccrDictionary baseDictionary, NaaccrDictionary userDictionary) {
+    public RuntimeNaaccrDictionary(String recordType, NaaccrDictionary baseDictionary, NaaccrDictionary userDictionary) throws NaaccrIOException {
+
+        // as of spec 1.1 the NAACCR version is optional on user-dictionaries, but that means we can't really validate them without 
+        // knowing the corresponding base dictionary, so we have to re-validate here...
+        if (userDictionary != null && userDictionary.getNaaccrVersion() == null) {
+            String error = NaaccrXmlDictionaryUtils.validateUserDictionary(userDictionary, baseDictionary.getNaaccrVersion());
+            if (error != null)
+                throw new NaaccrIOException("Invalid user-defined dictionary: " + error);
+        }
 
         // use the default user dictionary if one is not provided...
         if (userDictionary == null)
             userDictionary = NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(baseDictionary.getNaaccrVersion());
 
-        _baseDictionaryUri = baseDictionary.getDictionaryUri();
-        _userDictionaryUri = userDictionary.getDictionaryUri();
         _format = NaaccrFormat.getInstance(baseDictionary.getNaaccrVersion(), recordType);
         _items = new ArrayList<>();
         for (NaaccrDictionaryItem item : baseDictionary.getItems())
@@ -47,21 +49,17 @@ public class RuntimeNaaccrDictionary {
             if (item.getRecordTypes() == null || Arrays.asList(item.getRecordTypes().split(",")).contains(recordType))
                 _items.add(new RuntimeNaaccrDictionaryItem(item));
 
-        // sort the fields by starting columns
+        // sort the fields by starting columns (no start columns go to the end)
         Collections.sort(_items, new Comparator<RuntimeNaaccrDictionaryItem>() {
             @Override
             public int compare(RuntimeNaaccrDictionaryItem o1, RuntimeNaaccrDictionaryItem o2) {
+                if (o1.getStartColumn() == null)
+                    return 1;
+                if (o2.getStartColumn() == null)
+                    return -1;
                 return o1.getStartColumn().compareTo(o2.getStartColumn());
             }
         });
-    }
-
-    public String getBaseDictionaryUri() {
-        return _baseDictionaryUri;
-    }
-
-    public String getUserDictionaryUri() {
-        return _userDictionaryUri;
     }
 
     public String getNaaccrVersion() {
@@ -91,16 +89,5 @@ public class RuntimeNaaccrDictionary {
             _cachedById = cache;
         }
         return _cachedById.get(id);
-    }
-
-    public RuntimeNaaccrDictionaryItem getItemByNaaccrNum(Integer number) {
-        if (_cachedByNumber == null) {
-            Map<Integer, RuntimeNaaccrDictionaryItem> cache = new HashMap<>();
-            for (RuntimeNaaccrDictionaryItem item : _items)
-                if (item.getNaaccrNum() != null)
-                    cache.put(item.getNaaccrNum(), item);
-            _cachedByNumber = cache;
-        }
-        return _cachedByNumber.get(number);
     }
 }

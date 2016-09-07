@@ -109,6 +109,14 @@ public class PatientXmlReader implements AutoCloseable {
                     throw new NaaccrIOException("invalid time generated value: " + generatedTime, configuration.getParser().getLineNumber());
                 }
             }
+            
+            // read the standard attribute: specification version
+            String specVersion = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION);
+            if (specVersion == null)
+                specVersion = SpecificationVersion.SPEC_1_0;
+            if (!SpecificationVersion.isSpecificationSupported(specVersion))
+                throw new NaaccrIOException("invalid specification version: " + specVersion);
+            _rootData.setSpecificationVersion(specVersion);
 
             // read the non-standard attributes
             Set<String> standardAttributes = new HashSet<>();
@@ -137,6 +145,7 @@ public class PatientXmlReader implements AutoCloseable {
             while (_reader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM)) {
                 String rawId = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID);
                 String rawNum = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM);
+                // following call will ensure that proper validation runs
                 configuration.getPatientConverter().readItem(_rootData, "/NaaccrData", NaaccrXmlUtils.NAACCR_XML_TAG_ROOT, rawId, rawNum, _reader.getValue());
                 if (rawId != null && itemsAlreadySeen.contains(rawId))
                     throw new NaaccrIOException("item '" + rawId + "' should be unique within the \"" + NaaccrXmlUtils.NAACCR_XML_TAG_ROOT + "\" tags");

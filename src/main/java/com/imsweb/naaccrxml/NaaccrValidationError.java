@@ -28,16 +28,8 @@ public class NaaccrValidationError {
         return _code;
     }
 
-    public void setCode(String code) {
-        _code = code;
-    }
-
     public String getMessage() {
         return _message;
-    }
-
-    public void setMessage(String message) {
-        throw new RuntimeException("Forbidden method, use the constructor along with the NaaccrValidationErrorUtils class!");
     }
 
     public Integer getLineNumber() {

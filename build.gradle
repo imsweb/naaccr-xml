@@ -51,6 +51,11 @@ jar {
     }
 }
 
+// this sucks, but they made the Javadoc way too stritct in Java 8 and it's not worth my time fixing it!
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
 // we don't want these files in the "all" jar, it's confusing
 shadowJar {
     exclude('XMLPULL_1_1_3_1_VERSION')

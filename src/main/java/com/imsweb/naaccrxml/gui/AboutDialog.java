@@ -19,6 +19,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import com.imsweb.naaccrxml.NaaccrXmlUtils;
+
 public class AboutDialog extends JDialog {
 
     public AboutDialog(Window owner) {
@@ -43,10 +45,15 @@ public class AboutDialog extends JDialog {
         
         centerPnl.add(buildTextPnl("NAACCR XML Utility", true));
         centerPnl.add(buildTextPnl(Standalone.VERSION, false));
+        
         centerPnl.add(Box.createVerticalStrut(25));
         centerPnl.add(buildTextPnl("Provided by the", false));
         centerPnl.add(Box.createVerticalStrut(3));
         centerPnl.add(buildTextPnl("NAACCR XML Work Group", true));
+        
+        centerPnl.add(Box.createVerticalStrut(15));
+        centerPnl.add(buildTextPnl("Implements NAACCR XML Specification " + NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION, false));
+        
         centerPnl.add(Box.createVerticalStrut(25));
         centerPnl.add(buildTextPnl("Developed by", false));
         centerPnl.add(Box.createVerticalStrut(3));

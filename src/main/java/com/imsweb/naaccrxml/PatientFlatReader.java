@@ -85,6 +85,7 @@ public class PatientFlatReader implements AutoCloseable {
         NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(_format.getNaaccrVersion());
         _dictionary = new RuntimeNaaccrDictionary(_format.getRecordType(), baseDictionary, userDictionary);
         _rootData = new NaaccrData(_format.toString());
+        _rootData.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
 
         // make sure first line has the correct length
         if (_previousLine.length() != _format.getLineLength())
@@ -220,6 +221,11 @@ public class PatientFlatReader implements AutoCloseable {
     }
 
     protected void addItemFromLine(AbstractEntity entity, String line, Integer lineNumber, RuntimeNaaccrDictionaryItem def) {
+
+        // as of spec 1.1, the start column is optional for user-defined items, so let's ignore those
+        if (def.getStartColumn() == null)
+            return;
+
         Item item = createItemFromLine(entity, line, lineNumber, def);
         if (item != null && _options.processItem(def.getNaaccrId()))
             entity.addItem(item);
@@ -241,18 +247,20 @@ public class PatientFlatReader implements AutoCloseable {
 
             if (!value.isEmpty()) {
                 // create the item
-                item = new Item(def.getNaaccrId(), def.getNaaccrNum(), value);
+                item = new Item(def.getNaaccrId(), def.getNaaccrNum(), value, lineNumber);
 
                 // validate the value
-                if (entity != null && _options.getValidateReadValues()) {
+                if (entity != null) {
                     if (item.getValue().length() > def.getLength())
                         reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_LONG, def.getLength(), item.getValue().length());
-                    else if (NaaccrXmlDictionaryUtils.isFullLengthRequiredForType(def.getDataType()) && item.getValue().length() != def.getLength())
-                        reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_SHORT, def.getLength(), item.getValue().length());
-                    else if (def.getDataType() != null && !NaaccrXmlDictionaryUtils.getDataTypePattern(def.getDataType()).matcher(item.getValue()).matches())
-                        reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
-                    else if (def.getRegexValidation() != null && !def.getRegexValidation().matcher(item.getValue()).matches())
-                        reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getRegexValidation());
+                    if (_options.getValidateReadValues()) {
+                        if (NaaccrXmlDictionaryUtils.isFullLengthRequiredForType(def.getDataType()) && item.getValue().length() != def.getLength())
+                            reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_SHORT, def.getLength(), item.getValue().length());
+                        else if (def.getDataType() != null && !NaaccrXmlDictionaryUtils.getDataTypePattern(def.getDataType()).matcher(item.getValue()).matches())
+                            reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
+                        else if (def.getRegexValidation() != null && !def.getRegexValidation().matcher(item.getValue()).matches())
+                            reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getRegexValidation());
+                    }
                 }
             }
         }

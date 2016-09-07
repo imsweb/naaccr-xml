@@ -9,15 +9,12 @@ import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrIOException;
 import com.imsweb.naaccrxml.NaaccrObserver;
 import com.imsweb.naaccrxml.NaaccrOptions;
-import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
-import com.imsweb.naaccrxml.PatientXmlReader;
-import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.gui.StandaloneOptions;
 
 public class XmlToFlatPage extends AbstractProcessingPage {
-    
+
     @Override
     protected String getSourceLabelText() {
         return "Source XML File:";
@@ -26,6 +23,11 @@ public class XmlToFlatPage extends AbstractProcessingPage {
     @Override
     protected String getTargetLabelText() {
         return "Target Flat File:";
+    }
+
+    @Override
+    protected boolean showUserDictionaryDisclaimer(File file) {
+        return !(file == null || !file.exists()) && NaaccrXmlUtils.getAttributesFromXmlFile(file).get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT) != null;
     }
 
     @Override
@@ -41,19 +43,16 @@ public class XmlToFlatPage extends AbstractProcessingPage {
     @Override
     protected NaaccrFormat getFormatForInputFile(File file) {
 
-        // make sure the file exists
         if (file == null || !file.exists()) {
             reportAnalysisError("unable to find selected file");
             return null;
         }
 
-        try (PatientXmlReader reader = new PatientXmlReader(NaaccrXmlUtils.createReader(file), null, null)) {
-            NaaccrData rootData = reader.getRootData(); // all the validation happens when creating the root object in the reader...
-            return NaaccrFormat.getInstance(NaaccrXmlDictionaryUtils.extractVersionFromUri(rootData.getBaseDictionaryUri()), rootData.getRecordType());
+        try {
+            return NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromXmlFile(file));
         }
-        catch (NaaccrIOException e) {
-            String lineNum = e.getLineNumber() != null ? e.getLineNumber().toString() : "N/A";
-            reportAnalysisError("line " + lineNum + ", " + e.getMessage());
+        catch (RuntimeException e) {
+            reportAnalysisError("unable to identify file format");
             return null;
         }
     }

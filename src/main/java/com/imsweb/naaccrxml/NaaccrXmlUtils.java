@@ -37,6 +37,9 @@ import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
  */
 public class NaaccrXmlUtils {
 
+    // specification version that this library implements (will be used when writing XML files)
+    public static final String CURRENT_SPECIFICATION_VERSION = SpecificationVersion.SPEC_1_1;
+    
     // structure tags in the XML
     public static final String NAACCR_XML_TAG_ROOT = "NaaccrData";
     public static final String NAACCR_XML_TAG_PATIENT = "Patient";
@@ -48,6 +51,7 @@ public class NaaccrXmlUtils {
     public static final String NAACCR_XML_ROOT_ATT_USER_DICT = "userDictionaryUri";
     public static final String NAACCR_XML_ROOT_ATT_REC_TYPE = "recordType";
     public static final String NAACCR_XML_ROOT_ATT_TIME_GENERATED = "timeGenerated";
+    public static final String NAACCR_XML_ROOT_ATT_SPEC_VERSION = "specificationVersion";
 
     // item attributes
     public static final String NAACCR_XML_ITEM_ATT_ID = "naaccrId";

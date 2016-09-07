@@ -6,6 +6,8 @@ package com.imsweb.naaccrxml;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,11 +28,13 @@ public class PatientFlatReaderTest {
         rec1.replace(539, 543, "C123"); // primarySite (Tumor level)
         File file = TestingUtils.createAndPopulateFile("test-flat-reader-one-rec.txt", rec1);
         PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, null);
+        Assert.assertEquals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION, reader.getRootData().getSpecificationVersion());
         Assert.assertEquals("0000000001", reader.getRootData().getItem("registryId").getValue());
         Patient patient = reader.readPatient();
         Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
         Assert.assertEquals(1, patient.getTumors().size());
         Assert.assertEquals("C123", patient.getTumors().get(0).getItem("primarySite").getValue());
+        Assert.assertEquals(1, patient.getTumors().get(0).getItem("primarySite").getStartLineNumber().intValue());
         Assert.assertNull(reader.readPatient());
         reader.close();
 
@@ -46,10 +50,12 @@ public class PatientFlatReaderTest {
         Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
         Assert.assertEquals(1, patient.getTumors().size());
         Assert.assertEquals("C123", patient.getTumors().get(0).getItem("primarySite").getValue());
+        Assert.assertEquals(1, patient.getTumors().get(0).getItem("primarySite").getStartLineNumber().intValue());
         patient = reader.readPatient();
         Assert.assertEquals("00000002", patient.getItem("patientIdNumber").getValue());
         Assert.assertEquals(1, patient.getTumors().size());
         Assert.assertEquals("C456", patient.getTumors().get(0).getItem("primarySite").getValue());
+        Assert.assertEquals(2, patient.getTumors().get(0).getItem("primarySite").getStartLineNumber().intValue());
         Assert.assertNull(reader.readPatient());
         reader.close();
 
@@ -238,23 +244,34 @@ public class PatientFlatReaderTest {
         File file = TestingUtils.createAndPopulateFile("test-flat-reader-user-dict.txt", rec1);
 
         // first, let's use the default user dictionary (so null)
-        PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, null);
-        Tumor tumor = reader.readPatient().getTumors().get(0);
-        Assert.assertEquals(1000, tumor.getItem("stateRequestorItems").getValue().length());
-        Assert.assertTrue(tumor.getItem("stateRequestorItems").getValue().startsWith("X"));
+        try (PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, null)) {
+            Tumor tumor = reader.readPatient().getTumors().get(0);
+            Assert.assertEquals(1000, tumor.getItem("stateRequestorItems").getValue().length());
+            Assert.assertTrue(tumor.getItem("stateRequestorItems").getValue().startsWith("X"));
+        }
 
         // the result should be the same if we pass the same default dictionary to the method
-        reader = new PatientFlatReader(new FileReader(file), null, NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion("150"));
-        tumor = reader.readPatient().getTumors().get(0);
-        Assert.assertEquals(1000, tumor.getItem("stateRequestorItems").getValue().length());
-        Assert.assertTrue(tumor.getItem("stateRequestorItems").getValue().startsWith("X"));
+        try (PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(NaaccrFormat.NAACCR_VERSION_150))) {
+            Tumor tumor = reader.readPatient().getTumors().get(0);
+            Assert.assertEquals(1000, tumor.getItem("stateRequestorItems").getValue().length());
+            Assert.assertTrue(tumor.getItem("stateRequestorItems").getValue().startsWith("X"));
+        }
 
         // if we pass an "empty" user dictionary, then the state requestor item should be ignored, resulting in a null item...
         NaaccrDictionary dict = new NaaccrDictionary();
         dict.setNaaccrVersion("150");
         dict.setDictionaryUri("whatever");
-        reader = new PatientFlatReader(new FileReader(file), null, dict);
-        tumor = reader.readPatient().getTumors().get(0);
-        Assert.assertNull(tumor.getItem("stateRequestorItems"));
+        try (PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, dict)) {
+            Tumor tumor = reader.readPatient().getTumors().get(0);
+            Assert.assertNull(tumor.getItem("stateRequestorItems"));
+        }
+
+        // using a dictionary with items that are not tied to a start location; those should be ignored...
+        try (Reader dictReader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary.xml"))) {
+            try (PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, NaaccrXmlDictionaryUtils.readDictionary(dictReader))) {
+                Tumor tumor = reader.readPatient().getTumors().get(0);
+                Assert.assertNull(tumor.getItem("stateRequestorItems"));
+            }
+        }
     }
 }

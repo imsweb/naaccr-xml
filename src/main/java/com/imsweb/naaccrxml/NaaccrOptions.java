@@ -19,7 +19,7 @@ public class NaaccrOptions {
     public static final String ITEM_HANDLING_PROCESS = "process";
 
     /**
-     * When reading data, if set to false, no validation of the values will take place. Defaults to true.
+     * When reading data, if set to false, no validation of the values will take place (this applies only to data types, the length is always validated). Defaults to true.
      */
     private Boolean _validateReadValues;
 
@@ -59,6 +59,11 @@ public class NaaccrOptions {
     private Boolean _applyPaddingRules;
 
     /**
+     * When writing data, whether or not errors need to be reported for values too long (values will always be truncated, this only affect the error reporting mechanism). Defaults to false.
+     */
+    private Boolean _reportValuesTooLong;
+
+    /**
      * Default constructor.
      */
     public NaaccrOptions() {
@@ -69,6 +74,7 @@ public class NaaccrOptions {
         _reportLevelMismatch = false;
         _writeItemNumber = false;
         _applyPaddingRules = false;
+        _reportValuesTooLong = false;
     }
 
     public Boolean getValidateReadValues() {
@@ -135,12 +141,24 @@ public class NaaccrOptions {
         _applyPaddingRules = applyPaddingRules;
     }
 
+    public Boolean getReportValuesTooLong() {
+        return _reportValuesTooLong;
+    }
+
+    public void setReportValuesTooLong(Boolean reportValuesTooLong) {
+        _reportValuesTooLong = reportValuesTooLong;
+    }
+
     /**
      * Convenience method that computes if a given item needs to be ignored, based on the include/exclude lists.
      * @param naaccrId NAACCR ID
      * @return true if the corresponding item needs to be processed.
      */
     public boolean processItem(String naaccrId) {
-        return _itemsToInclude != null && _itemsToInclude.contains(naaccrId) || !(_itemsToExclude != null && _itemsToExclude.contains(naaccrId));
+        if (_itemsToInclude != null)
+            return _itemsToInclude.contains(naaccrId);
+        else if (_itemsToExclude != null)
+            return !_itemsToExclude.contains(naaccrId);
+        return true;
     }
 }

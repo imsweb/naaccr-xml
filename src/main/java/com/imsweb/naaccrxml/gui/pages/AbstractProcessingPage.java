@@ -78,7 +78,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
     protected JFileChooser _fileChooser, _dictionaryFileChooser;
     protected CardLayout _northLayout, _centerLayout, _northProcessingLayout;
-    protected JPanel _northPnl, _centerPnl, _northProcessingPnl;
+    protected JPanel _northPnl, _centerPnl, _northProcessingPnl, _dictionaryDisclaimerPnl;
     protected JTextField _sourceFld, _targetFld, _dictionaryFld;
     protected JComboBox<String> _compressionBox;
     protected JProgressBar _analysisBar, _processingBar;
@@ -300,6 +300,13 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         optionsPnl.add(_guiOptions);
         allOptionsPnl.add(optionsPnl);
 
+        _dictionaryDisclaimerPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        _dictionaryDisclaimerPnl.setBorder(new EmptyBorder(15, 0, 0, 0));
+        JLabel dictionaryDisclaimerLbl = Standalone.createBoldLabel("The XML data file references a user-defined dictionary, you must provide it or the file won't be processed successfully.");
+        dictionaryDisclaimerLbl.setForeground(new Color(150, 0, 0));
+        _dictionaryDisclaimerPnl.add(dictionaryDisclaimerLbl);
+        allOptionsPnl.add(_dictionaryDisclaimerPnl);
+
         JPanel dictionaryPnl = new JPanel();
         dictionaryPnl.setBorder(new EmptyBorder(15, 0, 0, 0));
         dictionaryPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -342,6 +349,10 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
     protected boolean showTargetInput() {
         return true;
+    }
+
+    protected boolean showUserDictionaryDisclaimer(File file) {
+        return false;
     }
 
     protected abstract StandaloneOptions createOptions();
@@ -519,9 +530,10 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             _fileSizeLbl.setText(Standalone.formatFileSize(file.length()));
             _northLayout.show(_northPnl, _NORTH_PANEL_ID_ANALYSIS_RESULTS);
             _centerPnl.setVisible(true);
+            _dictionaryDisclaimerPnl.setVisible(showUserDictionaryDisclaimer(file));
             _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_OPTIONS);
             if (_targetFld != null) {
-                _targetFld.setText(invertFilename(new File(_sourceFld.getText())));
+                _targetFld.setText(invertFilename(file));
                 if (_targetFld.getText().endsWith(".gz"))
                     _compressionBox.setSelectedItem(_COMPRESSION_GZIP);
                 else if (_targetFld.getText().endsWith(".xz"))
@@ -617,7 +629,9 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                     userDictionary = NaaccrXmlDictionaryUtils.readDictionary(new File(_dictionaryFld.getText()));
 
                 final long start = System.currentTimeMillis();
-                runProcessing(srcFile, targetFile, _guiOptions.getOptions(), userDictionary, new NaaccrObserver() {
+                String baseUri = NaaccrXmlUtils.getAttributesFromXmlFile(targetFile).get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT);
+                NaaccrDictionary baseDictionary = baseUri == null ? null : NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(baseUri);
+                runProcessing(srcFile, targetFile, _guiOptions.getOptions(baseDictionary, userDictionary), userDictionary, new NaaccrObserver() {
                     @Override
                     public void patientRead(Patient patient) {
                         publish(patient);
@@ -699,15 +713,16 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 for (Patient patient : patients) {
                     for (NaaccrValidationError error : patient.getAllValidationErrors()) {
                         // this will be shown in the warnings view
-                        buf.append("Line ").append(error.getLineNumber());
+                        buf.append("Line ").append(error.getLineNumber() == null ? "N/A" : error.getLineNumber());
                         if (error.getNaaccrId() != null) {
                             buf.append(", item '").append(error.getNaaccrId()).append("'");
                             if (error.getNaaccrNum() != null)
                                 buf.append(" (#").append(error.getNaaccrNum()).append(")");
                         }
                         buf.append(": ").append(error.getMessage());
-                        if (error.getValue() != null && !error.getValue().isEmpty())
-                            buf.append(": ").append(error.getValue());
+                        if (error.getValue() != null && !error.getValue().isEmpty()) {
+                            buf.append(" [").append(error.getValue().length() > 250 ? (error.getValue().substring(0, 250) + "...") : error.getValue()).append("]");
+                        }
                         buf.append("\n");
 
                         // this will be used in the summary view
