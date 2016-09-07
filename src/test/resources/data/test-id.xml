@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<NaaccrDataExchange naaccrVersion="140" recordType="A">
+<NaaccrData naaccrVersion="140" recordType="A">
     <Patient>
         <Item naaccrId="nameLast">DEPRY</Item>
         <Item naaccrId="nameFirst">FABIAN</Item>
@@ -19,4 +19,4 @@
             <Item naaccrId="primarySite">C789</Item>
         </Tumor>
     </Patient>
-</NaaccrDataExchange>
+</NaaccrData>
