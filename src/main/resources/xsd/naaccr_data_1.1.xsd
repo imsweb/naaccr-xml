@@ -21,7 +21,7 @@
 		<xsd:attribute name="timeGenerated" use="optional" type="xsd:dateTime" />
 		<xsd:attribute name="recordType" use="required" type="tns:recordtypeType" />
         <xsd:attribute name="specificationVersion" use="optional" default="1.0" />
-		<xsd:anyAttribute />
+		<xsd:anyAttribute namespace="##other" processContents="lax" />
 	</xsd:complexType>
 </xsd:element>
 
@@ -32,7 +32,6 @@
 			<xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
 			<xsd:element ref="tns:Tumor" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
-		<xsd:anyAttribute />
 	</xsd:complexType>
 </xsd:element>
 
@@ -42,7 +41,6 @@
 			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
 			<xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
 		</xsd:sequence>
-		<xsd:anyAttribute />
 	</xsd:complexType>
 </xsd:element>
 
@@ -51,7 +49,6 @@
 		<xsd:extension base="xsd:string" >
 			<xsd:attribute name="naaccrId" use="required" type="xsd:NCName" />
 			<xsd:attribute name="naaccrNum" type="xsd:integer" use="optional" />
-			<xsd:anyAttribute />
 		</xsd:extension>
 	</xsd:simpleContent>
 </xsd:complexType>

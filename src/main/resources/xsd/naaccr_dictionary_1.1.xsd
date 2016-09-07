@@ -4,13 +4,11 @@
 	<xsd:complexType>
 		<xsd:sequence>
 			<xsd:element ref="tns:ItemDefs" minOccurs="1" maxOccurs="1" />
-			<xsd:any minOccurs="0" maxOccurs="unbounded" processContents="lax" namespace="##other" />
 		</xsd:sequence>
 		<xsd:attribute name="dictionaryUri" use="required" type="xsd:anyURI"/>
 		<xsd:attribute name="naaccrVersion" use="optional" />
         <xsd:attribute name="specificationVersion" use="optional" default="1.0" />
 		<xsd:attribute name="description" use="optional" />
-		<xsd:anyAttribute processContents="lax" namespace="##other" />
 	</xsd:complexType>
 </xsd:element>
 
@@ -18,7 +16,6 @@
 	<xsd:complexType>
 		<xsd:sequence>
 			<xsd:element ref="tns:ItemDef"  minOccurs="0" maxOccurs="unbounded" />
-			<xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
 		</xsd:sequence>
 		<xsd:anyAttribute processContents="lax" />
 	</xsd:complexType>
@@ -61,9 +58,6 @@
 
 <xsd:element name="ItemDef" >
 	<xsd:complexType>
-		<xsd:sequence>
-			<xsd:any minOccurs="0" maxOccurs="unbounded" processContents="lax" namespace="##other" />
-		</xsd:sequence>
 		<xsd:attribute name="naaccrId" use="required" type="xsd:ID" />
 		<xsd:attribute name="naaccrNum" use="required" type="xsd:integer" />
 		<xsd:attribute name="naaccrName" use="optional" type="xsd:string" />
@@ -77,7 +71,6 @@
         <xsd:attribute name="allowUnlimitedText" use="optional" type="xsd:boolean" />
 		<xsd:attribute name="sourceOfStandard" use="optional" type="xsd:string" />
 		<xsd:attribute name="recordTypes" use="optional" type="xsd:string" />
-		<xsd:anyAttribute processContents="lax" />
 	</xsd:complexType>
 </xsd:element>
 
