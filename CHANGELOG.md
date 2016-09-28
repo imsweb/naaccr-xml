@@ -2,6 +2,10 @@
 
 **Version 2.0**
 
+ - Removed Class-Path attribute from generated JAR.
+
+**Version 2.0**
+
  - Removed "any-attribute" from the XSD since those are not properly supported; only kept the one for the NaaccrData tag.
  - Added line number on the item object; populated only when reading items.
  - Validation errors for specific items are now reported directly on those items instead of the parent entity.
