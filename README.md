@@ -117,5 +117,5 @@ That utility class also contains a method to create a NAACCR ID (used for the "n
 ## XML Schemas
 
 The following schemas are available in the project:
-* [naaccr_data.xsd](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/xsd/naaccr_data_1.0.xsd) - W3C Schema for the data files
-* [naaccr_dictionary.xsd](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/xsd/naaccr_dictionary_1.0.xsd) - W3C Schema for the dictionary files
+* [naaccr_data.xsd](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/xsd/naaccr_data_1.1.xsd) - W3C Schema for the data files
+* [naaccr_dictionary.xsd](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/xsd/naaccr_dictionary_1.1.xsd) - W3C Schema for the dictionary files
