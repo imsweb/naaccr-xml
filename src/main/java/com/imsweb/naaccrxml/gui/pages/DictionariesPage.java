@@ -8,11 +8,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Insets;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Vector;
 import java.util.regex.PatternSyntaxException;
 
@@ -53,6 +49,7 @@ public class DictionariesPage extends AbstractPage {
     // global GUI components
     private JLabel _dictionaryUriFld, _versionFld, _descFld;
     private JTextArea _xmlArea;
+    private JTextField _filterFld;
     private JTable _itemsTbl;
     private DefaultTableModel _itemsModel;
     private TableRowSorter<TableModel> _itemsSorter;
@@ -67,12 +64,7 @@ public class DictionariesPage extends AbstractPage {
             standardDictionaries.add(new NaaccrDictionaryWrapper(NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(version)));
             standardDictionaries.add(new NaaccrDictionaryWrapper(NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(version)));
         }
-        Collections.sort(standardDictionaries, new Comparator<NaaccrDictionaryWrapper>() {
-            @Override
-            public int compare(NaaccrDictionaryWrapper o1, NaaccrDictionaryWrapper o2) {
-                return o2.getDictionary().getNaaccrVersion().compareTo(o1.getDictionary().getNaaccrVersion());
-            }
-        });
+        standardDictionaries.sort((o1, o2) -> o2.getDictionary().getNaaccrVersion().compareTo(o1.getDictionary().getNaaccrVersion()));
 
         JPanel controlsPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         this.add(controlsPnl, BorderLayout.NORTH);
@@ -125,7 +117,6 @@ public class DictionariesPage extends AbstractPage {
 
         JPanel tableContentPnl = new JPanel(new BorderLayout());
         tablePnl.add(tableContentPnl, BorderLayout.CENTER);
-        //tableContentPnl.setBorder(new EmptyBorder(3, 0, 0, 0));
         _itemsModel = new DefaultTableModel() {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
@@ -136,7 +127,7 @@ public class DictionariesPage extends AbstractPage {
         };
         _itemsTbl = new JTable(_itemsModel);
         _itemsTbl.setDragEnabled(false);
-        _itemsSorter = new TableRowSorter<>((TableModel)_itemsModel);
+        _itemsSorter = new TableRowSorter<>(_itemsModel);
         _itemsTbl.setRowSorter(_itemsSorter);
         DefaultTableCellRenderer itemsRenderer = new DefaultTableCellRenderer() {
             @Override
@@ -158,12 +149,12 @@ public class DictionariesPage extends AbstractPage {
         tablePnl.add(tableControlsPnl, BorderLayout.SOUTH);
         tableControlsPnl.add(new JLabel("Filter Items:"));
         tableControlsPnl.add(Box.createHorizontalStrut(5));
-        final JTextField filterFld = new JTextField(25);
-        filterFld.getDocument().addDocumentListener(new DocumentListener() {
+        _filterFld = new JTextField(25);
+        _filterFld.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 try {
-                    _itemsSorter.setRowFilter(RowFilter.regexFilter("(?i)" + filterFld.getText(), 0, 1, 2));
+                    _itemsSorter.setRowFilter(RowFilter.regexFilter("(?i)" + _filterFld.getText(), 0, 1, 2));
                 }
                 catch (PatternSyntaxException ex) {
                     // ignored
@@ -173,7 +164,7 @@ public class DictionariesPage extends AbstractPage {
             @Override
             public void removeUpdate(DocumentEvent e) {
                 try {
-                    _itemsSorter.setRowFilter(RowFilter.regexFilter("(?i)" + filterFld.getText(), 0, 1, 2));
+                    _itemsSorter.setRowFilter(RowFilter.regexFilter("(?i)" + _filterFld.getText(), 0, 1, 2));
                 }
                 catch (PatternSyntaxException ex) {
                     // ignored
@@ -184,16 +175,11 @@ public class DictionariesPage extends AbstractPage {
             public void changedUpdate(DocumentEvent e) {
             }
         });
-        tableControlsPnl.add(filterFld);
+        tableControlsPnl.add(_filterFld);
         tableControlsPnl.add(Box.createHorizontalStrut(10));
         tableControlsPnl.add(new JLabel("(only the ID, Num and Name columns are searched)"));
 
-        selectionBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                setDictionary(((NaaccrDictionaryWrapper)selectionBox.getSelectedItem()));
-            }
-        });
+        selectionBox.addItemListener(e -> setDictionary(((NaaccrDictionaryWrapper)selectionBox.getSelectedItem())));
 
         setDictionary((NaaccrDictionaryWrapper)selectionBox.getSelectedItem());
     }
@@ -237,6 +223,13 @@ public class DictionariesPage extends AbstractPage {
         }
         _itemsModel.setDataVector(rows, columns);
         _itemsSorter.setRowFilter(null);
+        _filterFld.setText("");
+
+        _itemsTbl.getColumnModel().getColumn(1).setPreferredWidth(45); // item number
+        _itemsTbl.getColumnModel().getColumn(3).setPreferredWidth(30); // start column
+        _itemsTbl.getColumnModel().getColumn(4).setPreferredWidth(30); // length
+        _itemsTbl.getColumnModel().getColumn(7).setPreferredWidth(40); // data type
+        _itemsTbl.getColumnModel().getColumn(10).setPreferredWidth(40); // trim
 
         try {
             if (dictionary.getDictionaryUri().contains("user-defined"))
