@@ -473,14 +473,14 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Patient"
             dataType="alpha"/>
-        <ItemDef naaccrId="censusIndCode2010Cdc"
+        <ItemDef naaccrId="censusIndCode2010"
             naaccrNum="272"
             naaccrName="Census Ind Code 2010 CDC"
             startColumn="455"
             length="4"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
-        <ItemDef naaccrId="censusOccCode2010Cdc"
+        <ItemDef naaccrId="censusOccCode2010"
             naaccrNum="282"
             naaccrName="Census Occ Code 2010 CDC"
             startColumn="459"

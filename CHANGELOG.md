@@ -1,7 +1,8 @@
 ## NAACCR XML Version History
 
-**Version 2.0**
+**Version 2.1**
 
+ - Fixed NAACCR ID of Item Numbers 272 and 282; those should not have been renamed from NAACCR 15.
  - Removed Class-Path attribute from generated JAR.
 
 **Version 2.0**
