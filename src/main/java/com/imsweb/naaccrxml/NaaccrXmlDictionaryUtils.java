@@ -13,8 +13,10 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -152,7 +154,7 @@ public final class NaaccrXmlDictionaryUtils {
             return readDictionary(reader);
         }
         catch (IOException e) {
-            throw new RuntimeException("Unable to get base dictionary!", e);
+            throw new RuntimeException("Unable to load base dictionary for version " + naaccrVersion, e);
         }
     }
 
@@ -183,7 +185,7 @@ public final class NaaccrXmlDictionaryUtils {
             return readDictionary(reader);
         }
         catch (IOException e) {
-            throw new RuntimeException("Unable to get base dictionary!", e);
+            throw new RuntimeException("Unable to get base dictionary for version " + naaccrVersion, e);
         }
     }
 
@@ -301,13 +303,21 @@ public final class NaaccrXmlDictionaryUtils {
             return "a dictionary must contain at least one item definition";
 
         Pattern idPattern = Pattern.compile("^[a-z][a-zA-Z0-9]+$");
+        Set<String> naaccrIds = new HashSet<>();
+        Set<Integer> naaccrNums = new HashSet<>();
         for (NaaccrDictionaryItem item : dictionary.getItems()) {
             if (item.getNaaccrId() == null || item.getNaaccrId().trim().isEmpty())
                 return "'naaccrId' attribute is required";
             if (!idPattern.matcher(item.getNaaccrId()).matches())
                 return "'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + item.getNaaccrId();
+            if (naaccrIds.contains(item.getNaaccrId()))
+                return "'naaccrId' attribute must be unique, already saw " + item.getNaaccrId();
+            naaccrIds.add(item.getNaaccrId());
             if (item.getNaaccrNum() == null)
                 return "'naaccrNum' attribute is required";
+            if (naaccrNums.contains(item.getNaaccrNum()))
+                return "'naaccrNum' attribute must be unique, already saw " + item.getNaaccrNum();
+            naaccrNums.add(item.getNaaccrNum());
             if (item.getLength() == null)
                 return "'length' attribute is required";
             boolean allowBlankStartCol = !isBaseDictionary && SpecificationVersion.compareVersions(specVersion, SpecificationVersion.SPEC_1_1) >= 0;

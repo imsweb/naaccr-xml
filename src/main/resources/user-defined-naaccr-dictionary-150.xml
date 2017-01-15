@@ -111,7 +111,7 @@
             parentXmlElement="Tumor"
             trim="none"/>
         <ItemDef naaccrId="reserved17"
-            naaccrNum="270"
+            naaccrNum="2700"
             naaccrName="Reserved 17"
             startColumn="2195"
             length="1"

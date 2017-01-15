@@ -1113,14 +1113,14 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="derivedSeerCmbNSrc"
-            naaccrNum="3622"
+            naaccrNum="3624"
             naaccrName="Derived SEER Cmb N Src"
             startColumn="884"
             length="1"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="derivedSeerCmbMSrc"
-            naaccrNum="3622"
+            naaccrNum="3626"
             naaccrName="Derived SEER Cmb M Src"
             startColumn="885"
             length="1"

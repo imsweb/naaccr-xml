@@ -5,8 +5,6 @@ package com.imsweb.naaccrxml.runtime;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +25,10 @@ public class RuntimeNaaccrDictionary {
     private Map<String, RuntimeNaaccrDictionaryItem> _cachedById;
 
     public RuntimeNaaccrDictionary(String recordType, NaaccrDictionary baseDictionary, NaaccrDictionary userDictionary) throws NaaccrIOException {
+        if (recordType == null)
+            throw new NaaccrIOException("Record type is required to create a runtime dictionary");
+        if (baseDictionary == null)
+            throw new NaaccrIOException("Base dictionary is required to create a runtime dictionary");
 
         // as of spec 1.1 the NAACCR version is optional on user-dictionaries, but that means we can't really validate them without 
         // knowing the corresponding base dictionary, so we have to re-validate here...
@@ -40,6 +42,14 @@ public class RuntimeNaaccrDictionary {
         if (userDictionary == null)
             userDictionary = NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(baseDictionary.getNaaccrVersion());
 
+        // extra validation: no user-defined item should have the same NAACCR ID or NAACCR Number as a base one
+        for (NaaccrDictionaryItem item : userDictionary.getItems()) {
+            if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
+                throw new NaaccrIOException("User-defined dictionary cannot use same NAACCR ID as a base item: " + item.getNaaccrId());
+            if (baseDictionary.getItemByNaaccrNum(item.getNaaccrNum()) != null)
+                throw new NaaccrIOException("User-defined dictionary cannot use same NAACCR Number as a base item: " + item.getNaaccrNum());
+        }
+
         _format = NaaccrFormat.getInstance(baseDictionary.getNaaccrVersion(), recordType);
         _items = new ArrayList<>();
         for (NaaccrDictionaryItem item : baseDictionary.getItems())
@@ -50,15 +60,12 @@ public class RuntimeNaaccrDictionary {
                 _items.add(new RuntimeNaaccrDictionaryItem(item));
 
         // sort the fields by starting columns (no start columns go to the end)
-        Collections.sort(_items, new Comparator<RuntimeNaaccrDictionaryItem>() {
-            @Override
-            public int compare(RuntimeNaaccrDictionaryItem o1, RuntimeNaaccrDictionaryItem o2) {
-                if (o1.getStartColumn() == null)
-                    return 1;
-                if (o2.getStartColumn() == null)
-                    return -1;
-                return o1.getStartColumn().compareTo(o2.getStartColumn());
-            }
+        _items.sort((o1, o2) -> {
+            if (o1.getStartColumn() == null)
+                return 1;
+            if (o2.getStartColumn() == null)
+                return -1;
+            return o1.getStartColumn().compareTo(o2.getStartColumn());
         });
     }
 

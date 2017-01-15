@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+**Version 2.2**
+
+ - Fixed wrong item number in 14, 15 and 16 default user dictionaries for reserved 17 item.
+ - Fixed wrong item number in 16 base dictionary for items derivedSeerCmbNSrc and derivedSeerCmbMSrc.
+
 **Version 2.1**
 
  - Fixed NAACCR ID of Item Numbers 272 and 282; those should not have been renamed from NAACCR 15.
