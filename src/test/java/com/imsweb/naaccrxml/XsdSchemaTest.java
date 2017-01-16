@@ -12,6 +12,9 @@ import javax.xml.validation.Validator;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
+
 /**
  * The purpose of this test is to make sure that the built-in validation behaves the same way as the 3WC XSD schema one.
  */
@@ -33,7 +36,7 @@ public class XsdSchemaTest {
         assertValidXmlFileForXsd("namespace-without-prefix.xml");
 
         // a regular file that defines the namespace and uses prefix; we don't support that in the library...
-        assertNotValidXmlFileForLibrary("namespace-with-prefix.xml");
+        assertValidXmlFileForLibrary("namespace-with-prefix.xml");
         assertValidXmlFileForXsd("namespace-with-prefix.xml");
 
         // this file has no items, that's OK
@@ -48,8 +51,8 @@ public class XsdSchemaTest {
         assertValidXmlFileForLibrary("no-tumors.xml");
         assertValidXmlFileForXsd("no-tumors.xml");
 
-        // extensions - not valid with XSD because doesn't define the namespace (and extensions wouldn't be valid anyway)
-        assertValidXmlFileForLibrary("extension-missing-namespace.xml");
+        // extensions - not valid because doesn't define the namespace
+        assertNotValidXmlFileForLibrary("extension-missing-namespace.xml");
         assertNotValidXmlFileForXsd("extension-missing-namespace.xml");
 
         // this file has a root extension that should be ignored
@@ -69,7 +72,7 @@ public class XsdSchemaTest {
     @SuppressWarnings("ConstantConditions")
     private void assertValidXmlFileForXsd(String xmlFile) {
         try {
-            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("xsd/naaccr_data_1.0.xsd");
+            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("xsd/naaccr_data_1.1.xsd");
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(schemaXsd);
             Validator validator = schema.newValidator();
@@ -83,7 +86,7 @@ public class XsdSchemaTest {
     @SuppressWarnings("ConstantConditions")
     private void assertNotValidXmlFileForXsd(String xmlFile) {
         try {
-            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("xsd/naaccr_data_1.0.xsd");
+            URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("xsd/naaccr_data_1.1.xsd");
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(schemaXsd);
             Validator validator = schema.newValidator();
@@ -95,20 +98,48 @@ public class XsdSchemaTest {
         Assert.fail("Was expected an invalid file, but it was valid");
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void assertValidXmlFileForLibrary(String xmlFile) {
         File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/xsdcomparison/" + xmlFile);
+
+        NaaccrOptions options = new NaaccrOptions();
+        options.setUseStrictNamespaces(true);
+
+        NaaccrStreamConfiguration configuration = new NaaccrStreamConfiguration();
+        configuration.setAllowedTagsForNamespacePrefix("other", "MyOuterTag", "MyInnerTag");
+        configuration.setAllowedTagsForNamespacePrefix("naaccr", "NaaccrData", "Patient", "Tumor", "Item");
+
         try {
-            NaaccrXmlUtils.readXmlFile(file, null, null, null);
+            try (PatientXmlReader reader = new PatientXmlReader(NaaccrXmlUtils.createReader(file), options, null, configuration)) {
+                reader.getRootData();
+                Patient patient = reader.readPatient();
+                while (patient != null)
+                    patient = reader.readPatient();
+            }
         }
         catch (NaaccrIOException e) {
             Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void assertNotValidXmlFileForLibrary(String xmlFile) {
         File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/xsdcomparison/" + xmlFile);
+
+        NaaccrOptions options = new NaaccrOptions();
+        options.setUseStrictNamespaces(true);
+
+        NaaccrStreamConfiguration configuration = new NaaccrStreamConfiguration();
+        configuration.setAllowedTagsForNamespacePrefix("other", "MyOuterTag", "MyInnerTag");
+        configuration.setAllowedTagsForNamespacePrefix("naaccr", "NaaccrData", "Patient", "Tumor", "Item");
+
         try {
-            NaaccrXmlUtils.readXmlFile(file, null, null, null);
+            try (PatientXmlReader reader = new PatientXmlReader(NaaccrXmlUtils.createReader(file), options, null, configuration)) {
+                reader.getRootData();
+                Patient patient = reader.readPatient();
+                while (patient != null)
+                    patient = reader.readPatient();
+            }
         }
         catch (NaaccrIOException e) {
             return;

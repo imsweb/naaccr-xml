@@ -41,7 +41,7 @@ public class PatientXmlWriter implements AutoCloseable {
      * @param writer required underlined writer
      * @param options optional options
      * @param userDictionary optional user-defined dictionary
-     * @throws NaaccrIOException
+     * @throws NaaccrIOException if anything goes wrong
      */
     public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
         this(writer, rootData, options, userDictionary, null);
@@ -53,7 +53,7 @@ public class PatientXmlWriter implements AutoCloseable {
      * @param options optional options
      * @param userDictionary optional user-defined dictionary
      * @param configuration optional stream configuration
-     * @throws NaaccrIOException
+     * @throws NaaccrIOException if anything goes wrong
      */
     public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
 
@@ -65,6 +65,11 @@ public class PatientXmlWriter implements AutoCloseable {
             // we always need a configuration
             if (configuration == null)
                 configuration = new NaaccrStreamConfiguration();
+
+            // create the context
+            NaaccrStreamContext context = new NaaccrStreamContext();
+            context.setOptions(options);
+            context.setConfiguration(configuration);
 
             NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(rootData.getBaseDictionaryUri());
 
@@ -113,10 +118,7 @@ public class PatientXmlWriter implements AutoCloseable {
                     _writer.addAttribute(entry.getKey(), entry.getValue());
 
             // now we are ready to create our reading context and make it available to the patient converter
-            NaaccrStreamContext context = new NaaccrStreamContext();
             context.setDictionary(new RuntimeNaaccrDictionary(rootData.getRecordType(), baseDictionary, userDictionary));
-            context.setOptions(options);
-            context.setParser(configuration.getParser());
             configuration.getPatientConverter().setContext(context);
 
             // write the root items
@@ -135,7 +137,7 @@ public class PatientXmlWriter implements AutoCloseable {
 
     /**
      * Writes the given patient on this stream.
-     * @throws NaaccrIOException
+     * @throws NaaccrIOException if anything goes wrong
      */
     public void writePatient(Patient patient) throws NaaccrIOException {
         try {

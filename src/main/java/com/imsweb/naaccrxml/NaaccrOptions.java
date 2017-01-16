@@ -64,6 +64,11 @@ public class NaaccrOptions {
     private Boolean _reportValuesTooLong;
 
     /**
+     * When reading data, whether or not strict namespace rules need to be enforced. Defaults to false.
+     */
+    private Boolean _useStrictNamespaces;
+
+    /**
      * Default constructor.
      */
     public NaaccrOptions() {
@@ -75,6 +80,7 @@ public class NaaccrOptions {
         _writeItemNumber = false;
         _applyPaddingRules = false;
         _reportValuesTooLong = false;
+        _useStrictNamespaces = false;
     }
 
     public Boolean getValidateReadValues() {
@@ -147,6 +153,14 @@ public class NaaccrOptions {
 
     public void setReportValuesTooLong(Boolean reportValuesTooLong) {
         _reportValuesTooLong = reportValuesTooLong;
+    }
+
+    public Boolean getUseStrictNamespaces() {
+        return _useStrictNamespaces;
+    }
+
+    public void setUseStrictNamespaces(Boolean useStrictNamespaces) {
+        _useStrictNamespaces = useStrictNamespaces;
     }
 
     /**

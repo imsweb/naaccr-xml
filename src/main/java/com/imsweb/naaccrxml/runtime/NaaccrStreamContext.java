@@ -3,17 +3,18 @@
  */
 package com.imsweb.naaccrxml.runtime;
 
-import org.xmlpull.v1.XmlPullParser;
+import java.util.Set;
 
+import com.imsweb.naaccrxml.NaaccrIOException;
 import com.imsweb.naaccrxml.NaaccrOptions;
 
 public class NaaccrStreamContext {
 
     protected RuntimeNaaccrDictionary _dictionary;
 
-    protected NaaccrOptions _options;
+    protected NaaccrStreamConfiguration _configuration;
 
-    protected XmlPullParser _parser;
+    protected NaaccrOptions _options;
 
     public RuntimeNaaccrDictionary getDictionary() {
         return _dictionary;
@@ -21,6 +22,14 @@ public class NaaccrStreamContext {
 
     public void setDictionary(RuntimeNaaccrDictionary dictionary) {
         _dictionary = dictionary;
+    }
+
+    public NaaccrStreamConfiguration getConfiguration() {
+        return _configuration;
+    }
+
+    public void setConfiguration(NaaccrStreamConfiguration configuration) {
+        _configuration = configuration;
     }
 
     public NaaccrOptions getOptions() {
@@ -31,11 +40,35 @@ public class NaaccrStreamContext {
         _options = options;
     }
 
-    public XmlPullParser getParser() {
-        return _parser;
+    /**
+     * Returns the current line number.
+     * @return current line number (from the parser).
+     */
+    public int getLineNumber() {
+        return _configuration.getParser().getLineNumber();
     }
 
-    public void setParser(XmlPullParser parser) {
-        _parser = parser;
+    /**
+     * Extracts the tag from the given raw tag (which might contain a namespace).
+     * @param tag tag without any namespace
+     * @return the tag without any namespace
+     * @throws NaaccrIOException if anything goes wrong
+     */
+    public String extractTag(String tag) throws NaaccrIOException {
+        if (tag == null)
+            throw new NaaccrIOException("missing tag");
+        int idx = tag.indexOf(':');
+        if (idx != -1) {
+            String namespace = tag.substring(0, idx), cleanTag = tag.substring(idx + 1);
+            Set<String> allowedTags = _configuration.getAllowedTagsForNamespacePrefix(namespace);
+            if (allowedTags == null || !allowedTags.contains(cleanTag))
+                throw new NaaccrIOException("tag '" + cleanTag + "' is not allowed for namespace '" + namespace + "'");
+            return cleanTag;
+        }
+        else {
+            if (_options.getUseStrictNamespaces() && !_configuration.getAllowedTagsForNamespacePrefix(null).contains(tag))
+                throw new NaaccrIOException("tag '" + tag + "' needs to be defined within a namespace");
+            return tag;
+        }
     }
 }

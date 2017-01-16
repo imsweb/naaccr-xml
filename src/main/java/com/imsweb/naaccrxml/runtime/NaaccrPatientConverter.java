@@ -16,6 +16,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 import com.imsweb.naaccrxml.NaaccrErrorUtils;
+import com.imsweb.naaccrxml.NaaccrIOException;
 import com.imsweb.naaccrxml.NaaccrOptions;
 import com.imsweb.naaccrxml.NaaccrValidationError;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
@@ -70,75 +71,81 @@ public class NaaccrPatientConverter implements Converter {
 
     @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-        if (!NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(reader.getNodeName()))
-            reportSyntaxError("unexpected tag: " + reader.getNodeName());
+        try {
+            if (!NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(_context.extractTag(reader.getNodeName())))
+                reportSyntaxError("unexpected tag: " + _context.extractTag(reader.getNodeName()));
 
-        Patient patient = new Patient();
-        patient.setStartLineNumber(_context.getParser().getLineNumber());
-        int patItemCount = 0, tumorCount = 0;
-        boolean seenPatientExtension = false;
-        Set<String> itemsAlreadySeen = new HashSet<>();
-        while (reader.hasMoreChildren()) {
-            reader.moveDown();
-
-            // handel patient items
-            if (NaaccrXmlUtils.NAACCR_XML_TAG_ITEM.equals(reader.getNodeName())) {
-                if (tumorCount > 0 || seenPatientExtension)
-                    reportSyntaxError("unexpected tag: " + reader.getNodeName());
-                patItemCount++;
-                String path = "/Patient/Item[" + patItemCount + "]";
-                String rawId = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID);
-                String rawNum = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM);
-                readItem(patient, path, NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT, rawId, rawNum, reader.getValue());
-                if (rawId != null && itemsAlreadySeen.contains(rawId))
-                    reportSyntaxError("item '" + rawId + "' should be unique within the " + NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT + " tags");
-                else
-                    itemsAlreadySeen.add(rawId);
-            }
-            // handle tumors
-            else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(reader.getNodeName())) {
-                Tumor tumor = new Tumor();
-                tumor.setStartLineNumber(_context.getParser().getLineNumber());
-                tumorCount++;
-                int tumorItemCount = 0;
-                boolean seenTumorExtension = false;
-                itemsAlreadySeen.clear();
-                while (reader.hasMoreChildren()) {
-                    reader.moveDown();
-
-                    // handle tumor items
-                    if (NaaccrXmlUtils.NAACCR_XML_TAG_ITEM.equals(reader.getNodeName())) {
-                        if (seenTumorExtension)
-                            reportSyntaxError("unexpected tag: " + reader.getNodeName());
-                        tumorItemCount++;
-                        String path = "/Patient/Tumor[" + tumorCount + "]/Item[" + tumorItemCount + "]";
-                        String rawId = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID);
-                        String rawNum = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM);
-                        readItem(tumor, path, NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR, rawId, rawNum, reader.getValue());
-                        if (rawId != null && itemsAlreadySeen.contains(rawId))
-                            reportSyntaxError("item '" + rawId + "' should be unique within the " + NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR + " tags");
-                        else
-                            itemsAlreadySeen.add(rawId);
-                    }
-                    // TODO [EXTENSIONS] this would be the place to read the tumor extension; for now it's ignored...
-
-                    reader.moveUp();
-                }
-                patient.addTumor(tumor);
-            }
-            // handle patient extension
-            else {
-                if (tumorCount > 0)
-                    reportSyntaxError("unexpected tag: " + reader.getNodeName());
-                // TODO [EXTENSIONS] this would be the place to read the patient extension; for now it's ignored...
-                reader.moveUp();
+            Patient patient = new Patient();
+            patient.setStartLineNumber(_context.getLineNumber());
+            int patItemCount = 0, tumorCount = 0;
+            boolean seenPatientExtension = false;
+            Set<String> itemsAlreadySeen = new HashSet<>();
+            while (reader.hasMoreChildren()) {
                 reader.moveDown();
+
+                // handel patient items
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_ITEM.equals(_context.extractTag(reader.getNodeName()))) {
+                    if (tumorCount > 0 || seenPatientExtension)
+                        reportSyntaxError("unexpected tag: " + _context.extractTag(reader.getNodeName()));
+                    patItemCount++;
+                    String path = "/Patient/Item[" + patItemCount + "]";
+                    String rawId = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID);
+                    String rawNum = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM);
+                    readItem(patient, path, NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT, rawId, rawNum, reader.getValue());
+                    if (rawId != null && itemsAlreadySeen.contains(rawId))
+                        reportSyntaxError("item '" + rawId + "' should be unique within the " + NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT + " tags");
+                    else
+                        itemsAlreadySeen.add(rawId);
+                }
+                // handle tumors
+                else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(_context.extractTag(reader.getNodeName()))) {
+                    Tumor tumor = new Tumor();
+                    tumor.setStartLineNumber(_context.getLineNumber());
+                    tumorCount++;
+                    int tumorItemCount = 0;
+                    boolean seenTumorExtension = false;
+                    itemsAlreadySeen.clear();
+                    while (reader.hasMoreChildren()) {
+                        reader.moveDown();
+
+                        // handle tumor items
+                        if (NaaccrXmlUtils.NAACCR_XML_TAG_ITEM.equals(_context.extractTag(reader.getNodeName()))) {
+                            if (seenTumorExtension)
+                                reportSyntaxError("unexpected tag: " + _context.extractTag(reader.getNodeName()));
+                            tumorItemCount++;
+                            String path = "/Patient/Tumor[" + tumorCount + "]/Item[" + tumorItemCount + "]";
+                            String rawId = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID);
+                            String rawNum = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM);
+                            readItem(tumor, path, NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR, rawId, rawNum, reader.getValue());
+                            if (rawId != null && itemsAlreadySeen.contains(rawId))
+                                reportSyntaxError("item '" + rawId + "' should be unique within the " + NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR + " tags");
+                            else
+                                itemsAlreadySeen.add(rawId);
+                        }
+                        // TODO [EXTENSIONS] this would be the place to read the tumor extension; for now it's ignored...
+
+                        reader.moveUp();
+                    }
+                    patient.addTumor(tumor);
+                }
+                // handle patient extension
+                else {
+                    if (tumorCount > 0)
+                        reportSyntaxError("unexpected tag: " + _context.extractTag(reader.getNodeName()));
+                    // TODO [EXTENSIONS] this would be the place to read the patient extension; for now it's ignored...
+                    reader.moveUp();
+                    reader.moveDown();
+                }
+
+                reader.moveUp();
             }
 
-            reader.moveUp();
+            return patient;
         }
-
-        return patient;
+        catch (NaaccrIOException e) {
+            reportSyntaxError(e.getMessage());
+            return null;
+        }
     }
 
     public void writeItem(AbstractEntity entity, Item item, HierarchicalStreamWriter writer) {
@@ -194,7 +201,7 @@ public class NaaccrPatientConverter implements Converter {
     }
 
     public void readItem(AbstractEntity entity, String currentPath, String parentTag, String rawId, String rawNum, String value) {
-        int lineNumber = _context.getParser().getLineNumber();
+        int lineNumber = _context.getLineNumber();
 
         // if there is no value at all, don't bother
         if (value == null || value.isEmpty())
