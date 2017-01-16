@@ -176,7 +176,7 @@ public class NaaccrXmlUtilsTest {
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file1));
 
         // this one contains extensions
-        File file2 = new File(System.getProperty("user.dir") + "/src/test/resources/data/extension-missing-namespace.xml");
+        File file2 = new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file-extension.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file2));
     }
 
