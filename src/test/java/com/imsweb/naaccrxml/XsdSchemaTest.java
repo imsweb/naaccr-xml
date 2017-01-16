@@ -21,44 +21,48 @@ public class XsdSchemaTest {
     public void testXsdAgainstLibrary() {
 
         // regular file
-        assertValidXmlFileForLibrary("validation-standard-file.xml");
-        assertValidXmlFileForXsd("validation-standard-file.xml");
+        assertValidXmlFileForLibrary("standard-file.xml");
+        assertValidXmlFileForXsd("standard-file.xml");
+
+        // regular file that doesn't define a default namespace; not allowed by XSD
+        assertValidXmlFileForLibrary("standard-file-no-default-namespace.xml");
+        assertNotValidXmlFileForXsd("standard-file-no-default-namespace.xml");
 
         // a regular file that defines the namespace but doesn't use prefixes, should be valid in both
-        assertValidXmlFileForLibrary("validation-namespace-without-prefix.xml");
-        assertValidXmlFileForXsd("validation-namespace-without-prefix.xml");
+        assertValidXmlFileForLibrary("namespace-without-prefix.xml");
+        assertValidXmlFileForXsd("namespace-without-prefix.xml");
 
         // a regular file that defines the namespace and uses prefix; we don't support that in the library...
-        assertNotValidXmlFileForLibrary("validation-namespace-with-prefix.xml");
-        assertValidXmlFileForXsd("validation-namespace-with-prefix.xml");
+        assertNotValidXmlFileForLibrary("namespace-with-prefix.xml");
+        assertValidXmlFileForXsd("namespace-with-prefix.xml");
 
         // this file has no items, that's OK
-        assertValidXmlFileForLibrary("validation-no-items.xml");
-        assertValidXmlFileForXsd("validation-no-items.xml");
+        assertValidXmlFileForLibrary("no-items.xml");
+        assertValidXmlFileForXsd("no-items.xml");
 
         // this file has no patient, that's OK
-        assertValidXmlFileForLibrary("validation-no-patients.xml");
-        assertValidXmlFileForXsd("validation-no-patients.xml");
+        assertValidXmlFileForLibrary("no-patients.xml");
+        assertValidXmlFileForXsd("no-patients.xml");
 
         // this file has no tumors, that's OK
-        assertValidXmlFileForLibrary("validation-no-tumors.xml");
-        assertValidXmlFileForXsd("validation-no-tumors.xml");
+        assertValidXmlFileForLibrary("no-tumors.xml");
+        assertValidXmlFileForXsd("no-tumors.xml");
 
         // extensions - not valid with XSD because doesn't define the namespace (and extensions wouldn't be valid anyway)
-        assertValidXmlFileForLibrary("validation-extension-missing-namespace.xml");
-        assertNotValidXmlFileForXsd("validation-extension-missing-namespace.xml");
+        assertValidXmlFileForLibrary("extension-missing-namespace.xml");
+        assertNotValidXmlFileForXsd("extension-missing-namespace.xml");
 
         // this file has a root extension that should be ignored
-        assertValidXmlFileForLibrary("validation-extension-root.xml");
-        assertValidXmlFileForXsd("validation-extension-root.xml");
+        assertValidXmlFileForLibrary("extension-root.xml");
+        assertValidXmlFileForXsd("extension-root.xml");
 
         // this file has a patient extension that should be ignored
-        assertValidXmlFileForLibrary("validation-extension-patient.xml");
-        assertValidXmlFileForXsd("validation-extension-patient.xml");
+        assertValidXmlFileForLibrary("extension-patient.xml");
+        assertValidXmlFileForXsd("extension-patient.xml");
 
         // this file has a tumor extension that should be ignored
-        assertValidXmlFileForLibrary("validation-extension-tumor.xml");
-        assertValidXmlFileForXsd("validation-extension-tumor.xml");
+        assertValidXmlFileForLibrary("extension-tumor.xml");
+        assertValidXmlFileForXsd("extension-tumor.xml");
 
     }
 
@@ -69,7 +73,7 @@ public class XsdSchemaTest {
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(schemaXsd);
             Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/" + xmlFile)));
+            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/xsdcomparison/" + xmlFile)));
         }
         catch (Exception e) {
             Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
@@ -83,7 +87,7 @@ public class XsdSchemaTest {
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(schemaXsd);
             Validator validator = schema.newValidator();
-            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/" + xmlFile)));
+            validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/xsdcomparison/" + xmlFile)));
         }
         catch (Exception e) {
             return;
@@ -92,7 +96,7 @@ public class XsdSchemaTest {
     }
 
     private void assertValidXmlFileForLibrary(String xmlFile) {
-        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/" + xmlFile);
+        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/xsdcomparison/" + xmlFile);
         try {
             NaaccrXmlUtils.readXmlFile(file, null, null, null);
         }
@@ -102,7 +106,7 @@ public class XsdSchemaTest {
     }
 
     private void assertNotValidXmlFileForLibrary(String xmlFile) {
-        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/" + xmlFile);
+        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/xsdcomparison/" + xmlFile);
         try {
             NaaccrXmlUtils.readXmlFile(file, null, null, null);
         }

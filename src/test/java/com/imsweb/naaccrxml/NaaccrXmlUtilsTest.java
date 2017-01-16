@@ -33,7 +33,7 @@ public class NaaccrXmlUtilsTest {
         File xmlFile = new File(System.getProperty("user.dir") + "/build/test.xml");
 
         // it's not great to use another write method for testing this one, but it's convenient, so whatever...
-        NaaccrData data = NaaccrXmlUtils.readXmlFile(new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml"), null, null, null);
+        NaaccrData data = NaaccrXmlUtils.readXmlFile(new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file.xml"), null, null, null);
         File flatFile = new File(System.getProperty("user.dir") + "/build/test.txt");
         NaaccrXmlUtils.writeFlatFile(data, flatFile, null, null, null);
 
@@ -63,7 +63,7 @@ public class NaaccrXmlUtilsTest {
         File flatFile = new File(System.getProperty("user.dir") + "/build/test.txt");
 
         // it's not great to use another write method for testing this one, but it's convenient, so whatever...
-        NaaccrData data = NaaccrXmlUtils.readXmlFile(new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml"), null, null, null);
+        NaaccrData data = NaaccrXmlUtils.readXmlFile(new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file.xml"), null, null, null);
         File xmlFile = new File(System.getProperty("user.dir") + "/build/test.xml");
         NaaccrXmlUtils.writeXmlFile(data, xmlFile, null, null, null);
 
@@ -93,7 +93,7 @@ public class NaaccrXmlUtilsTest {
 
     @Test
     public void testReadXmlFile() throws IOException {
-        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml");
+        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file.xml");
 
         // get the format from the file (not necessary, one could hard-code it in the reading call)
         String format = NaaccrXmlUtils.getFormatFromXmlFile(file);
@@ -164,7 +164,7 @@ public class NaaccrXmlUtilsTest {
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromFlatFile(file));
 
         // not a valid file
-        file = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml");
+        file = new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file.xml");
         Assert.assertNull(NaaccrXmlUtils.getFormatFromFlatFile(file));
     }
 
@@ -172,11 +172,11 @@ public class NaaccrXmlUtilsTest {
     public void testGetFormatFromXmlFile() {
 
         // regular file
-        File file1 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-standard-file.xml");
+        File file1 = new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file1));
 
         // this one contains extensions
-        File file2 = new File(System.getProperty("user.dir") + "/src/test/resources/data/validation-extension-missing-namespace.xml");
+        File file2 = new File(System.getProperty("user.dir") + "/src/test/resources/data/extension-missing-namespace.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file2));
     }
 
