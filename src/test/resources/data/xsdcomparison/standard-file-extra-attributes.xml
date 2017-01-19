@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" recordType="I" specificationVersion="1.1" xmlns="http://naaccr.org/naaccrxml">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" userDictionaryUri="whatever" recordType="I" timeGenerated="2015-03-13T12:09:19.0Z" other:otherAttribute="XXX" xmlns="http://naaccr.org/naaccrxml" xmlns:other="http://other">
     <Item naaccrId="registryId">0000000001</Item>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>

@@ -177,6 +177,9 @@ public class StandaloneOptions extends JPanel {
     public NaaccrOptions getOptions(NaaccrDictionary baseDictionary, NaaccrDictionary userDictionary) {
         NaaccrOptions options = new NaaccrOptions();
 
+        // this one is not part of the GUI; I guess at some point it can be
+        options.setUseStrictNamespaces(true);
+
         if (_readFlat) {
             if (_groupTumorBox.isSelected())
                 options.setTumorGroupingItems(Collections.singletonList(NaaccrXmlUtils.DEFAULT_TUMOR_GROUPING_ITEM));

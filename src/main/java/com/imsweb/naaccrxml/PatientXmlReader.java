@@ -4,7 +4,9 @@
 package com.imsweb.naaccrxml;
 
 import java.io.Reader;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.bind.DatatypeConverter;
@@ -129,6 +131,8 @@ public class PatientXmlReader implements AutoCloseable {
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT);
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE);
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
+            standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION);
+            Map<String, String> attributeValues = new HashMap<>(), namespaces = new HashMap<>();
             for (int i = 0; i < _reader.getAttributeCount(); i++) {
                 String attrName = _reader.getAttributeName(i);
                 if (standardAttributes.contains(attrName))
@@ -139,10 +143,37 @@ public class PatientXmlReader implements AutoCloseable {
                         String namespacePrefix = attrName.substring(idx + 1);
                         if (options.getUseStrictNamespaces() && configuration.getAllowedTagsForNamespacePrefix(namespacePrefix) == null)
                             throw new NaaccrIOException("namespace " + _reader.getAttribute(i) + " (prefix=" + namespacePrefix + ") has not been defined in the configuration");
+                        namespaces.put(namespacePrefix, _reader.getAttribute(i));
                     }
+                    else
+                        namespaces.put("", _reader.getAttribute(i));
                 }
                 else
-                    _rootData.addExtraRootParameters(attrName, _reader.getAttribute(i));
+                    attributeValues.put(attrName, _reader.getAttribute(i));
+            }
+
+            // in strict namespace mode, the NAACCR namespace must be defined (either as the default namespace or as a prefixed namespace, that doesn't matter)
+            if (options.getUseStrictNamespaces() && !namespaces.containsValue(NaaccrXmlUtils.NAACCR_XML_NAMESPACE))
+                throw new NaaccrIOException("namespace " + NaaccrXmlUtils.NAACCR_XML_NAMESPACE + " must be defined in the root attributes");
+
+            // in strict namespace mode, any non-standard attribute must be prefixed by a defined namespace
+            for (Map.Entry<String, String> entry : attributeValues.entrySet()) {
+                String prefix = null, attrName;
+                int idx = entry.getKey().indexOf(':');
+                if (idx != -1) {
+                    prefix = entry.getKey().substring(0, idx);
+                    attrName = entry.getKey().substring(idx + 1);
+                }
+                else
+                    attrName = entry.getKey();
+
+                if (options.getUseStrictNamespaces()) {
+                    if (prefix == null)
+                        throw new NaaccrIOException("attribute " + attrName + " must use a namespace prefix");
+                    if (!namespaces.containsKey(prefix))
+                        throw new NaaccrIOException("attribute " + attrName + " uses a prefix " + prefix + " that is not properly defined");
+                }
+                _rootData.addExtraRootParameters(attrName, entry.getValue());
             }
 
             // now we are ready to setup our reading context and make it available to the patient converter
