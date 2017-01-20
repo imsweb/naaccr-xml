@@ -35,7 +35,7 @@ public class StandaloneOptions extends JPanel {
     private boolean _readFlat, _writeFlat, _readXml, _writeXml;
 
     // global GUI components
-    private JCheckBox _groupTumorBox, _reportMismatchBox, _validateValuesBox, _ignoreUnkItemsBox, _writeNumBox, _applyPaddingBox, _reportValTooLongBox;
+    private JCheckBox _groupTumorBox, _reportMismatchBox, _validateValuesBox, _ignoreUnkItemsBox, _writeNumBox, _applyPaddingBox, _reportValTooLongBox, _strictNameSpacesBox;
     private JTextField _itemListFld;
     private JRadioButton _itemsIncludeBtn, _itemsExcludeBtn;
 
@@ -159,6 +159,17 @@ public class StandaloneOptions extends JPanel {
             contentPnl.add(addHelpRow("Comma-separated list of items (NAACCR ID or NAACCR Number) to exclude/include when reading or writing the file."));
             contentPnl.add(Box.createVerticalStrut(15));
         }
+
+        if (readXml) {
+            JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+            _strictNameSpacesBox = new JCheckBox(" (Advanced) When reading the file, use strict rules for the XML namespaces.");
+            _strictNameSpacesBox.setSelected(true);
+            pnl.add(_strictNameSpacesBox);
+            contentPnl.add(pnl);
+            contentPnl.add(Box.createVerticalStrut(3));
+            contentPnl.add(addHelpRow("If this option is checked, non-standard XML tags/attributes will need to be defined in a proper namespace using a namespace prefix."));
+            contentPnl.add(Box.createVerticalStrut(15));
+        }
     }
 
     private JPanel addHelpRow(String text) {
@@ -177,14 +188,11 @@ public class StandaloneOptions extends JPanel {
     public NaaccrOptions getOptions(NaaccrDictionary baseDictionary, NaaccrDictionary userDictionary) {
         NaaccrOptions options = new NaaccrOptions();
 
-        // this one is not part of the GUI; I guess at some point it can be
-        options.setUseStrictNamespaces(true);
-
         if (_readFlat) {
             if (_groupTumorBox.isSelected())
                 options.setTumorGroupingItems(Collections.singletonList(NaaccrXmlUtils.DEFAULT_TUMOR_GROUPING_ITEM));
             else
-                options.setTumorGroupingItems(Collections.<String>emptyList());
+                options.setTumorGroupingItems(Collections.emptyList());
         }
 
         if (_readFlat)
@@ -232,10 +240,13 @@ public class StandaloneOptions extends JPanel {
                 // set the items on the options
                 if (_itemsExcludeBtn.isSelected())
                     options.setItemsToExclude(naaccrIds);
-                else
+                else if (_itemsIncludeBtn.isSelected())
                     options.setItemsToInclude(naaccrIds);
             }
         }
+
+        if (_readXml)
+            options.setUseStrictNamespaces(_strictNameSpacesBox.isSelected());
 
         return options;
     }

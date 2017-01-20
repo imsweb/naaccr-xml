@@ -355,9 +355,9 @@ public class NaaccrXmlUtils {
             if (xmlReader.markSupported())
                 xmlReader.mark(8192); // this is the default buffer size for a BufferedReader; should be more than enough to get all available attributes...
             HierarchicalStreamReader xstreamReader = new NaaccrStreamConfiguration().getDriver().createReader(xmlReader);
-            if (xstreamReader.getNodeName().equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
+            if (removeNameSpacePrefix(xstreamReader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
                 for (int i = 0; i < xstreamReader.getAttributeCount(); i++)
-                    result.put(xstreamReader.getAttributeName(i), xstreamReader.getAttribute(i));
+                    result.put(removeNameSpacePrefix(xstreamReader.getAttributeName(i)), xstreamReader.getAttribute(i));
             if (xmlReader.markSupported())
                 xmlReader.reset();
         }
@@ -366,6 +366,14 @@ public class NaaccrXmlUtils {
         }
 
         return result;
+    }
+
+    // helper
+    private static String removeNameSpacePrefix(String tag) {
+        int idx = tag.indexOf(':');
+        if (idx != -1)
+            return tag.substring(idx + 1);
+        return tag;
     }
 
     /**

@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -157,7 +159,7 @@ public class NaaccrXmlUtilsTest {
     }
 
     @Test
-    public void testGetFormatFromFlatFile() {
+    public void testGetFormatFromFlatFile() throws IOException {
 
         // regular file
         File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/fake-naaccr14inc-1-rec.txt");
@@ -169,7 +171,7 @@ public class NaaccrXmlUtilsTest {
     }
 
     @Test
-    public void testGetFormatFromXmlFile() {
+    public void testGetFormatFromXmlFile() throws IOException {
 
         // regular file
         File file1 = new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file.xml");
@@ -178,6 +180,10 @@ public class NaaccrXmlUtilsTest {
         // this one contains extensions
         File file2 = new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file-extension.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file2));
+
+        Files.newDirectoryStream(Paths.get(System.getProperty("user.dir"), "src", "test", "resources", "data", "validity", "valid")).forEach(path ->
+                Assert.assertNotNull(path.toString(), NaaccrXmlUtils.getFormatFromXmlFile(path.toFile())));
+
     }
 
     @Test
