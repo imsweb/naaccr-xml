@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/imsweb/naaccr-xml.svg?branch=master)](https://travis-ci.org/imsweb/naaccr-xml)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml)
 
-This library provides support for the NAACCR XML format. It implements version 1.1 of the format specification.
+This library provides support for the NAACCR XML format. It implements version 1.1 of the format specifications.
 
 Information about the format and the Work Group that developed it can be found here: [http://naaccrxml.org/](http://naaccrxml.org/).
 
@@ -62,7 +62,7 @@ All those methods accept the following optional parameters (optional in the sens
 
 ### Using the Graphical User Interface (Standalone)
 
-The library contains an experimental GUI that wraps some of the utility methods and provides a more user-friendly environment for processing files.
+The library contains an standalone GUI that wraps some of the utility methods and provides a more user-friendly environment for processing files.
 
 To start the GUI, just double-click the JAR file created from this project; it will invoke the main GUI class 
 ([Standalone](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/gui/Standalone.java)).
@@ -98,12 +98,13 @@ output.folder=C:\\output
 
 ## Dealing with dictionaries
 
-The project contains two dictionaries for each supported NAACCR versions: the main dictionary and the default user defined dictionary; here are the ones for NAACCR 16:
+The project contains two dictionaries for each supported NAACCR version: the main dictionary and the default user defined dictionary. 
+Combined, they defined all the data items that are supported for the corresponding NAACCR version. Here are the dictionaries for NAACCR version 16:
 * [naaccr-dictionary-160.xml](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/naaccr-dictionary-160.xml)
 * [user-defined-naaccr-dictionary-160.xml](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/user-defined-naaccr-dictionary-160.xml)
 
 In addition, the project also contains a utility class ([NaaccrXmlDictionaryUtils](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrXmlDictionaryUtils.java))
- to read, write and validate a given dictionary file. Note that there is no syntax differences between a base dictionary and a user-defined one.
+ to read, write and validate a given dictionary file. Note that there is no syntax differences between a base dictionary and a user-defined one, but they do use a different validation logic.
 
 That utility class also contains a method to create a NAACCR ID (used for the "naaccrId" attribute) from a given item name using the following rules:
 
@@ -116,6 +117,22 @@ That utility class also contains a method to create a NAACCR ID (used for the "n
 
 ## XML Schemas
 
-The following schemas are available in the project:
+While the NAACCR XML standard defines a W3C XML Schema file for the data files and dictionaries, this library does not actually use them. Here there are for reference:
 * [naaccr_data.xsd](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/xsd/naaccr_data_1.1.xsd) - W3C Schema for the data files
 * [naaccr_dictionary.xsd](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/xsd/naaccr_dictionary_1.1.xsd) - W3C Schema for the dictionary files
+
+## NAACCR XML Specifications History
+ 
+**Changes made in version 1.1 of the specifications**
+- Added a new 'specificationVersion' optional attribute on both data and dictionary files to indicate the specification that the file follows; default to 1.0 if not provided.
+- The 'version' attribute is now optional in the user-defined dictionaries; if not provided, it is assumed to be the same version as the corresponding base dictionary.
+- The 'start-column' attribute is now optional in the user defined dictionaries; if not provided, it is assumed that the item has no location in a flat data file.
+- Added a new 'allowUnlimitedText' optional attribute in the dictionary, allowing large amount of text to be provided for some specific text fields.
+
+## About SEER
+
+This library was developed through the [SEER](http://seer.cancer.gov/) program.
+
+The Surveillance, Epidemiology and End Results program is a premier source for cancer statistics in the United States.
+The SEER program collects information on incidence, prevalence and survival from specific geographic areas representing
+a large portion of the US population and reports on all these data plus cancer mortality data for the entire country.
