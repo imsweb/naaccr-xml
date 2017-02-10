@@ -129,7 +129,7 @@ While the NAACCR XML standard defines a W3C XML Schema file for the data files a
 - The 'start-column' attribute is now optional in the user defined dictionaries; if not provided, it is assumed that the item has no location in a flat data file.
 - Added a new 'allowUnlimitedText' optional attribute in the dictionary, allowing large amount of text to be provided for some specific text fields.
 
-## About SEER
+## About this library
 
 This library was developed through the [SEER](http://seer.cancer.gov/) program.
 
