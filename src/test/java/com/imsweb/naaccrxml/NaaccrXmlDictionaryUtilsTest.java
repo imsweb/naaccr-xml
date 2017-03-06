@@ -293,4 +293,9 @@ public class NaaccrXmlDictionaryUtilsTest {
             fail("Was expected a valid file, but it was invalid: " + e.getMessage());
         }
     }
+    
+    @Test
+    public void testGetMergedDictionaries() {
+        Assert.assertNotNull(NaaccrXmlDictionaryUtils.getMergedDictionaries(NaaccrFormat.NAACCR_VERSION_160));
+    }
 }

@@ -12,8 +12,11 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -291,14 +294,14 @@ public final class NaaccrXmlDictionaryUtils {
         String specVersion = dictionary.getSpecificationVersion() == null ? SpecificationVersion.SPEC_1_0 : dictionary.getSpecificationVersion();
         if (!SpecificationVersion.isSpecificationSupported(specVersion))
             return "'specificationVersion' attribute is not valid";
-        
+
         if (dictionary.getDictionaryUri() == null || dictionary.getDictionaryUri().trim().isEmpty())
             return "'dictionaryUri' attribute is required";
-        
+
         boolean allowBlankNaaccrVersion = !isBaseDictionary && SpecificationVersion.compareVersions(specVersion, SpecificationVersion.SPEC_1_1) >= 0;
         if (!allowBlankNaaccrVersion && (dictionary.getNaaccrVersion() == null || dictionary.getNaaccrVersion().trim().isEmpty()))
             return "'naaccrVersion' attribute is required";
-        
+
         if (dictionary.getItems().isEmpty())
             return "a dictionary must contain at least one item definition";
 
@@ -434,6 +437,45 @@ public final class NaaccrXmlDictionaryUtils {
             buf.append(StringUtils.capitalize(parts[i].toLowerCase()));
 
         return buf.toString();
+    }
+
+    /**
+     * Merges the base user dictionary for the given NAACCR version.
+     * <br/><br/>
+     * Sort order of the items is based on start column, items without a start column go to the end.
+     * @param naaccrVersion NAACCR version, required
+     * @return a new merged dictionary containing the items of the requested dictionaries
+     */
+    public static NaaccrDictionary getMergedDictionaries(String naaccrVersion) {
+        return mergeDictionaries(getBaseDictionaryByVersion(naaccrVersion), getDefaultUserDictionaryByVersion(naaccrVersion));
+    }
+
+    /**
+     * Merges the given base dictionary and user dictionaries into one dictionary.
+     * <br/><br/>
+     * Sort order of the items is based on start column, items without a start column go to the end.
+     * @param baseDictionary base dictionary, required
+     * @param userDictionaries user dictionaries, optional
+     * @return a new merged dictionary containing the items of all the provided dictionaries.
+     */
+    public static NaaccrDictionary mergeDictionaries(NaaccrDictionary baseDictionary, NaaccrDictionary... userDictionaries) {
+        if (baseDictionary == null)
+            throw new RuntimeException("Base dictionary is required");
+
+        NaaccrDictionary result = new NaaccrDictionary();
+        result.setNaaccrVersion(baseDictionary.getNaaccrVersion());
+        result.setDictionaryUri(baseDictionary.getDictionaryUri() + "[merged]");
+        result.setSpecificationVersion(baseDictionary.getSpecificationVersion());
+        result.setDescription(baseDictionary.getDescription());
+
+        List<NaaccrDictionaryItem> items = new ArrayList<>();
+        items.addAll(baseDictionary.getItems());
+        for (NaaccrDictionary userDictionary : userDictionaries)
+            items.addAll(userDictionary.getItems());
+        items.sort(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId));
+        result.setItems(items);
+
+        return result;
     }
 
     /**
