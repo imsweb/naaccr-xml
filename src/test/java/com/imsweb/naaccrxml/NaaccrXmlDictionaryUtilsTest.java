@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.junit.Assert;
@@ -17,23 +20,34 @@ import org.junit.Test;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
+import static org.junit.Assert.fail;
+
 public class NaaccrXmlDictionaryUtilsTest {
 
     @Test
     public void testInternalDictionaries() throws IOException {
         for (String version : NaaccrFormat.getSupportedVersions()) {
+            List<NaaccrDictionaryItem> items = new ArrayList<>();
 
             // make sure internal base dictionaries are valid
             try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-" + version + ".xml"))) {
                 NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
                 Assert.assertNull(NaaccrXmlDictionaryUtils.validateBaseDictionary(dict));
+                items.addAll(dict.getItems());
             }
 
             // make sure internal default user dictionaries are valid
             try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("user-defined-naaccr-dictionary-" + version + ".xml"))) {
                 NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
                 Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+                items.addAll(dict.getItems());
             }
+
+            // make sure the combination of fields doesn't leave any gaps
+            items.sort(Comparator.comparing(NaaccrDictionaryItem::getStartColumn));
+            for (int i = 0; i < items.size() - 1; i++)
+                if (items.get(i).getStartColumn() + items.get(i).getLength() != items.get(i + 1).getStartColumn())
+                    fail("Found a gap after item " + items.get(i).getNaaccrId());
         }
     }
 
@@ -276,7 +290,12 @@ public class NaaccrXmlDictionaryUtilsTest {
             NaaccrXmlDictionaryUtils.readDictionary(file);
         }
         catch (IOException e) {
-            Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
+            fail("Was expected a valid file, but it was invalid: " + e.getMessage());
         }
+    }
+    
+    @Test
+    public void testGetMergedDictionaries() {
+        Assert.assertNotNull(NaaccrXmlDictionaryUtils.getMergedDictionaries(NaaccrFormat.NAACCR_VERSION_160));
     }
 }

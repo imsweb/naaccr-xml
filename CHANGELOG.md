@@ -1,5 +1,8 @@
 ## NAACCR XML Version History
 
+**Version 2.3**
+ - Fixed wrong item length for seerMets in version 16, was defined as length 1 instead of 2.
+
 **Version 2.2**
 
  - Fixed wrong item number in 14, 15 and 16 default user dictionaries for reserved 17 item.
