@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" recordType="I" xmlns="http://naaccr.org/naaccrxml">
-    <Patient>
-        <Item naaccrId="patientIdNumber" naaccrNum="20">00000001</Item>
-    </Patient>
-</NaaccrData>

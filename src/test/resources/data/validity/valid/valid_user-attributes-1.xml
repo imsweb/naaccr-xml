@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- user-define root attribute, properly defined within its own namespace -->
+
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml" userDictionaryUri="whatever" recordType="I" specificationVersion="1.1" other:otherAttribute="XXX" xmlns="http://naaccr.org/naaccrxml" xmlns:other="http://other">
+    <Item naaccrId="registryId">0000000001</Item>
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000001</Item>
+        <Tumor>
+            <Item naaccrId="primarySite">C123</Item>
+        </Tumor>
+    </Patient>
+</NaaccrData>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- valid file defining no tumor for the unique patient -->
+
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml" recordType="I" specificationVersion="1.1" xmlns="http://naaccr.org/naaccrxml">
+    <Patient>
+        <Item naaccrId="patientIdNumber" naaccrNum="20">00000001</Item>
+    </Patient>
+</NaaccrData>

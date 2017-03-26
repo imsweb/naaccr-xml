@@ -24,7 +24,7 @@ public class NaaccrOptions {
     private Boolean _validateReadValues;
 
     /**
-     * When reading data (from XML format), how to handle unknown items (items with an ID that is not defined in the dictionary). See the handling constants.
+     * When reading XML data, how to handle unknown items (items with an ID that is not defined in the dictionary). See the handling constants.
      */
     private String _unknownItemHandling;
 
@@ -64,7 +64,7 @@ public class NaaccrOptions {
     private Boolean _reportValuesTooLong;
 
     /**
-     * When reading data, whether or not strict namespace rules need to be enforced. Defaults to false.
+     * When reading XML data, whether or not strict namespace rules need to be enforced. Defaults to true.
      */
     private Boolean _useStrictNamespaces;
 
@@ -80,7 +80,7 @@ public class NaaccrOptions {
         _writeItemNumber = false;
         _applyPaddingRules = false;
         _reportValuesTooLong = false;
-        _useStrictNamespaces = false;
+        _useStrictNamespaces = true;
     }
 
     public Boolean getValidateReadValues() {

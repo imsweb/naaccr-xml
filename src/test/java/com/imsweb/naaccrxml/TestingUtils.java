@@ -19,7 +19,7 @@ public class TestingUtils {
      */
     public static NaaccrDictionary createUserDictionary() {
         NaaccrDictionary dict = new NaaccrDictionary();
-        dict.setNaaccrVersion("150");
+        dict.setNaaccrVersion("160");
         dict.setDictionaryUri("whatever");
         dict.setDescription("Another whatever...");
         

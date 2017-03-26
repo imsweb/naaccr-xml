@@ -175,11 +175,11 @@ public class NaaccrXmlUtilsTest {
 
         // regular file
         File file1 = new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file.xml");
-        Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file1));
+        Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_16_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file1));
 
         // this one contains extensions
         File file2 = new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file-extension.xml");
-        Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file2));
+        Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_16_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file2));
 
         Files.newDirectoryStream(Paths.get(System.getProperty("user.dir"), "src", "test", "resources", "data", "validity", "valid")).forEach(path ->
                 Assert.assertNotNull(path.toString(), NaaccrXmlUtils.getFormatFromXmlFile(path.toFile())));
@@ -192,7 +192,7 @@ public class NaaccrXmlUtilsTest {
         // a regular file which includes an extra attribute
         File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/read-attributes-1.xml");
         Map<String, String> attr = NaaccrXmlUtils.getAttributesFromXmlFile(file);
-        Assert.assertEquals("http://naaccr.org/naaccrxml/naaccr-dictionary-150.xml", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
+        Assert.assertEquals("http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
         Assert.assertNull(attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT));
         Assert.assertEquals("I", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE));
         Assert.assertEquals("2015-03-13T12:09:19.0Z", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED));
@@ -201,7 +201,7 @@ public class NaaccrXmlUtilsTest {
         // another good file with less attributes
         file = new File(System.getProperty("user.dir") + "/src/test/resources/data/read-attributes-2.xml");
         attr = NaaccrXmlUtils.getAttributesFromXmlFile(file);
-        Assert.assertEquals("http://naaccr.org/naaccrxml/naaccr-dictionary-150.xml", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
+        Assert.assertEquals("http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
         Assert.assertEquals("I", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE));
 
         // a bad file (missing required attributes)
@@ -215,13 +215,15 @@ public class NaaccrXmlUtilsTest {
 
     @Test
     public void testGetAttributesFromXmlReader() throws IOException {
+        NaaccrOptions options = new NaaccrOptions();
+        options.setUseStrictNamespaces(false);
 
         // peek at the attributes using a reader that does support marking
         InputStreamReader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/read-attributes-1.xml"), StandardCharsets.UTF_8);
         try (BufferedReader bufferedReader = new BufferedReader(reader)) {
             Assert.assertFalse(NaaccrXmlUtils.getAttributesFromXmlReader(bufferedReader).isEmpty());
             // at this point, we should still be able to consume the file (which contains a single patient)
-            try (PatientXmlReader xmlReader = new PatientXmlReader(bufferedReader, null, null)) {
+            try (PatientXmlReader xmlReader = new PatientXmlReader(bufferedReader, options, null)) {
                 Assert.assertNotNull(xmlReader.readPatient());
                 Assert.assertNull(xmlReader.readPatient());
             }
@@ -232,7 +234,7 @@ public class NaaccrXmlUtilsTest {
             Assert.assertFalse(NaaccrXmlUtils.getAttributesFromXmlReader(reader2).isEmpty());
             // at this point, we should't be able to consume the data anymore
             try {
-                new PatientXmlReader(reader2, null, null);
+                new PatientXmlReader(reader2, options, null);
                 Assert.fail("There should have been an exception!");
             }
             catch (Exception e) {

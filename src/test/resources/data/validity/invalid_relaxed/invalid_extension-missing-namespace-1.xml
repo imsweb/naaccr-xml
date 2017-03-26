@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- invalid because user-defined root attribute and extensions are not defined in their own namespace -->
+
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml" recordType="I" specificationVersion="1.1" xmlns="http://naaccr.org/naaccrxml">
+    <Item naaccrId="registryId">0000000001</Item>
+    <MySpecialData>
+        <MyItem naaccrId="myDataItem">VALUE</MyItem>
+    </MySpecialData>
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000001</Item>
+        <MySpecialPatientData>
+            <MyItem naaccrId="myPatientItem">VALUE</MyItem>
+        </MySpecialPatientData>
+        <Tumor>
+            <Item naaccrId="primarySite">C456</Item>
+            <MySpecialTumorData>
+                <MyItem naaccrId="myTumorItem">VALUE</MyItem>
+            </MySpecialTumorData>
+        </Tumor>
+    </Patient>
+</NaaccrData>

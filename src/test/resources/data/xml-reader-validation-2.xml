@@ -1,4 +1,4 @@
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" recordType="I">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml" recordType="I" specificationVersion="1.1">
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
         <Item naaccrId="patientIdNumber">00000002</Item>

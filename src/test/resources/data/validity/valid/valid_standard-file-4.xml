@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- valid file defining no patient -->
+
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml" recordType="I" specificationVersion="1.1" xmlns="http://naaccr.org/naaccrxml">
+    <Item naaccrId="registryId">0000000001</Item>
+</NaaccrData>

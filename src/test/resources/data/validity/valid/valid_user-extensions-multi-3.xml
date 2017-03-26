@@ -1,14 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- user-define tumor-level extension (doubled), properly defined within its own namespace -->
 
 <NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml" recordType="I" specificationVersion="1.1" xmlns="http://naaccr.org/naaccrxml" xmlns:other="http://whatever.org">
     <Item naaccrId="registryId">0000000001</Item>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
-        <other:MyOuterTag>
-            <other:MyInnterTag>Something</other:MyInnterTag>
-        </other:MyOuterTag>
         <Tumor>
             <Item naaccrId="primarySite">C123</Item>
+            <other:MyOuterTag>
+                <other:MyInnterTag>Something</other:MyInnterTag>
+            </other:MyOuterTag>
+            <other:MyOuterTag>
+                <other:MyInnterTag>Something</other:MyInnterTag>
+            </other:MyOuterTag>
         </Tumor>
     </Patient>
 </NaaccrData>

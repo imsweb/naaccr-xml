@@ -179,7 +179,7 @@ public class PatientXmlWriterTest {
     public void testUserDefinedDictionary() throws IOException {
         NaaccrDictionary dict = TestingUtils.createUserDictionary();
 
-        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_INCIDENCE);
+        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_16_INCIDENCE);
         Patient patient = new Patient();
         patient.addItem(new Item("patientIdNumber", "00000001"));
         Tumor tumor = new Tumor();

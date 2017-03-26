@@ -32,10 +32,14 @@ public class RuntimeNaaccrDictionary {
 
         // as of spec 1.1 the NAACCR version is optional on user-dictionaries, but that means we can't really validate them without 
         // knowing the corresponding base dictionary, so we have to re-validate here...
-        if (userDictionary != null && userDictionary.getNaaccrVersion() == null) {
-            String error = NaaccrXmlDictionaryUtils.validateUserDictionary(userDictionary, baseDictionary.getNaaccrVersion());
-            if (error != null)
-                throw new NaaccrIOException("Invalid user-defined dictionary: " + error);
+        if (userDictionary != null) {
+            if (userDictionary.getNaaccrVersion() == null) {
+                String error = NaaccrXmlDictionaryUtils.validateUserDictionary(userDictionary, baseDictionary.getNaaccrVersion());
+                if (error != null)
+                    throw new NaaccrIOException("Invalid user-defined dictionary: " + error);
+            }
+            else if (!baseDictionary.getNaaccrVersion().equals(userDictionary.getNaaccrVersion()))
+                throw new NaaccrIOException("User-defined dictionary doesn't define the same version as the base dictionary");
         }
 
         // use the default user dictionary if one is not provided...

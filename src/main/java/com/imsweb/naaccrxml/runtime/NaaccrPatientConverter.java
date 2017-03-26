@@ -75,6 +75,10 @@ public class NaaccrPatientConverter implements Converter {
             if (!NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(_context.extractTag(reader.getNodeName())))
                 reportSyntaxError("unexpected tag: " + _context.extractTag(reader.getNodeName()));
 
+            // Patient tag doesn't support any attributes
+            if (reader.getAttributeCount() > 0)
+                reportSyntaxError("unexpected attribute for Patient tag: " + reader.getAttribute(0));
+
             Patient patient = new Patient();
             patient.setStartLineNumber(_context.getLineNumber());
             int patItemCount = 0, tumorCount = 0;
@@ -99,6 +103,11 @@ public class NaaccrPatientConverter implements Converter {
                 }
                 // handle tumors
                 else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(_context.extractTag(reader.getNodeName()))) {
+
+                    // Tumor tag doesn't support any attributes
+                    if (reader.getAttributeCount() > 0)
+                        reportSyntaxError("unexpected attribute for Tumor tag: " + reader.getAttribute(0));
+
                     Tumor tumor = new Tumor();
                     tumor.setStartLineNumber(_context.getLineNumber());
                     tumorCount++;
@@ -122,7 +131,7 @@ public class NaaccrPatientConverter implements Converter {
                             else
                                 itemsAlreadySeen.add(rawId);
                         }
-                        // TODO [EXTENSIONS] this would be the place to read the tumor extension; for now it's ignored...
+                        // TODO [EXTENSIONS] this would be the place to read the tumor extension; for now they are ignored...
 
                         reader.moveUp();
                     }
@@ -132,9 +141,7 @@ public class NaaccrPatientConverter implements Converter {
                 else {
                     if (tumorCount > 0)
                         reportSyntaxError("unexpected tag: " + _context.extractTag(reader.getNodeName()));
-                    // TODO [EXTENSIONS] this would be the place to read the patient extension; for now it's ignored...
-                    reader.moveUp();
-                    reader.moveDown();
+                    // TODO [EXTENSIONS] this would be the place to read the patient extension; for now they are ignored...
                 }
 
                 reader.moveUp();
