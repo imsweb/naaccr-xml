@@ -1,6 +1,11 @@
 ## NAACCR XML Version History
 
+**Version 3.0**
+
+ - Added proper support for namespaces.
+
 **Version 2.3**
+
  - Fixed wrong item length for seerMets in version 16, was defined as length 1 instead of 2.
 
 **Version 2.2**
