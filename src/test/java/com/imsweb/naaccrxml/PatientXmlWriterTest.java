@@ -89,14 +89,16 @@ public class PatientXmlWriterTest {
         patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().get(1);
         Assert.assertEquals("00000002", patient.getItemValue("patientIdNumber"));
         Assert.assertEquals("C456", patient.getTumors().get(0).getItemValue("primarySite"));
-        
+
         // test some special characters
         file = TestingUtils.createFile("test-xml-writer-special-chars.xml");
+        String val =
+                "\nFollowing characters should be translated:\n<\n>\n\"\n'\n&\n\nFollowing characters should appear as-is:\n~\n@\n#\n%\n^\n*\n()\n{}\n[]\n,\n;\n.\n|\n\\\n/\n`\n\nFollowing characters are the few controls characters allowed in XML 1.0 (not visible):\n\t\n\r\n\nFollowing characters are not valid and should be ignored:\n\u0000\n\u001C\n\nFollowing characters are valid:\n\u0009\n\u0040\n";
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null)) {
             patient = new Patient();
             patient.addItem(new Item("patientIdNumber", "00000001"));
             Tumor tumor = new Tumor();
-            tumor.addItem(new Item("rxTextSurgery", "This would be lines with some special characters: <\n>\n\"\n'\n&\n~\n@\n#\n%\n^\n*\n()\n{}\n\n[]\n,\n;\n.\n|\n\\\n/\n`\nDONE!"));
+            tumor.addItem(new Item("rxTextSurgery", val));
             patient.addTumor(tumor);
             writer.writePatient(patient);
         }
@@ -109,6 +111,23 @@ public class PatientXmlWriterTest {
         Assert.assertTrue(xmlAsString.contains("~"));
         Assert.assertTrue(xmlAsString.contains("`"));
         // no need to test all of them...
+
+        // same test, but fail on bad characters
+        file = TestingUtils.createFile("test-xml-writer-special-chars-error.xml");
+        NaaccrOptions options = new NaaccrOptions();
+        options.setIgnoreControlCharacters(false);
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, null)) {
+            patient = new Patient();
+            patient.addItem(new Item("patientIdNumber", "00000001"));
+            Tumor tumor = new Tumor();
+            tumor.addItem(new Item("rxTextSurgery", val));
+            patient.addTumor(tumor);
+            writer.writePatient(patient);
+            Assert.fail("An exception should have been thrown");
+        }
+        catch (NaaccrIOException e) {
+            // expected
+        }
     }
 
     @Test
@@ -127,7 +146,7 @@ public class PatientXmlWriterTest {
         data.addPatient(patient);
 
         File file = TestingUtils.createFile("test-xml-writer-options.xml");
-        
+
         // value is too long, option says to report the error (it should still be truncated)
         options.setReportValuesTooLong(true);
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
@@ -138,7 +157,7 @@ public class PatientXmlWriterTest {
         Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
         Assert.assertTrue(patient.getAllValidationErrors().get(0).getCode().equals(NaaccrErrorUtils.CODE_VAL_TOO_LONG));
         patient.getAllValidationErrors().clear();
-        
+
         // value is too long, options says to ignore the error (it should still be truncated)
         options.setReportValuesTooLong(false);
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
@@ -147,7 +166,7 @@ public class PatientXmlWriterTest {
         Assert.assertFalse(TestingUtils.readFileAsOneString(file).contains("XX"));
         Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("X"));
         Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
-        
+
         // value is too long, but the field is flagged as unlimited text -> no error, not truncated
         options.setReportValuesTooLong(true);
         patient.addItem(new Item("myVariable6", "YY"));
@@ -156,7 +175,7 @@ public class PatientXmlWriterTest {
         }
         Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("YY"));
         Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
-        
+
         // option is set to pad the values
         options.setApplyPaddingRules(true);
         data.addItem(new Item("npiRegistryId", "1"));
@@ -197,14 +216,14 @@ public class PatientXmlWriterTest {
         catch (NaaccrIOException e) {
             // expected
         }
-        
+
         // user dictionary is referenced
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, dict)) {
             writer.writePatient(patient);
         }
         Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("02"));
         Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains(dict.getDictionaryUri()));
-        
+
         // root data is providing a different dictionary -> error
         data.setUserDictionaryUri("something-else");
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, dict)) {

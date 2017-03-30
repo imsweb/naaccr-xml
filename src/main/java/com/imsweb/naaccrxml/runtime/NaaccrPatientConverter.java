@@ -5,6 +5,8 @@ package com.imsweb.naaccrxml.runtime;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -31,6 +33,13 @@ import com.imsweb.naaccrxml.entity.Tumor;
  */
 public class NaaccrPatientConverter implements Converter {
 
+    // this pattern is used to replace CR by LF (because this library generates "&#xd;" for CR, which is technically correct but causes a lot of confusion)
+    protected static final Pattern _CARRIAGE_RETURN_PATTERN = Pattern.compile("\r\n|\r(?!\n)|(?<!\r)\n");
+
+    // this pattern is used to find/remove non-printable control characters (those are the first 32 ASCII characters, except the TAB, CR and LF)
+    protected static final Pattern _CONTROL_CHARACTERS_PATTERN = Pattern.compile("[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F]");
+
+    // current processing context
     protected NaaccrStreamContext _context;
 
     /**
@@ -179,7 +188,17 @@ public class NaaccrPatientConverter implements Converter {
             if (itemDef.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
                 writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, itemDef.getNaaccrNum().toString());
 
-            String value = item.getValue();
+            // first, let's remove any CR, we only want to use LF for new lines (because this library generates "&#xd;" for CR, which is technically correct but causes a lot of confusion)
+            String value = _CARRIAGE_RETURN_PATTERN.matcher(item.getValue()).replaceAll("\n");
+
+            // then deal with the control characters
+            Matcher matcher = _CONTROL_CHARACTERS_PATTERN.matcher(value);
+            if (matcher.find()) {
+                if (Boolean.TRUE.equals(_context.getOptions().getIgnoreControlCharacters()))
+                    value = matcher.replaceAll("");
+                else
+                    reportSyntaxError("value for item '" + item.getNaaccrId() + "' contains non-printable control characters");
+            }
 
             // handle the padding
             if (Boolean.TRUE.equals(_context.getOptions().getApplyPaddingRules()) && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef.getLength()) {

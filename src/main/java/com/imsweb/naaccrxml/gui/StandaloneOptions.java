@@ -62,11 +62,11 @@ public class StandaloneOptions extends JPanel {
             _groupTumorBox.setSelected(true);
             pnl.add(_groupTumorBox);
             contentPnl.add(pnl);
-            contentPnl.add(Box.createVerticalStrut(3));
+            contentPnl.add(Box.createVerticalStrut(2));
             contentPnl.add(addHelpRow("If this option is checked, the tumors will be grouped together, resulting in several tumors per patient."));
             contentPnl.add(addHelpRow("Otherwise the tumors won't be grouped and every patient will contain exactly one tumor."));
             contentPnl.add(addHelpRow("If this option is selected, the lines in the flat file belonging to the same patient are assumed to appear next to each other.", new Color(150, 0, 0)));
-            contentPnl.add(Box.createVerticalStrut(15));
+            contentPnl.add(Box.createVerticalStrut(10));
         }
 
         if (readFlat) {
@@ -75,10 +75,10 @@ public class StandaloneOptions extends JPanel {
             _reportMismatchBox.setSelected(false);
             pnl.add(_reportMismatchBox);
             contentPnl.add(pnl);
-            contentPnl.add(Box.createVerticalStrut(3));
+            contentPnl.add(Box.createVerticalStrut(2));
             contentPnl.add(addHelpRow("If this option is checked, the items of the tumors grouped together, but having different values will be reported as warnings."));
             contentPnl.add(addHelpRow("The few items defined as root-items (like registry ID) but having different values for different patients will also be reported."));
-            contentPnl.add(Box.createVerticalStrut(15));
+            contentPnl.add(Box.createVerticalStrut(10));
         }
 
         if (readFlat || readXml) {
@@ -87,9 +87,9 @@ public class StandaloneOptions extends JPanel {
             _validateValuesBox.setSelected(false);
             pnl.add(_validateValuesBox);
             contentPnl.add(pnl);
-            contentPnl.add(Box.createVerticalStrut(3));
+            contentPnl.add(Box.createVerticalStrut(2));
             contentPnl.add(addHelpRow("If this option is checked, each value will be validated against the item's data type defined in the dictionary."));
-            contentPnl.add(Box.createVerticalStrut(15));
+            contentPnl.add(Box.createVerticalStrut(10));
         }
 
         if (readXml) {
@@ -98,9 +98,9 @@ public class StandaloneOptions extends JPanel {
             _ignoreUnkItemsBox.setSelected(true);
             pnl.add(_ignoreUnkItemsBox);
             contentPnl.add(pnl);
-            contentPnl.add(Box.createVerticalStrut(3));
+            contentPnl.add(Box.createVerticalStrut(2));
             contentPnl.add(addHelpRow("If this option is checked, unknown items will be ignored. Otherwise a warning will be reported."));
-            contentPnl.add(Box.createVerticalStrut(15));
+            contentPnl.add(Box.createVerticalStrut(10));
         }
 
         if (writeXml) {
@@ -109,10 +109,10 @@ public class StandaloneOptions extends JPanel {
             _writeNumBox.setSelected(false);
             pnl.add(_writeNumBox);
             contentPnl.add(pnl);
-            contentPnl.add(Box.createVerticalStrut(3));
+            contentPnl.add(Box.createVerticalStrut(2));
             contentPnl.add(addHelpRow("If this option is checked, the NAACCR Numbers will be written to the file in addition to the NAACCR IDs."));
             contentPnl.add(addHelpRow("Otherwise only the NAACCR ID (which ia required) is written as an attribute."));
-            contentPnl.add(Box.createVerticalStrut(15));
+            contentPnl.add(Box.createVerticalStrut(10));
         }
 
         if (writeFlat || writeXml) {
@@ -121,9 +121,9 @@ public class StandaloneOptions extends JPanel {
             _applyPaddingBox.setSelected(false);
             pnl.add(_applyPaddingBox);
             contentPnl.add(pnl);
-            contentPnl.add(Box.createVerticalStrut(3));
+            contentPnl.add(Box.createVerticalStrut(2));
             contentPnl.add(addHelpRow("If this option is checked, items defining a padding rule (usually left 0-padded) will have their value modified to honor the definition."));
-            contentPnl.add(Box.createVerticalStrut(15));
+            contentPnl.add(Box.createVerticalStrut(10));
         }
 
         if (writeFlat) {
@@ -132,11 +132,22 @@ public class StandaloneOptions extends JPanel {
             _reportValTooLongBox.setSelected(false);
             pnl.add(_reportValTooLongBox);
             contentPnl.add(pnl);
-            contentPnl.add(Box.createVerticalStrut(3));
+            contentPnl.add(Box.createVerticalStrut(2));
             contentPnl.add(addHelpRow("If this option is checked, a warning will be reported if an item in the XML has a value that is too long for the flat file."));
             contentPnl.add(addHelpRow("Otherwise the value will be silently cut-off to the maximum length allowed."));
             contentPnl.add(addHelpRow("Note that this option doesn't affect items that allow unlimited-text; those will be silently cut-off regardless."));
-            contentPnl.add(Box.createVerticalStrut(15));
+            contentPnl.add(Box.createVerticalStrut(10));
+        }
+
+        if (readXml) {
+            JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+            _strictNameSpacesBox = new JCheckBox(" (Advanced) When reading the file, use strict rules for the XML namespaces.");
+            _strictNameSpacesBox.setSelected(true);
+            pnl.add(_strictNameSpacesBox);
+            contentPnl.add(pnl);
+            contentPnl.add(Box.createVerticalStrut(2));
+            contentPnl.add(addHelpRow("If this option is checked, non-standard XML tags/attributes will need to be defined in a proper namespace using a namespace prefix."));
+            contentPnl.add(Box.createVerticalStrut(10));
         }
 
         if (readFlat || readXml || writeFlat || writeXml) {
@@ -155,20 +166,9 @@ public class StandaloneOptions extends JPanel {
             group.add(_itemsIncludeBtn);
             _itemsExcludeBtn.setSelected(true);
             contentPnl.add(pnl);
-            contentPnl.add(Box.createVerticalStrut(3));
+            contentPnl.add(Box.createVerticalStrut(2));
             contentPnl.add(addHelpRow("Comma-separated list of items (NAACCR ID or NAACCR Number) to exclude/include when reading or writing the file."));
-            contentPnl.add(Box.createVerticalStrut(15));
-        }
-
-        if (readXml) {
-            JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-            _strictNameSpacesBox = new JCheckBox(" (Advanced) When reading the file, use strict rules for the XML namespaces.");
-            _strictNameSpacesBox.setSelected(true);
-            pnl.add(_strictNameSpacesBox);
-            contentPnl.add(pnl);
-            contentPnl.add(Box.createVerticalStrut(3));
-            contentPnl.add(addHelpRow("If this option is checked, non-standard XML tags/attributes will need to be defined in a proper namespace using a namespace prefix."));
-            contentPnl.add(Box.createVerticalStrut(15));
+            contentPnl.add(Box.createVerticalStrut(10));
         }
     }
 

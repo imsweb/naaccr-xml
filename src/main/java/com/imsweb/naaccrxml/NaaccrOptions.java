@@ -69,6 +69,11 @@ public class NaaccrOptions {
     private Boolean _useStrictNamespaces;
 
     /**
+     * When writing XML data, whether the control (non-printable) characters should be ignored or reported as error (since they are not valid in XML 1.0). Defaults to true.
+     */
+    private Boolean _ignoreControlCharacters;
+
+    /**
      * Default constructor.
      */
     public NaaccrOptions() {
@@ -81,6 +86,7 @@ public class NaaccrOptions {
         _applyPaddingRules = false;
         _reportValuesTooLong = false;
         _useStrictNamespaces = true;
+        _ignoreControlCharacters = true;
     }
 
     public Boolean getValidateReadValues() {
@@ -161,6 +167,14 @@ public class NaaccrOptions {
 
     public void setUseStrictNamespaces(Boolean useStrictNamespaces) {
         _useStrictNamespaces = useStrictNamespaces;
+    }
+
+    public Boolean getIgnoreControlCharacters() {
+        return _ignoreControlCharacters;
+    }
+
+    public void setIgnoreControlCharacters(Boolean ignoreControlCharacters) {
+        _ignoreControlCharacters = ignoreControlCharacters;
     }
 
     /**

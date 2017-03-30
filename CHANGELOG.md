@@ -2,6 +2,8 @@
 
 **Version 3.0**
 
+ - Added better support for non-printable control characters; those will be ignored by default when writing item values; an error can be thrown instead by setting the 'ignoreControlCharacters' options to false.
+ - Carriage Returns (CR) are now translated to Line Feed (LF) when writing item values; this library was writing it as '&#xd;' which it technically correct but was causing some confusion.
  - Added proper support for namespaces.
 
 **Version 2.3**

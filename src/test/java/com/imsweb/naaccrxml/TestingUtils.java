@@ -22,7 +22,7 @@ public class TestingUtils {
         dict.setNaaccrVersion("160");
         dict.setDictionaryUri("whatever");
         dict.setDescription("Another whatever...");
-        
+
         NaaccrDictionaryItem item = new NaaccrDictionaryItem();
         item.setNaaccrId("myVariable");
         item.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
@@ -37,10 +37,10 @@ public class TestingUtils {
         item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_NONE);
         item.setRegexValidation("0[0-8]");
         dict.addItem(item);
-        
+
         return dict;
     }
-    
+
     /**
      * Returns the testing data file with the requested name.
      * @param name file name
@@ -78,6 +78,16 @@ public class TestingUtils {
      * @throws IOException
      */
     public static File createFile(String filename) throws IOException {
+        return createFile(filename, true);
+    }
+
+    /**
+     * Creates a file in a "test-tmp" folder in the build folder.
+     * @param filename name of the file to create
+     * @return created file
+     * @throws IOException
+     */
+    public static File createFile(String filename, boolean autoDelete) throws IOException {
 
         // create the tmp folder
         File tmpDir = new File(System.getProperty("user.dir") + "/build/test-tmp");
@@ -86,7 +96,8 @@ public class TestingUtils {
 
         // there is no need to physically create the file, it will be created when something is written to it...
         File file = new File(tmpDir, filename);
-        file.deleteOnExit();
+        if (autoDelete)
+            file.deleteOnExit();
         return file;
     }
 
