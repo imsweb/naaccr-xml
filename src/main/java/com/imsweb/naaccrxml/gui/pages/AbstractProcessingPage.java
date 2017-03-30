@@ -8,8 +8,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
@@ -133,13 +131,10 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         sourceFilePnl.add(_sourceFld);
         sourceFilePnl.add(Box.createHorizontalStrut(5));
         JButton browseBtn = new JButton("Browse...");
-        browseBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (_fileChooser.showDialog(AbstractProcessingPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
-                    _sourceFld.setText(_fileChooser.getSelectedFile().getAbsolutePath());
-                    performPreAnalysis();
-                }
+        browseBtn.addActionListener(e -> {
+            if (_fileChooser.showDialog(AbstractProcessingPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
+                _sourceFld.setText(_fileChooser.getSelectedFile().getAbsolutePath());
+                performPreAnalysis();
             }
         });
         sourceFilePnl.add(browseBtn);
@@ -268,24 +263,18 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             targetFieldPnl.add(_targetFld);
             targetFieldPnl.add(Box.createHorizontalStrut(5));
             JButton browseBtn = new JButton("Browse...");
-            browseBtn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (_fileChooser.showDialog(AbstractProcessingPage.this, "Select") == JFileChooser.APPROVE_OPTION)
-                        _targetFld.setText(_fileChooser.getSelectedFile().getAbsolutePath());
-                }
+            browseBtn.addActionListener(e -> {
+                if (_fileChooser.showDialog(AbstractProcessingPage.this, "Select") == JFileChooser.APPROVE_OPTION)
+                    _targetFld.setText(_fileChooser.getSelectedFile().getAbsolutePath());
             });
             targetFieldPnl.add(browseBtn);
             targetFieldPnl.add(Box.createHorizontalStrut(10));
             targetFieldPnl.add(Standalone.createBoldLabel("Compression:"));
             targetFieldPnl.add(Box.createHorizontalStrut(5));
             _compressionBox = new JComboBox<>(new String[] {_COMPRESSION_NONE, _COMPRESSION_GZIP, _COMPRESSION_XZ});
-            _compressionBox.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (!_targetFld.getText().isEmpty())
-                        _targetFld.setText(fixFileExtension(_targetFld.getText(), (String)_compressionBox.getSelectedItem()));
-                }
+            _compressionBox.addActionListener(e -> {
+                if (!_targetFld.getText().isEmpty())
+                    _targetFld.setText(fixFileExtension(_targetFld.getText(), (String)_compressionBox.getSelectedItem()));
             });
             targetFieldPnl.add(_compressionBox);
             allOptionsPnl.add(targetFieldPnl);
@@ -317,12 +306,9 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         dictionaryPnl.add(_dictionaryFld);
         dictionaryPnl.add(Box.createHorizontalStrut(10));
         JButton dictionaryBrowseBtn = new JButton("Browse...");
-        dictionaryBrowseBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (_dictionaryFileChooser.showDialog(AbstractProcessingPage.this, "Select") == JFileChooser.APPROVE_OPTION)
-                    _dictionaryFld.setText(_dictionaryFileChooser.getSelectedFile().getAbsolutePath());
-            }
+        dictionaryBrowseBtn.addActionListener(e -> {
+            if (_dictionaryFileChooser.showDialog(AbstractProcessingPage.this, "Select") == JFileChooser.APPROVE_OPTION)
+                _dictionaryFld.setText(_dictionaryFileChooser.getSelectedFile().getAbsolutePath());
         });
         dictionaryPnl.add(dictionaryBrowseBtn);
         allOptionsPnl.add(dictionaryPnl);
@@ -330,12 +316,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         JPanel controlsPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         controlsPnl.setBorder(new EmptyBorder(25, 300, 10, 0));
         JButton processBtn = new JButton("Process Source File");
-        processBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performAnalysis();
-            }
-        });
+        processBtn.addActionListener(e -> performAnalysis());
         controlsPnl.add(processBtn);
         allOptionsPnl.add(controlsPnl);
 
@@ -422,18 +403,15 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         controlsPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         controlsPnl.setBorder(new EmptyBorder(0, 10, 0, 0));
         JButton cancelBtn = new JButton("Cancel");
-        cancelBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (_analysisWorker != null)
-                    _analysisWorker.cancel(true);
-                _analysisWorker = null;
-                _analysisBar.setMinimum(0);
-                _analysisBar.setIndeterminate(true);
-                _sourceFld.setText(null);
-                _northLayout.show(_northPnl, _NORTH_PANEL_ID_NO_FILE);
-                _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_HELP);
-            }
+        cancelBtn.addActionListener(e -> {
+            if (_analysisWorker != null)
+                _analysisWorker.cancel(true);
+            _analysisWorker = null;
+            _analysisBar.setMinimum(0);
+            _analysisBar.setIndeterminate(true);
+            _sourceFld.setText(null);
+            _northLayout.show(_northPnl, _NORTH_PANEL_ID_NO_FILE);
+            _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_HELP);
         });
         controlsPnl.add(cancelBtn);
         contentPnl.add(controlsPnl, BorderLayout.EAST);
@@ -463,16 +441,13 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         controlsPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         controlsPnl.setBorder(new EmptyBorder(0, 10, 0, 0));
         JButton cancelBtn = new JButton("Cancel");
-        cancelBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (_processingWorker != null)
-                    _processingWorker.cancel(true);
-                _processingWorker = null;
-                _sourceFld.setText(null);
-                _northLayout.show(_northPnl, _NORTH_PANEL_ID_NO_FILE);
-                _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_HELP);
-            }
+        cancelBtn.addActionListener(e -> {
+            if (_processingWorker != null)
+                _processingWorker.cancel(true);
+            _processingWorker = null;
+            _sourceFld.setText(null);
+            _northLayout.show(_northPnl, _NORTH_PANEL_ID_NO_FILE);
+            _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_HELP);
         });
         controlsPnl.add(cancelBtn);
         contentPnl.add(controlsPnl, BorderLayout.EAST);
@@ -643,15 +618,12 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 });
 
                 // update GUI
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        long processingTime = System.currentTimeMillis() - start;
-                        String size = targetFile == null ? null : Standalone.formatFileSize(targetFile.length());
-                        String path = targetFile == null ? null : targetFile.getPath();
-                        _processingResultLbl.setText(getProcessingResultText(path, analysisTime, processingTime, size));
-                        _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_RESULTS);
-                    }
+                SwingUtilities.invokeLater(() -> {
+                    long processingTime = System.currentTimeMillis() - start;
+                    String size = targetFile == null ? null : Standalone.formatFileSize(targetFile.length());
+                    String path = targetFile == null ? null : targetFile.getPath();
+                    _processingResultLbl.setText(getProcessingResultText(path, analysisTime, processingTime, size));
+                    _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_RESULTS);
                 });
 
                 return null;
@@ -662,34 +634,31 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 try {
                     get();
 
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (_warningsTextArea.getText().isEmpty()) {
-                                _warningsTextArea.setForeground(Color.GRAY);
-                                _warningsTextArea.setText("Found no warning, well done!");
-                            }
+                    SwingUtilities.invokeLater(() -> {
+                        if (_warningsTextArea.getText().isEmpty()) {
+                            _warningsTextArea.setForeground(Color.GRAY);
+                            _warningsTextArea.setText("Found no warning, well done!");
+                        }
 
-                            if (_warningStats.isEmpty()) {
-                                _warningsTextArea.setForeground(Color.GRAY);
-                                _warningsSummaryTextArea.setText("Found no warning, well done!");
-                            }
-                            else {
-                                _warningsSummaryTextArea.setForeground(Color.BLACK);
-                                StringBuilder buf = new StringBuilder("Validation warning counts (0 counts not displayed):\n\n");
-                                for (String code : NaaccrErrorUtils.getAllValidationErrors().keySet()) {
-                                    int count = _warningStats.containsKey(code) ? _warningStats.get(code).get() : 0;
-                                    if (count > 0) {
-                                        buf.append("   ").append(code).append(": ").append(Standalone.formatNumber(count)).append("\n");
-                                        if (_warningStatsDetails.containsKey(code)) {
-                                            List<String> list = new ArrayList<>(_warningStatsDetails.get(code));
-                                            Collections.sort(list);
-                                            buf.append("      ").append(list).append("\n");
-                                        }
+                        if (_warningStats.isEmpty()) {
+                            _warningsTextArea.setForeground(Color.GRAY);
+                            _warningsSummaryTextArea.setText("Found no warning, well done!");
+                        }
+                        else {
+                            _warningsSummaryTextArea.setForeground(Color.BLACK);
+                            StringBuilder buf = new StringBuilder("Validation warning counts (0 counts not displayed):\n\n");
+                            for (String code : NaaccrErrorUtils.getAllValidationErrors().keySet()) {
+                                int count = _warningStats.containsKey(code) ? _warningStats.get(code).get() : 0;
+                                if (count > 0) {
+                                    buf.append("   ").append(code).append(": ").append(Standalone.formatNumber(count)).append("\n");
+                                    if (_warningStatsDetails.containsKey(code)) {
+                                        List<String> list = new ArrayList<>(_warningStatsDetails.get(code));
+                                        Collections.sort(list);
+                                        buf.append("      ").append(list).append("\n");
                                     }
                                 }
-                                _warningsSummaryTextArea.setText(buf.toString());
                             }
+                            _warningsSummaryTextArea.setText(buf.toString());
                         }
                     });
                 }
@@ -733,36 +702,26 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                             count.incrementAndGet();
 
                         // let's also keep track of more detailed information
-                        if (error.getNaaccrId() != null) {
-                            Set<String> set = _warningStatsDetails.get(error.getCode());
-                            if (set == null) {
-                                set = new HashSet<>();
-                                _warningStatsDetails.put(error.getCode(), set);
-                            }
-                            set.add(error.getNaaccrId());
-                        }
+                        if (error.getNaaccrId() != null)
+                            _warningStatsDetails.computeIfAbsent(error.getCode(), k -> new HashSet<>()).add(error.getNaaccrId());
                     }
                 }
 
                 // update GUI (process bar and text area)
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        // technically this should use the "endLineNumber", not the "startLineNumber", but that's close enough for a progress bar...
-                        int processedLineNumber = 0;
-                        for (Patient patient : patients)
-                            processedLineNumber = Math.max(processedLineNumber, patient.getStartLineNumber());
-                        _processingBar.setValue(processedLineNumber);
-                        if (!_maxWarningsReached) {
-                            _warningsTextArea.append(buf.toString());
-                            if (_warningsTextArea.getLineCount() > 5000)
-                                _maxWarningsReached = true;
-                        }
-                        else if (!_maxWarningsDiscAdded) {
-                            _warningsTextArea.append(
-                                    "Reached maximum number of warnings that can be displayed; use the summary instead (available once the processing is done)...");
-                            _maxWarningsDiscAdded = true;
-                        }
+                SwingUtilities.invokeLater(() -> {
+                    // technically this should use the "endLineNumber", not the "startLineNumber", but that's close enough for a progress bar...
+                    int processedLineNumber = 0;
+                    for (Patient patient : patients)
+                        processedLineNumber = Math.max(processedLineNumber, patient.getStartLineNumber());
+                    _processingBar.setValue(processedLineNumber);
+                    if (!_maxWarningsReached) {
+                        _warningsTextArea.append(buf.toString());
+                        if (_warningsTextArea.getLineCount() > 5000)
+                            _maxWarningsReached = true;
+                    }
+                    else if (!_maxWarningsDiscAdded) {
+                        _warningsTextArea.append("Reached maximum number of warnings that can be displayed; use the summary instead (available once the processing is done)...");
+                        _maxWarningsDiscAdded = true;
                     }
                 });
             }
