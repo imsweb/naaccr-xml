@@ -104,7 +104,9 @@ public class PatientXmlWriter implements AutoCloseable {
             }
             else
                 _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, DatatypeConverter.printDateTime(Calendar.getInstance()));
+            // always use the current specs; doesn't matter the value on the root object...
             _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION, NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
+            // same for the default namespace, always use the library value...
             _writer.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
 
             // write non-standard attributes
@@ -113,6 +115,8 @@ public class PatientXmlWriter implements AutoCloseable {
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT);
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE);
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
+            standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION);
+            standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
             for (Entry<String, String> entry : rootData.getExtraRootParameters().entrySet())
                 if (!standardAttributes.contains(entry.getKey()))
                     _writer.addAttribute(entry.getKey(), entry.getValue());

@@ -530,7 +530,7 @@ public final class NaaccrXmlDictionaryUtils {
             super(writer, new char[] {' ', ' ', ' ', ' '});
             _dictionary = dictionary;
             try {
-                writer.write("<?xml version=\"1.0\"?>\r\n\r\n");
+                writer.write("<?xml version=\"1.0\"?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));
             }
             catch (IOException e) {
                 // ignore this one, the exception will happen again anyway...
