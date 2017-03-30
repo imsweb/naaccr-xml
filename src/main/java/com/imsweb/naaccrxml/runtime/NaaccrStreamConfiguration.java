@@ -101,6 +101,7 @@ public class NaaccrStreamConfiguration {
         xstream.aliasAttribute(NaaccrData.class, "_userDictionaryUri", NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT);
         xstream.aliasAttribute(NaaccrData.class, "_recordType", NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE);
         xstream.aliasAttribute(NaaccrData.class, "_timeGenerated", NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
+        xstream.aliasAttribute(NaaccrData.class, "_specificationVersion", NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION);
 
         // all collections should be wrap into collection tags, but it's nicer to omit them in the XML; we have to tell XStream though
         xstream.addImplicitCollection(NaaccrData.class, "_items", Item.class);

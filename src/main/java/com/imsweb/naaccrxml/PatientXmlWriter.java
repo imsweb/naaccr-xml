@@ -116,9 +116,8 @@ public class PatientXmlWriter implements AutoCloseable {
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE);
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION);
-            standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
             for (Entry<String, String> entry : rootData.getExtraRootParameters().entrySet())
-                if (!standardAttributes.contains(entry.getKey()))
+                if (!standardAttributes.contains(entry.getKey()) && !"xmlns".equals(entry.getKey()))
                     _writer.addAttribute(entry.getKey(), entry.getValue());
 
             // now we are ready to create our reading context and make it available to the patient converter
