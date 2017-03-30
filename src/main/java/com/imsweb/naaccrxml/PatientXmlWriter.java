@@ -78,7 +78,7 @@ public class PatientXmlWriter implements AutoCloseable {
 
             // would be better to use a "header writer", I think XStream has one actually; that would be better...
             try {
-                writer.write("<?xml version=\"1.0\"?>" + System.getProperty("line.separator") + System.getProperty("line.separator"));
+                writer.write("<?xml version=\"1.0\"?>\n\n");
             }
             catch (IOException e) {
                 throw new NaaccrIOException(e.getMessage());
