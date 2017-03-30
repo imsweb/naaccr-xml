@@ -91,7 +91,7 @@ public class PatientXmlWriterTest {
         Assert.assertEquals("C456", patient.getTumors().get(0).getItemValue("primarySite"));
 
         // test some special characters
-        file = TestingUtils.createFile("test-xml-writer-special-chars.xml", false);
+        file = TestingUtils.createFile("test-xml-writer-special-chars.xml");
         String val =
                 "\nFollowing characters should be translated:\n<\n>\n\"\n'\n&\n\nFollowing characters should appear as-is:\n~\n@\n#\n%\n^\n*\n()\n{}\n[]\n,\n;\n.\n|\n\\\n/\n`\n\nFollowing characters are the few controls characters allowed in XML 1.0 (not visible):\n\t\n\r\n\nFollowing characters are not valid and should be ignored:\n\u0000\n\u001C\n\nFollowing characters are valid:\n\u0009\n\u0040\n";
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null)) {
