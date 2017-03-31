@@ -1,8 +1,12 @@
 package com.imsweb.naaccrxml;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -231,6 +235,30 @@ public class PatientXmlWriterTest {
         }
         catch (NaaccrIOException e) {
             // expected
+        }
+    }
+
+    @Test
+    public void testZipFile() throws IOException {
+
+        File file = TestingUtils.createFile("test-xml-writer.zip");
+        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(file))) {
+            for (int i = 1; i <= 5; i++) {
+                zos.putNextEntry(new ZipEntry("test-file-" + i + ".xml"));
+
+                // we can't use a try-with-resource since it would call close, but we have to call closeAndKeepAlive!
+                PatientXmlWriter writer = null;
+                try {
+                    writer = new PatientXmlWriter(new OutputStreamWriter(zos), new NaaccrData(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT), null, null);
+                    Patient patient = new Patient();
+                    patient.addItem(new Item("patientIdNumber", "0000000" + i));
+                    writer.writePatient(patient);
+                }
+                finally {
+                    if (writer != null)
+                        writer.closeAndKeepAlive();
+                }
+            }
         }
     }
 }

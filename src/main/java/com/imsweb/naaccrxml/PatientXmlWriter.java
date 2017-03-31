@@ -36,6 +36,9 @@ public class PatientXmlWriter implements AutoCloseable {
     // the underlined writer
     protected HierarchicalStreamWriter _writer;
 
+    // sometimes we want to finalize the writing operation without closing the writer itself...
+    protected boolean _hasBeenFinalized = false;
+
     /**
      * Constructor.
      * @param writer required underlined writer
@@ -152,9 +155,19 @@ public class PatientXmlWriter implements AutoCloseable {
         }
     }
 
+    /**
+     * Write the final node of the document, without closing the stream.
+     */
+    public void closeAndKeepAlive() {
+        if (!_hasBeenFinalized) {
+            _writer.endNode();
+            _hasBeenFinalized = true;
+        }
+    }
+
     @Override
     public void close() {
-        _writer.endNode();
+        closeAndKeepAlive();
         _writer.close();
     }
 
