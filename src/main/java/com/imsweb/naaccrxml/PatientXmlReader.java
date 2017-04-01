@@ -40,6 +40,9 @@ public class PatientXmlReader implements AutoCloseable {
     // context for this reader (some stuff got a bit convoluted and using a context made them a cleaner)
     protected NaaccrStreamContext _context;
 
+    // sometimes we want to finalize the reading operation without closing the reader itself...
+    protected boolean _hasBeenFinalized = false;
+
     /**
      * Constructor.
      * @param reader required underlined reader
@@ -270,9 +273,19 @@ public class PatientXmlReader implements AutoCloseable {
         return _rootData;
     }
 
+    /**
+     * Write the final node of the document, without closing the stream.
+     */
+    public void closeAndKeepAlive() {
+        if (!_hasBeenFinalized) {
+            _reader.moveUp();
+            _hasBeenFinalized = true;
+        }
+    }
+
     @Override
     public void close() {
-        _reader.moveUp();
+        closeAndKeepAlive();
         _reader.close();
     }
 

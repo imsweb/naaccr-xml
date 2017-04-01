@@ -89,8 +89,16 @@ public class PatientFlatWriter implements AutoCloseable {
         }
     }
 
+    /**
+     * This method does nothing for a flat writer, it has been added to be consistent with the XML writer.
+     */
+    public void closeAndKeepAlive() {
+        // does nothing
+    }
+
     @Override
     public void close() throws NaaccrIOException {
+        closeAndKeepAlive();
         try {
             _writer.close();
         }
