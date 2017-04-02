@@ -74,6 +74,11 @@ public class NaaccrOptions {
     private Boolean _ignoreControlCharacters;
 
     /**
+     * When reading or writing XML data, whether the extensions should be ignore or not (defaults to false)
+     */
+    private Boolean _ignoreExtensions;
+
+    /**
      * Default constructor.
      */
     public NaaccrOptions() {
@@ -87,6 +92,7 @@ public class NaaccrOptions {
         _reportValuesTooLong = false;
         _useStrictNamespaces = true;
         _ignoreControlCharacters = true;
+        _ignoreExtensions = false;
     }
 
     public Boolean getValidateReadValues() {
@@ -175,6 +181,14 @@ public class NaaccrOptions {
 
     public void setIgnoreControlCharacters(Boolean ignoreControlCharacters) {
         _ignoreControlCharacters = ignoreControlCharacters;
+    }
+
+    public Boolean getIgnoreExtensions() {
+        return _ignoreExtensions;
+    }
+
+    public void setIgnoreExtensions(Boolean ignoreExtensions) {
+        _ignoreExtensions = ignoreExtensions;
     }
 
     /**

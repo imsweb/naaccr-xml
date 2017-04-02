@@ -31,6 +31,9 @@ public class AbstractEntity {
     // the line number for this entity; available only when reading from a file
     protected Integer _startLineNumber;
 
+    // the extension object
+    protected Object _extension;
+
     // caches to improve lookup performances
     protected Map<String, Item> _cachedById;
 
@@ -122,5 +125,21 @@ public class AbstractEntity {
      */
     public void setStartLineNumber(Integer startLineNumber) {
         _startLineNumber = startLineNumber;
+    }
+
+    /**
+     * Returns the extension for the current entity. The configuration must have been setup to understand how this object can be read/written.
+     * @return extension (can be any object), maybe null
+     */
+    public Object getExtension() {
+        return _extension;
+    }
+
+    /**
+     * Sets the extension for the current entity. The configuration must have been setup to understand how this object can be read/written.
+     * @param extension extension (can be any object) to set, can be null
+     */
+    public void setExtension(Object extension) {
+        _extension = extension;
     }
 }

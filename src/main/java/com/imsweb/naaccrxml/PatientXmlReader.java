@@ -144,12 +144,16 @@ public class PatientXmlReader implements AutoCloseable {
                     int idx = attrName.indexOf(':');
                     if (idx != -1) {
                         String namespacePrefix = attrName.substring(idx + 1);
-                        if (options.getUseStrictNamespaces() && configuration.getAllowedTagsForNamespacePrefix(namespacePrefix) == null)
+                        if (options.getUseStrictNamespaces() && !configuration.getRegisterNamespaces().containsKey(namespacePrefix))
                             throw new NaaccrIOException("namespace " + _reader.getAttribute(i) + " (prefix=" + namespacePrefix + ") has not been defined in the configuration");
                         namespaces.put(namespacePrefix, _reader.getAttribute(i));
                     }
-                    else
+                    else {
+                        // the only default namespace allowed is the NAACCR one
+                        if (!NaaccrXmlUtils.NAACCR_XML_NAMESPACE.equals(_reader.getAttribute(i)))
+                            throw new NaaccrIOException("default namespace can only be set to " + NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
                         namespaces.put("", _reader.getAttribute(i));
+                    }
                 }
                 else
                     attributeValues.put(attrName, _reader.getAttribute(i));
@@ -208,16 +212,24 @@ public class PatientXmlReader implements AutoCloseable {
             if (_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
                 return;
 
-            // for now, ignore the root extension...
-            // TODO [EXTENSIONS] this would be the place to read the root extension; for now they are ignored...
+            // handle root extension
             if (!_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT)) {
-                _reader.moveUp();
-                while (!_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT) && _reader.hasMoreChildren()) {
-                    _reader.moveDown();
+                if (!Boolean.TRUE.equals(options.getIgnoreExtensions())) {
+                    _rootData.setExtension(configuration.getXstream().unmarshal(_reader));
                     _reader.moveUp();
+                    if (_reader.hasMoreChildren())
+                        _reader.moveDown();
                 }
-                if (_reader.hasMoreChildren())
-                    _reader.moveDown();
+                else {
+                    _reader.moveUp();
+                    while (!_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT) && !_context.extractTag(_reader.getNodeName()).equals(
+                            NaaccrXmlUtils.NAACCR_XML_TAG_ROOT) && _reader.hasMoreChildren()) {
+                        _reader.moveDown();
+                        _reader.moveUp();
+                    }
+                    if (_reader.hasMoreChildren())
+                        _reader.moveDown();
+                }
             }
 
             // if we are back at the root level, there is no more children, and we are done

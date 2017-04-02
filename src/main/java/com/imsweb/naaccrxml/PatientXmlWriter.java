@@ -109,8 +109,6 @@ public class PatientXmlWriter implements AutoCloseable {
                 _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, DatatypeConverter.printDateTime(Calendar.getInstance()));
             // always use the current specs; doesn't matter the value on the root object...
             _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION, NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
-            // same for the default namespace, always use the library value...
-            _writer.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
 
             // write non-standard attributes
             Set<String> standardAttributes = new HashSet<>();
@@ -120,8 +118,14 @@ public class PatientXmlWriter implements AutoCloseable {
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION);
             for (Entry<String, String> entry : rootData.getExtraRootParameters().entrySet())
-                if (!standardAttributes.contains(entry.getKey()) && !"xmlns".equals(entry.getKey()))
+                if (!standardAttributes.contains(entry.getKey()) && !entry.getKey().startsWith("xmlns"))
                     _writer.addAttribute(entry.getKey(), entry.getValue());
+
+            // add the default namespace, always use the library value...
+            _writer.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
+
+            // add any user-defined namespaces
+            configuration.getRegisterNamespaces().entrySet().forEach(entry -> _writer.addAttribute("xmlns:" + entry.getKey(), entry.getValue()));
 
             // now we are ready to create our reading context and make it available to the patient converter
             context.setDictionary(new RuntimeNaaccrDictionary(rootData.getRecordType(), baseDictionary, userDictionary));
@@ -131,11 +135,12 @@ public class PatientXmlWriter implements AutoCloseable {
             for (Item item : rootData.getItems())
                 configuration.getPatientConverter().writeItem(rootData, item, _writer);
 
-            // for now, ignore the root extension...
-            // TODO [EXTENSIONS] this would be the place to write the root extension...
-
             // need to expose xstream so the other methods can use it...
             _xstream = configuration.getXstream();
+
+            // handle extension
+            if (!Boolean.TRUE.equals(options.getIgnoreExtensions()) && rootData.getExtension() != null)
+                _xstream.marshal(rootData.getExtension(), _writer);
         }
         catch (ConversionException ex) {
             throw convertSyntaxException(ex);

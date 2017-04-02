@@ -3,7 +3,7 @@
  */
 package com.imsweb.naaccrxml.runtime;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,9 +14,9 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.xml.XppDriver;
-import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
 import com.imsweb.naaccrxml.entity.Item;
@@ -33,7 +33,9 @@ public class NaaccrStreamConfiguration {
 
     protected XStream _xstream;
 
-    protected Map<String, Set<String>> _allowedTagsPerNamespacePrefix;
+    protected Map<String, String> _namespaces;
+
+    private Map<String, Set<String>> _tags, _attributes;
 
     private static Set<String> _DEFAULT_TAGS = new HashSet<>();
 
@@ -49,7 +51,9 @@ public class NaaccrStreamConfiguration {
         _driver = createDriver(_parser);
         _patientConverter = createPatientConverter();
         _xstream = createXStream(_driver, _patientConverter);
-        _allowedTagsPerNamespacePrefix = new HashMap<>();
+        _namespaces = new HashMap<>();
+        _tags = new HashMap<>();
+        _attributes = new HashMap<>();
     }
 
     protected XmlPullParser createParser() {
@@ -75,21 +79,7 @@ public class NaaccrStreamConfiguration {
     }
 
     protected XStream createXStream(HierarchicalStreamDriver driver, NaaccrPatientConverter patientConverter) {
-        XStream xstream = new XStream(driver) {
-            @Override
-            protected MapperWrapper wrapMapper(MapperWrapper next) {
-                return new MapperWrapper(next) {
-                    @Override
-                    public Class realClass(String elementName) {
-                        // I really don't like this solution, but this makes sure that when XStream looks for a suitable class, it doesn't take the namespace into account
-                        int idx = elementName.indexOf(':');
-                        if (idx != -1)
-                            return next.realClass(elementName.substring(idx + 1));
-                        return next.realClass(elementName);
-                    }
-                };
-            }
-        };
+        XStream xstream = new XStream(driver);
 
         // tell XStream how to read/write our main entities
         xstream.alias(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT, NaaccrData.class);
@@ -113,10 +103,6 @@ public class NaaccrStreamConfiguration {
         return xstream;
     }
 
-    public void setAllowedTagsForNamespacePrefix(String prefix, String... allowedTags) {
-        _allowedTagsPerNamespacePrefix.computeIfAbsent(prefix, k -> new HashSet<>()).addAll(Arrays.asList(allowedTags));
-    }
-
     public XmlPullParser getParser() {
         return _parser;
     }
@@ -133,9 +119,48 @@ public class NaaccrStreamConfiguration {
         return _xstream;
     }
 
+    public void registerNamespace(String namespacePrefix, String namespaceUri) {
+        if (_namespaces.containsKey(namespacePrefix))
+            throw new RuntimeException("Namespace prefix '" + namespacePrefix + "' has already been registered");
+        _namespaces.put(namespacePrefix, namespaceUri);
+    }
+
+    public Map<String, String> getRegisterNamespaces() {
+        return Collections.unmodifiableMap(_namespaces);
+    }
+
+    public void registerTag(String namespacePrefix, String tagName, Class<?> clazz) {
+        if (!_namespaces.containsKey(namespacePrefix))
+            throw new RuntimeException("Namespace prefix '" + namespacePrefix + "' has not been registered yet");
+        _xstream.alias(namespacePrefix + ":" + tagName, clazz);
+        _tags.computeIfAbsent(namespacePrefix, k -> new HashSet<>()).add(tagName);
+    }
+
+    public void registerTag(String namespacePrefix, String tagName, Class<?> clazz, String fieldName) {
+        if (!_namespaces.containsKey(namespacePrefix))
+            throw new RuntimeException("Namespace prefix '" + namespacePrefix + "' has not been registered yet");
+        _xstream.aliasField(namespacePrefix + ":" + tagName, clazz, fieldName);
+        _tags.computeIfAbsent(namespacePrefix, k -> new HashSet<>()).add(tagName);
+    }
+
+    public void registerAttribute(String namespacePrefix, String attributeName, Class<?> clazz, String fieldName) {
+        if (!_namespaces.containsKey(namespacePrefix))
+            throw new RuntimeException("Namespace prefix '" + namespacePrefix + "' has not been registered yet");
+        _xstream.aliasAttribute(clazz, fieldName, namespacePrefix + ":" + attributeName);
+        _attributes.computeIfAbsent(namespacePrefix, k -> new HashSet<>()).add(attributeName);
+    }
+
+    public void registerImplicitCollection(Class<?> clazz, String field, Class<?> fieldType) {
+        _xstream.addImplicitCollection(clazz, field, fieldType);
+    }
+
+    public void registerConverter(Converter converter) {
+        _xstream.registerConverter(converter);
+    }
+
     public Set<String> getAllowedTagsForNamespacePrefix(String prefix) {
         if (prefix == null)
             return _DEFAULT_TAGS;
-        return _allowedTagsPerNamespacePrefix.get(prefix);
+        return _tags.get(prefix);
     }
 }

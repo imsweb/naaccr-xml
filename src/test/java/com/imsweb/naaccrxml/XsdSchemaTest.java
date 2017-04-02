@@ -16,9 +16,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import com.thoughtworks.xstream.io.StreamException;
+import com.thoughtworks.xstream.XStreamException;
 
+import com.imsweb.naaccrxml.entity.Item;
+import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
@@ -89,7 +92,7 @@ public class XsdSchemaTest {
                     patient = reader.readPatient();
             }
         }
-        catch (StreamException | NaaccrIOException e) {
+        catch (XStreamException | NaaccrIOException e) {
             Assert.fail("Was expected a valid file for '" + xmlFile.getName() + "'" + "  with strict namespace set to " + useStrictNamespace + ", but it was invalid:\n" + e.getMessage());
         }
     }
@@ -104,7 +107,7 @@ public class XsdSchemaTest {
                     patient = reader.readPatient();
             }
         }
-        catch (StreamException | NaaccrIOException e) {
+        catch (XStreamException | NaaccrIOException e) {
             return;
         }
         Assert.fail("Was expected an invalid file for '" + xmlFile.getName() + "'" + " with strict namespace set to " + useStrictNamespace + ", but it was valid");
@@ -117,8 +120,17 @@ public class XsdSchemaTest {
 
     private NaaccrStreamConfiguration createConfiguration() {
         NaaccrStreamConfiguration configuration = new NaaccrStreamConfiguration();
-        configuration.setAllowedTagsForNamespacePrefix("other", "MyOuterTag", "MyInnerTag");
-        configuration.setAllowedTagsForNamespacePrefix("naaccr", "NaaccrData", "Patient", "Tumor", "Item");
+
+        configuration.registerNamespace("other", "http://whatever.org");
+        configuration.registerTag("other", "MyOuterTag", MyOuterTag.class);
+        configuration.registerTag("other", "MyInnerTag", MyOuterTag.class, "_myInnerTag");
+
+        configuration.registerNamespace("naaccr", "http://naaccr.org/naaccrxml");
+        configuration.registerTag("naaccr", "NaaccrData", NaaccrData.class);
+        configuration.registerTag("naaccr", "Patient", Patient.class);
+        configuration.registerTag("naaccr", "Tumor", Tumor.class);
+        configuration.registerTag("naaccr", "Item", Item.class);
+
         return configuration;
     }
 
@@ -145,4 +157,9 @@ public class XsdSchemaTest {
         return userDictionary;
     }
 
+    public static class MyOuterTag {
+
+        public String _myInnerTag;
+
+    }
 }

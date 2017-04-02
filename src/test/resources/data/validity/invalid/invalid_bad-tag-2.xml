@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- invalid because the patient tag is misspelled, but in "relaxed" mode, this is detected as a root extension and ignored -->
+<!-- invalid because the patient tag is misspelled -->
 
 <NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml" recordType="I" xmlns="http://naaccr.org/naaccrxml">
     <Item naaccrId="registryId">0000000001</Item>
