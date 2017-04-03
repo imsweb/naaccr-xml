@@ -24,7 +24,7 @@ public class NaaccrOptions {
     private Boolean _validateReadValues;
 
     /**
-     * When reading XML data, how to handle unknown items (items with an ID that is not defined in the dictionary). See the handling constants.
+     * When reading XML data, how to handle unknown items (items with an ID that is not defined in the dictionary). See the handling constants. Defaults to ITEM_HANDLING_ERROR.
      */
     private String _unknownItemHandling;
 

@@ -59,6 +59,12 @@ public class XsdSchemaTest {
             assertNotValidXmlFileForLibrary(path.toFile(), STRICT_NAMESPACE_MODE);
             assertNotValidXmlFileForLibrary(path.toFile(), RELAXED_NAMESPACE_MODE);
         });
+
+        // files in this folder are supposed to be invalid but only for the library (the errors can't be detected with just an XSD)
+        Files.newDirectoryStream(dir.resolve("invalid_library_only")).forEach(path -> {
+            assertNotValidXmlFileForLibrary(path.toFile(), STRICT_NAMESPACE_MODE);
+            assertNotValidXmlFileForLibrary(path.toFile(), RELAXED_NAMESPACE_MODE);
+        });
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -85,32 +91,43 @@ public class XsdSchemaTest {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void assertValidXmlFileForLibrary(File xmlFile, boolean useStrictNamespace) {
         try {
+            String libraryError = null;
             try (PatientXmlReader reader = new PatientXmlReader(NaaccrXmlUtils.createReader(xmlFile), createOptions(useStrictNamespace), createUserDictionary(), createConfiguration())) {
                 reader.getRootData();
                 Patient patient = reader.readPatient();
-                while (patient != null)
+                while (patient != null) {
+                    if (!patient.getAllValidationErrors().isEmpty())
+                        libraryError = patient.getAllValidationErrors().iterator().next().getMessage();
                     patient = reader.readPatient();
+                }
             }
+            if (libraryError != null)
+                Assert.fail("Was expected a valid file for '" + xmlFile.getName() + "' but found a an error on one of the patients:\n  " + libraryError);
         }
         catch (XStreamException | NaaccrIOException e) {
-            Assert.fail("Was expected a valid file for '" + xmlFile.getName() + "'" + "  with strict namespace set to " + useStrictNamespace + ", but it was invalid:\n" + e.getMessage());
+            Assert.fail("Was expected a valid file for '" + xmlFile.getName() + "'  with strict namespace set to " + useStrictNamespace + ", but it was invalid:\n  " + e.getMessage());
         }
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void assertNotValidXmlFileForLibrary(File xmlFile, boolean useStrictNamespace) {
+        String libraryError = null;
         try {
             try (PatientXmlReader reader = new PatientXmlReader(NaaccrXmlUtils.createReader(xmlFile), createOptions(useStrictNamespace), createUserDictionary(), createConfiguration())) {
                 reader.getRootData();
                 Patient patient = reader.readPatient();
-                while (patient != null)
+                while (patient != null) {
+                    if (!patient.getAllValidationErrors().isEmpty())
+                        libraryError = patient.getAllValidationErrors().iterator().next().getMessage();
                     patient = reader.readPatient();
+                }
             }
         }
         catch (XStreamException | NaaccrIOException e) {
             return;
         }
-        Assert.fail("Was expected an invalid file for '" + xmlFile.getName() + "'" + " with strict namespace set to " + useStrictNamespace + ", but it was valid");
+        if (libraryError == null)
+            Assert.fail("Was expected an invalid file for '" + xmlFile.getName() + "' with strict namespace set to " + useStrictNamespace + ", but it was valid");
     }
 
     @SuppressWarnings("ConstantConditions")
