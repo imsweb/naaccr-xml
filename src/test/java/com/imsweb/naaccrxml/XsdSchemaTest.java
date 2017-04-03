@@ -123,7 +123,7 @@ public class XsdSchemaTest {
 
         configuration.registerNamespace("other", "http://whatever.org");
         configuration.registerTag("other", "MyOuterTag", MyOuterTag.class);
-        configuration.registerTag("other", "MyInnerTag", MyOuterTag.class, "_myInnerTag");
+        configuration.registerTag("other", "MyInnerTag", MyOuterTag.class, "_myInnerTag", String.class);
 
         configuration.registerNamespace("naaccr", "http://naaccr.org/naaccrxml");
         configuration.registerTag("naaccr", "NaaccrData", NaaccrData.class);

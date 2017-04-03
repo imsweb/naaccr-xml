@@ -7,7 +7,7 @@
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
         <other:MyOuterTag>
-            <other:MyInnterTag>Something</other:MyInnterTag>
+            <other:MyInnerTag>Something</other:MyInnerTag>
         </other:MyOuterTag>
         <Tumor>
             <Item naaccrId="primarySite">C123</Item>

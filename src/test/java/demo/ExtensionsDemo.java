@@ -1,0 +1,205 @@
+/*
+ * Copyright (C) 2017 Information Management Services, Inc.
+ */
+package demo;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.imsweb.naaccrxml.NaaccrFormat;
+import com.imsweb.naaccrxml.PatientXmlReader;
+import com.imsweb.naaccrxml.PatientXmlWriter;
+import com.imsweb.naaccrxml.TestingUtils;
+import com.imsweb.naaccrxml.entity.Item;
+import com.imsweb.naaccrxml.entity.NaaccrData;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
+import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
+
+public class ExtensionsDemo {
+
+    public static void main(String[] args) throws IOException {
+
+        // setup configuration; tell the library how to read/write the extensions
+        NaaccrStreamConfiguration configuration = new NaaccrStreamConfiguration();
+        configuration.registerNamespace("ext", "http://demo.org");
+        configuration.registerTag("ext", "OverallSummary", OverallSummary.class);
+        configuration.registerTag("ext", "Patient", OverallSummary.class, "_patientSummary", Summary.class);
+        configuration.registerTag("ext", "Tumor", OverallSummary.class, "_tumorSummary", Summary.class);
+        configuration.registerTag("ext", "NumberRejected", Summary.class, "_numberRejected", Integer.class);
+        configuration.registerTag("ext", "NumberProcessed", Summary.class, "_numberProcessed", Integer.class);
+        configuration.registerTag("ext", "NumberMatched", Summary.class, "_numberMatched", Integer.class);
+        configuration.registerTag("ext", "PatientSummary", PatientSummary.class);
+        configuration.registerTag("ext", "TumorSummary", TumorSummary.class);
+        configuration.registerTag("ext", "MatchingMethod", IndividualSummary.class, "_matchingMethod", String.class);
+        configuration.registerTag("ext", "MatchingScore", IndividualSummary.class, "_matchingScore", Integer.class);
+        configuration.registerTag("ext", "MatchingIdentifier", IndividualSummary.class, "_matchingIdentifier", String.class);
+
+        // setup demo data (25 patients each with one tumor)
+        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT);
+        // *** start of root extension
+        OverallSummary summary = new OverallSummary();
+        Summary patientSummary = new Summary();
+        patientSummary.setNumberRejected(1);
+        patientSummary.setNumberProcessed(25);
+        patientSummary.setNumberMatched(24);
+        summary.setPatientSummary(patientSummary);
+        Summary tumorSummary = new Summary();
+        tumorSummary.setNumberRejected(1);
+        tumorSummary.setNumberProcessed(25);
+        tumorSummary.setNumberMatched(24);
+        summary.setTumorSummary(tumorSummary);
+        // *** end of root extension
+        data.setExtension(summary);
+        for (int i = 1; i <= 25; i++) {
+            Patient patient = new Patient();
+            patient.addItem(new Item("patientIdNumber", StringUtils.leftPad(String.valueOf(i), 8, '0')));
+            // *** start of patient extension
+            PatientSummary patSummary = new PatientSummary();
+            patSummary.setMatchingMethod("Patient Matching Algorithm #1");
+            patSummary.setMatchingScore(i - 1);
+            patSummary.setMatchingIdentifier("PAT-XXX");
+            patient.setExtension(patSummary);
+            // *** end of patient extension
+            data.addPatient(patient);
+            Tumor tumor = new Tumor();
+            tumor.addItem(new Item("sequenceNumberCentral", "01"));
+            // *** start of tumor extension
+            TumorSummary tumSummary = new TumorSummary();
+            tumSummary.setMatchingMethod("Tumor Matching Algorithm #1");
+            tumSummary.setMatchingScore(i - 1);
+            tumSummary.setMatchingIdentifier("TUM-YYY");
+            tumor.setExtension(tumSummary);
+            // *** end of patient extension
+            patient.addTumor(tumor);
+        }
+
+        // write the patients (the root is written as part of the writer creation)
+        File file = TestingUtils.createFile("test-root-extension.xml", true);
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null, configuration)) {
+            for (Patient p : data.getPatients())
+                writer.writePatient(p);
+        }
+
+        // read back the file and print a frew values to make sure we can access them
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file), null, null, configuration)) {
+            OverallSummary os = (OverallSummary)reader.getRootData().getExtension();
+            System.out.println("total number of processed patients: " + os.getPatientSummary().getNumberProcessed());
+            System.out.println("total number of processed tumors:" + os.getTumorSummary().getNumberProcessed());
+            Patient pat = reader.readPatient();
+            PatientSummary patSum = (PatientSummary)reader.readPatient().getExtension();
+            System.out.println(" > first patient matching method: " + patSum.getMatchingMethod());
+            TumorSummary tumSum = (TumorSummary)pat.getTumors().get(0).getExtension();
+            System.out.println(" > first tumor matching method: " + tumSum.getMatchingMethod());
+        }
+    }
+
+    /**
+     * Helper class representing an overall summary (either for patient or tumor)
+     */
+    public static class Summary {
+
+        private Integer _numberRejected;
+        private Integer _numberProcessed;
+        private Integer _numberMatched;
+
+        public Integer getNumberRejected() {
+            return _numberRejected;
+        }
+
+        public void setNumberRejected(Integer numberRejected) {
+            _numberRejected = numberRejected;
+        }
+
+        public Integer getNumberProcessed() {
+            return _numberProcessed;
+        }
+
+        public void setNumberProcessed(Integer numberProcessed) {
+            _numberProcessed = numberProcessed;
+        }
+
+        public Integer getNumberMatched() {
+            return _numberMatched;
+        }
+
+        public void setNumberMatched(Integer numberMatched) {
+            _numberMatched = numberMatched;
+        }
+    }
+
+    /**
+     * Helper class that encapsulates the patient and tumor overall summary.
+     */
+    public static class OverallSummary {
+
+        private Summary _patientSummary;
+        private Summary _tumorSummary;
+
+        public Summary getPatientSummary() {
+            return _patientSummary;
+        }
+
+        public void setPatientSummary(Summary patientSummary) {
+            _patientSummary = patientSummary;
+        }
+
+        public Summary getTumorSummary() {
+            return _tumorSummary;
+        }
+
+        public void setTumorSummary(Summary tumorSummary) {
+            _tumorSummary = tumorSummary;
+        }
+    }
+
+    /**
+     * Helper class representing the summary of a single patient or tumor.
+     */
+    public static class IndividualSummary {
+
+        private String _matchingMethod;
+        private Integer _matchingScore;
+        private String _matchingIdentifier;
+
+        public String getMatchingMethod() {
+            return _matchingMethod;
+        }
+
+        public void setMatchingMethod(String matchingMethod) {
+            _matchingMethod = matchingMethod;
+        }
+
+        public Integer getMatchingScore() {
+            return _matchingScore;
+        }
+
+        public void setMatchingScore(Integer matchingScore) {
+            _matchingScore = matchingScore;
+        }
+
+        public String getMatchingIdentifier() {
+            return _matchingIdentifier;
+        }
+
+        public void setMatchingIdentifier(String matchingIdentifier) {
+            _matchingIdentifier = matchingIdentifier;
+        }
+    }
+
+    /**
+     * Helper class representing the summary of a single patient.
+     */
+    public static class PatientSummary extends IndividualSummary {
+    }
+
+    /**
+     * Helper class representing the summary of a single tumor.
+     */
+    public static class TumorSummary extends IndividualSummary {
+    }
+}

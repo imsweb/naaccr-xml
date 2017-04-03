@@ -25,19 +25,26 @@ import com.imsweb.naaccrxml.entity.Patient;
 
 public class NaaccrStreamConfiguration {
 
+    // the parser used for reading operations
     protected XmlPullParser _parser;
 
+    // the XStream driver used for reading and writing operations
     protected HierarchicalStreamDriver _driver;
 
+    // the patient converter responsible for defining how to read and write patient objects
     protected NaaccrPatientConverter _patientConverter;
 
+    // the instance of XStream to use for reading and writing operations
     protected XStream _xstream;
 
+    // the registered namespace (in addition to the default one)
     protected Map<String, String> _namespaces;
 
-    private Map<String, Set<String>> _tags, _attributes;
+    // the registered tags for each registered namespaces
+    protected Map<String, Set<String>> _tags;
 
-    private static Set<String> _DEFAULT_TAGS = new HashSet<>();
+    // the tags defined in the default NAACCR namespace
+    protected static Set<String> _DEFAULT_TAGS = new HashSet<>();
 
     static {
         _DEFAULT_TAGS.add(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT);
@@ -46,6 +53,9 @@ public class NaaccrStreamConfiguration {
         _DEFAULT_TAGS.add(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
     }
 
+    /**
+     * Constructor.
+     */
     public NaaccrStreamConfiguration() {
         _parser = createParser();
         _driver = createDriver(_parser);
@@ -53,9 +63,12 @@ public class NaaccrStreamConfiguration {
         _xstream = createXStream(_driver, _patientConverter);
         _namespaces = new HashMap<>();
         _tags = new HashMap<>();
-        _attributes = new HashMap<>();
     }
 
+    /**
+     * Creates a parser to use for all reading operations.
+     * @return a parser, never null
+     */
     protected XmlPullParser createParser() {
         try {
             return XmlPullParserFactory.newInstance().newPullParser();
@@ -65,6 +78,11 @@ public class NaaccrStreamConfiguration {
         }
     }
 
+    /**
+     * Creates an XStream driver to use for all reading and writing operations
+     * @param parser parser (see createParser())
+     * @return an XStream driver, never null
+     */
     protected HierarchicalStreamDriver createDriver(XmlPullParser parser) {
         return new XppDriver() {
             @Override
@@ -74,10 +92,20 @@ public class NaaccrStreamConfiguration {
         };
     }
 
+    /**
+     * Creates the patient converter to use for reading and writing patient objects.
+     * @return a patient converter, never null
+     */
     protected NaaccrPatientConverter createPatientConverter() {
         return new NaaccrPatientConverter();
     }
 
+    /**
+     * Creates the instance of XStream to us for all reading and writing operations
+     * @param driver an XStream driver (see createDriver())
+     * @param patientConverter a patient converter (see createPatientConverter())
+     * @return an instance of XStream, never null
+     */
     protected XStream createXStream(HierarchicalStreamDriver driver, NaaccrPatientConverter patientConverter) {
         XStream xstream = new XStream(driver);
 
@@ -103,32 +131,64 @@ public class NaaccrStreamConfiguration {
         return xstream;
     }
 
+    /**
+     * Returns the parser that is used for all reading operations.
+     * @return a parser, never null
+     */
     public XmlPullParser getParser() {
         return _parser;
     }
 
+    /**
+     * Returns the XStream driver used for all reading and writing operations.
+     * @return an XStream driver, never null
+     */
     public HierarchicalStreamDriver getDriver() {
         return _driver;
     }
 
+    /**
+     * Returns the patient converter to use for reading and writing patient objects.
+     * @return a patient converter, never null
+     */
     public NaaccrPatientConverter getPatientConverter() {
         return _patientConverter;
     }
 
+    /**
+     * Returns the instance of XStream to use for all reading and writing operations.
+     * @return an instance of XStream, never null
+     */
     public XStream getXstream() {
         return _xstream;
     }
 
+    /**
+     * Registers a namespace for a given namespace prefix. This method must be called before registering any tags or attributes
+     * for that namespace. Note that extensions require namespaces to work properly.
+     * @param namespacePrefix the namespace prefix, cannot be null
+     * @param namespaceUri the namespace URI, cannot be null
+     */
     public void registerNamespace(String namespacePrefix, String namespaceUri) {
         if (_namespaces.containsKey(namespacePrefix))
             throw new RuntimeException("Namespace prefix '" + namespacePrefix + "' has already been registered");
         _namespaces.put(namespacePrefix, namespaceUri);
     }
 
+    /**
+     * Returns all the registered namespaces, keyed by their prefix.
+     * @return a map of namespaces keyed by their prefix, maybe empty but never null
+     */
     public Map<String, String> getRegisterNamespaces() {
         return Collections.unmodifiableMap(_namespaces);
     }
 
+    /**
+     * Registers a tag corresponding to a specific class, in the given namespace.
+     * @param namespacePrefix namespace prefix, required
+     * @param tagName tag name, required
+     * @param clazz class corresponding to the tag name, required
+     */
     public void registerTag(String namespacePrefix, String tagName, Class<?> clazz) {
         if (!_namespaces.containsKey(namespacePrefix))
             throw new RuntimeException("Namespace prefix '" + namespacePrefix + "' has not been registered yet");
@@ -136,31 +196,63 @@ public class NaaccrStreamConfiguration {
         _tags.computeIfAbsent(namespacePrefix, k -> new HashSet<>()).add(tagName);
     }
 
-    public void registerTag(String namespacePrefix, String tagName, Class<?> clazz, String fieldName) {
+    /**
+     * Registers a tag corresponding to a specific field of a specific class, in a the given namespace.
+     * @param namespacePrefix namespace prefix, required
+     * @param tagName tag name, required
+     * @param clazz class containing the field, required
+     * @param fieldName field name, required
+     * @param fieldClass field type, required
+     */
+    public void registerTag(String namespacePrefix, String tagName, Class<?> clazz, String fieldName, Class<?> fieldClass) {
         if (!_namespaces.containsKey(namespacePrefix))
             throw new RuntimeException("Namespace prefix '" + namespacePrefix + "' has not been registered yet");
+        _xstream.alias(namespacePrefix + ":" + tagName, fieldClass);
         _xstream.aliasField(namespacePrefix + ":" + tagName, clazz, fieldName);
         _tags.computeIfAbsent(namespacePrefix, k -> new HashSet<>()).add(tagName);
     }
 
-    public void registerAttribute(String namespacePrefix, String attributeName, Class<?> clazz, String fieldName) {
+    /**
+     * Registers an attribute corresponding to a specific field of a specific class, in a given namespace.
+     * @param namespacePrefix namespace prefix, required
+     * @param attributeName attribute name, required
+     * @param clazz class containing the field, required
+     * @param fieldName field name, required
+     * @param fieldClass field type, required
+     */
+    public void registerAttribute(String namespacePrefix, String attributeName, Class<?> clazz, String fieldName, Class<?> fieldClass) {
         if (!_namespaces.containsKey(namespacePrefix))
             throw new RuntimeException("Namespace prefix '" + namespacePrefix + "' has not been registered yet");
         _xstream.aliasAttribute(clazz, fieldName, namespacePrefix + ":" + attributeName);
-        _attributes.computeIfAbsent(namespacePrefix, k -> new HashSet<>()).add(attributeName);
+        _xstream.useAttributeFor(fieldName, fieldClass);
     }
 
-    public void registerImplicitCollection(Class<?> clazz, String field, Class<?> fieldType) {
-        _xstream.addImplicitCollection(clazz, field, fieldType);
+    /**
+     * Register an implicit collection (a collection that shouldn't appear as a tag in the XML).
+     * @param clazz class containing the field (the collection in this case), required
+     * @param fieldName field name, required
+     * @param fieldClass field type, required
+     */
+    public void registerImplicitCollection(Class<?> clazz, String fieldName, Class<?> fieldClass) {
+        _xstream.addImplicitCollection(clazz, fieldName, fieldClass);
     }
 
+    /**
+     * Registers an XStream data converter.
+     * @param converter converter to register, required
+     */
     public void registerConverter(Converter converter) {
         _xstream.registerConverter(converter);
     }
 
-    public Set<String> getAllowedTagsForNamespacePrefix(String prefix) {
-        if (prefix == null)
+    /**
+     * Returns the tags allowed for a given namespace prefix (null means the default namespace).
+     * @param namespacePrefix namespace prefix
+     * @return set of allowed tags, maybe empty but never null
+     */
+    public Set<String> getAllowedTagsForNamespacePrefix(String namespacePrefix) {
+        if (namespacePrefix == null)
             return _DEFAULT_TAGS;
-        return _tags.get(prefix);
+        return _tags.get(namespacePrefix);
     }
 }

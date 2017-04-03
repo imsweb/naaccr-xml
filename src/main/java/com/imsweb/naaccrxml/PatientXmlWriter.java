@@ -133,7 +133,7 @@ public class PatientXmlWriter implements AutoCloseable {
 
             // write the root items
             for (Item item : rootData.getItems())
-                configuration.getPatientConverter().writeItem(rootData, item, _writer);
+                configuration.getPatientConverter().writeItem(item, _writer);
 
             // need to expose xstream so the other methods can use it...
             _xstream = configuration.getXstream();
