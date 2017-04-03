@@ -44,14 +44,7 @@ public class NaaccrStreamConfiguration {
     protected Map<String, Set<String>> _tags;
 
     // the tags defined in the default NAACCR namespace
-    protected static Set<String> _DEFAULT_TAGS = new HashSet<>();
-
-    static {
-        _DEFAULT_TAGS.add(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT);
-        _DEFAULT_TAGS.add(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT);
-        _DEFAULT_TAGS.add(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
-        _DEFAULT_TAGS.add(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
-    }
+    protected Set<String> _defaultTags;
 
     /**
      * Constructor.
@@ -63,6 +56,13 @@ public class NaaccrStreamConfiguration {
         _xstream = createXStream(_driver, _patientConverter);
         _namespaces = new HashMap<>();
         _tags = new HashMap<>();
+
+        Set<String> defaultTags = new HashSet<>();
+        defaultTags.add(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT);
+        defaultTags.add(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT);
+        defaultTags.add(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+        defaultTags.add(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
+        _defaultTags = Collections.unmodifiableSet(defaultTags);
     }
 
     /**
@@ -252,7 +252,7 @@ public class NaaccrStreamConfiguration {
      */
     public Set<String> getAllowedTagsForNamespacePrefix(String namespacePrefix) {
         if (namespacePrefix == null)
-            return _DEFAULT_TAGS;
+            return _defaultTags;
         return _tags.get(namespacePrefix);
     }
 }
