@@ -69,9 +69,9 @@ To start the GUI, just double-click the JAR file created from this project; it w
 
 You can also type the following in a DOS prompt, after navigating to the folder containing the JAR file:
 ```
-java -jar naaccr-xml-X.X.jar
+java -jar naaccr-xml-x.x-all.jar
 ```
-where X.X is the downloaded version.
+where X.x.x is the downloaded version.
 
 ### Using the no-GUI batch class (BatchProcessor)
 
@@ -80,9 +80,9 @@ The library also contains an experimental no-GUI class that can be used to proce
 
 Here is an example of how to start it:
 ```
-java -cp naaccr-xml-X.X.jar BatchProcessor options.properties
+java -cp naaccr-xml-x.x.jar BatchProcessor options.properties
 ```
-where X.X is the downloaded version.
+where x.x is the downloaded version.
 
 This assumes the options file is in the same folder as the JAR file (but it can be anywhere and a full path can be provided on the command line).
 
@@ -114,20 +114,6 @@ That utility class also contains a method to create a NAACCR ID (used for the "n
 4. The result is split by spaces
 5. The first part is un-capitalized, the other parts are capitalized
 6. All the parts are concatenated back together
-
-## XML Schemas
-
-While the NAACCR XML standard defines a W3C XML Schema file for the data files and dictionaries, this library does not actually use them. Here there are for reference:
-* [naaccr_data.xsd](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/xsd/naaccr_data_1.1.xsd) - W3C Schema for the data files
-* [naaccr_dictionary.xsd](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/xsd/naaccr_dictionary_1.1.xsd) - W3C Schema for the dictionary files
-
-## NAACCR XML Specifications History
- 
-**Changes made in version 1.1 of the specifications**
-- Added a new 'specificationVersion' optional attribute on both data and dictionary files to indicate the specification that the file follows; default to 1.0 if not provided.
-- The 'version' attribute is now optional in the user-defined dictionaries; if not provided, it is assumed to be the same version as the corresponding base dictionary.
-- The 'start-column' attribute is now optional in the user defined dictionaries; if not provided, it is assumed that the item has no location in a flat data file.
-- Added a new 'allowUnlimitedText' optional attribute in the dictionary, allowing large amount of text to be provided for some specific text fields.
 
 ## About this library
 
