@@ -96,25 +96,6 @@ processing.mode=flat-to-xml
 output.folder=C:\\output
 ```
 
-## Dealing with dictionaries
-
-The project contains two dictionaries for each supported NAACCR version: the main dictionary and the default user defined dictionary. 
-Combined, they defined all the data items that are supported for the corresponding NAACCR version. Here are the dictionaries for NAACCR version 16:
-* [naaccr-dictionary-160.xml](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/naaccr-dictionary-160.xml)
-* [user-defined-naaccr-dictionary-160.xml](https://github.com/imsweb/naaccr-xml/blob/master/src/main/resources/user-defined-naaccr-dictionary-160.xml)
-
-In addition, the project also contains a utility class ([NaaccrXmlDictionaryUtils](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrXmlDictionaryUtils.java))
- to read, write and validate a given dictionary file. Note that there is no syntax differences between a base dictionary and a user-defined one, but they do use a different validation logic.
-
-That utility class also contains a method to create a NAACCR ID (used for the "naaccrId" attribute) from a given item name using the following rules:
-
-1. Spaces, dashes, slashes periods and underscores are considered as word separators and replaced by a single space
-2. Anything in parenthesis is removed (along with the parenthesis)
-3. Any non-digit and non-letter character is removed
-4. The result is split by spaces
-5. The first part is un-capitalized, the other parts are capitalized
-6. All the parts are concatenated back together
-
 ## About this library
 
 This library was developed through the [SEER](http://seer.cancer.gov/) program.
