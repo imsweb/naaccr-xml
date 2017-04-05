@@ -1,0 +1,58 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://naaccr.org/naaccrxml" targetNamespace="http://naaccr.org/naaccrxml" >
+
+<xsd:simpleType name="recordtypeType">
+	<xsd:restriction base="xsd:string">
+		<xsd:enumeration value="A" />
+		<xsd:enumeration value="M" />
+		<xsd:enumeration value="C" />
+		<xsd:enumeration value="I" />
+	</xsd:restriction>
+</xsd:simpleType>
+
+<xsd:element name="NaaccrData">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
+			<xsd:element ref="tns:Patient" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="baseDictionaryUri" use="required" type="xsd:anyURI"/>
+		<xsd:attribute name="userDictionaryUri" use="optional" type="xsd:anyURI"/>
+		<xsd:attribute name="timeGenerated" use="optional" type="xsd:dateTime" />
+		<xsd:attribute name="recordType" use="required" type="tns:recordtypeType" />
+        <xsd:attribute name="specificationVersion" use="optional" default="1.0" />
+		<xsd:anyAttribute namespace="##other" processContents="lax" />
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="Patient">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
+			<xsd:element ref="tns:Tumor" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:element name="Tumor">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tns:Item" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:any minOccurs="0" maxOccurs="unbounded" namespace="##other" processContents="lax" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+<xsd:complexType name="itemType" >
+	<xsd:simpleContent>
+		<xsd:extension base="xsd:string" >
+			<xsd:attribute name="naaccrId" use="required" type="xsd:NCName" />
+			<xsd:attribute name="naaccrNum" type="xsd:integer" use="optional" />
+		</xsd:extension>
+	</xsd:simpleContent>
+</xsd:complexType>
+
+<xsd:element name="Item" type="tns:itemType" />
+
+</xsd:schema>

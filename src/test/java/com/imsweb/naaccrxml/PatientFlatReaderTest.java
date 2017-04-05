@@ -216,27 +216,6 @@ public class PatientFlatReaderTest {
     }
 
     @Test
-    public void testValidation() throws IOException {
-
-        // validation is on by default...
-
-        StringBuilder rec1 = TestingUtils.createEmptyRecord("150", "I", "00000001");
-        rec1.replace(539, 543, "XXXX"); // primarySite
-        File file = TestingUtils.createAndPopulateFile("test-flat-reader-validation.txt", rec1);
-        PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, null);
-        Patient patient = reader.readPatient();
-        Assert.assertEquals(1, patient.getTumors().size());
-        Assert.assertFalse(patient.getTumors().get(0).getValidationErrors().isEmpty());
-        // even if the value is bad, its still being made available in the patient (if possible)
-        Assert.assertEquals("XXXX", patient.getTumors().get(0).getItem("primarySite").getValue());
-        // the validation error shouldn't be available on the patient...
-        Assert.assertTrue(patient.getValidationErrors().isEmpty());
-        // ... unless the "get-all-errors" method is used
-        Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
-        reader.close();
-    }
-
-    @Test
     public void testUserDefinedDictionary() throws IOException {
 
         StringBuilder rec1 = TestingUtils.createEmptyRecord("150", "I", "00000001");

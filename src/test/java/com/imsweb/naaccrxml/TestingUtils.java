@@ -18,7 +18,15 @@ public class TestingUtils {
      * Create a user-defined dictionary that can be used in various unit tests.
      */
     public static NaaccrDictionary createUserDictionary() {
+        return createUserDictionary(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
+    }
+    
+    /**
+     * Create a user-defined dictionary that can be used in various unit tests.
+     */
+    public static NaaccrDictionary createUserDictionary(String specifications) {
         NaaccrDictionary dict = new NaaccrDictionary();
+        dict.setSpecificationVersion(specifications);
         dict.setNaaccrVersion("160");
         dict.setDictionaryUri("whatever");
         dict.setDescription("Another whatever...");
@@ -35,7 +43,8 @@ public class TestingUtils {
         item.setSourceOfStandard("ME");
         item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
         item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_NONE);
-        item.setRegexValidation("0[0-8]");
+        if (SpecificationVersion.compareSpecifications(specifications, SpecificationVersion.SPEC_1_2) < 0)
+            item.setRegexValidation("0[0-8]");
         dict.addItem(item);
 
         return dict;

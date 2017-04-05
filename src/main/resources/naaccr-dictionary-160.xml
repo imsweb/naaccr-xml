@@ -2,7 +2,7 @@
 
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml"
             naaccrVersion="160"
-            specificationVersion="1.1"
+            specificationVersion="1.2"
             description="NAACCR 16 base dictionary"
             xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>
@@ -12,8 +12,7 @@
             startColumn="1"
             length="1"
             recordTypes="A,M,C,I"
-            parentXmlElement="NaaccrData"
-            regexValidation="^[ICAM]$"/>
+            parentXmlElement="NaaccrData"/>
         <ItemDef naaccrId="registryType"
             naaccrNum="30"
             naaccrName="Registry Type"
@@ -560,8 +559,7 @@
             startColumn="540"
             length="4"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"
-            regexValidation="^C\d{3}$"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="laterality"
             naaccrNum="410"
             naaccrName="Laterality"
@@ -2199,8 +2197,7 @@
             length="7"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="mixed"
-            regexValidation="^[A-Z]\d{3}$"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="secondaryDiagnosis2"
             naaccrNum="3782"
             naaccrName="Secondary Diagnosis 2"
@@ -2208,8 +2205,7 @@
             length="7"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="mixed"
-            regexValidation="^[A-Z]\d{3}$"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="secondaryDiagnosis3"
             naaccrNum="3784"
             naaccrName="Secondary Diagnosis 3"
@@ -2217,8 +2213,7 @@
             length="7"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="mixed"
-            regexValidation="^[A-Z]\d{3}$"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="secondaryDiagnosis4"
             naaccrNum="3786"
             naaccrName="Secondary Diagnosis 4"
@@ -2226,8 +2221,7 @@
             length="7"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="mixed"
-            regexValidation="^[A-Z]\d{3}$"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="secondaryDiagnosis5"
             naaccrNum="3788"
             naaccrName="Secondary Diagnosis 5"
@@ -2235,8 +2229,7 @@
             length="7"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="mixed"
-            regexValidation="^[A-Z]\d{3}$"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="secondaryDiagnosis6"
             naaccrNum="3790"
             naaccrName="Secondary Diagnosis 6"
@@ -2244,8 +2237,7 @@
             length="7"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="mixed"
-            regexValidation="^[A-Z]\d{3}$"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="secondaryDiagnosis7"
             naaccrNum="3792"
             naaccrName="Secondary Diagnosis 7"
@@ -2253,8 +2245,7 @@
             length="7"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="mixed"
-            regexValidation="^[A-Z]\d{3}$"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="secondaryDiagnosis8"
             naaccrNum="3794"
             naaccrName="Secondary Diagnosis 8"
@@ -2262,8 +2253,7 @@
             length="7"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="mixed"
-            regexValidation="^[A-Z]\d{3}$"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="secondaryDiagnosis9"
             naaccrNum="3796"
             naaccrName="Secondary Diagnosis 9"
@@ -2271,8 +2261,7 @@
             length="7"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="mixed"
-            regexValidation="^[A-Z]\d{3}$"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="secondaryDiagnosis10"
             naaccrNum="3798"
             naaccrName="Secondary Diagnosis 10"
@@ -2280,8 +2269,7 @@
             length="7"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="mixed"
-            regexValidation="^[A-Z]\d{3}$"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="dateInitialRxSeer"
             naaccrNum="1260"
             naaccrName="Date Initial RX SEER"

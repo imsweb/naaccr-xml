@@ -86,26 +86,8 @@ public class PatientXmlReaderTest {
             Assert.assertEquals(1, data.getItems().size());
         }
 
-        // test validation
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-validation-1.xml")), options, null, null)) {
-            Patient patient = reader.readPatient();
-            Assert.assertEquals(1, patient.getTumors().size());
-            // error should have been reported on the item
-            Assert.assertNotNull(patient.getTumors().get(0).getItem("primarySite").getValidationError());
-            // it shouldn't be available on the tumor...
-            Assert.assertTrue(patient.getTumors().get(0).getValidationErrors().isEmpty());
-            // ... unless the "get-all-errors" method is used
-            Assert.assertFalse(patient.getTumors().get(0).getAllValidationErrors().isEmpty());
-            // even if the value is bad, its still being made available in the patient (if possible)
-            Assert.assertEquals("XXXX", patient.getTumors().get(0).getItem("primarySite").getValue());
-            // the validation error shouldn't be available on the patient...
-            Assert.assertTrue(patient.getValidationErrors().isEmpty());
-            // ... unless the "get-all-errors" method is used
-            Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
-        }
-
         // this file has a duplicate item for the patient
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-validation-2.xml")), options, null, null)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-validation-1.xml")), options, null, null)) {
             try {
                 reader.readPatient();
                 Assert.fail("Should have been an exception!");
@@ -172,7 +154,7 @@ public class PatientXmlReaderTest {
         NaaccrOptions options = new NaaccrOptions();
         options.setUseStrictNamespaces(false);
 
-        NaaccrDictionary dict = TestingUtils.createUserDictionary();
+        NaaccrDictionary dict = TestingUtils.createUserDictionary(SpecificationVersion.SPEC_1_1);
         Assert.assertNotNull(dict.getItemByNaaccrId("myVariable"));
         Assert.assertNotNull(dict.getItemByNaaccrNum(10000));
 

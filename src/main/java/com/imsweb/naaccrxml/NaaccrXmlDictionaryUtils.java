@@ -298,7 +298,7 @@ public final class NaaccrXmlDictionaryUtils {
         if (dictionary.getDictionaryUri() == null || dictionary.getDictionaryUri().trim().isEmpty())
             return "'dictionaryUri' attribute is required";
 
-        boolean allowBlankNaaccrVersion = !isBaseDictionary && SpecificationVersion.compareVersions(specVersion, SpecificationVersion.SPEC_1_1) >= 0;
+        boolean allowBlankNaaccrVersion = !isBaseDictionary && SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_1) >= 0;
         if (!allowBlankNaaccrVersion && (dictionary.getNaaccrVersion() == null || dictionary.getNaaccrVersion().trim().isEmpty()))
             return "'naaccrVersion' attribute is required";
 
@@ -323,7 +323,7 @@ public final class NaaccrXmlDictionaryUtils {
             naaccrNums.add(item.getNaaccrNum());
             if (item.getLength() == null)
                 return "'length' attribute is required";
-            boolean allowBlankStartCol = !isBaseDictionary && SpecificationVersion.compareVersions(specVersion, SpecificationVersion.SPEC_1_1) >= 0;
+            boolean allowBlankStartCol = !isBaseDictionary && SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_1) >= 0;
             if (!allowBlankStartCol && item.getStartColumn() == null)
                 return "'startColumn' attribute is required";
             if (item.getParentXmlElement() == null || item.getParentXmlElement().trim().isEmpty())
@@ -341,12 +341,16 @@ public final class NaaccrXmlDictionaryUtils {
             if (item.getTrim() != null && (!NAACCR_TRIM_ALL.equals(item.getTrim()) && !NAACCR_TRIM_NONE.equals(item.getTrim())))
                 return "invalid value for 'trim' attribute: " + item.getTrim();
             if (item.getRegexValidation() != null) {
-                try {
-                    //noinspection ResultOfMethodCallIgnored
-                    Pattern.compile(item.getRegexValidation());
-                }
-                catch (PatternSyntaxException e) {
-                    return "invalid value for 'regexValidation' attribute: " + item.getRegexValidation();
+                if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_2) >= 0)
+                    return "invalid attribute 'regexValidation'";
+                else {
+                    try {
+                        //noinspection ResultOfMethodCallIgnored
+                        Pattern.compile(item.getRegexValidation());
+                    }
+                    catch (PatternSyntaxException e) {
+                        return "invalid value for 'regexValidation' attribute: " + item.getRegexValidation();
+                    }
                 }
             }
         }

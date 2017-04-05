@@ -267,7 +267,7 @@ public class PatientFlatReader implements AutoCloseable {
                         else if (def.getDataType() != null && !NaaccrXmlDictionaryUtils.getDataTypePattern(def.getDataType()).matcher(item.getValue()).matches())
                             reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
                         else if (def.getRegexValidation() != null && !def.getRegexValidation().matcher(item.getValue()).matches())
-                            reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getRegexValidation());
+                            reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_REGEX, def.getRegexValidation());
                     }
                 }
             }

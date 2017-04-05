@@ -38,7 +38,7 @@ import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 public class NaaccrXmlUtils {
 
     // specification version that this library implements (will be used when writing XML files)
-    public static final String CURRENT_SPECIFICATION_VERSION = SpecificationVersion.SPEC_1_1;
+    public static final String CURRENT_SPECIFICATION_VERSION = SpecificationVersion.SPEC_1_2;
     
     // structure tags in the XML
     public static final String NAACCR_XML_TAG_ROOT = "NaaccrData";
