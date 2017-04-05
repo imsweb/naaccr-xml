@@ -3,9 +3,9 @@
 [![Build Status](https://travis-ci.org/imsweb/naaccr-xml.svg?branch=master)](https://travis-ci.org/imsweb/naaccr-xml)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml)
 
-This library provides support for the NAACCR XML format. It implements version 1.1 of the format specifications.
+This library provides support for the NAACCR XML format.
 
-Information about the format and the Work Group that developed it can be found here: [http://naaccrxml.org/](http://naaccrxml.org/).
+Information about the format and its specifications can be found in [the project wiki](https://github.com/imsweb/naaccr-xml/wiki).
 
 ## Download
 
@@ -13,7 +13,7 @@ The library is available on [Maven Central](http://search.maven.org/#search%7Cga
 
 To include it to your Maven or Gradle project, use the group ID `com.imsweb` and the artifact ID `naaccr-xml`.
 
-You can check out the [release page](https://github.com/imsweb/naaccr-xml/releases) for a list of the releases and their changes.
+You can check out the [releases page](https://github.com/imsweb/naaccr-xml/releases) for a list of the releases and their changes.
 
 This library requires Java 8 or a more recent version.
 
@@ -36,7 +36,29 @@ This is the recommended way to use the library; 4 streams are provided:
 The readers provide a ***readPatient()*** method that returns the next patient available, or null if the end of the stream is reached.
 The writers provide a ***writePatient(patient)*** method.
 
-Transforming a flat file into the corresponding XML file and vice-versa becomes very simple with those streams; just create the stream and write every patient you read...
+Here is an example of reading a patient from a data file using the reader:
+
+```java
+try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file), options, userDictionary)) {
+    Patient patient = reader.readPatient();
+}
+```
+
+Here is an example of writing a patient to a data file using the writer:
+
+```java
+ try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), naaccrData, null, null, configuration)) {
+    writer.writePatient(patient);
+}
+```
+
+Note that the data files contain a collection of patients, but they also contain some information that appear once per file. 
+That information is encapsulated in the NaaccrData class. The reading/writing process for that class is very different than the one used for the patients:
+
+- The NaaccrData is read from XML within the constructor of the reader (so it's available as soon as the reader is created).
+- The NaaccrData is written to XML within the constructor of the writer (so it's written to the file as soon as the writer is created).
+
+It is important to keep in mind those side effects when creating readers or writers.
 
 ### Using the NAACCR XML Utility class (NaaccrXmlUtils)
 A few higher-level utility methods have been defined in the [NaaccrXmlUtils](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrXmlUtils.java) class (only the required parameters are shown for clarity):
