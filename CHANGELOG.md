@@ -2,6 +2,7 @@
 
 **Version 3.0**
 
+ - Relaxed the type of many items in standard base dictionaries (specification 1.2).
  - Removed support for "regexValidation" in dictionaries (specification 1.2).
  - Added full support for extensions (user-defined XML blocks) at the NaaccrData, Patient and Tumor levels.
  - Added better support for non-printable control characters; those will be ignored by default when writing item values; an error can be thrown instead by setting the 'ignoreControlCharacters' options to false.

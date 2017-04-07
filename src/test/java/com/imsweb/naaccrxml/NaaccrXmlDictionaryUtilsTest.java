@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -293,9 +295,26 @@ public class NaaccrXmlDictionaryUtilsTest {
             fail("Was expected a valid file, but it was invalid: " + e.getMessage());
         }
     }
-    
+
     @Test
     public void testGetMergedDictionaries() {
         Assert.assertNotNull(NaaccrXmlDictionaryUtils.getMergedDictionaries(NaaccrFormat.NAACCR_VERSION_160));
+    }
+
+    @Test
+    public void testStandardDictionaries() throws IOException {
+        for (String version : NaaccrFormat.getSupportedVersions()) {
+            Path path1 = Paths.get("src/main/resources/naaccr-dictionary-" + version + ".xml");
+            Path path2 = Paths.get("build/tmp-dictionary-" + version + ".xml");
+            NaaccrXmlDictionaryUtils.writeDictionary(NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(version), path2.toFile());
+            if (!TestingUtils.readFileAsOneString(path1.toFile()).equals(TestingUtils.readFileAsOneString(path2.toFile())))
+                Assert.fail("Dictionary for version " + version + " needs to be re-created, it contains differences from what would be created by the library!");
+
+            path1 = Paths.get("src/main/resources/user-defined-naaccr-dictionary-" + version + ".xml");
+            path2 = Paths.get("build/tmp-dictionary-" + version + ".xml");
+            NaaccrXmlDictionaryUtils.writeDictionary(NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(version), path2.toFile());
+            if (!TestingUtils.readFileAsOneString(path1.toFile()).equals(TestingUtils.readFileAsOneString(path2.toFile())))
+                Assert.fail("User dictionary for version " + version + " needs to be re-created, it contains differences from what would be created by the library!");
+        }
     }
 }
