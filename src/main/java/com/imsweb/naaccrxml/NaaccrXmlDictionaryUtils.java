@@ -31,6 +31,7 @@ import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryGroupedItem;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 /**
@@ -479,6 +480,13 @@ public final class NaaccrXmlDictionaryUtils {
         items.sort(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId));
         result.setItems(items);
 
+        List<NaaccrDictionaryGroupedItem> groupedItems = new ArrayList<>();
+        groupedItems.addAll(baseDictionary.getGroupedItems());
+        for (NaaccrDictionary userDictionary : userDictionaries)
+            groupedItems.addAll(userDictionary.getGroupedItems());
+        groupedItems.sort(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId));
+        result.setGroupedItems(groupedItems);
+
         return result;
     }
 
@@ -490,14 +498,18 @@ public final class NaaccrXmlDictionaryUtils {
         XStream xstream = new XStream();
 
         xstream.alias("NaaccrDictionary", NaaccrDictionary.class);
-        xstream.alias("ItemDef", NaaccrDictionaryItem.class);
-
         xstream.aliasAttribute(NaaccrDictionary.class, "_dictionaryUri", "dictionaryUri");
         xstream.aliasAttribute(NaaccrDictionary.class, "_naaccrVersion", "naaccrVersion");
         xstream.aliasAttribute(NaaccrDictionary.class, "_specificationVersion", "specificationVersion");
         xstream.aliasAttribute(NaaccrDictionary.class, "_description", "description");
         xstream.aliasAttribute(NaaccrDictionary.class, "_items", "ItemDefs");
+        xstream.aliasAttribute(NaaccrDictionary.class, "_groupedItems", "GroupedItemDefs");
+        xstream.omitField(NaaccrDictionary.class, "_cachedById");
+        xstream.omitField(NaaccrDictionary.class, "_cachedByNumber");
+        xstream.omitField(NaaccrDictionary.class, "_cachedById");
+        xstream.omitField(NaaccrDictionary.class, "_cachedByNumber");
 
+        xstream.alias("ItemDef", NaaccrDictionaryItem.class);
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "_naaccrId", "naaccrId");
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "_naaccrNum", "naaccrNum");
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "_naaccrName", "naaccrName");
@@ -512,8 +524,21 @@ public final class NaaccrXmlDictionaryUtils {
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "_trim", "trim");
         xstream.aliasAttribute(NaaccrDictionaryItem.class, "_allowUnlimitedText", "allowUnlimitedText");
 
-        xstream.omitField(NaaccrDictionary.class, "_cachedById");
-        xstream.omitField(NaaccrDictionary.class, "_cachedByNumber");
+        xstream.alias("GroupedItemDef", NaaccrDictionaryGroupedItem.class);
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_naaccrId", "naaccrId");
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_naaccrNum", "naaccrNum");
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_naaccrName", "naaccrName");
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_startColumn", "startColumn");
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_length", "length");
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_recordTypes", "recordTypes");
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_sourceOfStandard", "sourceOfStandard");
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_parentXmlElement", "parentXmlElement");
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_dataType", "dataType");
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_regexValidation", "regexValidation");
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_padding", "padding");
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_trim", "trim");
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_allowUnlimitedText", "allowUnlimitedText");
+        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_contains", "contains");
 
         return xstream;
     }

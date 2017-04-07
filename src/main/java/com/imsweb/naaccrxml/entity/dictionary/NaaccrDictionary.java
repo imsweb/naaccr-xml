@@ -21,14 +21,20 @@ public class NaaccrDictionary {
 
     private List<NaaccrDictionaryItem> _items;
 
+    private List<NaaccrDictionaryGroupedItem> _groupedItems;
+
     // caches to improve lookup performances
     private Map<String, NaaccrDictionaryItem> _cachedById;
     private Map<Integer, NaaccrDictionaryItem> _cachedByNumber;
+    private Map<String, NaaccrDictionaryGroupedItem> _groupedCachedById;
+    private Map<Integer, NaaccrDictionaryGroupedItem> _groupedCachedByNumber;
 
     public NaaccrDictionary() {
         _items = new ArrayList<>();
         _cachedById = new HashMap<>();
         _cachedByNumber = new HashMap<>();
+        _groupedCachedById = new HashMap<>();
+        _groupedCachedByNumber = new HashMap<>();
     }
 
     public String getDictionaryUri() {
@@ -103,5 +109,47 @@ public class NaaccrDictionary {
                 _cachedByNumber.put(item.getNaaccrNum(), item);
         }
         return _cachedByNumber.get(number);
+    }
+
+    public List<NaaccrDictionaryGroupedItem> getGroupedItems() {
+        return Collections.unmodifiableList(_groupedItems);
+    }
+
+    public void setGroupedItems(List<NaaccrDictionaryGroupedItem> items) {
+        if (items != null) {
+            _groupedItems = items;
+            for (NaaccrDictionaryGroupedItem item : items) {
+                _groupedCachedById.put(item.getNaaccrId(), item);
+                _groupedCachedByNumber.put(item.getNaaccrNum(), item);
+            }
+        }
+    }
+
+    public void addGroupedItem(NaaccrDictionaryGroupedItem item) {
+        _groupedItems.add(item);
+        if (item.getNaaccrId() != null)
+            _groupedCachedById.put(item.getNaaccrId(), item);
+        if (item.getNaaccrNum() != null)
+            _groupedCachedByNumber.put(item.getNaaccrNum(), item);
+    }
+
+    public NaaccrDictionaryGroupedItem getGroupedItemByNaaccrId(String id) {
+        // I don't know how/why, but it seems XStreams by-passes the default constructor, so I have to deal with a null cache here...
+        if (_groupedCachedById == null) {
+            _groupedCachedById = new HashMap<>();
+            for (NaaccrDictionaryGroupedItem item : _groupedItems)
+                _groupedCachedById.put(item.getNaaccrId(), item);
+        }
+        return _groupedCachedById.get(id);
+    }
+
+    public NaaccrDictionaryGroupedItem getGroupedItemByNaaccrNum(Integer number) {
+        // I don't know how/why, but it seems XStreams by-passes the default constructor, so I have to deal with a null cache here...
+        if (_groupedCachedByNumber == null) {
+            _groupedCachedByNumber = new HashMap<>();
+            for (NaaccrDictionaryGroupedItem item : _groupedItems)
+                _groupedCachedByNumber.put(item.getNaaccrNum(), item);
+        }
+        return _groupedCachedByNumber.get(number);
     }
 }
