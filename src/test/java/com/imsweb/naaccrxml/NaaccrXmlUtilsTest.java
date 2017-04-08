@@ -55,8 +55,8 @@ public class NaaccrXmlUtilsTest {
         // same test, but use a user-defined dictionary (we have to re-write the flat-file to use the extra variable)
         NaaccrDictionary dict = TestingUtils.createUserDictionary();
         data.getPatients().get(0).getTumors().get(0).addItem(new Item("myVariable", "01"));
-        NaaccrXmlUtils.writeFlatFile(data, flatFile, null, dict, null);
-        NaaccrXmlUtils.flatToXml(flatFile, xmlFile, null, dict, null);
+        NaaccrXmlUtils.writeFlatFile(data, flatFile, null, Collections.singletonList(dict), null);
+        NaaccrXmlUtils.flatToXml(flatFile, xmlFile, null, Collections.singletonList(dict), null);
         Assert.assertTrue(TestingUtils.readFileAsOneString(xmlFile).contains("myVariable"));
     }
 
@@ -88,8 +88,8 @@ public class NaaccrXmlUtilsTest {
         // same test, but use a user-defined dictionary (we have to re-write the xml-file to use the extra variable)
         NaaccrDictionary dict = TestingUtils.createUserDictionary();
         data.getPatients().get(0).getTumors().get(0).addItem(new Item("myVariable", "01"));
-        NaaccrXmlUtils.writeXmlFile(data, xmlFile, null, dict, null);
-        NaaccrXmlUtils.xmlToFlat(xmlFile, flatFile, null, dict, null);
+        NaaccrXmlUtils.writeXmlFile(data, xmlFile, null, Collections.singletonList(dict), null);
+        NaaccrXmlUtils.xmlToFlat(xmlFile, flatFile, null, Collections.singletonList(dict), null);
         Assert.assertTrue(TestingUtils.readFileAsOneString(xmlFile).contains("01"));
     }
 
@@ -104,17 +104,17 @@ public class NaaccrXmlUtilsTest {
         // read the entire file at once
         NaaccrData data = NaaccrXmlUtils.readXmlFile(file, null, null, null);
         Assert.assertNotNull(data.getBaseDictionaryUri());
-        Assert.assertNull(data.getUserDictionaryUri());
+        Assert.assertTrue(data.getUserDictionaryUri().isEmpty());
         Assert.assertNotNull(data.getRecordType());
         Assert.assertNotNull(data.getTimeGenerated());
         Assert.assertEquals(1, data.getItems().size());
         Assert.assertEquals(2, data.getPatients().size());
 
         // read the file using a stream
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file), null, null, null)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file))) {
             data = reader.getRootData();
             Assert.assertNotNull(data.getBaseDictionaryUri());
-            Assert.assertNull(data.getUserDictionaryUri());
+            Assert.assertTrue(data.getUserDictionaryUri().isEmpty());
             Assert.assertNotNull(data.getRecordType());
             Assert.assertNotNull(data.getTimeGenerated());
             Assert.assertEquals(1, data.getItems().size());
@@ -152,7 +152,7 @@ public class NaaccrXmlUtilsTest {
 
         // write the file using a steam
         file = new File(System.getProperty("user.dir") + "/build/test-writing-2.xml");
-        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
             for (Patient patient : data.getPatients())
                 writer.writePatient(patient);
         }
@@ -223,7 +223,7 @@ public class NaaccrXmlUtilsTest {
         try (BufferedReader bufferedReader = new BufferedReader(reader)) {
             Assert.assertFalse(NaaccrXmlUtils.getAttributesFromXmlReader(bufferedReader).isEmpty());
             // at this point, we should still be able to consume the file (which contains a single patient)
-            try (PatientXmlReader xmlReader = new PatientXmlReader(bufferedReader, options, null)) {
+            try (PatientXmlReader xmlReader = new PatientXmlReader(bufferedReader, options)) {
                 Assert.assertNotNull(xmlReader.readPatient());
                 Assert.assertNull(xmlReader.readPatient());
             }
@@ -234,7 +234,7 @@ public class NaaccrXmlUtilsTest {
             Assert.assertFalse(NaaccrXmlUtils.getAttributesFromXmlReader(reader2).isEmpty());
             // at this point, we should't be able to consume the data anymore
             try {
-                new PatientXmlReader(reader2, options, null);
+                new PatientXmlReader(reader2, options);
                 Assert.fail("There should have been an exception!");
             }
             catch (Exception e) {

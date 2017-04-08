@@ -6,11 +6,18 @@ package com.imsweb.naaccrxml;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.xml.bind.DatatypeConverter;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
@@ -42,23 +49,71 @@ public class PatientXmlWriter implements AutoCloseable {
     /**
      * Constructor.
      * @param writer required underlined writer
-     * @param options optional options
-     * @param userDictionary optional user-defined dictionary
+     * @param rootData required root data (corresponds to the content of NaaccrData)
      * @throws NaaccrIOException if anything goes wrong
      */
-    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
-        this(writer, rootData, options, userDictionary, null);
+    public PatientXmlWriter(Writer writer, NaaccrData rootData) throws NaaccrIOException {
+        this(writer, rootData, null, (NaaccrDictionary)null, null);
     }
 
     /**
      * Constructor.
      * @param writer required underlined writer
+     * @param rootData required root data (corresponds to the content of NaaccrData)
+     * @param options optional options
+     * @throws NaaccrIOException if anything goes wrong
+     */
+    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options) throws NaaccrIOException {
+        this(writer, rootData, options, (NaaccrDictionary)null, null);
+    }
+
+    /**
+     * Constructor.
+     * @param writer required underlined writer
+     * @param rootData required root data (corresponds to the content of NaaccrData)
+     * @param options optional options
+     * @param userDictionary optional user-defined dictionary
+     * @throws NaaccrIOException if anything goes wrong
+     */
+    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
+        this(writer, rootData, options, Collections.singletonList(userDictionary), null);
+    }
+
+    /**
+     * Constructor.
+     * @param writer required underlined writer
+     * @param rootData required root data (corresponds to the content of NaaccrData)
+     * @param options optional options
+     * @param userDictionaries optional user-defined dictionaries (can be null or empty)
+     * @throws NaaccrIOException if anything goes wrong
+     */
+    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, List<NaaccrDictionary> userDictionaries) throws NaaccrIOException {
+        this(writer, rootData, options, userDictionaries, null);
+    }
+
+    /**
+     * Constructor.
+     * @param writer required underlined writer
+     * @param rootData required root data (corresponds to the content of NaaccrData)
      * @param options optional options
      * @param userDictionary optional user-defined dictionary
      * @param configuration optional stream configuration
      * @throws NaaccrIOException if anything goes wrong
      */
     public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
+        this(writer, rootData, options, Collections.singletonList(userDictionary), configuration);
+    }
+
+    /**
+     * Constructor.
+     * @param writer required underlined writer
+     * @param rootData required root data (corresponds to the content of NaaccrData)
+     * @param options optional options
+     * @param userDictionaries optional user-defined dictionaries (can be null or empty)
+     * @param configuration optional stream configuration
+     * @throws NaaccrIOException if anything goes wrong
+     */
+    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, List<NaaccrDictionary> userDictionaries, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
 
         try {
             // we always need options
@@ -68,6 +123,13 @@ public class PatientXmlWriter implements AutoCloseable {
             // we always need a configuration
             if (configuration == null)
                 configuration = new NaaccrStreamConfiguration();
+
+            // clean-up the dictionaries
+            Map<String, NaaccrDictionary> dictionaries = new HashMap<>();
+            if (userDictionaries != null)
+                for (NaaccrDictionary userDictionary : userDictionaries)
+                    if (userDictionary != null)
+                        dictionaries.put(userDictionary.getDictionaryUri(), userDictionary);
 
             // create the context
             NaaccrStreamContext context = new NaaccrStreamContext();
@@ -92,10 +154,10 @@ public class PatientXmlWriter implements AutoCloseable {
             if (rootData.getBaseDictionaryUri() == null)
                 throw new NaaccrIOException("base dictionary URI is required");
             _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT, rootData.getBaseDictionaryUri());
-            if (userDictionary != null) {
-                if (rootData.getUserDictionaryUri() != null && !rootData.getUserDictionaryUri().equals(userDictionary.getDictionaryUri()))
-                    throw new NaaccrIOException("Provided dictionary has a different URI than the one in the rootData");
-                _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT, userDictionary.getDictionaryUri());
+            if (!dictionaries.isEmpty()) {
+                if (rootData.getUserDictionaryUri() != null && !rootData.getUserDictionaryUri().isEmpty() && !new HashSet<>(rootData.getUserDictionaryUri()).equals(dictionaries.keySet()))
+                    throw new NaaccrIOException("Provided dictionaries are not the ones referenced in the rootData");
+                _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT, StringUtils.join(new TreeSet<>(dictionaries.keySet()), ' '));
             }
             if (rootData.getRecordType() == null)
                 throw new NaaccrIOException("record type is required");
@@ -128,7 +190,7 @@ public class PatientXmlWriter implements AutoCloseable {
             configuration.getRegisterNamespaces().entrySet().forEach(entry -> _writer.addAttribute("xmlns:" + entry.getKey(), entry.getValue()));
 
             // now we are ready to create our reading context and make it available to the patient converter
-            context.setDictionary(new RuntimeNaaccrDictionary(rootData.getRecordType(), baseDictionary, userDictionary));
+            context.setDictionary(new RuntimeNaaccrDictionary(rootData.getRecordType(), baseDictionary, dictionaries.values()));
             configuration.getPatientConverter().setContext(context);
 
             // write the root items

@@ -599,14 +599,14 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             protected Void doInBackground() throws Exception {
                 final File targetFile = _targetFld == null ? null : new File(fixFileExtension(_targetFld.getText(), (String)_compressionBox.getSelectedItem()));
 
-                NaaccrDictionary userDictionary = null;
+                List<NaaccrDictionary> userDictionaries = new ArrayList<>();
                 if (!_dictionaryFld.getText().isEmpty())
-                    userDictionary = NaaccrXmlDictionaryUtils.readDictionary(new File(_dictionaryFld.getText()));
+                    userDictionaries.add(NaaccrXmlDictionaryUtils.readDictionary(new File(_dictionaryFld.getText())));
 
                 final long start = System.currentTimeMillis();
                 String baseUri = NaaccrXmlUtils.getAttributesFromXmlFile(targetFile).get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT);
                 NaaccrDictionary baseDictionary = baseUri == null ? null : NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(baseUri);
-                runProcessing(srcFile, targetFile, _guiOptions.getOptions(baseDictionary, userDictionary), userDictionary, new NaaccrObserver() {
+                runProcessing(srcFile, targetFile, _guiOptions.getOptions(baseDictionary, userDictionaries), userDictionaries, new NaaccrObserver() {
                     @Override
                     public void patientRead(Patient patient) {
                         publish(patient);
@@ -729,7 +729,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _processingWorker.execute();
     }
 
-    protected abstract void runProcessing(File source, File target, NaaccrOptions options, NaaccrDictionary dictionary, NaaccrObserver observer) throws NaaccrIOException;
+    protected abstract void runProcessing(File source, File target, NaaccrOptions options, List<NaaccrDictionary> dictionaries, NaaccrObserver observer) throws NaaccrIOException;
 
     protected String getProcessingResultText(String path, long analysisTime, long processingTime, String size) {
         String analysis = Standalone.formatTime(analysisTime);

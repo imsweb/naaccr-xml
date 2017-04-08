@@ -4,12 +4,17 @@
 package com.imsweb.naaccrxml;
 
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.xml.bind.DatatypeConverter;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
@@ -46,12 +51,42 @@ public class PatientXmlReader implements AutoCloseable {
     /**
      * Constructor.
      * @param reader required underlined reader
+     * @throws NaaccrIOException if anything goes wrong
+     */
+    public PatientXmlReader(Reader reader) throws NaaccrIOException {
+        this(reader, null, (NaaccrDictionary)null, null);
+    }
+
+    /**
+     * Constructor.
+     * @param reader required underlined reader
+     * @param options optional options
+     * @throws NaaccrIOException if anything goes wrong
+     */
+    public PatientXmlReader(Reader reader, NaaccrOptions options) throws NaaccrIOException {
+        this(reader, options, (NaaccrDictionary)null, null);
+    }
+
+    /**
+     * Constructor.
+     * @param reader required underlined reader
      * @param options optional options
      * @param userDictionary optional user-defined dictionary
      * @throws NaaccrIOException if anything goes wrong
      */
     public PatientXmlReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
-        this(reader, options, userDictionary, null);
+        this(reader, options, Collections.singletonList(userDictionary), null);
+    }
+
+    /**
+     * Constructor.
+     * @param reader required underlined reader
+     * @param options optional options
+     * @param userDictionaries optional user-defined dictionaries (can be null or empty)
+     * @throws NaaccrIOException if anything goes wrong
+     */
+    public PatientXmlReader(Reader reader, NaaccrOptions options, List<NaaccrDictionary> userDictionaries) throws NaaccrIOException {
+        this(reader, options, userDictionaries, null);
     }
 
     /**
@@ -63,6 +98,18 @@ public class PatientXmlReader implements AutoCloseable {
      * @throws NaaccrIOException if anything goes wrong
      */
     public PatientXmlReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
+        this(reader, options, Collections.singletonList(userDictionary), configuration);
+    }
+
+    /**
+     * Constructor.
+     * @param reader required underlined reader
+     * @param options optional options
+     * @param userDictionaries optional user-defined dictionaries (can be null or empty)
+     * @param configuration optional stream configuration
+     * @throws NaaccrIOException if anything goes wrong
+     */
+    public PatientXmlReader(Reader reader, NaaccrOptions options, List<NaaccrDictionary> userDictionaries, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
 
         try {
             // we always need options
@@ -72,6 +119,13 @@ public class PatientXmlReader implements AutoCloseable {
             // we always need a configuration
             if (configuration == null)
                 configuration = new NaaccrStreamConfiguration();
+
+            // clean-up the dictionaries
+            Map<String, NaaccrDictionary> dictionaries = new HashMap<>();
+            if (userDictionaries != null)
+                for (NaaccrDictionary userDictionary : userDictionaries)
+                    if (userDictionary != null)
+                        dictionaries.put(userDictionary.getDictionaryUri(), userDictionary);
 
             // create the context
             _context = new NaaccrStreamContext();
@@ -97,10 +151,16 @@ public class PatientXmlReader implements AutoCloseable {
                 throw new NaaccrIOException("invalid/unsupported NAACCR version: " + version, configuration.getParser().getLineNumber());
             NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(version);
 
-            // read the standard attribute: user dictionary
-            _rootData.setUserDictionaryUri(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT));
-            if (_rootData.getUserDictionaryUri() != null && (userDictionary == null || !_rootData.getUserDictionaryUri().equals(userDictionary.getDictionaryUri())))
-                throw new NaaccrIOException("unknown/invalid user dictionary: " + _rootData.getUserDictionaryUri(), configuration.getParser().getLineNumber());
+            // read the standard attribute: user dictionaries
+            if (!StringUtils.isBlank(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT))) {
+                List<String> uriList = new ArrayList<>();
+                for (String userDictionary : StringUtils.split(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT), ' ')) {
+                    if (!dictionaries.containsKey(userDictionary))
+                        throw new NaaccrIOException("unknown/invalid user dictionary: " + userDictionary, configuration.getParser().getLineNumber());
+                    uriList.add(userDictionary);
+                }
+                _rootData.setUserDictionaryUri(uriList);
+            }
 
             // read the standard attribute: record type            
             _rootData.setRecordType(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE));
@@ -184,7 +244,7 @@ public class PatientXmlReader implements AutoCloseable {
             }
 
             // now we are ready to setup our reading context and make it available to the patient converter
-            _context.setDictionary(new RuntimeNaaccrDictionary(_rootData.getRecordType(), baseDictionary, userDictionary));
+            _context.setDictionary(new RuntimeNaaccrDictionary(_rootData.getRecordType(), baseDictionary, dictionaries.values()));
             configuration.getPatientConverter().setContext(_context);
 
             // handle the case where no patients nor items are provided

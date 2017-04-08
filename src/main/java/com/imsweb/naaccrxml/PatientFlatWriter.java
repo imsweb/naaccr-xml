@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -52,6 +53,18 @@ public class PatientFlatWriter implements AutoCloseable {
      * @throws NaaccrIOException
      */
     public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
+        this(writer, data, options, Collections.singletonList(userDictionary));
+    }
+
+    /**
+     * Constructor.
+     * @param writer required underlined writer
+     * @param data required root data
+     * @param options optional options
+     * @param userDictionaries optional user-defined dictionaries (can be null or empty)
+     * @throws NaaccrIOException
+     */
+    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrOptions options, List<NaaccrDictionary> userDictionaries) throws NaaccrIOException {
         _writer = new BufferedWriter(writer);
         _rootData = data;
         _options = options == null ? new NaaccrOptions() : options;
@@ -59,7 +72,7 @@ public class PatientFlatWriter implements AutoCloseable {
         // there should be better validation here...
 
         NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(data.getBaseDictionaryUri());
-        _dictionary = new RuntimeNaaccrDictionary(data.getRecordType(), baseDictionary, userDictionary);
+        _dictionary = new RuntimeNaaccrDictionary(data.getRecordType(), baseDictionary, userDictionaries);
 
         // let's cache the record type and naaccr version items; we are going to use them a lot...
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {

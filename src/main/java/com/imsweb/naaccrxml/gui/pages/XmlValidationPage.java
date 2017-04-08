@@ -4,6 +4,7 @@
 package com.imsweb.naaccrxml.gui.pages;
 
 import java.io.File;
+import java.util.List;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrIOException;
@@ -43,8 +44,8 @@ public class XmlValidationPage extends AbstractProcessingPage {
     }
 
     @Override
-    protected void runProcessing(File source, File target, NaaccrOptions options, NaaccrDictionary dictionary, NaaccrObserver observer) throws NaaccrIOException {
-        try (PatientXmlReader reader = new PatientXmlReader(NaaccrXmlUtils.createReader(source), options, dictionary)) {
+    protected void runProcessing(File source, File target, NaaccrOptions options, List<NaaccrDictionary> dictionaries, NaaccrObserver observer) throws NaaccrIOException {
+        try (PatientXmlReader reader = new PatientXmlReader(NaaccrXmlUtils.createReader(source), options, dictionaries)) {
             Patient patient = reader.readPatient();
             while (patient != null && !Thread.currentThread().isInterrupted()) {
                 // this is the call that will actually collect the errors and show them in the GUI...

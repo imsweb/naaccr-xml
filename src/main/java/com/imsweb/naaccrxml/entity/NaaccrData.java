@@ -20,7 +20,7 @@ public class NaaccrData extends AbstractEntity {
 
     private String _baseDictionaryUri;
 
-    private String _userDictionaryUri;
+    private List<String> _userDictionaryUri;
 
     private String _recordType;
 
@@ -34,6 +34,7 @@ public class NaaccrData extends AbstractEntity {
 
     public NaaccrData() {
         super();
+        _userDictionaryUri = new ArrayList<>();
         _extraRootParameters = new HashMap<>();
         _patients = new ArrayList<>();
     }
@@ -54,11 +55,11 @@ public class NaaccrData extends AbstractEntity {
         _baseDictionaryUri = baseDictionaryUri;
     }
 
-    public String getUserDictionaryUri() {
+    public List<String> getUserDictionaryUri() {
         return _userDictionaryUri;
     }
 
-    public void setUserDictionaryUri(String userDictionaryUri) {
+    public void setUserDictionaryUri(List<String> userDictionaryUri) {
         _userDictionaryUri = userDictionaryUri;
     }
 

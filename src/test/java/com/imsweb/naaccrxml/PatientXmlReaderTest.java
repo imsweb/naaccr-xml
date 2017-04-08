@@ -22,7 +22,7 @@ public class PatientXmlReaderTest {
         options.setUseStrictNamespaces(false);
 
         // one patient with no tumor
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-one-patient-no-tumor.xml")), options, null, null)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-one-patient-no-tumor.xml")), options)) {
             Patient patient = reader.readPatient();
             Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
             Assert.assertEquals(3, patient.getItem("patientIdNumber").getStartLineNumber().intValue());
@@ -31,7 +31,7 @@ public class PatientXmlReaderTest {
         }
 
         // one patient with one tumor
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-one-patient-one-tumor.xml")), options, null, null)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-one-patient-one-tumor.xml")), options)) {
             Patient patient = reader.readPatient();
             Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
             Assert.assertEquals(1, patient.getTumors().size());
@@ -40,7 +40,7 @@ public class PatientXmlReaderTest {
         }
 
         // one patient with two tumors
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-one-patient-two-tumors.xml")), options, null, null)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-one-patient-two-tumors.xml")), options)) {
             Patient patient = reader.readPatient();
             Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
             Assert.assertEquals(2, patient.getTumors().size());
@@ -50,7 +50,7 @@ public class PatientXmlReaderTest {
         }
 
         // two patients with one tumor each
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-two-patients.xml")), options, null, null)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-two-patients.xml")), options)) {
             Patient patient1 = reader.readPatient();
             Assert.assertEquals("00000001", patient1.getItem("patientIdNumber").getValue());
             Assert.assertEquals(1, patient1.getTumors().size());
@@ -65,10 +65,10 @@ public class PatientXmlReaderTest {
         }
 
         // test the root data attributes
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-root-data-1.xml")), options, null, null)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-root-data-1.xml")), options)) {
             NaaccrData data = reader.getRootData();
             Assert.assertNotNull(data.getBaseDictionaryUri());
-            Assert.assertNull(data.getUserDictionaryUri());
+            Assert.assertTrue(data.getUserDictionaryUri().isEmpty());
             Assert.assertNotNull(data.getRecordType());
             Assert.assertNull(data.getTimeGenerated());
             Assert.assertEquals("1.0", data.getSpecificationVersion());
@@ -76,10 +76,10 @@ public class PatientXmlReaderTest {
         }
 
         // another test with the root data and the new 1.1 specification
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-root-data-2.xml")), options, null, null)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-root-data-2.xml")), options)) {
             NaaccrData data = reader.getRootData();
             Assert.assertNotNull(data.getBaseDictionaryUri());
-            Assert.assertNull(data.getUserDictionaryUri());
+            Assert.assertTrue(data.getUserDictionaryUri().isEmpty());
             Assert.assertNotNull(data.getRecordType());
             Assert.assertNotNull(data.getTimeGenerated());
             Assert.assertEquals("1.1", data.getSpecificationVersion());
@@ -87,7 +87,7 @@ public class PatientXmlReaderTest {
         }
 
         // this file has a duplicate item for the patient
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-validation-1.xml")), options, null, null)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-validation-1.xml")), options)) {
             try {
                 reader.readPatient();
                 Assert.fail("Should have been an exception!");
@@ -99,7 +99,7 @@ public class PatientXmlReaderTest {
 
         // by default, a value too long should be reported as an error but shouldn't be truncated
         NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(TestingUtils.getDataFile("testing-user-dictionary.xml"));
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-too-long.xml")), options, dict, null)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-too-long.xml")), options, dict)) {
             Patient patient = reader.readPatient();
             Assert.assertEquals("XX", patient.getItemValue("myVariable2"));
             Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
@@ -119,7 +119,7 @@ public class PatientXmlReaderTest {
 
         // we want to process the unknown item
         options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_PROCESS);
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-unk.xml")), options, null, null)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-unk.xml")), options)) {
             Patient patient = reader.readPatient();
             Assert.assertEquals("X", patient.getItemValue("unknown"));
             Assert.assertTrue(patient.getValidationErrors().isEmpty());
@@ -127,7 +127,7 @@ public class PatientXmlReaderTest {
 
         // we want to ignore the unknown item
         options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_IGNORE);
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-unk.xml")), options, null, null)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-unk.xml")), options)) {
             Patient patient = reader.readPatient();
             Assert.assertNull(patient.getItemValue("unknown"));
             Assert.assertTrue(patient.getValidationErrors().isEmpty());
@@ -135,7 +135,7 @@ public class PatientXmlReaderTest {
 
         // we want to report an error for the unknown item
         options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_ERROR);
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-unk.xml")), options, null, null)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-unk.xml")), options)) {
             Patient patient = reader.readPatient();
             Assert.assertNull(patient.getItemValue("unknown"));
             Assert.assertFalse(patient.getValidationErrors().isEmpty());

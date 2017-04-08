@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,17 @@ public class PatientFlatReader implements AutoCloseable {
      * @throws NaaccrIOException
      */
     public PatientFlatReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
+        this(reader, options, Collections.singletonList(userDictionary));
+    }
+
+    /**
+     * Constructor
+     * @param reader required underlined reader
+     * @param options optional options
+     * @param userDictionaries optional user-defined dictionaries (can be null or empty)
+     * @throws NaaccrIOException
+     */
+    public PatientFlatReader(Reader reader, NaaccrOptions options, List<NaaccrDictionary> userDictionaries) throws NaaccrIOException {
         _reader = new LineNumberReader(reader);
         _options = options == null ? new NaaccrOptions() : options;
 
@@ -83,7 +95,7 @@ public class PatientFlatReader implements AutoCloseable {
 
         _format = NaaccrFormat.getInstance(version, type);
         NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(_format.getNaaccrVersion());
-        _dictionary = new RuntimeNaaccrDictionary(_format.getRecordType(), baseDictionary, userDictionary);
+        _dictionary = new RuntimeNaaccrDictionary(_format.getRecordType(), baseDictionary, userDictionaries);
         _rootData = new NaaccrData(_format.toString());
         _rootData.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
 

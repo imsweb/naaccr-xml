@@ -5,6 +5,7 @@ package com.imsweb.naaccrxml.runtime;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,34 +25,43 @@ public class RuntimeNaaccrDictionary {
     // caches used to improve lookup performances
     private Map<String, RuntimeNaaccrDictionaryItem> _cachedById;
 
-    public RuntimeNaaccrDictionary(String recordType, NaaccrDictionary baseDictionary, NaaccrDictionary userDictionary) throws NaaccrIOException {
+    public RuntimeNaaccrDictionary(String recordType, NaaccrDictionary baseDictionary, Collection<NaaccrDictionary> userDictionaries) throws NaaccrIOException {
         if (recordType == null)
             throw new NaaccrIOException("Record type is required to create a runtime dictionary");
         if (baseDictionary == null)
             throw new NaaccrIOException("Base dictionary is required to create a runtime dictionary");
 
-        // as of spec 1.1 the NAACCR version is optional on user-dictionaries, but that means we can't really validate them without 
+        // compute a clean list of user dictionaries
+        List<NaaccrDictionary> dictionaries = new ArrayList<>();
+        if (userDictionaries != null)
+            for (NaaccrDictionary userDictionary : userDictionaries)
+                if (userDictionary != null)
+                    dictionaries.add(userDictionary);
+
+        // as of spec 1.1 the NAACCR version is optional on user-dictionaries, but that means we can't really validate them without
         // knowing the corresponding base dictionary, so we have to re-validate here...
-        if (userDictionary != null) {
+        for (NaaccrDictionary userDictionary : dictionaries) {
             if (userDictionary.getNaaccrVersion() == null) {
                 String error = NaaccrXmlDictionaryUtils.validateUserDictionary(userDictionary, baseDictionary.getNaaccrVersion());
                 if (error != null)
-                    throw new NaaccrIOException("Invalid user-defined dictionary: " + error);
+                    throw new NaaccrIOException("Invalid user-defined dictionary '" + userDictionary.getDictionaryUri() + "': " + error);
             }
             else if (!baseDictionary.getNaaccrVersion().equals(userDictionary.getNaaccrVersion()))
-                throw new NaaccrIOException("User-defined dictionary doesn't define the same version as the base dictionary");
+                throw new NaaccrIOException("User-defined dictionary '" + userDictionary.getDictionaryUri() + "' doesn't define the same version as the base dictionary");
         }
 
         // use the default user dictionary if one is not provided...
-        if (userDictionary == null)
-            userDictionary = NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(baseDictionary.getNaaccrVersion());
+        if (dictionaries.isEmpty())
+            dictionaries.add(NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(baseDictionary.getNaaccrVersion()));
 
         // extra validation: no user-defined item should have the same NAACCR ID or NAACCR Number as a base one
-        for (NaaccrDictionaryItem item : userDictionary.getItems()) {
-            if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
-                throw new NaaccrIOException("User-defined dictionary cannot use same NAACCR ID as a base item: " + item.getNaaccrId());
-            if (baseDictionary.getItemByNaaccrNum(item.getNaaccrNum()) != null)
-                throw new NaaccrIOException("User-defined dictionary cannot use same NAACCR Number as a base item: " + item.getNaaccrNum());
+        for (NaaccrDictionary userDictionary : dictionaries) {
+            for (NaaccrDictionaryItem item : userDictionary.getItems()) {
+                if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
+                    throw new NaaccrIOException("User-defined dictionary '" + userDictionary.getDictionaryUri() + "' cannot use same NAACCR ID as a base item: " + item.getNaaccrId());
+                if (baseDictionary.getItemByNaaccrNum(item.getNaaccrNum()) != null)
+                    throw new NaaccrIOException("User-defined dictionary '" + userDictionary.getDictionaryUri() + "' cannot use same NAACCR Number as a base item: " + item.getNaaccrNum());
+            }
         }
 
         _format = NaaccrFormat.getInstance(baseDictionary.getNaaccrVersion(), recordType);
@@ -59,9 +69,10 @@ public class RuntimeNaaccrDictionary {
         for (NaaccrDictionaryItem item : baseDictionary.getItems())
             if (item.getRecordTypes() == null || Arrays.asList(item.getRecordTypes().split(",")).contains(recordType))
                 _items.add(new RuntimeNaaccrDictionaryItem(item));
-        for (NaaccrDictionaryItem item : userDictionary.getItems())
-            if (item.getRecordTypes() == null || Arrays.asList(item.getRecordTypes().split(",")).contains(recordType))
-                _items.add(new RuntimeNaaccrDictionaryItem(item));
+        for (NaaccrDictionary userDictionary : dictionaries)
+            for (NaaccrDictionaryItem item : userDictionary.getItems())
+                if (item.getRecordTypes() == null || Arrays.asList(item.getRecordTypes().split(",")).contains(recordType))
+                    _items.add(new RuntimeNaaccrDictionaryItem(item));
 
         // sort the fields by starting columns (no start columns go to the end)
         _items.sort((o1, o2) -> {

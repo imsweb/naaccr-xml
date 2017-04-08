@@ -185,7 +185,7 @@ public class StandaloneOptions extends JPanel {
         return helpPnl;
     }
 
-    public NaaccrOptions getOptions(NaaccrDictionary baseDictionary, NaaccrDictionary userDictionary) {
+    public NaaccrOptions getOptions(NaaccrDictionary baseDictionary, List<NaaccrDictionary> userDictionaries) {
         NaaccrOptions options = new NaaccrOptions();
 
         if (_readFlat) {
@@ -227,7 +227,7 @@ public class StandaloneOptions extends JPanel {
                     for (NaaccrDictionaryItem item : baseDictionary.getItems())
                         if (item.getNaaccrNum() != null)
                             itemNumToItemId.put(item.getNaaccrNum().toString(), item.getNaaccrId());
-                if (userDictionary != null)
+                for (NaaccrDictionary userDictionary : userDictionaries)
                     for (NaaccrDictionaryItem item : userDictionary.getItems())
                         if (item.getNaaccrNum() != null)
                             itemNumToItemId.put(item.getNaaccrNum().toString(), item.getNaaccrId());

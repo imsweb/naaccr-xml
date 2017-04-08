@@ -4,6 +4,7 @@
 package com.imsweb.naaccrxml.gui.pages;
 
 import java.io.File;
+import java.util.List;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrIOException;
@@ -36,8 +37,8 @@ public class XmlToFlatPage extends AbstractProcessingPage {
     }
 
     @Override
-    protected void runProcessing(File source, File target, NaaccrOptions options, NaaccrDictionary dictionary, NaaccrObserver observer) throws NaaccrIOException {
-        NaaccrXmlUtils.xmlToFlat(source, target, options, dictionary, observer);
+    protected void runProcessing(File source, File target, NaaccrOptions options, List<NaaccrDictionary> dictionaries, NaaccrObserver observer) throws NaaccrIOException {
+        NaaccrXmlUtils.xmlToFlat(source, target, options, dictionaries, observer);
     }
 
     @Override

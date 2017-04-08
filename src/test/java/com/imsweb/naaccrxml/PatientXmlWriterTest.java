@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Collections;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -28,7 +29,7 @@ public class PatientXmlWriterTest {
 
         // a patient with no tumor
         File file = TestingUtils.createFile("test-xml-writer-no-tumor.xml");
-        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
             Patient patient = new Patient();
             patient.addItem(new Item("patientIdNumber", "00000001"));
             writer.writePatient(patient);
@@ -41,7 +42,7 @@ public class PatientXmlWriterTest {
 
         // a patient with one tumor
         file = TestingUtils.createFile("test-flat-writer-one-tumor.txt");
-        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
             patient = new Patient();
             patient.addItem(new Item("patientIdNumber", "00000001"));
             Tumor tumor1 = new Tumor();
@@ -55,7 +56,7 @@ public class PatientXmlWriterTest {
 
         // a patient with two tumors
         file = TestingUtils.createFile("test-flat-writer-two-tumors.txt");
-        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
             patient = new Patient();
             patient.addItem(new Item("patientIdNumber", "00000001"));
             Tumor tumor1 = new Tumor();
@@ -73,7 +74,7 @@ public class PatientXmlWriterTest {
 
         // two patients with one tumor each
         file = TestingUtils.createFile("test-flat-writer-two-patients.txt");
-        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
             Patient patient1 = new Patient();
             patient1.addItem(new Item("patientIdNumber", "00000001"));
             Tumor tumor1 = new Tumor();
@@ -98,7 +99,7 @@ public class PatientXmlWriterTest {
         file = TestingUtils.createFile("test-xml-writer-special-chars.xml");
         String val =
                 "\nFollowing characters should be translated:\n<\n>\n\"\n'\n&\n\nFollowing characters should appear as-is:\n~\n@\n#\n%\n^\n*\n()\n{}\n[]\n,\n;\n.\n|\n\\\n/\n`\n\nFollowing characters are the few controls characters allowed in XML 1.0 (not visible):\n\t\n\r\n\nFollowing characters are not valid and should be ignored:\n\u0000\n\u001C\n\nFollowing characters are valid:\n\u0009\n\u0040\n";
-        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
             patient = new Patient();
             patient.addItem(new Item("patientIdNumber", "00000001"));
             Tumor tumor = new Tumor();
@@ -120,7 +121,7 @@ public class PatientXmlWriterTest {
         file = TestingUtils.createFile("test-xml-writer-special-chars-error.xml");
         NaaccrOptions options = new NaaccrOptions();
         options.setIgnoreControlCharacters(false);
-        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, null)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options)) {
             patient = new Patient();
             patient.addItem(new Item("patientIdNumber", "00000001"));
             Tumor tumor = new Tumor();
@@ -213,7 +214,7 @@ public class PatientXmlWriterTest {
         File file = TestingUtils.createFile("test-xml-writer-user-dict.xml");
 
         // user dictionary is not referenced -> error
-        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
             writer.writePatient(patient);
             Assert.fail("Was expecting an exception...");
         }
@@ -229,7 +230,7 @@ public class PatientXmlWriterTest {
         Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains(dict.getDictionaryUri()));
 
         // root data is providing a different dictionary -> error
-        data.setUserDictionaryUri("something-else");
+        data.setUserDictionaryUri(Collections.singletonList("something-else"));
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, dict)) {
             Assert.fail("Was expecting an exception...");
         }
@@ -249,7 +250,7 @@ public class PatientXmlWriterTest {
                 // we can't use a try-with-resource since it would call close, but we have to call closeAndKeepAlive!
                 PatientXmlWriter writer = null;
                 try {
-                    writer = new PatientXmlWriter(new OutputStreamWriter(zos), new NaaccrData(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT), null, null);
+                    writer = new PatientXmlWriter(new OutputStreamWriter(zos), new NaaccrData(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT));
                     Patient patient = new Patient();
                     patient.addItem(new Item("patientIdNumber", "0000000" + i));
                     writer.writePatient(patient);
