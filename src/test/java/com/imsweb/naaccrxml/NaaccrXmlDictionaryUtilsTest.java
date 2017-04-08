@@ -35,6 +35,7 @@ public class NaaccrXmlDictionaryUtilsTest {
             try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-" + version + ".xml"))) {
                 NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
                 Assert.assertNull(NaaccrXmlDictionaryUtils.validateBaseDictionary(dict));
+                Assert.assertTrue(NaaccrXmlDictionaryUtils.BASE_DICTIONARY_URI_PATTERN.matcher(dict.getDictionaryUri()).matches());
                 items.addAll(dict.getItems());
             }
 
@@ -42,6 +43,7 @@ public class NaaccrXmlDictionaryUtilsTest {
             try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("user-defined-naaccr-dictionary-" + version + ".xml"))) {
                 NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
                 Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+                Assert.assertTrue(NaaccrXmlDictionaryUtils.DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(dict.getDictionaryUri()).matches());
                 items.addAll(dict.getItems());
             }
 

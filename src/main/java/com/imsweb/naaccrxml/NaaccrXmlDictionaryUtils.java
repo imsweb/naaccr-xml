@@ -27,6 +27,7 @@ import java.util.regex.PatternSyntaxException;
 import org.apache.commons.lang3.StringUtils;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
@@ -75,7 +76,8 @@ public final class NaaccrXmlDictionaryUtils {
     public static final String NAACCR_PADDING_LEFT_ZERO = "leftZero";
 
     // the Patterns for the internal dictionaries URI
-    public static final Pattern _PATTERN_DICTIONARY_URI = Pattern.compile("http://naaccr\\.org/naaccrxml/(user-defined-)?naaccr-dictionary-(.+?)\\.xml");
+    public static final Pattern BASE_DICTIONARY_URI_PATTERN = Pattern.compile("http://naaccr\\.org/naaccrxml/naaccr-dictionary-(.+?)\\.xml");
+    public static final Pattern DEFAULT_USER_DICTIONARY_URI_PATTERN = Pattern.compile("http://naaccr\\.org/naaccrxml/user-defined-naaccr-dictionary-(.+?)\\.xml");
 
     /**
      * Private constructor, no instanciation...
@@ -112,9 +114,14 @@ public final class NaaccrXmlDictionaryUtils {
     public static String extractVersionFromUri(String uri) {
         if (uri == null)
             return null;
-        Matcher matcher = _PATTERN_DICTIONARY_URI.matcher(uri);
+        Matcher matcher = BASE_DICTIONARY_URI_PATTERN.matcher(uri);
         if (matcher.matches())
-            return matcher.group(2);
+            return matcher.group(1);
+        else {
+            matcher = DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(uri);
+            if (matcher.matches())
+                return matcher.group(1);
+        }
         return null;
     }
 
@@ -221,14 +228,13 @@ public final class NaaccrXmlDictionaryUtils {
         if (dictionary.getSpecificationVersion() == null)
             dictionary.setSpecificationVersion(SpecificationVersion.SPEC_1_0);
 
-        String error;
-        if (dictionary.getDictionaryUri() != null && _PATTERN_DICTIONARY_URI.matcher(dictionary.getDictionaryUri()).matches())
-            error = validateBaseDictionary(dictionary);
-        else
-            error = validateUserDictionary(dictionary);
-
-        if (error != null)
-            throw new IOException(error);
+        // let's not validate the internal dictionaries, we know they are valid
+        String uri = dictionary.getDictionaryUri();
+        if (uri != null && !BASE_DICTIONARY_URI_PATTERN.matcher(uri).matches() && !DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(uri).matches()) {
+            String error = validateUserDictionary(dictionary);
+            if (error != null)
+                throw new IOException(error);
+        }
 
         return dictionary;
     }
@@ -356,6 +362,13 @@ public final class NaaccrXmlDictionaryUtils {
             }
         }
 
+        // validate grouped items; since those can only appear in base dictionaries, the validation is going to be minimal
+        if (isBaseDictionary)
+            for (NaaccrDictionaryGroupedItem groupedItem : dictionary.getGroupedItems())
+                for (String contained : groupedItem.getContainedItemId())
+                    if (dictionary.getItemByNaaccrId(contained) == null)
+                        return "grouped item '" + groupedItem.getNaaccrId() + "' references unknown item '" + contained + "'";
+
         // user dictionary specific validation
         if (!isBaseDictionary) {
             String naaccrVersionToUse = dictionary.getNaaccrVersion() == null ? naaccrVersion : dictionary.getNaaccrVersion();
@@ -412,6 +425,9 @@ public final class NaaccrXmlDictionaryUtils {
                     }
                 }
             }
+
+            if (!dictionary.getGroupedItems().isEmpty())
+                return "user-defined dictionaries cannot defined grouped items";
         }
 
         return null;
@@ -495,7 +511,7 @@ public final class NaaccrXmlDictionaryUtils {
      * @return a configured <code>XStream</code> object
      */
     private static XStream instanciateXStream() {
-        XStream xstream = new XStream();
+        XStream xstream = new XStream(new PureJavaReflectionProvider());
 
         xstream.alias("NaaccrDictionary", NaaccrDictionary.class);
         xstream.aliasAttribute(NaaccrDictionary.class, "_dictionaryUri", "dictionaryUri");
@@ -504,8 +520,6 @@ public final class NaaccrXmlDictionaryUtils {
         xstream.aliasAttribute(NaaccrDictionary.class, "_description", "description");
         xstream.aliasAttribute(NaaccrDictionary.class, "_items", "ItemDefs");
         xstream.aliasAttribute(NaaccrDictionary.class, "_groupedItems", "GroupedItemDefs");
-        xstream.omitField(NaaccrDictionary.class, "_cachedById");
-        xstream.omitField(NaaccrDictionary.class, "_cachedByNumber");
         xstream.omitField(NaaccrDictionary.class, "_cachedById");
         xstream.omitField(NaaccrDictionary.class, "_cachedByNumber");
 
@@ -605,6 +619,8 @@ public final class NaaccrXmlDictionaryUtils {
         private boolean isLastAttribute(String attribute) {
             NaaccrDictionaryItem item = _dictionary.getItemByNaaccrId(_currentItemId);
             if (item == null)
+                item = _dictionary.getGroupedItemByNaaccrId(_currentItemId);
+            if (item == null)
                 return false;
 
             if (item.getTrim() != null && !NAACCR_TRIM_ALL.equals(item.getTrim()))
@@ -615,6 +631,8 @@ public final class NaaccrXmlDictionaryUtils {
                 return "regexValidation".equals(attribute);
             if (item.getDataType() != null && !NAACCR_DATA_TYPE_TEXT.equals(item.getDataType()))
                 return "dataType".equals(attribute);
+            if (item instanceof NaaccrDictionaryGroupedItem)
+                return "contains".equals(attribute);
             return item.getParentXmlElement() != null && "parentXmlElement".equals(attribute);
         }
     }
