@@ -34,16 +34,16 @@ public class NaaccrXmlDictionaryUtilsTest {
             // make sure internal base dictionaries are valid
             try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-" + version + ".xml"))) {
                 NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
-                Assert.assertNull(NaaccrXmlDictionaryUtils.validateBaseDictionary(dict));
-                Assert.assertTrue(NaaccrXmlDictionaryUtils.BASE_DICTIONARY_URI_PATTERN.matcher(dict.getDictionaryUri()).matches());
+                Assert.assertNull(version, NaaccrXmlDictionaryUtils.validateBaseDictionary(dict));
+                Assert.assertTrue(version, NaaccrXmlDictionaryUtils.BASE_DICTIONARY_URI_PATTERN.matcher(dict.getDictionaryUri()).matches());
                 items.addAll(dict.getItems());
             }
 
             // make sure internal default user dictionaries are valid
             try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("user-defined-naaccr-dictionary-" + version + ".xml"))) {
                 NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
-                Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
-                Assert.assertTrue(NaaccrXmlDictionaryUtils.DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(dict.getDictionaryUri()).matches());
+                Assert.assertNull(version, NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+                Assert.assertTrue(version, NaaccrXmlDictionaryUtils.DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(dict.getDictionaryUri()).matches());
                 items.addAll(dict.getItems());
             }
 
@@ -134,7 +134,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         dict.addItem(item);
 
         // write using a writer
-        File file = TestingUtils.createFile("dict-write-test.xml");
+        File file = TestingUtils.createFile("dict-write-test.xml", false);
         try (Writer writer = new FileWriter(file)) {
             NaaccrXmlDictionaryUtils.writeDictionary(dict, writer);
         }

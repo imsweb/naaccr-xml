@@ -363,11 +363,26 @@ public final class NaaccrXmlDictionaryUtils {
         }
 
         // validate grouped items; since those can only appear in base dictionaries, the validation is going to be minimal
-        if (isBaseDictionary)
-            for (NaaccrDictionaryGroupedItem groupedItem : dictionary.getGroupedItems())
+        if (isBaseDictionary) {
+            for (NaaccrDictionaryGroupedItem groupedItem : dictionary.getGroupedItems()) {
+                if (groupedItem.getNaaccrId() == null || groupedItem.getNaaccrId().trim().isEmpty())
+                    return "'naaccrId' attribute is required";
+                if (!idPattern.matcher(groupedItem.getNaaccrId()).matches())
+                    return "'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + groupedItem.getNaaccrId();
+                if (naaccrIds.contains(groupedItem.getNaaccrId()))
+                    return "'naaccrId' attribute must be unique, already saw " + groupedItem.getNaaccrId();
+                naaccrIds.add(groupedItem.getNaaccrId());
+                if (groupedItem.getNaaccrNum() == null)
+                    return "'naaccrNum' attribute is required";
+                if (naaccrNums.contains(groupedItem.getNaaccrNum()))
+                    return "'naaccrNum' attribute must be unique, already saw " + groupedItem.getNaaccrNum();
+                naaccrNums.add(groupedItem.getNaaccrNum());
+                naaccrIds.add(groupedItem.getNaaccrId());
                 for (String contained : groupedItem.getContainedItemId())
                     if (dictionary.getItemByNaaccrId(contained) == null)
                         return "grouped item '" + groupedItem.getNaaccrId() + "' references unknown item '" + contained + "'";
+            }
+        }
 
         // user dictionary specific validation
         if (!isBaseDictionary) {
@@ -564,14 +579,16 @@ public final class NaaccrXmlDictionaryUtils {
 
         // why isn't the internal writer protected instead of private??? I hate when people do that!
         private QuickWriter _internalWriter;
-
         private NaaccrDictionary _dictionary;
-
         private String _currentItemId;
+        private boolean _namespaceWritten;
 
         public NaaccrPrettyPrintWriter(NaaccrDictionary dictionary, Writer writer) {
             super(writer, new char[] {' ', ' ', ' ', ' '});
             _dictionary = dictionary;
+            _currentItemId = null;
+            _namespaceWritten = false;
+
             try {
                 writer.write("<?xml version=\"1.0\"?>\n\n");
             }
@@ -606,9 +623,21 @@ public final class NaaccrXmlDictionaryUtils {
                 _currentItemId = value;
             if (!isLastAttribute(key))
                 _internalWriter.write("\r\n           ");
-            // this isn't going to work well for user-define dictionaries bc desc is optional...
-            if ("description".equals(key))
-                super.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
+
+            if (!_namespaceWritten) {
+                boolean hasDesc = !StringUtils.isBlank(_dictionary.getDescription());
+                boolean hasSpec = !StringUtils.isBlank(_dictionary.getSpecificationVersion());
+                boolean hasVer = !StringUtils.isBlank(_dictionary.getNaaccrVersion());
+                // URI is required, so we know it will be there
+                if ((hasDesc && "description".equals(key))
+                        || (!hasDesc && hasSpec && "specificationVersions".equals(key))
+                        || (!hasDesc && !hasSpec && hasVer && "naaccrVersion".equals(key))
+                        || (!hasDesc && !hasSpec && !hasVer && "dictionaryUri".equals(key))) {
+                    super.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
+                    _namespaceWritten = true;
+                }
+
+            }
         }
 
         /**
@@ -623,6 +652,8 @@ public final class NaaccrXmlDictionaryUtils {
             if (item == null)
                 return false;
 
+            if (item instanceof NaaccrDictionaryGroupedItem)
+                return "contains".equals(attribute);
             if (item.getTrim() != null && !NAACCR_TRIM_ALL.equals(item.getTrim()))
                 return "trim".equals(attribute);
             if (item.getPadding() != null && !NAACCR_PADDING_RIGHT_BLANK.equals(item.getPadding()))
@@ -631,8 +662,6 @@ public final class NaaccrXmlDictionaryUtils {
                 return "regexValidation".equals(attribute);
             if (item.getDataType() != null && !NAACCR_DATA_TYPE_TEXT.equals(item.getDataType()))
                 return "dataType".equals(attribute);
-            if (item instanceof NaaccrDictionaryGroupedItem)
-                return "contains".equals(attribute);
             return item.getParentXmlElement() != null && "parentXmlElement".equals(attribute);
         }
     }

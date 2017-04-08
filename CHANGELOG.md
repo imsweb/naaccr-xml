@@ -2,6 +2,7 @@
 
 **Version 3.0**
 
+ - Added support for grouped items definition in the base dictionaries (specification 1.2).
  - Relaxed the type of many items in standard base dictionaries (specification 1.2).
  - Removed support for "regexValidation" in dictionaries (specification 1.2).
  - Added full support for extensions (user-defined XML blocks) at the NaaccrData, Patient and Tumor levels.
