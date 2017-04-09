@@ -18,6 +18,7 @@ import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 
 public class ExtensionsDemo {
@@ -86,13 +87,13 @@ public class ExtensionsDemo {
 
         // write the patients (the root is written as part of the writer creation)
         File file = TestingUtils.createFile("test-root-extension.xml", false);
-        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, null, configuration)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, (NaaccrDictionary)null, configuration)) {
             for (Patient p : data.getPatients())
                 writer.writePatient(p);
         }
 
         // read back the file and print a frew values to make sure we can access them
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file), null, null, configuration)) {
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file), null, (NaaccrDictionary)null, configuration)) {
             OverallSummary os = (OverallSummary)reader.getRootData().getExtension();
             System.out.println("total number of processed patients: " + os.getPatientSummary().getNumberProcessed());
             System.out.println("total number of processed tumors:" + os.getTumorSummary().getNumberProcessed());

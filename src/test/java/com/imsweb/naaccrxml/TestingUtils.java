@@ -40,7 +40,6 @@ public class TestingUtils {
         item.setLength(2);
         item.setStartColumn(2340);
         item.setNaaccrName("My Variable");
-        item.setSourceOfStandard("ME");
         item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
         item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_NONE);
         if (SpecificationVersion.compareSpecifications(specifications, SpecificationVersion.SPEC_1_2) < 0)

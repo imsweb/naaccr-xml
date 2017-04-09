@@ -5,6 +5,7 @@ package com.imsweb.naaccrxml;
 
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -121,11 +122,11 @@ public class PatientXmlReader implements AutoCloseable {
                 configuration = new NaaccrStreamConfiguration();
 
             // clean-up the dictionaries
-            Map<String, NaaccrDictionary> dictionaries = new HashMap<>();
+            Map<String, NaaccrDictionary> providedDictionaries = new HashMap<>();
             if (userDictionaries != null)
                 for (NaaccrDictionary userDictionary : userDictionaries)
                     if (userDictionary != null)
-                        dictionaries.put(userDictionary.getDictionaryUri(), userDictionary);
+                        providedDictionaries.put(userDictionary.getDictionaryUri(), userDictionary);
 
             // create the context
             _context = new NaaccrStreamContext();
@@ -140,6 +141,14 @@ public class PatientXmlReader implements AutoCloseable {
             // create the root data holder (it will be use for every field except the list of patients)
             _rootData = createRootData();
 
+            // read the standard attribute: specification version (we do it first because the format of other attributes can depend on the specs version)
+            String specVersion = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION);
+            if (specVersion == null)
+                specVersion = SpecificationVersion.SPEC_1_0;
+            if (!SpecificationVersion.isSpecificationSupported(specVersion))
+                throw new NaaccrIOException("invalid specification version: " + specVersion);
+            _rootData.setSpecificationVersion(specVersion);
+
             // read the standard attribute: base dictionary
             _rootData.setBaseDictionaryUri(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
             if (_rootData.getBaseDictionaryUri() == null)
@@ -153,14 +162,21 @@ public class PatientXmlReader implements AutoCloseable {
 
             // read the standard attribute: user dictionaries
             if (!StringUtils.isBlank(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT))) {
-                List<String> uriList = new ArrayList<>();
-                for (String userDictionary : StringUtils.split(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT), ' ')) {
-                    if (!dictionaries.containsKey(userDictionary))
-                        throw new NaaccrIOException("unknown/invalid user dictionary: " + userDictionary, configuration.getParser().getLineNumber());
-                    uriList.add(userDictionary);
-                }
-                _rootData.setUserDictionaryUri(uriList);
+                List<String> dataUserDictionaries = new ArrayList<>();
+                if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_2) < 0)
+                    dataUserDictionaries.add(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT));
+                else
+                    dataUserDictionaries.addAll(Arrays.asList(StringUtils.split(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT), ' ')));
+                _rootData.setUserDictionaryUri(dataUserDictionaries);
             }
+            // every dictionary provided in the data must be available to the library
+            for (String uri : _rootData.getUserDictionaryUri())
+                if (!providedDictionaries.containsKey(uri))
+                    throw new NaaccrIOException("unknown/invalid user dictionary: " + uri, configuration.getParser().getLineNumber());
+            // it's OK to provide more dictionaries to the library, but the library needs to process only the ones that appear in the data
+            for (String uri : new HashSet<>(providedDictionaries.keySet()))
+                if (!_rootData.getUserDictionaryUri().contains(uri))
+                    providedDictionaries.remove(uri);
 
             // read the standard attribute: record type            
             _rootData.setRecordType(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE));
@@ -179,14 +195,6 @@ public class PatientXmlReader implements AutoCloseable {
                     throw new NaaccrIOException("invalid time generated value: " + generatedTime, configuration.getParser().getLineNumber());
                 }
             }
-
-            // read the standard attribute: specification version
-            String specVersion = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION);
-            if (specVersion == null)
-                specVersion = SpecificationVersion.SPEC_1_0;
-            if (!SpecificationVersion.isSpecificationSupported(specVersion))
-                throw new NaaccrIOException("invalid specification version: " + specVersion);
-            _rootData.setSpecificationVersion(specVersion);
 
             // read the non-standard attributes
             Set<String> standardAttributes = new HashSet<>();
@@ -244,7 +252,7 @@ public class PatientXmlReader implements AutoCloseable {
             }
 
             // now we are ready to setup our reading context and make it available to the patient converter
-            _context.setDictionary(new RuntimeNaaccrDictionary(_rootData.getRecordType(), baseDictionary, dictionaries.values()));
+            _context.setDictionary(new RuntimeNaaccrDictionary(_rootData.getRecordType(), baseDictionary, providedDictionaries.values()));
             configuration.getPatientConverter().setContext(_context);
 
             // handle the case where no patients nor items are provided

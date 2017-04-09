@@ -76,7 +76,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertEquals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION, defaultUserDictionary1.getSpecificationVersion());
 
         // read a provided user dictionary
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140.xml"))) {
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140.xml"))) {
             NaaccrDictionary defaultUserDictionary = NaaccrXmlDictionaryUtils.readDictionary(reader);
             Assert.assertEquals(SpecificationVersion.SPEC_1_0, defaultUserDictionary.getSpecificationVersion());
             Assert.assertEquals(4, defaultUserDictionary.getItems().size());
@@ -84,7 +84,7 @@ public class NaaccrXmlDictionaryUtilsTest {
 
         // try to read a user dictionary with an error (bad start column)
         boolean exceptionAppend = false;
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140-bad1.xml"))) {
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140-bad1.xml"))) {
             NaaccrXmlDictionaryUtils.readDictionary(reader);
         }
         catch (IOException e) {
@@ -94,7 +94,7 @@ public class NaaccrXmlDictionaryUtilsTest {
 
         // try to read a user dictionary with another error (NPCR item definition redefines the NAACCR number)
         exceptionAppend = false;
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140-bad2.xml"))) {
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140-bad2.xml"))) {
             NaaccrXmlDictionaryUtils.readDictionary(reader);
         }
         catch (IOException e) {
@@ -103,7 +103,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertTrue(exceptionAppend);
 
         // this one defines an item in a bad location, but it doesn't define a NAACCR version, so no exception, but if a NAACCR version is provided, the validation should fail
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary-140-bad3.xml"))) {
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140-bad3.xml"))) {
             NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
             Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
             Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict, "140"));
@@ -255,47 +255,6 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertEquals("", NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName(""));
         Assert.assertEquals("testTestTest", NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName("Test Test Test"));
         Assert.assertEquals("testSomeThingElse123", NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName("test: (ignored);   some_thing # else --123!!!"));
-    }
-
-    @Test
-    public void testXsdAgainstLibrary() {
-
-        // I can't validate the dictionary files against the XSD because it requires them to define a namespace, which they don't know right now...
-
-        assertValidXmlFileForLibrary("naaccr-dictionary-140.xml");
-        assertValidXmlFileForLibrary("user-defined-naaccr-dictionary-140.xml");
-        //assertValidXmlFileForXsd("naaccr-dictionary-140.xml");
-        //assertValidXmlFileForXsd("user-defined-naaccr-dictionary-140.xml");
-
-        assertValidXmlFileForLibrary("naaccr-dictionary-150.xml");
-        assertValidXmlFileForLibrary("user-defined-naaccr-dictionary-150.xml");
-        //assertValidXmlFileForXsd("naaccr-dictionary-150.xml");
-        //assertValidXmlFileForXsd("user-defined-naaccr-dictionary-150.xml");
-    }
-
-    /**
-     * private void assertValidXmlFileForXsd(String xmlFile) {
-     * try {
-     * URL schemaXsd = Thread.currentThread().getContextClassLoader().getResource("naaccr_dictionary.xsd");
-     * SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-     * Schema schema = schemaFactory.newSchema(schemaXsd);
-     * Validator validator = schema.newValidator();
-     * validator.validate(new StreamSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlFile)));
-     * }
-     * catch (Exception e) {
-     * Assert.fail("Was expected a valid file, but it was invalid: " + e.getMessage());
-     * }
-     * }
-     */
-
-    private void assertValidXmlFileForLibrary(String xmlFile) {
-        File file = new File(System.getProperty("user.dir") + "/src/main/resources/" + xmlFile);
-        try {
-            NaaccrXmlDictionaryUtils.readDictionary(file);
-        }
-        catch (IOException e) {
-            fail("Was expected a valid file, but it was invalid: " + e.getMessage());
-        }
     }
 
     @Test

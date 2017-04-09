@@ -5,6 +5,8 @@ package com.imsweb.naaccrxml;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,6 +14,7 @@ import org.junit.Test;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 public class PatientXmlReaderTest {
 
@@ -158,6 +161,8 @@ public class PatientXmlReaderTest {
         Assert.assertNotNull(dict.getItemByNaaccrId("myVariable"));
         Assert.assertNotNull(dict.getItemByNaaccrNum(10000));
 
+        // TODO FD don't understand these tests, they don't define the user dictionary!!!
+
         // regular value for the extra variable
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-1.xml")), options, dict, null)) {
             Patient patient = reader.readPatient();
@@ -177,6 +182,48 @@ public class PatientXmlReaderTest {
             Assert.assertNotNull(patient.getTumors().get(0).getItem("myVariable").getValidationError());
             Assert.assertFalse(patient.getTumors().get(0).getAllValidationErrors().isEmpty());
             Assert.assertTrue(patient.getTumors().get(0).getValidationErrors().isEmpty());
+        }
+
+        // create a list with two user dictionaries
+        List<NaaccrDictionary> dictionaries = new ArrayList<>();
+        NaaccrDictionary dict1 = new NaaccrDictionary();
+        dict1.setSpecificationVersion(SpecificationVersion.SPEC_1_2);
+        dict1.setDictionaryUri("http://test.org/naaccrxml/test1.xml");
+        NaaccrDictionaryItem item1 = new NaaccrDictionaryItem();
+        item1.setNaaccrId("myVariable1");
+        item1.setNaaccrNum(10001);
+        item1.setNaaccrName("My Variable 1");
+        item1.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT);
+        item1.setRecordTypes("A,M,C,I");
+        item1.setLength(1);
+        dict1.addItem(item1);
+        dictionaries.add(dict1);
+        NaaccrDictionary dict2 = new NaaccrDictionary();
+        dict2.setSpecificationVersion(SpecificationVersion.SPEC_1_2);
+        dict2.setDictionaryUri("http://test.org/naaccrxml/test2.xml");
+        NaaccrDictionaryItem item2 = new NaaccrDictionaryItem();
+        item2.setNaaccrId("myVariable2");
+        item2.setNaaccrNum(10002);
+        item2.setNaaccrName("My Variable 2");
+        item2.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT);
+        item2.setRecordTypes("A,M,C,I");
+        item2.setLength(1);
+        dict2.addItem(item2);
+        dictionaries.add(dict2);
+
+        // data file defines two user dictionaries
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-mult-1.xml")), null, dictionaries)) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("1", patient.getItemValue("myVariable1"));
+            Assert.assertEquals("2", patient.getItemValue("myVariable2"));
+        }
+
+        // data file defines two user dictionaries, but specs are only 1.1 so multiple dictionaries is not supported
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-mult-2.xml")), null, dictionaries)) {
+            Assert.fail("Was expecting an exception here");
+        }
+        catch (NaaccrIOException e) {
+            // expected
         }
     }
 }

@@ -30,7 +30,7 @@ public class PatientFlatWriterTest {
 
         // a patient with no tumor
         File file = TestingUtils.createFile("test-flat-writer-no-tumor.txt");
-        PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, null, null);
+        PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, null, (NaaccrDictionary)null);
         Patient patient = new Patient();
         patient.addItem(new Item("patientIdNumber", "00000001"));
         writer.writePatient(patient);
@@ -45,7 +45,7 @@ public class PatientFlatWriterTest {
 
         // a patient with one tumor
         file = TestingUtils.createFile("test-flat-writer-one-tumor.txt");
-        writer = new PatientFlatWriter(new FileWriter(file), data, null, null);
+        writer = new PatientFlatWriter(new FileWriter(file), data, null, (NaaccrDictionary)null);
         patient = new Patient();
         patient.addItem(new Item("patientIdNumber", "00000001"));
         Tumor tumor1 = new Tumor();
@@ -63,7 +63,7 @@ public class PatientFlatWriterTest {
 
         // a patient with two tumors
         file = TestingUtils.createFile("test-flat-writer-two-tumors.txt");
-        writer = new PatientFlatWriter(new FileWriter(file), data, null, null);
+        writer = new PatientFlatWriter(new FileWriter(file), data, null, (NaaccrDictionary)null);
         patient = new Patient();
         patient.addItem(new Item("patientIdNumber", "00000001"));
         tumor1 = new Tumor();
@@ -89,7 +89,7 @@ public class PatientFlatWriterTest {
 
         // two patients with one tumor each
         file = TestingUtils.createFile("test-flat-writer-two-patients.txt");
-        writer = new PatientFlatWriter(new FileWriter(file), data, null, null);
+        writer = new PatientFlatWriter(new FileWriter(file), data, null, (NaaccrDictionary)null);
         Patient patient1 = new Patient();
         patient1.addItem(new Item("patientIdNumber", "00000001"));
         tumor1 = new Tumor();
@@ -165,7 +165,7 @@ public class PatientFlatWriterTest {
         File file = TestingUtils.createFile("test-flat-writer-user-dict.xml");
 
         // first, let's use the default user dictionary (so null)
-        try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), root, null, null)) {
+        try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), root, null, (NaaccrDictionary)null)) {
             writer.writePatient(patient);
             Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("00000001"));
         }
@@ -178,7 +178,7 @@ public class PatientFlatWriterTest {
         }
 
         // using a dictionary with items that are not tied to a start location; those should be ignored...
-        try (Reader dictReader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary.xml"))) {
+        try (Reader dictReader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary.xml"))) {
             dict = NaaccrXmlDictionaryUtils.readDictionary(dictReader);
             try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), root, null, dict)) {
                 writer.writePatient(patient);
@@ -221,7 +221,7 @@ public class PatientFlatWriterTest {
         data.addItem(new Item("registryId", "0000000001"));
 
         File file = TestingUtils.createFile("test-flat-writer-values-with-new-lines.txt");
-        PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, null, null);
+        PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, null, (NaaccrDictionary)null);
         Patient patient = new Patient();
         patient.addItem(new Item("patientIdNumber", "000000\r\n1"));
         writer.writePatient(patient);

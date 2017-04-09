@@ -1,0 +1,13 @@
+<!-- uses two user dictionaries... -->
+<NaaccrData
+        baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml"
+        userDictionaryUri="http://test.org/naaccrxml/test1.xml http://test.org/naaccrxml/test2.xml"
+        recordType="I"
+        specificationVersion="1.2"
+        xmlns="http://naaccr.org/naaccrxml">
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000001</Item>
+        <Item naaccrId="myVariable1">1</Item>
+        <Item naaccrId="myVariable2">2</Item>
+    </Patient>
+</NaaccrData>

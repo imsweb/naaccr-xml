@@ -27,7 +27,7 @@ public class PatientFlatReaderTest {
         rec1.replace(41, 49, "00000001"); // patient ID number (Patient level)
         rec1.replace(539, 543, "C123"); // primarySite (Tumor level)
         File file = TestingUtils.createAndPopulateFile("test-flat-reader-one-rec.txt", rec1);
-        PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, null);
+        PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, (NaaccrDictionary)null);
         Assert.assertEquals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION, reader.getRootData().getSpecificationVersion());
         Assert.assertEquals("0000000001", reader.getRootData().getItem("registryId").getValue());
         Patient patient = reader.readPatient();
@@ -44,7 +44,7 @@ public class PatientFlatReaderTest {
         rec2.replace(41, 49, "00000002"); // patient ID number (Patient level)
         rec2.replace(539, 543, "C456"); // primarySite (Tumor level)
         file = TestingUtils.createAndPopulateFile("test-flat-reader-two-rec-diff.txt", rec1, rec2);
-        reader = new PatientFlatReader(new FileReader(file), null, null);
+        reader = new PatientFlatReader(new FileReader(file), null, (NaaccrDictionary)null);
         Assert.assertEquals("0000000001", reader.getRootData().getItem("registryId").getValue());
         patient = reader.readPatient();
         Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
@@ -62,7 +62,7 @@ public class PatientFlatReaderTest {
         // file with two records for the same patient (one patient with two tumors)
         rec2.replace(41, 49, "00000001"); // patient ID number (Patient level)
         file = TestingUtils.createAndPopulateFile("test-flat-reader-two-rec-same.txt", rec1, rec2);
-        reader = new PatientFlatReader(new FileReader(file), null, null);
+        reader = new PatientFlatReader(new FileReader(file), null, (NaaccrDictionary)null);
         Assert.assertEquals("0000000001", reader.getRootData().getItem("registryId").getValue());
         patient = reader.readPatient();
         Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
@@ -79,7 +79,7 @@ public class PatientFlatReaderTest {
         // empty file
         File file = TestingUtils.createAndPopulateFile("test-flat-reader-empty.txt");
         try {
-            new PatientFlatReader(new FileReader(file), null, null);
+            new PatientFlatReader(new FileReader(file), null, (NaaccrDictionary)null);
             Assert.fail("Should have been an exception!");
         }
         catch (NaaccrIOException e) {
@@ -89,7 +89,7 @@ public class PatientFlatReaderTest {
         // one line that is empty
         file = TestingUtils.createAndPopulateFile("test-flat-reader-blank.txt", new StringBuilder());
         try {
-            new PatientFlatReader(new FileReader(file), null, null);
+            new PatientFlatReader(new FileReader(file), null, (NaaccrDictionary)null);
             Assert.fail("Should have been an exception!");
         }
         catch (NaaccrIOException e) {
@@ -102,7 +102,7 @@ public class PatientFlatReaderTest {
         line.replace(0, 1, " ");
         file = TestingUtils.createAndPopulateFile("test-flat-reader-missing-type.txt", line);
         try {
-            new PatientFlatReader(new FileReader(file), null, null);
+            new PatientFlatReader(new FileReader(file), null, (NaaccrDictionary)null);
             Assert.fail("Should have been an exception!");
         }
         catch (NaaccrIOException e) {
@@ -113,7 +113,7 @@ public class PatientFlatReaderTest {
         line.replace(0, 1, "X");
         file = TestingUtils.createAndPopulateFile("test-flat-reader-invalid-type.txt", line);
         try {
-            new PatientFlatReader(new FileReader(file), null, null);
+            new PatientFlatReader(new FileReader(file), null, (NaaccrDictionary)null);
             Assert.fail("Should have been an exception!");
         }
         catch (NaaccrIOException e) {
@@ -125,7 +125,7 @@ public class PatientFlatReaderTest {
         line.replace(16, 19, "   ");
         file = TestingUtils.createAndPopulateFile("test-flat-reader-missing-version.txt", line);
         try {
-            new PatientFlatReader(new FileReader(file), null, null);
+            new PatientFlatReader(new FileReader(file), null, (NaaccrDictionary)null);
             Assert.fail("Should have been an exception!");
         }
         catch (NaaccrIOException e) {
@@ -136,7 +136,7 @@ public class PatientFlatReaderTest {
         line.replace(16, 19, "XXX");
         file = TestingUtils.createAndPopulateFile("test-flat-reader-invalid-version.txt", line);
         try {
-            new PatientFlatReader(new FileReader(file), null, null);
+            new PatientFlatReader(new FileReader(file), null, (NaaccrDictionary)null);
             Assert.fail("Should have been an exception!");
         }
         catch (NaaccrIOException e) {
@@ -148,7 +148,7 @@ public class PatientFlatReaderTest {
         line.append("X");
         file = TestingUtils.createAndPopulateFile("test-flat-reader-invalid-version.txt", line);
         try {
-            new PatientFlatReader(new FileReader(file), null, null);
+            new PatientFlatReader(new FileReader(file), null, (NaaccrDictionary)null);
             Assert.fail("Should have been an exception!");
         }
         catch (NaaccrIOException e) {
@@ -171,7 +171,7 @@ public class PatientFlatReaderTest {
         File file = TestingUtils.createAndPopulateFile("test-flat-reader-pat-mismatch.txt", rec1, rec2);
 
         // lets read the patient, it should contain two tumors
-        PatientFlatReader reader = new PatientFlatReader(new FileReader(file), options, null);
+        PatientFlatReader reader = new PatientFlatReader(new FileReader(file), options, (NaaccrDictionary)null);
 
         Patient pat1 = reader.readPatient();
         Assert.assertNotNull(pat1);
@@ -198,7 +198,7 @@ public class PatientFlatReaderTest {
         File file = TestingUtils.createAndPopulateFile("test-flat-reader-root-mismatch.txt", rec1, rec2);
 
         // lets read the patients; first one should be used to populate the root data; second one should report a failure for the mismatch
-        PatientFlatReader reader = new PatientFlatReader(new FileReader(file), options, null);
+        PatientFlatReader reader = new PatientFlatReader(new FileReader(file), options, (NaaccrDictionary)null);
 
         Patient pat1 = reader.readPatient();
         Assert.assertNotNull(pat1);
@@ -223,7 +223,7 @@ public class PatientFlatReaderTest {
         File file = TestingUtils.createAndPopulateFile("test-flat-reader-user-dict.txt", rec1);
 
         // first, let's use the default user dictionary (so null)
-        try (PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, null)) {
+        try (PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, (NaaccrDictionary)null)) {
             Tumor tumor = reader.readPatient().getTumors().get(0);
             Assert.assertEquals(1000, tumor.getItem("stateRequestorItems").getValue().length());
             Assert.assertTrue(tumor.getItem("stateRequestorItems").getValue().startsWith("X"));
@@ -246,7 +246,7 @@ public class PatientFlatReaderTest {
         }
 
         // using a dictionary with items that are not tied to a start location; those should be ignored...
-        try (Reader dictReader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/testing-user-dictionary.xml"))) {
+        try (Reader dictReader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary.xml"))) {
             try (PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, NaaccrXmlDictionaryUtils.readDictionary(dictReader))) {
                 Tumor tumor = reader.readPatient().getTumors().get(0);
                 Assert.assertNull(tumor.getItem("stateRequestorItems"));
