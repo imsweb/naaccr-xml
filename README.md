@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/imsweb/naaccr-xml.svg?branch=master)](https://travis-ci.org/imsweb/naaccr-xml)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml)
 
-This library provides support for the NAACCR XML format. It implements version 1.1 of the specifications.
+This library provides support for the NAACCR XML format. It implements version 1.2 of the specifications but also supports versions 1.0 and 1.1.
 
 Information about the format and its specifications can be found in [the project wiki](https://github.com/imsweb/naaccr-xml/wiki).
 
@@ -47,7 +47,7 @@ try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file), option
 Here is an example of writing a patient to a data file using the writer:
 
 ```java
- try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), naaccrData, null, null, configuration)) {
+ try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), naaccrData, options, userDictionary)) {
     writer.writePatient(patient);
 }
 ```
@@ -55,10 +55,10 @@ Here is an example of writing a patient to a data file using the writer:
 Note that the data files contain a collection of patients, but they also contain some information that appear once per file. 
 That information is encapsulated in the NaaccrData class. The reading/writing process for that class is very different than the one used for the patients:
 
-- The NaaccrData is read from XML within the constructor of the reader (so it's available as soon as the reader is created).
-- The NaaccrData is written to XML within the constructor of the writer (so it's written to the file as soon as the writer is created).
+- The NaaccrData is read from XML when the constructor of the reader is called (so it's available as soon as the reader is created).
+- The NaaccrData is written to XML when the constructor of the writer is called (so it's written to the file as soon as the writer is created).
 
-It is important to keep in mind those side effects when creating readers or writers.
+It is important to keep in mind those side effects when creating readers and writers.
 
 ### Using the NAACCR XML Utility class (NaaccrXmlUtils)
 A few higher-level utility methods have been defined in the [NaaccrXmlUtils](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrXmlUtils.java) class (only the required parameters are shown for clarity):
@@ -79,7 +79,7 @@ There are other utility methods, but those are the main ones.
 
 All those methods accept the following optional parameters (optional in the sense that null can be passed to the method):
 * [NaaccrXmlOptions](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrXmlOptions.java) - options for customizing the read/write and errors reporting operations
-* [NaaccrDictionary](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/entity/dictionary/NaaccrDictionary.java) - a user-defined dictionary (if none is provided, the default user-defined dictionary will be used)
+* [NaaccrDictionary](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/entity/dictionary/NaaccrDictionary.java) - one or several user-defined dictionary (if none is provided, the default user-defined dictionary will be used)
 * [NaaccrObserver](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrObserver.java) - an observer allowing to report progress as the files are being processed.
 
 ### Using the Graphical User Interface (Standalone)
