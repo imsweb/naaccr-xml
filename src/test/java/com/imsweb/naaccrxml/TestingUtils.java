@@ -28,7 +28,7 @@ public class TestingUtils {
         NaaccrDictionary dict = new NaaccrDictionary();
         dict.setSpecificationVersion(specifications);
         dict.setNaaccrVersion("160");
-        dict.setDictionaryUri("whatever");
+        dict.setDictionaryUri("http://test.org/naaccrxml/test.xml");
         dict.setDescription("Another whatever...");
 
         NaaccrDictionaryItem item = new NaaccrDictionaryItem();

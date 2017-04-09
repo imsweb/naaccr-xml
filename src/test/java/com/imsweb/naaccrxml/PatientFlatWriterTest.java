@@ -122,7 +122,7 @@ public class PatientFlatWriterTest {
 
         NaaccrOptions options = new NaaccrOptions();
 
-        NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(TestingUtils.getDataFile("testing-user-dictionary.xml"));
+        NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(TestingUtils.getDataFile("dictionary/testing-user-dictionary.xml"));
 
         NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_INCIDENCE);
         Patient patient = new Patient();

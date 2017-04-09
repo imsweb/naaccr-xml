@@ -101,7 +101,7 @@ public class PatientXmlReaderTest {
         }
 
         // by default, a value too long should be reported as an error but shouldn't be truncated
-        NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(TestingUtils.getDataFile("testing-user-dictionary.xml"));
+        NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(TestingUtils.getDataFile("dictionary/testing-user-dictionary.xml"));
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-too-long.xml")), options, dict)) {
             Patient patient = reader.readPatient();
             Assert.assertEquals("XX", patient.getItemValue("myVariable2"));
@@ -157,11 +157,9 @@ public class PatientXmlReaderTest {
         NaaccrOptions options = new NaaccrOptions();
         options.setUseStrictNamespaces(false);
 
-        NaaccrDictionary dict = TestingUtils.createUserDictionary(SpecificationVersion.SPEC_1_1);
+        NaaccrDictionary dict = TestingUtils.createUserDictionary(SpecificationVersion.SPEC_1_1); // has to be this version since one of the test uses a regex
         Assert.assertNotNull(dict.getItemByNaaccrId("myVariable"));
         Assert.assertNotNull(dict.getItemByNaaccrNum(10000));
-
-        // TODO FD don't understand these tests, they don't define the user dictionary!!!
 
         // regular value for the extra variable
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-1.xml")), options, dict, null)) {
@@ -187,7 +185,7 @@ public class PatientXmlReaderTest {
         // create a list with two user dictionaries
         List<NaaccrDictionary> dictionaries = new ArrayList<>();
         NaaccrDictionary dict1 = new NaaccrDictionary();
-        dict1.setSpecificationVersion(SpecificationVersion.SPEC_1_2);
+        dict1.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
         dict1.setDictionaryUri("http://test.org/naaccrxml/test1.xml");
         NaaccrDictionaryItem item1 = new NaaccrDictionaryItem();
         item1.setNaaccrId("myVariable1");
@@ -199,7 +197,7 @@ public class PatientXmlReaderTest {
         dict1.addItem(item1);
         dictionaries.add(dict1);
         NaaccrDictionary dict2 = new NaaccrDictionary();
-        dict2.setSpecificationVersion(SpecificationVersion.SPEC_1_2);
+        dict2.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
         dict2.setDictionaryUri("http://test.org/naaccrxml/test2.xml");
         NaaccrDictionaryItem item2 = new NaaccrDictionaryItem();
         item2.setNaaccrId("myVariable2");
