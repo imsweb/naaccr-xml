@@ -6,6 +6,7 @@ package com.imsweb.naaccrxml.gui.pages;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.io.IOException;
@@ -58,6 +59,7 @@ public class DictionariesPage extends AbstractPage {
         super();
 
         this.setBorder(new MatteBorder(0, 0, 1, 1, Color.GRAY));
+        this.setPreferredSize(new Dimension(500, 300)); // need this because some dictionaries define pretty long lines now...
 
         Vector<NaaccrDictionaryWrapper> standardDictionaries = new Vector<>();
         for (String version : NaaccrFormat.getSupportedVersions()) {

@@ -54,6 +54,7 @@ import org.apache.commons.io.IOUtils;
 import com.imsweb.naaccrxml.gui.pages.DictionariesPage;
 import com.imsweb.naaccrxml.gui.pages.FlatToXmlPage;
 import com.imsweb.naaccrxml.gui.pages.XmlToFlatPage;
+import com.imsweb.naaccrxml.gui.pages.XmlToXmlPage;
 import com.imsweb.naaccrxml.gui.pages.XmlValidationPage;
 
 public class Standalone extends JFrame implements ActionListener {
@@ -114,7 +115,9 @@ public class Standalone extends JFrame implements ActionListener {
         toolbar.add(Box.createVerticalStrut(15));
         toolbar.add(createToolbarButton("XML to Flat", "xml_to_flat", "transform a given NAACCR XML file into the corresponding Flat file (fixed-columns)"));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("Dictionary", "dictionary", "view the standard NAACCR dictionaries used to process NAACCR XML data"));
+        toolbar.add(createToolbarButton("XML to XML", "xml_to_xml", "re-create a given NAACCR XML file using different options"));
+        toolbar.add(Box.createVerticalStrut(15));
+        toolbar.add(createToolbarButton("Dictionaries", "dictionaries", "view the standard NAACCR dictionaries used to process NAACCR XML data"));
         toolbar.add(Box.createVerticalStrut(15));
         toolbar.add(createToolbarButton("XML Validation", "validate", "validate a given NAACCR XML file"));
         this.getContentPane().add(toolbar, BorderLayout.WEST);
@@ -125,7 +128,8 @@ public class Standalone extends JFrame implements ActionListener {
         _centerPnl.setLayout(_layout);
         _centerPnl.add("flat_to_xml", new FlatToXmlPage());
         _centerPnl.add("xml_to_flat", new XmlToFlatPage());
-        _centerPnl.add("dictionary", new DictionariesPage());
+        _centerPnl.add("xml_to_xml", new XmlToXmlPage());
+        _centerPnl.add("dictionaries", new DictionariesPage());
         _centerPnl.add("validate", new XmlValidationPage());
         this.getContentPane().add(_centerPnl, BorderLayout.CENTER);
 
