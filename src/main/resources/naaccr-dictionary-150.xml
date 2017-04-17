@@ -1893,7 +1893,7 @@
             length="5"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="comorbidComplication2"
             naaccrNum="3120"
             naaccrName="Comorbid/Complication 2"
@@ -1901,7 +1901,7 @@
             length="5"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="comorbidComplication3"
             naaccrNum="3130"
             naaccrName="Comorbid/Complication 3"
@@ -1909,7 +1909,7 @@
             length="5"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="comorbidComplication4"
             naaccrNum="3140"
             naaccrName="Comorbid/Complication 4"
@@ -1917,7 +1917,7 @@
             length="5"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="comorbidComplication5"
             naaccrNum="3150"
             naaccrName="Comorbid/Complication 5"
@@ -1925,7 +1925,7 @@
             length="5"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="comorbidComplication6"
             naaccrNum="3160"
             naaccrName="Comorbid/Complication 6"
@@ -1933,7 +1933,7 @@
             length="5"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="comorbidComplication7"
             naaccrNum="3161"
             naaccrName="Comorbid/Complication 7"
@@ -1941,7 +1941,7 @@
             length="5"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="comorbidComplication8"
             naaccrNum="3162"
             naaccrName="Comorbid/Complication 8"
@@ -1949,7 +1949,7 @@
             length="5"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="comorbidComplication9"
             naaccrNum="3163"
             naaccrName="Comorbid/Complication 9"
@@ -1957,7 +1957,7 @@
             length="5"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="comorbidComplication10"
             naaccrNum="3164"
             naaccrName="Comorbid/Complication 10"
@@ -1965,7 +1965,7 @@
             length="5"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="secondaryDiagnosis1"
             naaccrNum="3780"
             naaccrName="Secondary Diagnosis 1"
