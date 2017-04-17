@@ -43,7 +43,7 @@ public class FlatToXmlPage extends AbstractProcessingPage {
 
         // make sure the file exists
         if (file == null || !file.exists()) {
-            reportAnalysisError("unable to find selected file");
+            reportAnalysisError(new Exception("unable to find selected file"));
             return null;
         }
 
@@ -56,29 +56,29 @@ public class FlatToXmlPage extends AbstractProcessingPage {
             // ignored
         }
         if (firstLine == null || firstLine.isEmpty()) {
-            reportAnalysisError("selected file is empty");
+            reportAnalysisError(new Exception("selected file is empty"));
             return null;
         }
 
         // make sure the NAACCR version is valid
         String version = firstLine.length() < 19 ? "" : firstLine.substring(16, 19).trim();
         if (version.isEmpty()) {
-            reportAnalysisError("unable to get NAACCR version from first record");
+            reportAnalysisError(new Exception("unable to get NAACCR version from first record"));
             return null;
         }
         if (!NaaccrFormat.isVersionSupported(version)) {
-            reportAnalysisError("invalid/unsupported NAACCR version on first record: " + version);
+            reportAnalysisError(new Exception("invalid/unsupported NAACCR version on first record: " + version));
             return null;
         }
 
         // make sure the record type is valid
         String type = firstLine.substring(0, 1).trim();
         if (type.isEmpty()) {
-            reportAnalysisError("unable to get record type from first record");
+            reportAnalysisError(new Exception("unable to get record type from first record"));
             return null;
         }
         if (!NaaccrFormat.isRecordTypeSupported(type)) {
-            reportAnalysisError("invalid/unsupported record type on first record: " + type);
+            reportAnalysisError(new Exception("invalid/unsupported record type on first record: " + type));
             return null;
         }
 
@@ -88,13 +88,13 @@ public class FlatToXmlPage extends AbstractProcessingPage {
             format = NaaccrFormat.getInstance(version, type);
         }
         catch (RuntimeException ex) {
-            reportAnalysisError(ex.getMessage());
+            reportAnalysisError(ex);
             return null;
         }
 
         // make sure first line has the correct length
         if (firstLine.length() != format.getLineLength()) {
-            reportAnalysisError("invalid line length for first record, expected " + format.getLineLength() + " but got " + firstLine.length());
+            reportAnalysisError(new Exception("invalid line length for first record, expected " + format.getLineLength() + " but got " + firstLine.length()));
             return null;
         }
 

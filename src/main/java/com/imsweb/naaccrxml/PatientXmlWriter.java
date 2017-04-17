@@ -187,7 +187,7 @@ public class PatientXmlWriter implements AutoCloseable {
             _writer.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
 
             // add any user-defined namespaces
-            configuration.getRegisterNamespaces().entrySet().forEach(entry -> _writer.addAttribute("xmlns:" + entry.getKey(), entry.getValue()));
+            configuration.getRegisterNamespaces().forEach((key, value) -> _writer.addAttribute("xmlns:" + key, value));
 
             // now we are ready to create our reading context and make it available to the patient converter
             context.setDictionary(new RuntimeNaaccrDictionary(rootData.getRecordType(), baseDictionary, dictionaries.values()));
@@ -207,6 +207,9 @@ public class PatientXmlWriter implements AutoCloseable {
         catch (ConversionException ex) {
             throw convertSyntaxException(ex);
         }
+        catch (RuntimeException ex) {
+            throw new NaaccrIOException("unable to write XML", ex);
+        }
     }
 
     /**
@@ -219,6 +222,9 @@ public class PatientXmlWriter implements AutoCloseable {
         }
         catch (ConversionException ex) {
             throw convertSyntaxException(ex);
+        }
+        catch (RuntimeException ex) {
+            throw new NaaccrIOException("unable to write XML", ex);
         }
     }
 
@@ -245,9 +251,9 @@ public class PatientXmlWriter implements AutoCloseable {
         String msg = ex.get("message");
         if (msg == null)
             msg = ex.getMessage();
-        NaaccrIOException e = new NaaccrIOException(msg);
-        if (ex.get("lineNumber") != null)
-            e.setLineNumber(Integer.valueOf(ex.get("lineNumber")));
+        NaaccrIOException e = new NaaccrIOException(msg, ex);
+        if (ex.get("line number") != null)
+            e.setLineNumber(Integer.valueOf(ex.get("line number")));
         e.setPath(ex.get("path"));
         return e;
     }

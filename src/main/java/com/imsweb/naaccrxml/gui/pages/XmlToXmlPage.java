@@ -11,8 +11,8 @@ import com.imsweb.naaccrxml.NaaccrIOException;
 import com.imsweb.naaccrxml.NaaccrObserver;
 import com.imsweb.naaccrxml.NaaccrOptions;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
-import com.imsweb.naaccrxml.PatientFlatWriter;
 import com.imsweb.naaccrxml.PatientXmlReader;
+import com.imsweb.naaccrxml.PatientXmlWriter;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.gui.StandaloneOptions;
@@ -50,7 +50,7 @@ public class XmlToXmlPage extends AbstractProcessingPage {
 
         // create the reader and writer and let them do all the work!
         try (PatientXmlReader reader = new PatientXmlReader(NaaccrXmlUtils.createReader(source), options, dictionaries)) {
-            try (PatientFlatWriter writer = new PatientFlatWriter(NaaccrXmlUtils.createWriter(target), reader.getRootData(), options, dictionaries)) {
+            try (PatientXmlWriter writer = new PatientXmlWriter(NaaccrXmlUtils.createWriter(target), reader.getRootData(), options, dictionaries)) {
                 Patient patient = reader.readPatient();
                 while (patient != null && !Thread.currentThread().isInterrupted()) {
                     if (observer != null)
@@ -68,7 +68,7 @@ public class XmlToXmlPage extends AbstractProcessingPage {
     protected NaaccrFormat getFormatForInputFile(File file) {
 
         if (file == null || !file.exists()) {
-            reportAnalysisError("unable to find selected file");
+            reportAnalysisError(new Exception("unable to find selected file"));
             return null;
         }
 
@@ -76,7 +76,7 @@ public class XmlToXmlPage extends AbstractProcessingPage {
             return NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromXmlFile(file));
         }
         catch (RuntimeException e) {
-            reportAnalysisError("unable to identify file format");
+            reportAnalysisError(new Exception("unable to identify file format"));
             return null;
         }
     }

@@ -20,6 +20,10 @@ public class NaaccrIOException extends IOException {
         _lineNumber = lineNumber;
     }
 
+    public NaaccrIOException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     public Integer getLineNumber() {
         return _lineNumber;
     }

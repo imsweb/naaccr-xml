@@ -572,7 +572,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                     // ignored
                 }
                 catch (ExecutionException e) {
-                    reportAnalysisError(e.getCause().getMessage());
+                    reportAnalysisError((Exception)e.getCause());
                 }
                 finally {
                     _analysisWorker = null;
@@ -601,7 +601,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
                 List<NaaccrDictionary> userDictionaries = new ArrayList<>();
                 if (!_dictionaryFld.getText().isEmpty())
-                    userDictionaries.add(NaaccrXmlDictionaryUtils.readDictionary(new File(_dictionaryFld.getText())));
+                    for (String s : _dictionaryFld.getText().split(";"))
+                        userDictionaries.add(NaaccrXmlDictionaryUtils.readDictionary(new File(s.trim())));
 
                 final long start = System.currentTimeMillis();
                 String baseUri = NaaccrXmlUtils.getAttributesFromXmlFile(targetFile).get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT);
@@ -666,7 +667,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                     _warningsSummaryTextArea.setText("Processing interrupted...");
                 }
                 catch (ExecutionException e) {
-                    reportProcessingError(e.getCause().getMessage());
+                    reportProcessingError((Exception)e.getCause());
                     _warningsSummaryTextArea.setText("Processing error...");
                 }
                 finally {
@@ -738,16 +739,40 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         return "Successfully created \"" + path + "\" (" + size + ") in " + total + " (analysis: " + analysis + ", processing: " + processing + ")";
     }
 
-    protected void reportAnalysisError(String error) {
+    protected void reportAnalysisError(Exception e) {
         _centerPnl.setVisible(false);
         _analysisBar.setIndeterminate(false);
-        _analysisErrorLbl.setText(error == null || error.isEmpty() ? "unexpected error" : error);
+        _analysisErrorLbl.setText(extractMessageFromException(e));
         _northLayout.show(_northPnl, _NORTH_PANEL_ID_ERROR);
     }
 
-    protected void reportProcessingError(String error) {
-        _processingErrorLbl.setText(error == null || error.isEmpty() ? "unexpected error" : error);
+    protected void reportProcessingError(Exception e) {
+        _processingErrorLbl.setText(extractMessageFromException(e));
         _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_ERROR);
+    }
+
+    private String extractMessageFromException(Exception e) {
+        String result = null;
+
+        if (e != null) {
+            if (e instanceof NaaccrIOException) {
+                NaaccrIOException ioe = (NaaccrIOException)e;
+                if (ioe.getMessage() != null) {
+                    if (ioe.getLineNumber() != null)
+                        result = e.getMessage() + " at line " + ioe.getLineNumber();
+                    else
+                        result = e.getMessage();
+                }
+            }
+
+            if (result == null)
+                result = e.getMessage();
+        }
+
+        if (result == null)
+            result = "unexpected error";
+
+        return result;
     }
 
     private String fixFileExtension(String filename, String compression) {

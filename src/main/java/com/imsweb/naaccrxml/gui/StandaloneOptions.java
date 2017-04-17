@@ -141,7 +141,7 @@ public class StandaloneOptions extends JPanel {
 
         if (readXml) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-            _strictNameSpacesBox = new JCheckBox(" (Advanced) When reading the file, use strict rules for the XML namespaces.");
+            _strictNameSpacesBox = new JCheckBox("When reading the file, use strict rules for the XML namespaces.");
             _strictNameSpacesBox.setSelected(true);
             pnl.add(_strictNameSpacesBox);
             contentPnl.add(pnl);

@@ -21,6 +21,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.StreamException;
+import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
@@ -315,7 +316,13 @@ public class PatientXmlReader implements AutoCloseable {
             throw convertSyntaxException(ex);
         }
         catch (StreamException ex) {
-            throw new NaaccrIOException("invalid XML syntax, unable to find root tag");
+            throw new NaaccrIOException("invalid XML syntax, unable to find root tag", ex);
+        }
+        catch (RuntimeException ex) {
+            // an unknown tag in the extension is a common mistake, so let's make sure we report that nicely
+            if (ex instanceof CannotResolveClassException)
+                throw new NaaccrIOException("invalid tag: " + ex.getMessage());
+            throw new NaaccrIOException("invalid XML syntax", ex);
         }
     }
 
@@ -340,6 +347,15 @@ public class PatientXmlReader implements AutoCloseable {
         }
         catch (ConversionException ex) {
             throw convertSyntaxException(ex);
+        }
+        catch (StreamException ex) {
+            throw new NaaccrIOException("invalid XML syntax", ex);
+        }
+        catch (RuntimeException ex) {
+            // an unknown tag in the extension is a common mistake, so let's make sure we report that nicely
+            if (ex instanceof CannotResolveClassException)
+                throw new NaaccrIOException("invalid tag: " + ex.getMessage());
+            throw new NaaccrIOException("invalid XML syntax", ex);
         }
 
         return patient;
@@ -382,11 +398,19 @@ public class PatientXmlReader implements AutoCloseable {
      */
     private NaaccrIOException convertSyntaxException(ConversionException ex) {
         String msg = ex.get("message");
+
+        // reading a file that has bad tags is very common, so let's try to get a better error message in that case:
+        if (CannotResolveClassException.class.getName().equals(ex.get("cause-exception")))
+            msg = "invalid tag: " + ex.get("cause-message");
+        else if (StreamException.class.getName().equals(ex.get("cause-exception")))
+            msg = "invalid XML syntax";
+
         if (msg == null)
             msg = ex.getMessage();
-        NaaccrIOException e = new NaaccrIOException(msg);
-        if (ex.get("lineNumber") != null)
-            e.setLineNumber(Integer.valueOf(ex.get("lineNumber")));
+
+        NaaccrIOException e = new NaaccrIOException(msg, ex);
+        if (ex.get("line number") != null)
+            e.setLineNumber(Integer.valueOf(ex.get("line number")));
         e.setPath(ex.get("path"));
         return e;
     }

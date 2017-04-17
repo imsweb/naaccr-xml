@@ -45,7 +45,7 @@ public class XmlToFlatPage extends AbstractProcessingPage {
     protected NaaccrFormat getFormatForInputFile(File file) {
 
         if (file == null || !file.exists()) {
-            reportAnalysisError("unable to find selected file");
+            reportAnalysisError(new Exception("unable to find selected file"));
             return null;
         }
 
@@ -53,7 +53,7 @@ public class XmlToFlatPage extends AbstractProcessingPage {
             return NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromXmlFile(file));
         }
         catch (RuntimeException e) {
-            reportAnalysisError("unable to identify file format");
+            reportAnalysisError(new Exception("unable to identify file format"));
             return null;
         }
     }
