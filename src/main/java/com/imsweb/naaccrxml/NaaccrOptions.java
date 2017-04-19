@@ -79,6 +79,14 @@ public class NaaccrOptions {
     private Boolean _ignoreExtensions;
 
     /**
+     * Convenience method to make the code look nicer, but it really just calls the default constructor!
+     * @return an instance of the options with all default values.
+     */
+    public static NaaccrOptions getDefault() {
+        return new NaaccrOptions();
+    }
+
+    /**
      * Default constructor.
      */
     public NaaccrOptions() {

@@ -47,6 +47,14 @@ public class NaaccrStreamConfiguration {
     protected Set<String> _defaultTags;
 
     /**
+     * Convenience method to make the code look nicer, but it really just calls the default constructor!
+     * @return an instance of the configuration with all default values.
+     */
+    public static NaaccrStreamConfiguration getDefault() {
+        return new NaaccrStreamConfiguration();
+    }
+
+    /**
      * Constructor.
      */
     public NaaccrStreamConfiguration() {

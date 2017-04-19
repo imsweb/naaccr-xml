@@ -116,11 +116,11 @@ public class PatientXmlReader implements AutoCloseable {
         try {
             // we always need options
             if (options == null)
-                options = new NaaccrOptions();
+                options = NaaccrOptions.getDefault();
 
             // we always need a configuration
             if (configuration == null)
-                configuration = new NaaccrStreamConfiguration();
+                configuration = NaaccrStreamConfiguration.getDefault();
 
             // clean-up the dictionaries
             Map<String, NaaccrDictionary> providedDictionaries = new HashMap<>();

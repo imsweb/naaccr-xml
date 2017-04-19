@@ -2,6 +2,7 @@
 
 **Version 3.0**
 
+ - Added 'getDefault()' method to options and configuration objects.
  - Now caching the internal dictionaries (base and default user) in the dictionary utility class.
  - Added support for multiple user dictionaries (specification 1.2).
  - Added support for grouped items definition in the base dictionaries (specification 1.2).

@@ -118,11 +118,19 @@ public class PatientXmlWriter implements AutoCloseable {
         try {
             // we always need options
             if (options == null)
-                options = new NaaccrOptions();
+                options = NaaccrOptions.getDefault();
 
             // we always need a configuration
             if (configuration == null)
-                configuration = new NaaccrStreamConfiguration();
+                configuration = NaaccrStreamConfiguration.getDefault();
+
+            // create the context
+            NaaccrStreamContext context = new NaaccrStreamContext();
+            context.setOptions(options);
+            context.setConfiguration(configuration);
+
+            // get the base dictionary we need
+            NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(rootData.getBaseDictionaryUri());
 
             // clean-up the dictionaries
             Map<String, NaaccrDictionary> dictionaries = new HashMap<>();
@@ -130,14 +138,7 @@ public class PatientXmlWriter implements AutoCloseable {
                 for (NaaccrDictionary userDictionary : userDictionaries)
                     if (userDictionary != null)
                         dictionaries.put(userDictionary.getDictionaryUri(), userDictionary);
-
-            // create the context
-            NaaccrStreamContext context = new NaaccrStreamContext();
-            context.setOptions(options);
-            context.setConfiguration(configuration);
-
-            NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(rootData.getBaseDictionaryUri());
-
+            
             // create the writer
             _writer = new PrettyPrintWriter(writer, new char[] {' ', ' ', ' ', ' '});
 
