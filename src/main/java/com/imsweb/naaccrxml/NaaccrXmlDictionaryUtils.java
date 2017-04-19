@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -78,6 +79,9 @@ public final class NaaccrXmlDictionaryUtils {
     // the Patterns for the internal dictionaries URI
     public static final Pattern BASE_DICTIONARY_URI_PATTERN = Pattern.compile("http://naaccr\\.org/naaccrxml/naaccr-dictionary-(.+?)\\.xml");
     public static final Pattern DEFAULT_USER_DICTIONARY_URI_PATTERN = Pattern.compile("http://naaccr\\.org/naaccrxml/user-defined-naaccr-dictionary-(.+?)\\.xml");
+
+    // cached internal dictionaries
+    private static Map<String, NaaccrDictionary> _INTERNAL_DICTIONARIES = new ConcurrentHashMap<>();
 
     /**
      * Private constructor, no instanciation...
@@ -160,13 +164,18 @@ public final class NaaccrXmlDictionaryUtils {
             throw new RuntimeException("Version is required for getting the base dictionary.");
         if (!NaaccrFormat.isVersionSupported(naaccrVersion))
             throw new RuntimeException("Unsupported base dictionary version: " + naaccrVersion);
-        String resName = "naaccr-dictionary-" + naaccrVersion + ".xml";
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResource(resName).openStream(), StandardCharsets.UTF_8)) {
-            return readDictionary(reader);
+        NaaccrDictionary result = _INTERNAL_DICTIONARIES.get("base_" + naaccrVersion);
+        if (result == null) {
+            String resName = "naaccr-dictionary-" + naaccrVersion + ".xml";
+            try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResource(resName).openStream(), StandardCharsets.UTF_8)) {
+                result = readDictionary(reader);
+                _INTERNAL_DICTIONARIES.put("base_" + naaccrVersion, result);
+            }
+            catch (IOException e) {
+                throw new RuntimeException("Unable to load base dictionary for version " + naaccrVersion, e);
+            }
         }
-        catch (IOException e) {
-            throw new RuntimeException("Unable to load base dictionary for version " + naaccrVersion, e);
-        }
+        return result;
     }
 
     /**
@@ -191,13 +200,25 @@ public final class NaaccrXmlDictionaryUtils {
             throw new RuntimeException("Version is required for getting the default user dictionary.");
         if (!NaaccrFormat.isVersionSupported(naaccrVersion))
             throw new RuntimeException("Unsupported default user dictionary version: " + naaccrVersion);
-        String resName = "user-defined-naaccr-dictionary-" + naaccrVersion + ".xml";
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResource(resName).openStream(), StandardCharsets.UTF_8)) {
-            return readDictionary(reader);
+        NaaccrDictionary result = _INTERNAL_DICTIONARIES.get("user_" + naaccrVersion);
+        if (result == null) {
+            String resName = "user-defined-naaccr-dictionary-" + naaccrVersion + ".xml";
+            try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResource(resName).openStream(), StandardCharsets.UTF_8)) {
+                result = readDictionary(reader);
+                _INTERNAL_DICTIONARIES.put("user_" + naaccrVersion, result);
+            }
+            catch (IOException e) {
+                throw new RuntimeException("Unable to get base dictionary for version " + naaccrVersion, e);
+            }
         }
-        catch (IOException e) {
-            throw new RuntimeException("Unable to get base dictionary for version " + naaccrVersion, e);
-        }
+        return result;
+    }
+
+    /**
+     * Clears the cached internal dictionaries.
+     */
+    public static void clearCachedDictionaries() {
+        _INTERNAL_DICTIONARIES.clear();
     }
 
     /**

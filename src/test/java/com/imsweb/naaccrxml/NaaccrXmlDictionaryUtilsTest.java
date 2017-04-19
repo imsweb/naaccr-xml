@@ -53,6 +53,9 @@ public class NaaccrXmlDictionaryUtilsTest {
                 if (items.get(i).getStartColumn() + items.get(i).getLength() != items.get(i + 1).getStartColumn())
                     fail("Found a gap after item " + items.get(i).getNaaccrId());
         }
+
+        // clear the caches, force other tests to reload them again
+        NaaccrXmlDictionaryUtils.clearCachedDictionaries();
     }
 
     @Test
