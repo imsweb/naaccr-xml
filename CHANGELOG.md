@@ -2,6 +2,7 @@
 
 **Version 3.0**
 
+ - Added the ability to cache a runtime dictionary when using the XML reader/writer inside a loop.
  - Added 'getDefault()' method to options and configuration objects.
  - Now caching the internal dictionaries (base and default user) in the dictionary utility class.
  - Added support for multiple user dictionaries (specification 1.2).

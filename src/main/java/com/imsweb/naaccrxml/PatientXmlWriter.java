@@ -97,11 +97,11 @@ public class PatientXmlWriter implements AutoCloseable {
      * @param rootData required root data (corresponds to the content of NaaccrData)
      * @param options optional options
      * @param userDictionary optional user-defined dictionary
-     * @param configuration optional stream configuration
+     * @param conf optional stream configuration
      * @throws NaaccrIOException if anything goes wrong
      */
-    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
-        this(writer, rootData, options, Collections.singletonList(userDictionary), configuration);
+    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration conf) throws NaaccrIOException {
+        this(writer, rootData, options, Collections.singletonList(userDictionary), conf);
     }
 
     /**
@@ -110,10 +110,10 @@ public class PatientXmlWriter implements AutoCloseable {
      * @param rootData required root data (corresponds to the content of NaaccrData)
      * @param options optional options
      * @param userDictionaries optional user-defined dictionaries (can be null or empty)
-     * @param configuration optional stream configuration
+     * @param conf optional stream configuration
      * @throws NaaccrIOException if anything goes wrong
      */
-    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, List<NaaccrDictionary> userDictionaries, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
+    public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, List<NaaccrDictionary> userDictionaries, NaaccrStreamConfiguration conf) throws NaaccrIOException {
 
         try {
             // we always need options
@@ -121,13 +121,13 @@ public class PatientXmlWriter implements AutoCloseable {
                 options = NaaccrOptions.getDefault();
 
             // we always need a configuration
-            if (configuration == null)
-                configuration = NaaccrStreamConfiguration.getDefault();
+            if (conf == null)
+                conf = NaaccrStreamConfiguration.getDefault();
 
             // create the context
             NaaccrStreamContext context = new NaaccrStreamContext();
             context.setOptions(options);
-            context.setConfiguration(configuration);
+            context.setConfiguration(conf);
 
             // get the base dictionary we need
             NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(rootData.getBaseDictionaryUri());
@@ -138,7 +138,7 @@ public class PatientXmlWriter implements AutoCloseable {
                 for (NaaccrDictionary userDictionary : userDictionaries)
                     if (userDictionary != null)
                         dictionaries.put(userDictionary.getDictionaryUri(), userDictionary);
-            
+
             // create the writer
             _writer = new PrettyPrintWriter(writer, new char[] {' ', ' ', ' ', ' '});
 
@@ -188,18 +188,22 @@ public class PatientXmlWriter implements AutoCloseable {
             _writer.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
 
             // add any user-defined namespaces
-            configuration.getRegisterNamespaces().forEach((key, value) -> _writer.addAttribute("xmlns:" + key, value));
+            conf.getRegisterNamespaces().forEach((key, value) -> _writer.addAttribute("xmlns:" + key, value));
+
+            // create or get the runtime dictionary
+            if (conf.getCachedDictionary() == null || !conf.getCachedDictionary().getId().equals(RuntimeNaaccrDictionary.computeId(rootData.getRecordType(), baseDictionary, dictionaries.values())))
+                conf.setCachedDictionary(new RuntimeNaaccrDictionary(rootData.getRecordType(), baseDictionary, dictionaries.values()));
 
             // now we are ready to create our reading context and make it available to the patient converter
-            context.setDictionary(new RuntimeNaaccrDictionary(rootData.getRecordType(), baseDictionary, dictionaries.values()));
-            configuration.getPatientConverter().setContext(context);
+            context.setDictionary(conf.getCachedDictionary());
+            conf.getPatientConverter().setContext(context);
 
             // write the root items
             for (Item item : rootData.getItems())
-                configuration.getPatientConverter().writeItem(item, _writer);
+                conf.getPatientConverter().writeItem(item, _writer);
 
             // need to expose xstream so the other methods can use it...
-            _xstream = configuration.getXstream();
+            _xstream = conf.getXstream();
 
             // handle extension
             if (!Boolean.TRUE.equals(options.getIgnoreExtensions()) && rootData.getExtension() != null)

@@ -18,18 +18,33 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 public class RuntimeNaaccrDictionary {
 
+    // used to uniquely identify a runtime dictionary (based on the URI of the base and user dictionaries)
+    private String _id;
+
+    // the format for this runtime dictionary
     private NaaccrFormat _format;
 
+    // the items for this runtime dictionary
     private List<RuntimeNaaccrDictionaryItem> _items;
 
     // caches used to improve lookup performances
     private Map<String, RuntimeNaaccrDictionaryItem> _cachedById;
 
+    /**
+     * Constructor.
+     * @param recordType record type (required)
+     * @param baseDictionary base dictionary (required)
+     * @param userDictionaries user dictionaries (optional)
+     * @throws NaaccrIOException if the runtime dictionary cannot be successfully created
+     */
     public RuntimeNaaccrDictionary(String recordType, NaaccrDictionary baseDictionary, Collection<NaaccrDictionary> userDictionaries) throws NaaccrIOException {
         if (recordType == null)
             throw new NaaccrIOException("Record type is required to create a runtime dictionary");
         if (baseDictionary == null)
             throw new NaaccrIOException("Base dictionary is required to create a runtime dictionary");
+
+        // assign the ID based on the URI (done on the raw input so the behavior is the same when called outside of this constructor)
+        _id = computeId(recordType, baseDictionary, userDictionaries);
 
         // compute a clean list of user dictionaries
         List<NaaccrDictionary> dictionaries = new ArrayList<>();
@@ -84,6 +99,10 @@ public class RuntimeNaaccrDictionary {
         });
     }
 
+    public String getId() {
+        return _id;
+    }
+
     public String getNaaccrVersion() {
         return _format.getNaaccrVersion();
     }
@@ -111,5 +130,24 @@ public class RuntimeNaaccrDictionary {
             _cachedById = cache;
         }
         return _cachedById.get(id);
+    }
+
+    /**
+     * Helper method to compute an ID for a runtime dictionary based on the URI of its base and user dictionaries.
+     * @param baseDictionary base dictionary (required)
+     * @param userDictionaries user-defined dictionaries (optional, can be null or empty)
+     * @return computed runtime dictionary ID, never null
+     */
+    public static String computeId(String recordType, NaaccrDictionary baseDictionary, Collection<NaaccrDictionary> userDictionaries) {
+        if (baseDictionary == null)
+            return recordType;
+
+        StringBuilder buf = new StringBuilder(recordType);
+        buf.append(";").append(baseDictionary.getDictionaryUri());
+        if (userDictionaries != null)
+            for (NaaccrDictionary userDictionary : userDictionaries)
+                if (userDictionary != null)
+                    buf.append(";").append(userDictionary.getDictionaryUri());
+        return buf.toString();
     }
 }

@@ -96,11 +96,11 @@ public class PatientXmlReader implements AutoCloseable {
      * @param reader required underlined reader
      * @param options optional options
      * @param userDictionary optional user-defined dictionary
-     * @param configuration optional stream configuration
+     * @param conf optional stream configuration
      * @throws NaaccrIOException if anything goes wrong
      */
-    public PatientXmlReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
-        this(reader, options, Collections.singletonList(userDictionary), configuration);
+    public PatientXmlReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration conf) throws NaaccrIOException {
+        this(reader, options, Collections.singletonList(userDictionary), conf);
     }
 
     /**
@@ -108,10 +108,10 @@ public class PatientXmlReader implements AutoCloseable {
      * @param reader required underlined reader
      * @param options optional options
      * @param userDictionaries optional user-defined dictionaries (can be null or empty)
-     * @param configuration optional stream configuration
+     * @param conf optional stream configuration
      * @throws NaaccrIOException if anything goes wrong
      */
-    public PatientXmlReader(Reader reader, NaaccrOptions options, List<NaaccrDictionary> userDictionaries, NaaccrStreamConfiguration configuration) throws NaaccrIOException {
+    public PatientXmlReader(Reader reader, NaaccrOptions options, List<NaaccrDictionary> userDictionaries, NaaccrStreamConfiguration conf) throws NaaccrIOException {
 
         try {
             // we always need options
@@ -119,25 +119,25 @@ public class PatientXmlReader implements AutoCloseable {
                 options = NaaccrOptions.getDefault();
 
             // we always need a configuration
-            if (configuration == null)
-                configuration = NaaccrStreamConfiguration.getDefault();
+            if (conf == null)
+                conf = NaaccrStreamConfiguration.getDefault();
 
             // clean-up the dictionaries
-            Map<String, NaaccrDictionary> providedDictionaries = new HashMap<>();
+            Map<String, NaaccrDictionary> dictionaries = new HashMap<>();
             if (userDictionaries != null)
                 for (NaaccrDictionary userDictionary : userDictionaries)
                     if (userDictionary != null)
-                        providedDictionaries.put(userDictionary.getDictionaryUri(), userDictionary);
+                        dictionaries.put(userDictionary.getDictionaryUri(), userDictionary);
 
             // create the context
             _context = new NaaccrStreamContext();
             _context.setOptions(options);
-            _context.setConfiguration(configuration);
+            _context.setConfiguration(conf);
 
             // create the XML reader
-            _reader = configuration.getDriver().createReader(reader);
+            _reader = conf.getDriver().createReader(reader);
             if (!_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
-                throw new NaaccrIOException("was expecting " + NaaccrXmlUtils.NAACCR_XML_TAG_ROOT + " root tag but got " + _reader.getNodeName(), configuration.getParser().getLineNumber());
+                throw new NaaccrIOException("was expecting " + NaaccrXmlUtils.NAACCR_XML_TAG_ROOT + " root tag but got " + _reader.getNodeName(), conf.getParser().getLineNumber());
 
             // create the root data holder (it will be use for every field except the list of patients)
             _rootData = createRootData();
@@ -153,12 +153,12 @@ public class PatientXmlReader implements AutoCloseable {
             // read the standard attribute: base dictionary
             _rootData.setBaseDictionaryUri(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
             if (_rootData.getBaseDictionaryUri() == null)
-                throw new NaaccrIOException("the \"" + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT + "\" attribute is required", configuration.getParser().getLineNumber());
+                throw new NaaccrIOException("the \"" + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT + "\" attribute is required", conf.getParser().getLineNumber());
             String version = NaaccrXmlDictionaryUtils.extractVersionFromUri(_rootData.getBaseDictionaryUri());
             if (version == null || version.trim().isEmpty())
-                throw new NaaccrIOException("unable to extract NAACCR version from base dictionary URI \"" + _rootData.getBaseDictionaryUri() + "\"", configuration.getParser().getLineNumber());
+                throw new NaaccrIOException("unable to extract NAACCR version from base dictionary URI \"" + _rootData.getBaseDictionaryUri() + "\"", conf.getParser().getLineNumber());
             if (!NaaccrFormat.isVersionSupported(version))
-                throw new NaaccrIOException("invalid/unsupported NAACCR version: " + version, configuration.getParser().getLineNumber());
+                throw new NaaccrIOException("invalid/unsupported NAACCR version: " + version, conf.getParser().getLineNumber());
             NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(version);
 
             // read the standard attribute: user dictionaries
@@ -172,19 +172,19 @@ public class PatientXmlReader implements AutoCloseable {
             }
             // every dictionary provided in the data must be available to the library
             for (String uri : _rootData.getUserDictionaryUri())
-                if (!providedDictionaries.containsKey(uri))
-                    throw new NaaccrIOException("unknown/invalid user dictionary: " + uri, configuration.getParser().getLineNumber());
+                if (!dictionaries.containsKey(uri))
+                    throw new NaaccrIOException("unknown/invalid user dictionary: " + uri, conf.getParser().getLineNumber());
             // it's OK to provide more dictionaries to the library, but the library needs to process only the ones that appear in the data
-            for (String uri : new HashSet<>(providedDictionaries.keySet()))
+            for (String uri : new HashSet<>(dictionaries.keySet()))
                 if (!_rootData.getUserDictionaryUri().contains(uri))
-                    providedDictionaries.remove(uri);
+                    dictionaries.remove(uri);
 
             // read the standard attribute: record type            
             _rootData.setRecordType(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE));
             if (_rootData.getRecordType() == null || _rootData.getRecordType().trim().isEmpty())
-                throw new NaaccrIOException("the \"" + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE + "\" attribute is required", configuration.getParser().getLineNumber());
+                throw new NaaccrIOException("the \"" + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE + "\" attribute is required", conf.getParser().getLineNumber());
             if (!NaaccrFormat.isRecordTypeSupported(_rootData.getRecordType()))
-                throw new NaaccrIOException("invalid record type: " + _rootData.getRecordType(), configuration.getParser().getLineNumber());
+                throw new NaaccrIOException("invalid record type: " + _rootData.getRecordType(), conf.getParser().getLineNumber());
 
             // read the standard attribute: time generated
             String generatedTime = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
@@ -193,7 +193,7 @@ public class PatientXmlReader implements AutoCloseable {
                     _rootData.setTimeGenerated(DatatypeConverter.parseDateTime(generatedTime).getTime());
                 }
                 catch (IllegalArgumentException e) {
-                    throw new NaaccrIOException("invalid time generated value: " + generatedTime, configuration.getParser().getLineNumber());
+                    throw new NaaccrIOException("invalid time generated value: " + generatedTime, conf.getParser().getLineNumber());
                 }
             }
 
@@ -213,7 +213,7 @@ public class PatientXmlReader implements AutoCloseable {
                     int idx = attrName.indexOf(':');
                     if (idx != -1) {
                         String namespacePrefix = attrName.substring(idx + 1);
-                        if (options.getUseStrictNamespaces() && !configuration.getRegisterNamespaces().containsKey(namespacePrefix))
+                        if (options.getUseStrictNamespaces() && !conf.getRegisterNamespaces().containsKey(namespacePrefix))
                             throw new NaaccrIOException("namespace " + _reader.getAttribute(i) + " (prefix=" + namespacePrefix + ") has not been defined in the configuration");
                         namespaces.put(namespacePrefix, _reader.getAttribute(i));
                     }
@@ -252,9 +252,13 @@ public class PatientXmlReader implements AutoCloseable {
                 _rootData.addExtraRootParameters(attrName, entry.getValue());
             }
 
+            // create or get the runtime dictionary
+            if (conf.getCachedDictionary() == null || !conf.getCachedDictionary().getId().equals(RuntimeNaaccrDictionary.computeId(_rootData.getRecordType(), baseDictionary, dictionaries.values())))
+                conf.setCachedDictionary(new RuntimeNaaccrDictionary(_rootData.getRecordType(), baseDictionary, dictionaries.values()));
+
             // now we are ready to setup our reading context and make it available to the patient converter
-            _context.setDictionary(new RuntimeNaaccrDictionary(_rootData.getRecordType(), baseDictionary, providedDictionaries.values()));
-            configuration.getPatientConverter().setContext(_context);
+            _context.setDictionary(conf.getCachedDictionary());
+            conf.getPatientConverter().setContext(_context);
 
             // handle the case where no patients nor items are provided
             if (!_reader.hasMoreChildren())
@@ -267,7 +271,7 @@ public class PatientXmlReader implements AutoCloseable {
                 String rawId = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID);
                 String rawNum = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM);
                 // following call will ensure that proper validation runs
-                configuration.getPatientConverter().readItem(_rootData, "/NaaccrData", NaaccrXmlUtils.NAACCR_XML_TAG_ROOT, rawId, rawNum, _reader.getValue());
+                conf.getPatientConverter().readItem(_rootData, "/NaaccrData", NaaccrXmlUtils.NAACCR_XML_TAG_ROOT, rawId, rawNum, _reader.getValue());
                 if (rawId != null && itemsAlreadySeen.contains(rawId))
                     throw new NaaccrIOException("item '" + rawId + "' should be unique within the \"" + NaaccrXmlUtils.NAACCR_XML_TAG_ROOT + "\" tags");
                 else
@@ -284,7 +288,7 @@ public class PatientXmlReader implements AutoCloseable {
             // handle root extension
             if (!_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT)) {
                 if (!Boolean.TRUE.equals(options.getIgnoreExtensions())) {
-                    _rootData.setExtension(configuration.getXstream().unmarshal(_reader));
+                    _rootData.setExtension(conf.getXstream().unmarshal(_reader));
                     _reader.moveUp();
                     if (_reader.hasMoreChildren())
                         _reader.moveDown();
@@ -307,10 +311,10 @@ public class PatientXmlReader implements AutoCloseable {
 
             // at this point, either we are done (and the method already return) or there should be a patient tag
             if (!_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT))
-                throw new NaaccrIOException("unexpected tag: " + _context.extractTag(_reader.getNodeName()), configuration.getParser().getLineNumber());
+                throw new NaaccrIOException("unexpected tag: " + _context.extractTag(_reader.getNodeName()), conf.getParser().getLineNumber());
 
             // need to expose xstream so the other methods can use it...
-            _xstream = configuration.getXstream();
+            _xstream = conf.getXstream();
         }
         catch (ConversionException ex) {
             throw convertSyntaxException(ex);

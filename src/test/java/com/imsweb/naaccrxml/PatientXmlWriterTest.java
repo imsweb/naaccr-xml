@@ -17,6 +17,7 @@ import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 
 public class PatientXmlWriterTest {
 
@@ -133,6 +134,61 @@ public class PatientXmlWriterTest {
         catch (NaaccrIOException e) {
             // expected
         }
+    }
+
+    @Test
+    public void testCachedRuntimeDictionary() throws IOException {
+
+        // we are going to need all the constructor params for this test...
+        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT);
+        NaaccrOptions options = NaaccrOptions.getDefault();
+        NaaccrStreamConfiguration conf = NaaccrStreamConfiguration.getDefault();
+        NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(TestingUtils.getDataFile("dictionary/testing-user-dictionary.xml"));
+
+        File file = TestingUtils.createFile("test-cached-runtime-dictionary.xml");
+
+        // first, write the file once without a configuration
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict, null)) {
+            Patient patient = new Patient();
+            patient.addItem(new Item("patientIdNumber", "00000001"));
+            writer.writePatient(patient);
+        }
+        String content = TestingUtils.readFileAsOneString(file);
+
+        // then write the same file with the same data in a loop using a unique configuration (the runtime dictionary should be cached)
+        for (int i = 0; i < 3; i++) {
+            try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict, conf)) {
+                Patient patient = new Patient();
+                patient.addItem(new Item("patientIdNumber", "00000001"));
+                writer.writePatient(patient);
+            }
+            Assert.assertEquals(content, TestingUtils.readFileAsOneString(file));
+        }
+        Assert.assertNotNull(conf.getCachedDictionary());
+        String runtimeId = conf.getCachedDictionary().getId();
+
+        // change the ID of the user dictionary -> should not use the caching anymore
+        dict.setDictionaryUri("something-else");
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict, conf)) {
+            Patient patient = new Patient();
+            patient.addItem(new Item("patientIdNumber", "00000001"));
+            writer.writePatient(patient);
+        }
+        Assert.assertNotEquals(content, TestingUtils.readFileAsOneString(file));
+        Assert.assertNotNull(conf.getCachedDictionary());
+        Assert.assertNotEquals(runtimeId, conf.getCachedDictionary().getId());
+        
+        // change the main version -> should not use the caching anymore
+        data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_16_INCIDENCE);
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict, conf)) {
+            Patient patient = new Patient();
+            patient.addItem(new Item("patientIdNumber", "00000001"));
+            writer.writePatient(patient);
+        }
+        Assert.assertNotEquals(content, TestingUtils.readFileAsOneString(file));
+        Assert.assertNotNull(conf.getCachedDictionary());
+        Assert.assertNotEquals(runtimeId, conf.getCachedDictionary().getId());
+        
     }
 
     @Test

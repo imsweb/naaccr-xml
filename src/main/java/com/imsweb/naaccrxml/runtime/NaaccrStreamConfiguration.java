@@ -46,6 +46,9 @@ public class NaaccrStreamConfiguration {
     // the tags defined in the default NAACCR namespace
     protected Set<String> _defaultTags;
 
+    // cached runtime dictionary
+    protected RuntimeNaaccrDictionary _cachedDictionary;
+
     /**
      * Convenience method to make the code look nicer, but it really just calls the default constructor!
      * @return an instance of the configuration with all default values.
@@ -169,6 +172,25 @@ public class NaaccrStreamConfiguration {
      */
     public XStream getXstream() {
         return _xstream;
+    }
+
+    /**
+     * Returns the runtime dictionary cached by this configuration, null if non is currently cached.
+     * @return runtime dictionary, maybe null
+     */
+    public RuntimeNaaccrDictionary getCachedDictionary() {
+        return _cachedDictionary;
+    }
+
+    /**
+     * The library calls this method to cache the runtime dictionary among several stream instantiations.
+     * <br/><br/>
+     * This method can be used to set the cached dictionary to null between the stream instantiations (to disable the caching);
+     * it shouldn't be used to set an actual runtime dictionary (only the library should do that).
+     * @param cachedDictionary cached dictionary to set
+     */
+    public void setCachedDictionary(RuntimeNaaccrDictionary cachedDictionary) {
+        _cachedDictionary = cachedDictionary;
     }
 
     /**

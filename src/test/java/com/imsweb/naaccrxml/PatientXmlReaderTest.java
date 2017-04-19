@@ -15,6 +15,7 @@ import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
+import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 
 public class PatientXmlReaderTest {
 
@@ -109,6 +110,29 @@ public class PatientXmlReaderTest {
             NaaccrValidationError error = patient.getAllValidationErrors().get(0);
             Assert.assertTrue(error.getMessage().contains("long"));
         }
+    }
+
+    @Test
+    public void testCachedRuntimeDictionary() throws IOException {
+
+        // we are going to need all the constructor params for this test...
+        NaaccrOptions options = new NaaccrOptions();
+        options.setUseStrictNamespaces(false);
+        NaaccrStreamConfiguration conf = NaaccrStreamConfiguration.getDefault();
+        NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(TestingUtils.getDataFile("dictionary/testing-user-dictionary.xml"));
+
+        // first, read the file once without a configuration
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-one-patient-no-tumor.xml")), options, dict, null)) {
+            Assert.assertEquals("00000001", reader.readPatient().getItemValue("patientIdNumber"));
+        }
+
+        // then read the same file with the same data in a loop using a unique configuration (the runtime dictionary should be cached)
+        for (int i = 0; i < 3; i++) {
+            try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-one-patient-no-tumor.xml")), options, dict, conf)) {
+                Assert.assertEquals("00000001", reader.readPatient().getItemValue("patientIdNumber"));
+            }
+        }
+        Assert.assertNotNull(conf.getCachedDictionary());
     }
 
     @Test
