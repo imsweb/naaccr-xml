@@ -3434,8 +3434,7 @@
             startColumn="2269"
             length="4"
             recordTypes="A,M,C,I"
-            parentXmlElement="Patient"
-            dataType="digits"/>
+            parentXmlElement="Patient"/>
         <ItemDef naaccrId="icdRevisionNumber"
             naaccrNum="1920"
             naaccrName="ICD Revision Number"
@@ -4159,7 +4158,7 @@
         <GroupedItemDef naaccrId="extentOfDisease10Dig"
             naaccrNum="779"
             naaccrName="Extent of Disease 10-Dig"
-            startColumn="909"
+            startColumn="906"
             length="12"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"

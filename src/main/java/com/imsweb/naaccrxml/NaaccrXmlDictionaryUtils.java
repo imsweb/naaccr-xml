@@ -391,17 +391,23 @@ public final class NaaccrXmlDictionaryUtils {
                 if (!idPattern.matcher(groupedItem.getNaaccrId()).matches())
                     return "'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + groupedItem.getNaaccrId();
                 if (naaccrIds.contains(groupedItem.getNaaccrId()))
-                    return "'naaccrId' attribute must be unique, already saw " + groupedItem.getNaaccrId();
+                    return "'naaccrId' attribute for grouped item " + groupedItem.getNaaccrId() + " is not unique";
                 naaccrIds.add(groupedItem.getNaaccrId());
                 if (groupedItem.getNaaccrNum() == null)
-                    return "'naaccrNum' attribute is required";
+                    return "'naaccrNum' attribute for grouped item " + groupedItem.getNaaccrId() + " is missing";
                 if (naaccrNums.contains(groupedItem.getNaaccrNum()))
-                    return "'naaccrNum' attribute must be unique, already saw " + groupedItem.getNaaccrNum();
+                    return "'naaccrNum' attribute for grouped item " + groupedItem.getNaaccrId() + " must be unique, already saw " + groupedItem.getNaaccrNum();
                 naaccrNums.add(groupedItem.getNaaccrNum());
                 naaccrIds.add(groupedItem.getNaaccrId());
-                for (String contained : groupedItem.getContainedItemId())
-                    if (dictionary.getItemByNaaccrId(contained) == null)
-                        return "grouped item '" + groupedItem.getNaaccrId() + "' references unknown item '" + contained + "'";
+                if (groupedItem.getStartColumn() == null)
+                    return "'startColumn' attribute for grouped item " + groupedItem.getNaaccrId() + " is missing";
+                for (int idx = 0; idx < groupedItem.getContainedItemId().size(); idx++) {
+                    NaaccrDictionaryItem containedItem = dictionary.getItemByNaaccrId(groupedItem.getContainedItemId().get(idx));
+                    if (containedItem == null)
+                        return "grouped item " + groupedItem.getNaaccrId() + " references unknown item " + groupedItem.getContainedItemId().get(idx);
+                    if (idx == 0 && !groupedItem.getStartColumn().equals(containedItem.getStartColumn()))
+                        return "'startColumn' attribute for grouped item " + groupedItem.getNaaccrId() + " is not consistent with first contained item";   
+                }
             }
         }
 
