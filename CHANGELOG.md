@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+**Version 3.1**
+
+ - Changed type of causeOfDeath in all base dictionaries from digits to text.
+ - Fixed start column of grouped item extendOfDisease10Dig in all base dictionaries.
+
 **Version 3.0**
 
  - Added the ability to cache a runtime dictionary when using the XML reader/writer inside a loop.
