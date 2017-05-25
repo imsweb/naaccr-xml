@@ -6,6 +6,7 @@ package com.imsweb.naaccrxml;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
@@ -233,15 +234,44 @@ public class PatientXmlReaderTest {
         dict2.addItem(item2);
         dictionaries.add(dict2);
 
-        // data file defines two user dictionaries
+        // data file defines two user dictionaries -> all is good
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-mult-1.xml")), null, dictionaries)) {
             Patient patient = reader.readPatient();
             Assert.assertEquals("1", patient.getItemValue("myVariable1"));
             Assert.assertEquals("2", patient.getItemValue("myVariable2"));
+            Assert.assertTrue(patient.getAllValidationErrors().isEmpty());
+        }
+
+        // data file defines two user dictionaries, but the library knows only about one of them
+        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_IGNORE);
+        List<NaaccrDictionary> singleDictionary = Collections.singletonList(dict1);
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-mult-1.xml")), options, singleDictionary)) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("1", patient.getItemValue("myVariable1"));
+            Assert.assertNull(patient.getItemValue("myVariable2"));
+            Assert.assertTrue(patient.getAllValidationErrors().isEmpty());
+        }
+
+        // same test again, but the item handling is set to ignore unknown item, so there shouldn't an error anymore
+        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_ERROR);
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-mult-1.xml")), options, singleDictionary)) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("1", patient.getItemValue("myVariable1"));
+            Assert.assertNull(patient.getItemValue("myVariable2"));
+            Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
+        }
+
+        // same test again, but the item handling is set to process the item, so it should still be loaded
+        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_PROCESS);
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-mult-1.xml")), options, singleDictionary)) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("1", patient.getItemValue("myVariable1"));
+            Assert.assertEquals("2", patient.getItemValue("myVariable2"));
+            Assert.assertTrue(patient.getAllValidationErrors().isEmpty());
         }
 
         // data file defines two user dictionaries, but specs are only 1.1 so multiple dictionaries is not supported
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-mult-2.xml")), null, dictionaries)) {
+        try (@SuppressWarnings("unused") PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-mult-2.xml")), null, dictionaries)) {
             Assert.fail("Was expecting an exception here");
         }
         catch (NaaccrIOException e) {

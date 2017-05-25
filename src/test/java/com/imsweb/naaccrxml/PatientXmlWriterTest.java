@@ -287,7 +287,7 @@ public class PatientXmlWriterTest {
 
         // root data is providing a different dictionary -> error
         data.setUserDictionaryUri(Collections.singletonList("something-else"));
-        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, dict)) {
+        try (@SuppressWarnings("unused") PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, dict)) {
             Assert.fail("Was expecting an exception...");
         }
         catch (NaaccrIOException e) {

@@ -2,6 +2,7 @@
 
 **Version 3.1**
 
+ - Relaxed the rule requiring all the user dictionaries from data files to be provided to the library.
  - Changed type of causeOfDeath in all base dictionaries from digits to text.
  - Fixed start column of grouped item extendOfDisease10Dig in all base dictionaries.
 

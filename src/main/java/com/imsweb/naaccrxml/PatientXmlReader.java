@@ -4,7 +4,6 @@
 package com.imsweb.naaccrxml;
 
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -163,18 +162,12 @@ public class PatientXmlReader implements AutoCloseable {
 
             // read the standard attribute: user dictionaries
             if (!StringUtils.isBlank(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT))) {
-                List<String> dataUserDictionaries = new ArrayList<>();
-                if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_2) < 0)
-                    dataUserDictionaries.add(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT));
-                else
-                    dataUserDictionaries.addAll(Arrays.asList(StringUtils.split(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT), ' ')));
+                List<String> dataUserDictionaries = Arrays.asList(StringUtils.split(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT), ' '));
+                if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_2) < 0 && dataUserDictionaries.size() > 1)
+                    throw new NaaccrIOException("multiple user dictionaries can only be provided under specification 1.2+", conf.getParser().getLineNumber());
                 _rootData.setUserDictionaryUri(dataUserDictionaries);
             }
-            // every dictionary provided in the data must be available to the library
-            for (String uri : _rootData.getUserDictionaryUri())
-                if (!dictionaries.containsKey(uri))
-                    throw new NaaccrIOException("unknown/invalid user dictionary: " + uri, conf.getParser().getLineNumber());
-            // it's OK to provide more dictionaries to the library, but the library needs to process only the ones that appear in the data
+            // let's use only the dictionaries that are referenced in the data file (more can be provided to library, that's OK; it's also OK if some are missing in the library)
             for (String uri : new HashSet<>(dictionaries.keySet()))
                 if (!_rootData.getUserDictionaryUri().contains(uri))
                     dictionaries.remove(uri);
