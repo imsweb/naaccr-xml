@@ -167,7 +167,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         NaaccrDictionary dict = new NaaccrDictionary();
         dict.setNaaccrVersion("160");
         dict.setDictionaryUri("whatever");
-        dict.setSpecificationVersion(SpecificationVersion.CURRENT_SPECIFICATION);
+        dict.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
 
         // validate good dictionary
         NaaccrDictionaryItem item = new NaaccrDictionaryItem();

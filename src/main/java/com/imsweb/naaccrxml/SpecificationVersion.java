@@ -8,11 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 public class SpecificationVersion {
 
     /**
-     * Constant for the current specification implemented by this library
-     */
-    public static final String CURRENT_SPECIFICATION = "1.3";
-
-    /**
      * Constant for specification version 1.3
      */
     public static final String SPEC_1_3 = "1.3";

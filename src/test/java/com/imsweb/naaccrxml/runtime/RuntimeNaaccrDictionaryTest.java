@@ -13,7 +13,6 @@ import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrIOException;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
-import com.imsweb.naaccrxml.SpecificationVersion;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
@@ -28,7 +27,7 @@ public class RuntimeNaaccrDictionaryTest {
         NaaccrDictionary dict1 = new NaaccrDictionary();
         dict1.setNaaccrVersion(NaaccrFormat.NAACCR_VERSION_160);
         dict1.setDictionaryUri("user-dictionary-1");
-        dict1.setSpecificationVersion(SpecificationVersion.CURRENT_SPECIFICATION);
+        dict1.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
         NaaccrDictionaryItem item1 = new NaaccrDictionaryItem();
         item1.setNaaccrId("myVariable1");
         item1.setNaaccrName("My Variable 1");
@@ -41,7 +40,7 @@ public class RuntimeNaaccrDictionaryTest {
         NaaccrDictionary dict2 = new NaaccrDictionary();
         dict2.setNaaccrVersion(NaaccrFormat.NAACCR_VERSION_160);
         dict2.setDictionaryUri("user-dictionary-2");
-        dict2.setSpecificationVersion(SpecificationVersion.CURRENT_SPECIFICATION);
+        dict2.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
         NaaccrDictionaryItem item2 = new NaaccrDictionaryItem();
         item2.setNaaccrId("myVariable2");
         item2.setNaaccrName("My Variable 2");

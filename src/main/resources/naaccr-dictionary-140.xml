@@ -2,7 +2,7 @@
 
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml"
             naaccrVersion="140"
-            specificationVersion="1.2"
+            specificationVersion="1.3"
             description="NAACCR 14 base dictionary"
             xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>
