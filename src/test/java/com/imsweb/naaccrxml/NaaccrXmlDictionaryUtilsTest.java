@@ -12,6 +12,7 @@ import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -158,7 +159,48 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertEquals(1, newDict.getItems().size());
         Assert.assertNotNull(newDict.getItemByNaaccrId("myVariable"));
         Assert.assertNotNull(newDict.getItemByNaaccrNum(10000));
+    }
 
+    @Test
+    public void testValidateUserDictionary() {
+
+        NaaccrDictionary dict = new NaaccrDictionary();
+        dict.setNaaccrVersion("160");
+        dict.setDictionaryUri("whatever");
+        dict.setSpecificationVersion(SpecificationVersion.CURRENT_SPECIFICATION);
+
+        // validate good dictionary
+        NaaccrDictionaryItem item = new NaaccrDictionaryItem();
+        item.setNaaccrId("myVariable");
+        item.setNaaccrName("My Variable");
+        item.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT);
+        item.setNaaccrNum(10000);
+        item.setLength(1);
+        dict.setItems(Collections.singletonList(item));
+        Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+
+        // this one re-defines the NPCR field but with a different number, which is not allowed
+        item = new NaaccrDictionaryItem();
+        item.setNaaccrId("npcrSpecificField");
+        item.setNaaccrName("NPCR Specific Field");
+        item.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+        item.setNaaccrNum(10000);
+        item.setLength(75);
+        item.setRecordTypes("A,M,C,I");
+        dict.setItems(Collections.singletonList(item));
+        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+
+        // this one defines an item that has the same number as the base
+        item = new NaaccrDictionaryItem();
+        item.setNaaccrId("myVariable");
+        item.setNaaccrName("My Variable");
+        item.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+        item.setNaaccrNum(240);
+        item.setLength(1);
+        dict.setItems(Collections.singletonList(item));
+        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+        item.setNaaccrNum(999999);
+        Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
     }
 
     @Test

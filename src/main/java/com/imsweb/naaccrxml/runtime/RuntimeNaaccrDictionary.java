@@ -69,13 +69,28 @@ public class RuntimeNaaccrDictionary {
         if (dictionaries.isEmpty())
             dictionaries.add(NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(baseDictionary.getNaaccrVersion()));
 
-        // extra validation: no user-defined item should have the same NAACCR ID or NAACCR Number as a base one
+        // extra validation involving all the user-defined dictionaries
+        Map<String, String> idsDejaVu = new HashMap<>();
+        Map<Integer, String> numbersDejaVue = new HashMap<>();
         for (NaaccrDictionary userDictionary : dictionaries) {
+            String dictId = userDictionary.getDictionaryUri();
             for (NaaccrDictionaryItem item : userDictionary.getItems()) {
+                // NAACCR IDs defined in user dictionaries cannot be the same as the base NAACCR IDs
                 if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
-                    throw new NaaccrIOException("User-defined dictionary '" + userDictionary.getDictionaryUri() + "' cannot use same NAACCR ID as a base item: " + item.getNaaccrId());
+                    throw new NaaccrIOException("User-defined dictionary '" + dictId + "' cannot use same NAACCR ID as a base item: " + item.getNaaccrId());
+                // NAACCR Numbers defined in user dictionaries cannot be the same as the base NAACCR Numbers
                 if (baseDictionary.getItemByNaaccrNum(item.getNaaccrNum()) != null)
-                    throw new NaaccrIOException("User-defined dictionary '" + userDictionary.getDictionaryUri() + "' cannot use same NAACCR Number as a base item: " + item.getNaaccrNum());
+                    throw new NaaccrIOException("User-defined dictionary '" + dictId + "' cannot use same NAACCR Number as a base item: " + item.getNaaccrNum());
+                // NAACCR IDs must be unique among all user dictionaries
+                if (idsDejaVu.containsKey(item.getNaaccrId()))
+                    throw new NaaccrIOException("User-defined dictionary '" + dictId + "' and '" + idsDejaVu.get(item.getNaaccrId()) + "' both  define NAACCR ID '" + item.getNaaccrId() + "'");
+                else
+                    idsDejaVu.put(item.getNaaccrId(), dictId);
+                // NAACCR Numbers must be unique among all user dictionaries
+                if (numbersDejaVue.containsKey(item.getNaaccrNum()))
+                    throw new NaaccrIOException("User-defined dictionary '" + dictId + "' and '" + numbersDejaVue.get(item.getNaaccrNum()) + "' both  define NAACCR ID '" + item.getNaaccrNum() + "'");
+                else
+                    numbersDejaVue.put(item.getNaaccrNum(), dictId);
             }
         }
 

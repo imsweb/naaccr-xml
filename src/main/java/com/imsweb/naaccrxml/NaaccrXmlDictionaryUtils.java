@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -406,7 +407,7 @@ public final class NaaccrXmlDictionaryUtils {
                     if (containedItem == null)
                         return "grouped item " + groupedItem.getNaaccrId() + " references unknown item " + groupedItem.getContainedItemId().get(idx);
                     if (idx == 0 && !groupedItem.getStartColumn().equals(containedItem.getStartColumn()))
-                        return "'startColumn' attribute for grouped item " + groupedItem.getNaaccrId() + " is not consistent with first contained item";   
+                        return "'startColumn' attribute for grouped item " + groupedItem.getNaaccrId() + " is not consistent with first contained item";
                 }
             }
         }
@@ -419,6 +420,9 @@ public final class NaaccrXmlDictionaryUtils {
                 // we are going to need these...
                 NaaccrDictionary baseDictionary = getBaseDictionaryByVersion(naaccrVersionToUse);
                 NaaccrDictionary defaultUserDictionary = getDefaultUserDictionaryByVersion(naaccrVersionToUse);
+
+                // we need the NAACCR numbers from the base dictionary...
+                List<Integer> baseNumbers = baseDictionary.getItems().stream().map(NaaccrDictionaryItem::getNaaccrNum).collect(Collectors.toList());
 
                 for (NaaccrDictionaryItem item : dictionary.getItems()) {
 
@@ -448,9 +452,15 @@ public final class NaaccrXmlDictionaryUtils {
                             return "invalid value for 'dataType' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItemType;
                     }
                     else {
-                        // range must be very specific for a user dictionary...
-                        if (item.getNaaccrNum() < 9500 || item.getNaaccrNum() > 99999)
-                            return "invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999";
+
+                        // number cannot be one of the numbers from the base dictionary
+                        if (baseNumbers.contains(item.getNaaccrNum()))
+                            return "invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; number is already defined in corresponding base dictionary";
+
+                        // range must be very specific for a user dictionary (deprecated)
+                        if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_3) < 0)
+                            if (item.getNaaccrNum() < 9500 || item.getNaaccrNum() > 99999)
+                                return "invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999";
 
                         // this is tricky, but an item must fall into the columns of one of the items defined in the corresponding items defined in the default user dictionary
                         if (item.getStartColumn() != null) {
