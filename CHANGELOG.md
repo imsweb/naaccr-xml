@@ -1,6 +1,6 @@
 ## NAACCR XML Version History
 
-**Version 3.1**
+**Version 4.0**
 
  - Relaxed the validation of the NAACCR numbers in user-defined dictionaries (specification 1.3).
  - Relaxed the rule requiring all the user dictionaries from data files to be provided to the library.
