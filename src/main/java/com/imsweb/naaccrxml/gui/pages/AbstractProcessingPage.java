@@ -41,6 +41,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.imsweb.naaccrxml.NaaccrErrorUtils;
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrIOException;
@@ -81,6 +83,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected JComboBox<String> _compressionBox;
     protected JProgressBar _analysisBar, _processingBar;
     protected JLabel _analysisErrorLbl, _processingErrorLbl, _processingResultLbl, _formatLbl, _numLinesLbl, _fileSizeLbl;
+    protected JLabel _numPatLbl, _numTumLbl;
     protected JTextArea _warningsTextArea, _warningsSummaryTextArea;
     protected JTabbedPane _warningsPane;
     protected StandaloneOptions _guiOptions;
@@ -92,7 +95,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected Map<String, AtomicInteger> _warningStats = new HashMap<>();
     protected Map<String, Set<String>> _warningStatsDetails = new HashMap<>();
 
-    public AbstractProcessingPage() {
+    public AbstractProcessingPage(boolean isSourceXml) {
         super();
 
         _fileChooser = new JFileChooser();
@@ -144,7 +147,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _northLayout = new CardLayout();
         _northPnl.setLayout(_northLayout);
         _northPnl.add(_NORTH_PANEL_ID_NO_FILE, buildNoFileSelectedPanel());
-        _northPnl.add(_NORTH_PANEL_ID_ANALYSIS_RESULTS, buildAnalysisResultsPanel());
+        _northPnl.add(_NORTH_PANEL_ID_ANALYSIS_RESULTS, buildAnalysisResultsPanel(isSourceXml));
         _northPnl.add(_NORTH_PANEL_ID_ERROR, buildAnalysisErrorPanel());
         inputFilePnl.add(_northPnl, BorderLayout.SOUTH);
         this.add(inputFilePnl, BorderLayout.NORTH);
@@ -199,7 +202,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         return wrapperPnl;
     }
 
-    private JPanel buildAnalysisResultsPanel() {
+    private JPanel buildAnalysisResultsPanel(boolean isSourceXml) {
         JPanel pnl = new JPanel();
         pnl.setBorder(new EmptyBorder(15, 25, 10, 0));
         pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -209,11 +212,25 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _formatLbl = new JLabel(" ");
         pnl.add(_formatLbl);
         pnl.add(Box.createHorizontalStrut(25));
-        pnl.add(Standalone.createBoldLabel("Number of lines: "));
+        pnl.add(Standalone.createBoldLabel("Num lines: "));
         pnl.add(Box.createHorizontalStrut(5));
         _numLinesLbl = new JLabel(" ");
         pnl.add(_numLinesLbl);
         pnl.add(Box.createHorizontalStrut(25));
+
+        if (isSourceXml) {
+            pnl.add(Standalone.createBoldLabel("Num patients: "));
+            pnl.add(Box.createHorizontalStrut(5));
+            _numPatLbl = new JLabel(" ");
+            pnl.add(_numPatLbl);
+            pnl.add(Box.createHorizontalStrut(25));
+            pnl.add(Standalone.createBoldLabel("Num tumors: "));
+            pnl.add(Box.createHorizontalStrut(5));
+            _numTumLbl = new JLabel(" ");
+            pnl.add(_numTumLbl);
+            pnl.add(Box.createHorizontalStrut(25));
+        }
+
         pnl.add(Standalone.createBoldLabel("File size: "));
         pnl.add(Box.createHorizontalStrut(5));
         _fileSizeLbl = new JLabel(" ");
@@ -501,7 +518,11 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 _formatLbl.setText("Compressed " + format.getDisplayName());
             else
                 _formatLbl.setText(format.getDisplayName());
-            _numLinesLbl.setText("<not evaluated yet>");
+            _numLinesLbl.setText("<?>");
+            if (_numPatLbl != null)
+                _numPatLbl.setText("<?>");
+            if (_numTumLbl != null)
+                _numTumLbl.setText("<?>");
             _fileSizeLbl.setText(Standalone.formatFileSize(file.length()));
             _northLayout.show(_northPnl, _NORTH_PANEL_ID_ANALYSIS_RESULTS);
             _centerPnl.setVisible(true);
@@ -548,14 +569,22 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _analysisWorker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                int numLines = 0;
+                int numLines = 0, numPat = 0, numTum = 0;
                 try (LineNumberReader reader = new LineNumberReader(NaaccrXmlUtils.createReader(srcFile))) {
                     String line = reader.readLine();
                     while (line != null) {
                         numLines++;
+                        if (_numPatLbl != null)
+                            numPat += StringUtils.countMatches(line, "<Patient");
+                        if (_numTumLbl != null)
+                            numTum += StringUtils.countMatches(line, "<Tumor");
                         line = reader.readLine();
                     }
                     _numLinesLbl.setText(Standalone.formatNumber(numLines));
+                    if (_numPatLbl != null)
+                        _numPatLbl.setText(Standalone.formatNumber(numPat));
+                    if (_numTumLbl != null)
+                        _numTumLbl.setText(Standalone.formatNumber(numTum));
                 }
                 return null;
             }

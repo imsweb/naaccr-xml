@@ -18,6 +18,10 @@ import com.imsweb.naaccrxml.gui.StandaloneOptions;
 
 public class FlatToXmlPage extends AbstractProcessingPage {
 
+    public FlatToXmlPage() {
+        super(false);
+    }
+
     @Override
     protected String getSourceLabelText() {
         return "Source Flat File:";

@@ -19,6 +19,10 @@ import com.imsweb.naaccrxml.gui.StandaloneOptions;
 
 public class XmlToXmlPage extends AbstractProcessingPage {
 
+    public XmlToXmlPage() {
+        super(true);
+    }
+
     @Override
     protected String getSourceLabelText() {
         return "Source XML File:";

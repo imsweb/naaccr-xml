@@ -18,6 +18,10 @@ import com.imsweb.naaccrxml.gui.StandaloneOptions;
 
 public class XmlValidationPage extends AbstractProcessingPage {
 
+    public XmlValidationPage() {
+        super(true);
+    }
+
     @Override
     protected String getSourceLabelText() {
         return "Source XML File:";
@@ -62,7 +66,7 @@ public class XmlValidationPage extends AbstractProcessingPage {
             reportAnalysisError(new Exception("unable to find selected file"));
             return null;
         }
-        
+
         try {
             return NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromXmlFile(file));
         }

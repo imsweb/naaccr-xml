@@ -6,6 +6,7 @@
  - Relaxed the rule requiring all the user dictionaries from data files to be provided to the library.
  - Changed type of causeOfDeath in all base dictionaries from digits to text.
  - Fixed start column of grouped item extendOfDisease10Dig in all base dictionaries.
+ - Now display the number of Patient and Tumor tags found in the source XML file in the GUI.
 
 **Version 3.0**
 
