@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/imsweb/naaccr-xml.svg?branch=master)](https://travis-ci.org/imsweb/naaccr-xml)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml)
 
-This library provides support for the NAACCR XML format. It implements version 1.3 of the specifications but still supports prior versions.
+This library provides support for the NAACCR XML format. It implements version 1.3 of [the specifications](https://www.naaccr.org/xml-data-exchange-standard/) but still supports prior versions.
 
 Information about the format and its specifications can be found in [the project wiki](https://github.com/imsweb/naaccr-xml/wiki).
 
