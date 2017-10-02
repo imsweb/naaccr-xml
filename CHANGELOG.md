@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 4.1**
+
+ - Addressed a bug crashing the Standalone GUI when minimizing the application.
+
 **Version 4.0**
 
  - Relaxed the validation of the NAACCR numbers in user-defined dictionaries (specification 1.3).

@@ -134,8 +134,11 @@ public class Standalone extends JFrame implements ActionListener {
         this.getContentPane().add(_centerPnl, BorderLayout.CENTER);
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> SwingUtilities.invokeLater(() -> {
-            String msg = "An unexpected error happened, it is recommended to close the application.\n\n   Error: " + (e.getMessage() == null ? "null access" : e.getMessage());
-            JOptionPane.showMessageDialog(Standalone.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+            boolean isLocationException = e instanceof IllegalStateException; // https://bugs.openjdk.java.net/browse/JDK-8179665
+            if (!isLocationException) {
+                String msg = "An unexpected error happened, it is recommended to close the application.\n\n   Error: " + (e.getMessage() == null ? "null access" : e.getMessage());
+                JOptionPane.showMessageDialog(Standalone.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }));
 
         SwingUtilities.invokeLater(() -> _buttons.get(0).doClick());
