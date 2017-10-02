@@ -10,6 +10,7 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.IllegalComponentStateException;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -134,7 +135,7 @@ public class Standalone extends JFrame implements ActionListener {
         this.getContentPane().add(_centerPnl, BorderLayout.CENTER);
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> SwingUtilities.invokeLater(() -> {
-            boolean isLocationException = e instanceof IllegalStateException; // https://bugs.openjdk.java.net/browse/JDK-8179665
+            boolean isLocationException = e instanceof IllegalComponentStateException; // https://bugs.openjdk.java.net/browse/JDK-8179665
             if (!isLocationException) {
                 String msg = "An unexpected error happened, it is recommended to close the application.\n\n   Error: " + (e.getMessage() == null ? "null access" : e.getMessage());
                 JOptionPane.showMessageDialog(Standalone.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
@@ -233,7 +234,7 @@ public class Standalone extends JFrame implements ActionListener {
             SwingUtilities.invokeLater(() -> dlg.setVisible(true));
         }
     }
-    
+
     public static JLabel createItalicLabel(String text) {
         JLabel lbl = new JLabel(text);
         lbl.setFont(lbl.getFont().deriveFont(Font.ITALIC));
