@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 4.2**
+
+ - Fixed a bug in the dictionary validation that would not flag as invalid a dictionary with a missing URI attribute.
+
 **Version 4.1**
 
  - Addressed a bug crashing the Standalone GUI when minimizing the application.
