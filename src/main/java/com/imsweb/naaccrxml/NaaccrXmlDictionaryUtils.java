@@ -252,7 +252,9 @@ public final class NaaccrXmlDictionaryUtils {
 
         // let's not validate the internal dictionaries, we know they are valid
         String uri = dictionary.getDictionaryUri();
-        if (uri != null && !BASE_DICTIONARY_URI_PATTERN.matcher(uri).matches() && !DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(uri).matches()) {
+        if (uri == null || uri.trim().isEmpty())
+            throw new IOException("'dictionaryUri' attribute is required");
+        else if (!BASE_DICTIONARY_URI_PATTERN.matcher(uri).matches() && !DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(uri).matches()) {
             String error = validateUserDictionary(dictionary);
             if (error != null)
                 throw new IOException(error);

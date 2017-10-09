@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<NaaccrDictionary naaccrVersion="140">
+    <ItemDefs>
+        <ItemDef naaccrId="myVariable1" naaccrNum="10001" naaccrName="My Variable 1" startColumn="2340" length="1" recordTypes="A,M,C,I" parentXmlElement="Tumor"/>
+        <ItemDef naaccrId="myVariable2" naaccrNum="10002" naaccrName="My Variable 2" startColumn="2341" length="1" recordTypes="A,M,C,I" parentXmlElement="Patient"/>
+        <ItemDef naaccrId="myVariable3" naaccrNum="10003" naaccrName="My Variable 3" startColumn="2342" length="1" recordTypes="A,M,C,I" parentXmlElement="NaaccrData"/>
+    </ItemDefs>
+</NaaccrDictionary>

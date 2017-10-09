@@ -113,6 +113,16 @@ public class NaaccrXmlDictionaryUtilsTest {
             Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict, "140"));
             Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict, "160"));
         }
+
+        // try to read a user dictionary with another error (missing dictionaryUri attribute)
+        exceptionAppend = false;
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140-bad4.xml"))) {
+            NaaccrXmlDictionaryUtils.readDictionary(reader);
+        }
+        catch (IOException e) {
+            exceptionAppend = true;
+        }
+        Assert.assertTrue(exceptionAppend);
     }
 
     @Test
