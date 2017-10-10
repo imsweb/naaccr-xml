@@ -18,6 +18,7 @@ import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
 import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionaryItem;
 
@@ -50,12 +51,31 @@ public class PatientFlatReader implements AutoCloseable {
     /**
      * Constructor
      * @param reader required underlined reader
+     * @throws NaaccrIOException if there is problem creating the stream
+     */
+    public PatientFlatReader(Reader reader) throws NaaccrIOException {
+        this(reader, null, (NaaccrDictionary)null, null);
+    }
+
+    /**
+     * Constructor
+     * @param reader required underlined reader
+     * @param options optional options
+     * @throws NaaccrIOException if there is problem creating the stream
+     */
+    public PatientFlatReader(Reader reader, NaaccrOptions options) throws NaaccrIOException {
+        this(reader, options, (NaaccrDictionary)null, null);
+    }
+
+    /**
+     * Constructor
+     * @param reader required underlined reader
      * @param options optional options
      * @param userDictionary optional user-defined dictionary
-     * @throws NaaccrIOException
+     * @throws NaaccrIOException if there is problem creating the stream
      */
     public PatientFlatReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
-        this(reader, options, Collections.singletonList(userDictionary));
+        this(reader, options, Collections.singletonList(userDictionary), null);
     }
 
     /**
@@ -63,9 +83,33 @@ public class PatientFlatReader implements AutoCloseable {
      * @param reader required underlined reader
      * @param options optional options
      * @param userDictionaries optional user-defined dictionaries (can be null or empty)
-     * @throws NaaccrIOException
+     * @throws NaaccrIOException if there is problem creating the stream
      */
     public PatientFlatReader(Reader reader, NaaccrOptions options, List<NaaccrDictionary> userDictionaries) throws NaaccrIOException {
+        this(reader, options, userDictionaries, null);
+    }
+
+    /**
+     * Constructor
+     * @param reader required underlined reader
+     * @param options optional options
+     * @param userDictionary optional user-defined dictionary
+     * @param conf optional stream configuration
+     * @throws NaaccrIOException if there is problem creating the stream
+     */
+    public PatientFlatReader(Reader reader, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration conf) throws NaaccrIOException {
+        this(reader, options, Collections.singletonList(userDictionary), conf);
+    }
+
+    /**
+     * Constructor
+     * @param reader required underlined reader
+     * @param options optional options
+     * @param userDictionaries optional user-defined dictionaries (can be null or empty)
+     * @param conf optional stream configuration
+     * @throws NaaccrIOException if there is problem creating the stream
+     */
+    public PatientFlatReader(Reader reader, NaaccrOptions options, List<NaaccrDictionary> userDictionaries, NaaccrStreamConfiguration conf) throws NaaccrIOException {
         _reader = new LineNumberReader(reader);
         _options = options == null ? new NaaccrOptions() : options;
 
@@ -94,8 +138,13 @@ public class PatientFlatReader implements AutoCloseable {
             throw new NaaccrIOException("invalid/unsupported record type on first record: " + type);
 
         _format = NaaccrFormat.getInstance(version, type);
-        NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(_format.getNaaccrVersion());
-        _dictionary = new RuntimeNaaccrDictionary(_format.getRecordType(), baseDictionary, userDictionaries);
+
+        // try to use the cached runtime dictionary, create one if there isn't a cached one...
+        _dictionary = conf == null ? null : conf.getCachedDictionary();
+        if (_dictionary == null) {
+            NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(_format.getNaaccrVersion());
+            _dictionary = new RuntimeNaaccrDictionary(_format.getRecordType(), baseDictionary, userDictionaries);
+        }
         _rootData = new NaaccrData(_format.toString());
         _rootData.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
 
@@ -122,7 +171,7 @@ public class PatientFlatReader implements AutoCloseable {
     /**
      * Reads the next patient on this stream.
      * @return the next available patient, null if not such patient
-     * @throws NaaccrIOException
+     * @throws NaaccrIOException if there is a problem reading the next patient
      */
     public Patient readPatient() throws NaaccrIOException {
         List<String> lines = new ArrayList<>();

@@ -27,7 +27,7 @@ public class PatientFlatReaderTest {
         rec1.replace(41, 49, "00000001"); // patient ID number (Patient level)
         rec1.replace(539, 543, "C123"); // primarySite (Tumor level)
         File file = TestingUtils.createAndPopulateFile("test-flat-reader-one-rec.txt", rec1);
-        PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, (NaaccrDictionary)null);
+        PatientFlatReader reader = new PatientFlatReader(new FileReader(file));
         Assert.assertEquals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION, reader.getRootData().getSpecificationVersion());
         Assert.assertEquals("0000000001", reader.getRootData().getItem("registryId").getValue());
         Patient patient = reader.readPatient();
@@ -44,7 +44,7 @@ public class PatientFlatReaderTest {
         rec2.replace(41, 49, "00000002"); // patient ID number (Patient level)
         rec2.replace(539, 543, "C456"); // primarySite (Tumor level)
         file = TestingUtils.createAndPopulateFile("test-flat-reader-two-rec-diff.txt", rec1, rec2);
-        reader = new PatientFlatReader(new FileReader(file), null, (NaaccrDictionary)null);
+        reader = new PatientFlatReader(new FileReader(file), null);
         Assert.assertEquals("0000000001", reader.getRootData().getItem("registryId").getValue());
         patient = reader.readPatient();
         Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());

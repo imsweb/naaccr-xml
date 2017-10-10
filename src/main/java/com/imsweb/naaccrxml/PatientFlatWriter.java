@@ -18,6 +18,7 @@ import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
 import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionaryItem;
 
@@ -48,12 +49,33 @@ public class PatientFlatWriter implements AutoCloseable {
      * Constructor.
      * @param writer required underlined writer
      * @param data required root data
+     * @throws NaaccrIOException if there is problem creating the stream
+     */
+    public PatientFlatWriter(Writer writer, NaaccrData data) throws NaaccrIOException {
+        this(writer, data, null, (NaaccrDictionary)null, null);
+    }
+
+    /**
+     * Constructor.
+     * @param writer required underlined writer
+     * @param data required root data
+     * @param options optional options
+     * @throws NaaccrIOException if there is problem creating the stream
+     */
+    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrOptions options) throws NaaccrIOException {
+        this(writer, data, options, (NaaccrDictionary)null, null);
+    }
+
+    /**
+     * Constructor.
+     * @param writer required underlined writer
+     * @param data required root data
      * @param options optional options
      * @param userDictionary optional user-defined dictionary
-     * @throws NaaccrIOException
+     * @throws NaaccrIOException if there is problem creating the stream
      */
     public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrOptions options, NaaccrDictionary userDictionary) throws NaaccrIOException {
-        this(writer, data, options, Collections.singletonList(userDictionary));
+        this(writer, data, options, Collections.singletonList(userDictionary), null);
     }
 
     /**
@@ -62,17 +84,47 @@ public class PatientFlatWriter implements AutoCloseable {
      * @param data required root data
      * @param options optional options
      * @param userDictionaries optional user-defined dictionaries (can be null or empty)
-     * @throws NaaccrIOException
+     * @throws NaaccrIOException if there is problem creating the stream
      */
     public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrOptions options, List<NaaccrDictionary> userDictionaries) throws NaaccrIOException {
+        this(writer, data, options, userDictionaries, null);
+    }
+
+    /**
+     * Constructor.
+     * @param writer required underlined writer
+     * @param data required root data
+     * @param options optional options
+     * @param userDictionary optional user-defined dictionary
+     * @param conf optional stream configuration
+     * @throws NaaccrIOException if there is problem creating the stream
+     */
+    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrOptions options, NaaccrDictionary userDictionary, NaaccrStreamConfiguration conf) throws NaaccrIOException {
+        this(writer, data, options, Collections.singletonList(userDictionary), conf);
+    }
+
+    /**
+     * Constructor.
+     * @param writer required underlined writer
+     * @param data required root data
+     * @param options optional options
+     * @param userDictionaries optional user-defined dictionaries (can be null or empty)
+     * @param conf optional stream configuration
+     * @throws NaaccrIOException if there is problem creating the stream
+     */
+    public PatientFlatWriter(Writer writer, NaaccrData data, NaaccrOptions options, List<NaaccrDictionary> userDictionaries, NaaccrStreamConfiguration conf) throws NaaccrIOException {
         _writer = new BufferedWriter(writer);
         _rootData = data;
         _options = options == null ? new NaaccrOptions() : options;
 
         // there should be better validation here...
 
-        NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(data.getBaseDictionaryUri());
-        _dictionary = new RuntimeNaaccrDictionary(data.getRecordType(), baseDictionary, userDictionaries);
+        // try to use the cached runtime dictionary, create one if there isn't a cached one...
+        _dictionary = conf == null ? null : conf.getCachedDictionary();
+        if (_dictionary == null) {
+            NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(data.getBaseDictionaryUri());
+            _dictionary = new RuntimeNaaccrDictionary(data.getRecordType(), baseDictionary, userDictionaries);
+        }
 
         // let's cache the record type and naaccr version items; we are going to use them a lot...
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
@@ -88,7 +140,7 @@ public class PatientFlatWriter implements AutoCloseable {
     /**
      * Write the given patient on this stream.
      * @param patient patient to write (can't be null)
-     * @throws NaaccrIOException
+     * @throws NaaccrIOException if there is problem writing the next patient
      */
     public void writePatient(Patient patient) throws NaaccrIOException {
         for (String line : createLinesFromPatient(_rootData, patient)) {

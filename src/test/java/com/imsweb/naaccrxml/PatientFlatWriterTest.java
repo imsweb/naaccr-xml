@@ -30,7 +30,7 @@ public class PatientFlatWriterTest {
 
         // a patient with no tumor
         File file = TestingUtils.createFile("test-flat-writer-no-tumor.txt");
-        PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, null, (NaaccrDictionary)null);
+        PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data);
         Patient patient = new Patient();
         patient.addItem(new Item("patientIdNumber", "00000001"));
         writer.writePatient(patient);
@@ -45,7 +45,7 @@ public class PatientFlatWriterTest {
 
         // a patient with one tumor
         file = TestingUtils.createFile("test-flat-writer-one-tumor.txt");
-        writer = new PatientFlatWriter(new FileWriter(file), data, null, (NaaccrDictionary)null);
+        writer = new PatientFlatWriter(new FileWriter(file), data, null);
         patient = new Patient();
         patient.addItem(new Item("patientIdNumber", "00000001"));
         Tumor tumor1 = new Tumor();
@@ -150,7 +150,7 @@ public class PatientFlatWriterTest {
         Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("1"));
         Assert.assertFalse(TestingUtils.readFileAsOneString(file).contains("0000000001"));
     }
-    
+
     @Test
     public void testUserDefinedDictionary() throws IOException {
 
@@ -184,7 +184,7 @@ public class PatientFlatWriterTest {
                 writer.writePatient(patient);
                 Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("00000001"));
             }
-            
+
             // using the same dictionary, define a value too long for a field that is supposed to be 1 long; option say to not report errors -> truncated
             patient.addItem(new Item("myVariable5", "XX"));
             try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), root, null, dict)) {

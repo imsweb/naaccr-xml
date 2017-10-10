@@ -13,6 +13,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -245,6 +247,50 @@ public class NaaccrXmlUtils {
                 if (Thread.currentThread().isInterrupted())
                     break;
             }
+        }
+    }
+
+    /**
+     * Translates a single line representing a flat file line into a patient object.
+     * <br/><br/>
+     * TODO explain the context
+     * @param line the line to translate, required
+     * @param context the context to use for the translation, required
+     * @return the corresponding patient, never null
+     * @throws NaaccrIOException if there is problem translating the line
+     */
+    public static Patient lineToPatient(String line, NaaccrContext context) throws NaaccrIOException {
+        if (line == null)
+            throw new NaaccrIOException("Line is required");
+        if (context == null)
+            throw new NaaccrIOException("Context is required");
+
+        // TODO inject format if not provided on the line
+
+        try (PatientFlatReader reader = new PatientFlatReader(new StringReader(line), context.getOptions(), context.getUserDictionaries(), context.getStreamConfiguration())) {
+            return reader.readPatient();
+        }
+    }
+
+    /**
+     * Translates a single patient into a line representing a flat file line.
+     * <br/><br/>
+     * TODO explain the context
+     * @param patient the patient to translate, required
+     * @param context the context to use for the translation, required
+     * @return the corresponding line, never null
+     * @throws NaaccrIOException if there is problem translating the patient
+     */
+    public static String patientToLine(Patient patient, NaaccrContext context) throws NaaccrIOException {
+        if (patient == null)
+            throw new NaaccrIOException("Patient is required");
+        if (context == null)
+            throw new NaaccrIOException("Context is required");
+
+        StringWriter buf = new StringWriter();
+        try (PatientFlatWriter writer = new PatientFlatWriter(buf, new NaaccrData(context.getFormat()), context.getOptions(), context.getUserDictionaries(), context.getStreamConfiguration())) {
+            writer.writePatient(patient);
+            return buf.toString();
         }
     }
 
