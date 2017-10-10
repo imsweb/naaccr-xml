@@ -189,13 +189,13 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         pnl.add(buildTextPnl("             NAACCR 14"));
         pnl.add(buildTextPnl("The Abstract, Modified, Confidential and Incidence flavors are supported for those versions."));
         pnl.add(Box.createVerticalStrut(25));
-        pnl.add(buildTextPnl("Note that this utility is not a data conversion tool, it simply translated one format into another."));
-        pnl.add(buildTextPnl("That means the created file (Flat or XML) will always have the same NAACCR version (and same data) as its source."));
-        pnl.add(Box.createVerticalStrut(25));
         pnl.add(buildTextPnl("The following compressions are supported:"));
         pnl.add(buildTextPnl("             GZip (\".gz\" extension)"));
         pnl.add(buildTextPnl("             XZ (\".xz\" extension; this compression will usually produce smaller files than GZip but will take longer to process)"));
         pnl.add(buildTextPnl("             Uncompressed (anything not ending in .gz or .xz will be treated as uncompressed)"));
+        pnl.add(Box.createVerticalStrut(25));
+        pnl.add(buildTextPnl("Note that this utility is not a data conversion tool, it simply translates one format into another."));
+        pnl.add(buildTextPnl("That means the created file (Flat or XML) will always have the same NAACCR version (and same data) as its source."));
 
         JPanel wrapperPnl = new JPanel(new BorderLayout());
         wrapperPnl.add(pnl, BorderLayout.NORTH);
