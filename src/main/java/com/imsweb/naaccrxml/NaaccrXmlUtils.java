@@ -253,7 +253,23 @@ public class NaaccrXmlUtils {
     /**
      * Translates a single line representing a flat file line into a patient object.
      * <br/><br/>
-     * TODO explain the context
+     * Unlike the methods dealing with files, this method takes a context as a parameter. The reason for that difference is that this method uses a stream to convert
+     * the line, and so the stream needs to be re-created every time the method is invoked on a given line. This is very inefficient and would be too slow if this
+     * method was used in a loop (which is the common use-case). Having a shared context that is created once outside the loop avoids that inefficiency.
+     * <br/><br/>
+     * It is very important to not re-create the context when this method is called in a loop:
+     * <br><br/>
+     * This is NOT correct:
+     * <code>
+     *     for (String line : lines)
+     *         NaaccrXmlUtils.lineToPatient(line, new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT));
+     * </code>
+     * This is correct:
+     * <code>
+     *     NaaccrContext context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT);
+     *     for (String line : lines)
+     *         NaaccrXmlUtils.lineToPatient(line, context);
+     * </code>
      * @param line the line to translate, required
      * @param context the context to use for the translation, required
      * @return the corresponding patient, never null
@@ -265,7 +281,18 @@ public class NaaccrXmlUtils {
         if (context == null)
             throw new NaaccrIOException("Context is required");
 
-        // TODO inject format if not provided on the line
+        NaaccrFormat format = NaaccrFormat.getInstance(context.getFormat());
+        if (line.length() != format.getLineLength())
+            throw new NaaccrIOException("Expected line length to be " + format.getLineLength() + " but was " + line.length());
+
+        boolean updateType = !format.getRecordType().equals(line.substring(0, 1).trim());
+        boolean updateVersion = !format.getNaaccrVersion().equals(line.substring(16, 19).trim());
+        if (updateType || updateVersion) {
+            StringBuilder buf = new StringBuilder(line);
+            buf.replace(0, 1, format.getRecordType());
+            buf.replace(16, 19, format.getNaaccrVersion());
+            line = buf.toString();
+        }
 
         try (PatientFlatReader reader = new PatientFlatReader(new StringReader(line), context.getOptions(), context.getUserDictionaries(), context.getStreamConfiguration())) {
             return reader.readPatient();
@@ -275,7 +302,23 @@ public class NaaccrXmlUtils {
     /**
      * Translates a single patient into a line representing a flat file line.
      * <br/><br/>
-     * TODO explain the context
+     * Unlike the methods dealing with files, this method takes a context as a parameter. The reason for that difference is that this method uses a stream to convert
+     * the patient, and so the stream needs to be re-created every time the method is invoked on a given patient. This is very inefficient and would be too slow if this
+     * method was used in a loop (which is the common use-case). Having a shared context that is created once outside the loop avoids that inefficiency.
+     * <br/><br/>
+     * It is very important to not re-create the context when this method is called in a loop:
+     * <br><br/>
+     * This is NOT correct:
+     * <code>
+     *     for (Patient patient : patients)
+     *         NaaccrXmlUtils.patientToLine(patient, new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT));
+     * </code>
+     * This is correct:
+     * <code>
+     *     NaaccrContext context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT);
+     *     for (Patient patient : patients)
+     *         NaaccrXmlUtils.patientToLine(patient, context);
+     * </code>
      * @param patient the patient to translate, required
      * @param context the context to use for the translation, required
      * @return the corresponding line, never null

@@ -159,6 +159,56 @@ public class NaaccrXmlUtilsTest {
     }
 
     @Test
+    public void testLineToPatient() throws IOException {
+        StringBuilder line = TestingUtils.createEmptyRecord("160", "A", "00000001");
+
+        NaaccrContext context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT);
+        Patient patient = NaaccrXmlUtils.lineToPatient(line.toString(), context);
+        Assert.assertEquals("00000001", patient.getItemValue("patientIdNumber"));
+
+        List<NaaccrDictionary> dictionaries = Collections.singletonList(TestingUtils.createUserDictionary());
+        line.replace(2339, 2341, "00");
+        context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT, dictionaries);
+        patient = NaaccrXmlUtils.lineToPatient(line.toString(), context);
+        Assert.assertEquals("00", patient.getTumors().get(0).getItemValue("myVariable"));
+
+        NaaccrOptions options = NaaccrOptions.getDefault();
+        options.setItemsToExclude(Collections.singletonList("patientIdNumber"));
+        context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT, dictionaries, options);
+        patient = NaaccrXmlUtils.lineToPatient(line.toString(), context);
+        Assert.assertNull(patient.getItemValue("patientIdNumber"));
+
+        line.replace(0, 20, "                    ");
+        context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT);
+        patient = NaaccrXmlUtils.lineToPatient(line.toString(), context);
+        Assert.assertEquals("00000001", patient.getItemValue("patientIdNumber"));
+    }
+
+    @Test
+    public void testPatientToLine() throws IOException {
+        Patient patient = new Patient();
+        patient.addItem(new Item("patientIdNumber", "00000001"));
+
+        NaaccrContext context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT);
+        String line = NaaccrXmlUtils.patientToLine(patient, context);
+        Assert.assertEquals("00000001", line.substring(41, 49));
+
+        List<NaaccrDictionary> dictionaries = Collections.singletonList(TestingUtils.createUserDictionary());
+        Tumor tumor = new Tumor();
+        patient.addTumor(tumor);
+        tumor.addItem(new Item("myVariable", "00"));
+        context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT, dictionaries);
+        line = NaaccrXmlUtils.patientToLine(patient, context);
+        Assert.assertEquals("00", line.substring(2339, 2341));
+
+        NaaccrOptions options = NaaccrOptions.getDefault();
+        options.setItemsToExclude(Collections.singletonList("patientIdNumber"));
+        context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT, dictionaries, options);
+        line = NaaccrXmlUtils.patientToLine(patient, context);
+        Assert.assertEquals("        ", line.substring(41, 49));
+    }
+
+    @Test
     public void testGetFormatFromFlatFile() throws IOException {
 
         // regular file

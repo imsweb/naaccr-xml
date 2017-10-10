@@ -74,13 +74,17 @@ A few higher-level utility methods have been defined in the [NaaccrXmlUtils](htt
 *Translation methods*
 * void ***flatToXml*** (File flatFile, File xmlFile, ...)
 * void ***xmlToFlat*** (File xmlFile, File flatFile, ...)
+* Patient ***lineToPatient*** (String line, NaaccrContext context)
+* String ***patientToLine*** (Patient patient, NaaccrContext context)
 
 There are other utility methods, but those are the main ones.
 
-All those methods accept the following optional parameters (optional in the sense that null can be passed to the method):
+All the file-related methods accept the following optional parameters (optional in the sense that null can be passed to the method):
 * [NaaccrXmlOptions](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrXmlOptions.java) - options for customizing the read/write and errors reporting operations
 * [NaaccrDictionary](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/entity/dictionary/NaaccrDictionary.java) - one or several user-defined dictionary (if none is provided, the default user-defined dictionary will be used)
 * [NaaccrObserver](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/NaaccrObserver.java) - an observer allowing to report progress as the files are being processed.
+
+The methods translating a single line or single patient takes a context as parameter; it is very important to initialize that context outside a loop if the methods are called in a loop.
 
 ### Using the Graphical User Interface (Standalone)
 
