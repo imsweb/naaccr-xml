@@ -200,7 +200,11 @@ public final class NaaccrFormat {
             default:
                 formattedType = "?";
         }
-        return "NAACCR " + _naaccrVersion.substring(0, 2) + "." + _naaccrVersion.substring(2) + " " + formattedType;
+
+        if ("0".equals(_naaccrVersion.substring(2)))
+            return "NAACCR " + _naaccrVersion.substring(0, 2) + " " + formattedType;
+        else
+            return "NAACCR " + _naaccrVersion.substring(0, 2) + "." + _naaccrVersion.substring(2) + " " + formattedType;
     }
 
     @Override
