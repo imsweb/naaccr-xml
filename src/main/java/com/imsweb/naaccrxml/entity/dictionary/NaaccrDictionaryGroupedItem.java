@@ -26,7 +26,7 @@ public class NaaccrDictionaryGroupedItem extends NaaccrDictionaryItem {
 
     /**
      * Returns the NAACCR ID of the items contained in this grouped item.
-     * @return
+     * @return the NAACCR ID of the items contained in this grouped item
      */
     public List<String> getContainedItemId() {
         if (StringUtils.isBlank(_contains))
