@@ -251,7 +251,7 @@ public class NaaccrXmlUtils {
     }
 
     /**
-     * Translates a single line representing a flat file line into a patient object.
+     * Translates a single line representing a flat file line into a patient object. The resulting patient will have 0 or 1 tumor.
      * <br/><br/>
      * Unlike the methods dealing with files, this method takes a context as a parameter. The reason for that difference is that this method uses a stream to convert
      * the line, and so the stream needs to be re-created every time the method is invoked on a given line. This is very inefficient and would be too slow if this
@@ -300,7 +300,7 @@ public class NaaccrXmlUtils {
     }
 
     /**
-     * Translates a single patient into a line representing a flat file line.
+     * Translates a single patient into a line representing a flat file line. This method expects a patient with 0 or 1 tumor. An exception will be raised if it has more.
      * <br/><br/>
      * Unlike the methods dealing with files, this method takes a context as a parameter. The reason for that difference is that this method uses a stream to convert
      * the patient, and so the stream needs to be re-created every time the method is invoked on a given patient. This is very inefficient and would be too slow if this
@@ -329,6 +329,10 @@ public class NaaccrXmlUtils {
             throw new NaaccrIOException("Patient is required");
         if (context == null)
             throw new NaaccrIOException("Context is required");
+
+        // it wouldn't be very hard to support more than one tumor, but will do it only if needed
+        if (patient.getTumors().size() > 1)
+            throw new NaaccrIOException("This method requires a patient with 0 or 1 tumor.");
 
         StringWriter buf = new StringWriter();
         try (PatientFlatWriter writer = new PatientFlatWriter(buf, new NaaccrData(context.getFormat()), context.getOptions(), context.getUserDictionaries(), context.getStreamConfiguration())) {
