@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 4.3**
+
+ - Improved the algorithm that generate NAACCR XML ID from names so it handles roman numerals better.
+
 **Version 4.2**
 
  - Fixed a bug in the dictionary validation that would not flag as invalid a dictionary with a missing URI attribute.

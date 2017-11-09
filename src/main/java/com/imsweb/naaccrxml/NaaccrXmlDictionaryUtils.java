@@ -504,12 +504,37 @@ public final class NaaccrXmlDictionaryUtils {
         if (name == null || name.isEmpty())
             return "";
 
+        // not including 10 (and after) because I feel like X might be a legit occurrence...
+        Map<String, String> romanNumerals = new HashMap<>();
+        romanNumerals.put("I", "1");
+        romanNumerals.put("II", "2");
+        romanNumerals.put("II", "3");
+        romanNumerals.put("IV", "4");
+        romanNumerals.put("V", "5");
+        romanNumerals.put("VI", "6");
+        romanNumerals.put("VII", "7");
+        romanNumerals.put("VIII", "8");
+        romanNumerals.put("IX", "9");
+
         String[] parts = StringUtils.split(name.replaceAll("\\s+|-+|/|_|\\.", " ").replaceAll("\\(.+\\)|[\\W&&[^\\s]]", ""), ' ');
+
+        // special case, if the last two parts are both roman numeral, then put a "to" between them
+        if (parts.length > 2 && romanNumerals.containsKey(parts[parts.length - 1]) && romanNumerals.containsKey(parts[parts.length - 2])) {
+            String[] tmp = new String[parts.length + 1];
+            System.arraycopy(parts, 0, tmp, 0, parts.length - 1);
+            tmp[tmp.length - 2] = "to";
+            tmp[tmp.length - 1] = parts[parts.length - 1];
+            parts = tmp;
+        }
 
         StringBuilder buf = new StringBuilder();
         buf.append(StringUtils.uncapitalize(parts[0].toLowerCase()));
-        for (int i = 1; i < parts.length; i++)
-            buf.append(StringUtils.capitalize(parts[i].toLowerCase()));
+        for (int i = 1; i < parts.length; i++) {
+            if (romanNumerals.containsKey(parts[i]))
+                buf.append(romanNumerals.get(parts[i]));
+            else
+                buf.append(StringUtils.capitalize(parts[i].toLowerCase()));
+        }
 
         return buf.toString();
     }
