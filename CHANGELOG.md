@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+
+**Version 4.4**
+
+ - Improved the algorithm that generate NAACCR XML ID from names so it handles roman numerals better.
+
 **Version 4.3**
 
  - Improved user-defined dictionaries validation; an error will now be reported if two dictionaries define overlapping columns.
