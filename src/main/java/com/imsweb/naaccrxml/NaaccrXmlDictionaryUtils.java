@@ -32,6 +32,8 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
+import com.thoughtworks.xstream.security.NoTypePermission;
+import com.thoughtworks.xstream.security.WildcardTypePermission;
 
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryGroupedItem;
@@ -566,6 +568,10 @@ public final class NaaccrXmlDictionaryUtils {
      */
     private static XStream instanciateXStream() {
         XStream xstream = new XStream(new PureJavaReflectionProvider());
+
+        // setup proper security environment
+        xstream.addPermission(NoTypePermission.NONE);
+        xstream.addPermission(new WildcardTypePermission(new String[] {"com.imsweb.naaccrxml.**"}));
 
         xstream.alias("NaaccrDictionary", NaaccrDictionary.class);
         xstream.aliasAttribute(NaaccrDictionary.class, "_dictionaryUri", "dictionaryUri");

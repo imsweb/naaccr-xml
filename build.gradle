@@ -21,12 +21,12 @@ repositories {
 
 dependencies {
     compile 'commons-io:commons-io:2.5'
-    compile 'org.apache.commons:commons-lang3:3.4'
-    compile 'com.thoughtworks.xstream:xstream:1.4.9'
-    compile 'org.tukaani:xz:1.5'
+    compile 'org.apache.commons:commons-lang3:3.6'
+    compile 'com.thoughtworks.xstream:xstream:1.4.10'
+    compile 'org.tukaani:xz:1.6'
     testCompile 'junit:junit:4.12'
     testCompile 'au.com.bytecode:opencsv:2.4'
-    testCompile 'com.imsweb:data-generator:0.3'
+    testCompile 'com.imsweb:data-generator:1.0'
 }
 
 // enforce UTF-8 for all compilation tasks
@@ -44,10 +44,10 @@ jar {
                 'Built-JDK': System.getProperty('java.version'),
                 'Main-Class': 'com.imsweb.naaccrxml.gui.Standalone')
     }
-    from ('VERSION') {
+    from('VERSION') {
         rename 'VERSION', 'NAACCR-XML-VERSION'
     }
-    from ('LICENSE') {
+    from('LICENSE') {
         rename 'LICENSE', 'NAACCR-XML-LICENSE'
     }
 }
@@ -61,10 +61,10 @@ tasks.withType(Javadoc) {
 shadowJar {
     exclude('XMLPULL_1_1_3_1_VERSION')
     exclude('XPP3_1.1.4c_MIN_VERSION')
-    from ('VERSION') {
+    from('VERSION') {
         rename 'VERSION', 'NAACCR-XML-VERSION'
     }
-    from ('LICENSE') {
+    from('LICENSE') {
         rename 'LICENSE', 'NAACCR-XML-LICENSE'
     }
 }

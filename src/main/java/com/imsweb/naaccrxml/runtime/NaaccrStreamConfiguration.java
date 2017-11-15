@@ -17,6 +17,8 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.xml.XppDriver;
+import com.thoughtworks.xstream.security.NoTypePermission;
+import com.thoughtworks.xstream.security.WildcardTypePermission;
 
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
 import com.imsweb.naaccrxml.entity.Item;
@@ -119,6 +121,10 @@ public class NaaccrStreamConfiguration {
      */
     protected XStream createXStream(HierarchicalStreamDriver driver, NaaccrPatientConverter patientConverter) {
         XStream xstream = new XStream(driver);
+
+        // setup proper security environment
+        xstream.addPermission(NoTypePermission.NONE);
+        xstream.addPermission(new WildcardTypePermission(new String[] {"com.imsweb.naaccrxml.**"}));
 
         // tell XStream how to read/write our main entities
         xstream.alias(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT, NaaccrData.class);

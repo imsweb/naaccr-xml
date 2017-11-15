@@ -1,5 +1,12 @@
 ## NAACCR XML Version History
 
+**Version 4.3**
+
+ - Added a proper security environment to XStream by limiting the classes that it can create when loading XML files.
+ - Updated XStream dependency from version 1.4.9 to version 1.4.10.
+ - Updated commons-lang3 dependency from version 3.4 to version 3.6.
+ - Updated XZ compression library from version 1.5 to version 1.6.
+
 **Version 4.2**
 
  - Fixed a bug in the dictionary validation that would not flag as invalid a dictionary with a missing URI attribute.
@@ -57,8 +64,8 @@
  - Made start column optional in user-defined dictionaries (specification 1.1).
  - Made NAACCR version optional in user-defined dictionaries  specification 1.1).
  - Added optional attribute "specificationVersion" to the root dictionary and data XML tags, now set to 1.1 by default.
- - Updated commons-lang3 dependency to version 2.5.
- - Updated commons-io dependency to version 3.4.
+ - Updated commons-lang3 dependency to version 3.4.
+ - Updated commons-io dependency to version 2.5.
  - Updated XStream dependency to version 1.4.9.
  - Library now requires Java 8 at minimum.
 
