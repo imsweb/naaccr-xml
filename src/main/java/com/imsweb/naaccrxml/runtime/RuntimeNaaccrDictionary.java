@@ -112,6 +112,15 @@ public class RuntimeNaaccrDictionary {
                 return -1;
             return o1.getStartColumn().compareTo(o2.getStartColumn());
         });
+
+        // make sure there is no overlapping with the start columns (for the items that have them)
+        RuntimeNaaccrDictionaryItem currentItem = null;
+        for (RuntimeNaaccrDictionaryItem item : _items) {
+            if (currentItem != null && item.getStartColumn() != null && item.getStartColumn() <= currentItem.getStartColumn() + currentItem.getLength() - 1)
+                throw new NaaccrIOException("User-defined dictionaries define overlapping columns for items '" + currentItem.getNaaccrId() + "' and '" + item.getNaaccrId() + "'");
+            if (item.getStartColumn() != null)
+                currentItem = item;
+        }
     }
 
     public String getId() {

@@ -2,6 +2,7 @@
 
 **Version 4.3**
 
+ - Improved user-defined dictionaries validation; an error will now be reported if two dictionaries define overlapping columns.
  - Added a proper security environment to XStream by limiting the classes that it can create when loading XML files.
  - Updated XStream dependency from version 1.4.9 to version 1.4.10.
  - Updated commons-lang3 dependency from version 3.4 to version 3.6.

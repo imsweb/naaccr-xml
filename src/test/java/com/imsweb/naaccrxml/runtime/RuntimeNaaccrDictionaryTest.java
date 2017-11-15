@@ -74,6 +74,27 @@ public class RuntimeNaaccrDictionaryTest {
         assertNotValid("M", baseDict, userDicts);
         item2.setNaaccrNum(10001);
 
+        // both dictionaries define overlapping items
+        item1.setStartColumn(2340);
+        item1.setLength(1);
+        item2.setStartColumn(2340);
+        item2.setLength(1);
+        assertNotValid("A", baseDict, userDicts);
+        item1.setStartColumn(2340);
+        item1.setLength(2);
+        item2.setStartColumn(2341);
+        item2.setLength(1);
+        assertNotValid("A", baseDict, userDicts);
+        item1.setStartColumn(2341);
+        item1.setLength(1);
+        item2.setStartColumn(2340);
+        item2.setLength(3);
+        assertNotValid("A", baseDict, userDicts);
+        item1.setStartColumn(2340);
+        item1.setLength(1);
+        item2.setStartColumn(2341);
+        item2.setLength(1);
+        assertValid("A", baseDict, userDicts);
     }
 
     private void assertValid(String recordType, NaaccrDictionary baseDictionary, Collection<NaaccrDictionary> userDictionaries) {
