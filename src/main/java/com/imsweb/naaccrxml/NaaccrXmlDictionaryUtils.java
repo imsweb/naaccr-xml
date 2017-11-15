@@ -510,7 +510,7 @@ public final class NaaccrXmlDictionaryUtils {
         Map<String, String> romanNumerals = new HashMap<>();
         romanNumerals.put("I", "1");
         romanNumerals.put("II", "2");
-        romanNumerals.put("II", "3");
+        romanNumerals.put("III", "3");
         romanNumerals.put("IV", "4");
         romanNumerals.put("V", "5");
         romanNumerals.put("VI", "6");
