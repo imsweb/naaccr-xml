@@ -35,7 +35,7 @@ import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
 /**
  * This class can be used to wrap a generic writer into a patient writer handling the NAACCR XML format.
  */
-public class PatientXmlWriter implements AutoCloseable {
+public class PatientXmlWriter implements PatientWriter {
 
     // XStream object responsible for reading patient objects
     protected XStream _xstream;
@@ -218,10 +218,7 @@ public class PatientXmlWriter implements AutoCloseable {
         }
     }
 
-    /**
-     * Writes the given patient on this stream.
-     * @throws NaaccrIOException if anything goes wrong
-     */
+    @Override
     public void writePatient(Patient patient) throws NaaccrIOException {
         try {
             _xstream.marshal(patient, _writer);
@@ -234,9 +231,7 @@ public class PatientXmlWriter implements AutoCloseable {
         }
     }
 
-    /**
-     * Write the final node of the document, without closing the stream.
-     */
+    @Override
     public void closeAndKeepAlive() {
         if (!_hasBeenFinalized) {
             _writer.endNode();

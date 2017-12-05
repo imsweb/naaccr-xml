@@ -32,7 +32,7 @@ import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
 /**
  * This class can be used to wrap a generic reader into a patient reader handling the NAACCR XML format.
  */
-public class PatientXmlReader implements AutoCloseable {
+public class PatientXmlReader implements PatientReader {
 
     // the root data
     protected NaaccrData _rootData;
@@ -323,11 +323,7 @@ public class PatientXmlReader implements AutoCloseable {
         }
     }
 
-    /**
-     * Reads the next patient on this stream.
-     * @return the next available patient, null if not such patient
-     * @throws NaaccrIOException if anything goes wrong
-     */
+    @Override
     public Patient readPatient() throws NaaccrIOException {
         if (_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
             return null;
@@ -358,17 +354,12 @@ public class PatientXmlReader implements AutoCloseable {
         return patient;
     }
 
-    /**
-     * Returns the "root" data; it includes root attributes and the root items.
-     * @return the root data, never null
-     */
+    @Override
     public NaaccrData getRootData() {
         return _rootData;
     }
 
-    /**
-     * Write the final node of the document, without closing the stream.
-     */
+    @Override
     public void closeAndKeepAlive() {
         if (!_hasBeenFinalized) {
             _reader.moveUp();

@@ -25,7 +25,7 @@ import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionaryItem;
 /**
  * This class can be used to wrap a generic writer into a patient writer handling the NAACCR flat-file format.
  */
-public class PatientFlatWriter implements AutoCloseable {
+public class PatientFlatWriter implements PatientWriter {
 
     // the underlined writer
     protected BufferedWriter _writer;
@@ -137,11 +137,7 @@ public class PatientFlatWriter implements AutoCloseable {
         }
     }
 
-    /**
-     * Write the given patient on this stream.
-     * @param patient patient to write (can't be null)
-     * @throws NaaccrIOException if there is problem writing the next patient
-     */
+    @Override
     public void writePatient(Patient patient) throws NaaccrIOException {
         for (String line : createLinesFromPatient(_rootData, patient)) {
             try {
@@ -154,9 +150,7 @@ public class PatientFlatWriter implements AutoCloseable {
         }
     }
 
-    /**
-     * This method does nothing for a flat writer, it has been added to be consistent with the XML writer.
-     */
+    @Override
     public void closeAndKeepAlive() {
         // does nothing
     }
@@ -266,16 +260,15 @@ public class PatientFlatWriter implements AutoCloseable {
         // for flat-file values, we always have to truncate, so the "allowUnlimitedText" is used only to know if we have to report an error
         if (value != null && value.length() > itemDef.getLength()) {
             if (!Boolean.TRUE.equals(itemDef.getAllowUnlimitedText()) && _options.getReportValuesTooLong())
-                reportError(entityToUse, null, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());
+                reportError(entityToUse, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());
             value = value.substring(0, itemDef.getLength());
         }
 
         return value;
     }
 
-    protected void reportError(AbstractEntity entity, Integer line, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {
+    protected void reportError(AbstractEntity entity, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {
         NaaccrValidationError error = new NaaccrValidationError(code, msgValues);
-        error.setLineNumber(line);
         if (def != null) {
             error.setNaaccrId(def.getNaaccrId());
             error.setNaaccrNum(def.getNaaccrNum());

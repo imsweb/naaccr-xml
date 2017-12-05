@@ -25,7 +25,7 @@ import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionaryItem;
 /**
  * This class can be used to wrap a generic reader into a patient reader handling the NAACCR flat-file format.
  */
-public class PatientFlatReader implements AutoCloseable {
+public class PatientFlatReader implements PatientReader {
 
     // the underlined line reader
     protected LineNumberReader _reader;
@@ -168,11 +168,7 @@ public class PatientFlatReader implements AutoCloseable {
         }
     }
 
-    /**
-     * Reads the next patient on this stream.
-     * @return the next available patient, null if not such patient
-     * @throws NaaccrIOException if there is a problem reading the next patient
-     */
+    @Override
     public Patient readPatient() throws NaaccrIOException {
         List<String> lines = new ArrayList<>();
         List<Integer> lineNumbers = new ArrayList<>();
@@ -206,17 +202,12 @@ public class PatientFlatReader implements AutoCloseable {
         return lines.isEmpty() ? null : createPatientFromLines(lines, lineNumbers);
     }
 
-    /**
-     * Returns the "root" data; it includes root attributes and the root items.
-     * @return the root data, never null
-     */
+    @Override
     public NaaccrData getRootData() {
         return _rootData;
     }
 
-    /**
-     * This method does nothing for a flat writer, it has been added to be consistent with the XML writer.
-     */
+    @Override
     public void closeAndKeepAlive() {
         // does nothing
     }
@@ -244,7 +235,7 @@ public class PatientFlatReader implements AutoCloseable {
         return values;
     }
 
-    protected Patient createPatientFromLines(List<String> lines, List<Integer> lineNumbers) throws NaaccrIOException {
+    protected Patient createPatientFromLines(List<String> lines, List<Integer> lineNumbers) {
         Patient patient = new Patient();
         patient.setStartLineNumber(lineNumbers.get(0));
 
