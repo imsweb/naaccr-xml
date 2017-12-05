@@ -2,6 +2,7 @@
 
 **Version 4.3**
 
+ - Added a new dictionary utility method that validates a combination of dictionaries instead of a single one.
  - The patient readers/writers are now implementing a common reader/writer interface.
  - Improved handling of extension to allow several extension objects per data level instead of a single one.
  - Improved the algorithm that generate NAACCR XML ID from names so it handles roman numerals better.
