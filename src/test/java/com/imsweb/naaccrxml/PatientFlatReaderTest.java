@@ -236,15 +236,6 @@ public class PatientFlatReaderTest {
             Assert.assertTrue(tumor.getItem("stateRequestorItems").getValue().startsWith("X"));
         }
 
-        // if we pass an "empty" user dictionary, then the state requestor item should be ignored, resulting in a null item...
-        NaaccrDictionary dict = new NaaccrDictionary();
-        dict.setNaaccrVersion("150");
-        dict.setDictionaryUri("whatever");
-        try (PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, dict)) {
-            Tumor tumor = reader.readPatient().getTumors().get(0);
-            Assert.assertNull(tumor.getItem("stateRequestorItems"));
-        }
-
         // using a dictionary with items that are not tied to a start location; those should be ignored...
         try (Reader dictReader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary.xml"))) {
             try (PatientFlatReader reader = new PatientFlatReader(new FileReader(file), null, NaaccrXmlDictionaryUtils.readDictionary(dictReader))) {

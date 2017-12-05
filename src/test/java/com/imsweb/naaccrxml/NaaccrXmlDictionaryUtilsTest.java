@@ -214,6 +214,66 @@ public class NaaccrXmlDictionaryUtilsTest {
     }
 
     @Test
+    public void testValidateDictionaries() {
+
+        // base dictionary by itself is valid
+        NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("160");
+        Assert.assertNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, Collections.emptyList()));
+
+        // add two valid user-defined dictionaries
+        List<NaaccrDictionary> userDictionaries = new ArrayList<>();
+        NaaccrDictionary userDictionary1 = new NaaccrDictionary();
+        userDictionary1.setNaaccrVersion("160");
+        userDictionary1.setDictionaryUri("whatever1");
+        userDictionary1.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
+        NaaccrDictionaryItem item1 = new NaaccrDictionaryItem();
+        item1.setNaaccrId("myVariable1");
+        item1.setNaaccrName("My Variable1");
+        item1.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT);
+        item1.setNaaccrNum(10000);
+        item1.setLength(1);
+        userDictionary1.setItems(Collections.singletonList(item1));
+        userDictionaries.add(userDictionary1);
+        NaaccrDictionary userDictionary2 = new NaaccrDictionary();
+        userDictionary2.setDictionaryUri("whatever2");
+        userDictionary2.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
+        NaaccrDictionaryItem item2 = new NaaccrDictionaryItem();
+        item2.setNaaccrId("myVariable2");
+        item2.setNaaccrName("My Variable2");
+        item2.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT);
+        item2.setNaaccrNum(10001);
+        item2.setLength(1);
+        userDictionary2.setItems(Collections.singletonList(item2));
+        userDictionaries.add(userDictionary2);
+        Assert.assertNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries));
+
+        // NAACCR ID repeats a base one
+        item2.setNaaccrId("vitalStatus");
+        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries));
+        item2.setNaaccrId("myVariable2");
+
+        // NAACCR ID repeats a user-defined ones
+        item2.setNaaccrId("myVariable1");
+        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries));
+        item2.setNaaccrId("myVariable2");
+
+        // NAACCR number repeats a base one
+        item2.setNaaccrNum(10);
+        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries));
+        item2.setNaaccrNum(10001);
+
+        // NAACCR number repeats a user-defined one
+        item2.setNaaccrNum(10000);
+        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries));
+        item2.setNaaccrNum(10001);
+
+        // items overlap
+        item1.setStartColumn(2340);
+        item2.setStartColumn(2340);
+        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries));
+    }
+
+    @Test
     public void testValidationRegex() {
 
         //  "alpha": uppercase letters, A-Z, no spaces, full length needs to be filled in

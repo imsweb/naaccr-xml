@@ -188,6 +188,9 @@ public class StandaloneOptions extends JPanel {
     public NaaccrOptions getOptions(NaaccrDictionary baseDictionary, List<NaaccrDictionary> userDictionaries) {
         NaaccrOptions options = new NaaccrOptions();
 
+        // the standalone app has no way to register proper extensions, so they have to be turned off!
+        options.setIgnoreExtensions(true);
+
         if (_readFlat) {
             if (_groupTumorBox.isSelected())
                 options.setTumorGroupingItems(Collections.singletonList(NaaccrXmlUtils.DEFAULT_TUMOR_GROUPING_ITEM));
@@ -235,7 +238,7 @@ public class StandaloneOptions extends JPanel {
                 // gather the items
                 List<String> naaccrIds = new ArrayList<>();
                 for (String s : StringUtils.split(itemsStr, ','))
-                    naaccrIds.add(itemNumToItemId.containsKey(s) ? itemNumToItemId.get(s) : s);
+                    naaccrIds.add(itemNumToItemId.getOrDefault(s, s));
 
                 // set the items on the options
                 if (_itemsExcludeBtn.isSelected())

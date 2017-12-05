@@ -4,11 +4,12 @@
 package com.imsweb.naaccrxml.runtime;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrIOException;
@@ -43,9 +44,6 @@ public class RuntimeNaaccrDictionary {
         if (baseDictionary == null)
             throw new NaaccrIOException("Base dictionary is required to create a runtime dictionary");
 
-        // assign the ID based on the URI (done on the raw input so the behavior is the same when called outside of this constructor)
-        _id = computeId(recordType, baseDictionary, userDictionaries);
-
         // compute a clean list of user dictionaries
         List<NaaccrDictionary> dictionaries = new ArrayList<>();
         if (userDictionaries != null)
@@ -53,55 +51,25 @@ public class RuntimeNaaccrDictionary {
                 if (userDictionary != null)
                     dictionaries.add(userDictionary);
 
-        // as of spec 1.1 the NAACCR version is optional on user-dictionaries, but that means we can't really validate them without
-        // knowing the corresponding base dictionary, so we have to re-validate here...
-        for (NaaccrDictionary userDictionary : dictionaries) {
-            if (userDictionary.getNaaccrVersion() == null) {
-                String error = NaaccrXmlDictionaryUtils.validateUserDictionary(userDictionary, baseDictionary.getNaaccrVersion());
-                if (error != null)
-                    throw new NaaccrIOException("Invalid user-defined dictionary '" + userDictionary.getDictionaryUri() + "': " + error);
-            }
-            else if (!baseDictionary.getNaaccrVersion().equals(userDictionary.getNaaccrVersion()))
-                throw new NaaccrIOException("User-defined dictionary '" + userDictionary.getDictionaryUri() + "' doesn't define the same version as the base dictionary");
-        }
+        // assign the ID based on the URI (done on the raw input so the behavior is the same when called outside of this constructor)
+        _id = computeId(recordType, baseDictionary, dictionaries);
+
+        String error = NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, dictionaries);
+        if (error != null)
+            throw new NaaccrIOException(StringUtils.capitalize(error));
 
         // use the default user dictionary if one is not provided...
         if (dictionaries.isEmpty())
             dictionaries.add(NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(baseDictionary.getNaaccrVersion()));
 
-        // extra validation involving all the user-defined dictionaries
-        Map<String, String> idsDejaVu = new HashMap<>();
-        Map<Integer, String> numbersDejaVue = new HashMap<>();
-        for (NaaccrDictionary userDictionary : dictionaries) {
-            String dictId = userDictionary.getDictionaryUri();
-            for (NaaccrDictionaryItem item : userDictionary.getItems()) {
-                // NAACCR IDs defined in user dictionaries cannot be the same as the base NAACCR IDs
-                if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
-                    throw new NaaccrIOException("User-defined dictionary '" + dictId + "' cannot use same NAACCR ID as a base item: " + item.getNaaccrId());
-                // NAACCR Numbers defined in user dictionaries cannot be the same as the base NAACCR Numbers
-                if (baseDictionary.getItemByNaaccrNum(item.getNaaccrNum()) != null)
-                    throw new NaaccrIOException("User-defined dictionary '" + dictId + "' cannot use same NAACCR Number as a base item: " + item.getNaaccrNum());
-                // NAACCR IDs must be unique among all user dictionaries
-                if (idsDejaVu.containsKey(item.getNaaccrId()))
-                    throw new NaaccrIOException("User-defined dictionary '" + dictId + "' and '" + idsDejaVu.get(item.getNaaccrId()) + "' both  define NAACCR ID '" + item.getNaaccrId() + "'");
-                else
-                    idsDejaVu.put(item.getNaaccrId(), dictId);
-                // NAACCR Numbers must be unique among all user dictionaries
-                if (numbersDejaVue.containsKey(item.getNaaccrNum()))
-                    throw new NaaccrIOException("User-defined dictionary '" + dictId + "' and '" + numbersDejaVue.get(item.getNaaccrNum()) + "' both  define NAACCR ID '" + item.getNaaccrNum() + "'");
-                else
-                    numbersDejaVue.put(item.getNaaccrNum(), dictId);
-            }
-        }
-
         _format = NaaccrFormat.getInstance(baseDictionary.getNaaccrVersion(), recordType);
         _items = new ArrayList<>();
         for (NaaccrDictionaryItem item : baseDictionary.getItems())
-            if (item.getRecordTypes() == null || Arrays.asList(item.getRecordTypes().split(",")).contains(recordType))
+            if (item.getRecordTypes() == null || StringUtils.contains(item.getRecordTypes(), recordType))
                 _items.add(new RuntimeNaaccrDictionaryItem(item));
         for (NaaccrDictionary userDictionary : dictionaries)
             for (NaaccrDictionaryItem item : userDictionary.getItems())
-                if (item.getRecordTypes() == null || Arrays.asList(item.getRecordTypes().split(",")).contains(recordType))
+                if (item.getRecordTypes() == null || StringUtils.contains(item.getRecordTypes(), recordType))
                     _items.add(new RuntimeNaaccrDictionaryItem(item));
 
         // sort the fields by starting columns (no start columns go to the end)
@@ -112,15 +80,6 @@ public class RuntimeNaaccrDictionary {
                 return -1;
             return o1.getStartColumn().compareTo(o2.getStartColumn());
         });
-
-        // make sure there is no overlapping with the start columns (for the items that have them)
-        RuntimeNaaccrDictionaryItem currentItem = null;
-        for (RuntimeNaaccrDictionaryItem item : _items) {
-            if (currentItem != null && item.getStartColumn() != null && item.getStartColumn() <= currentItem.getStartColumn() + currentItem.getLength() - 1)
-                throw new NaaccrIOException("User-defined dictionaries define overlapping columns for items '" + currentItem.getNaaccrId() + "' and '" + item.getNaaccrId() + "'");
-            if (item.getStartColumn() != null)
-                currentItem = item;
-        }
     }
 
     public String getId() {

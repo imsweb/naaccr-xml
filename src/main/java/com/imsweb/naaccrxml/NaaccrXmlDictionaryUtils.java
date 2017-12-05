@@ -13,6 +13,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.XStreamException;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
@@ -247,22 +249,27 @@ public final class NaaccrXmlDictionaryUtils {
      * @throws IOException if the dictionary could not be read
      */
     public static NaaccrDictionary readDictionary(Reader reader) throws IOException {
-        NaaccrDictionary dictionary = (NaaccrDictionary)instanciateXStream().fromXML(reader);
+        try {
+            NaaccrDictionary dictionary = (NaaccrDictionary)instanciateXStream().fromXML(reader);
 
-        if (dictionary.getSpecificationVersion() == null)
-            dictionary.setSpecificationVersion(SpecificationVersion.SPEC_1_0);
+            if (dictionary.getSpecificationVersion() == null)
+                dictionary.setSpecificationVersion(SpecificationVersion.SPEC_1_0);
 
-        // let's not validate the internal dictionaries, we know they are valid
-        String uri = dictionary.getDictionaryUri();
-        if (uri == null || uri.trim().isEmpty())
-            throw new IOException("'dictionaryUri' attribute is required");
-        else if (!BASE_DICTIONARY_URI_PATTERN.matcher(uri).matches() && !DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(uri).matches()) {
-            String error = validateUserDictionary(dictionary);
-            if (error != null)
-                throw new IOException(error);
+            // let's not validate the internal dictionaries, we know they are valid
+            String uri = dictionary.getDictionaryUri();
+            if (uri == null || uri.trim().isEmpty())
+                throw new IOException("'dictionaryUri' attribute is required");
+            else if (!BASE_DICTIONARY_URI_PATTERN.matcher(uri).matches() && !DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(uri).matches()) {
+                String error = validateUserDictionary(dictionary);
+                if (error != null)
+                    throw new IOException(error);
+            }
+
+            return dictionary;
         }
-
-        return dictionary;
+        catch (XStreamException ex) {
+            throw new IOException("Unable to read dictionary", ex);
+        }
     }
 
     /**
@@ -284,7 +291,12 @@ public final class NaaccrXmlDictionaryUtils {
      * @throws IOException if the dictionary could not be written
      */
     public static void writeDictionary(NaaccrDictionary dictionary, Writer writer) throws IOException {
-        instanciateXStream().marshal(dictionary, new NaaccrPrettyPrintWriter(dictionary, writer));
+        try {
+            instanciateXStream().marshal(dictionary, new NaaccrPrettyPrintWriter(dictionary, writer));
+        }
+        catch (XStreamException ex) {
+            throw new IOException("Unable to write dictionary", ex);
+        }
     }
 
     /**
@@ -298,6 +310,8 @@ public final class NaaccrXmlDictionaryUtils {
 
     /**
      * Validates the provided user dictionary.
+     * <br/><br/>
+     * If the dictionary doesn't contain a NAACCR version, any validation that needs a specific version will be skipped.
      * @param dictionary dictionary to validate, can't be null
      * @return null if the dictionary is valid, the error message otherwise
      */
@@ -490,6 +504,74 @@ public final class NaaccrXmlDictionaryUtils {
     }
 
     /**
+     * Validates the given base dictionary and user-defined dictionaries; this method validate every dictionaries individually but also runs some inter-dictionary validation.
+     * @param baseDictionary base dictionary (required)
+     * @param userDictionaries user-defined dictionaries, can be empty but not null
+     * @return null if the combination of dictionaries is valid, the error message otherwise
+     */
+    public static String validateDictionaries(NaaccrDictionary baseDictionary, Collection<NaaccrDictionary> userDictionaries) {
+
+        // validate the base dictionary
+        String error = validateBaseDictionary(baseDictionary);
+        if (error != null)
+            return error;
+
+        // validate each user dictionary
+        Map<String, String> idsDejaVu = new HashMap<>();
+        Map<Integer, String> numbersDejaVue = new HashMap<>();
+        for (NaaccrDictionary userDictionary : userDictionaries) {
+            error = validateUserDictionary(userDictionary, baseDictionary.getNaaccrVersion());
+            if (error != null)
+                return error;
+
+            // make sure the provided version (if one is provided) agrees with the base version
+            if (userDictionary.getNaaccrVersion() != null && !baseDictionary.getNaaccrVersion().equals(userDictionary.getNaaccrVersion()))
+                return "user-defined dictionary '" + userDictionary.getDictionaryUri() + "' doesn't define the same version as the base dictionary";
+
+            // validate the items
+            String dictId = userDictionary.getDictionaryUri();
+            for (NaaccrDictionaryItem item : userDictionary.getItems()) {
+                // NAACCR IDs defined in user dictionaries cannot be the same as the base NAACCR IDs
+                if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
+                    return "user-defined dictionary '" + dictId + "' cannot use same NAACCR ID as a base item: " + item.getNaaccrId();
+
+                // NAACCR Numbers defined in user dictionaries cannot be the same as the base NAACCR Numbers
+                if (baseDictionary.getItemByNaaccrNum(item.getNaaccrNum()) != null)
+                    return "user-defined dictionary '" + dictId + "' cannot use same NAACCR Number as a base item: " + item.getNaaccrNum();
+
+                // NAACCR IDs must be unique among all user dictionaries
+                if (idsDejaVu.containsKey(item.getNaaccrId()))
+                    return "user-defined dictionary '" + dictId + "' and '" + idsDejaVu.get(item.getNaaccrId()) + "' both  define NAACCR ID '" + item.getNaaccrId() + "'";
+                idsDejaVu.put(item.getNaaccrId(), dictId);
+
+                // NAACCR Numbers must be unique among all user dictionaries
+                if (numbersDejaVue.containsKey(item.getNaaccrNum()))
+                    return "user-defined dictionary '" + dictId + "' and '" + numbersDejaVue.get(item.getNaaccrNum()) + "' both  define NAACCR ID '" + item.getNaaccrNum() + "'";
+                numbersDejaVue.put(item.getNaaccrNum(), dictId);
+            }
+        }
+
+        // make sure there is no overlapping with the start columns (for the items that have them)
+        List<NaaccrDictionaryItem> items = new ArrayList<>(mergeDictionaries(baseDictionary, userDictionaries.toArray(new NaaccrDictionary[0])).getItems());
+        items.sort((o1, o2) -> {
+            if (o1.getStartColumn() == null)
+                return 1;
+            if (o2.getStartColumn() == null)
+                return -1;
+            return o1.getStartColumn().compareTo(o2.getStartColumn());
+        });
+        NaaccrDictionaryItem currentItem = null;
+        for (NaaccrDictionaryItem item : items) {
+            if (currentItem != null && item.getStartColumn() != null && item.getStartColumn() <= currentItem.getStartColumn() + currentItem.getLength() - 1)
+                return "user-defined dictionaries define overlapping columns for items '" + currentItem.getNaaccrId() + "' and '" + item.getNaaccrId() + "'";
+            if (item.getStartColumn() != null)
+                currentItem = item;
+        }
+
+        return null;
+    }
+
+    /**
      * Utility method to create a NAACCR ID from a display name:
      * <ol>
      * <li>Spaces, dashes, slashes periods and underscores are considered as word separators and replaced by a single space</li>
@@ -570,15 +652,13 @@ public final class NaaccrXmlDictionaryUtils {
         result.setSpecificationVersion(baseDictionary.getSpecificationVersion());
         result.setDescription(baseDictionary.getDescription());
 
-        List<NaaccrDictionaryItem> items = new ArrayList<>();
-        items.addAll(baseDictionary.getItems());
+        List<NaaccrDictionaryItem> items = new ArrayList<>(baseDictionary.getItems());
         for (NaaccrDictionary userDictionary : userDictionaries)
             items.addAll(userDictionary.getItems());
         items.sort(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId));
         result.setItems(items);
 
-        List<NaaccrDictionaryGroupedItem> groupedItems = new ArrayList<>();
-        groupedItems.addAll(baseDictionary.getGroupedItems());
+        List<NaaccrDictionaryGroupedItem> groupedItems = new ArrayList<>(baseDictionary.getGroupedItems());
         for (NaaccrDictionary userDictionary : userDictionaries)
             groupedItems.addAll(userDictionary.getGroupedItems());
         groupedItems.sort(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId));
