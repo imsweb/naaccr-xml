@@ -60,13 +60,16 @@ public class NaaccrStreamContext {
         int idx = tag.indexOf(':');
         if (idx != -1) {
             String namespace = tag.substring(0, idx), cleanTag = tag.substring(idx + 1);
-            Set<String> allowedTags = _configuration.getAllowedTagsForNamespacePrefix(namespace);
-            if (allowedTags == null || !allowedTags.contains(cleanTag))
-                throw new NaaccrIOException("tag '" + cleanTag + "' is not allowed for namespace '" + namespace + "'");
+            // check for the namespace only if the tag is a default one (Patient, Tumor, etc...) or if extensions are enabled
+            if (_configuration.getAllowedTagsForNamespacePrefix(null).contains(cleanTag) || !Boolean.TRUE.equals(_options.getIgnoreExtensions())) {
+                Set<String> allowedTags = _configuration.getAllowedTagsForNamespacePrefix(namespace);
+                if (allowedTags == null || !allowedTags.contains(cleanTag))
+                    throw new NaaccrIOException("tag '" + cleanTag + "' is not allowed for namespace '" + namespace + "'");
+            }
             return cleanTag;
         }
         else {
-            if (_options.getUseStrictNamespaces() && !_configuration.getAllowedTagsForNamespacePrefix(null).contains(tag))
+            if (Boolean.TRUE.equals(_options.getUseStrictNamespaces()) && !_configuration.getAllowedTagsForNamespacePrefix(null).contains(tag))
                 throw new NaaccrIOException("tag '" + tag + "' needs to be defined within a namespace");
             return tag;
         }
