@@ -229,6 +229,7 @@ public class NaaccrStreamConfiguration {
         if (!_namespaces.containsKey(namespacePrefix))
             throw new RuntimeException("Namespace prefix '" + namespacePrefix + "' has not been registered yet");
         _xstream.alias(namespacePrefix + ":" + tagName, clazz);
+        _xstream.addPermission(new WildcardTypePermission(new String[] {clazz.getName()}));
         _tags.computeIfAbsent(namespacePrefix, k -> new HashSet<>()).add(tagName);
     }
 

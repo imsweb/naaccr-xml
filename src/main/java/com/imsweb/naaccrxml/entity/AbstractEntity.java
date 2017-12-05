@@ -14,9 +14,9 @@ import com.imsweb.naaccrxml.NaaccrValidationError;
 /**
  * Encapsulates the logic about the complex entities.
  * <ol>
- *     <li>Entity has a collection of items on it</li>
- *     <li>Entity has a collection of validation errors on it (most errors are attached to individual items so it will be rare that this collection contains any)</li>
- *     <li>Entity has a line number on it (might not always be populated)</li>
+ * <li>Entity has a collection of items on it</li>
+ * <li>Entity has a collection of validation errors on it (most errors are attached to individual items so it will be rare that this collection contains any)</li>
+ * <li>Entity has a line number on it (might not always be populated)</li>
  * </ol>
  * This class also defines some utility methods to read/write those variables...
  */
@@ -31,8 +31,8 @@ public class AbstractEntity {
     // the line number for this entity; available only when reading from a file
     protected Integer _startLineNumber;
 
-    // the extension object
-    protected Object _extension;
+    // the extension objects
+    protected List<Object> _extensions;
 
     // caches to improve lookup performances
     protected Map<String, Item> _cachedById;
@@ -128,18 +128,30 @@ public class AbstractEntity {
     }
 
     /**
-     * Returns the extension for the current entity. The configuration must have been setup to understand how this object can be read/written.
-     * @return extension (can be any object), maybe null
+     * Returns the extensions for the current entity. The configuration must have been setup to understand how those objects can be read/written.
+     * @return extensions (can be any objects), the list itself maybe null
      */
-    public Object getExtension() {
-        return _extension;
+    public List<Object> getExtensions() {
+        return _extensions;
     }
 
     /**
-     * Sets the extension for the current entity. The configuration must have been setup to understand how this object can be read/written.
-     * @param extension extension (can be any object) to set, can be null
+     * Sets the extensions for the current entity. The configuration must have been setup to understand how those objects can be read/written.
+     * @param extensions extensions (can be any objects) to set, the list itself can be null
      */
-    public void setExtension(Object extension) {
-        _extension = extension;
+    public void setExtensions(List<Object> extensions) {
+        _extensions = extensions;
+    }
+
+    /**
+     * Adds an extension for the current entity. The configuration must have been setup to understand how this object can be read/written.
+     * @param extension extension (can be any object) to add; a null object will be ignored
+     */
+    public void addExtesion(Object extension) {
+        if (extension == null)
+            return;
+        if (_extensions == null)
+            _extensions = new ArrayList<>();
+        _extensions.add(extension);
     }
 }

@@ -281,7 +281,7 @@ public class PatientXmlReader implements AutoCloseable {
             // handle root extension
             if (!_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT)) {
                 if (!Boolean.TRUE.equals(options.getIgnoreExtensions())) {
-                    _rootData.setExtension(conf.getXstream().unmarshal(_reader));
+                    _rootData.addExtesion(conf.getXstream().unmarshal(_reader));
                     _reader.moveUp();
                     if (_reader.hasMoreChildren())
                         _reader.moveDown();

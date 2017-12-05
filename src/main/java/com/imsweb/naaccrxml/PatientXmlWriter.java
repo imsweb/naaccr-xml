@@ -206,8 +206,9 @@ public class PatientXmlWriter implements AutoCloseable {
             _xstream = conf.getXstream();
 
             // handle extension
-            if (!Boolean.TRUE.equals(options.getIgnoreExtensions()) && rootData.getExtension() != null)
-                _xstream.marshal(rootData.getExtension(), _writer);
+            if (!Boolean.TRUE.equals(options.getIgnoreExtensions()) && rootData.getExtensions() != null)
+                for (Object extension : rootData.getExtensions())
+                    _xstream.marshal(extension, _writer);
         }
         catch (ConversionException ex) {
             throw convertSyntaxException(ex);

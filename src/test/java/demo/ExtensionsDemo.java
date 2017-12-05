@@ -40,7 +40,7 @@ public class ExtensionsDemo {
         tumorSummary.setNumberMatched(24);
         summary.setTumorSummary(tumorSummary);
         // *** end of root extension
-        data.setExtension(summary);
+        data.addExtesion(summary);
         for (int i = 1; i <= 25; i++) {
             Patient patient = new Patient();
             patient.addItem(new Item("patientIdNumber", StringUtils.leftPad(String.valueOf(i), 8, '0')));
@@ -49,7 +49,7 @@ public class ExtensionsDemo {
             patSummary.setMatchingMethod("Patient Matching Algorithm #1");
             patSummary.setMatchingScore(i - 1);
             patSummary.setMatchingIdentifier("PAT-XXX");
-            patient.setExtension(patSummary);
+            patient.addExtesion(patSummary);
             // *** end of patient extension
             data.addPatient(patient);
             Tumor tumor = new Tumor();
@@ -59,7 +59,7 @@ public class ExtensionsDemo {
             tumSummary.setMatchingMethod("Tumor Matching Algorithm #1");
             tumSummary.setMatchingScore(i - 1);
             tumSummary.setMatchingIdentifier("TUM-YYY");
-            tumor.setExtension(tumSummary);
+            tumor.addExtesion(tumSummary);
             // *** end of patient extension
             patient.addTumor(tumor);
         }
@@ -92,15 +92,15 @@ public class ExtensionsDemo {
                 writer.writePatient(p);
         }
 
-        // read back the file and print a frew values to make sure we can access them
+        // read back the file and print a few values to make sure we can access them
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file), null, (NaaccrDictionary)null, configuration)) {
-            OverallSummary os = (OverallSummary)reader.getRootData().getExtension();
+            OverallSummary os = (OverallSummary)reader.getRootData().getExtensions().get(0);
             System.out.println("total number of processed patients: " + os.getPatientSummary().getNumberProcessed());
             System.out.println("total number of processed tumors:" + os.getTumorSummary().getNumberProcessed());
             Patient pat = reader.readPatient();
-            PatientSummary patSum = (PatientSummary)reader.readPatient().getExtension();
+            PatientSummary patSum = (PatientSummary)reader.readPatient().getExtensions().get(0);
             System.out.println(" > first patient matching method: " + patSum.getMatchingMethod());
-            TumorSummary tumSum = (TumorSummary)pat.getTumors().get(0).getExtension();
+            TumorSummary tumSum = (TumorSummary)pat.getTumors().get(0).getExtensions().get(0);
             System.out.println(" > first tumor matching method: " + tumSum.getMatchingMethod());
         }
     }

@@ -65,8 +65,9 @@ public class NaaccrPatientConverter implements Converter {
                 writeItem(item, writer);
 
             // handle extension
-            if (!Boolean.TRUE.equals(_context.getOptions().getIgnoreExtensions()) && patient.getExtension() != null)
-                _context.getConfiguration().getXstream().marshal(patient.getExtension(), writer);
+            if (!Boolean.TRUE.equals(_context.getOptions().getIgnoreExtensions()) && patient.getExtensions() != null)
+                for (Object extension : patient.getExtensions())
+                    _context.getConfiguration().getXstream().marshal(extension, writer);
 
             for (Tumor tumor : patient.getTumors()) {
                 writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
@@ -74,8 +75,9 @@ public class NaaccrPatientConverter implements Converter {
                     writeItem(item, writer);
 
                 // handle extension
-                if (!Boolean.TRUE.equals(_context.getOptions().getIgnoreExtensions()) && tumor.getExtension() != null)
-                    _context.getConfiguration().getXstream().marshal(tumor.getExtension(), writer);
+                if (!Boolean.TRUE.equals(_context.getOptions().getIgnoreExtensions()) && tumor.getExtensions() != null)
+                    for (Object extension : tumor.getExtensions())
+                        _context.getConfiguration().getXstream().marshal(extension, writer);
 
                 writer.endNode();
             }
@@ -146,7 +148,7 @@ public class NaaccrPatientConverter implements Converter {
                         }
                         else {
                             if (!Boolean.TRUE.equals(_context.getOptions().getIgnoreExtensions()))
-                                tumor.setExtension(_context.getConfiguration().getXstream().unmarshal(reader));
+                                tumor.addExtesion(_context.getConfiguration().getXstream().unmarshal(reader));
                             seenTumorExtension = true;
                         }
 
@@ -159,7 +161,7 @@ public class NaaccrPatientConverter implements Converter {
                     if (tumorCount > 0)
                         reportSyntaxError("unexpected tag: " + _context.extractTag(reader.getNodeName()));
                     if (!Boolean.TRUE.equals(_context.getOptions().getIgnoreExtensions()))
-                        patient.setExtension(_context.getConfiguration().getXstream().unmarshal(reader));
+                        patient.addExtesion(_context.getConfiguration().getXstream().unmarshal(reader));
                     seenPatientExtension = true;
                 }
 

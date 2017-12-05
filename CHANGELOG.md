@@ -1,12 +1,9 @@
 ## NAACCR XML Version History
 
-
-**Version 4.4**
-
- - Improved the algorithm that generate NAACCR XML ID from names so it handles roman numerals better.
-
 **Version 4.3**
 
+ - Improved handling of extension to allow several extension objects per data level instead of a single one.
+ - Improved the algorithm that generate NAACCR XML ID from names so it handles roman numerals better.
  - Improved user-defined dictionaries validation; an error will now be reported if two dictionaries define overlapping columns.
  - Added a proper security environment to XStream by limiting the classes that it can create when loading XML files.
  - Updated XStream dependency from version 1.4.9 to version 1.4.10.
