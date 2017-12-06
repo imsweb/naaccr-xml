@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 4.4**
+
+ - Fixed an exception in new validation method added in version 4.3.
+
 **Version 4.3**
 
  - Added a new dictionary utility method that validates a combination of dictionaries instead of a single one.

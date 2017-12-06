@@ -552,20 +552,15 @@ public final class NaaccrXmlDictionaryUtils {
         }
 
         // make sure there is no overlapping with the start columns (for the items that have them)
-        List<NaaccrDictionaryItem> items = new ArrayList<>(mergeDictionaries(baseDictionary, userDictionaries.toArray(new NaaccrDictionary[0])).getItems());
-        items.sort((o1, o2) -> {
-            if (o1.getStartColumn() == null)
-                return 1;
-            if (o2.getStartColumn() == null)
-                return -1;
-            return o1.getStartColumn().compareTo(o2.getStartColumn());
-        });
+        List<NaaccrDictionaryItem> items = mergeDictionaries(baseDictionary, userDictionaries.toArray(new NaaccrDictionary[0])).getItems().stream()
+                .filter(i -> i.getStartColumn() != null)
+                .sorted(Comparator.comparing(NaaccrDictionaryItem::getStartColumn))
+                .collect(Collectors.toList());
         NaaccrDictionaryItem currentItem = null;
         for (NaaccrDictionaryItem item : items) {
-            if (currentItem != null && item.getStartColumn() != null && item.getStartColumn() <= currentItem.getStartColumn() + currentItem.getLength() - 1)
+            if (currentItem != null && item.getStartColumn() <= currentItem.getStartColumn() + currentItem.getLength() - 1)
                 return "user-defined dictionaries define overlapping columns for items '" + currentItem.getNaaccrId() + "' and '" + item.getNaaccrId() + "'";
-            if (item.getStartColumn() != null)
-                currentItem = item;
+            currentItem = item;
         }
 
         return null;
