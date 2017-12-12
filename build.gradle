@@ -26,7 +26,7 @@ dependencies {
     compile 'org.tukaani:xz:1.6'
     testCompile 'junit:junit:4.12'
     testCompile 'au.com.bytecode:opencsv:2.4'
-    testCompile 'com.imsweb:data-generator:1.0'
+    testCompile 'com.imsweb:data-generator:1.2'
 }
 
 // enforce UTF-8 for all compilation tasks
