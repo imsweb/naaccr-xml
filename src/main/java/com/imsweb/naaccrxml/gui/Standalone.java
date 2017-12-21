@@ -135,6 +135,9 @@ public class Standalone extends JFrame implements ActionListener {
         this.getContentPane().add(_centerPnl, BorderLayout.CENTER);
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> SwingUtilities.invokeLater(() -> {
+
+            e.printStackTrace();
+
             boolean isLocationException = e instanceof IllegalComponentStateException; // https://bugs.openjdk.java.net/browse/JDK-8179665
             if (!isLocationException) {
                 String msg = "An unexpected error happened, it is recommended to close the application.\n\n   Error: " + (e.getMessage() == null ? "null access" : e.getMessage());

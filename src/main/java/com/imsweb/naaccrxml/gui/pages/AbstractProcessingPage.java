@@ -601,7 +601,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                     // ignored
                 }
                 catch (ExecutionException e) {
-                    reportAnalysisError((Exception)e.getCause());
+                    reportAnalysisError(e.getCause());
                 }
                 finally {
                     _analysisWorker = null;
@@ -696,7 +696,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                     _warningsSummaryTextArea.setText("Processing interrupted...");
                 }
                 catch (ExecutionException e) {
-                    reportProcessingError((Exception)e.getCause());
+                    e.printStackTrace();
+                    reportProcessingError(e.getCause());
                     _warningsSummaryTextArea.setText("Processing error...");
                 }
                 finally {
@@ -768,19 +769,19 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         return "Successfully created \"" + path + "\" (" + size + ") in " + total + " (analysis: " + analysis + ", processing: " + processing + ")";
     }
 
-    protected void reportAnalysisError(Exception e) {
+    protected void reportAnalysisError(Throwable e) {
         _centerPnl.setVisible(false);
         _analysisBar.setIndeterminate(false);
         _analysisErrorLbl.setText(extractMessageFromException(e));
         _northLayout.show(_northPnl, _NORTH_PANEL_ID_ERROR);
     }
 
-    protected void reportProcessingError(Exception e) {
+    protected void reportProcessingError(Throwable e) {
         _processingErrorLbl.setText(extractMessageFromException(e));
         _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_ERROR);
     }
 
-    private String extractMessageFromException(Exception e) {
+    private String extractMessageFromException(Throwable e) {
         String result = null;
 
         if (e != null) {

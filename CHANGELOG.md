@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 4.5**
+ 
+ - Added new jaxb-api (version 2.3.0) dependency required by Java 9.
+
 **Version 4.4**
 
  - Fixed an exception in new validation method added in version 4.3.
