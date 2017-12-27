@@ -14,6 +14,7 @@ import java.util.Set;
 public final class NaaccrFormat {
 
     // version constants
+    public static final String NAACCR_VERSION_180 = "180";
     public static final String NAACCR_VERSION_160 = "160";
     public static final String NAACCR_VERSION_150 = "150";
     public static final String NAACCR_VERSION_140 = "140";
@@ -22,6 +23,7 @@ public final class NaaccrFormat {
     private static final List<String> _SUPPORTED_VERSIONS = new ArrayList<>();
 
     static {
+        _SUPPORTED_VERSIONS.add(NAACCR_VERSION_180);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_160);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_150);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_140);
@@ -36,6 +38,10 @@ public final class NaaccrFormat {
     }
 
     // format constants
+    public static final String NAACCR_FORMAT_18_ABSTRACT = "naaccr-180-abstract";
+    public static final String NAACCR_FORMAT_18_MODIFIED = "naaccr-180-modified";
+    public static final String NAACCR_FORMAT_18_CONFIDENTIAL = "naaccr-180-confidential";
+    public static final String NAACCR_FORMAT_18_INCIDENCE = "naaccr-180-incidence";
     public static final String NAACCR_FORMAT_16_ABSTRACT = "naaccr-160-abstract";
     public static final String NAACCR_FORMAT_16_MODIFIED = "naaccr-160-modified";
     public static final String NAACCR_FORMAT_16_CONFIDENTIAL = "naaccr-160-confidential";
@@ -53,6 +59,10 @@ public final class NaaccrFormat {
     private static final List<String> _SUPPORTED_FORMATS = new ArrayList<>();
 
     static {
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_18_ABSTRACT);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_18_MODIFIED);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_18_CONFIDENTIAL);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_18_INCIDENCE);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_16_ABSTRACT);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_16_MODIFIED);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_16_CONFIDENTIAL);
@@ -125,19 +135,19 @@ public final class NaaccrFormat {
         switch (parts[2]) {
             case "abstract":
                 _recordType = "A";
-                _lineLength = 22824;
+                _lineLength = _naaccrVersion.equals("180") ? 24194 : 22824;
                 break;
             case "modified":
                 _recordType = "M";
-                _lineLength = 22824;
+                _lineLength = _naaccrVersion.equals("180") ? 24194 : 22824;
                 break;
             case "confidential":
                 _recordType = "C";
-                _lineLength = 5564;
+                _lineLength = _naaccrVersion.equals("180") ? 6934 : 5564;
                 break;
             case "incidence":
                 _recordType = "I";
-                _lineLength = 3339;
+                _lineLength = _naaccrVersion.equals("180") ? 4048 : 3339;
                 break;
             default:
                 throw new RuntimeException("Unsupported format: " + parts[2]);
