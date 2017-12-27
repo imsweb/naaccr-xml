@@ -53,6 +53,11 @@ public class NaaccrXmlDictionaryUtilsTest {
             for (int i = 0; i < items.size() - 1; i++)
                 if (items.get(i).getStartColumn() + items.get(i).getLength() != items.get(i + 1).getStartColumn())
                     fail("Found a gap after item " + items.get(i).getNaaccrId());
+
+            // make sure IDs are no longer than 50 characters (this will be enforced by the standard in a future version)
+            for (NaaccrDictionaryItem item : items)
+                if (item.getNaaccrId().length() > 50)
+                    fail("Found item with ID too long: " + item.getNaaccrId());
         }
 
         // clear the caches, force other tests to reload them again

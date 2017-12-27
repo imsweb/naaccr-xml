@@ -2,6 +2,7 @@
 
 **Version 4.5**
  
+ - Added support for NAACCR 18.
  - Added new jaxb-api (version 2.3.0) dependency required by Java 9.
 
 **Version 4.4**
