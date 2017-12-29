@@ -35,9 +35,9 @@ public class SasLab {
 
         for (NaaccrDictionaryItem item : dictionary.getItems()) {
             buf.append("\r\n");
-            buf.append("        <COLUMN name=\"").append(item.getNaaccrId());
+            buf.append("        <COLUMN name=\"").append(item.getNaaccrId()).append("\"");
             if (!NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(item.getParentXmlElement()))
-                buf.append("\" retain=\"YES\"");
+                buf.append(" retain=\"YES\"");
             buf.append(">\r\n");
             buf.append("            <PATH syntax=\"XPath\">").append(createXpath(item)).append("</PATH>\r\n");
             buf.append("            <DESCRIPTION>")
