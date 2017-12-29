@@ -44,6 +44,8 @@ import javax.swing.table.DefaultTableModel;
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 import com.imsweb.naaccrxml.gui.Standalone;
 
 // TODO re-work the toolbar, add "current file", maybe a modified status.
@@ -253,7 +255,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     }
 
     @SuppressWarnings("ConstantConditions")
-    public JButton createToolbarButton(String icon, String action, String tooltip) {
+    private JButton createToolbarButton(String icon, String action, String tooltip) {
         JButton btn = new JButton();
         btn.setFocusPainted(false);
         btn.setOpaque(false);
@@ -266,7 +268,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         return btn;
     }
 
-    public JPanel createToolbarSeparation() {
+    private JPanel createToolbarSeparation() {
         return new JPanel() {
             @Override
             public void paintComponent(Graphics graphics) {
@@ -279,6 +281,34 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
                 g.drawLine(bounds.width / 2 + 1, 0, bounds.width / 2 + 1, bounds.height);
             }
         };
+    }
+
+    private NaaccrDictionary createEmptyDictionary() {
+        NaaccrDictionary dictionary = new NaaccrDictionary();
+        dictionary.setDictionaryUri("http://mycompany.com/naaccrxml/my-naaccr-dictionary.xml");
+        dictionary.setNaaccrVersion(null);
+        dictionary.setDescription("My description.");
+        return dictionary;
+    }
+
+    private void populateFromDictionary(NaaccrDictionary dictionary) {
+        _dictionaryUriFld.setText(dictionary.getDictionaryUri());
+        if (dictionary.getNaaccrVersion() != null)
+            _versionBox.setSelectedItem(dictionary.getNaaccrVersion());
+        else
+            _versionBox.setSelectedItem(_BLANK_VERSION);
+        if (dictionary.getDescription() != null)
+            _descFld.setText(dictionary.getDescription());
+
+        if (dictionary.getItems().isEmpty()) {
+
+        }
+        else {
+            for (NaaccrDictionaryItem item : dictionary.getItems()) {
+
+            }
+        }
+
     }
 
     @Override
