@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Vector;
 
@@ -25,8 +27,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -38,6 +42,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -49,8 +54,6 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 import com.imsweb.naaccrxml.gui.Standalone;
 
 // TODO re-work the toolbar, add "current file", maybe a modified status.
-// TODO add default URI
-// TODO create a default empty dictionary instead of actually setting the values
 // TODO finish the popup (insert before/after, delete (disabled if only one line left)), setup rules of what options are allowed based on selection
 // TODO hook up actions
 // TODO add proper validation, maybe show the validation result at the bottom of the table? Or maybe a popup dialog...
@@ -68,6 +71,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     private JComboBox<String> _versionBox;
     private JTable _itemsTbl;
     private DefaultTableModel _itemsModel;
+    protected JFileChooser _dictionaryFileChooser, _outputFileChooser;
 
     public DictionaryEditorPage() {
         super();
@@ -141,44 +145,22 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
                 if (e.isPopupTrigger()) {
                     JPopupMenu popup = new JPopupMenu("Table Popup");
                     popup.setBorder(new BevelBorder(BevelBorder.RAISED));
-                    JMenuItem addRowItem = new JMenuItem("Add row");
-                    addRowItem.setActionCommand("add-row");
-                    addRowItem.addActionListener(DictionaryEditorPage.this);
-                    popup.add(addRowItem);
-                    //popup.addSeparator();
+
+                    JMenuItem addRowBeforeItem = new JMenuItem("Insert row before");
+                    addRowBeforeItem.setActionCommand("table-add-row-before");
+                    addRowBeforeItem.addActionListener(DictionaryEditorPage.this);
+                    popup.add(addRowBeforeItem);
+
+                    JMenuItem addRowAfterItem = new JMenuItem("Insert row after");
+                    addRowAfterItem.setActionCommand("table-add-row-after");
+                    addRowAfterItem.addActionListener(DictionaryEditorPage.this);
+                    popup.add(addRowAfterItem);
 
                     popup.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
         });
-
-        // TODO share this list?
-        Vector<String> columns = new Vector<>();
-        columns.add("ID");
-        columns.add("Num");
-        columns.add("Name");
-        columns.add("Start Col");
-        columns.add("Length");
-        columns.add("Record Types");
-        columns.add("Parent XML Element");
-        columns.add("Data Type");
-        columns.add("Padding");
-        columns.add("Trimming");
-        Vector<Vector<Object>> rows = new Vector<>();
-        Vector<Object> row = new Vector<>();
-        row.add(null);
-        row.add(null);
-        row.add(null);
-        row.add(null);
-        row.add(null);
-        row.add("A,M,C,I");
-        row.add(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
-        row.add(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
-        row.add(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
-        row.add(NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL);
-        rows.add(row);
-        _itemsModel.setDataVector(rows, columns);
-
+        populateGuiFromDictionary(createEmptyDictionary());
         _itemsTbl.getColumnModel().getColumn(1).setPreferredWidth(45); // item number
         _itemsTbl.getColumnModel().getColumn(3).setPreferredWidth(45); // start column
         _itemsTbl.getColumnModel().getColumn(4).setPreferredWidth(30); // length
@@ -233,6 +215,42 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         line2Pnl.add(new JLabel("Disclaimer 2..."));
         disclaimerPnl.add(line2Pnl);
         centerPnl.add(disclaimerPnl, BorderLayout.SOUTH);
+
+        _dictionaryFileChooser = new JFileChooser();
+        _dictionaryFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        _dictionaryFileChooser.setDialogTitle("Select File");
+        _dictionaryFileChooser.setApproveButtonToolTipText("Select file");
+        _dictionaryFileChooser.setMultiSelectionEnabled(false);
+        _dictionaryFileChooser.setFileFilter(new FileFilter() {
+
+            @Override
+            public String getDescription() {
+                return "XML files (*.xml)";
+            }
+
+            @Override
+            public boolean accept(File f) {
+                return f != null && (f.isDirectory() || f.getName().toLowerCase().endsWith(".xml"));
+            }
+        });
+
+        _outputFileChooser = new JFileChooser();
+        _outputFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        _outputFileChooser.setDialogTitle("Select File");
+        _outputFileChooser.setApproveButtonToolTipText("Select file");
+        _outputFileChooser.setMultiSelectionEnabled(false);
+        _outputFileChooser.setFileFilter(new FileFilter() {
+
+            @Override
+            public String getDescription() {
+                return "XML files (*.xml)";
+            }
+
+            @Override
+            public boolean accept(File f) {
+                return f != null && (f.isDirectory() || f.getName().toLowerCase().endsWith(".xml"));
+            }
+        });
     }
 
     private JToolBar createToolBar() {
@@ -287,11 +305,11 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         NaaccrDictionary dictionary = new NaaccrDictionary();
         dictionary.setDictionaryUri("http://mycompany.com/naaccrxml/my-naaccr-dictionary.xml");
         dictionary.setNaaccrVersion(null);
-        dictionary.setDescription("My description.");
+        dictionary.setDescription("My awesome dictionary");
         return dictionary;
     }
 
-    private void populateFromDictionary(NaaccrDictionary dictionary) {
+    private void populateGuiFromDictionary(NaaccrDictionary dictionary) {
         _dictionaryUriFld.setText(dictionary.getDictionaryUri());
         if (dictionary.getNaaccrVersion() != null)
             _versionBox.setSelectedItem(dictionary.getNaaccrVersion());
@@ -300,22 +318,146 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         if (dictionary.getDescription() != null)
             _descFld.setText(dictionary.getDescription());
 
-        if (dictionary.getItems().isEmpty()) {
+        Vector<String> columns = new Vector<>();
+        columns.add("ID");
+        columns.add("Num");
+        columns.add("Name");
+        columns.add("Start Col");
+        columns.add("Length");
+        columns.add("Record Types");
+        columns.add("Parent XML Element");
+        columns.add("Data Type");
+        columns.add("Padding");
+        columns.add("Trimming");
 
+        Vector<Vector<Object>> rows = new Vector<>();
+        if (dictionary.getItems().isEmpty()) {
+            Vector<Object> row = new Vector<>();
+            row.add(null);
+            row.add(null);
+            row.add(null);
+            row.add(null);
+            row.add(null);
+            row.add("A,M,C,I");
+            row.add(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+            row.add(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
+            row.add(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
+            row.add(NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL);
+            rows.add(row);
         }
         else {
             for (NaaccrDictionaryItem item : dictionary.getItems()) {
-
+                Vector<Object> row = new Vector<>();
+                row.add(item.getNaaccrId());
+                row.add(item.getNaaccrNum());
+                row.add(item.getNaaccrName());
+                row.add(item.getStartColumn());
+                row.add(item.getLength());
+                row.add(item.getRecordTypes());
+                row.add(item.getParentXmlElement());
+                row.add(item.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : item.getDataType());
+                row.add(item.getPadding() == null ? NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK : item.getPadding());
+                row.add(item.getTrim() == null ? NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL : item.getTrim());
+                rows.add(row);
             }
         }
+        _itemsModel.setDataVector(rows, columns);
+    }
+
+    private NaaccrDictionary createDictionaryFromGui() {
+        NaaccrDictionary dictionary = new NaaccrDictionary();
+        dictionary.setDictionaryUri(_dictionaryUriFld.getText().trim());
+        if (!_BLANK_VERSION.equals(_versionBox.getSelectedItem()))
+            dictionary.setNaaccrVersion((String)_versionBox.getSelectedItem());
+        dictionary.setDescription(_descFld.getText().trim().isEmpty() ? null : _descFld.getText().trim());
+
+        for (int i = 0; i < _itemsModel.getRowCount(); i++) {
+            NaaccrDictionaryItem item = new NaaccrDictionaryItem();
+            item.setNaaccrId((String)_itemsModel.getValueAt(i, 0));
+            item.setNaaccrNum((Integer)_itemsModel.getValueAt(i, 1));
+            item.setNaaccrName((String)_itemsModel.getValueAt(i, 2));
+            item.setStartColumn((Integer)_itemsModel.getValueAt(i, 3));
+            item.setLength((Integer)_itemsModel.getValueAt(i, 4));
+            item.setRecordTypes((String)_itemsModel.getValueAt(i, 5));
+            item.setParentXmlElement((String)_itemsModel.getValueAt(i, 6));
+            item.setDataType((String)_itemsModel.getValueAt(i, 7));
+            item.setPadding((String)_itemsModel.getValueAt(i, 8));
+            item.setTrim((String)_itemsModel.getValueAt(i, 9));
+            dictionary.addItem(item);
+        }
+
+        return dictionary;
+    }
+
+    private void performLoad() {
+        if (_dictionaryFileChooser.showDialog(DictionaryEditorPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
+            try {
+                populateGuiFromDictionary(NaaccrXmlDictionaryUtils.readDictionary(_dictionaryFileChooser.getSelectedFile()));
+            }
+            catch (IOException e) {
+                JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Unable to load dictionary.\r\n\r\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void performSave() {
+
+    }
+
+    private void performSaveAs() {
+        NaaccrDictionary dictionary = createDictionaryFromGui();
+
+        String naaccrVersion = (String)_versionBox.getSelectedItem();
+        if (_BLANK_VERSION.equals(naaccrVersion))
+            naaccrVersion = NaaccrFormat.getSupportedVersions().stream().max(String.CASE_INSENSITIVE_ORDER).orElse(null);
+
+        String errorMsg = NaaccrXmlDictionaryUtils.validateUserDictionary(dictionary, naaccrVersion);
+        if (errorMsg != null) {
+            JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Dictionary is not valid.\r\n\r\nError:\r\n" + errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // TODO error if they try to save a "standard" URI
+
+        if (_outputFileChooser.showDialog(DictionaryEditorPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
+            try {
+                NaaccrXmlDictionaryUtils.writeDictionary(dictionary, _outputFileChooser.getSelectedFile());
+                JOptionPane.showMessageDialog(DictionaryEditorPage.this, "File successfully created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+            catch (IOException e) {
+                JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Unable to save dictionary.\r\n\r\nError:\r\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void performValidate() {
+
+    }
+
+    private void performAddRow(boolean insertBefore) {
 
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
-            case "add-row":
-                System.out.println("ADD ROW");
+            case "toolbar-load":
+                performLoad();
+                break;
+            case "toolbar-save":
+                performSave();
+                break;
+            case "toolbar-save-as":
+                performSaveAs();
+                break;
+            case "toolbar-validate":
+                performValidate();
+                break;
+            case "table-add-row-before":
+                performAddRow(true);
+                break;
+            case "table-add-row-after":
+                performAddRow(false);
                 break;
             default:
                 throw new RuntimeException("Unknown action: " + e.getActionCommand());
