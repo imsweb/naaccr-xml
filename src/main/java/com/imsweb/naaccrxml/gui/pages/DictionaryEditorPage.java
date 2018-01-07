@@ -40,6 +40,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
@@ -58,12 +59,12 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 import com.imsweb.naaccrxml.gui.Standalone;
 
-// TODO keep track of a "modified" status
-// TODO finish the popup (insert before/after, delete (disabled if only one line left)), setup rules of what options are allowed based on selection
-// TODO hook up actions, updates their status (save shouldn't be available if no file is current)
-// TODO add a "New" toolbar button to start a new dictionary
-// TODO add proper validation, maybe show the validation result at the bottom of the table? Or maybe a popup dialog...
-// TODO enter should start editing, not go to next cell
+/**
+ * FUTURE IMPROVEMENTS:
+ *  - add a "Create New Dictionary" toolbar button to start a new dictionary
+ *  - keep track whether the current dictionary has been modified or not, display that status and use confirmation upon closing if modified
+ */
+
 // TODO add proper help for this feature
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -135,6 +136,8 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         };
         _itemsTbl = new JTable(_itemsModel);
         _itemsTbl.setDragEnabled(false);
+        _itemsTbl.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        // default behavior of Enter is to go to next cell, I think editing the current cell makes more sense
         _itemsTbl.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "edit");
         _itemsTbl.getActionMap().put("edit", new AbstractAction() {
             @Override
@@ -167,21 +170,62 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
                     JPopupMenu popup = new JPopupMenu("Table Popup");
                     popup.setBorder(new BevelBorder(BevelBorder.RAISED));
 
+                    boolean rowSelected = _itemsTbl.getSelectedRow() != -1;
+
+                    JMenuItem addRowFirstItem = new JMenuItem("Insert row first");
+                    addRowFirstItem.setActionCommand("table-add-row-first");
+                    addRowFirstItem.addActionListener(DictionaryEditorPage.this);
+                    popup.add(addRowFirstItem);
+
+                    JMenuItem addRowLastItem = new JMenuItem("Insert row last");
+                    addRowLastItem.setActionCommand("table-add-row-last");
+                    addRowLastItem.addActionListener(DictionaryEditorPage.this);
+                    popup.add(addRowLastItem);
+
+                    popup.addSeparator();
+
                     JMenuItem addRowBeforeItem = new JMenuItem("Insert row before");
                     addRowBeforeItem.setActionCommand("table-add-row-before");
                     addRowBeforeItem.addActionListener(DictionaryEditorPage.this);
+                    if (!rowSelected)
+                        addRowBeforeItem.setEnabled(false);
                     popup.add(addRowBeforeItem);
 
                     JMenuItem addRowAfterItem = new JMenuItem("Insert row after");
                     addRowAfterItem.setActionCommand("table-add-row-after");
                     addRowAfterItem.addActionListener(DictionaryEditorPage.this);
+                    if (!rowSelected)
+                        addRowAfterItem.setEnabled(false);
                     popup.add(addRowAfterItem);
+
+                    popup.addSeparator();
+
+                    JMenuItem removeSelectedRowItem = new JMenuItem("Remove row");
+                    removeSelectedRowItem.setActionCommand("table-remove-row");
+                    removeSelectedRowItem.addActionListener(DictionaryEditorPage.this);
+                    if (!rowSelected)
+                        removeSelectedRowItem.setEnabled(false);
+                    popup.add(removeSelectedRowItem);
+
+                    JMenuItem removeAllRowsExceptSelectedItem = new JMenuItem("Remove all other rows");
+                    removeAllRowsExceptSelectedItem.setActionCommand("table-remove-all-other-rows");
+                    removeAllRowsExceptSelectedItem.addActionListener(DictionaryEditorPage.this);
+                    if (!rowSelected)
+                        removeAllRowsExceptSelectedItem.setEnabled(false);
+                    popup.add(removeAllRowsExceptSelectedItem);
+
+                    JMenuItem removeAllRowsItem = new JMenuItem("Remove all rows");
+                    removeAllRowsItem.setActionCommand("table-remove-all-rows");
+                    removeAllRowsItem.addActionListener(DictionaryEditorPage.this);
+                    popup.add(removeAllRowsItem);
 
                     popup.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
         });
+
         populateGuiFromDictionary(createEmptyDictionary());
+
         _itemsTbl.getColumnModel().getColumn(1).setPreferredWidth(45); // item number
         _itemsTbl.getColumnModel().getColumn(3).setPreferredWidth(45); // start column
         _itemsTbl.getColumnModel().getColumn(4).setPreferredWidth(30); // length
@@ -221,6 +265,9 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         trimmingBox.addItem(NaaccrXmlDictionaryUtils.NAACCR_TRIM_NONE);
         _itemsTbl.getColumnModel().getColumn(9).setCellEditor(new DefaultCellEditor(trimmingBox));
 
+        _itemsTbl.getSelectionModel().setSelectionInterval(0, 0);
+        SwingUtilities.invokeLater(() -> _itemsTbl.requestFocusInWindow());
+
         JScrollPane tableScrollPane = new JScrollPane(_itemsTbl);
         tableScrollPane.setBorder(null);
         tableContentPnl.add(tableScrollPane, BorderLayout.CENTER);
@@ -230,12 +277,9 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         disclaimerPnl.setBorder(new EmptyBorder(0, 10, 5, 0));
         disclaimerPnl.setLayout(new BoxLayout(disclaimerPnl, BoxLayout.Y_AXIS));
         JPanel line1Pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 2));
-        line1Pnl.add(new JLabel("Double click a cell or hit Enter to modify its content, hit Enter once you are done editing it (or Escape to cancel). Right click on the table to add or remove rows."));
+        line1Pnl.add(
+                new JLabel("Double click a cell or hit Enter to modify its content, hit Enter once you are done editing it (or Escape to cancel). Right click on the table to add or remove rows."));
         disclaimerPnl.add(line1Pnl);
-        // TODO FD remove this
-        //        JPanel line2Pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 2));
-        //        line2Pnl.add(new JLabel("Disclaimer 2..."));
-        //        disclaimerPnl.add(line2Pnl);
         centerPnl.add(disclaimerPnl, BorderLayout.SOUTH);
 
         _dictionaryFileChooser = new JFileChooser();
@@ -277,14 +321,15 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
 
     private JToolBar createToolBar() {
         JToolBar toolbar = new JToolBar();
+        toolbar.setBackground(new Color(206, 220, 227));
         toolbar.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         toolbar.setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY), new EmptyBorder(5, 10, 5, 0)));
         toolbar.setFloatable(false);
-        toolbar.add(createToolbarButton("load", "toolbar-load", "Load user-defined dictionary"));
+        toolbar.add(createToolbarButton("load", "toolbar-load", "Load dictionary"));
         toolbar.add(Box.createHorizontalStrut(10));
         toolbar.add(createToolbarSeparation());
         toolbar.add(Box.createHorizontalStrut(10));
-        toolbar.add(createToolbarButton("save", "toolbar-save", "Save dictionary into current file"));
+        toolbar.add(createToolbarButton("save", "toolbar-save", "Save dictionary"));
         toolbar.add(Box.createHorizontalStrut(2));
         toolbar.add(createToolbarButton("save-as", "toolbar-save-as", "Save dictionary into new file"));
         toolbar.add(Box.createHorizontalStrut(10));
@@ -335,8 +380,10 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         JPanel pnl = new JPanel();
         pnl.setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY), new EmptyBorder(5, 10, 5, 0)));
         pnl.setLayout(new BorderLayout());
+        pnl.setBackground(new Color(222, 232, 237));
 
         JPanel filePnl = new JPanel();
+        filePnl.setOpaque(false);
         pnl.add(filePnl, BorderLayout.WEST);
         filePnl.setBorder(new EmptyBorder(0, 0, 0, 0));
         filePnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -379,7 +426,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         Vector<Vector<Object>> rows = new Vector<>();
         if (dictionary.getItems().isEmpty()) {
             Vector<Object> row = new Vector<>();
-            row.add("myVariable"); // TODO remove these default values
+            row.add("myVariable");
             row.add(10000);
             row.add("My Variable");
             row.add(null);
@@ -446,18 +493,62 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
             catch (IOException e) {
                 JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Unable to load dictionary.\r\n\r\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
+
+            SwingUtilities.invokeLater(() -> _itemsTbl.requestFocusInWindow());
         }
     }
 
-    private void performReset() {
-        // TODO reests the form to create a new dictionary
-    }
-
     private void performSave() {
+        if (_currentFile == null) {
+            performSaveAs();
+            return;
+        }
 
+        NaaccrDictionary dictionary = performValidate(false);
+        if (dictionary == null)
+            return;
+
+        try {
+            NaaccrXmlDictionaryUtils.writeDictionary(dictionary, _currentFile);
+            updateFileInfo();
+        }
+        catch (IOException e) {
+            JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Unable to save dictionary.\r\n\r\nError:\r\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        SwingUtilities.invokeLater(() -> _itemsTbl.requestFocusInWindow());
     }
 
     private void performSaveAs() {
+        NaaccrDictionary dictionary = performValidate(false);
+        if (dictionary == null)
+            return;
+
+        if (_outputFileChooser.showDialog(DictionaryEditorPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
+            try {
+                File file = _outputFileChooser.getSelectedFile();
+                if (!file.getName().toLowerCase().endsWith(".xml"))
+                    file = new File(file.getParentFile(), file.getName() + ".xml");
+
+                if (file.exists()) {
+                    int i = JOptionPane.showConfirmDialog(DictionaryEditorPage.this, "The target file already exist and will be overridden. Are you sure?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                    if (i != JOptionPane.YES_OPTION)
+                        return;
+                }
+
+                NaaccrXmlDictionaryUtils.writeDictionary(dictionary, file);
+                _currentFile = file;
+                updateFileInfo();
+            }
+            catch (IOException e) {
+                JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Unable to save dictionary.\r\n\r\nError:\r\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            SwingUtilities.invokeLater(() -> _itemsTbl.requestFocusInWindow());
+        }
+    }
+
+    private NaaccrDictionary performValidate(boolean showSuccessDlg) {
         NaaccrDictionary dictionary = createDictionaryFromGui();
 
         String naaccrVersion = (String)_versionBox.getSelectedItem();
@@ -467,36 +558,71 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         String errorMsg = NaaccrXmlDictionaryUtils.validateUserDictionary(dictionary, naaccrVersion);
         if (errorMsg != null) {
             JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Dictionary is not valid.\r\n\r\nError:\r\n" + errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+            return null;
         }
 
-        if (_outputFileChooser.showDialog(DictionaryEditorPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
-            try {
-                File file = _outputFileChooser.getSelectedFile();
-                if (!file.getName().toLowerCase().endsWith(".xml"))
-                    file = new File(file.getParentFile(), file.getName() + ".xml");
+        if (showSuccessDlg)
+            JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Dictionary is valid.", "Valid", JOptionPane.INFORMATION_MESSAGE);
 
-                // TODO FD check that file does't exist yet
+        return dictionary;
+    }
 
-                NaaccrXmlDictionaryUtils.writeDictionary(dictionary, file);
-                _currentFile = file;
-                updateFileInfo();
-                JOptionPane.showMessageDialog(DictionaryEditorPage.this, "File successfully created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+    private void performAddRow(boolean relativeToSelected, boolean insertBefore) {
+
+        Vector<Object> row = new Vector<>();
+        row.add(null);
+        row.add(null);
+        row.add(null);
+        row.add(null);
+        row.add(null);
+        row.add("A,M,C,I");
+        row.add(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+        row.add(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
+        row.add(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
+        row.add(NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL);
+
+        int rowToEdit;
+        if (relativeToSelected) {
+            int selected = _itemsTbl.getSelectedRow();
+            if (selected == -1)
+                return;
+            if (insertBefore) {
+                _itemsModel.insertRow(selected, row);
+                rowToEdit = selected;
             }
-            catch (IOException e) {
-                JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Unable to save dictionary.\r\n\r\nError:\r\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            else {
+                _itemsModel.insertRow(selected + 1, row);
+                rowToEdit = selected + 1;
+            }
+        }
+        else {
+            if (insertBefore) {
+                _itemsModel.insertRow(0, row);
+                rowToEdit = 0;
+            }
+            else {
+                _itemsModel.addRow(row);
+                rowToEdit = _itemsModel.getRowCount() - 1;
             }
         }
 
-        SwingUtilities.invokeLater(() -> _itemsTbl.requestFocusInWindow());
+        _itemsTbl.getSelectionModel().setSelectionInterval(rowToEdit, rowToEdit);
+        _itemsTbl.editCellAt(rowToEdit, 0);
+        Component comp = _itemsTbl.getEditorComponent();
+        comp.requestFocusInWindow();
     }
 
-    private void performValidate() {
+    private void performRemoveRow(boolean removeAllRows, boolean keepSelected) {
+        int selected = _itemsTbl.getSelectedRow();
 
-    }
-
-    private void performAddRow(boolean insertBefore) {
-
+        if (removeAllRows) {
+            for (int i = _itemsModel.getRowCount() - 1; i >= 0; i--) {
+                if (!keepSelected || i != selected)
+                    _itemsModel.removeRow(i);
+            }
+        }
+        else if (selected != -1)
+            _itemsModel.removeRow(selected);
     }
 
     @Override
@@ -512,13 +638,28 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
                 performSaveAs();
                 break;
             case "toolbar-validate":
-                performValidate();
+                performValidate(true);
                 break;
             case "table-add-row-before":
-                performAddRow(true);
+                performAddRow(true, true);
                 break;
             case "table-add-row-after":
-                performAddRow(false);
+                performAddRow(true, false);
+                break;
+            case "table-add-row-first":
+                performAddRow(false, true);
+                break;
+            case "table-add-row-last":
+                performAddRow(false, false);
+                break;
+            case "table-remove-row":
+                performRemoveRow(false, false);
+                break;
+            case "table-remove-all-rows":
+                performRemoveRow(true, false);
+                break;
+            case "table-remove-all-other-rows":
+                performRemoveRow(true, true);
                 break;
             default:
                 throw new RuntimeException("Unknown action: " + e.getActionCommand());
