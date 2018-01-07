@@ -3197,9 +3197,9 @@
             length="1"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
-        <ItemDef naaccrId="ca125PretreatmentLabValue"
+        <ItemDef naaccrId="ca125PretreatmentInterpretation"
             naaccrNum="3818"
-            naaccrName="CA-125 Pretreatment Lab Value"
+            naaccrName="CA-125 Pretreatment Interpretation"
             startColumn="1919"
             length="1"
             recordTypes="A,M,C,I"
