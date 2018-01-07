@@ -13,6 +13,7 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Vector;
 
+import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
@@ -37,7 +39,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -45,6 +49,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.JTextComponent;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
@@ -53,11 +58,11 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 import com.imsweb.naaccrxml.gui.Standalone;
 
-// TODO re-work the toolbar, add "current file", maybe a modified status.
+// TODO keep track of a "modified" status
 // TODO finish the popup (insert before/after, delete (disabled if only one line left)), setup rules of what options are allowed based on selection
-// TODO hook up actions
+// TODO hook up actions, updates their status (save shouldn't be available if no file is current)
+// TODO add a "New" toolbar button to start a new dictionary
 // TODO add proper validation, maybe show the validation result at the bottom of the table? Or maybe a popup dialog...
-// TODO set focus on first cell, editing it
 // TODO enter should start editing, not go to next cell
 // TODO add proper help for this feature
 
@@ -65,13 +70,17 @@ import com.imsweb.naaccrxml.gui.Standalone;
 public class DictionaryEditorPage extends AbstractPage implements ActionListener {
 
     private static final String _BLANK_VERSION = "<Any>";
+    private static final String _NO_FILE_TEXT = "< no current file, use the load button to load an existing dictionary, or the save-as button to save the current dictionary >";
 
     // global GUI components
+    private JLabel _currentFileLbl;
     private JTextField _dictionaryUriFld, _descFld;
     private JComboBox<String> _versionBox;
     private JTable _itemsTbl;
     private DefaultTableModel _itemsModel;
-    protected JFileChooser _dictionaryFileChooser, _outputFileChooser;
+    private JFileChooser _dictionaryFileChooser, _outputFileChooser;
+
+    private File _currentFile;
 
     public DictionaryEditorPage() {
         super();
@@ -79,10 +88,10 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         this.setBorder(new MatteBorder(0, 0, 1, 1, Color.GRAY));
 
         // NORTH
-        JPanel controlsPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        JPanel controlsPnl = new JPanel(new BorderLayout());
         this.add(controlsPnl, BorderLayout.NORTH);
-        controlsPnl.setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY), new EmptyBorder(5, 10, 5, 0)));
-        controlsPnl.add(createToolBar());
+        controlsPnl.add(createToolBar(), BorderLayout.NORTH);
+        controlsPnl.add(createFilePanel(), BorderLayout.SOUTH);
 
         // CENTER
         JPanel centerPnl = new JPanel(new BorderLayout());
@@ -126,6 +135,18 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         };
         _itemsTbl = new JTable(_itemsModel);
         _itemsTbl.setDragEnabled(false);
+        _itemsTbl.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "edit");
+        _itemsTbl.getActionMap().put("edit", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int row = _itemsTbl.getSelectedRow(), col = _itemsTbl.getSelectedColumn();
+                _itemsTbl.editCellAt(row, col);
+                Component comp = _itemsTbl.getEditorComponent();
+                comp.requestFocusInWindow();
+                if (comp instanceof JTextComponent)
+                    ((JTextComponent)comp).selectAll();
+            }
+        });
         DefaultTableCellRenderer itemsRenderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -209,11 +230,12 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         disclaimerPnl.setBorder(new EmptyBorder(0, 10, 5, 0));
         disclaimerPnl.setLayout(new BoxLayout(disclaimerPnl, BoxLayout.Y_AXIS));
         JPanel line1Pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 2));
-        line1Pnl.add(new JLabel("Disclaimer 1"));
+        line1Pnl.add(new JLabel("Double click a cell or hit Enter to modify its content, hit Enter once you are done editing it (or Escape to cancel). Right click on the table to add or remove rows."));
         disclaimerPnl.add(line1Pnl);
-        JPanel line2Pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 2));
-        line2Pnl.add(new JLabel("Disclaimer 2..."));
-        disclaimerPnl.add(line2Pnl);
+        // TODO FD remove this
+        //        JPanel line2Pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 2));
+        //        line2Pnl.add(new JLabel("Disclaimer 2..."));
+        //        disclaimerPnl.add(line2Pnl);
         centerPnl.add(disclaimerPnl, BorderLayout.SOUTH);
 
         _dictionaryFileChooser = new JFileChooser();
@@ -256,6 +278,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     private JToolBar createToolBar() {
         JToolBar toolbar = new JToolBar();
         toolbar.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        toolbar.setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY), new EmptyBorder(5, 10, 5, 0)));
         toolbar.setFloatable(false);
         toolbar.add(createToolbarButton("load", "toolbar-load", "Load user-defined dictionary"));
         toolbar.add(Box.createHorizontalStrut(10));
@@ -301,11 +324,34 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         };
     }
 
+    private void updateFileInfo() {
+        if (_currentFile == null)
+            _currentFileLbl.setText("");
+        else
+            _currentFileLbl.setText(_currentFile.getPath());
+    }
+
+    private JPanel createFilePanel() {
+        JPanel pnl = new JPanel();
+        pnl.setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY), new EmptyBorder(5, 10, 5, 0)));
+        pnl.setLayout(new BorderLayout());
+
+        JPanel filePnl = new JPanel();
+        pnl.add(filePnl, BorderLayout.WEST);
+        filePnl.setBorder(new EmptyBorder(0, 0, 0, 0));
+        filePnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        filePnl.add(Standalone.createBoldLabel("Current File:  "));
+        _currentFileLbl = new JLabel(_NO_FILE_TEXT);
+        filePnl.add(_currentFileLbl);
+
+        return pnl;
+    }
+
     private NaaccrDictionary createEmptyDictionary() {
         NaaccrDictionary dictionary = new NaaccrDictionary();
         dictionary.setDictionaryUri("http://mycompany.com/naaccrxml/my-naaccr-dictionary.xml");
         dictionary.setNaaccrVersion(null);
-        dictionary.setDescription("My awesome dictionary");
+        dictionary.setDescription("My NAACCR dictionary");
         return dictionary;
     }
 
@@ -333,11 +379,11 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         Vector<Vector<Object>> rows = new Vector<>();
         if (dictionary.getItems().isEmpty()) {
             Vector<Object> row = new Vector<>();
+            row.add("myVariable"); // TODO remove these default values
+            row.add(10000);
+            row.add("My Variable");
             row.add(null);
-            row.add(null);
-            row.add(null);
-            row.add(null);
-            row.add(null);
+            row.add(1);
             row.add("A,M,C,I");
             row.add(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
             row.add(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
@@ -367,6 +413,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     private NaaccrDictionary createDictionaryFromGui() {
         NaaccrDictionary dictionary = new NaaccrDictionary();
         dictionary.setDictionaryUri(_dictionaryUriFld.getText().trim());
+        dictionary.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
         if (!_BLANK_VERSION.equals(_versionBox.getSelectedItem()))
             dictionary.setNaaccrVersion((String)_versionBox.getSelectedItem());
         dictionary.setDescription(_descFld.getText().trim().isEmpty() ? null : _descFld.getText().trim());
@@ -393,11 +440,17 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         if (_dictionaryFileChooser.showDialog(DictionaryEditorPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
             try {
                 populateGuiFromDictionary(NaaccrXmlDictionaryUtils.readDictionary(_dictionaryFileChooser.getSelectedFile()));
+                _currentFile = _dictionaryFileChooser.getSelectedFile();
+                updateFileInfo();
             }
             catch (IOException e) {
                 JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Unable to load dictionary.\r\n\r\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private void performReset() {
+        // TODO reests the form to create a new dictionary
     }
 
     private void performSave() {
@@ -417,17 +470,25 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
             return;
         }
 
-        // TODO error if they try to save a "standard" URI
-
         if (_outputFileChooser.showDialog(DictionaryEditorPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
             try {
-                NaaccrXmlDictionaryUtils.writeDictionary(dictionary, _outputFileChooser.getSelectedFile());
+                File file = _outputFileChooser.getSelectedFile();
+                if (!file.getName().toLowerCase().endsWith(".xml"))
+                    file = new File(file.getParentFile(), file.getName() + ".xml");
+
+                // TODO FD check that file does't exist yet
+
+                NaaccrXmlDictionaryUtils.writeDictionary(dictionary, file);
+                _currentFile = file;
+                updateFileInfo();
                 JOptionPane.showMessageDialog(DictionaryEditorPage.this, "File successfully created!", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
             catch (IOException e) {
                 JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Unable to save dictionary.\r\n\r\nError:\r\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+
+        SwingUtilities.invokeLater(() -> _itemsTbl.requestFocusInWindow());
     }
 
     private void performValidate() {
