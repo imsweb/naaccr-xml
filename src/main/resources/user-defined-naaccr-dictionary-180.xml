@@ -14,6 +14,14 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             trim="none"/>
+        <ItemDef naaccrId="reserved16"
+            naaccrNum="2450"
+            naaccrName="Reserved 16"
+            startColumn="138"
+            length="12"
+            recordTypes="A,M,C,I"
+            parentXmlElement="Tumor"
+            trim="none"/>
         <ItemDef naaccrId="reserved01"
             naaccrNum="370"
             naaccrName="Reserved 01"
