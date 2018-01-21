@@ -278,7 +278,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         disclaimerPnl.setLayout(new BoxLayout(disclaimerPnl, BoxLayout.Y_AXIS));
         JPanel line1Pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 2));
         line1Pnl.add(
-                new JLabel("Double click a cell or hit Enter to modify its content, hit Enter once you are done editing it (or Escape to cancel). Right click on the table to add or remove rows."));
+                new JLabel("Double click a cell or select it and hit Enter to modify its content; hit Enter once you are done editing it (or Escape to cancel). Right click on the table to add or remove rows."));
         disclaimerPnl.add(line1Pnl);
         centerPnl.add(disclaimerPnl, BorderLayout.SOUTH);
 
@@ -557,7 +557,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
 
         String errorMsg = NaaccrXmlDictionaryUtils.validateUserDictionary(dictionary, naaccrVersion);
         if (errorMsg != null) {
-            JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Dictionary is not valid.\r\n\r\nError:\r\n" + errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Dictionary is not valid.\r\n\r\nError: " + errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
 
