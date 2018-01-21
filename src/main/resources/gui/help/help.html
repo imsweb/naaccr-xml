@@ -21,6 +21,7 @@
             display: inline-block;
             color: #002C4C;
         }
+
     </style>
 </head>
 <body>
@@ -36,7 +37,8 @@
     <div class="lvl1"><a href="#xmltoflat">Converting an XML file to Flat file</a></div>
     <div class="lvl1"><a href="#xmltoxml">Re-creating an XML file using different options</a></div>
     <div class="lvl1"><a href="#validation">Validating a NAACCR XML file</a></div>
-    <div class="lvl1"><a href="#dictionaries">Viewing the NAACCR dictionaries</a></div>
+    <div class="lvl1"><a href="#dictionaries">Viewing the standard NAACCR dictionaries</a></div>
+    <div class="lvl1"><a href="#dictionaryeditor">Creating a user-defined dictionary</a></div>
     <div class="lvl1"><a href="#attribution">Attribution</a></div>
 
     <div id="intro"><h2>Introduction</h2></div>
@@ -47,145 +49,193 @@
         <b>This tool is not a data conversion tool; it simply translates one format into another.</b>
     </div>
 
-    <div id="versions"><h2>Supported NAACCR versions</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div></div>
-    <div class="indent1">
-        The following NAACCR versions are currently supported:
-        <ul>
-            <li>NAACCR 18</li>
-            <li>NAACCR 16</li>
-            <li>NAACCR 15</li>
-            <li>NAACCR 14</li>
-        </ul>
-        The Abstract, Modified, Confidential and Incidence flavors are supported for those versions.
-    </div>
+    <div id="versions"><h2>Supported NAACCR versions</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
+</div>
+<div class="indent1">
+    The following NAACCR versions are currently supported:
+    <ul>
+        <li>NAACCR 18</li>
+        <li>NAACCR 16</li>
+        <li>NAACCR 15</li>
+        <li>NAACCR 14</li>
+    </ul>
+    The Abstract, Modified, Confidential and Incidence flavors are supported for those versions.
+</div>
 
-    <div id="compressions"><h2>Supported compression algorithms</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
-    <div class="indent1">
-        The following compression algorithms are supported:
-        <ul>
-            <li><a href="http://www.gzip.org/#intro">GZip</a> (.gz)</li>
-            <li><a href="http://tukaani.org/xz/">XZ</a> (.xz)</li>
-        </ul>
-        Several software can be found online to compress/uncompress a given file.
-        For example, <a href="http://www.7-zip.org/">7-Zip</a> is a free standalone program that will handle the two compression methods.
-        <br/><br/>
-        The utility tool allows you to select the compression as part of the conversion options.
-        <br/>
-        By default, the compression is set to the same one as the source file, but that can be changed by using the compression drop-down.
-    </div>
+<div id="compressions"><h2>Supported compression algorithms</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
+<div class="indent1">
+    The following compression algorithms are supported:
+    <ul>
+        <li><a href="http://www.gzip.org/#intro">GZip</a> (.gz)</li>
+        <li><a href="http://tukaani.org/xz/">XZ</a> (.xz)</li>
+    </ul>
+    Several software can be found online to compress/uncompress a given file.
+    For example, <a href="http://www.7-zip.org/">7-Zip</a> is a free standalone program that will handle the two compression methods.
+    <br/><br/>
+    The utility tool allows you to select the compression as part of the conversion options.
+    <br/>
+    By default, the compression is set to the same one as the source file, but that can be changed by using the compression drop-down.
+</div>
 
-    <div id="flattoxml"><h2>Converting a Flat file to an XML file</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
-    <div class="indent1">
-        Follow the following steps to convert a flat file into the corresponding XML format:
-        <ol>
-            <li>In the left navigation bar, select the <b>Flat to XML</b> button.</li>
-            <li>Use the <b>Browse</b> button and select the source data file you would like to convert.</li>
-            <li>Review the target file and the compression drop-down; change the values if the default ones are not what you need.</li>
-            <li>Review the processing options.</li>
-            <li>If you need to, provide a user-defined dictionary.</li>
-            <li>Click the <b>Process Source File</b> button.</li>
-            <li>The file will first be analyzed, and the processing will start automatically if no issues are detected during the analysis.</li>
-            <li>The interface will show the created file, its size and the processing time; it might also show some warnings gathered during the processing.</li>
-        </ol>
-    </div>
+<div id="flattoxml"><h2>Converting a Flat file to an XML file</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
+<div class="indent1">
+    Follow the following steps to convert a flat file into the corresponding XML format:
+    <ol>
+        <li>In the left navigation bar, select the <b>Flat to XML</b> button.</li>
+        <li>Use the <b>Browse</b> button and select the source data file you would like to convert.</li>
+        <li>Review the target file and the compression drop-down; change the values if the default ones are not what you need.</li>
+        <li>Review the processing options.</li>
+        <li>If you need to, provide a user-defined dictionary.</li>
+        <li>Click the <b>Process Source File</b> button.</li>
+        <li>The file will first be analyzed, and the processing will start automatically if no issues are detected during the analysis.</li>
+        <li>The interface will show the created file, its size and the processing time; it might also show some warnings gathered during the processing.</li>
+    </ol>
+</div>
 
-    <div id="xmltoflat"><h2>Converting an XML file to Flat file</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div><
-    <div class="indent1">
-        Follow the following steps to convert an XML file into the corresponding flat-file format:
-        <ol>
-            <li>In the left navigation bar, select the <b>XML to Flat</b> button.</li>
-            <li>Use the <b>Browse</b> button and select the source data file you would like to convert.</li>
-            <li>Review the target file and the compression drop-down; change the values if the default ones are not what you need.</li>
-            <li>Review the processing options.</li>
-            <li>If you need to, provide a user-defined dictionary.</li>
-            <li>Click the <b>Process Source File</b> button.</li>
-            <li>The file will first be analyzed, and the processing will start automatically if no issues are detected during the analysis.</li>
-            <li>The interface will show the created file, its size and the processing time; it might also show some warnings gathered during the processing.</li>
-        </ol>
-    </div>
+<div id="xmltoflat"><h2>Converting an XML file to Flat file</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
+<
+<div class="indent1">
+    Follow the following steps to convert an XML file into the corresponding flat-file format:
+    <ol>
+        <li>In the left navigation bar, select the <b>XML to Flat</b> button.</li>
+        <li>Use the <b>Browse</b> button and select the source data file you would like to convert.</li>
+        <li>Review the target file and the compression drop-down; change the values if the default ones are not what you need.</li>
+        <li>Review the processing options.</li>
+        <li>If you need to, provide a user-defined dictionary.</li>
+        <li>Click the <b>Process Source File</b> button.</li>
+        <li>The file will first be analyzed, and the processing will start automatically if no issues are detected during the analysis.</li>
+        <li>The interface will show the created file, its size and the processing time; it might also show some warnings gathered during the processing.</li>
+    </ol>
+</div>
 
-    <div id="xmltoxml"><h2>Re-creating an XML file using different options</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
-    <div class="indent1">
-        Follow the following steps to re-create an XML file using specific options (for example to add the NAACCR Item Numbers):
-        <ol>
-            <li>In the left navigation bar, select the <b>XML to XML</b> button.</li>
-            <li>Use the <b>Browse</b> button and select the source data file you would like to convert.</li>
-            <li>Review the target file and the compression drop-down; change the values if the default ones are not what you need.</li>
-            <li>Review the processing options.</li>
-            <li>If you need to, provide a user-defined dictionary.</li>
-            <li>Click the <b>Process Source File</b> button.</li>
-            <li>The file will first be analyzed, and the processing will start automatically if no issues are detected during the analysis.</li>
-            <li>The interface will show the created file, its size and the processing time; it might also show some warnings gathered during the processing.</li>
-        </ol>
-    </div>
+<div id="xmltoxml"><h2>Re-creating an XML file using different options</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
+<div class="indent1">
+    Follow the following steps to re-create an XML file using specific options (for example to add the NAACCR Item Numbers):
+    <ol>
+        <li>In the left navigation bar, select the <b>XML to XML</b> button.</li>
+        <li>Use the <b>Browse</b> button and select the source data file you would like to convert.</li>
+        <li>Review the target file and the compression drop-down; change the values if the default ones are not what you need.</li>
+        <li>Review the processing options.</li>
+        <li>If you need to, provide a user-defined dictionary.</li>
+        <li>Click the <b>Process Source File</b> button.</li>
+        <li>The file will first be analyzed, and the processing will start automatically if no issues are detected during the analysis.</li>
+        <li>The interface will show the created file, its size and the processing time; it might also show some warnings gathered during the processing.</li>
+    </ol>
+</div>
 
-    <div id="validation"><h2>Validating a NAACCR XML file</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
-    <div class="indent1">
-        Follow the following steps to validate a given NAACCR XML file:
-        <ol>
-            <li>In the left navigation bar, select the <b>XML Validation</b> button.</li>
-            <li>Use the <b>Browse</b> button and select the source data file you would like to validate.</li>
-            <li>Review the target file and the compression drop-down; change the values if the default ones are not what you need.</li>
-            <li>Review the processing options.</li>
-            <li>If you need to, provide a user-defined dictionary.</li>
-            <li>Click the <b>Process Source File</b> button.</li>
-            <li>The file will first be analyzed, and the processing will start automatically if no issues are detected during the analysis.</li>
-            <li>The interface will show the created file, its size and the processing time; it might also show some warnings gathered during the processing.</li>
-        </ol>
-    </div>
+<div id="validation"><h2>Validating a NAACCR XML file</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
+<div class="indent1">
+    Follow the following steps to validate a given NAACCR XML file:
+    <ol>
+        <li>In the left navigation bar, select the <b>XML Validation</b> button.</li>
+        <li>Use the <b>Browse</b> button and select the source data file you would like to validate.</li>
+        <li>Review the target file and the compression drop-down; change the values if the default ones are not what you need.</li>
+        <li>Review the processing options.</li>
+        <li>If you need to, provide a user-defined dictionary.</li>
+        <li>Click the <b>Process Source File</b> button.</li>
+        <li>The file will first be analyzed, and the processing will start automatically if no issues are detected during the analysis.</li>
+        <li>The interface will show the created file, its size and the processing time; it might also show some warnings gathered during the processing.</li>
+    </ol>
+</div>
 
-    <div id="dictionaries"><h2>Viewing the NAACCR dictionaries</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
-    <div class="indent1">
-        Follow the following steps to view one of the NAACCR dictionaries:
-        <ol>
-            <li>In the left navigation bar, select the <b>Dictionary</b> button.</li>
-            <li>Select one of the dictionaries in the drop-down.</li>
-        </ol>
-        You can also use the <b>Extract to CSV...</b> button to create a CSV file containing all the data items of dictionary currently selected.
-    </div>
+<div id="dictionaries"><h2>Viewing the standard NAACCR dictionaries</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
+<div class="indent1">
+    Follow the following steps to view one of the standard NAACCR dictionaries:
+    <ol>
+        <li>In the left navigation bar, select the <b>Standard Dictionaries</b> button.</li>
+        <li>Select one of the dictionaries in the drop-down.</li>
+    </ol>
+    You can also use the <b>Extract to CSV...</b> button to create a CSV file containing all the data items of dictionary currently selected.
+</div>
 
-    <div id="attribution"><h2>Attribution</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
-    <div class="indent1">
-        This software uses binary code from the following projects:
-        <ul>
-            <li><a href="https://commons.apache.org">Apache Commons</a> - Released under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a></li>
-            <li><a href="http://tukaani.org/xz/java.html">XZ for Java</a> - Released to Public Domain</li>
-            <li><a href="http://www.xmlpull.org">XML Pull</a> - Released to Public Domain</li>
-            <li>Thoughtworks XStream (https://github.com/codehaus/xstream) - License:
+<div id="dictionaryeditor"><h2>Creating a user-defined dictionary</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
+<div class="indent1">
+    To create your own user-defined dictionary, select the <b>Dictionary Editor</b> button in the left navigation bar.
+    <br/><br/>
+    The toolbar on the top of the page allows the following actions:
+    <ul>
+        <li><b>Load</b>: load an existing dictionary from an XML file.</li>
+        <li><b>Save</b>: save the current dictionary in the current file.</li>
+        <li><b>Save As</b>: save the current dictionary in a new file.</li>
+        <li><b>Validate</b>: validate the current dictionary.</li>
+    </ul>
+    When editing your dictionary, you may modify the following fields:
+    <ul>
+        <li>
+            <b>URI</b>: this is a sequence of characters that uniquely identifies your dictionary; by convention it looks like an online address (a URL), but the dictionary itself doesn't have to leave to that address.
+        </li>
+        <li><b>Version</b>: which NAACCR version your dictionary will be used for; leaving the value to
+            <i>Any</i> implies that it can be used with several versions (this usually requires to leave the Start Columns blank in the data items).
+        </li>
+        <li><b>Description</b>: an optional description for you dictionary.</li>
+        <li><b>Data Items</b>: the data items making up your dictionary. The following properties can be modified:
             <ul>
-            <li>
-(BSD Style License)
+                <li>
+                    <b>ID</b>: a sequence of characters that uniquely identifies the data item; to minimize conflicts it is recommended to use a prefix for every data item that is relevant to your company or organization.
+                </li>
+                <li><b>Num</b>: a number that also uniquely identifies the data item.</li>
+                <li><b>Name</b>: the data item name.</li>
+                <li><b>Start Col</b>: an optional start column for the data item in the corresponding flat file format; leaving this property blank means you don't intend to use it with flat files.
+                </li>
+                <li><b>Length</b>: the data item length.</li>
+                <li><b>Record Types</b>: to which record type(s) this data item applies.</li>
+                <li><b>Parent XML Element</b>: the parent XML tag of the data item in the NAACCR XML structure.</li>
+                <li><b>Data Type</b>: the data type of this data item; leaving the default value of
+                    <i>Text</i> means that you impose no restriction on the values that the data item can have in the XML data files.
+                </li>
+                <li>
+                    <b>Padding</b>: the padding rule to apply when writing values to a flat or XML file (this libraries doesn't apply padding rules by default but offers an option to turn that feature on).
+                </li>
+                <li><b>Trimming</b>: the trimming rule to apply when reading values form a flat file (most data items should be left to the <i>all</i> default value.</li>
+            </ul>
+            To add or remove rows in the data item tables, use the table context menu by right-clicking on one of its the rows. Not all options might be available depending which row is selected.
+        </li>
+    </ul>
+</div>
 
-Copyright (c) 2003-2006, Joe Walnes
-Copyright (c) 2006-2011, XStream Committers
-All rights reserved.
+<div id="attribution"><h2>Attribution</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
+<div class="indent1">
+    This software uses binary code from the following projects:
+    <ul>
+        <li><a href="https://commons.apache.org">Apache Commons</a> - Released under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a></li>
+        <li><a href="http://tukaani.org/xz/java.html">XZ for Java</a> - Released to Public Domain</li>
+        <li><a href="http://www.xmlpull.org">XML Pull</a> - Released to Public Domain</li>
+        <li>Thoughtworks XStream (https://github.com/codehaus/xstream) - License:
+            <ul>
+                <li>
+                    (BSD Style License)
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+                    Copyright (c) 2003-2006, Joe Walnes
+                    Copyright (c) 2006-2011, XStream Committers
+                    All rights reserved.
 
-Redistributions of source code must retain the above copyright notice, this list of
-conditions and the following disclaimer. Redistributions in binary form must reproduce
-the above copyright notice, this list of conditions and the following disclaimer in
-the documentation and/or other materials provided with the distribution.
+                    Redistribution and use in source and binary forms, with or without
+                    modification, are permitted provided that the following conditions are met:
 
-Neither the name of XStream nor the names of its contributors may be used to endorse
-or promote products derived from this software without specific prior written
-permission.
+                    Redistributions of source code must retain the above copyright notice, this list of
+                    conditions and the following disclaimer. Redistributions in binary form must reproduce
+                    the above copyright notice, this list of conditions and the following disclaimer in
+                    the documentation and/or other materials provided with the distribution.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
-EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
-SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
-TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
-WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-DAMAGE.            
-            </li>
-            </ul></li>
-        </ul>
-    </div>
+                    Neither the name of XStream nor the names of its contributors may be used to endorse
+                    or promote products derived from this software without specific prior written
+                    permission.
+
+                    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+                    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+                    OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+                    SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+                    INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+                    TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+                    BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+                    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+                    WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+                    DAMAGE.
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
 
 </body>
 </html>

@@ -61,12 +61,9 @@ import com.imsweb.naaccrxml.gui.Standalone;
 
 /**
  * FUTURE IMPROVEMENTS:
- *  - add a "Create New Dictionary" toolbar button to start a new dictionary
- *  - keep track whether the current dictionary has been modified or not, display that status and use confirmation upon closing if modified
+ * - add a "Create New Dictionary" toolbar button to start a new dictionary
+ * - keep track whether the current dictionary has been modified or not, display that status and use confirmation upon closing if modified
  */
-
-// TODO add proper help for this feature
-
 @SuppressWarnings("FieldCanBeLocal")
 public class DictionaryEditorPage extends AbstractPage implements ActionListener {
 
@@ -278,7 +275,8 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         disclaimerPnl.setLayout(new BoxLayout(disclaimerPnl, BoxLayout.Y_AXIS));
         JPanel line1Pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 2));
         line1Pnl.add(
-                new JLabel("Double click a cell or select it and hit Enter to modify its content; hit Enter once you are done editing it (or Escape to cancel). Right click on the table to add or remove rows."));
+                new JLabel(
+                        "Double click a cell or select it and hit Enter to modify its content; hit Enter once you are done editing it (or Escape to cancel). Right click on the table to add or remove rows."));
         disclaimerPnl.add(line1Pnl);
         centerPnl.add(disclaimerPnl, BorderLayout.SOUTH);
 
