@@ -2630,9 +2630,9 @@
             length="4"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
-        <ItemDef naaccrId="her2IshSingleCopyNumber"
+        <ItemDef naaccrId="her2IshSingleProbeCopyNumber"
             naaccrNum="3853"
-            naaccrName="HER2 ISH Single Copy Number"
+            naaccrName="HER2 ISH Single Probe Copy Number"
             startColumn="1766"
             length="4"
             recordTypes="A,M,C,I"
