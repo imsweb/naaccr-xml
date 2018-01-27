@@ -22,6 +22,7 @@
             color: #002C4C;
         }
 
+
     </style>
 </head>
 <body>
@@ -162,13 +163,13 @@
     When editing your dictionary, you may modify the following fields:
     <ul>
         <li>
-            <b>URI</b>: this is a sequence of characters that uniquely identifies your dictionary; by convention it looks like an online address (a URL), but the dictionary itself doesn't have to leave to that address.
+            <b>URI</b>: this is a sequence of characters that uniquely identifies your dictionary; by convention it looks like an online address (a URL), but the dictionary itself doesn't have to be maintained online at that address.
         </li>
         <li><b>Version</b>: which NAACCR version your dictionary will be used for; leaving the value to
-            <i>Any</i> implies that it can be used with several versions (this usually requires to leave the Start Columns blank in the data items).
+            <i>Any</i> implies that it can be used with several versions (this usually requires to leave the Start Columns blank in the data items since items tends to shift location in the flat file standard).
         </li>
         <li><b>Description</b>: an optional description for you dictionary.</li>
-        <li><b>Data Items</b>: the data items making up your dictionary. The following properties can be modified:
+        <li><b>Data Items</b>: the data items making up your dictionary. The following properties can be modified for each item:
             <ul>
                 <li>
                     <b>ID</b>: a sequence of characters that uniquely identifies the data item; to minimize conflicts it is recommended to use a prefix for every data item that is relevant to your company or organization.
@@ -188,9 +189,11 @@
                 </li>
                 <li><b>Trimming</b>: the trimming rule to apply when reading values form a flat file (most data items should be left to the <i>all</i> default value.</li>
             </ul>
-            To add or remove rows in the data item tables, use the table context menu by right-clicking on one of its the rows. Not all options might be available depending which row is selected.
+            To add or remove rows in the data item tables, use the table context menu by right-clicking on one of its rows. Not all options might be available depending which row is selected.
         </li>
     </ul>
+    For more information about the NAACCR XML standard and the meaning of those attributes, check out the implementation guide on the
+    <a href="https://www.naaccr.org/xml-data-exchange-standard/" target="_blank">NAACCR website</a>.
 </div>
 
 <div id="attribution"><h2>Attribution</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>

@@ -58,6 +58,7 @@ import com.imsweb.naaccrxml.NaaccrXmlUtils;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 import com.imsweb.naaccrxml.gui.Standalone;
+import com.imsweb.naaccrxml.gui.components.SeerClickableLabel;
 
 /**
  * FUTURE IMPROVEMENTS:
@@ -71,7 +72,8 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     private static final String _NO_FILE_TEXT = "< no current file, use the load button to load an existing dictionary, or the save-as button to save the current dictionary >";
 
     // global GUI components
-    private JLabel _currentFileLbl;
+    private JLabel _currentFileLbl, _currentFilePreLbl, _currentFileMiddleLbl, _currentFilePostLbl;
+    private SeerClickableLabel _openCurrentFileLbl, _openParentFolderLbl;
     private JTextField _dictionaryUriFld, _descFld;
     private JComboBox<String> _versionBox;
     private JTable _itemsTbl;
@@ -368,10 +370,26 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     }
 
     private void updateFileInfo() {
-        if (_currentFile == null)
-            _currentFileLbl.setText("");
-        else
+        if (_currentFile == null) {
+            _currentFileLbl.setText(_NO_FILE_TEXT);
+            _openCurrentFileLbl.setAction(null);
+            _openParentFolderLbl.setAction(null);
+            _currentFilePreLbl.setVisible(false);
+            _openCurrentFileLbl.setVisible(false);
+            _currentFileMiddleLbl.setVisible(false);
+            _openParentFolderLbl.setVisible(false);
+            _currentFilePostLbl.setVisible(false);
+        }
+        else {
             _currentFileLbl.setText(_currentFile.getPath());
+            _currentFilePreLbl.setVisible(true);
+            _openCurrentFileLbl.setVisible(true);
+            _openCurrentFileLbl.setAction(SeerClickableLabel.createOpenFileAction(_currentFile.getPath()));
+            _currentFileMiddleLbl.setVisible(true);
+            _openParentFolderLbl.setVisible(true);
+            _openParentFolderLbl.setAction(SeerClickableLabel.createOpenParentFolderAction(_currentFile.getPath()));
+            _currentFilePostLbl.setVisible(true);
+        }
     }
 
     private JPanel createFilePanel() {
@@ -388,6 +406,22 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         filePnl.add(Standalone.createBoldLabel("Current File:  "));
         _currentFileLbl = new JLabel(_NO_FILE_TEXT);
         filePnl.add(_currentFileLbl);
+        filePnl.add(Box.createHorizontalStrut(15));
+        _currentFilePreLbl = new JLabel("[ ");
+        _currentFilePreLbl.setVisible(false);
+        filePnl.add(_currentFilePreLbl);
+        _openCurrentFileLbl = new SeerClickableLabel("open file");
+        _openCurrentFileLbl.setVisible(false);
+        filePnl.add(_openCurrentFileLbl);
+        _currentFileMiddleLbl = new JLabel(" | ");
+        _currentFileMiddleLbl.setVisible(false);
+        filePnl.add(_currentFileMiddleLbl);
+        _openParentFolderLbl = new SeerClickableLabel("open folder");
+        _openParentFolderLbl.setVisible(false);
+        filePnl.add(_openParentFolderLbl);
+        _currentFilePostLbl = new JLabel(" ]");
+        _currentFilePostLbl.setVisible(false);
+        filePnl.add(_currentFilePostLbl);
 
         return pnl;
     }
@@ -509,6 +543,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         try {
             NaaccrXmlDictionaryUtils.writeDictionary(dictionary, _currentFile);
             updateFileInfo();
+            JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Dictionary saved.", "Success", JOptionPane.INFORMATION_MESSAGE);
         }
         catch (IOException e) {
             JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Unable to save dictionary.\r\n\r\nError:\r\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
