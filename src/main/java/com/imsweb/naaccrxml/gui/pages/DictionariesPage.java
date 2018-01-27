@@ -191,6 +191,11 @@ public class DictionariesPage extends AbstractPage {
                     return Integer.class;
                 return String.class;
             }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
         _itemsTbl = new JTable(_itemsModel);
         _itemsTbl.setDragEnabled(false);
