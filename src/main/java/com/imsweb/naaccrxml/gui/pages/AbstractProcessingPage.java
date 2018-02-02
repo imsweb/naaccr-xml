@@ -697,7 +697,6 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                     _warningsSummaryTextArea.setText("Processing interrupted...");
                 }
                 catch (ExecutionException e) {
-                    e.printStackTrace();
                     reportProcessingError(e.getCause());
                     _warningsSummaryTextArea.setText("Processing error...");
                 }
