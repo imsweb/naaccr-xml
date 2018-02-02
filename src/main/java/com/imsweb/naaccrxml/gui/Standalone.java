@@ -53,6 +53,7 @@ import javax.swing.border.MatteBorder;
 import org.apache.commons.io.IOUtils;
 
 import com.imsweb.naaccrxml.gui.pages.DictionariesPage;
+import com.imsweb.naaccrxml.gui.pages.DictionaryEditorPage;
 import com.imsweb.naaccrxml.gui.pages.FlatToXmlPage;
 import com.imsweb.naaccrxml.gui.pages.XmlToFlatPage;
 import com.imsweb.naaccrxml.gui.pages.XmlToXmlPage;
@@ -118,9 +119,11 @@ public class Standalone extends JFrame implements ActionListener {
         toolbar.add(Box.createVerticalStrut(15));
         toolbar.add(createToolbarButton("XML to XML", "xml_to_xml", "re-create a given NAACCR XML file using different options"));
         toolbar.add(Box.createVerticalStrut(15));
-        toolbar.add(createToolbarButton("Dictionaries", "dictionaries", "view the standard NAACCR dictionaries used to process NAACCR XML data"));
-        toolbar.add(Box.createVerticalStrut(15));
         toolbar.add(createToolbarButton("XML Validation", "validate", "validate a given NAACCR XML file"));
+        toolbar.add(Box.createVerticalStrut(15));
+        toolbar.add(createToolbarButton("Standard<br/>Dictionaries", "dictionaries", "view the standard NAACCR dictionaries used to process NAACCR XML data"));
+        toolbar.add(Box.createVerticalStrut(15));
+        toolbar.add(createToolbarButton("Dictionary<br/>Editor", "edit", "create your own user-defined dictionary"));
         this.getContentPane().add(toolbar, BorderLayout.WEST);
 
         _centerPnl = new JPanel();
@@ -130,8 +133,9 @@ public class Standalone extends JFrame implements ActionListener {
         _centerPnl.add("flat_to_xml", new FlatToXmlPage());
         _centerPnl.add("xml_to_flat", new XmlToFlatPage());
         _centerPnl.add("xml_to_xml", new XmlToXmlPage());
-        _centerPnl.add("dictionaries", new DictionariesPage());
         _centerPnl.add("validate", new XmlValidationPage());
+        _centerPnl.add("dictionaries", new DictionariesPage());
+        _centerPnl.add("edit", new DictionaryEditorPage());
         this.getContentPane().add(_centerPnl, BorderLayout.CENTER);
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> SwingUtilities.invokeLater(() -> {
@@ -181,13 +185,13 @@ public class Standalone extends JFrame implements ActionListener {
         btn.setFocusPainted(false);
         btn.setFocusable(false);
         btn.setBorder(new EmptyBorder(10, 5, 5, 5));
-        btn.setText("<html><b>" + text + "<b></html>");
+        btn.setText("<html><center><b>" + text + "<b></center></html>");
         btn.setForeground(Color.GRAY);
         btn.setVerticalTextPosition(SwingConstants.BOTTOM);
         btn.setHorizontalTextPosition(SwingConstants.CENTER);
         btn.setActionCommand(pageId);
         btn.addActionListener(e -> {
-            _currentPageIdLbl.setText(text + " : ");
+            _currentPageIdLbl.setText(text.replace("<br/>", " ") + " : ");
             _currentPageDescLbl.setText(description);
             _layout.show(_centerPnl, pageId);
             for (JButton btn1 : _buttons) {

@@ -3,6 +3,7 @@
 **Version 4.5**
  
  - Added support for NAACCR 18.
+ - Added a new dictionary editor in the standalone GUI.
  - Added new jaxb-api (version 2.3.0) dependency required by Java 9.
 
 **Version 4.4**

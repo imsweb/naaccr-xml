@@ -77,8 +77,9 @@ public class DictionariesPage extends AbstractPage {
 
         JPanel controlsPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         this.add(controlsPnl, BorderLayout.NORTH);
+        controlsPnl.setBackground(new Color(206, 220, 227));
         controlsPnl.setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY), new EmptyBorder(5, 10, 5, 0)));
-        controlsPnl.add(Standalone.createBoldLabel("Standard Dictionaries:"));
+        controlsPnl.add(Standalone.createBoldLabel("Dictionary:"));
         controlsPnl.add(Box.createHorizontalStrut(10));
         final JComboBox selectionBox = new JComboBox<>(standardDictionaries);
         controlsPnl.add(selectionBox);
@@ -189,6 +190,11 @@ public class DictionariesPage extends AbstractPage {
                 if (columnIndex == 1 || columnIndex == 3 || columnIndex == 4)
                     return Integer.class;
                 return String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
         };
         _itemsTbl = new JTable(_itemsModel);
