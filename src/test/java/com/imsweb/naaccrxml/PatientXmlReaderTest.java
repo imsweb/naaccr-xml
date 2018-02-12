@@ -12,8 +12,11 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
@@ -276,6 +279,57 @@ public class PatientXmlReaderTest {
         }
         catch (NaaccrIOException e) {
             // expected
+        }
+    }
+
+    @Test
+    public void testExtensions() throws IOException {
+
+        // to properly process extensions, we have to register them to the framework; this is done through a configuration object
+        NaaccrStreamConfiguration conf = new NaaccrStreamConfiguration();
+        conf.getXstream().autodetectAnnotations(true); // required only because we want to use annotation on the extension classes (it's more convenient)
+        conf.registerNamespace("other", "http://whatever.org");
+        conf.registerTag("other", "MyOuterTag", OuterTag.class);
+
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("standard-file-extension.xml")), null, (NaaccrDictionary)null, conf)) {
+            // there should be no error, 1 item and 2 extensions for the root
+            Assert.assertTrue(reader.getRootData().getValidationErrors().isEmpty());
+            Assert.assertEquals(1, reader.getRootData().getItems().size());
+            Assert.assertEquals(2, reader.getRootData().getExtensions().size());
+            Assert.assertEquals("root-extension-1", ((OuterTag)reader.getRootData().getExtensions().get(0)).getInnerTag());
+            Assert.assertEquals("root-extension-2", ((OuterTag)reader.getRootData().getExtensions().get(1)).getInnerTag());
+
+            // there should be no error, 1 item and 2 extensions for the unique patient
+            Patient patient = reader.readPatient();
+            Assert.assertTrue(patient.getValidationErrors().isEmpty());
+            Assert.assertEquals(1, patient.getItems().size());
+            Assert.assertEquals(2, patient.getExtensions().size());
+            Assert.assertEquals("patient-extension-1", ((OuterTag)patient.getExtensions().get(0)).getInnerTag());
+            Assert.assertEquals("patient-extension-2", ((OuterTag)patient.getExtensions().get(1)).getInnerTag());
+            Assert.assertEquals(1, patient.getTumors().size());
+
+            // there should be no error, 1 item and 2 extensions for the unique tumor
+            Tumor tumor = patient.getTumors().get(0);
+            Assert.assertTrue(tumor.getValidationErrors().isEmpty());
+            Assert.assertEquals(1, tumor.getItems().size());
+            Assert.assertEquals(2, tumor.getExtensions().size());
+            Assert.assertEquals("tumor-extension-1", ((OuterTag)tumor.getExtensions().get(0)).getInnerTag());
+            Assert.assertEquals("tumor-extension-2", ((OuterTag)tumor.getExtensions().get(1)).getInnerTag());
+        }
+    }
+
+    @XStreamAlias("MyOuterTag")
+    private static class OuterTag {
+
+        @XStreamAlias("other:MyInnerTag")
+        private String _innerTag;
+
+        public String getInnerTag() {
+            return _innerTag;
+        }
+
+        public void setInnerTag(String innerTag) {
+            _innerTag = innerTag;
         }
     }
 }

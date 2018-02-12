@@ -2,13 +2,28 @@
 
 <NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml" recordType="I" specificationVersion="1.1" xmlns="http://naaccr.org/naaccrxml" xmlns:other="http://whatever.org">
     <Item naaccrId="registryId">0000000001</Item>
+    <other:MyOuterTag>
+            <other:MyInnerTag>root-extension-1</other:MyInnerTag>
+    </other:MyOuterTag>
+    <other:MyOuterTag>
+            <other:MyInnerTag>root-extension-2</other:MyInnerTag>
+    </other:MyOuterTag>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
         <other:MyOuterTag>
-            <other:MyInnterTag>Something</other:MyInnterTag>
+            <other:MyInnerTag>patient-extension-1</other:MyInnerTag>
+        </other:MyOuterTag>
+        <other:MyOuterTag>
+            <other:MyInnerTag>patient-extension-2</other:MyInnerTag>
         </other:MyOuterTag>
         <Tumor>
             <Item naaccrId="primarySite">C123</Item>
+            <other:MyOuterTag>
+                <other:MyInnerTag>tumor-extension-1</other:MyInnerTag>
+            </other:MyOuterTag>
+            <other:MyOuterTag>
+                <other:MyInnerTag>tumor-extension-2</other:MyInnerTag>
+            </other:MyOuterTag>
         </Tumor>
     </Patient>
 </NaaccrData>

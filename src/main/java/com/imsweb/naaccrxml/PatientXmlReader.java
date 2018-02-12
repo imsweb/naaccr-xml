@@ -29,6 +29,18 @@ import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamContext;
 import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
 
+import static com.imsweb.naaccrxml.NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID;
+import static com.imsweb.naaccrxml.NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM;
+import static com.imsweb.naaccrxml.NaaccrXmlUtils.NAACCR_XML_NAMESPACE;
+import static com.imsweb.naaccrxml.NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT;
+import static com.imsweb.naaccrxml.NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE;
+import static com.imsweb.naaccrxml.NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION;
+import static com.imsweb.naaccrxml.NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED;
+import static com.imsweb.naaccrxml.NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT;
+import static com.imsweb.naaccrxml.NaaccrXmlUtils.NAACCR_XML_TAG_ITEM;
+import static com.imsweb.naaccrxml.NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT;
+import static com.imsweb.naaccrxml.NaaccrXmlUtils.NAACCR_XML_TAG_ROOT;
+
 /**
  * This class can be used to wrap a generic reader into a patient reader handling the NAACCR XML format.
  */
@@ -135,14 +147,14 @@ public class PatientXmlReader implements PatientReader {
 
             // create the XML reader
             _reader = conf.getDriver().createReader(reader);
-            if (!_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
-                throw new NaaccrIOException("was expecting " + NaaccrXmlUtils.NAACCR_XML_TAG_ROOT + " root tag but got " + _reader.getNodeName(), conf.getParser().getLineNumber());
+            if (!isRootTag(_reader.getNodeName()))
+                throw new NaaccrIOException("was expecting " + NAACCR_XML_TAG_ROOT + " root tag but got " + _reader.getNodeName(), conf.getParser().getLineNumber());
 
             // create the root data holder (it will be use for every field except the list of patients)
             _rootData = createRootData();
 
             // read the standard attribute: specification version (we do it first because the format of other attributes can depend on the specs version)
-            String specVersion = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION);
+            String specVersion = _reader.getAttribute(NAACCR_XML_ROOT_ATT_SPEC_VERSION);
             if (specVersion == null)
                 specVersion = SpecificationVersion.SPEC_1_0;
             if (!SpecificationVersion.isSpecificationSupported(specVersion))
@@ -150,9 +162,9 @@ public class PatientXmlReader implements PatientReader {
             _rootData.setSpecificationVersion(specVersion);
 
             // read the standard attribute: base dictionary
-            _rootData.setBaseDictionaryUri(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
+            _rootData.setBaseDictionaryUri(_reader.getAttribute(NAACCR_XML_ROOT_ATT_BASE_DICT));
             if (_rootData.getBaseDictionaryUri() == null)
-                throw new NaaccrIOException("the \"" + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT + "\" attribute is required", conf.getParser().getLineNumber());
+                throw new NaaccrIOException("the \"" + NAACCR_XML_ROOT_ATT_BASE_DICT + "\" attribute is required", conf.getParser().getLineNumber());
             String version = NaaccrXmlDictionaryUtils.extractVersionFromUri(_rootData.getBaseDictionaryUri());
             if (version == null || version.trim().isEmpty())
                 throw new NaaccrIOException("unable to extract NAACCR version from base dictionary URI \"" + _rootData.getBaseDictionaryUri() + "\"", conf.getParser().getLineNumber());
@@ -161,8 +173,8 @@ public class PatientXmlReader implements PatientReader {
             NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(version);
 
             // read the standard attribute: user dictionaries
-            if (!StringUtils.isBlank(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT))) {
-                List<String> dataUserDictionaries = Arrays.asList(StringUtils.split(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT), ' '));
+            if (!StringUtils.isBlank(_reader.getAttribute(NAACCR_XML_ROOT_ATT_USER_DICT))) {
+                List<String> dataUserDictionaries = Arrays.asList(StringUtils.split(_reader.getAttribute(NAACCR_XML_ROOT_ATT_USER_DICT), ' '));
                 if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_2) < 0 && dataUserDictionaries.size() > 1)
                     throw new NaaccrIOException("multiple user dictionaries can only be provided under specification 1.2+", conf.getParser().getLineNumber());
                 _rootData.setUserDictionaryUri(dataUserDictionaries);
@@ -173,14 +185,14 @@ public class PatientXmlReader implements PatientReader {
                     dictionaries.remove(uri);
 
             // read the standard attribute: record type            
-            _rootData.setRecordType(_reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE));
+            _rootData.setRecordType(_reader.getAttribute(NAACCR_XML_ROOT_ATT_REC_TYPE));
             if (_rootData.getRecordType() == null || _rootData.getRecordType().trim().isEmpty())
-                throw new NaaccrIOException("the \"" + NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE + "\" attribute is required", conf.getParser().getLineNumber());
+                throw new NaaccrIOException("the \"" + NAACCR_XML_ROOT_ATT_REC_TYPE + "\" attribute is required", conf.getParser().getLineNumber());
             if (!NaaccrFormat.isRecordTypeSupported(_rootData.getRecordType()))
                 throw new NaaccrIOException("invalid record type: " + _rootData.getRecordType(), conf.getParser().getLineNumber());
 
             // read the standard attribute: time generated
-            String generatedTime = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
+            String generatedTime = _reader.getAttribute(NAACCR_XML_ROOT_ATT_TIME_GENERATED);
             if (generatedTime != null) {
                 try {
                     _rootData.setTimeGenerated(DatatypeConverter.parseDateTime(generatedTime).getTime());
@@ -192,11 +204,11 @@ public class PatientXmlReader implements PatientReader {
 
             // read the non-standard attributes
             Set<String> standardAttributes = new HashSet<>();
-            standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT);
-            standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT);
-            standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE);
-            standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED);
-            standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION);
+            standardAttributes.add(NAACCR_XML_ROOT_ATT_BASE_DICT);
+            standardAttributes.add(NAACCR_XML_ROOT_ATT_USER_DICT);
+            standardAttributes.add(NAACCR_XML_ROOT_ATT_REC_TYPE);
+            standardAttributes.add(NAACCR_XML_ROOT_ATT_TIME_GENERATED);
+            standardAttributes.add(NAACCR_XML_ROOT_ATT_SPEC_VERSION);
             Map<String, String> attributeValues = new HashMap<>(), namespaces = new HashMap<>();
             for (int i = 0; i < _reader.getAttributeCount(); i++) {
                 String attrName = _reader.getAttributeName(i);
@@ -212,8 +224,8 @@ public class PatientXmlReader implements PatientReader {
                     }
                     else {
                         // the only default namespace allowed is the NAACCR one
-                        if (!NaaccrXmlUtils.NAACCR_XML_NAMESPACE.equals(_reader.getAttribute(i)))
-                            throw new NaaccrIOException("default namespace can only be set to " + NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
+                        if (!NAACCR_XML_NAMESPACE.equals(_reader.getAttribute(i)))
+                            throw new NaaccrIOException("default namespace can only be set to " + NAACCR_XML_NAMESPACE);
                         namespaces.put("", _reader.getAttribute(i));
                     }
                 }
@@ -222,8 +234,8 @@ public class PatientXmlReader implements PatientReader {
             }
 
             // in strict namespace mode, the NAACCR namespace must be defined (either as the default namespace or as a prefixed namespace, that doesn't matter)
-            if (options.getUseStrictNamespaces() && !namespaces.containsValue(NaaccrXmlUtils.NAACCR_XML_NAMESPACE))
-                throw new NaaccrIOException("namespace " + NaaccrXmlUtils.NAACCR_XML_NAMESPACE + " must be defined in the root attributes");
+            if (options.getUseStrictNamespaces() && !namespaces.containsValue(NAACCR_XML_NAMESPACE))
+                throw new NaaccrIOException("namespace " + NAACCR_XML_NAMESPACE + " must be defined in the root attributes");
 
             // in strict namespace mode, any non-standard attribute must be prefixed by a defined namespace
             for (Map.Entry<String, String> entry : attributeValues.entrySet()) {
@@ -260,13 +272,13 @@ public class PatientXmlReader implements PatientReader {
 
             // read the root items
             Set<String> itemsAlreadySeen = new HashSet<>();
-            while (_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM)) {
-                String rawId = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID);
-                String rawNum = _reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM);
+            while (isItemTag(_reader.getNodeName())) {
+                String rawId = _reader.getAttribute(NAACCR_XML_ITEM_ATT_ID);
+                String rawNum = _reader.getAttribute(NAACCR_XML_ITEM_ATT_NUM);
                 // following call will ensure that proper validation runs
-                conf.getPatientConverter().readItem(_rootData, "/NaaccrData", NaaccrXmlUtils.NAACCR_XML_TAG_ROOT, rawId, rawNum, _reader.getValue());
+                conf.getPatientConverter().readItem(_rootData, "/NaaccrData", NAACCR_XML_TAG_ROOT, rawId, rawNum, _reader.getValue());
                 if (rawId != null && itemsAlreadySeen.contains(rawId))
-                    throw new NaaccrIOException("item '" + rawId + "' should be unique within the \"" + NaaccrXmlUtils.NAACCR_XML_TAG_ROOT + "\" tags");
+                    throw new NaaccrIOException("item '" + rawId + "' should be unique within the \"" + NAACCR_XML_TAG_ROOT + "\" tags");
                 else
                     itemsAlreadySeen.add(rawId);
                 _reader.moveUp();
@@ -275,35 +287,23 @@ public class PatientXmlReader implements PatientReader {
             }
 
             // if we are back at the root level, there is no more children, and we are done
-            if (_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
+            if (isRootTag(_reader.getNodeName()))
                 return;
 
-            // handle root extension
-            if (!_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT)) {
-                if (!Boolean.TRUE.equals(options.getIgnoreExtensions())) {
-                    _rootData.addExtesion(conf.getXstream().unmarshal(_reader));
-                    _reader.moveUp();
-                    if (_reader.hasMoreChildren())
-                        _reader.moveDown();
-                }
-                else {
-                    _reader.moveUp();
-                    while (!_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT) && !_context.extractTag(_reader.getNodeName()).equals(
-                            NaaccrXmlUtils.NAACCR_XML_TAG_ROOT) && _reader.hasMoreChildren()) {
-                        _reader.moveDown();
-                        _reader.moveUp();
-                    }
-                    if (_reader.hasMoreChildren())
-                        _reader.moveDown();
-                }
+            // handle root extensions
+            while (!isPatientTag(_reader.getNodeName()) && !isRootTag(_reader.getNodeName()) && _reader.hasMoreChildren()) {
+                if (!Boolean.TRUE.equals(options.getIgnoreExtensions()))
+                    _rootData.addExtension(conf.getXstream().unmarshal(_reader));
+                _reader.moveUp();
+                _reader.moveDown();
             }
 
             // if we are back at the root level, there is no more children, and we are done
-            if (_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
+            if (isRootTag(_reader.getNodeName()))
                 return;
 
             // at this point, either we are done (and the method already return) or there should be a patient tag
-            if (!_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT))
+            if (!isPatientTag(_reader.getNodeName()))
                 throw new NaaccrIOException("unexpected tag: " + _context.extractTag(_reader.getNodeName()), conf.getParser().getLineNumber());
 
             // need to expose xstream so the other methods can use it...
@@ -323,12 +323,24 @@ public class PatientXmlReader implements PatientReader {
         }
     }
 
+    private boolean isRootTag(String tag) throws NaaccrIOException {
+        return _context.extractTag(tag).equals(NAACCR_XML_TAG_ROOT);
+    }
+
+    private boolean isPatientTag(String tag) throws NaaccrIOException {
+        return _context.extractTag(tag).equals(NAACCR_XML_TAG_PATIENT);
+    }
+
+    private boolean isItemTag(String tag) throws NaaccrIOException {
+        return _context.extractTag(tag).equals(NAACCR_XML_TAG_ITEM);
+    }
+
     @Override
     public Patient readPatient() throws NaaccrIOException {
-        if (_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT))
+        if (_context.extractTag(_reader.getNodeName()).equals(NAACCR_XML_TAG_ROOT))
             return null;
 
-        if (!_context.extractTag(_reader.getNodeName()).equals(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT))
+        if (!_context.extractTag(_reader.getNodeName()).equals(NAACCR_XML_TAG_PATIENT))
             throw new NaaccrIOException("Unexpected tag: " + _reader.getNodeName(), _context.getLineNumber());
 
         Patient patient;

@@ -40,7 +40,7 @@ public class ExtensionsDemo {
         tumorSummary.setNumberMatched(24);
         summary.setTumorSummary(tumorSummary);
         // *** end of root extension
-        data.addExtesion(summary);
+        data.addExtension(summary);
         for (int i = 1; i <= 25; i++) {
             Patient patient = new Patient();
             patient.addItem(new Item("patientIdNumber", StringUtils.leftPad(String.valueOf(i), 8, '0')));
@@ -49,7 +49,7 @@ public class ExtensionsDemo {
             patSummary.setMatchingMethod("Patient Matching Algorithm #1");
             patSummary.setMatchingScore(i - 1);
             patSummary.setMatchingIdentifier("PAT-XXX");
-            patient.addExtesion(patSummary);
+            patient.addExtension(patSummary);
             // *** end of patient extension
             data.addPatient(patient);
             Tumor tumor = new Tumor();
@@ -59,7 +59,7 @@ public class ExtensionsDemo {
             tumSummary.setMatchingMethod("Tumor Matching Algorithm #1");
             tumSummary.setMatchingScore(i - 1);
             tumSummary.setMatchingIdentifier("TUM-YYY");
-            tumor.addExtesion(tumSummary);
+            tumor.addExtension(tumSummary);
             // *** end of patient extension
             patient.addTumor(tumor);
         }

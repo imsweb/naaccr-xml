@@ -17,6 +17,7 @@ import com.imsweb.naaccrxml.NaaccrValidationError;
  * <li>Entity has a collection of items on it</li>
  * <li>Entity has a collection of validation errors on it (most errors are attached to individual items so it will be rare that this collection contains any)</li>
  * <li>Entity has a line number on it (might not always be populated)</li>
+ * <li>Entity has a list of extensions (most of the time those won't be provided in the data)</li>
  * </ol>
  * This class also defines some utility methods to read/write those variables...
  */
@@ -147,7 +148,7 @@ public class AbstractEntity {
      * Adds an extension for the current entity. The configuration must have been setup to understand how this object can be read/written.
      * @param extension extension (can be any object) to add; a null object will be ignored
      */
-    public void addExtesion(Object extension) {
+    public void addExtension(Object extension) {
         if (extension == null)
             return;
         if (_extensions == null)
