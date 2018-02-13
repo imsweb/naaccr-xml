@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
@@ -297,7 +298,9 @@ public class PatientXmlReaderTest {
             Assert.assertEquals(1, reader.getRootData().getItems().size());
             Assert.assertEquals(2, reader.getRootData().getExtensions().size());
             Assert.assertEquals("root-extension-1", ((OuterTag)reader.getRootData().getExtensions().get(0)).getInnerTag());
+            Assert.assertEquals(5, ((OuterTag)reader.getRootData().getExtensions().get(0)).getStartLineNumber().intValue());
             Assert.assertEquals("root-extension-2", ((OuterTag)reader.getRootData().getExtensions().get(1)).getInnerTag());
+            Assert.assertEquals(8, ((OuterTag)reader.getRootData().getExtensions().get(1)).getStartLineNumber().intValue());
 
             // there should be no error, 1 item and 2 extensions for the unique patient
             Patient patient = reader.readPatient();
@@ -305,8 +308,10 @@ public class PatientXmlReaderTest {
             Assert.assertEquals(1, patient.getItems().size());
             Assert.assertEquals(2, patient.getExtensions().size());
             Assert.assertEquals("patient-extension-1", ((OuterTag)patient.getExtensions().get(0)).getInnerTag());
+            Assert.assertEquals(13, ((OuterTag)patient.getExtensions().get(0)).getStartLineNumber().intValue());
             Assert.assertEquals("patient-extension-2", ((OuterTag)patient.getExtensions().get(1)).getInnerTag());
             Assert.assertEquals(1, patient.getTumors().size());
+            Assert.assertEquals(16, ((OuterTag)patient.getExtensions().get(1)).getStartLineNumber().intValue());
 
             // there should be no error, 1 item and 2 extensions for the unique tumor
             Tumor tumor = patient.getTumors().get(0);
@@ -314,15 +319,20 @@ public class PatientXmlReaderTest {
             Assert.assertEquals(1, tumor.getItems().size());
             Assert.assertEquals(2, tumor.getExtensions().size());
             Assert.assertEquals("tumor-extension-1", ((OuterTag)tumor.getExtensions().get(0)).getInnerTag());
+            Assert.assertEquals(21, ((OuterTag)tumor.getExtensions().get(0)).getStartLineNumber().intValue());
             Assert.assertEquals("tumor-extension-2", ((OuterTag)tumor.getExtensions().get(1)).getInnerTag());
+            Assert.assertEquals(24, ((OuterTag)tumor.getExtensions().get(1)).getStartLineNumber().intValue());
         }
     }
 
     @XStreamAlias("MyOuterTag")
-    private static class OuterTag {
+    private static class OuterTag implements NaaccrXmlExtension {
 
         @XStreamAlias("other:MyInnerTag")
         private String _innerTag;
+
+        @XStreamOmitField
+        private Integer _startLineNumber;
 
         public String getInnerTag() {
             return _innerTag;
@@ -330,6 +340,16 @@ public class PatientXmlReaderTest {
 
         public void setInnerTag(String innerTag) {
             _innerTag = innerTag;
+        }
+
+        @Override
+        public Integer getStartLineNumber() {
+            return _startLineNumber;
+        }
+
+        @Override
+        public void setStartLineNumber(Integer startLineNumber) {
+            _startLineNumber = startLineNumber;
         }
     }
 }

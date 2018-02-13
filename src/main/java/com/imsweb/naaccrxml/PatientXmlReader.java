@@ -292,8 +292,13 @@ public class PatientXmlReader implements PatientReader {
 
             // handle root extensions
             while (!isPatientTag(_reader.getNodeName()) && !isRootTag(_reader.getNodeName()) && _reader.hasMoreChildren()) {
-                if (!Boolean.TRUE.equals(options.getIgnoreExtensions()))
-                    _rootData.addExtension(conf.getXstream().unmarshal(_reader));
+                if (!Boolean.TRUE.equals(options.getIgnoreExtensions())) {
+                    int lineNumber = conf.getParser().getLineNumber();
+                    Object extension = conf.getXstream().unmarshal(_reader);
+                    if (extension instanceof NaaccrXmlExtension)
+                        ((NaaccrXmlExtension)extension).setStartLineNumber(lineNumber);
+                    _rootData.addExtension(extension);
+                }
                 _reader.moveUp();
                 _reader.moveDown();
             }
