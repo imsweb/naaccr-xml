@@ -286,12 +286,8 @@ public class PatientXmlReader implements PatientReader {
                     _reader.moveDown();
             }
 
-            // if we are back at the root level, there is no more children, and we are done
-            if (isRootTag(_reader.getNodeName()))
-                return;
-
             // handle root extensions
-            while (!isPatientTag(_reader.getNodeName()) && !isRootTag(_reader.getNodeName()) && _reader.hasMoreChildren()) {
+            while (!isPatientTag(_reader.getNodeName()) && !isRootTag(_reader.getNodeName())) {
                 if (!Boolean.TRUE.equals(options.getIgnoreExtensions())) {
                     int lineNumber = conf.getParser().getLineNumber();
                     Object extension = conf.getXstream().unmarshal(_reader);
@@ -300,7 +296,8 @@ public class PatientXmlReader implements PatientReader {
                     _rootData.addExtension(extension);
                 }
                 _reader.moveUp();
-                _reader.moveDown();
+                if (_reader.hasMoreChildren())
+                    _reader.moveDown();
             }
 
             // if we are back at the root level, there is no more children, and we are done

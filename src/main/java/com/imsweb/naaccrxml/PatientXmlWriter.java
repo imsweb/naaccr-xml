@@ -124,6 +124,9 @@ public class PatientXmlWriter implements PatientWriter {
             if (conf == null)
                 conf = NaaccrStreamConfiguration.getDefault();
 
+            // need to expose xstream so the other methods can use it...
+            _xstream = conf.getXstream();
+
             // create the context
             NaaccrStreamContext context = new NaaccrStreamContext();
             context.setOptions(options);
@@ -202,10 +205,7 @@ public class PatientXmlWriter implements PatientWriter {
             for (Item item : rootData.getItems())
                 conf.getPatientConverter().writeItem(item, _writer);
 
-            // need to expose xstream so the other methods can use it...
-            _xstream = conf.getXstream();
-
-            // handle extension
+            // write extensions
             if (!Boolean.TRUE.equals(options.getIgnoreExtensions()) && rootData.getExtensions() != null)
                 for (Object extension : rootData.getExtensions())
                     _xstream.marshal(extension, _writer);
