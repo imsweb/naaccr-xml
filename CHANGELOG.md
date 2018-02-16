@@ -2,7 +2,7 @@
 
 **Version 4.5**
  
- - Added support for NAACCR 18.
+ - Added support for NAACCR 18; that version is not final yet and it's possible it will change in a future release.
  - Extensions now return their line number if the class implements NaaccrXmlExtension.
  - Added a new dictionary editor in the standalone GUI.
  - Added new jaxb-api (version 2.3.0) dependency required by Java 9.
