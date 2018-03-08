@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 4.6**
+
+ - Final version of the NAACCR 18 dictionary.
+
 **Version 4.5**
  
  - Added support for NAACCR 18; that version is not final yet and it's possible it will change in a future release.
