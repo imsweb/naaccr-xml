@@ -27,6 +27,9 @@ public class NaaccrDictionary {
     private Map<String, NaaccrDictionaryItem> _cachedById;
     private Map<Integer, NaaccrDictionaryItem> _cachedByNumber;
 
+    // cache access needs to be synchronized!
+    private static final Object _CACHED_LOCK = new Object();
+
     public NaaccrDictionary() {
         _items = new ArrayList<>();
         _cachedById = new HashMap<>();
@@ -73,33 +76,41 @@ public class NaaccrDictionary {
     public void setItems(List<NaaccrDictionaryItem> items) {
         if (items != null) {
             _items = items;
-            for (NaaccrDictionaryItem item : items) {
-                _cachedById.put(item.getNaaccrId(), item);
-                _cachedByNumber.put(item.getNaaccrNum(), item);
+            synchronized (_CACHED_LOCK) {
+                for (NaaccrDictionaryItem item : items) {
+                    _cachedById.put(item.getNaaccrId(), item);
+                    _cachedByNumber.put(item.getNaaccrNum(), item);
+                }
             }
         }
     }
 
     public void addItem(NaaccrDictionaryItem item) {
         _items.add(item);
-        if (item.getNaaccrId() != null)
-            _cachedById.put(item.getNaaccrId(), item);
-        if (item.getNaaccrNum() != null)
-            _cachedByNumber.put(item.getNaaccrNum(), item);
+        synchronized (_CACHED_LOCK) {
+            if (item.getNaaccrId() != null)
+                _cachedById.put(item.getNaaccrId(), item);
+            if (item.getNaaccrNum() != null)
+                _cachedByNumber.put(item.getNaaccrNum(), item);
+        }
     }
 
     public NaaccrDictionaryItem getItemByNaaccrId(String id) {
-        if (_cachedById.isEmpty())
-            for (NaaccrDictionaryItem item : _items)
-                _cachedById.put(item.getNaaccrId(), item);
-        return _cachedById.get(id);
+        synchronized (_CACHED_LOCK) {
+            if (_cachedById.isEmpty())
+                for (NaaccrDictionaryItem item : _items)
+                    _cachedById.put(item.getNaaccrId(), item);
+            return _cachedById.get(id);
+        }
     }
 
     public NaaccrDictionaryItem getItemByNaaccrNum(Integer number) {
-        if (_cachedByNumber.isEmpty())
-            for (NaaccrDictionaryItem item : _items)
-                _cachedByNumber.put(item.getNaaccrNum(), item);
-        return _cachedByNumber.get(number);
+        synchronized (_CACHED_LOCK) {
+            if (_cachedByNumber.isEmpty())
+                for (NaaccrDictionaryItem item : _items)
+                    _cachedByNumber.put(item.getNaaccrNum(), item);
+            return _cachedByNumber.get(number);
+        }
     }
 
     public List<NaaccrDictionaryGroupedItem> getGroupedItems() {
