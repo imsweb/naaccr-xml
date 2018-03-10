@@ -2916,7 +2916,7 @@
             dataType="digits"/>
         <ItemDef naaccrId="overRideLeukLymphoma"
             naaccrNum="2070"
-            naaccrName="Over-ride Leuk,  Lymphoma"
+            naaccrName="Over-ride Leuk, Lymphoma"
             startColumn="1904"
             length="1"
             recordTypes="A,M,C,I"
