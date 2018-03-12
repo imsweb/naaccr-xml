@@ -411,7 +411,7 @@ Item Number,Item Name,Item Start column,NAACCR XML ID,NAACCR XML Parent Element
 2040,"Over-ride Histology",1901,overRideHistology,Tumor
 2050,"Over-ride Report Source",1902,overRideReportSource,Tumor
 2060,"Over-ride Ill-define Site",1903,overRideIllDefineSite,Tumor
-2070,"Over-ride Leuk,  Lymphoma",1904,overRideLeukLymphoma,Tumor
+2070,"Over-ride Leuk, Lymphoma",1904,overRideLeukLymphoma,Tumor
 2071,"Over-ride Site/Behavior",1905,overRideSiteBehavior,Tumor
 2072,"Over-ride Site/EOD/DX Dt",1906,overRideSiteEodDxDt,Tumor
 2073,"Over-ride Site/Lat/EOD",1907,overRideSiteLatEod,Tumor
