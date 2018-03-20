@@ -460,7 +460,7 @@ Item Number,Item Name,Item Start column,NAACCR XML ID,NAACCR XML Parent Element
 1785,"Surv-Date Presumed Alive",2305,survDatePresumedAlive,Tumor
 1786,"Surv-Flag Presumed Alive",2313,survFlagPresumedAlive,Tumor
 1787,"Surv-Mos Presumed Alive",2314,survMosPresumedAlive,Tumor
-1788,"urv-Date DX Recode",2318,urvDateDxRecode,Tumor
+1788,"Surv-Date DX Recode",2318,survDateDxRecode,Tumor
 1740,"Reserved 09",2326,reserved09,Tumor
 2220,"State/Requestor Items",2340,stateRequestorItems,Tumor
 2230,"Name--Last",3340,nameLast,Patient

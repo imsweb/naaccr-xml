@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 4.7**
+
+ - Fixed wrong NAACCR ID and name for item #1788 in version 15 dictionary.
+
 **Version 4.6**
 
  - Final version of the NAACCR 18 dictionary.
