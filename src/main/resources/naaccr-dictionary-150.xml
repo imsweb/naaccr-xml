@@ -3538,9 +3538,9 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="urvDateDxRecode"
+        <ItemDef naaccrId="survDateDxRecode"
             naaccrNum="1788"
-            naaccrName="urv-Date DX Recode"
+            naaccrName="Surv-Date DX Recode"
             startColumn="2318"
             length="8"
             recordTypes="A,M,C,I"
