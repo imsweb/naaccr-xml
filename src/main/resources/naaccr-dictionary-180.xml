@@ -2693,7 +2693,7 @@
             length="2"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
-        <ItemDef naaccrId="ceaPretreatmentIntrepretation"
+        <ItemDef naaccrId="ceaPretreatmentInterpretation"
             naaccrNum="3819"
             naaccrName="CEA Pretreatment Interpretation"
             startColumn="1789"

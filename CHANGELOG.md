@@ -3,6 +3,7 @@
 **Version 4.7**
 
  - Fixed wrong NAACCR ID and name for item #1788 in version 15 dictionary.
+ - Fixed typos in NAACCR ID's for ceaPretreatmentInterpretation
 
 **Version 4.6**
 
