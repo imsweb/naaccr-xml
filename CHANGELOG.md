@@ -2,8 +2,8 @@
 
 **Version 4.7**
 
+- Fixed typos in NAACCR ID of new NAACCR 18 data item from 'ceaPretreatmentIntrepretation' to 'ceaPretreatmentInterpretation'.
  - Fixed wrong NAACCR ID and name for item #1788 in version 15 dictionary.
- - Fixed typos in NAACCR ID's for ceaPretreatmentInterpretation
 
 **Version 4.6**
 
