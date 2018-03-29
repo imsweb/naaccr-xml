@@ -360,7 +360,7 @@ Item Number,Item Name,Item Start column,NAACCR XML ID,NAACCR XML Parent Element
 3906,"Oncotype Dx Risk Level-Invasive",1783,oncotypeDxRiskLevelInvasive,Tumor
 3914,"Progesterone Receptor Percent Positive or Range",1784,progesteroneReceptorPercentPositiveOrRange,Tumor
 3916,"Progesterone Receptor Total Allred Score",1787,progesteroneReceptorTotalAllredScore,Tumor
-3819,"CEA Pretreatment Interpretation",1789,ceaPretreatmentIntrepretation,Tumor
+3819,"CEA Pretreatment Interpretation",1789,ceaPretreatmentInterpretation,Tumor
 3820,"CEA Pretreatment Lab Value",1790,ceaPretreatmentLabValue,Tumor
 3823,"Circumferential Resection Margin (CRM)",1796,circumferentialResectionMargin,Tumor
 3866,"KRAS",1800,kras,Tumor
