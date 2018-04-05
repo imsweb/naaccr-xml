@@ -1,5 +1,8 @@
 ## NAACCR XML Version History
 
+**Version 4.8**
+- Fixed padding, alignment and dataType attributes for items in NAACCR dictionaries
+
 **Version 4.7**
 
  - Fixed typos in NAACCR ID of new NAACCR 18 data item from 'ceaPretreatmentIntrepretation' to 'ceaPretreatmentInterpretation'.
