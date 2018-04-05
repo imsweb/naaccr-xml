@@ -135,7 +135,7 @@ public class PatientFlatWriterTest {
 
         // option is set to pad the values
         options.setApplyPaddingRules(true);
-        data.addItem(new Item("npiRegistryId", "1"));
+        data.addItem(new Item("registryId", "1"));
         try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, options, dict)) {
             writer.writePatient(patient);
         }
@@ -143,7 +143,7 @@ public class PatientFlatWriterTest {
 
         // same test, but option is set to NOT pad the values
         options.setApplyPaddingRules(false);
-        data.addItem(new Item("npiRegistryId", "1"));
+        data.addItem(new Item("registryId", "1"));
         try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, options, dict)) {
             writer.writePatient(patient);
         }
