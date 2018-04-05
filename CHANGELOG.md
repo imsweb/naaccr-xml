@@ -1,7 +1,7 @@
 ## NAACCR XML Version History
 
 **Version 4.8**
-- Fixed padding, alignment and dataType attributes for items in NAACCR dictionaries
+ - Fixed padding, alignment and dataType attributes for items in NAACCR dictionaries
 
 **Version 4.7**
 
