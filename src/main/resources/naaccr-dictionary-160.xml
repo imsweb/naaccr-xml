@@ -4295,7 +4295,7 @@
             length="25"
             recordTypes="A,M,C"
             parentXmlElement="Tumor"
-            padding="rightBLank"/>
+            padding="rightBlank"/>
         <ItemDef naaccrId="pathReportNumber2"
             naaccrNum="7091"
             naaccrName="Path Report Number 2"

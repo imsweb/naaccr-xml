@@ -239,7 +239,7 @@ public class PatientXmlWriterTest {
 
         // option is set to pad the values
         options.setApplyPaddingRules(true);
-        data.addItem(new Item("npiRegistryId", "1"));
+        data.addItem(new Item("registryId", "1"));
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
             writer.writePatient(patient);
         }
@@ -247,7 +247,7 @@ public class PatientXmlWriterTest {
 
         // same test, but option is set to NOT pad the values
         options.setApplyPaddingRules(false);
-        data.addItem(new Item("npiRegistryId", "1"));
+        data.addItem(new Item("registryId", "1"));
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
             writer.writePatient(patient);
         }

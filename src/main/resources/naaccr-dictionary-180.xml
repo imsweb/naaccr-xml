@@ -1378,7 +1378,7 @@
             length="2"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"            
+            dataType="digits"
             padding="leftZero"/>
         <ItemDef naaccrId="eodLymphNodeInvolv"
             naaccrNum="810"
