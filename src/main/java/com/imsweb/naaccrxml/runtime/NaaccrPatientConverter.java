@@ -225,11 +225,7 @@ public class NaaccrPatientConverter implements Converter {
 
             // handle the padding
             if (Boolean.TRUE.equals(_context.getOptions().getApplyPaddingRules()) && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef.getLength()) {
-                if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(itemDef.getPadding()))
-                    value = StringUtils.leftPad(value, itemDef.getLength(), ' ');
-                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(itemDef.getPadding()))
-                    value = StringUtils.rightPad(value, itemDef.getLength(), ' ');
-                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(itemDef.getPadding()))
+                if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(itemDef.getPadding()))
                     value = StringUtils.leftPad(value, itemDef.getLength(), '0');
                 else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_ZERO.equals(itemDef.getPadding()))
                     value = StringUtils.rightPad(value, itemDef.getLength(), '0');
