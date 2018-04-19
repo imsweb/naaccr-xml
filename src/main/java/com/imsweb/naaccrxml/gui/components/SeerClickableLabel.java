@@ -20,6 +20,7 @@ import javax.swing.JLabel;
  * Use this class to create a label that can be clicked (this class was copied from the seerutils-gui project).
  */
 
+@SuppressWarnings("unused")
 public class SeerClickableLabel extends JLabel implements MouseListener {
 
     // the action that needs to be executed when clicked

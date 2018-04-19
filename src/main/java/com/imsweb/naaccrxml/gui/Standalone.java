@@ -149,7 +149,7 @@ public class Standalone extends JFrame implements ActionListener {
         SwingUtilities.invokeLater(() -> _buttons.get(0).doClick());
     }
 
-    private static String getVersion() {
+    public static String getVersion() {
         String version = null;
 
         // this will make it work when running from the JAR file

@@ -9,6 +9,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -32,6 +34,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -49,6 +52,7 @@ import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
+import com.imsweb.naaccrxml.gui.SasDefinitionDialog;
 import com.imsweb.naaccrxml.gui.Standalone;
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -62,6 +66,7 @@ public class DictionariesPage extends AbstractPage {
     private DefaultTableModel _itemsModel;
     private TableRowSorter<TableModel> _itemsSorter;
 
+    @SuppressWarnings("ConstantConditions")
     public DictionariesPage() {
         super();
 
@@ -85,61 +90,14 @@ public class DictionariesPage extends AbstractPage {
         controlsPnl.add(selectionBox);
         controlsPnl.add(Box.createHorizontalStrut(25));
         JButton extractBtn = new JButton("Extract to CSV...");
-        extractBtn.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            fileChooser.setDialogTitle("Select Target File");
-            fileChooser.setApproveButtonToolTipText("Create CSV");
-            fileChooser.setMultiSelectionEnabled(false);
-            NaaccrDictionaryWrapper dictionary = (NaaccrDictionaryWrapper)selectionBox.getSelectedItem();
-            @SuppressWarnings("ConstantConditions")
-            String prefix = dictionary.isBase() ? "naaccr-dictionary-" : "user-defined-naaccr-dictionary-";
-            fileChooser.setSelectedFile(new File(fileChooser.getCurrentDirectory(), prefix + dictionary.getDictionary().getNaaccrVersion() + ".csv"));
-            if (fileChooser.showDialog(DictionariesPage.this, "Create CSV") == JFileChooser.APPROVE_OPTION) {
-                File targetFile = fileChooser.getSelectedFile();
-                if (targetFile.exists()) {
-                    int result = JOptionPane.showConfirmDialog(DictionariesPage.this, "Target file already exists, are you sure you want to replace it?", "Confirmation",
-                            JOptionPane.YES_NO_OPTION);
-                    if (result != JOptionPane.YES_OPTION)
-                        return;
-                }
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile))) {
-                    writer.write("NAACCR XML ID,NAACCR Number,Name,Start Column,Length,Record Types,Parent XML Element,Data Type");
-                    writer.newLine();
-                    dictionary.getDictionary().getItems().stream()
-                            .sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId))
-                            .forEach(item -> {
-                                try {
-                                    writer.write(item.getNaaccrId());
-                                    writer.write(",");
-                                    writer.write(item.getNaaccrNum() == null ? "" : item.getNaaccrNum().toString());
-                                    writer.write(",\"");
-                                    writer.write(item.getNaaccrName() == null ? "" : item.getNaaccrName());
-                                    writer.write("\",");
-                                    writer.write(item.getStartColumn() == null ? "" : item.getStartColumn().toString());
-                                    writer.write(",");
-                                    writer.write(item.getLength().toString());
-                                    writer.write(",\"");
-                                    writer.write(item.getRecordTypes() == null ? "" : item.getRecordTypes());
-                                    writer.write("\",");
-                                    writer.write(item.getParentXmlElement() == null ? "" : item.getParentXmlElement());
-                                    writer.write(",");
-                                    writer.write(item.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : item.getDataType());
-                                    writer.newLine();
-                                }
-                                catch (IOException | RuntimeException ex1) {
-                                    throw new RuntimeException(ex1); // doing that to make sure the loop is broken...
-                                }
-                            });
-                }
-                catch (IOException | RuntimeException ex2) {
-                    String msg = "Unexpected error creating CSV file\n\n" + ex2.getMessage();
-                    JOptionPane.showMessageDialog(DictionariesPage.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
-                }
-                JOptionPane.showMessageDialog(DictionariesPage.this, "Extract successfully created!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
+        extractBtn.setOpaque(false);
+        extractBtn.addActionListener(e -> performExtractToCsv((NaaccrDictionaryWrapper)selectionBox.getSelectedItem()));
         controlsPnl.add(extractBtn);
+        controlsPnl.add(Box.createHorizontalStrut(25));
+        JButton sasBtn = new JButton("Create SAS Definition...");
+        sasBtn.setOpaque(false);
+        sasBtn.addActionListener(e -> performCreateSasDefinition((NaaccrDictionaryWrapper)selectionBox.getSelectedItem()));
+        controlsPnl.add(sasBtn);
 
         JPanel centerPnl = new JPanel(new BorderLayout());
         this.add(centerPnl, BorderLayout.CENTER);
@@ -312,6 +270,88 @@ public class DictionariesPage extends AbstractPage {
             _xmlArea.setText("Unable to read dictionary...");
         }
         _xmlArea.setCaretPosition(0);
+    }
+
+    private void performExtractToCsv(NaaccrDictionaryWrapper dictionary) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setDialogTitle("Select Target File");
+        fileChooser.setApproveButtonToolTipText("Create CSV");
+        fileChooser.setMultiSelectionEnabled(false);
+        @SuppressWarnings("ConstantConditions")
+        String prefix = dictionary.isBase() ? "naaccr-dictionary-" : "user-defined-naaccr-dictionary-";
+        fileChooser.setSelectedFile(new File(fileChooser.getCurrentDirectory(), prefix + dictionary.getDictionary().getNaaccrVersion() + ".csv"));
+        if (fileChooser.showDialog(DictionariesPage.this, "Create CSV") == JFileChooser.APPROVE_OPTION) {
+            File targetFile = fileChooser.getSelectedFile();
+            if (targetFile.exists()) {
+                int result = JOptionPane.showConfirmDialog(DictionariesPage.this, "Target file already exists, are you sure you want to replace it?", "Confirmation",
+                        JOptionPane.YES_NO_OPTION);
+                if (result != JOptionPane.YES_OPTION)
+                    return;
+            }
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile))) {
+                writer.write("NAACCR XML ID,NAACCR Number,Name,Start Column,Length,Record Types,Parent XML Element,Data Type");
+                writer.newLine();
+                dictionary.getDictionary().getItems().stream()
+                        .sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId))
+                        .forEach(item -> {
+                            try {
+                                writer.write(item.getNaaccrId());
+                                writer.write(",");
+                                writer.write(item.getNaaccrNum() == null ? "" : item.getNaaccrNum().toString());
+                                writer.write(",\"");
+                                writer.write(item.getNaaccrName() == null ? "" : item.getNaaccrName());
+                                writer.write("\",");
+                                writer.write(item.getStartColumn() == null ? "" : item.getStartColumn().toString());
+                                writer.write(",");
+                                writer.write(item.getLength().toString());
+                                writer.write(",\"");
+                                writer.write(item.getRecordTypes() == null ? "" : item.getRecordTypes());
+                                writer.write("\",");
+                                writer.write(item.getParentXmlElement() == null ? "" : item.getParentXmlElement());
+                                writer.write(",");
+                                writer.write(item.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : item.getDataType());
+                                writer.newLine();
+                            }
+                            catch (IOException | RuntimeException ex1) {
+                                throw new RuntimeException(ex1); // doing that to make sure the loop is broken...
+                            }
+                        });
+            }
+            catch (IOException | RuntimeException ex2) {
+                String msg = "Unexpected error creating CSV file\n\n" + ex2.getMessage();
+                JOptionPane.showMessageDialog(DictionariesPage.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            JOptionPane.showMessageDialog(DictionariesPage.this, "Extract successfully created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void performCreateSasDefinition(NaaccrDictionaryWrapper dictionary) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setDialogTitle("Select Target File");
+        fileChooser.setApproveButtonToolTipText("Create CSV");
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setSelectedFile(new File(fileChooser.getCurrentDirectory(), "naaccr-xml-sas-def-" + dictionary.getDictionary().getNaaccrVersion() + ".map"));
+        if (fileChooser.showDialog(DictionariesPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
+            File targetFile = fileChooser.getSelectedFile();
+            if (targetFile.exists()) {
+                int result = JOptionPane.showConfirmDialog(DictionariesPage.this, "Target file already exists, are you sure you want to replace it?", "Confirmation",
+                        JOptionPane.YES_NO_OPTION);
+                if (result != JOptionPane.YES_OPTION)
+                    return;
+            }
+
+            SasDefinitionDialog dlg = new SasDefinitionDialog(null, dictionary.getDictionary(), targetFile);
+            dlg.pack();
+
+            // TODO get frame, compute middle of the frame (for now I am using the screen)
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            Point center = new Point(screenSize.width / 2, screenSize.height / 2);
+            dlg.setLocation(center.x - dlg.getWidth() / 2, center.y - dlg.getHeight() / 2);
+
+            SwingUtilities.invokeLater(() -> dlg.setVisible(true));
+        }
     }
 
     private static class NaaccrDictionaryWrapper {
