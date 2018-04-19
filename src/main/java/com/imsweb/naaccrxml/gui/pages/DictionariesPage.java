@@ -13,8 +13,10 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.Vector;
 import java.util.regex.PatternSyntaxException;
@@ -289,7 +291,7 @@ public class DictionariesPage extends AbstractPage {
                 if (result != JOptionPane.YES_OPTION)
                     return;
             }
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile))) {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(targetFile), StandardCharsets.US_ASCII))) {
                 writer.write("NAACCR XML ID,NAACCR Number,Name,Start Column,Length,Record Types,Parent XML Element,Data Type");
                 writer.newLine();
                 dictionary.getDictionary().getItems().stream()

@@ -7,10 +7,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -88,7 +90,7 @@ public class SasDefinitionDialog extends JDialog {
     }
 
     public void performCreateFile(NaaccrDictionary dictionary, File targetFile) {
-        try (StringReader reader = new StringReader(createSasXmlMapper(dictionary)); Writer writer = new FileWriter(targetFile)) {
+        try (StringReader reader = new StringReader(createSasXmlMapper(dictionary)); Writer writer = new OutputStreamWriter(new FileOutputStream(targetFile), StandardCharsets.US_ASCII)) {
             IOUtils.copy(reader, writer);
         }
         catch (IOException e) {
@@ -180,7 +182,7 @@ public class SasDefinitionDialog extends JDialog {
         }
     }
 
-    private class ItemWrapper {
+    private static class ItemWrapper {
 
         private NaaccrDictionaryItem _item;
 
