@@ -38,7 +38,7 @@ import com.imsweb.naaccrxml.gui.components.SeerTwoListsSelectionPanel;
 
 public class SasDefinitionDialog extends JDialog {
 
-    public SasDefinitionDialog(JFrame parent, String naaccrVersion, File targetFile) {
+    public SasDefinitionDialog(JFrame parent, String naaccrVersion, String recordType, File targetFile) {
         super(parent);
 
         NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(naaccrVersion);
@@ -62,10 +62,19 @@ public class SasDefinitionDialog extends JDialog {
         JLabel leftLbl = Standalone.createBoldLabel("Available Data Items");
         List<ItemWrapper> leftList = new ArrayList<>();
         for (NaaccrDictionaryItem item : dictionary.getItems())
-            leftList.add(new ItemWrapper(item));
+            if (item.getRecordTypes().contains(recordType))
+                leftList.add(new ItemWrapper(item));
         JLabel rightLbl = Standalone.createBoldLabel("Included Data Items");
         List<ItemWrapper> rightList = new ArrayList<>();
-        Comparator<ItemWrapper> comp = Comparator.comparing(ItemWrapper::toString);
+        Comparator<ItemWrapper> comp = (o1, o2) -> {
+            if (o1.getItem().getStartColumn() != null && o2.getItem().getStartColumn() != null)
+                return o1.getItem().getStartColumn().compareTo(o2.getItem().getStartColumn());
+            if (o1.getItem().getStartColumn() != null)
+                return -1;
+            if (o2.getItem().getStartColumn() != null)
+                return 1;
+            return o1.getItem().getNaaccrId().compareTo(o2.getItem().getNaaccrId());
+        };
         SeerTwoListsSelectionPanel<ItemWrapper> selectionPnl = new SeerTwoListsSelectionPanel<>(leftList, rightList, leftLbl, rightLbl, comp, null);
         centerPnl.add(selectionPnl, BorderLayout.CENTER);
 

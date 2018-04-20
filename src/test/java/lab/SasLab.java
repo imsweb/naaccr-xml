@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -20,17 +22,40 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 public class SasLab {
 
     public static void main(String[] args) {
-        NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("160");
+        NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("180");
 
-        System.out.println(createSasXmlMapper(dictionary));
+        System.out.println(createSasFlatMappings(dictionary));
 
-        //        <COLUMN class="ORDINAL" name="KEY" retain="YES"> <!--2-->
-        //         <INCREMENT-PATH beginend="BEGIN" syntax="XPath">/PHARMACY/PERSON</INCREMENT-PATH>
-        //      <TYPE>numeric</TYPE>
-        //      <DATATYPE>integer</DATATYPE>
-        //      <FORMAT width="3">Z</FORMAT>
-        //      </COLUMN>
+        //System.out.println(createSasXmlMapper(dictionary));
 
+    }
+
+    private static String createSasFlatMappings(NaaccrDictionary dictionary) {
+        List<NaaccrDictionaryItem> items = new ArrayList<>(dictionary.getItems());
+        items.sort(Comparator.comparing(NaaccrDictionaryItem::getStartColumn));
+
+        StringBuilder buf = new StringBuilder();
+
+        int count = 0;
+        for (NaaccrDictionaryItem item : items) {
+            if (item.getRecordTypes().contains("I")) {
+                buf.append("    input ");
+                buf.append(item.getNaaccrId());
+                buf.append(" $");
+                buf.append(item.getStartColumn());
+                buf.append(" - ");
+                buf.append(item.getStartColumn() + item.getLength() - 1);
+                buf.append("  @; label ");
+                buf.append(item.getNaaccrId());
+                buf.append(" = '");
+                buf.append(item.getNaaccrName());
+                buf.append("';");
+                count++;
+            }
+        }
+        System.out.println(count + " items...");
+
+        return buf.toString();
     }
 
     private static String createSasXmlMapper(NaaccrDictionary dictionary) {

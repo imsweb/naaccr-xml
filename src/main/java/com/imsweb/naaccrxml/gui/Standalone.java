@@ -26,7 +26,9 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -52,6 +54,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.gui.pages.DictionariesPage;
@@ -91,11 +94,23 @@ public class Standalone extends JFrame implements ActionListener {
         bar.add(toolsMenu);
         JMenuItem sasMenu = new JMenu("Create SAS Definition ");
         toolsMenu.add(sasMenu);
-        for (String version : NaaccrFormat.getSupportedVersions()) {
-            JMenuItem sasItem = new JMenuItem("NAACCR " + version);
-            sasItem.setActionCommand("menu-sas-" + version);
-            sasItem.addActionListener(this);
-            sasMenu.add(sasItem);
+        List<String> versions = NaaccrFormat.getSupportedVersions().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        for (int i = 0; i < versions.size(); i++) {
+            String version = versions.get(i);
+            JMenuItem sasAbsItem = new JMenuItem("NAACCR " + version + " Abstract");
+            sasAbsItem.setActionCommand("menu-sas-" + version + "-A");
+            sasAbsItem.addActionListener(this);
+            sasMenu.add(sasAbsItem);
+            JMenuItem sasConfItem = new JMenuItem("NAACCR " + version + " Confidential");
+            sasConfItem.setActionCommand("menu-sas-" + version + "-C");
+            sasConfItem.addActionListener(this);
+            sasMenu.add(sasConfItem);
+            JMenuItem sasIncItem = new JMenuItem("NAACCR " + version + " Incidence");
+            sasIncItem.setActionCommand("menu-sas-" + version + "-I");
+            sasIncItem.addActionListener(this);
+            sasMenu.add(sasIncItem);
+            if (i != versions.size() - 1)
+                ((JMenu)sasMenu).addSeparator();
         }
         // help
         JMenu helpMenu = new JMenu(" Help ");
@@ -231,14 +246,18 @@ public class Standalone extends JFrame implements ActionListener {
         if ("menu-exit".equals(cmd))
             System.exit(0);
         else if (cmd.startsWith("menu-sas-")) {
-            String naaccrVersion = cmd.replace("menu-sas-", "");
+            String[] parts = StringUtils.split(cmd, '-');
+            String naaccrVersion = parts[2], recordType = parts[3];
+
+            String prefix = "naaccr-xml-sas-def-";
+            String suffix = "A".equals(recordType) ? "-abstract.map" : "C".equals(recordType) ? "-confidential.map" : "I".equals(recordType) ? "-incidence.map" : ".map";
 
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fileChooser.setDialogTitle("Select Target File");
             fileChooser.setApproveButtonToolTipText("Create CSV");
             fileChooser.setMultiSelectionEnabled(false);
-            fileChooser.setSelectedFile(new File(fileChooser.getCurrentDirectory(), "naaccr-xml-sas-def-" + naaccrVersion + ".map"));
+            fileChooser.setSelectedFile(new File(fileChooser.getCurrentDirectory(), prefix + naaccrVersion + suffix));
             if (fileChooser.showDialog(this, "Select") == JFileChooser.APPROVE_OPTION) {
                 File targetFile = fileChooser.getSelectedFile();
                 if (targetFile.exists()) {
@@ -247,7 +266,7 @@ public class Standalone extends JFrame implements ActionListener {
                     if (result != JOptionPane.YES_OPTION)
                         return;
                 }
-                SasDefinitionDialog dlg = new SasDefinitionDialog(this, naaccrVersion, targetFile);
+                SasDefinitionDialog dlg = new SasDefinitionDialog(this, naaccrVersion, recordType, targetFile);
                 dlg.pack();
                 Point center = new Point(this.getLocationOnScreen().x + this.getWidth() / 2, this.getLocationOnScreen().y + this.getHeight() / 2);
                 dlg.setLocation(center.x - dlg.getWidth() / 2, center.y - dlg.getHeight() / 2);
