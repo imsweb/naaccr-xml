@@ -15,7 +15,6 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -168,10 +167,8 @@ public class SasDefinitionDialog extends JDialog {
             buf.append("        </COLUMN>\r\n");
         }
 
-        List<String> included = Arrays.asList("registryId", "nameLast", "primarySite");
-
         for (NaaccrDictionaryItem item : items) {
-            if (!level.equals(item.getParentXmlElement()) || !included.contains(item.getNaaccrId()))
+            if (!level.equals(item.getParentXmlElement()))
                 continue;
             buf.append("\r\n");
             buf.append("        <COLUMN name=\"").append(item.getNaaccrId()).append("\">\r\n");
