@@ -33,6 +33,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -52,6 +53,7 @@ import javax.swing.border.MatteBorder;
 
 import org.apache.commons.io.IOUtils;
 
+import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.gui.pages.DictionariesPage;
 import com.imsweb.naaccrxml.gui.pages.DictionaryEditorPage;
 import com.imsweb.naaccrxml.gui.pages.FlatToXmlPage;
@@ -75,6 +77,7 @@ public class Standalone extends JFrame implements ActionListener {
         this.getContentPane().setLayout(new BorderLayout());
 
         JMenuBar bar = new JMenuBar();
+        // file
         JMenu fileMenu = new JMenu(" File ");
         fileMenu.setMnemonic(KeyEvent.VK_F);
         bar.add(fileMenu);
@@ -82,6 +85,19 @@ public class Standalone extends JFrame implements ActionListener {
         exitItem.setActionCommand("menu-exit");
         exitItem.addActionListener(this);
         fileMenu.add(exitItem);
+        // tools
+        JMenu toolsMenu = new JMenu(" Tools ");
+        toolsMenu.setMnemonic(KeyEvent.VK_T);
+        bar.add(toolsMenu);
+        JMenuItem sasMenu = new JMenu("Create SAS Definition ");
+        toolsMenu.add(sasMenu);
+        for (String version : NaaccrFormat.getSupportedVersions()) {
+            JMenuItem sasItem = new JMenuItem("NAACCR " + version);
+            sasItem.setActionCommand("menu-sas-" + version);
+            sasItem.addActionListener(this);
+            sasMenu.add(sasItem);
+        }
+        // help
         JMenu helpMenu = new JMenu(" Help ");
         helpMenu.setMnemonic(KeyEvent.VK_H);
         JMenuItem helpItem = new JMenuItem("View Help       ");
@@ -214,6 +230,30 @@ public class Standalone extends JFrame implements ActionListener {
         String cmd = e.getActionCommand();
         if ("menu-exit".equals(cmd))
             System.exit(0);
+        else if (cmd.startsWith("menu-sas-")) {
+            String naaccrVersion = cmd.replace("menu-sas-", "");
+
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fileChooser.setDialogTitle("Select Target File");
+            fileChooser.setApproveButtonToolTipText("Create CSV");
+            fileChooser.setMultiSelectionEnabled(false);
+            fileChooser.setSelectedFile(new File(fileChooser.getCurrentDirectory(), "naaccr-xml-sas-def-" + naaccrVersion + ".map"));
+            if (fileChooser.showDialog(this, "Select") == JFileChooser.APPROVE_OPTION) {
+                File targetFile = fileChooser.getSelectedFile();
+                if (targetFile.exists()) {
+                    int result = JOptionPane.showConfirmDialog(this, "Target file already exists, are you sure you want to replace it?", "Confirmation",
+                            JOptionPane.YES_NO_OPTION);
+                    if (result != JOptionPane.YES_OPTION)
+                        return;
+                }
+                SasDefinitionDialog dlg = new SasDefinitionDialog(this, naaccrVersion, targetFile);
+                dlg.pack();
+                Point center = new Point(this.getLocationOnScreen().x + this.getWidth() / 2, this.getLocationOnScreen().y + this.getHeight() / 2);
+                dlg.setLocation(center.x - dlg.getWidth() / 2, center.y - dlg.getHeight() / 2);
+                SwingUtilities.invokeLater(() -> dlg.setVisible(true));
+            }
+        }
         else if ("menu-help".equals(cmd)) {
             try {
                 File targetFile = File.createTempFile("naaccr-xml-help", ".html");

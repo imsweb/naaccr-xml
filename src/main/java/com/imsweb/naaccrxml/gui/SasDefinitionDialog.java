@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -29,17 +30,18 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.io.IOUtils;
 
+import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 import com.imsweb.naaccrxml.gui.components.SeerTwoListsSelectionPanel;
 
-// TODO error if no item selected; success dialog; hide SAS button for non-base dictionaries; pass the frame to constructor of dialog
-// TODO maybe this shouldn't be a button in dictonary page, maybe a Tools menu would look better...
 public class SasDefinitionDialog extends JDialog {
 
-    public SasDefinitionDialog(JFrame parent, NaaccrDictionary dictionary, File targetFile) {
+    public SasDefinitionDialog(JFrame parent, String naaccrVersion, File targetFile) {
         super(parent);
+
+        NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(naaccrVersion);
 
         this.setTitle("Select Data Items");
         this.setModal(true);
@@ -49,79 +51,82 @@ public class SasDefinitionDialog extends JDialog {
 
         JPanel contentPnl = new JPanel();
         contentPnl.setLayout(new BorderLayout());
-        contentPnl.setOpaque(true);
         contentPnl.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         this.getContentPane().setLayout(new BorderLayout());
         this.getContentPane().add(contentPnl, BorderLayout.CENTER);
 
-        //NORTH - target file
-        JPanel northPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        northPnl.setOpaque(false);
-        northPnl.add(Standalone.createBoldLabel("Target File: "));
-        northPnl.add(new JLabel(targetFile.getPath()));
-        northPnl.setBorder(new EmptyBorder(0, 0, 15, 0));
-        contentPnl.add(northPnl, BorderLayout.NORTH);
-
         //CENTER - selection component
         JPanel centerPnl = new JPanel();
-        centerPnl.setOpaque(false);
         centerPnl.setLayout(new BorderLayout());
         contentPnl.add(centerPnl, BorderLayout.CENTER);
-        JLabel leftLbl = new JLabel("Available Data Items");
+        JLabel leftLbl = Standalone.createBoldLabel("Available Data Items");
         List<ItemWrapper> leftList = new ArrayList<>();
         for (NaaccrDictionaryItem item : dictionary.getItems())
             leftList.add(new ItemWrapper(item));
-        JLabel rightLbl = new JLabel("Included Data Items");
+        JLabel rightLbl = Standalone.createBoldLabel("Included Data Items");
         List<ItemWrapper> rightList = new ArrayList<>();
         Comparator<ItemWrapper> comp = Comparator.comparing(ItemWrapper::toString);
         SeerTwoListsSelectionPanel<ItemWrapper> selectionPnl = new SeerTwoListsSelectionPanel<>(leftList, rightList, leftLbl, rightLbl, comp, comp);
         centerPnl.add(selectionPnl, BorderLayout.CENTER);
 
         //SOUTH - controls
-        JPanel controlsPnl = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        controlsPnl.setOpaque(false);
-        controlsPnl.setBorder(new EmptyBorder(10, 0, 0, 0));
+        JPanel controlsPnl = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        controlsPnl.setBorder(new EmptyBorder(25, 0, 0, 0));
         contentPnl.add(controlsPnl, BorderLayout.SOUTH);
-
         JButton goBtn = new JButton("Create File");
-        goBtn.setOpaque(false);
-        goBtn.addActionListener(e -> performCreateFile(dictionary, targetFile));
+        goBtn.addActionListener(e -> performCreateFile(dictionary, selectionPnl.getRightListContent(), targetFile));
         controlsPnl.add(goBtn);
+        JButton cancelBtn = new JButton("  Cancel  ");
+        cancelBtn.addActionListener(e -> {
+            SasDefinitionDialog.this.setVisible(false);
+            SasDefinitionDialog.this.dispose();
+        });
+        controlsPnl.add(cancelBtn);
     }
 
-    public void performCreateFile(NaaccrDictionary dictionary, File targetFile) {
-        try (StringReader reader = new StringReader(createSasXmlMapper(dictionary)); Writer writer = new OutputStreamWriter(new FileOutputStream(targetFile), StandardCharsets.US_ASCII)) {
-            IOUtils.copy(reader, writer);
+    public void performCreateFile(NaaccrDictionary dictionary, List<ItemWrapper> selectedItems, File targetFile) {
+        if (selectedItems.isEmpty()) {
+            JOptionPane.showMessageDialog(SasDefinitionDialog.this, "You must select at least one data item!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        List<NaaccrDictionaryItem> items = selectedItems.stream().map(ItemWrapper::getItem).collect(Collectors.toList());
+
+        try (StringReader r = new StringReader(createSasXmlMapper(dictionary, items)); Writer w = new OutputStreamWriter(new FileOutputStream(targetFile), StandardCharsets.US_ASCII)) {
+            IOUtils.copy(r, w);
         }
         catch (IOException e) {
             String msg = "Unexpected error creating file\n\n" + e.getMessage();
             JOptionPane.showMessageDialog(SasDefinitionDialog.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
         }
+
         this.setVisible(false);
         this.dispose();
+
+        JOptionPane.showMessageDialog(SasDefinitionDialog.this, "The file was successfully created!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private String createSasXmlMapper(NaaccrDictionary dict) {
+    private String createSasXmlMapper(NaaccrDictionary dict, List<NaaccrDictionaryItem> items) {
         StringBuilder buf = new StringBuilder();
 
         buf.append("<?xml version=\"1.0\" encoding=\"windows-1252\"?>\r\n");
         buf.append("\r\n");
         buf.append("<!-- ############################################################ -->\r\n");
         buf.append("<!-- SAS XML Libname Engine Map -->\r\n");
-        buf.append("<!-- Generated by NAACCR XML Java library v").append(Standalone.getVersion()).append(" -->\r\n");
+        buf.append("<!-- Generated by NAACCR XML Java library ").append(Standalone.getVersion()).append(" -->\r\n");
         buf.append("<!-- ############################################################ -->\r\n");
         buf.append("<SXLEMAP description=\"NAACCR XML v").append(dict.getNaaccrVersion()).append(" mapping\" name=\"naaccr_xml_map_").append(dict.getNaaccrVersion()).append("\" version=\"2.1\">\r\n");
         buf.append("\r\n");
         buf.append("    <NAMESPACES count=\"0\"/>\r\n");
-        addLevelInfo(dict, NaaccrXmlUtils.NAACCR_XML_TAG_ROOT, buf, "NAACCR Data data set", "naaccrdata", "/NaaccrData");
-        addLevelInfo(dict, NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT, buf, "Patients data set", "patients", "/NaaccrData/Patient");
-        addLevelInfo(dict, NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR, buf, "Tumors data set", "tumors", "/NaaccrData/Patient/Tumor");
+        addLevelInfo(items, NaaccrXmlUtils.NAACCR_XML_TAG_ROOT, buf, "NAACCR Data data set", "naaccrdata", "/NaaccrData");
+        addLevelInfo(items, NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT, buf, "Patients data set", "patients", "/NaaccrData/Patient");
+        addLevelInfo(items, NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR, buf, "Tumors data set", "tumors", "/NaaccrData/Patient/Tumor");
         buf.append("</SXLEMAP>\r\n");
 
         return buf.toString();
     }
 
-    private void addLevelInfo(NaaccrDictionary dictionary, String level, StringBuilder buf, String desc, String name, String path) {
+    private void addLevelInfo(List<NaaccrDictionaryItem> items, String level, StringBuilder buf, String desc, String name, String path) {
 
         buf.append("\r\n");
         buf.append("    <!-- ############################################################ -->\r\n");
@@ -152,7 +157,7 @@ public class SasDefinitionDialog extends JDialog {
 
         List<String> included = Arrays.asList("registryId", "nameLast", "primarySite");
 
-        for (NaaccrDictionaryItem item : dictionary.getItems()) {
+        for (NaaccrDictionaryItem item : items) {
             if (!level.equals(item.getParentXmlElement()) || !included.contains(item.getNaaccrId()))
                 continue;
             buf.append("\r\n");
@@ -188,6 +193,10 @@ public class SasDefinitionDialog extends JDialog {
 
         public ItemWrapper(NaaccrDictionaryItem item) {
             _item = item;
+        }
+
+        public NaaccrDictionaryItem getItem() {
+            return _item;
         }
 
         @Override
