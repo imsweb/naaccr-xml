@@ -67,7 +67,7 @@ public class SasDefinitionDialog extends JDialog {
         JLabel rightLbl = Standalone.createBoldLabel("Included Data Items");
         List<ItemWrapper> rightList = new ArrayList<>();
         Comparator<ItemWrapper> comp = Comparator.comparing(ItemWrapper::toString);
-        SeerTwoListsSelectionPanel<ItemWrapper> selectionPnl = new SeerTwoListsSelectionPanel<>(leftList, rightList, leftLbl, rightLbl, comp, comp);
+        SeerTwoListsSelectionPanel<ItemWrapper> selectionPnl = new SeerTwoListsSelectionPanel<>(leftList, rightList, leftLbl, rightLbl, comp, null);
         centerPnl.add(selectionPnl, BorderLayout.CENTER);
 
         //SOUTH - controls
