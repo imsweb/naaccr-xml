@@ -4,6 +4,7 @@
 package com.imsweb.naaccrxml.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.io.File;
@@ -103,7 +104,19 @@ public class SasDefinitionDialog extends JDialog {
         this.setVisible(false);
         this.dispose();
 
-        JOptionPane.showMessageDialog(SasDefinitionDialog.this, "The file was successfully created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        if (Desktop.isDesktopSupported()) {
+            int val = JOptionPane.showConfirmDialog(SasDefinitionDialog.this, "File successfully created. Would you like to open it now?", "Success", JOptionPane.YES_NO_OPTION);
+            if (val == JOptionPane.YES_OPTION) {
+                try {
+                    Desktop.getDesktop().open(targetFile);
+                }
+                catch (IOException e) {
+                    JOptionPane.showMessageDialog(SasDefinitionDialog.this, "Unable to open file.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        else
+            JOptionPane.showMessageDialog(SasDefinitionDialog.this, "File successfully created.", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private String createSasXmlMapper(NaaccrDictionary dict, List<NaaccrDictionaryItem> items) {
