@@ -8,9 +8,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.io.IOUtils;
 
@@ -24,9 +26,9 @@ public class SasLab {
     public static void main(String[] args) {
         NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("180");
 
-        System.out.println(createSasFlatMappings(dictionary));
+        //System.out.println(createSasFlatMappings(dictionary));
 
-        //System.out.println(createSasXmlMapper(dictionary));
+        System.out.println(createSasXmlMapper(dictionary));
 
     }
 
@@ -34,22 +36,31 @@ public class SasLab {
         List<NaaccrDictionaryItem> items = new ArrayList<>(dictionary.getItems());
         items.sort(Comparator.comparing(NaaccrDictionaryItem::getStartColumn));
 
+        Map<String, AtomicInteger> counters = new HashMap<>();
+
         StringBuilder buf = new StringBuilder();
 
         int count = 0;
         for (NaaccrDictionaryItem item : items) {
+            String id = item.getNaaccrId();
+            if (id.length() > 32) {
+                String prefix = id.substring(0, 30);
+                int counter = counters.computeIfAbsent(prefix, k -> new AtomicInteger()).getAndIncrement();
+                id = prefix + "_" + counter;
+            }
+
             if (item.getRecordTypes().contains("I")) {
                 buf.append("    input ");
-                buf.append(item.getNaaccrId());
+                buf.append(id);
                 buf.append(" $");
                 buf.append(item.getStartColumn());
                 buf.append(" - ");
                 buf.append(item.getStartColumn() + item.getLength() - 1);
                 buf.append("  @; label ");
-                buf.append(item.getNaaccrId());
+                buf.append(id);
                 buf.append(" = '");
                 buf.append(item.getNaaccrName());
-                buf.append("';");
+                buf.append("';\n");
                 count++;
             }
         }
@@ -114,24 +125,22 @@ public class SasLab {
             buf.append("        </COLUMN>\r\n");
         }
 
-        List<String> included = Arrays.asList("registryId", "nameLast", "primarySite");
-
         for (NaaccrDictionaryItem item : dictionary.getItems()) {
-            if (!level.equals(item.getParentXmlElement()) || !included.contains(item.getNaaccrId()))
-                continue;
-            buf.append("\r\n");
-            buf.append("        <COLUMN name=\"").append(item.getNaaccrId()).append("\">\r\n");
-            buf.append("            <PATH syntax=\"XPath\">").append(createXpath(item)).append("</PATH>\r\n");
-            buf.append("            <DESCRIPTION>")
-                    .append(item.getNaaccrName()
-                            .replace("<", "&lt;")
-                            .replace(">", "&gt;")
-                            .replace("&", "&amp;"))
-                    .append(" [Item #").append(item.getNaaccrNum()).append("]</DESCRIPTION>\r\n");
-            buf.append("            <TYPE>character</TYPE>\r\n");
-            buf.append("            <DATATYPE>string</DATATYPE>\r\n");
-            buf.append("            <LENGTH>").append(item.getLength()).append("</LENGTH>\r\n");
-            buf.append("        </COLUMN>\r\n");
+            if (level.equals(item.getParentXmlElement())) {
+                buf.append("\r\n");
+                buf.append("        <COLUMN name=\"").append(item.getNaaccrId()).append("\">\r\n");
+                buf.append("            <PATH syntax=\"XPath\">").append(createXpath(item)).append("</PATH>\r\n");
+                buf.append("            <DESCRIPTION>")
+                        .append(item.getNaaccrName()
+                                .replace("<", "&lt;")
+                                .replace(">", "&gt;")
+                                .replace("&", "&amp;"))
+                        .append(" [Item #").append(item.getNaaccrNum()).append("]</DESCRIPTION>\r\n");
+                buf.append("            <TYPE>character</TYPE>\r\n");
+                buf.append("            <DATATYPE>string</DATATYPE>\r\n");
+                buf.append("            <LENGTH>").append(item.getLength()).append("</LENGTH>\r\n");
+                buf.append("        </COLUMN>\r\n");
+            }
         }
 
         buf.append("    </TABLE>\r\n");
