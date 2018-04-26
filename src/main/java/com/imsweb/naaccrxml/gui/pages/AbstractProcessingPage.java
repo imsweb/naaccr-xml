@@ -635,8 +635,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                         userDictionaries.add(NaaccrXmlDictionaryUtils.readDictionary(new File(s.trim())));
 
                 final long start = System.currentTimeMillis();
-                String baseUri = NaaccrXmlUtils.getAttributesFromXmlFile(targetFile).get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT);
-                NaaccrDictionary baseDictionary = baseUri == null ? null : NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(baseUri);
+                NaaccrFormat format = getFormatForInputFile(srcFile);
+                NaaccrDictionary baseDictionary = format == null ? null : NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(format.getNaaccrVersion());
                 runProcessing(srcFile, targetFile, _guiOptions.getOptions(baseDictionary, userDictionaries), userDictionaries, new NaaccrObserver() {
                     @Override
                     public void patientRead(Patient patient) {
