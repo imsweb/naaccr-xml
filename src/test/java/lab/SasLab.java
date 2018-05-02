@@ -18,18 +18,58 @@ import org.apache.commons.io.IOUtils;
 
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
+import com.imsweb.naaccrxml.PatientFlatWriter;
+import com.imsweb.naaccrxml.PatientXmlReader;
+import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 public class SasLab {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("180");
 
         //System.out.println(createSasFlatMappings(dictionary));
 
-        System.out.println(createSasXmlMapper(dictionary));
+        //System.out.println(createSasXmlMapper(dictionary));
 
+        long start = System.currentTimeMillis();
+        try (PatientXmlReader r = new PatientXmlReader(NaaccrXmlUtils.createReader(new File("C:\\Users\\depryf\\Desktop\\sas\\synthetic-data_naaccr-18-incidence_10000000-recs.xml.gz")))) {
+            try (PatientFlatWriter w = new PatientFlatWriter(NaaccrXmlUtils.createWriter(new File("C:\\Users\\depryf\\Desktop\\sas\\synthetic-data_naaccr-18-incidence_10000000-recs-copy.txt.gz")),
+                    r.getRootData())) {
+                Patient pat = r.readPatient();
+                while (pat != null) {
+                    w.writePatient(pat);
+                    pat = r.readPatient();
+                }
+            }
+        }
+        System.out.println(System.currentTimeMillis() - start);
+
+        //        long start = System.currentTimeMillis();
+        //        try (PatientXmlReader r = new PatientXmlReader(NaaccrXmlUtils.createReader(new File("C:\\Users\\depryf\\Desktop\\sas\\synthetic-data_naaccr-18-incidence_10000000-recs.xml.gz")))) {
+        //            Patient pat = r.readPatient();
+        //            while (pat != null)
+        //                pat = r.readPatient();
+        //        }
+        //        System.out.println(System.currentTimeMillis() - start);
+
+        //        long start = System.currentTimeMillis();
+        //        try (BufferedReader r = new BufferedReader(NaaccrXmlUtils.createReader(new File("C:\\Users\\depryf\\Desktop\\sas\\synthetic-data_naaccr-18-incidence_10000000-recs.xml.gz")))) {
+        //            String line = r.readLine();
+        //            while (line != null)
+        //                line = r.readLine();
+        //        }
+        //        System.out.println(System.currentTimeMillis() - start);
+
+        //        long start = System.currentTimeMillis();
+        //        try (BufferedReader r = new BufferedReader(NaaccrXmlUtils.createReader(new File("C:\\Users\\depryf\\Desktop\\sas\\synthetic-data_naaccr-18-incidence_10000000-recs.xml.gz")))) {
+        //            char[] bytes = new char[8192]; // default buffer size
+        //            int n = r.read(bytes);
+        //            while (n > 0)
+        //                n = r.read(bytes);
+        //        }
+        //        System.out.println(System.currentTimeMillis() - start);
     }
 
     private static String createSasFlatMappings(NaaccrDictionary dictionary) {
