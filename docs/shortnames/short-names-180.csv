@@ -1,0 +1,803 @@
+NAACCR_Item_No,Field_Name,Short_Name
+10,Record Type,RecType
+20,Patient ID Number,PatientID
+21,Patient System ID-Hosp,PTSysIDHosp
+30,Registry Type,RegType
+37,Reserved 00,Reserved00
+40,Registry ID,RegistryID
+45,NPI--Registry ID,NPIRegID
+50,NAACCR Record Version,NAACCRRecVer
+60,Tumor Record Number,TumRecNum
+70,Addr at DX--City,DxCity
+80,Addr at DX--State,DxState
+81,State at DX Geocode 1970/80/90,DxStateGeo708090
+82,State at DX Geocode 2000,DxStateGeo2000
+83,State at DX Geocode 2010,DxStateGeo2010
+84,State at DX Geocode 2020,DxStateGeo2020
+89,County at DX Analysis,DxCountyAnalysis
+90,County at DX Reported,DxCountyReported
+94,County at DX Geocode 1970/80/90,DxCountyGeo1990
+95,County at DX Geocode2000,DxCountyGeo2000
+96,County at DX Geocode2010,DxCountyGeo2010
+97,County at DX Geocode2020,DxCountyGeo2020
+100,Addr at DX--Postal Code,DxPostalZip
+102,Addr at DX--Country,DxAddrCountry
+110,Census Tract 1970/80/90,CenTract708090
+120,Census Cod Sys 1970/80/90,CenCodSys708090
+125,Census Tract 2020,CenTract2020
+130,Census Tract 2000,CenTract2000
+135,Census Tract 2010,CenTract2010
+145,Census Tr Poverty Indictr,PovertyInd
+150,Marital Status at DX,Marital
+160,Race 1,Race1
+161,Race 2,Race2
+162,Race 3,Race3
+163,Race 4,Race4
+164,Race 5,Race5
+170,Race Coding Sys--Current,RaceCodSysCur
+180,Race Coding Sys--Original,RaceCodSysOrg
+190,Spanish/Hispanic Origin,Hispanic
+191,NHIA Derived Hisp Origin,NHIA
+192,IHS Link,IHSLink
+193,Race--NAPIIA(derived API),RaceNAPIIA
+200,Computed Ethnicity,CompEthn
+210,Computed Ethnicity Source,CompEthnSrc
+220,Sex,Sex
+230,Age at Diagnosis,AgeDx
+240,Date of Birth,BirthDate
+241,Date of Birth Flag,BirthDateFlag
+250,Birthplace,BPCode
+252,Birthplace--State,BPState
+254,Birthplace--Country,BPCountry
+270,Census Occ Code 1970-2000,OccCen
+272,Census Ind Code 2010 CDC,IndCen2010
+280,Census Ind Code 1970-2000,IndCen
+282,Census Occ Code 2010 CDC,OccCen2010
+290,Occupation Source,OccSrc
+300,Industry Source,IndSrc
+310,Text--Usual Occupation,TxUsualOcc
+320,Text--Usual Industry,TxUsualInd
+330,Census Occ/Ind Sys 70-00,OccIndCodSys
+339,RUCA 2000,RUCA2000
+341,RUCA 2010,RUCA2010
+345,URIC 2000,URIC2000
+346,URIC 2010,URIC2010
+351,GeoLocationID - 1970/80/90,GeoLocation708090
+352,GeoLocationID - 2000,GeoLocation2000
+353,GeoLocationID - 2010,GeoLocation2010
+354,GeoLocationID - 2020,GeoLocation2020
+361,Census Block Group 2020,CenBlockGrp2020
+362,Census Block Group 2000,CenBlockGrp2000
+363,Census Block Group 2010,CenBlockGrp2010
+364,Census Tr Cert 1970/80/90,CenTractCer708090
+365,Census Tr Certainty 2000,CenTractCer2000
+366,GIS Coordinate Quality,GISQuality
+367,Census Tr Certainty 2010,CenTractCer2010
+368,Census Block Grp 1970/80/90,CenBlockGrp708090
+369,Census Tract Certainty 2020,CenTractCert2020
+370,Reserved 01,Reserved01
+380,Sequence Number--Central,SeqNumCentr
+390,Date of Diagnosis,DxDate
+391,Date of Diagnosis Flag,DxDateFlag
+400,Primary Site,PSite
+410,Laterality,Lateral
+419,Morph--Type&Behav ICD-O-2,MorphTypBehICDO2
+420,Histology (92-00) ICD-O-2,HistTypeICDO2
+430,Behavior (92-00) ICD-O-2,BehaviorICDO2
+439,Date of Mult Tumors Flag,DateMultTumorFlag
+440,Grade,Grade
+441,Grade Path Value,GradePathValue
+442,Ambiguous Terminology DX,AmbiguousTermDx
+443,Date Conclusive DX,DateConclusiveDx
+444,Mult Tum Rpt as One Prim,MultTumAsOne
+445,Date of Mult Tumors,DateMultTumors
+446,Multiplicity Counter,MultiplicityCount
+448,Date Conclusive DX Flag,DateConclusDxFlag
+449,Grade Path System,GradePathSys
+450,Site Coding Sys--Current,SiteCodSysCur
+460,Site Coding Sys--Original,SiteCodSysOrg
+470,Morph Coding Sys--Current,MorphCodSysCur
+480,Morph Coding Sys--Originl,MorphCodSysOrg
+490,Diagnostic Confirmation,DxConf
+500,Type Of Reporting Source,TypeRepSrc
+501,Casefinding Source,CasefindingSrc
+521,Morph--Type&Behav ICD-O-3,MorphTypBehICDO3
+522,Histologic Type ICD-O-3,HistTypeICDO3
+523,Behavior Code ICD-O-3,BehaviorICDO3
+530,Reserved 02,Reserved02
+540,Reporting Facility,RepFacility
+545,NPI--Reporting Facility,NPIRepFacility
+550,Accession Number--Hosp,AccNumHosp
+560,Sequence Number--Hospital,SeqNumHosp
+570,Abstracted By,Abstractor
+580,Date of 1st Contact,Date1stCont
+581,Date of 1st Contact Flag,Date1stContFlag
+590,Date of Inpt Adm,DateInPtAdm
+591,Date of Inpt Adm Flag,DateInPtAdmFlag
+600,Date of Inpt Disch,DateInPtDisch
+601,Date of Inpt Disch Flag,DateInPtDischFlag
+605,Inpatient Status,InpatientStatus
+610,Class Of Case,ClassCase
+630,Primary Payer at DX,PrimaryPayerDx
+668,RX Hosp--Surg App 2010,RxHSurgApp2010
+670,RX Hosp--Surg Prim Site,RxHSurgPSite
+672,RX Hosp--Scope Reg LN Sur,RxHScopeRegLN
+674,RX Hosp--Surg Oth Reg/Dis,RxHSurgOthRegDis
+676,RX Hosp--Reg LN Removed,RxHRegLNRem
+680,Reserved 03,Reserved03
+682,Date Regional Lymph Node Dissection,DateRegLNDiss
+683,Date Regional Lymph Node Dissection Flag,DateRegLNDissFlag
+690,RX Hosp--Radiation,RxHRad
+700,RX Hosp--Chemo,RxHChemo
+710,RX Hosp--Hormone,RxHHorm
+720,RX Hosp--BRM,RxHBRM
+730,RX Hosp--Other,RxHOth
+740,RX Hosp--DX/Stg Proc,RxHDxStgProc
+746,RX Hosp--Surg Site 98-02,RxHSurgSite9802
+747,RX Hosp--Scope Reg 98-02,RxHScopeReg9802
+748,RX Hosp--Surg Oth 98-02,RxHSurgOth9802
+750,Reserved 04,Reserved04
+752,Tumor Size Clinical,TumorSizeClin
+754,Tumor Size Pathologic,TumorSizePath
+756,Tumor Size Summary,TumorSizeSumm
+759,SEER Summary Stage 2000,SEERSumStg2000
+760,SEER Summary Stage 1977,SEERSumStg1977
+762,Derived SS2018,DerivedSS2018
+764,Summary Stage 2018,SS2018
+772,EOD Primary Tumor,EODPrimaryTumor
+774,EOD Regional Nodes,EODRegNodes
+776,EOD Mets,EODMets
+779,Extent of Disease 10-Dig,EOD10Dig
+780,EOD--Tumor Size,EODTumSize
+785,Derived EOD 2018 T,DerivedEOD18T
+790,EOD--Extension,EODExtent
+795,Derived EOD 2018 M,DerivedEOD18M
+800,EOD--Extension Prost Path,EODPathProst
+810,EOD--Lymph Node Involv,EODLymNode
+815,Derived EOD 2018 N,DerivedEOD18N
+818,Derived EOD 2018 Stage Group,DerivedEOD18StgGp
+820,Regional Nodes Positive,RegNodPos
+830,Regional Nodes Examined,RegNodExam
+832,Date of Sentinel Lymph Node Biopsy,DateSentinelLNBx
+833,Date Sentinel Lymph Node Biopsy Flag,DateSentLNBxFlag
+834,Sentinel Lymph Nodes Examined,SentinelNodesExam
+835,Sentinel Lymph Nodes Positive,SentinelNodesPos
+840,EOD--Old 13 Digit,EOD13Dig
+850,EOD--Old 2 Digit,EOD2Dig
+860,EOD--Old 4 Digit,EOD4Dig
+870,Coding System For EOD,EODCodSys
+880,TNM Path T,TNMPathT
+890,TNM Path N,TNMPathN
+900,TNM Path M,TNMPathM
+910,TNM Path Stage Group,TNMPathGrp
+920,TNM Path Descriptor,TNMPathDescr
+930,TNM Path Staged By,TNMPathStgBy
+940,TNM Clin T,TNMClinT
+950,TNM Clin N,TNMClinN
+960,TNM Clin M,TNMClinM
+970,TNM Clin Stage Group,TNMClinGrp
+980,TNM Clin Descriptor,TNMClinDesc
+990,TNM Clin Staged By,TNMClinStgBy
+995,AJCC ID,AJCCID
+1001,AJCC TNM Clin T,AJCCTNMClinT
+1002,AJCC TNM Clin N,AJCCTNMClinN
+1003,AJCC TNM Clin M,AJCCTNMClinM
+1004,AJCC TNM Clin Stage Group,AJCCTNMClinStgGrp
+1011,AJCC TNM Path T,AJCCTNMPathT
+1012,AJCC TNM Path N,AJCCTNMPathN
+1013,AJCC TNM Path M,AJCCTNMPathM
+1014,AJCC TNM Path Stage Group,AJCCTNMPathStgGrp
+1021,AJCC TNM Post Therapy T,AJCCTNMPostT
+1022,AJCC TNM Post Therapy N,AJCCTNMPostN
+1023,AJCC TNM Post Therapy M,AJCCTNMPostM
+1024,AJCC TNM Post Therapy Stage Group,AJCCTNMPostStgGrp
+1031,AJCC TNM Clin T Suffix,AJCCTNMClinTSfx
+1032,AJCC TNM Path T Suffix,AJCCTNMPathTSfx
+1033,AJCC TNM Post Therapy T Suffix,AJCCTNMPostTSfx
+1034,AJCC TNM Clin N Suffix,AJCCTNMClinNSfx
+1035,AJCC TNM Path N Suffix,AJCCTNMPathNSfx
+1036,AJCC TNM Post Therapy N Suffix,AJCCTNMPostNSfx
+1060,TNM Edition Number,TNMEdition
+1112,Mets at DX-Bone,MetsDxBone
+1113,Mets at DX-Brain,MetsDxBrain
+1114,Mets at DX-Distant LN,MetsDxDistantLN
+1115,Mets at DX-Liver,MetsDxLiver
+1116,Mets at DX-Lung,MetsDxLung
+1117,Mets at DX-Other,MetsDxOther
+1120,Pediatric Stage,PedStage
+1130,Pediatric Staging System,PedStageSys
+1140,Pediatric Staged By,PedStageBy
+1150,Tumor Marker 1,TumMark1
+1160,Tumor Marker 2,TumMark2
+1170,Tumor Marker 3,TumMark3
+1180,Reserved 05,Reserved05
+1182,Lymph-vascular Invasion,LVI
+1190,Reserved 06,Reserved06
+1200,RX Date Surgery,RxDateSurg
+1201,RX Date Surgery Flag,RxDateSurgFlag
+1210,RX Date Radiation,RxDateRad
+1211,RX Date Radiation Flag,RxDateRadFlag
+1220,RX Date Chemo,RxDateChemo
+1221,RX Date Chemo Flag,RxDateChemoFlag
+1230,RX Date Hormone,RxDateHorm
+1231,RX Date Hormone Flag,RxDateHormFlag
+1240,RX Date BRM,RxDateBRM
+1241,RX Date BRM Flag,RxDateBRMFlag
+1250,RX Date Other,RxDateOth
+1251,RX Date Other Flag,RxDateOthFlag
+1260,Date Initial RX SEER,FirstRxDateSEER
+1261,Date Initial RX SEER Flag,FirstRxDtSEERFlag
+1270,Date 1st Crs RX CoC,FirstRxDateCOC
+1271,Date 1st Crs RX CoC Flag,FirstRxDtCOCFlag
+1280,RX Date DX/Stg Proc,RxDateDxStg
+1281,RX Date DX/Stg Proc Flag,RxDateDxStgFlag
+1285,RX Summ--Treatment Status,RXSummRXStatus
+1290,RX Summ--Surg Prim Site,RxSumSurgPSite
+1292,RX Summ--Scope Reg LN Sur,RxSumScopeRegLN
+1294,RX Summ--Surg Oth Reg/Dis,RxSumSurgOthReg
+1296,RX Summ--Reg LN Examined,RxSumRegLNExam
+1300,Reserved 07,Reserved07
+1310,RX Summ--Surgical Approch,SurgApproch
+1320,RX Summ--Surgical Margins,RxSumSurgMarg
+1330,RX Summ--Reconstruct 1st,ReconSurg
+1340,Reason for No Surgery,ReasonNoSurg
+1350,RX Summ--DX/Stg Proc,RxSumDxStg
+1360,RX Summ--Radiation,RxSumRad
+1370,RX Summ--Rad to CNS,RxSumRadCNS
+1380,RX Summ--Surg/Rad Seq,RxSumSurgRadSeq
+1390,RX Summ--Chemo,RxSumChemo
+1400,RX Summ--Hormone,RxSumHorm
+1410,RX Summ--BRM,RxSumBRM
+1420,RX Summ--Other,RxSumOth
+1430,Reason for No Radiation,ReasonNoRad
+1460,RX Coding System--Current,RxCodSysCur
+1501,Phase I Dose per Fraction,PhaseIDoseFract
+1502,Phase I Radiation External Beam Planning Tech,PhaseIBeamTech
+1503,Phase I Number of Fractions,PhaseINumFract
+1504,Phase I Radiation Primary Treatment Volume,PhaseIPrimTxVol
+1505,Phase I Radiation to Draining Lymph Nodes,PhaseIRTtoLN
+1506,Phase I Radiation Treatment Modality,PhaseIRTModality
+1507,Phase I Total Dose,PhaseITotalDose
+1510,Rad--Regional Dose: cGy,RadRegDose
+1511,Phase II Dose per Fraction,PhaseIIDoseFract
+1512,Phase II Radiation External Beam Planning Tech,PhaseIIBeamTech
+1513,Phase II Number of Fractions,PhaseIINumFract
+1514,Phase II Radiation Primary Treatment Volume,PhaseIIPrimTxVol
+1515,Phase II Radiation to Draining Lymph Nodes,PhaseIIRTtoLN
+1516,Phase II Radiation Treatment Modality,PhaseIIRTModality
+1517,Phase II Total Dose,PhaseIITotalDose
+1520,Rad--No of Treatment Vol,RadNumRxVol
+1521,Phase III Dose per Fraction,PhaseIIIDoseFract
+1522,Phase III Radiation External Beam Planning Tech,PhaseIIIBeamTech
+1523,Phase III Number of Fractions,PhaseIIINumFract
+1524,Phase III Radiation Primary Treatment Volume,PhaseIIIPrimTxVol
+1525,Phase III Radiation to Draining Lymph Nodes,PhaseIIIRTtoLN
+1526,Phase III Radiation Treatment Modality,PhaseIIIRTModalty
+1527,Phase III Total Dose,PhaseIIITotalDose
+1531,Radiation Treatment Discontinued Early,RTDiscontEarly
+1532,Number of Phases of Rad Treatment to this Volume,NumPhasesRTtoVol
+1533,Total Dose,TotalDose
+1540,Rad--Treatment Volume,RadRxVol
+1550,Rad--Location of RX,RadLocRx
+1570,Rad--Regional RX Modality,RadRegModal
+1639,RX Summ--Systemic/Sur Seq,RxSumSysSurSeq
+1640,RX Summ--Surgery Type,RxSumSurgOld
+1646,RX Summ--Surg Site 98-02,RxSumSurgSite9802
+1647,RX Summ--Scope Reg 98-02,RxSumScopeReg9802
+1648,RX Summ--Surg Oth 98-02,RxSumSurgOth9802
+1650,Reserved 08,Reserved08
+1660,Subsq RX 2nd Course Date,SbsqRxDate2
+1661,Subsq RX 2ndCrs Date Flag,SbsqRxDateFlag2
+1670,Subsq RX 2nd Course Codes,SbsqRxCodes2
+1671,Subsq RX 2nd Course Surg,SbsqRxSurg2
+1672,Subsq RX 2nd Course Rad,SbsqRxRad2
+1673,Subsq RX 2nd Course Chemo,SbsqRxChemo2
+1674,Subsq RX 2nd Course Horm,SbsqRxHorm2
+1675,Subsq RX 2nd Course BRM,SbsqRxBRM2
+1676,Subsq RX 2nd Course Oth,SbsqRxOth2
+1677,Subsq RX 2nd--Scope LN Su,SbsqRxScpLN2
+1678,Subsq RX 2nd--Surg Oth,SbsqRxSurgOth2
+1679,Subsq RX 2nd--Reg LN Rem,SbsqRxRegLN2
+1680,Subsq RX 3rd Course Date,SbsqRxDate3
+1681,Subsq RX 3rdCrs Date Flag,SbsqRxDateFlag3
+1690,Subsq RX 3rd Course Codes,SbsqRxCodes3
+1691,Subsq RX 3rd Course Surg,SbsqRxSurg3
+1692,Subsq RX 3rd Course Rad,SbsqRxRad3
+1693,Subsq RX 3rd Course Chemo,SbsqRxChemo3
+1694,Subsq RX 3rd Course Horm,SbsqRxHorm3
+1695,Subsq RX 3rd Course BRM,SbsqRxBRM3
+1696,Subsq RX 3rd Course Oth,SbsqRxOth3
+1697,Subsq RX 3rd--Scope LN Su,SbsqRxScpLN3
+1698,Subsq RX 3rd--Surg Oth,SbsqRxSurgOth3
+1699,Subsq RX 3rd--Reg LN Rem,SbsqRxRegLN3
+1700,Subsq RX 4th Course Date,SbsqRxDate4
+1701,Subsq RX 4thCrs Date Flag,SbsqRxDateFlag4
+1710,Subsq RX 4th Course Codes,SbsqRxCodes4
+1711,Subsq RX 4th Course Surg,SbsqRxSurg4
+1712,Subsq RX 4th Course Rad,SbsqRxRad4
+1713,Subsq RX 4th Course Chemo,SbsqRxChemo4
+1714,Subsq RX 4th Course Horm,SbsqRxHorm4
+1715,Subsq RX 4th Course BRM,SbsqRxBRM4
+1716,Subsq RX 4th Course Oth,SbsqRxOth4
+1717,Subsq RX 4th--Scope LN Su,SbsqRxScpLN4
+1718,Subsq RX 4th--Surg Oth,SbsqRxSurgOth4
+1719,Subsq RX 4th--Reg LN Rem,SbsqRxRegLN4
+1740,Reserved 09,Reserved09
+1741,Subsq RX--Reconstruct Del,SbsqRxReconDel
+1750,Date of Last Contact,DateLastContact
+1751,Date of Last Contact Flag,DateLastContFlag
+1755,Date of Death--Canada,DateDeathCanada
+1756,Date of Death--CanadaFlag,DateDeathCanadaFl
+1760,Vital Status,VitalStatus
+1762,Vital Status Recode,VitStatRecode
+1770,Cancer Status,CAStat
+1772,Date of Last Cancer (tumor) Status,DateLastCAStat
+1773,Date of Last Cancer (tumor) Status Flag,DateLastCAStatFlg
+1775,Record Number Recode,RecNumberRecode
+1780,Quality Of Survival,QualSurv
+1782,Surv-Date Active Followup,SurvDateActiveFU
+1783,Surv-Flag Active Followup,SurvFlagActiveFU
+1784,Surv-Mos Active Followup,SurvMosActiveFU
+1785,Surv-Date Presumed Alive,SurvDatePresAlive
+1786,Surv-Flag Presumed Alive,SurvFlagPresAlive
+1787,Surv-Mos Presumed Alive,SurvMosPresAlive
+1788,Surv-Date DX Recode,SurvDateDxRecode
+1790,Follow-Up Source,FupSource
+1791,Follow-Up Source Central,FupSourceCentral
+1800,Next Follow-Up Source,NextFupSource
+1810,Addr Current--City,CurrCity
+1820,Addr Current--State,CurrState
+1830,Addr Current--Postal Code,CurrPostalZip
+1832,Addr Current--Country,CurrCountry
+1835,Reserved 10,Reserved10
+1840,County--Current,CurrCounty
+1842,Follow-Up Contact--City,FupContCity
+1844,Follow-Up Contact--State,FupContState
+1846,Follow-Up Contact--Postal,FupContPostalZip
+1847,Followup Contact--Country,FupContCountry
+1850,Unusual Follow-Up Method,FupUnusual
+1860,Recurrence Date--1st,RecurDate1st
+1861,Recurrence Date--1st Flag,RecurDate1stFlag
+1880,Recurrence Type--1st,RecurType1st
+1900,Reserved 11,Reserved11
+1910,Cause Of Death,DthCause
+1914,SEER Cause Specific COD,SEERCsSpecCOD
+1915,SEER Other COD,SEEROtherCOD
+1920,ICD Revision Number,ICDRevNum
+1930,Autopsy,Autopsy
+1940,Place of Death,DthPlace
+1942,Place of Death--State,DthPlaceState
+1944,Place of Death--Country,DthPlaceCountry
+1960,Site (73-91) ICD-O-1,OldSite
+1970,Morph (73-91) ICD-O-1,OldMorph
+1971,Histology (73-91) ICD-O-1,OldHist
+1972,Behavior (73-91) ICD-O-1,OldBeh
+1973,Grade (73-91) ICD-O-1,OldGrade
+1980,ICD-O-2 Conversion Flag,ICDConvFlg
+1981,Over-ride SS/NodesPos,OvrdSSNodesPos
+1982,Over-ride SS/TNM-N,OvrdSSTNMN
+1983,Over-ride SS/TNM-M,OvrdSSTNMM
+1985,Over-ride Acsn/Class/Seq,OvrdAcsnClassSeq
+1986,Over-ride HospSeq/DxConf,OvrdHospSeqDxConf
+1987,Over-ride COC-Site/Type,OvrdCOCSiteType
+1988,Over-ride HospSeq/Site,OvrdHospSeqSite
+1989,Over-ride Site/TNM-StgGrp,OvrdSiteTNMStgGrp
+1990,Over-ride Age/Site/Morph,OvrdAgeSiteMorph
+1992,Over-ride TNM Stage,OvrdTNMStage
+1993,Over-ride TNM Tis,OvrdTNMTis
+1994,Over-ride TNM 3,OvrdTNM3
+2000,Over-ride SeqNo/DxConf,OvrdSqDxCnf
+2010,Over-ride Site/Lat/SeqNo,OvrdSitLatSq
+2020,Over-ride Surg/DxConf,OvrdSurgDxCf
+2030,Over-ride Site/Type,OvrdSiteType
+2040,Over-ride Histology,OvrdHist
+2050,Over-ride Report Source,OvrdRepSrc
+2060,Over-ride Ill-define Site,OvrdIldfSite
+2070,"Over-ride Leuk, Lymphoma",OvrdLeukLym
+2071,Over-ride Site/Behavior,OvrdSiteBeh
+2072,Over-ride Site/EOD/DX Dt,OvrdSiteEODDxDt
+2073,Over-ride Site/Lat/EOD,OvrdSiteLatEOD
+2074,Over-ride Site/Lat/Morph,OvrdSiteLatMorph
+2078,Over-ride Name/Sex,OvrdNameSex
+2080,Reserved 13,Reserved13
+2081,CRC CHECKSUM,CRCCheckSum
+2085,Date Case Initiated,DateCaseInitiated
+2090,Date Case Completed,DtCaseComp
+2092,Date Case Completed--CoC,DtCaseCompCoC
+2100,Date Case Last Changed,DateLastChgd
+2110,Date Case Report Exported,DateExported
+2111,Date Case Report Received,DtCaseRptRcvd
+2112,Date Case Report Loaded,DtCaseRptLoad
+2113,Date Tumor Record Availbl,DtTumorRecAvail
+2116,ICD-O-3 Conversion Flag,ICDO3ConvFlag
+2120,SEER Coding Sys--Current,SEERCodSysCur
+2130,SEER Coding Sys--Original,SEERCodSysOrg
+2140,COC Coding Sys--Current,COCCodSysCur
+2150,COC Coding Sys--Original,COCCodSysOrg
+2152,CoC Accredited Flag,CoCAccreditedFlag
+2155,RQRS NCDB Submission Flag,RQRSNCDBSubFlag
+2170,Vendor Name,VendorName
+2180,SEER Type of Follow-Up,SEERTypeFup
+2190,SEER Record Number,SEERRecNum
+2200,Diagnostic Proc 73-87,DxProcs
+2210,Reserved 14,Reserved14
+2220,State/Requestor Items,StateRequestor
+2230,Name--Last,LastName
+2240,Name--First,FirstName
+2250,Name--Middle,MiddleName
+2260,Name--Prefix,NamePrefix
+2270,Name--Suffix,NameSuffix
+2280,Name--Alias,Alias
+2290,Name--Spouse/Parent,SpouseName
+2300,Medical Record Number,MedRecNum
+2310,Military Record No Suffix,MilRecNumSfx
+2315,Medicare Beneficiary Identifier,MedicareBenefID
+2320,Social Security Number,SocSec
+2330,Addr at DX--No & Street,DxNumAndSt
+2335,Addr at DX--Supplementl,DxSupp
+2350,Addr Current--No & Street,CurrNumAndSt
+2352,Latitude,Latitude
+2354,Longitude,Longitude
+2355,Addr Current--Supplementl,CurrSupp
+2360,Telephone,Phone
+2380,DC State File Number,DCStateFileNum
+2390,Name--Maiden,MaidName
+2392,Follow-Up Contact--No&St,FupContNumAndSt
+2393,Follow-Up Contact--Suppl,FupContSupp
+2394,Follow-Up Contact--Name,FupContName
+2400,Reserved 15,Reserved15
+2410,Institution Referred From,HosRefFrom
+2415,NPI--Inst Referred From,NPIInstRefFrom
+2420,Institution Referred To,HosRefTo
+2425,NPI--Inst Referred To,NPIInstRefTo
+2440,Following Registry,FollowRegistry
+2445,NPI--Following Registry,NPIFollowRegistry
+2450,Reserved 16,Reserved16
+2460,Physician--Managing,PhysManaging
+2465,NPI--Physician--Managing,NPIPhysManaging
+2470,Physician--Follow-Up,PhysFup
+2475,NPI--Physician--Follow-Up,NPIPhysFup
+2480,Physician--Primary Surg,PhysPriSurg
+2485,NPI--Physician--Primary Surg,NPIPhysPriSurg
+2490,Physician 3,Phys3
+2495,NPI--Physician 3,NPIPhys3
+2500,Physician 4,Phys4
+2505,NPI--Physician 4,NPIPhys4
+2508,EHR Reporting,EHRReporting
+2510,Reserved 12,Reserved12
+2520,Text--DX Proc--PE,TxDxPE
+2530,Text--DX Proc--X-ray/scan,TxDxXray
+2540,Text--DX Proc--Scopes,TxDxScope
+2550,Text--DX Proc--Lab Tests,TxDxLab
+2560,Text--DX Proc--Op,TxDxOp
+2570,Text--DX Proc--Path,TxDxPath
+2580,Text--Primary Site Title,TxPSite
+2590,Text--Histology Title,TxHist
+2600,Text--Staging,TxStage
+2610,RX Text--Surgery,TxRxSurg
+2620,RX Text--Radiation (Beam),TxRxRadBm
+2630,RX Text--Radiation Other,TxRxRadOth
+2640,RX Text--Chemo,TxRxChemo
+2650,RX Text--Hormone,TxRxHorm
+2660,RX Text--BRM,TxRxBRM
+2670,RX Text--Other,TxRxOth
+2680,Text--Remarks,TxRemarks
+2690,Text--Place Of Diagnosis,TxDxPlace
+2800,CS Tumor Size,CSTumorSize
+2810,CS Extension,CSExt
+2820,CS Tumor Size/Ext Eval,CSSizeExtEval
+2830,CS Lymph Nodes,CSLymphNodes
+2840,CS Lymph Nodes Eval,CSNodesEval
+2850,CS Mets at DX,CSMetsAtDx
+2851,CS Mets at Dx-Bone,CSMetsAtDxBone
+2852,CS Mets at Dx-Brain,CSMetsAtDxBrain
+2853,CS Mets at Dx-Liver,CSMetsAtDxLiver
+2854,CS Mets at Dx-Lung,CSMetsAtDxLung
+2860,CS Mets Eval,CSMetsEval
+2861,CS Site-Specific Factor 7,CSSSF7
+2862,CS Site-Specific Factor 8,CSSSF8
+2863,CS Site-Specific Factor 9,CSSSF9
+2864,CS Site-Specific Factor10,CSSSF10
+2865,CS Site-Specific Factor11,CSSSF11
+2866,CS Site-Specific Factor12,CSSSF12
+2867,CS Site-Specific Factor13,CSSSF13
+2868,CS Site-Specific Factor14,CSSSF14
+2869,CS Site-Specific Factor15,CSSSF15
+2870,CS Site-Specific Factor16,CSSSF16
+2871,CS Site-Specific Factor17,CSSSF17
+2872,CS Site-Specific Factor18,CSSSF18
+2873,CS Site-Specific Factor19,CSSSF19
+2874,CS Site-Specific Factor20,CSSSF20
+2875,CS Site-Specific Factor21,CSSSF21
+2876,CS Site-Specific Factor22,CSSSF22
+2877,CS Site-Specific Factor23,CSSSF23
+2878,CS Site-Specific Factor24,CSSSF24
+2879,CS Site-Specific Factor25,CSSSF25
+2880,CS Site-Specific Factor 1,CSSSF1
+2890,CS Site-Specific Factor 2,CSSSF2
+2900,CS Site-Specific Factor 3,CSSSF3
+2910,CS Site-Specific Factor 4,CSSSF4
+2920,CS Site-Specific Factor 5,CSSSF5
+2930,CS Site-Specific Factor 6,CSSSF6
+2935,CS Version Input Original,CSVerInputOrig
+2936,CS Version Derived,CSVerDerived
+2937,CS Version Input Current,CSVerInputCurrent
+2940,Derived AJCC-6 T,DerivedAJCC6T
+2950,Derived AJCC-6 T Descript,DerivedAJCC6TDes
+2960,Derived AJCC-6 N,DerivedAJCC6N
+2970,Derived AJCC-6 N Descript,DerivedAJCC6NDes
+2980,Derived AJCC-6 M,DerivedAJCC6M
+2990,Derived AJCC-6 M Descript,DerivedAJCC6MDes
+3000,Derived AJCC-6 Stage Grp,DerivedAJCC6StGrp
+3010,Derived SS1977,DerivedSS1977
+3020,Derived SS2000,DerivedSS2000
+3030,Derived AJCC--Flag,DerivedTNMFlag
+3040,Derived SS1977--Flag,DerivedSS77Flag
+3050,Derived SS2000--Flag,DerivedSS2000Flag
+3100,Archive FIN,ArchiveFIN
+3105,NPI--Archive FIN,NPIArchiveFIN
+3110,Comorbid/Complication 1,ComorbidComp1
+3120,Comorbid/Complication 2,ComorbidComp2
+3130,Comorbid/Complication 3,ComorbidComp3
+3140,Comorbid/Complication 4,ComorbidComp4
+3150,Comorbid/Complication 5,ComorbidComp5
+3160,Comorbid/Complication 6,ComorbidComp6
+3161,Comorbid/Complication 7,ComorbidComp7
+3162,Comorbid/Complication 8,ComorbidComp8
+3163,Comorbid/Complication 9,ComorbidComp9
+3164,Comorbid/Complication 10,ComorbidComp10
+3165,ICD Revision Comorbid,ICDRevComorbid
+3170,RX Date Mst Defn Srg,RxDateMostDefSurg
+3171,RX Date Mst Defn Srg Flag,RxDateDefSurgFlag
+3180,RX Date Surg Disch,RxDateSurgDisch
+3181,RX Date Surg Disch Flag,RxDateSurgDisFlag
+3190,Readm Same Hosp 30 Days,ReadmSameHosp
+3200,Rad--Boost RX Modality,RadBoostRxModal
+3210,Rad--Boost Dose cGy,RadBoostDose
+3220,RX Date Rad Ended,RxDateRadEnd
+3221,RX Date Rad Ended Flag,RxDateRadEndFlag
+3230,RX Date Systemic,RxDateSystemic
+3231,RX Date Systemic Flag,RxDateSystmcFlag
+3250,RX Summ--Transplnt/Endocr,RxSumTransEndo
+3270,RX Summ--Palliative Proc,RxSumPalliative
+3280,RX Hosp--Palliative Proc,RxHPalliative
+3300,RuralUrban Continuum 1993,RuralUrbanCon1993
+3310,RuralUrban Continuum 2003,RuralUrbanCon2003
+3312,RuralUrban Continuum 2013,RuralUrbanCon2013
+3400,Derived AJCC-7 T,DerivedAJCC7T
+3402,Derived AJCC-7 T Descript,DerivedAJCC7TDes
+3410,Derived AJCC-7 N,DerivedAJCC7N
+3412,Derived AJCC-7 N Descript,DerivedAJCC7NDes
+3420,Derived AJCC-7 M,DerivedAJCC7M
+3422,Derived AJCC-7 M Descript,DerivedAJCC7MDes
+3430,Derived AJCC-7 Stage Grp,DerivedAJCC7StGrp
+3440,Derived PreRx-7 T,DerivedPreRx7T
+3442,Derived PreRx-7 T Descrip,DerivedPreRx7TDes
+3450,Derived PreRx-7 N,DerivedPreRx7N
+3452,Derived PreRx-7 N Descrip,DerivedPreRx7NDes
+3460,Derived PreRx-7 M,DerivedPreRx7M
+3462,Derived PreRx-7 M Descrip,DerivedPreRx7MDes
+3470,Derived PreRx-7 Stage Grp,DerivedPreRx7StGp
+3480,Derived PostRx-7 T,DerivedPostRx7T
+3482,Derived PostRx-7 N,DerivedPostRx7N
+3490,Derived PostRx-7 M,DerivedPostRx7M
+3492,Derived PostRx-7 Stge Grp,DerivedPostRx7SGp
+3600,Derived Neoadjuv Rx Flag,DerivedNeoadjFlag
+3605,Derived SEER Path Stg Grp,DerivedSEERPStg
+3610,Derived SEER Clin Stg Grp,DerivedSEERCStg
+3614,Derived SEER Cmb Stg Grp,DerivedSEERCmbStg
+3616,Derived SEER Combined T,DerivedSEERCmbT
+3618,Derived SEER Combined N,DerivedSEERCmbN
+3620,Derived SEER Combined M,DerivedSEERCmbM
+3622,Derived SEER Cmb T Src,DerivedSEERCmbTSr
+3624,Derived SEER Cmb N Src,DerivedSEERCmbNSr
+3626,Derived SEER Cmb M Src,DerivedSEERCmbMSr
+3645,NPCR Derived AJCC 8 TNM Clin Stg Grp,NPCRDerClinStgGrp
+3646,NPCR Derived AJCC 8 TNM Path Stg Grp,NPCRDerPathStgGrp
+3647,NPCR Derived AJCC 8 TNM Post Therapy Stg Grp,NPCRDerPostStgGrp
+3650,NPCR Derived Clin Stg Grp,NPCRDerivedCStg
+3655,NPCR Derived Path Stg Grp,NPCRDerivedPStg
+3700,SEER Site-Specific Fact 1,SEERSSF1
+3702,SEER Site-Specific Fact 2,SEERSSF2
+3704,SEER Site-Specific Fact 3,SEERSSF3
+3706,SEER Site-Specific Fact 4,SEERSSF4
+3708,SEER Site-Specific Fact 5,SEERSSF5
+3710,SEER Site-Specific Fact 6,SEERSSF6
+3720,NPCR Specific Field,NPCRField
+3750,Over-ride CS 1,OvrdCS1
+3751,Over-ride CS 2,OvrdCS2
+3752,Over-ride CS 3,OvrdCS3
+3753,Over-ride CS 4,OvrdCS4
+3754,Over-ride CS 5,OvrdCS5
+3755,Over-ride CS 6,OvrdCS6
+3756,Over-ride CS 7,OvrdCS7
+3757,Over-ride CS 8,OvrdCS8
+3758,Over-ride CS 9,OvrdCS9
+3759,Over-ride CS 10,OvrdCS10
+3760,Over-ride CS 11,OvrdCS11
+3761,Over-ride CS 12,OvrdCS12
+3762,Over-ride CS 13,OvrdCS13
+3763,Over-ride CS 14,OvrdCS14
+3764,Over-ride CS 15,OvrdCS15
+3765,Over-ride CS 16,OvrdCS16
+3766,Over-ride CS 17,OvrdCS17
+3767,Over-ride CS 18,OvrdCS18
+3768,Over-ride CS 19,OvrdCS19
+3769,Over-ride CS 20,OvrdCS20
+3780,Secondary Diagnosis 1,SecondaryDx1
+3782,Secondary Diagnosis 2,SecondaryDx2
+3784,Secondary Diagnosis 3,SecondaryDx3
+3786,Secondary Diagnosis 4,SecondaryDx4
+3788,Secondary Diagnosis 5,SecondaryDx5
+3790,Secondary Diagnosis 6,SecondaryDx6
+3792,Secondary Diagnosis 7,SecondaryDx7
+3794,Secondary Diagnosis 8,SecondaryDx8
+3796,Secondary Diagnosis 9,SecondaryDx9
+3798,Secondary Diagnosis 10,SecondaryDx10
+3800,Schema ID,SchemaID
+3801,Chromosome 1p: Loss of Heterozygosity (LOH),Chromosome1pLOH
+3802,Chromosome 19q: Loss of Heterozygosity (LOH),Chromosome19qLOH
+3803,Adenoid Cystic Basaloid Pattern,AdenoidCysticBsld
+3804,Adenopathy,Adenopathy
+3805,AFP Post-Orchiectomy Lab Value,AFPPostOrchValue
+3806,AFP Post-Orchiectomy Range,AFPPostOrchRange
+3807,AFP Pre-Orchiectomy Lab Value,AFPPreOrchValue
+3808,AFP Pre-Orchiectomy Range,AFPPreOrchRange
+3809,AFP Pretreatment Interpretation,AFPPreInterp
+3810,AFP Pretreatment Lab Value,AFPPreValue
+3811,Anemia,Anemia
+3812,B symptoms,Bsymptoms
+3813,Bilirubin Pretreatment Total Lab Value,BilirubinPreValue
+3814,Bilirubin Pretreatment Unit of Measure,BilirubinPreUnit
+3815,Bone Invasion,BoneInvasion
+3816,Brain Molecular Markers,BrainMolMarkers
+3817,Breslow Tumor Thickness,BreslowThickness
+3818,CA-125 Pretreatment Interpretation,CA125PreInterp
+3819,CEA Pretreatment Interpretation,CEAPreInterp
+3820,CEA Pretreatment Lab Value,CEAPreValue
+3821,Chromosome 3 Status,Chromosome3Status
+3822,Chromosome 8q Status,Chromosome8qStat
+3823,Circumferential Resection Margin (CRM),CRMargin
+3824,Creatinine Pretreatment Lab Value,CreatininePreValu
+3825,Creatinine Pretreatment Unit of Measure,CreatininePreUnit
+3826,Estrogen Receptor Percent Positive or Range,ERPercentPosOrRng
+3827,Estrogen Receptor Summary,ERSummary
+3828,Estrogen Receptor Total Allred Score,ERTotalAllred
+3829,Esophagus and EGJ Tumor Epicenter,EsophEpicenter
+3830,Extranodal Extension Clin (non-Head and Neck),ENEClinNotHN
+3831,Extranodal Extension Head and Neck Clinical,ENEClinHN
+3832,Extranodal Extension Head and Neck Pathological,ENEPathHN
+3833,Extranodal Extension Path (non-Head and Neck),ENEPathNotHN
+3834,Extravascular Matrix Patterns,ExtravascMatrix
+3835,Fibrosis Score,FibrosisScore
+3836,FIGO Stage,FIGOStage
+3837,Gestational Trophoblastic Prognostic Scoring Index,GestPrognostIndex
+3838,Gleason Patterns Clinical,GleasonPatClin
+3839,Gleason Patterns Pathological,GleasonPatPath
+3840,Gleason Score Clinical,GleasonScoreClin
+3841,Gleason Score Pathological,GleasonScorePath
+3842,Gleason Tertiary Pattern,GleasonTertiaryPt
+3843,Grade Clinical,GradeClin
+3844,Grade Pathological,GradePath
+3845,Grade Post Therapy,GradePost
+3846,hCG Post-orchiectomy Lab Value,hCGPostOrchValue
+3847,hCG Post-orchiectomy Range,hCGPostOrchRange
+3848,hCG Pre-orchiectomy Lab Value,hCGPreOrchValue
+3849,hCG Pre-orchiectomy Range,hCGPreOrchRange
+3850,HER2 IHC Summary,HER2IHCSummary
+3851,HER2 ISH Dual Probe Copy Number,HER2ISHDualNum
+3852,HER2 ISH Dual Probe Ratio,HER2ISHDualRatio
+3853,HER2 ISH Single Probe Copy Number,HER2ISHSingleNum
+3854,HER2 ISH Summary,HER2ISHSummary
+3855,HER2 Overall Summary,HER2OverallSumm
+3856,Heritable Trait,HeritableTrait
+3857,High Risk Cytogenetics,HighRiskCytogenet
+3858,High Risk Histologic Features,HighRiskHistFeat
+3859,HIV Status,HIVStatus
+3860,International Normalized Ratio Prothrombin Time,INRProTime
+3861,Ipsilateral Adrenal Gland Involvement,IpsiAdrenalInvol
+3862,JAK2,JAK2
+3863,Ki-67,Ki67
+3864,Invasion Beyond Capsule,BeyondCapsule
+3865,KIT Gene Immunohistochemistry,KITGeneIHC
+3866,KRAS,KRAS
+3867,LDH Post-Orchiectomy Range,LDHPostOrchRange
+3868,LDH Pre-Orchiectomy Range,LDHPreOrchRange
+3869,LDH Pretreatment Level,LDHPreTxLevel
+3870,LDH Upper Limits of Normal,LDHUpperNormal
+3871,LN Assessment Method Femoral-Inguinal,LNMethodFemIng
+3872,LN Assessment Method Para-aortic,LNMethodParaAort
+3873,LN Assessment Method Pelvic,LNMethodPelvic
+3874,LN Distant Assessment Method,LNDistantMethod
+3875,"LN Distant: Mediastinal, Scalene",LNDistMediasScaln
+3876,LN Head and Neck Levels I-III,LNHNLevelsI_III
+3877,LN Head and Neck Levels IV-V,LNHNLevelsIV_V
+3878,LN Head and Neck Levels VI-VII,LNHNLevelsVI_VII
+3879,LN Head and Neck Other,LNHNLevelsOther
+3880,LN Isolated Tumor Cells (ITC),LN_ITCs
+3881,LN Laterality,LNLaterality
+3882,LN Positive Axillary Level I-II,LNPosAxLevelsI_II
+3883,LN Size,LNSize
+3884,"LN Status Femoral-Inguinal, Para-aortic, Pelvic",LNFemIngParaAPelv
+3885,Lymphocytosis,Lymphocytosis
+3886,Major Vein Involvement,MajorVeinInvolv
+3887,Measured Basal Diameter,BasalDiameter
+3888,Measured Thickness,Thickness
+3889,Methylation of O6-Methylguanine-Methyltransferase,MethylationO6MGMT
+3890,Microsatellite Instability (MSI),MSI
+3891,Microvascular Density,MicrovascDensity
+3892,Mitotic Count Uveal Melanoma,MitoticCountUvea
+3893,Mitotic Rate Melanoma,MitoticRateMelano
+3894,Multigene Signature Method,MultigeneMethod
+3895,Multigene Signature Results,MultigeneResults
+3896,NCCN International Prognostic Index (IPI),NCCNIPI
+3897,Number of Cores Examined,NumCoresExam
+3898,Number of Cores Positive,NumCoresPos
+3899,Number of Examined Para-Aortic Nodes,NumNodesExamParaA
+3900,Number of Examined Pelvic Nodes,NumNodesExamPelv
+3901,Number of Positive Para-Aortic Nodes,NumNodesPosParaA
+3902,Number of Positive Pelvic Nodes,NumNodesPosPelv
+3903,Oncotype Dx Recurrence Score-DCIS,OncotypeScoreDCIS
+3904,Oncotype Dx Recurrence Score-Invasive,OncotypeScoreInv
+3905,Oncotype Dx Risk Level-DCIS,OncotypeRiskDCIS
+3906,Oncotype Dx Risk Level-Invasive,OncotypeRiskInvas
+3907,Organomegaly,Organomegaly
+3908,Percent Necrosis Post Neoadjuvant,PercntNecrosPost
+3909,Perineural Invasion,PerineuralInv
+3910,Peripheral Blood Involvement,PeriphBloodInv
+3911,Peritoneal Cytology,PeritonealCytol
+3913,Pleural Effusion,PleuralEffusion
+3914,Progesterone Receptor Percent Positive or Range,PRPercentPosOrRng
+3915,Progesterone Receptor Summary,PRSummary
+3916,Progesterone Receptor Total Allred Score,PRTotalAllred
+3917,Primary Sclerosing Cholangitis,PSclerCholangitis
+3918,Profound Immune Suppression,ImmuneSupp
+3919,Prostate Pathological Extension,ProstatePathExt
+3920,PSA (Prostatic Specific Antigen) Lab Value,PSAValue
+3921,Residual Tumor Volume Post Cytoreduction,ResidPostCytoredu
+3922,Response to Neoadjuvant Therapy,RspnsToNeoadjuvt
+3923,S Category Clinical,SCatClin
+3924,S Category Pathological,SCatPath
+3925,Sarcomatoid Features,Sarcomatoid
+3926,Schema Discriminator 1,SchemaDisc1
+3927,Schema Discriminator 2,SchemaDisc2
+3928,Schema Discriminator 3,SchemaDisc3
+3929,Separate Tumor Nodules,SepNodules
+3930,Serum Albumin Pretreatment Level,AlbuminPreTxLevl
+3931,Serum Beta-2 Microglobulin Pretreatment Level,Beta2MGPreTxLvl
+3932,LDH Pretreatment Lab Value,LDHPreTxValue
+3933,Thrombocytopenia,Thrombocytopenia
+3934,Tumor Deposits,TumorDeposits
+3935,Tumor Growth Pattern,TumorGrowthPat
+3936,Ulceration,Ulceration
+3937,Visceral and Parietal Pleural Invasion,PleuralInv
+7010,Path Reporting Fac ID 1,PathRepFacID1
+7011,Path Reporting Fac ID 2,PathRepFacID2
+7012,Path Reporting Fac ID 3,PathRepFacID3
+7013,Path Reporting Fac ID 4,PathRepFacID4
+7014,Path Reporting Fac ID 5,PathRepFacID5
+7090,Path Report Number 1,PathNumber1
+7091,Path Report Number 2,PathNumber2
+7092,Path Report Number 3,PathNumber3
+7093,Path Report Number 4,PathNumber4
+7094,Path Report Number 5,PathNumber5
+7100,Path Order Phys Lic No 1,PathOrderPhys1
+7101,Path Order Phys Lic No 2,PathOrderPhys2
+7102,Path Order Phys Lic No 3,PathOrderPhys3
+7103,Path Order Phys Lic No 4,PathOrderPhys4
+7104,Path Order Phys Lic No 5,PathOrderPhys5
+7190,Path Ordering Fac No 1,PathOrderFac1
+7191,Path Ordering Fac No 2,PathOrderFac2
+7192,Path Ordering Fac No 3,PathOrderFac3
+7193,Path Ordering Fac No 4,PathOrderFac4
+7194,Path Ordering Fac No 5,PathOrderFac5
+7320,Path Date Spec Collect 1,PathDateCollect1
+7321,Path Date Spec Collect 2,PathDateCollect2
+7322,Path Date Spec Collect 3,PathDateCollect3
+7323,Path Date Spec Collect 4,PathDateCollect4
+7324,Path Date Spec Collect 5,PathDateCollect5
+7480,Path Report Type 1,PathType1
+7481,Path Report Type 2,PathType2
+7482,Path Report Type 3,PathType3
+7483,Path Report Type 4,PathType4
+7484,Path Report Type 5,PathType5
