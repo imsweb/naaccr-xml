@@ -15,12 +15,19 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 public class TestingUtils {
 
     /**
+     * Returns the project root folder.
+     */
+    public static String getWorkingDirectory() {
+        return System.getProperty("user.dir").replace(".idea\\modules", ""); // this will make it work in IntelliJ and outside of it...
+    }
+
+    /**
      * Create a user-defined dictionary that can be used in various unit tests.
      */
     public static NaaccrDictionary createUserDictionary() {
         return createUserDictionary(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
     }
-    
+
     /**
      * Create a user-defined dictionary that can be used in various unit tests.
      */
@@ -55,7 +62,7 @@ public class TestingUtils {
      * @return corresponding data file
      */
     public static File getDataFile(String name) {
-        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/" + name);
+        File file = new File(getWorkingDirectory() + "/src/test/resources/data/" + name);
         if (!file.exists())
             throw new RuntimeException("Unable to find testing data file '" + name + "'");
         return file;
@@ -83,7 +90,6 @@ public class TestingUtils {
      * Creates a file in a "test-tmp" folder in the build folder.
      * @param filename name of the file to create
      * @return created file
-     * @throws IOException
      */
     public static File createFile(String filename) throws IOException {
         return createFile(filename, true);
@@ -93,7 +99,6 @@ public class TestingUtils {
      * Creates a file in a "test-tmp" folder in the build folder.
      * @param filename name of the file to create
      * @return created file
-     * @throws IOException
      */
     public static File createFile(String filename, boolean autoDelete) throws IOException {
 
@@ -114,7 +119,6 @@ public class TestingUtils {
      * @param filename name of the file to crate
      * @param records records (as lines) to add to the file
      * @return the created file
-     * @throws IOException
      */
     public static File createAndPopulateFile(String filename, StringBuilder... records) throws IOException {
         File file = createFile(filename);

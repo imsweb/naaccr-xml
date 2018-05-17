@@ -32,11 +32,11 @@ public class NaaccrXmlUtilsTest {
 
     @Test
     public void testFlatToXml() throws IOException {
-        File xmlFile = new File(System.getProperty("user.dir") + "/build/test.xml");
+        File xmlFile = new File(TestingUtils.getWorkingDirectory() + "/build/test.xml");
 
         // it's not great to use another write method for testing this one, but it's convenient, so whatever...
-        NaaccrData data = NaaccrXmlUtils.readXmlFile(new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file.xml"), null, null, null);
-        File flatFile = new File(System.getProperty("user.dir") + "/build/test.txt");
+        NaaccrData data = NaaccrXmlUtils.readXmlFile(new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/standard-file.xml"), null, null, null);
+        File flatFile = new File(TestingUtils.getWorkingDirectory() + "/build/test.txt");
         NaaccrXmlUtils.writeFlatFile(data, flatFile, null, null, null);
 
         // convert flat to XML; make sure the conversion worked by reading the data back
@@ -62,11 +62,11 @@ public class NaaccrXmlUtilsTest {
 
     @Test
     public void testXmlToFlat() throws IOException {
-        File flatFile = new File(System.getProperty("user.dir") + "/build/test.txt");
+        File flatFile = new File(TestingUtils.getWorkingDirectory() + "/build/test.txt");
 
         // it's not great to use another write method for testing this one, but it's convenient, so whatever...
-        NaaccrData data = NaaccrXmlUtils.readXmlFile(new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file.xml"), null, null, null);
-        File xmlFile = new File(System.getProperty("user.dir") + "/build/test.xml");
+        NaaccrData data = NaaccrXmlUtils.readXmlFile(new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/standard-file.xml"), null, null, null);
+        File xmlFile = new File(TestingUtils.getWorkingDirectory() + "/build/test.xml");
         NaaccrXmlUtils.writeXmlFile(data, xmlFile, null, null, null);
 
         // convert XML to flat; make sure the conversion worked by reading the data back
@@ -95,7 +95,7 @@ public class NaaccrXmlUtilsTest {
 
     @Test
     public void testReadXmlFile() throws IOException {
-        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file.xml");
+        File file = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/standard-file.xml");
 
         // get the format from the file (not necessary, one could hard-code it in the reading call)
         String format = NaaccrXmlUtils.getFormatFromXmlFile(file);
@@ -147,11 +147,11 @@ public class NaaccrXmlUtilsTest {
         data.addPatient(patient2);
 
         // write the entire file at once
-        File file = new File(System.getProperty("user.dir") + "/build/test-writing-1.xml");
+        File file = new File(TestingUtils.getWorkingDirectory() + "/build/test-writing-1.xml");
         NaaccrXmlUtils.writeXmlFile(data, file, null, null, null);
 
         // write the file using a steam
-        file = new File(System.getProperty("user.dir") + "/build/test-writing-2.xml");
+        file = new File(TestingUtils.getWorkingDirectory() + "/build/test-writing-2.xml");
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
             for (Patient patient : data.getPatients())
                 writer.writePatient(patient);
@@ -212,11 +212,11 @@ public class NaaccrXmlUtilsTest {
     public void testGetFormatFromFlatFile() throws IOException {
 
         // regular file
-        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/fake-naaccr14inc-1-rec.txt");
+        File file = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/fake-naaccr14inc-1-rec.txt");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromFlatFile(file));
 
         // not a valid file
-        file = new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file.xml");
+        file = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/standard-file.xml");
         Assert.assertNull(NaaccrXmlUtils.getFormatFromFlatFile(file));
     }
 
@@ -224,14 +224,14 @@ public class NaaccrXmlUtilsTest {
     public void testGetFormatFromXmlFile() throws IOException {
 
         // regular file
-        File file1 = new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file.xml");
+        File file1 = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/standard-file.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_16_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file1));
 
         // this one contains extensions
-        File file2 = new File(System.getProperty("user.dir") + "/src/test/resources/data/standard-file-extension.xml");
+        File file2 = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/standard-file-extension.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_16_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file2));
 
-        Files.newDirectoryStream(Paths.get(System.getProperty("user.dir"), "src", "test", "resources", "data", "validity", "valid")).forEach(path ->
+        Files.newDirectoryStream(Paths.get(TestingUtils.getWorkingDirectory() , "src", "test", "resources", "data", "validity", "valid")).forEach(path ->
                 Assert.assertNotNull(path.toString(), NaaccrXmlUtils.getFormatFromXmlFile(path.toFile())));
 
     }
@@ -240,7 +240,7 @@ public class NaaccrXmlUtilsTest {
     public void testGetAttributesFromXmlFile() {
 
         // a regular file which includes an extra attribute
-        File file = new File(System.getProperty("user.dir") + "/src/test/resources/data/read-attributes-1.xml");
+        File file = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/read-attributes-1.xml");
         Map<String, String> attr = NaaccrXmlUtils.getAttributesFromXmlFile(file);
         Assert.assertEquals("http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
         Assert.assertNull(attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT));
@@ -249,17 +249,17 @@ public class NaaccrXmlUtilsTest {
         Assert.assertEquals("whatever", attr.get("myOwnExtraAttribute"));
 
         // another good file with less attributes
-        file = new File(System.getProperty("user.dir") + "/src/test/resources/data/read-attributes-2.xml");
+        file = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/read-attributes-2.xml");
         attr = NaaccrXmlUtils.getAttributesFromXmlFile(file);
         Assert.assertEquals("http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
         Assert.assertEquals("I", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE));
 
         // a bad file (missing required attributes)
-        file = new File(System.getProperty("user.dir") + "/src/test/resources/data/read-attributes-3.xml");
+        file = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/read-attributes-3.xml");
         Assert.assertTrue(NaaccrXmlUtils.getAttributesFromXmlFile(file).isEmpty());
 
         // a complete garbage file
-        file = new File(System.getProperty("user.dir") + "/src/test/resources/data/read-attributes-4.xml");
+        file = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/read-attributes-4.xml");
         Assert.assertTrue(NaaccrXmlUtils.getAttributesFromXmlFile(file).isEmpty());
     }
 
