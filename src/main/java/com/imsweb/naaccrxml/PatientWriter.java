@@ -3,9 +3,11 @@
  */
 package com.imsweb.naaccrxml;
 
+import java.io.Closeable;
+
 import com.imsweb.naaccrxml.entity.Patient;
 
-public interface PatientWriter extends AutoCloseable {
+public interface PatientWriter extends Closeable {
 
     /**
      * Writes the given patient on this stream.

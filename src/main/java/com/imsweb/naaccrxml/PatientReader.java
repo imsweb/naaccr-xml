@@ -3,13 +3,15 @@
  */
 package com.imsweb.naaccrxml;
 
+import java.io.Closeable;
+
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 
 /**
  * Common interface for the two types of patient readers supported by this library.
  */
-public interface PatientReader extends AutoCloseable {
+public interface PatientReader extends Closeable {
 
     /**
      * Reads the next patient on this stream.

@@ -2,6 +2,7 @@
 
 **Version 4.9**
 
+- PatientReader and PatientWriter interfaces are now extending Closeable instead of AutoCloseable.
 - Added support for creating SAS definition file in the standalone GUI interface.
 
 **Version 4.8**
