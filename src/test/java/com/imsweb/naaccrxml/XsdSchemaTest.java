@@ -37,7 +37,7 @@ public class XsdSchemaTest {
 
     @Test
     public void testXsdAgainstLibrary() throws IOException {
-        Path dir = Paths.get(TestingUtils.getWorkingDirectory()+ "src/test/resources/data/validity");
+        Path dir = Paths.get(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/validity");
 
         // files in this folder are supposed to be valid according to the current specs
         Files.newDirectoryStream(dir.resolve("valid")).forEach(path -> {
