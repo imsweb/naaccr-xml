@@ -92,7 +92,7 @@ public class Standalone extends JFrame implements ActionListener {
         JMenu toolsMenu = new JMenu(" Tools ");
         toolsMenu.setMnemonic(KeyEvent.VK_T);
         bar.add(toolsMenu);
-        JMenuItem sasMenu = new JMenu("Create SAS Definition ");
+        JMenuItem sasMenu = new JMenu("Create SAS XMLMapper Definition File");
         toolsMenu.add(sasMenu);
         List<String> versions = NaaccrFormat.getSupportedVersions().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
         for (int i = 0; i < versions.size(); i++) {
