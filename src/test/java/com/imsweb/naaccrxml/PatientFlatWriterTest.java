@@ -234,18 +234,22 @@ public class PatientFlatWriterTest {
     public void testValuesWithNewLines() throws IOException {
 
         // create the root data
-        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_INCIDENCE);
+        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_ABSTRACT);
         data.addItem(new Item("registryId", "0000000001"));
 
         File file = TestingUtils.createFile("test-flat-writer-values-with-new-lines.txt");
         PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, null, (NaaccrDictionary)null);
         Patient patient = new Patient();
         patient.addItem(new Item("patientIdNumber", "000000\r\n1"));
+        Tumor tumor = new Tumor();
+        tumor.addItem(new Item("followUpContactName", "some\nvalue"));
+        patient.addTumor(tumor);
         writer.writePatient(patient);
         writer.close();
         List<String> lines = TestingUtils.readFile(file);
         Assert.assertEquals(1, lines.size());
         // new line should have been replaced by a space...
         Assert.assertEquals("000000 1", lines.get(0).substring(41, 49)); // patient ID
+        Assert.assertEquals(22824, lines.get(0).length());
     }
 }
