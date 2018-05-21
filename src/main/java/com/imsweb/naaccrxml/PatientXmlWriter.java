@@ -237,6 +237,7 @@ public class PatientXmlWriter implements PatientWriter {
             _writer.endNode();
             _hasBeenFinalized = true;
         }
+        _writer.flush();
     }
 
     @Override
