@@ -124,7 +124,7 @@ public class PatientFlatWriterTest {
 
         NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(TestingUtils.getDataFile("dictionary/testing-user-dictionary.xml"));
 
-        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_INCIDENCE);
+        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_ABSTRACT);
         Patient patient = new Patient();
         patient.addItem(new Item("patientIdNumber", "00000001"));
         Tumor tumor = new Tumor();
@@ -135,20 +135,37 @@ public class PatientFlatWriterTest {
 
         // option is set to pad the values
         options.setApplyPaddingRules(true);
+        // test a "leftZero" (registryId)
         data.addItem(new Item("registryId", "1"));
+        // test a "rightZero" (comorbidComplication1)
+        tumor.addItem(new Item("comorbidComplication1", "2"));
+        // test a "leftBlank" (medicalRecordNumber)
+        tumor.addItem(new Item("medicalRecordNumber", "3"));
+        // test a "rightBlank" (nameLast) - this is the default
+        tumor.addItem(new Item("primarySite", "4"));
         try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, options, dict)) {
             writer.writePatient(patient);
         }
-        Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("0000000001"));
+        String writtenContent = TestingUtils.readFileAsOneString(file);
+        Assert.assertTrue(writtenContent.contains("0000000001"));
+        Assert.assertTrue(writtenContent.contains("20000"));
+        Assert.assertTrue(writtenContent.contains("          3"));
+        Assert.assertTrue(writtenContent.contains("4   "));
 
         // same test, but option is set to NOT pad the values
         options.setApplyPaddingRules(false);
-        data.addItem(new Item("registryId", "1"));
         try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, options, dict)) {
             writer.writePatient(patient);
         }
-        Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("1"));
-        Assert.assertFalse(TestingUtils.readFileAsOneString(file).contains("0000000001"));
+        writtenContent = TestingUtils.readFileAsOneString(file);
+        Assert.assertTrue(writtenContent.contains("1"));
+        Assert.assertFalse(writtenContent.contains("0000000001"));
+        Assert.assertTrue(writtenContent.contains("2"));
+        Assert.assertFalse(writtenContent.contains("20000"));
+        Assert.assertTrue(writtenContent.contains("3"));
+        Assert.assertTrue(writtenContent.contains("          3")); // we can't really test this because the spaces exists (as part of the format) regardless...
+        Assert.assertTrue(writtenContent.contains("4"));
+        Assert.assertTrue(writtenContent.contains("4   ")); // we can't really test this because the spaces exists (as part of the format) regardless...
     }
 
     @Test

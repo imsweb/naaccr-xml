@@ -177,7 +177,7 @@ public class PatientXmlWriterTest {
         Assert.assertNotEquals(content, TestingUtils.readFileAsOneString(file));
         Assert.assertNotNull(conf.getCachedDictionary());
         Assert.assertNotEquals(runtimeId, conf.getCachedDictionary().getId());
-        
+
         // change the main version -> should not use the caching anymore
         data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_16_INCIDENCE);
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict, conf)) {
@@ -188,7 +188,7 @@ public class PatientXmlWriterTest {
         Assert.assertNotEquals(content, TestingUtils.readFileAsOneString(file));
         Assert.assertNotNull(conf.getCachedDictionary());
         Assert.assertNotEquals(runtimeId, conf.getCachedDictionary().getId());
-        
+
     }
 
     @Test
@@ -198,7 +198,7 @@ public class PatientXmlWriterTest {
 
         NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(TestingUtils.getDataFile("dictionary/testing-user-dictionary.xml"));
 
-        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_INCIDENCE);
+        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_15_ABSTRACT);
         Patient patient = new Patient();
         patient.addItem(new Item("patientIdNumber", "00000001"));
         Tumor tumor = new Tumor();
@@ -216,7 +216,7 @@ public class PatientXmlWriterTest {
         Assert.assertFalse(TestingUtils.readFileAsOneString(file).contains("XX"));
         Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("X"));
         Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
-        Assert.assertTrue(patient.getAllValidationErrors().get(0).getCode().equals(NaaccrErrorUtils.CODE_VAL_TOO_LONG));
+        Assert.assertEquals(patient.getAllValidationErrors().get(0).getCode(), NaaccrErrorUtils.CODE_VAL_TOO_LONG);
         patient.getAllValidationErrors().clear();
 
         // value is too long, options says to ignore the error (it should still be truncated)
@@ -239,20 +239,33 @@ public class PatientXmlWriterTest {
 
         // option is set to pad the values
         options.setApplyPaddingRules(true);
+        // test a "leftZero" (registryId)
         data.addItem(new Item("registryId", "1"));
+        // test a "rightZero" (comorbidComplication1)
+        tumor.addItem(new Item("comorbidComplication1", "2"));
+        // test a "leftBlank" (medicalRecordNumber)
+        tumor.addItem(new Item("medicalRecordNumber", "3"));
+        // test a "rightBlank" (nameLast) - this is the default
+        tumor.addItem(new Item("primarySite", "4"));
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
             writer.writePatient(patient);
         }
-        Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("0000000001"));
+        String writtenContent = TestingUtils.readFileAsOneString(file);
+        Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"registryId\">0000000001</Item>"));
+        Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"comorbidComplication1\">20000</Item>"));
+        Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"medicalRecordNumber\">3</Item>")); // spaces are not taken into account!
+        Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"primarySite\">4</Item>")); // spaces are not taken into account!
 
         // same test, but option is set to NOT pad the values
         options.setApplyPaddingRules(false);
-        data.addItem(new Item("registryId", "1"));
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
             writer.writePatient(patient);
         }
-        Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("1"));
-        Assert.assertFalse(TestingUtils.readFileAsOneString(file).contains("0000000001"));
+        writtenContent = TestingUtils.readFileAsOneString(file);
+        Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"registryId\">1</Item>"));
+        Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"comorbidComplication1\">2</Item>"));
+        Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"medicalRecordNumber\">3</Item>"));
+        Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"primarySite\">4</Item>"));
     }
 
     @Test

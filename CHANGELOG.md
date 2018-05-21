@@ -2,6 +2,7 @@
 
 **Version 4.9**
 
+- Fixed an exception happening when trying to write XML with padding turned ON.
 - PatientReader and PatientWriter interfaces are now extending Closeable instead of AutoCloseable.
 - Added support for creating SAS definition file in the standalone GUI interface.
 

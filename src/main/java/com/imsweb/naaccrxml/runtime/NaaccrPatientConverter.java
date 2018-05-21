@@ -223,18 +223,18 @@ public class NaaccrPatientConverter implements Converter {
                     reportSyntaxError("value for item '" + item.getNaaccrId() + "' contains non-printable control characters");
             }
 
-            // handle the padding
+            // handle the padding - only 0-padding is taken into account when writting XML; blank padding (left or right) is completely ignored
             if (Boolean.TRUE.equals(_context.getOptions().getApplyPaddingRules()) && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef.getLength()) {
                 if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(itemDef.getPadding()))
                     value = StringUtils.leftPad(value, itemDef.getLength(), '0');
                 else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_ZERO.equals(itemDef.getPadding()))
                     value = StringUtils.rightPad(value, itemDef.getLength(), '0');
-                else
+                else if (!NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(itemDef.getPadding()) && !NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(itemDef.getPadding()))
                     throw new RuntimeException("Unknown padding option: " + itemDef.getPadding());
             }
 
             // do we need to truncate the value?
-            if (value.length() > itemDef.getLength() && !Boolean.TRUE.equals(itemDef.getAllowUnlimitedText())) {
+            if (itemDef.getLength() != null && value.length() > itemDef.getLength() && !Boolean.TRUE.equals(itemDef.getAllowUnlimitedText())) {
                 if (_context.getOptions().getReportValuesTooLong())
                     reportError(item, null, null, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());
                 value = value.substring(0, itemDef.getLength());
