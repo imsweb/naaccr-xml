@@ -151,8 +151,13 @@ public class PatientFlatWriter implements PatientWriter {
     }
 
     @Override
-    public void closeAndKeepAlive() {
-        // does nothing
+    public void closeAndKeepAlive() throws NaaccrIOException {
+        try {
+            _writer.flush();
+        }
+        catch (IOException e) {
+            throw new NaaccrIOException(e.getMessage());
+        }
     }
 
     @Override

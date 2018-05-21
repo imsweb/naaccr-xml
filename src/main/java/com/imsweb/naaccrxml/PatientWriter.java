@@ -17,6 +17,7 @@ public interface PatientWriter extends Closeable {
 
     /**
      * Writes the final node of the document, without closing the stream.
+     * @throws NaaccrIOException if anything goes wrong
      */
-    void closeAndKeepAlive();
+    void closeAndKeepAlive() throws NaaccrIOException;
 }
