@@ -240,7 +240,7 @@ public class PatientFlatWriterTest {
         File file = TestingUtils.createFile("test-flat-writer-values-with-new-lines.txt");
         PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, null, (NaaccrDictionary)null);
         Patient patient = new Patient();
-        patient.addItem(new Item("patientIdNumber", "000000\r\n1"));
+        patient.addItem(new Item("patientIdNumber", "0\n0\r0\r\n01"));
         Tumor tumor = new Tumor();
         tumor.addItem(new Item("followUpContactName", "some\nvalue"));
         patient.addTumor(tumor);
@@ -249,7 +249,7 @@ public class PatientFlatWriterTest {
         List<String> lines = TestingUtils.readFile(file);
         Assert.assertEquals(1, lines.size());
         // new line should have been replaced by a space...
-        Assert.assertEquals("000000 1", lines.get(0).substring(41, 49)); // patient ID
+        Assert.assertEquals("0 0 0 01", lines.get(0).substring(41, 49)); // patient ID
         Assert.assertEquals(22824, lines.get(0).length());
     }
 }

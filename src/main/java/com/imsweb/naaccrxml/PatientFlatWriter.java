@@ -43,7 +43,7 @@ public class PatientFlatWriter implements PatientWriter {
     protected RuntimeNaaccrDictionaryItem _naaccrVersionItem, _recordTypeItem;
 
     // cached pattern for new lines
-    private static final Pattern _NEW_LINES_PATTERN = Pattern.compile("\r?\n");
+    private static final Pattern _NEW_LINES_PATTERN = Pattern.compile("(\r\n|\n|\r)");
 
     /**
      * Constructor.
