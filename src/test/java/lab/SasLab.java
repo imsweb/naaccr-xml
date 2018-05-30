@@ -18,33 +18,30 @@ import org.apache.commons.io.IOUtils;
 
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
-import com.imsweb.naaccrxml.PatientFlatWriter;
-import com.imsweb.naaccrxml.PatientXmlReader;
-import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 public class SasLab {
 
     public static void main(String[] args) throws IOException {
-        NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("180");
+        NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getMergedDictionaries("180");
 
-        //System.out.println(createSasFlatMappings(dictionary));
+        System.out.println(createSasFlatMappings(dictionary, false));
 
         //System.out.println(createSasXmlMapper(dictionary));
 
-        long start = System.currentTimeMillis();
-        try (PatientXmlReader r = new PatientXmlReader(NaaccrXmlUtils.createReader(new File("C:\\Users\\depryf\\Desktop\\sas\\synthetic-data_naaccr-18-incidence_10000000-recs.xml.gz")))) {
-            try (PatientFlatWriter w = new PatientFlatWriter(NaaccrXmlUtils.createWriter(new File("C:\\Users\\depryf\\Desktop\\sas\\synthetic-data_naaccr-18-incidence_10000000-recs-copy.txt.gz")),
-                    r.getRootData())) {
-                Patient pat = r.readPatient();
-                while (pat != null) {
-                    w.writePatient(pat);
-                    pat = r.readPatient();
-                }
-            }
-        }
-        System.out.println(System.currentTimeMillis() - start);
+        //        long start = System.currentTimeMillis();
+        //        try (PatientXmlReader r = new PatientXmlReader(NaaccrXmlUtils.createReader(new File("C:\\Users\\depryf\\Desktop\\sas\\synthetic-data_naaccr-18-incidence_10000000-recs.xml.gz")))) {
+        //            try (PatientFlatWriter w = new PatientFlatWriter(NaaccrXmlUtils.createWriter(new File("C:\\Users\\depryf\\Desktop\\sas\\synthetic-data_naaccr-18-incidence_10000000-recs-copy.txt.gz")),
+        //                    r.getRootData())) {
+        //                Patient pat = r.readPatient();
+        //                while (pat != null) {
+        //                    w.writePatient(pat);
+        //                    pat = r.readPatient();
+        //                }
+        //            }
+        //        }
+        //        System.out.println(System.currentTimeMillis() - start);
 
         //        long start = System.currentTimeMillis();
         //        try (PatientXmlReader r = new PatientXmlReader(NaaccrXmlUtils.createReader(new File("C:\\Users\\depryf\\Desktop\\sas\\synthetic-data_naaccr-18-incidence_10000000-recs.xml.gz")))) {
@@ -72,7 +69,7 @@ public class SasLab {
         //        System.out.println(System.currentTimeMillis() - start);
     }
 
-    private static String createSasFlatMappings(NaaccrDictionary dictionary) {
+    private static String createSasFlatMappings(NaaccrDictionary dictionary, boolean forInput) {
         List<NaaccrDictionaryItem> items = new ArrayList<>(dictionary.getItems());
         items.sort(Comparator.comparing(NaaccrDictionaryItem::getStartColumn));
 
@@ -90,17 +87,24 @@ public class SasLab {
             }
 
             if (item.getRecordTypes().contains("I")) {
-                buf.append("    input ");
-                buf.append(id);
-                buf.append(" $");
-                buf.append(item.getStartColumn());
-                buf.append(" - ");
-                buf.append(item.getStartColumn() + item.getLength() - 1);
-                buf.append("  @; label ");
-                buf.append(id);
-                buf.append(" = '");
-                buf.append(item.getNaaccrName());
-                buf.append("';\n");
+                if (forInput) {
+                    buf.append("          @");
+                    buf.append(item.getStartColumn());
+                    buf.append(" ");
+                    buf.append(id);
+                    buf.append(" $char");
+                    buf.append(item.getLength());
+                    buf.append(".\n");
+                }
+                else {
+                    buf.append("        @");
+                    buf.append(item.getStartColumn());
+                    buf.append(" ");
+                    buf.append(id);
+                    buf.append(" $char");
+                    buf.append(item.getLength());
+                    buf.append(".\n");
+                }
                 count++;
             }
         }
