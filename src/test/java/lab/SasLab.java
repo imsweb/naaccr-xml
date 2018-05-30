@@ -3,6 +3,7 @@
  */
 package lab;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class SasLab {
     public static void main(String[] args) throws IOException {
         NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getMergedDictionaries("180");
 
-        System.out.println(createSasFlatMappings(dictionary, false));
+        //System.out.println(createSasFlatMappings(dictionary, false));
 
         //System.out.println(createSasXmlMapper(dictionary));
 
@@ -67,6 +68,15 @@ public class SasLab {
         //                n = r.read(bytes);
         //        }
         //        System.out.println(System.currentTimeMillis() - start);
+
+
+        long start = System.currentTimeMillis();
+        try (BufferedReader r = new BufferedReader(NaaccrXmlUtils.createReader(new File("C:\\Users\\depryf\\Desktop\\sas\\data\\synthetic-data_naaccr-18-incidence_10000000-recs.txt.gz")))) {
+            String line = r.readLine();
+            while (line != null)
+                line = r.readLine();
+        }
+        System.out.println(System.currentTimeMillis() - start);
     }
 
     private static String createSasFlatMappings(NaaccrDictionary dictionary, boolean forInput) {
