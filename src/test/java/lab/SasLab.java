@@ -3,7 +3,6 @@
  */
 package lab;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,6 +29,8 @@ public class SasLab {
         //System.out.println(createSasFlatMappings(dictionary, false));
 
         //System.out.println(createSasXmlMapper(dictionary));
+
+        System.out.println(createSasReadMacroAttributes(dictionary, false));
 
         //        long start = System.currentTimeMillis();
         //        try (PatientXmlReader r = new PatientXmlReader(NaaccrXmlUtils.createReader(new File("C:\\Users\\depryf\\Desktop\\sas\\synthetic-data_naaccr-18-incidence_10000000-recs.xml.gz")))) {
@@ -69,14 +70,13 @@ public class SasLab {
         //        }
         //        System.out.println(System.currentTimeMillis() - start);
 
-
-        long start = System.currentTimeMillis();
-        try (BufferedReader r = new BufferedReader(NaaccrXmlUtils.createReader(new File("C:\\Users\\depryf\\Desktop\\sas\\data\\synthetic-data_naaccr-18-incidence_10000000-recs.txt.gz")))) {
-            String line = r.readLine();
-            while (line != null)
-                line = r.readLine();
-        }
-        System.out.println(System.currentTimeMillis() - start);
+//        long start = System.currentTimeMillis();
+//        try (BufferedReader r = new BufferedReader(NaaccrXmlUtils.createReader(new File("C:\\Users\\depryf\\Desktop\\sas\\data\\synthetic-data_naaccr-18-incidence_10000000-recs.txt.gz")))) {
+//            String line = r.readLine();
+//            while (line != null)
+//                line = r.readLine();
+//        }
+//        System.out.println(System.currentTimeMillis() - start);
     }
 
     private static String createSasFlatMappings(NaaccrDictionary dictionary, boolean forInput) {
@@ -114,6 +114,46 @@ public class SasLab {
                     buf.append(" $char");
                     buf.append(item.getLength());
                     buf.append(".\n");
+                }
+                count++;
+            }
+        }
+        System.out.println(count + " items...");
+
+        return buf.toString();
+    }
+
+    private static String createSasReadMacroAttributes(NaaccrDictionary dictionary, boolean calls) {
+        List<NaaccrDictionaryItem> items = new ArrayList<>(dictionary.getItems());
+        items.sort(Comparator.comparing(NaaccrDictionaryItem::getStartColumn));
+
+        Map<String, AtomicInteger> counters = new HashMap<>();
+
+        StringBuilder buf = new StringBuilder();
+
+        int count = 0;
+        for (NaaccrDictionaryItem item : items) {
+            String id = item.getNaaccrId();
+            if (id.length() > 32) {
+                String prefix = id.substring(0, 30);
+                int counter = counters.computeIfAbsent(prefix, k -> new AtomicInteger()).getAndIncrement();
+                id = prefix + "_" + counter;
+            }
+
+            if (item.getRecordTypes().contains("I")) {
+                if (calls) {
+                    buf.append("        j1.callStringMethod('getValue', '");
+                    buf.append(id);
+                    buf.append("', ");
+                    buf.append(id);
+                    buf.append(");\n");
+                }
+                else {
+                    buf.append("        ");
+                    buf.append(id);
+                    buf.append(" length = $");
+                    buf.append(item.getLength());
+                    buf.append("\n");
                 }
                 count++;
             }
