@@ -1,0 +1,28 @@
+sourceSets {
+    sas {
+        java {
+            srcDir "src/main/java/com/imsweb/naaccrxml/sas"
+        }
+
+        resources {
+            srcDir "src/main/resources/"
+            include "naaccr-dictionary-*.xml"
+        }
+    }
+}
+
+compileSasJava {
+    sourceCompatibility = "1.7"
+    targetCompatibility = "1.7"
+}
+
+task jarSas(type: Jar) {
+    dependsOn compileSasJava
+    from sourceSets.sas.output
+    classifier = 'sas'
+}
+
+task sourcesSasJar(type: Jar, dependsOn: sasClasses) {
+    classifier = 'sas-sources'
+    from sourceSets.sas.allSource
+}
