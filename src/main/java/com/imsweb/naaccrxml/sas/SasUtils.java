@@ -58,8 +58,12 @@ public class SasUtils {
 
                     if (naaccrId.length() > 32) {
                         String prefix = naaccrId.substring(0, 30);
-                        int counter = counters.computeIfAbsent(prefix, k -> new AtomicInteger()).getAndIncrement();
-                        naaccrId = prefix + "_" + counter;
+                        AtomicInteger counter = counters.get(prefix);
+                        if (counter == null) {
+                            counter = new AtomicInteger();
+                            counters.put(prefix, counter);
+                        }
+                        naaccrId = prefix + "_" + counter.getAndIncrement();
                     }
 
                     if ("nameLast".equals(naaccrId) && !"A".equals(recordType) && !"M".equals(recordType) && !"C".equals(recordType))
