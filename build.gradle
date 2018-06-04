@@ -124,4 +124,5 @@ task wrapper(type: Wrapper) {
     gradleVersion = '4.6'
 }
 
-apply from: 'gradle/sas.gradle'
+if (System.getProperty("idea.active") != 'true')
+    apply from: 'gradle/sas.gradle'

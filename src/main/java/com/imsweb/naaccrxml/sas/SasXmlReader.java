@@ -109,19 +109,21 @@ public class SasXmlReader {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        String xmlPath = "D:\\Users\\depryf\\Desktop\\synthetic-data_naaccr-18-incidence_100000-recs.xml.gz";
+    /**
+     public static void main(String[] args) throws IOException {
+     String xmlPath = "YOUR_PATH_HERE";
 
-        long start = System.currentTimeMillis();
-        SasXmlReader reader = new SasXmlReader(xmlPath, "180", "I");
-        int count = 0;
-        while (reader.nextRecord() == 1) {
-            reader.getValue("primarySite");
-            if (count < 5)
-                System.out.println(reader.getValue("primarySite"));
-            count++;
-        }
-        reader.close();
-        System.out.println((System.currentTimeMillis() - start) + "ms (" + count + ")");
-    }
+     long start = System.currentTimeMillis();
+     SasXmlReader reader = new SasXmlReader(xmlPath, "180", "I");
+     int count = 0;
+     while (reader.nextRecord() == 1) {
+     reader.getValue("primarySite");
+     if (count < 5)
+     System.out.println(reader.getValue("primarySite"));
+     count++;
+     }
+     reader.close();
+     System.out.println((System.currentTimeMillis() - start) + "ms (" + count + ")");
+     }
+     */
 }

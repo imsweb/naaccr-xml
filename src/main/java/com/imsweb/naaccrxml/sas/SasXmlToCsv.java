@@ -91,13 +91,15 @@ public class SasXmlToCsv {
             System.err.println("!!! Unable to cleanup tmp CSV file.");
     }
 
-    public static void main(String[] args) throws IOException {
-        String xmlPath = "D:\\Users\\depryf\\Desktop\\synthetic-data_naaccr-18-incidence_100-recs.xml";
+    /**
+     public static void main(String[] args) throws IOException {
+     String xmlPath = "YOUR_PATH_HERE";
 
-        long start = System.currentTimeMillis();
-        SasXmlToCsv reader = new SasXmlToCsv(xmlPath, "180", "I");
-        reader.convert();
-        //reader.cleanup();
-        System.out.println((System.currentTimeMillis() - start) + "ms");
-    }
+     long start = System.currentTimeMillis();
+     SasXmlToCsv reader = new SasXmlToCsv(xmlPath, "180", "I");
+     reader.convert();
+     //reader.cleanup();
+     System.out.println((System.currentTimeMillis() - start) + "ms");
+     }
+     */
 }
