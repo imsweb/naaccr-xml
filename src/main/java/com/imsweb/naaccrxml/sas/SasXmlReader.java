@@ -23,8 +23,6 @@ public class SasXmlReader {
 
     private Map<String, String> _naaccrDataValues = new HashMap<>(), _patientValues = new HashMap<>(), _tumorValues = new HashMap<>();
 
-    //private static final Pattern _ITEM_PATTERN = Pattern.compile("<Item naaccrId=['\"](.+?)['\"]>(.+?)</Item>");
-
     public SasXmlReader(String xmlPath, String version, String recordType) {
         _xmlFile = new File(xmlPath);
         if (!_xmlFile.exists())
@@ -48,15 +46,6 @@ public class SasXmlReader {
 
         String line = _reader.readLine();
         while (line != null) {
-            //            Matcher matcher = _ITEM_PATTERN.matcher(line);
-            //            if (matcher.find()) {
-            //                if (_inTumor)
-            //                    _tumorValues.put(matcher.group(1), matcher.group(2));
-            //                if (_inPatient)
-            //                    _patientValues.put(matcher.group(1), matcher.group(2));
-            //                else
-            //                    _naaccrDataValues.put(matcher.group(1), matcher.group(2));
-            //            }
             int itemIdx = line.indexOf("<Item");
             if (itemIdx > -1) {
                 int idIdx1 = line.indexOf('\"', itemIdx + 1);
@@ -65,11 +54,11 @@ public class SasXmlReader {
                 int valIdx2 = line.indexOf('<', valIdx1 + 1);
                 _naaccrDataValues.put(line.substring(idIdx1 + 1, idIdx2), line.substring(valIdx1 + 1, valIdx2));
             }
-            else if (line.indexOf("<Patient>") > -1) {
+            else if (line.contains("<Patient>")) {
                 _inPatient = true;
                 _inTumor = false;
             }
-            else if (line.indexOf("<Tumor>") > -1) {
+            else if (line.contains("<Tumor>")) {
                 _inPatient = false;
                 _inTumor = true;
             }

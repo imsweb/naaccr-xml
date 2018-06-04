@@ -16,26 +16,41 @@ public class SasXmlToCsv {
 
     private File _xmlFile, _csvFile;
 
-    private String _version, _recordType;
+    private String _naaccrVersion, _recordType;
 
-    public SasXmlToCsv(String xmlPath, String version, String recordType) {
+    public SasXmlToCsv(String xmlPath, String naaccrVersion, String recordType) {
+        this(xmlPath, xmlPath.replace(".xml", ".csv"), naaccrVersion, recordType);
+    }
+
+    public SasXmlToCsv(String xmlPath, String csvPath, String naaccrVersion, String recordType) {
         _xmlFile = new File(xmlPath);
         if (!_xmlFile.exists())
             System.err.println("!!! Invalid XML file: " + xmlPath);
-
         System.out.println(" > input XML: " + _xmlFile.getAbsolutePath());
-        String csvPath = _xmlFile.getAbsolutePath().replace(".xml", ".csv");
+
         if (csvPath.endsWith(".gz"))
             csvPath = csvPath.replace(".gz", "");
         _csvFile = new File(csvPath);
         System.out.println(" > temp CSV: " + _csvFile.getAbsolutePath());
 
-        _version = version;
+        _naaccrVersion = naaccrVersion;
         _recordType = recordType;
+    }
+
+    public String getXmlPath() {
+        return _xmlFile.getPath();
     }
 
     public String getCsvPath() {
         return _csvFile.getPath();
+    }
+
+    public String getNaaccrVersion() {
+        return _naaccrVersion;
+    }
+
+    public String getRecordType() {
+        return _recordType;
     }
 
     public void convert() throws IOException {
@@ -54,7 +69,7 @@ public class SasXmlToCsv {
         SasXmlReader reader = null;
         BufferedWriter writer = null;
         try {
-            reader = new SasXmlReader(_xmlFile.getPath(), _version, _recordType);
+            reader = new SasXmlReader(_xmlFile.getPath(), _naaccrVersion, _recordType);
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_csvFile), StandardCharsets.UTF_8));
             StringBuilder buf = new StringBuilder();
             for (String field : reader.getFields())
@@ -69,7 +84,9 @@ public class SasXmlToCsv {
                 for (String field : reader.getFields()) {
                     if (requestedFields == null || requestedFields.contains(field)) {
                         String val = reader.getValue(field);
-                        buf.append(val == null ? "" : val).append(","); // TODO deal with commas
+                        if (val != null && val.contains(","))
+                            val = "\"" + val + "\"";
+                        buf.append(val == null ? "" : val).append(",");
                     }
                 }
                 buf.setLength(buf.length() - 1);
