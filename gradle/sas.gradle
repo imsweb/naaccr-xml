@@ -5,8 +5,8 @@ sourceSets {
         }
 
         resources {
-            srcDir "src/main/resources/"
-            include "naaccr-dictionary-*.xml"
+            srcDir "docs/"
+            include "naaccr-xml-items-*.csv"
         }
     }
 }

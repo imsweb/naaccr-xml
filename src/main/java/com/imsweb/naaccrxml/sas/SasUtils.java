@@ -14,13 +14,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -40,39 +37,38 @@ public class SasUtils {
         return new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
     }
 
-    public static List<String> getFields(String version, String recordType) {
-        List<String> headers = new ArrayList<>();
+    public static Map<String, String> getFields(String version, String recordType) {
+        Map<String, String> result = new LinkedHashMap<>();
 
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-"+version+".xml"), StandardCharsets.US_ASCII));
+            reader = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-xml-items-" + version + ".csv"), StandardCharsets.US_ASCII));
 
-            Pattern pattern = Pattern.compile("<ItemDef naaccrId=\"(.+?)\"");
             Map<String, AtomicInteger> counters = new HashMap<>();
 
+            reader.readLine();
             String line = reader.readLine();
             while (line != null) {
-                Matcher matcher = pattern.matcher(line);
-                if (matcher.find()) {
-                    String naaccrId = matcher.group(1);
+                int idx2 = line.lastIndexOf('"');
+                int idx1 = line.lastIndexOf('"', idx2 - 1);
+                int idx3 = line.lastIndexOf(',');
+                String recTypes = line.substring(idx1 + 1, idx2);
+                String naaccrId = line.substring(idx2 + 2, idx3);
+                String parentTag = line.substring(idx3 + 1);
 
-                    if (naaccrId.length() > 32) {
-                        String prefix = naaccrId.substring(0, 30);
-                        AtomicInteger counter = counters.get(prefix);
-                        if (counter == null) {
-                            counter = new AtomicInteger();
-                            counters.put(prefix, counter);
-                        }
-                        naaccrId = prefix + "_" + counter.getAndIncrement();
+                if (naaccrId.length() > 32) {
+                    String prefix = naaccrId.substring(0, 30);
+                    AtomicInteger counter = counters.get(prefix);
+                    if (counter == null) {
+                        counter = new AtomicInteger();
+                        counters.put(prefix, counter);
                     }
-
-                    if ("nameLast".equals(naaccrId) && !"A".equals(recordType) && !"M".equals(recordType) && !"C".equals(recordType))
-                        break;
-                    if ("textDxProcPe".equals(naaccrId) && !"A".equals(recordType) && !"M".equals(recordType))
-                        break;
-                    if (!naaccrId.startsWith("reserved"))
-                        headers.add(naaccrId);
+                    naaccrId = prefix + "_" + counter.getAndIncrement();
                 }
+
+                if (!naaccrId.startsWith("reserved") && recTypes.contains(recordType))
+                    result.put(naaccrId, parentTag);
+
                 line = reader.readLine();
             }
         }
@@ -90,6 +86,10 @@ public class SasUtils {
             }
         }
 
-        return headers;
+        return result;
+    }
+
+    public static void main(String[] args) {
+        SasUtils.getFields("180", "A");
     }
 }

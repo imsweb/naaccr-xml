@@ -18,7 +18,7 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 public class DictionaryToCsv {
 
     public static void main(String[] args) throws IOException {
-        //fullAbstract();
+        fullAbstract();
         //incidenceOnly();
         //csv16to18diff();
     }
@@ -48,7 +48,7 @@ public class DictionaryToCsv {
     private static void fullAbstract() throws IOException {
         for (String version : NaaccrFormat.getSupportedVersions()) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get("docs/naaccr-xml-items-" + version + ".csv").toFile()))) {
-                writer.write("Item Number,Item Name,Item Start column,NAACCR XML ID,NAACCR XML Parent Element");
+                writer.write("Item Number,Item Name,Item Start column,Record Types,NAACCR XML ID,NAACCR XML Parent Element");
                 writer.newLine();
                 NaaccrXmlDictionaryUtils.getMergedDictionaries(version).getItems().stream()
                         .sorted((o1, o2) -> {
@@ -62,7 +62,9 @@ public class DictionaryToCsv {
                         })
                         .forEach(item -> {
                             try {
-                                writer.write(item.getNaaccrNum() + ",\"" + item.getNaaccrName() + "\"," + item.getStartColumn() + "," + item.getNaaccrId() + "," + item.getParentXmlElement());
+                                writer.write(
+                                        item.getNaaccrNum() + ",\"" + item.getNaaccrName() + "\"," + item.getStartColumn() + ",\"" + item.getRecordTypes() + "\"," + item.getNaaccrId() + "," + item
+                                                .getParentXmlElement());
                                 writer.newLine();
                             }
                             catch (IOException e) {

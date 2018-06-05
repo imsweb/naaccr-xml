@@ -6,6 +6,7 @@ package com.imsweb.naaccrxml.sas;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,9 @@ public class SasXmlReader {
         System.out.println("Created NAACCR XML reader for following file: ");
         System.out.println(" > input XML: " + _xmlFile.getAbsolutePath());
 
-        _fields = SasUtils.getFields(version, recordType);
+        _fields = new ArrayList<>();
+        for (Map.Entry<String, String> entry : SasUtils.getFields(version, recordType).entrySet())
+            _fields.add(entry.getKey());
     }
 
     public List<String> getFields() {
