@@ -72,9 +72,20 @@ public class SasXmlToCsv {
             reader = new SasXmlReader(_xmlFile.getPath(), _naaccrVersion, _recordType);
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_csvFile), StandardCharsets.UTF_8));
             StringBuilder buf = new StringBuilder();
+
+            // write the headers
             for (String field : reader.getFields())
                 if (requestedFields == null || requestedFields.contains(field))
                     buf.append(field).append(",");
+            buf.setLength(buf.length() - 1);
+            writer.write(buf.toString());
+            writer.write("\n");
+            buf.setLength(0);
+
+            // hack alert - force SAS to recognize all variables as characters...  Sigh...
+            for (String field : reader.getFields())
+                if (requestedFields == null || requestedFields.contains(field))
+                    buf.append("-,");
             buf.setLength(buf.length() - 1);
             writer.write(buf.toString());
             writer.write("\n");

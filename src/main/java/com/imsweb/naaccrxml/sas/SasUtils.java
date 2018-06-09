@@ -43,6 +43,7 @@ public class SasUtils {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-xml-items-" + version + ".csv"), StandardCharsets.US_ASCII));
+            //reader = new BufferedReader(new FileReader("D:\\Users\\depryf\\dev\\projects_github\\naaccr-xml\\docs\\naaccr-xml-items-" + version + ".csv"));
 
             Map<String, AtomicInteger> counters = new HashMap<>();
 
@@ -68,6 +69,60 @@ public class SasUtils {
 
                 if (!naaccrId.startsWith("reserved") && recTypes.contains(recordType))
                     result.put(naaccrId, parentTag);
+
+                line = reader.readLine();
+            }
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                }
+                catch (IOException e) {
+                    // ignored
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static Map<String, Integer> getFieldLengths(String version, String recordType) {
+        Map<String, Integer> result = new LinkedHashMap<>();
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-xml-items-" + version + ".csv"), StandardCharsets.US_ASCII));
+            //reader = new BufferedReader(new FileReader("D:\\Users\\depryf\\dev\\projects_github\\naaccr-xml\\docs\\naaccr-xml-items-" + version + ".csv"));
+
+            Map<String, AtomicInteger> counters = new HashMap<>();
+
+            reader.readLine();
+            String line = reader.readLine();
+            while (line != null) {
+                int idx3 = line.lastIndexOf(',');
+                int idx2 = line.lastIndexOf('"');
+                int idx1 = line.lastIndexOf('"', idx2 - 1);
+                int idx0 = line.lastIndexOf(',', idx1 - 2);
+                String recTypes = line.substring(idx1 + 1, idx2);
+                String naaccrId = line.substring(idx2 + 2, idx3);
+                Integer length = Integer.valueOf(line.substring(idx0 + 1, idx1 - 1));
+
+                if (naaccrId.length() > 32) {
+                    String prefix = naaccrId.substring(0, 30);
+                    AtomicInteger counter = counters.get(prefix);
+                    if (counter == null) {
+                        counter = new AtomicInteger();
+                        counters.put(prefix, counter);
+                    }
+                    naaccrId = prefix + "_" + counter.getAndIncrement();
+                }
+
+                if (recTypes.contains(recordType))
+                    result.put(naaccrId, length);
 
                 line = reader.readLine();
             }

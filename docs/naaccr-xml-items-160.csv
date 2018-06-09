@@ -1,588 +1,588 @@
-Item Number,Item Name,Item Start column,Record Types,NAACCR XML ID,NAACCR XML Parent Element
-10,"Record Type",1,"A,M,C,I",recordType,NaaccrData
-30,"Registry Type",2,"A,M,C,I",registryType,NaaccrData
-37,"Reserved 00",3,"A,M,C,I",reserved00,Tumor
-50,"NAACCR Record Version",17,"A,M,C,I",naaccrRecordVersion,NaaccrData
-45,"NPI--Registry ID",20,"A,M,C,I",npiRegistryId,NaaccrData
-40,"Registry ID",30,"A,M,C,I",registryId,NaaccrData
-60,"Tumor Record Number",40,"A,M,C,I",tumorRecordNumber,Tumor
-20,"Patient ID Number",42,"A,M,C,I",patientIdNumber,Patient
-21,"Patient System ID-Hosp",50,"A,M,C,I",patientSystemIdHosp,Tumor
-370,"Reserved 01",58,"A,M,C,I",reserved01,Tumor
-70,"Addr at DX--City",95,"A,M,C,I",addrAtDxCity,Tumor
-80,"Addr at DX--State",145,"A,M,C,I",addrAtDxState,Tumor
-100,"Addr at DX--Postal Code",147,"A,M,C,I",addrAtDxPostalCode,Tumor
-90,"County at DX",156,"A,M,C,I",countyAtDx,Tumor
-110,"Census Tract 1970/80/90",159,"A,M,C,I",censusTract19708090,Tumor
-368,"Census Block Grp 1970-90",165,"A,M,C,I",censusBlockGrp197090,Tumor
-120,"Census Cod Sys 1970/80/90",166,"A,M,C,I",censusCodSys19708090,Tumor
-364,"Census Tr Cert 1970/80/90",167,"A,M,C,I",censusTrCert19708090,Tumor
-130,"Census Tract 2000",168,"A,M,C,I",censusTract2000,Tumor
-362,"Census Block Group 2000",174,"A,M,C,I",censusBlockGroup2000,Tumor
-365,"Census Tr Certainty 2000",175,"A,M,C,I",censusTrCertainty2000,Tumor
-150,"Marital Status at DX",176,"A,M,C,I",maritalStatusAtDx,Tumor
-160,"Race 1",177,"A,M,C,I",race1,Patient
-161,"Race 2",179,"A,M,C,I",race2,Patient
-162,"Race 3",181,"A,M,C,I",race3,Patient
-163,"Race 4",183,"A,M,C,I",race4,Patient
-164,"Race 5",185,"A,M,C,I",race5,Patient
-170,"Race Coding Sys--Current",187,"A,M,C,I",raceCodingSysCurrent,Patient
-180,"Race Coding Sys--Original",188,"A,M,C,I",raceCodingSysOriginal,Patient
-190,"Spanish/Hispanic Origin",189,"A,M,C,I",spanishHispanicOrigin,Patient
-200,"Computed Ethnicity",190,"A,M,C,I",computedEthnicity,Patient
-210,"Computed Ethnicity Source",191,"A,M,C,I",computedEthnicitySource,Patient
-220,"Sex",192,"A,M,C,I",sex,Patient
-230,"Age at Diagnosis",193,"A,M,C,I",ageAtDiagnosis,Tumor
-240,"Date of Birth",196,"A,M,C,I",dateOfBirth,Patient
-241,"Date of Birth Flag",204,"A,M,C,I",dateOfBirthFlag,Patient
-250,"Birthplace",206,"A,M,C,I",birthplace,Patient
-270,"Census Occ Code 1970-2000",209,"A,M,C,I",censusOccCode19702000,Tumor
-280,"Census Ind Code 1970-2000",212,"A,M,C,I",censusIndCode19702000,Tumor
-290,"Occupation Source",215,"A,M,C,I",occupationSource,Tumor
-300,"Industry Source",216,"A,M,C,I",industrySource,Tumor
-310,"Text--Usual Occupation",217,"A,M,C,I",textUsualOccupation,Tumor
-320,"Text--Usual Industry",317,"A,M,C,I",textUsualIndustry,Tumor
-330,"Census Occ/Ind Sys 70-00",417,"A,M,C,I",censusOccIndSys7000,Tumor
-191,"NHIA Derived Hisp Origin",418,"A,M,C,I",nhiaDerivedHispOrigin,Patient
-193,"Race--NAPIIA(derived API)",419,"A,M,C,I",raceNapiia,Patient
-192,"IHS Link",421,"A,M,C,I",ihsLink,Patient
-366,"GIS Coordinate Quality",422,"A,M,C,I",gisCoordinateQuality,Tumor
-3300,"RuralUrban Continuum 1993",424,"A,M,C,I",ruralurbanContinuum1993,Tumor
-3310,"RuralUrban Continuum 2003",426,"A,M,C,I",ruralurbanContinuum2003,Tumor
-135,"Census Tract 2010",428,"A,M,C,I",censusTract2010,Tumor
-363,"Census Block Group 2010",434,"A,M,C,I",censusBlockGroup2010,Tumor
-367,"Census Tr Certainty 2010",435,"A,M,C,I",censusTrCertainty2010,Tumor
-102,"Addr at DX--Country",436,"A,M,C,I",addrAtDxCountry,Tumor
-1832,"Addr Current--Country",439,"A,M,C,I",addrCurrentCountry,Patient
-252,"Birthplace--State",442,"A,M,C,I",birthplaceState,Patient
-254,"Birthplace--Country",444,"A,M,C,I",birthplaceCountry,Patient
-1847,"FollowUp Contact--Country",447,"A,M,C,I",followupContactCountry,Tumor
-1942,"Place of Death--State",450,"A,M,C,I",placeOfDeathState,Patient
-1944,"Place of Death--Country",452,"A,M,C,I",placeOfDeathCountry,Patient
-272,"Census Ind Code 2010 CDC",455,"A,M,C,I",censusIndCode2010,Tumor
-282,"Census Occ Code 2010 CDC",459,"A,M,C,I",censusOccCode2010,Tumor
-145,"Census Tr Poverty Indictr",463,"A,M,C,I",censusTrPovertyIndictr,Tumor
-94,"County at DX Geocode1990",464,"A,M,C,I",countyAtDxGeocode1990,Tumor
-95,"County at DX Geocode2000",467,"A,M,C,I",countyAtDxGeocode2000,Tumor
-96,"County at DX Geocode2010",470,"A,M,C,I",countyAtDxGeocode2010,Tumor
-97,"County at DX Geocode2020",473,"A,M,C,I",countyAtDxGeocode2020,Tumor
-3312,"RuralUrban Continuum 2013",476,"A,M,C,I",ruralurbanContinuum2013,Tumor
-530,"Reserved 02",478,"A,M,C,I",reserved02,Tumor
-380,"Sequence Number--Central",528,"A,M,C,I",sequenceNumberCentral,Tumor
-390,"Date of Diagnosis",530,"A,M,C,I",dateOfDiagnosis,Tumor
-391,"Date of Diagnosis Flag",538,"A,M,C,I",dateOfDiagnosisFlag,Tumor
-400,"Primary Site",540,"A,M,C,I",primarySite,Tumor
-410,"Laterality",544,"A,M,C,I",laterality,Tumor
-420,"Histology (92-00) ICD-O-2",545,"A,M,C,I",histologyIcdO2,Tumor
-430,"Behavior (92-00) ICD-O-2",549,"A,M,C,I",behaviorIcdO2,Tumor
-522,"Histologic Type ICD-O-3",550,"A,M,C,I",histologicTypeIcdO3,Tumor
-523,"Behavior Code ICD-O-3",554,"A,M,C,I",behaviorCodeIcdO3,Tumor
-440,"Grade",555,"A,M,C,I",grade,Tumor
-441,"Grade Path Value",556,"A,M,C,I",gradePathValue,Tumor
-449,"Grade Path System",557,"A,M,C,I",gradePathSystem,Tumor
-450,"Site Coding Sys--Current",558,"A,M,C,I",siteCodingSysCurrent,Tumor
-460,"Site Coding Sys--Original",559,"A,M,C,I",siteCodingSysOriginal,Tumor
-470,"Morph Coding Sys--Current",560,"A,M,C,I",morphCodingSysCurrent,Tumor
-480,"Morph Coding Sys--Originl",561,"A,M,C,I",morphCodingSysOriginl,Tumor
-490,"Diagnostic Confirmation",562,"A,M,C,I",diagnosticConfirmation,Tumor
-500,"Type of Reporting Source",563,"A,M,C,I",typeOfReportingSource,Tumor
-501,"Casefinding Source",564,"A,M,C,I",casefindingSource,Tumor
-442,"Ambiguous Terminology DX",566,"A,M,C,I",ambiguousTerminologyDx,Tumor
-443,"Date Conclusive DX",567,"A,M,C,I",dateConclusiveDx,Tumor
-448,"Date Conclusive DX Flag",575,"A,M,C,I",dateConclusiveDxFlag,Tumor
-444,"Mult Tum Rpt as One Prim",577,"A,M,C,I",multTumRptAsOnePrim,Tumor
-445,"Date of Mult Tumors",579,"A,M,C,I",dateOfMultTumors,Tumor
-439,"Date of Mult Tumors Flag",587,"A,M,C,I",dateOfMultTumorsFlag,Tumor
-446,"Multiplicity Counter",589,"A,M,C,I",multiplicityCounter,Tumor
-680,"Reserved 03",591,"A,M,C,I",reserved03,Tumor
-545,"NPI--Reporting Facility",691,"A,M,C,I",npiReportingFacility,Tumor
-540,"Reporting Facility",701,"A,M,C,I",reportingFacility,Tumor
-3105,"NPI--Archive FIN",711,"A,M,C,I",npiArchiveFin,Tumor
-3100,"Archive FIN",721,"A,M,C,I",archiveFin,Tumor
-550,"Accession Number--Hosp",731,"A,M,C,I",accessionNumberHosp,Tumor
-560,"Sequence Number--Hospital",740,"A,M,C,I",sequenceNumberHospital,Tumor
-570,"Abstracted By",742,"A,M,C,I",abstractedBy,Tumor
-580,"Date of 1st Contact",745,"A,M,C,I",dateOf1stContact,Tumor
-581,"Date of 1st Contact Flag",753,"A,M,C,I",dateOf1stContactFlag,Tumor
-590,"Date of Inpt Adm",755,"A,M,C,I",dateOfInptAdm,Tumor
-591,"Date of Inpt Adm Flag",763,"A,M,C,I",dateOfInptAdmFlag,Tumor
-600,"Date of Inpt Disch",765,"A,M,C,I",dateOfInptDisch,Tumor
-601,"Date of Inpt Disch Flag",773,"A,M,C,I",dateOfInptDischFlag,Tumor
-605,"Inpatient Status",775,"A,M,C,I",inpatientStatus,Tumor
-610,"Class of Case",776,"A,M,C,I",classOfCase,Tumor
-630,"Primary Payer at DX",778,"A,M,C,I",primaryPayerAtDx,Tumor
-2400,"Reserved 15",780,"A,M,C,I",reserved15,Tumor
-668,"RX Hosp--Surg App 2010",781,"A,M,C,I",rxHospSurgApp2010,Tumor
-670,"RX Hosp--Surg Prim Site",782,"A,M,C,I",rxHospSurgPrimSite,Tumor
-672,"RX Hosp--Scope Reg LN Sur",784,"A,M,C,I",rxHospScopeRegLnSur,Tumor
-674,"RX Hosp--Surg Oth Reg/Dis",785,"A,M,C,I",rxHospSurgOthRegDis,Tumor
-676,"RX Hosp--Reg LN Removed",786,"A,M,C,I",rxHospRegLnRemoved,Tumor
-2450,"Reserved 16",788,"A,M,C,I",reserved16,Tumor
-690,"RX Hosp--Radiation",789,"A,M,C,I",rxHospRadiation,Tumor
-700,"RX Hosp--Chemo",790,"A,M,C,I",rxHospChemo,Tumor
-710,"RX Hosp--Hormone",792,"A,M,C,I",rxHospHormone,Tumor
-720,"RX Hosp--BRM",794,"A,M,C,I",rxHospBrm,Tumor
-730,"RX Hosp--Other",796,"A,M,C,I",rxHospOther,Tumor
-740,"RX Hosp--DX/Stg Proc",797,"A,M,C,I",rxHospDxStgProc,Tumor
-3280,"RX Hosp--Palliative Proc",799,"A,M,C,I",rxHospPalliativeProc,Tumor
-746,"RX Hosp--Surg Site 98-02",800,"A,M,C,I",rxHospSurgSite9802,Tumor
-747,"RX Hosp--Scope Reg 98-02",802,"A,M,C,I",rxHospScopeReg9802,Tumor
-748,"RX Hosp--Surg Oth 98-02",803,"A,M,C,I",rxHospSurgOth9802,Tumor
-750,"Reserved 04",804,"A,M,C,I",reserved04,Tumor
-930,"TNM Path Staged By",834,"A,M,C,I",tnmPathStagedBy,Tumor
-990,"TNM Clin Staged By",836,"A,M,C,I",tnmClinStagedBy,Tumor
-1112,"Mets at DX-Bone",838,"A,M,C,I",metsAtDxBone,Tumor
-1113,"Mets at DX-Brain",839,"A,M,C,I",metsAtDxBrain,Tumor
-1114,"Mets at DX-Distant LN",840,"A,M,C,I",metsAtDxDistantLn,Tumor
-1115,"Mets at DX-Liver",841,"A,M,C,I",metsAtDxLiver,Tumor
-1116,"Mets at DX-Lung",842,"A,M,C,I",metsAtDxLung,Tumor
-1117,"Mets at DX-Other",843,"A,M,C,I",metsAtDxOther,Tumor
-752,"Tumor Size Clinical",844,"A,M,C,I",tumorSizeClinical,Tumor
-754,"Tumor Size Pathologic",847,"A,M,C,I",tumorSizePathologic,Tumor
-756,"Tumor Size Summary",850,"A,M,C,I",tumorSizeSummary,Tumor
-3605,"Derived SEER Path Stg Grp",853,"A,M,C,I",derivedSeerPathStgGrp,Tumor
-3610,"Derived SEER Clin Stg Grp",858,"A,M,C,I",derivedSeerClinStgGrp,Tumor
-3614,"Derived SEER Cmb Stg Grp",863,"A,M,C,I",derivedSeerCmbStgGrp,Tumor
-3616,"Derived SEER Combined T",868,"A,M,C,I",derivedSeerCombinedT,Tumor
-3618,"Derived SEER Combined N",873,"A,M,C,I",derivedSeerCombinedN,Tumor
-3620,"Derived SEER Combined M",878,"A,M,C,I",derivedSeerCombinedM,Tumor
-3622,"Derived SEER Cmb T Src",883,"A,M,C,I",derivedSeerCmbTSrc,Tumor
-3624,"Derived SEER Cmb N Src",884,"A,M,C,I",derivedSeerCmbNSrc,Tumor
-3626,"Derived SEER Cmb M Src",885,"A,M,C,I",derivedSeerCmbMSrc,Tumor
-772,"SEER Primary Tumor",886,"A,M,C,I",seerPrimaryTumor,Tumor
-774,"SEER Regional Nodes",889,"A,M,C,I",seerRegionalNodes,Tumor
-776,"SEER Mets",892,"A,M,C,I",seerMets,Tumor
-762,"Derived SS2017",894,"A,M,C,I",derivedSs2017,Tumor
-764,"Directly Assigned SS2017",895,"A,M,C,I",directlyAssignedSs2017,Tumor
-3650,"NPCR Derived Clin Stg Grp",896,"A,M,C,I",npcrDerivedClinStgGrp,Tumor
-3655,"NPCR Derived Path Stg Grp",900,"A,M,C,I",npcrDerivedPathStgGrp,Tumor
-759,"SEER Summary Stage 2000",904,"A,M,C,I",seerSummaryStage2000,Tumor
-760,"SEER Summary Stage 1977",905,"A,M,C,I",seerSummaryStage1977,Tumor
-780,"EOD--Tumor Size",906,"A,M,C,I",eodTumorSize,Tumor
-790,"EOD--Extension",909,"A,M,C,I",eodExtension,Tumor
-800,"EOD--Extension Prost Path",911,"A,M,C,I",eodExtensionProstPath,Tumor
-810,"EOD--Lymph Node Involv",913,"A,M,C,I",eodLymphNodeInvolv,Tumor
-820,"Regional Nodes Positive",914,"A,M,C,I",regionalNodesPositive,Tumor
-830,"Regional Nodes Examined",916,"A,M,C,I",regionalNodesExamined,Tumor
-840,"EOD--Old 13 Digit",918,"A,M,C,I",eodOld13Digit,Tumor
-850,"EOD--Old 2 Digit",931,"A,M,C,I",eodOld2Digit,Tumor
-860,"EOD--Old 4 Digit",933,"A,M,C,I",eodOld4Digit,Tumor
-870,"Coding System for EOD",937,"A,M,C,I",codingSystemForEod,Tumor
-1060,"TNM Edition Number",938,"A,M,C,I",tnmEditionNumber,Tumor
-880,"TNM Path T",940,"A,M,C,I",tnmPathT,Tumor
-890,"TNM Path N",944,"A,M,C,I",tnmPathN,Tumor
-900,"TNM Path M",948,"A,M,C,I",tnmPathM,Tumor
-910,"TNM Path Stage Group",952,"A,M,C,I",tnmPathStageGroup,Tumor
-920,"TNM Path Descriptor",956,"A,M,C,I",tnmPathDescriptor,Tumor
-2162,"Reserved 19",957,"A,M,C,I",reserved19,Tumor
-940,"TNM Clin T",958,"A,M,C,I",tnmClinT,Tumor
-950,"TNM Clin N",962,"A,M,C,I",tnmClinN,Tumor
-960,"TNM Clin M",966,"A,M,C,I",tnmClinM,Tumor
-970,"TNM Clin Stage Group",970,"A,M,C,I",tnmClinStageGroup,Tumor
-980,"TNM Clin Descriptor",974,"A,M,C,I",tnmClinDescriptor,Tumor
-2163,"Reserved 20",975,"A,M,C,I",reserved20,Tumor
-1120,"Pediatric Stage",976,"A,M,C,I",pediatricStage,Tumor
-1130,"Pediatric Staging System",978,"A,M,C,I",pediatricStagingSystem,Tumor
-1140,"Pediatric Staged By",980,"A,M,C,I",pediatricStagedBy,Tumor
-1150,"Tumor Marker 1",981,"A,M,C,I",tumorMarker1,Tumor
-1160,"Tumor Marker 2",982,"A,M,C,I",tumorMarker2,Tumor
-1170,"Tumor Marker 3",983,"A,M,C,I",tumorMarker3,Tumor
-1182,"Lymph-vascular Invasion",984,"A,M,C,I",lymphVascularInvasion,Tumor
-2800,"CS Tumor Size",985,"A,M,C,I",csTumorSize,Tumor
-2810,"CS Extension",988,"A,M,C,I",csExtension,Tumor
-2820,"CS Tumor Size/Ext Eval",991,"A,M,C,I",csTumorSizeExtEval,Tumor
-2830,"CS Lymph Nodes",992,"A,M,C,I",csLymphNodes,Tumor
-2840,"CS Lymph Nodes Eval",995,"A,M,C,I",csLymphNodesEval,Tumor
-2850,"CS Mets at DX",996,"A,M,C,I",csMetsAtDx,Tumor
-2860,"CS Mets Eval",998,"A,M,C,I",csMetsEval,Tumor
-2851,"CS Mets at Dx-Bone",999,"A,M,C,I",csMetsAtDxBone,Tumor
-2852,"CS Mets at Dx-Brain",1000,"A,M,C,I",csMetsAtDxBrain,Tumor
-2853,"CS Mets at Dx-Liver",1001,"A,M,C,I",csMetsAtDxLiver,Tumor
-2854,"CS Mets at Dx-Lung",1002,"A,M,C,I",csMetsAtDxLung,Tumor
-2880,"CS Site-Specific Factor 1",1003,"A,M,C,I",csSiteSpecificFactor1,Tumor
-2890,"CS Site-Specific Factor 2",1006,"A,M,C,I",csSiteSpecificFactor2,Tumor
-2900,"CS Site-Specific Factor 3",1009,"A,M,C,I",csSiteSpecificFactor3,Tumor
-2910,"CS Site-Specific Factor 4",1012,"A,M,C,I",csSiteSpecificFactor4,Tumor
-2920,"CS Site-Specific Factor 5",1015,"A,M,C,I",csSiteSpecificFactor5,Tumor
-2930,"CS Site-Specific Factor 6",1018,"A,M,C,I",csSiteSpecificFactor6,Tumor
-2861,"CS Site-Specific Factor 7",1021,"A,M,C,I",csSiteSpecificFactor7,Tumor
-2862,"CS Site-Specific Factor 8",1024,"A,M,C,I",csSiteSpecificFactor8,Tumor
-2863,"CS Site-Specific Factor 9",1027,"A,M,C,I",csSiteSpecificFactor9,Tumor
-2864,"CS Site-Specific Factor10",1030,"A,M,C,I",csSiteSpecificFactor10,Tumor
-2865,"CS Site-Specific Factor11",1033,"A,M,C,I",csSiteSpecificFactor11,Tumor
-2866,"CS Site-Specific Factor12",1036,"A,M,C,I",csSiteSpecificFactor12,Tumor
-2867,"CS Site-Specific Factor13",1039,"A,M,C,I",csSiteSpecificFactor13,Tumor
-2868,"CS Site-Specific Factor14",1042,"A,M,C,I",csSiteSpecificFactor14,Tumor
-2869,"CS Site-Specific Factor15",1045,"A,M,C,I",csSiteSpecificFactor15,Tumor
-2870,"CS Site-Specific Factor16",1048,"A,M,C,I",csSiteSpecificFactor16,Tumor
-2871,"CS Site-Specific Factor17",1051,"A,M,C,I",csSiteSpecificFactor17,Tumor
-2872,"CS Site-Specific Factor18",1054,"A,M,C,I",csSiteSpecificFactor18,Tumor
-2873,"CS Site-Specific Factor19",1057,"A,M,C,I",csSiteSpecificFactor19,Tumor
-2874,"CS Site-Specific Factor20",1060,"A,M,C,I",csSiteSpecificFactor20,Tumor
-2875,"CS Site-Specific Factor21",1063,"A,M,C,I",csSiteSpecificFactor21,Tumor
-2876,"CS Site-Specific Factor22",1066,"A,M,C,I",csSiteSpecificFactor22,Tumor
-2877,"CS Site-Specific Factor23",1069,"A,M,C,I",csSiteSpecificFactor23,Tumor
-2878,"CS Site-Specific Factor24",1072,"A,M,C,I",csSiteSpecificFactor24,Tumor
-2879,"CS Site-Specific Factor25",1075,"A,M,C,I",csSiteSpecificFactor25,Tumor
-2730,"CS PreRx Tumor Size",1078,"A,M,C,I",csPrerxTumorSize,Tumor
-2735,"CS PreRx Extension",1081,"A,M,C,I",csPrerxExtension,Tumor
-2740,"CS PreRx Tum Sz/Ext Eval",1084,"A,M,C,I",csPrerxTumSzExtEval,Tumor
-2750,"CS PreRx Lymph Nodes",1085,"A,M,C,I",csPrerxLymphNodes,Tumor
-2755,"CS PreRx Reg Nodes Eval",1088,"A,M,C,I",csPrerxRegNodesEval,Tumor
-2760,"CS PreRx Mets at DX",1089,"A,M,C,I",csPrerxMetsAtDx,Tumor
-2765,"CS PreRx Mets Eval",1091,"A,M,C,I",csPrerxMetsEval,Tumor
-2770,"CS PostRx Tumor Size",1092,"A,M,C,I",csPostrxTumorSize,Tumor
-2775,"CS PostRx Extension",1095,"A,M,C,I",csPostrxExtension,Tumor
-2780,"CS PostRx Lymph Nodes",1098,"A,M,C,I",csPostrxLymphNodes,Tumor
-2785,"CS PostRx Mets at DX",1101,"A,M,C,I",csPostrxMetsAtDx,Tumor
-2940,"Derived AJCC-6 T",1103,"A,M,C,I",derivedAjcc6T,Tumor
-2950,"Derived AJCC-6 T Descript",1105,"A,M,C,I",derivedAjcc6TDescript,Tumor
-2960,"Derived AJCC-6 N",1106,"A,M,C,I",derivedAjcc6N,Tumor
-2970,"Derived AJCC-6 N Descript",1108,"A,M,C,I",derivedAjcc6NDescript,Tumor
-2980,"Derived AJCC-6 M",1109,"A,M,C,I",derivedAjcc6M,Tumor
-2990,"Derived AJCC-6 M Descript",1111,"A,M,C,I",derivedAjcc6MDescript,Tumor
-3000,"Derived AJCC-6 Stage Grp",1112,"A,M,C,I",derivedAjcc6StageGrp,Tumor
-3400,"Derived AJCC-7 T",1114,"A,M,C,I",derivedAjcc7T,Tumor
-3402,"Derived AJCC-7 T Descript",1117,"A,M,C,I",derivedAjcc7TDescript,Tumor
-3410,"Derived AJCC-7 N",1118,"A,M,C,I",derivedAjcc7N,Tumor
-3412,"Derived AJCC-7 N Descript",1121,"A,M,C,I",derivedAjcc7NDescript,Tumor
-3420,"Derived AJCC-7 M",1122,"A,M,C,I",derivedAjcc7M,Tumor
-3422,"Derived AJCC-7 M Descript",1125,"A,M,C,I",derivedAjcc7MDescript,Tumor
-3430,"Derived AJCC-7 Stage Grp",1126,"A,M,C,I",derivedAjcc7StageGrp,Tumor
-3440,"Derived PreRx-7 T",1129,"A,M,C,I",derivedPrerx7T,Tumor
-3442,"Derived PreRx-7 T Descrip",1132,"A,M,C,I",derivedPrerx7TDescrip,Tumor
-3450,"Derived PreRx-7 N",1133,"A,M,C,I",derivedPrerx7N,Tumor
-3452,"Derived PreRx-7 N Descrip",1136,"A,M,C,I",derivedPrerx7NDescrip,Tumor
-3460,"Derived PreRx-7 M",1137,"A,M,C,I",derivedPrerx7M,Tumor
-3462,"Derived PreRx-7 M Descrip",1140,"A,M,C,I",derivedPrerx7MDescrip,Tumor
-3470,"Derived PreRx-7 Stage Grp",1141,"A,M,C,I",derivedPrerx7StageGrp,Tumor
-3480,"Derived PostRx-7 T",1144,"A,M,C,I",derivedPostrx7T,Tumor
-3482,"Derived PostRx-7 N",1147,"A,M,C,I",derivedPostrx7N,Tumor
-3490,"Derived PostRx-7 M",1150,"A,M,C,I",derivedPostrx7M,Tumor
-3492,"Derived PostRx-7 Stge Grp",1152,"A,M,C,I",derivedPostrx7StgeGrp,Tumor
-3010,"Derived SS1977",1155,"A,M,C,I",derivedSs1977,Tumor
-3020,"Derived SS2000",1156,"A,M,C,I",derivedSs2000,Tumor
-3600,"Derived Neoadjuv Rx Flag",1157,"A,M,C,I",derivedNeoadjuvRxFlag,Tumor
-3030,"Derived AJCC--Flag",1158,"A,M,C,I",derivedAjccFlag,Tumor
-3040,"Derived SS1977--Flag",1159,"A,M,C,I",derivedSs1977Flag,Tumor
-3050,"Derived SS2000--Flag",1160,"A,M,C,I",derivedSs2000Flag,Tumor
-2937,"CS Version Input Current",1161,"A,M,C,I",csVersionInputCurrent,Tumor
-2935,"CS Version Input Original",1167,"A,M,C,I",csVersionInputOriginal,Tumor
-2936,"CS Version Derived",1173,"A,M,C,I",csVersionDerived,Tumor
-3700,"SEER Site-Specific Fact 1",1179,"A,M,C,I",seerSiteSpecificFact1,Tumor
-3702,"SEER Site-Specific Fact 2",1180,"A,M,C,I",seerSiteSpecificFact2,Tumor
-3704,"SEER Site-Specific Fact 3",1181,"A,M,C,I",seerSiteSpecificFact3,Tumor
-3706,"SEER Site-Specific Fact 4",1182,"A,M,C,I",seerSiteSpecificFact4,Tumor
-3708,"SEER Site-Specific Fact 5",1183,"A,M,C,I",seerSiteSpecificFact5,Tumor
-3710,"SEER Site-Specific Fact 6",1184,"A,M,C,I",seerSiteSpecificFact6,Tumor
-3165,"ICD Revision Comorbid",1185,"A,M,C,I",icdRevisionComorbid,Tumor
-3110,"Comorbid/Complication 1",1186,"A,M,C,I",comorbidComplication1,Tumor
-3120,"Comorbid/Complication 2",1191,"A,M,C,I",comorbidComplication2,Tumor
-3130,"Comorbid/Complication 3",1196,"A,M,C,I",comorbidComplication3,Tumor
-3140,"Comorbid/Complication 4",1201,"A,M,C,I",comorbidComplication4,Tumor
-3150,"Comorbid/Complication 5",1206,"A,M,C,I",comorbidComplication5,Tumor
-3160,"Comorbid/Complication 6",1211,"A,M,C,I",comorbidComplication6,Tumor
-3161,"Comorbid/Complication 7",1216,"A,M,C,I",comorbidComplication7,Tumor
-3162,"Comorbid/Complication 8",1221,"A,M,C,I",comorbidComplication8,Tumor
-3163,"Comorbid/Complication 9",1226,"A,M,C,I",comorbidComplication9,Tumor
-3164,"Comorbid/Complication 10",1231,"A,M,C,I",comorbidComplication10,Tumor
-3780,"Secondary Diagnosis 1",1236,"A,M,C,I",secondaryDiagnosis1,Tumor
-3782,"Secondary Diagnosis 2",1243,"A,M,C,I",secondaryDiagnosis2,Tumor
-3784,"Secondary Diagnosis 3",1250,"A,M,C,I",secondaryDiagnosis3,Tumor
-3786,"Secondary Diagnosis 4",1257,"A,M,C,I",secondaryDiagnosis4,Tumor
-3788,"Secondary Diagnosis 5",1264,"A,M,C,I",secondaryDiagnosis5,Tumor
-3790,"Secondary Diagnosis 6",1271,"A,M,C,I",secondaryDiagnosis6,Tumor
-3792,"Secondary Diagnosis 7",1278,"A,M,C,I",secondaryDiagnosis7,Tumor
-3794,"Secondary Diagnosis 8",1285,"A,M,C,I",secondaryDiagnosis8,Tumor
-3796,"Secondary Diagnosis 9",1292,"A,M,C,I",secondaryDiagnosis9,Tumor
-3798,"Secondary Diagnosis 10",1299,"A,M,C,I",secondaryDiagnosis10,Tumor
-3720,"NPCR Specific Field",1306,"A,M,C,I",npcrSpecificField,Tumor
-1180,"Reserved 05",1381,"A,M,C,I",reserved05,Tumor
-1260,"Date Initial RX SEER",1436,"A,M,C,I",dateInitialRxSeer,Tumor
-1261,"Date Initial RX SEER Flag",1444,"A,M,C,I",dateInitialRxSeerFlag,Tumor
-1270,"Date 1st Crs RX CoC",1446,"A,M,C,I",date1stCrsRxCoc,Tumor
-1271,"Date 1st Crs RX CoC Flag",1454,"A,M,C,I",date1stCrsRxCocFlag,Tumor
-1200,"RX Date Surgery",1456,"A,M,C,I",rxDateSurgery,Tumor
-1201,"RX Date Surgery Flag",1464,"A,M,C,I",rxDateSurgeryFlag,Tumor
-3170,"RX Date Most Defin Surg",1466,"A,M,C,I",rxDateMostDefinSurg,Tumor
-3171,"RX Date Most Defin Surg Flag",1474,"A,M,C,I",rxDateMostDefinSurgFlag,Tumor
-3180,"RX Date Surgical Disch",1476,"A,M,C,I",rxDateSurgicalDisch,Tumor
-3181,"RX Date Surgical Disch Flag",1484,"A,M,C,I",rxDateSurgicalDischFlag,Tumor
-1210,"RX Date Radiation",1486,"A,M,C,I",rxDateRadiation,Tumor
-1211,"RX Date Radiation Flag",1494,"A,M,C,I",rxDateRadiationFlag,Tumor
-3220,"RX Date Radiation Ended",1496,"A,M,C,I",rxDateRadiationEnded,Tumor
-3221,"RX Date Radiation Ended Flag",1504,"A,M,C,I",rxDateRadiationEndedFlag,Tumor
-3230,"RX Date Systemic",1506,"A,M,C,I",rxDateSystemic,Tumor
-3231,"RX Date Systemic Flag",1514,"A,M,C,I",rxDateSystemicFlag,Tumor
-1220,"RX Date Chemo",1516,"A,M,C,I",rxDateChemo,Tumor
-1221,"RX Date Chemo Flag",1524,"A,M,C,I",rxDateChemoFlag,Tumor
-1230,"RX Date Hormone",1526,"A,M,C,I",rxDateHormone,Tumor
-1231,"RX Date Hormone Flag",1534,"A,M,C,I",rxDateHormoneFlag,Tumor
-1240,"RX Date BRM",1536,"A,M,C,I",rxDateBrm,Tumor
-1241,"RX Date BRM Flag",1544,"A,M,C,I",rxDateBrmFlag,Tumor
-1250,"RX Date Other",1546,"A,M,C,I",rxDateOther,Tumor
-1251,"RX Date Other Flag",1554,"A,M,C,I",rxDateOtherFlag,Tumor
-1280,"RX Date DX/Stg Proc",1556,"A,M,C,I",rxDateDxStgProc,Tumor
-1281,"RX Date DX/Stg Proc Flag",1564,"A,M,C,I",rxDateDxStgProcFlag,Tumor
-1285,"RX Summ--Treatment Status",1566,"A,M,C,I",rxSummTreatmentStatus,Tumor
-1290,"RX Summ--Surg Prim Site",1567,"A,M,C,I",rxSummSurgPrimSite,Tumor
-1292,"RX Summ--Scope Reg LN Sur",1569,"A,M,C,I",rxSummScopeRegLnSur,Tumor
-1294,"RX Summ--Surg Oth Reg/Dis",1570,"A,M,C,I",rxSummSurgOthRegDis,Tumor
-1296,"RX Summ--Reg LN Examined",1571,"A,M,C,I",rxSummRegLnExamined,Tumor
-1310,"RX Summ--Surgical Approch",1573,"A,M,C,I",rxSummSurgicalApproch,Tumor
-1320,"RX Summ--Surgical Margins",1574,"A,M,C,I",rxSummSurgicalMargins,Tumor
-1330,"RX Summ--Reconstruct 1st",1575,"A,M,C,I",rxSummReconstruct1st,Tumor
-1340,"Reason for No Surgery",1576,"A,M,C,I",reasonForNoSurgery,Tumor
-1350,"RX Summ--DX/Stg Proc",1577,"A,M,C,I",rxSummDxStgProc,Tumor
-3270,"RX Summ--Palliative Proc",1579,"A,M,C,I",rxSummPalliativeProc,Tumor
-1360,"RX Summ--Radiation",1580,"A,M,C,I",rxSummRadiation,Tumor
-1370,"RX Summ--Rad to CNS",1581,"A,M,C,I",rxSummRadToCns,Tumor
-1380,"RX Summ--Surg/Rad Seq",1582,"A,M,C,I",rxSummSurgRadSeq,Tumor
-3250,"RX Summ--Transplnt/Endocr",1583,"A,M,C,I",rxSummTransplntEndocr,Tumor
-1390,"RX Summ--Chemo",1585,"A,M,C,I",rxSummChemo,Tumor
-1400,"RX Summ--Hormone",1587,"A,M,C,I",rxSummHormone,Tumor
-1410,"RX Summ--BRM",1589,"A,M,C,I",rxSummBrm,Tumor
-1420,"RX Summ--Other",1591,"A,M,C,I",rxSummOther,Tumor
-1430,"Reason for No Radiation",1592,"A,M,C,I",reasonForNoRadiation,Tumor
-1460,"RX Coding System--Current",1593,"A,M,C,I",rxCodingSystemCurrent,Tumor
-2161,"Reserved 18",1595,"A,M,C,I",reserved18,Tumor
-1510,"Rad--Regional Dose: cGy",1596,"A,M,C,I",radRegionalDoseCgy,Tumor
-1520,"Rad--No of Treatment Vol",1601,"A,M,C,I",radNoOfTreatmentVol,Tumor
-1540,"Rad--Treatment Volume",1604,"A,M,C,I",radTreatmentVolume,Tumor
-1550,"Rad--Location of RX",1606,"A,M,C,I",radLocationOfRx,Tumor
-1570,"Rad--Regional RX Modality",1607,"A,M,C,I",radRegionalRxModality,Tumor
-3200,"Rad--Boost RX Modality",1609,"A,M,C,I",radBoostRxModality,Tumor
-3210,"Rad--Boost Dose cGy",1611,"A,M,C,I",radBoostDoseCgy,Tumor
-1639,"RX Summ--Systemic/Sur Seq",1616,"A,M,C,I",rxSummSystemicSurSeq,Tumor
-1640,"RX Summ--Surgery Type",1617,"A,M,C,I",rxSummSurgeryType,Tumor
-3190,"Readm Same Hosp 30 Days",1619,"A,M,C,I",readmSameHosp30Days,Tumor
-1646,"RX Summ--Surg Site 98-02",1620,"A,M,C,I",rxSummSurgSite9802,Tumor
-1647,"RX Summ--Scope Reg 98-02",1622,"A,M,C,I",rxSummScopeReg9802,Tumor
-1648,"RX Summ--Surg Oth 98-02",1623,"A,M,C,I",rxSummSurgOth9802,Tumor
-1190,"Reserved 06",1624,"A,M,C,I",reserved06,Tumor
-1660,"Subsq RX 2nd Course Date",1724,"A,M,C,I",subsqRx2ndCourseDate,Tumor
-1661,"Subsq RX 2ndCrs Date Flag",1732,"A,M,C,I",subsqRx2ndcrsDateFlag,Tumor
-1671,"Subsq RX 2nd Course Surg",1734,"A,M,C,I",subsqRx2ndCourseSurg,Tumor
-1677,"Subsq RX 2nd--Scope LN SU",1736,"A,M,C,I",subsqRx2ndScopeLnSu,Tumor
-1678,"Subsq RX 2nd--Surg Oth",1737,"A,M,C,I",subsqRx2ndSurgOth,Tumor
-1679,"Subsq RX 2nd--Reg LN Rem",1738,"A,M,C,I",subsqRx2ndRegLnRem,Tumor
-1672,"Subsq RX 2nd Course Rad",1740,"A,M,C,I",subsqRx2ndCourseRad,Tumor
-1673,"Subsq RX 2nd Course Chemo",1741,"A,M,C,I",subsqRx2ndCourseChemo,Tumor
-1674,"Subsq RX 2nd Course Horm",1742,"A,M,C,I",subsqRx2ndCourseHorm,Tumor
-1675,"Subsq RX 2nd Course BRM",1743,"A,M,C,I",subsqRx2ndCourseBrm,Tumor
-1676,"Subsq RX 2nd Course Oth",1744,"A,M,C,I",subsqRx2ndCourseOth,Tumor
-1680,"Subsq RX 3rd Course Date",1745,"A,M,C,I",subsqRx3rdCourseDate,Tumor
-1681,"Subsq RX 3rdCrs Date Flag",1753,"A,M,C,I",subsqRx3rdcrsDateFlag,Tumor
-1691,"Subsq RX 3rd Course Surg",1755,"A,M,C,I",subsqRx3rdCourseSurg,Tumor
-1697,"Subsq RX 3rd--Scope LN Su",1757,"A,M,C,I",subsqRx3rdScopeLnSu,Tumor
-1698,"Subsq RX 3rd--Surg Oth",1758,"A,M,C,I",subsqRx3rdSurgOth,Tumor
-1699,"Subsq RX 3rd--Reg LN Rem",1759,"A,M,C,I",subsqRx3rdRegLnRem,Tumor
-1692,"Subsq RX 3rd Course Rad",1761,"A,M,C,I",subsqRx3rdCourseRad,Tumor
-1693,"Subsq RX 3rd Course Chemo",1762,"A,M,C,I",subsqRx3rdCourseChemo,Tumor
-1694,"Subsq RX 3rd Course Horm",1763,"A,M,C,I",subsqRx3rdCourseHorm,Tumor
-1695,"Subsq RX 3rd Course BRM",1764,"A,M,C,I",subsqRx3rdCourseBrm,Tumor
-1696,"Subsq RX 3rd Course Oth",1765,"A,M,C,I",subsqRx3rdCourseOth,Tumor
-1700,"Subsq RX 4th Course Date",1766,"A,M,C,I",subsqRx4thCourseDate,Tumor
-1701,"Subsq RX 4thCrs Date Flag",1774,"A,M,C,I",subsqRx4thcrsDateFlag,Tumor
-1711,"Subsq RX 4th Course Surg",1776,"A,M,C,I",subsqRx4thCourseSurg,Tumor
-1717,"Subsq RX 4th--Scope LN Su",1778,"A,M,C,I",subsqRx4thScopeLnSu,Tumor
-1718,"Subsq RX 4th--Surg Oth",1779,"A,M,C,I",subsqRx4thSurgOth,Tumor
-1719,"Subsq RX 4th--Reg LN Rem",1780,"A,M,C,I",subsqRx4thRegLnRem,Tumor
-1712,"Subsq RX 4th Course Rad",1782,"A,M,C,I",subsqRx4thCourseRad,Tumor
-1713,"Subsq RX 4th Course Chemo",1783,"A,M,C,I",subsqRx4thCourseChemo,Tumor
-1714,"Subsq RX 4th Course Horm",1784,"A,M,C,I",subsqRx4thCourseHorm,Tumor
-1715,"Subsq RX 4th Course BRM",1785,"A,M,C,I",subsqRx4thCourseBrm,Tumor
-1716,"Subsq RX 4th Course Oth",1786,"A,M,C,I",subsqRx4thCourseOth,Tumor
-1741,"Subsq RX--Reconstruct Del",1787,"A,M,C,I",subsqRxReconstructDel,Tumor
-1300,"Reserved 07",1788,"A,M,C,I",reserved07,Tumor
-1981,"Over-ride SS/NodesPos",1888,"A,M,C,I",overRideSsNodespos,Tumor
-1982,"Over-ride SS/TNM-N",1889,"A,M,C,I",overRideSsTnmN,Tumor
-1983,"Over-ride SS/TNM-M",1890,"A,M,C,I",overRideSsTnmM,Tumor
-1985,"Over-ride Acsn/Class/Seq",1891,"A,M,C,I",overRideAcsnClassSeq,Tumor
-1986,"Over-ride HospSeq/DxConf",1892,"A,M,C,I",overRideHospseqDxconf,Tumor
-1987,"Over-ride CoC-Site/Type",1893,"A,M,C,I",overRideCocSiteType,Tumor
-1988,"Over-ride HospSeq/Site",1894,"A,M,C,I",overRideHospseqSite,Tumor
-1989,"Over-ride Site/TNM-StgGrp",1895,"A,M,C,I",overRideSiteTnmStggrp,Tumor
-1990,"Over-ride Age/Site/Morph",1896,"A,M,C,I",overRideAgeSiteMorph,Tumor
-2000,"Over-ride SeqNo/DxConf",1897,"A,M,C,I",overRideSeqnoDxconf,Tumor
-2010,"Over-ride Site/Lat/SeqNo",1898,"A,M,C,I",overRideSiteLatSeqno,Tumor
-2020,"Over-ride Surg/DxConf",1899,"A,M,C,I",overRideSurgDxconf,Tumor
-2030,"Over-ride Site/Type",1900,"A,M,C,I",overRideSiteType,Tumor
-2040,"Over-ride Histology",1901,"A,M,C,I",overRideHistology,Tumor
-2050,"Over-ride Report Source",1902,"A,M,C,I",overRideReportSource,Tumor
-2060,"Over-ride Ill-define Site",1903,"A,M,C,I",overRideIllDefineSite,Tumor
-2070,"Over-ride Leuk, Lymphoma",1904,"A,M,C,I",overRideLeukLymphoma,Tumor
-2071,"Over-ride Site/Behavior",1905,"A,M,C,I",overRideSiteBehavior,Tumor
-2072,"Over-ride Site/EOD/DX Dt",1906,"A,M,C,I",overRideSiteEodDxDt,Tumor
-2073,"Over-ride Site/Lat/EOD",1907,"A,M,C,I",overRideSiteLatEod,Tumor
-2074,"Over-ride Site/Lat/Morph",1908,"A,M,C,I",overRideSiteLatMorph,Tumor
-1960,"Site (73-91) ICD-O-1",1909,"A,M,C,I",siteIcdO1,Tumor
-1971,"Histology (73-91) ICD-O-1",1913,"A,M,C,I",histologyIcdO1,Tumor
-1972,"Behavior (73-91) ICD-O-1",1917,"A,M,C,I",behaviorIcdO1,Tumor
-1973,"Grade (73-91) ICD-O-1",1918,"A,M,C,I",gradeIcdO1,Tumor
-1980,"ICD-O-2 Conversion Flag",1919,"A,M,C,I",icdO2ConversionFlag,Tumor
-2081,"CRC CHECKSUM",1920,"A,M,C,I",crcChecksum,Tumor
-2120,"SEER Coding Sys--Current",1930,"A,M,C,I",seerCodingSysCurrent,Tumor
-2130,"SEER Coding Sys--Original",1931,"A,M,C,I",seerCodingSysOriginal,Tumor
-2140,"CoC Coding Sys--Current",1932,"A,M,C,I",cocCodingSysCurrent,Tumor
-2150,"CoC Coding Sys--Original",1934,"A,M,C,I",cocCodingSysOriginal,Tumor
-2170,"Vendor Name",1936,"A,M,C,I",vendorName,Tumor
-2180,"SEER Type of Follow-Up",1946,"A,M,C,I",seerTypeOfFollowUp,Tumor
-2190,"SEER Record Number",1947,"A,M,C,I",seerRecordNumber,Tumor
-2200,"Diagnostic Proc 73-87",1949,"A,M,C,I",diagnosticProc7387,Tumor
-2085,"Date Case Initiated",1951,"A,M,C,I",dateCaseInitiated,Tumor
-2090,"Date Case Completed",1959,"A,M,C,I",dateCaseCompleted,Tumor
-2092,"Date Case Completed--CoC",1967,"A,M,C,I",dateCaseCompletedCoc,Tumor
-2100,"Date Case Last Changed",1975,"A,M,C,I",dateCaseLastChanged,Tumor
-2110,"Date Case Report Exported",1983,"A,M,C,I",dateCaseReportExported,Tumor
-2111,"Date Case Report Received",1991,"A,M,C,I",dateCaseReportReceived,Tumor
-2112,"Date Case Report Loaded",1999,"A,M,C,I",dateCaseReportLoaded,Tumor
-2113,"Date Tumor Record Availbl",2007,"A,M,C,I",dateTumorRecordAvailbl,Tumor
-2116,"ICD-O-3 Conversion Flag",2015,"A,M,C,I",icdO3ConversionFlag,Tumor
-3750,"Over-ride CS 1",2016,"A,M,C,I",overRideCs1,Tumor
-3751,"Over-ride CS 2",2017,"A,M,C,I",overRideCs2,Tumor
-3752,"Over-ride CS 3",2018,"A,M,C,I",overRideCs3,Tumor
-3753,"Over-ride CS 4",2019,"A,M,C,I",overRideCs4,Tumor
-3754,"Over-ride CS 5",2020,"A,M,C,I",overRideCs5,Tumor
-3755,"Over-ride CS 6",2021,"A,M,C,I",overRideCs6,Tumor
-3756,"Over-ride CS 7",2022,"A,M,C,I",overRideCs7,Tumor
-3757,"Over-ride CS 8",2023,"A,M,C,I",overRideCs8,Tumor
-3758,"Over-ride CS 9",2024,"A,M,C,I",overRideCs9,Tumor
-3759,"Over-ride CS 10",2025,"A,M,C,I",overRideCs10,Tumor
-3760,"Over-ride CS 11",2026,"A,M,C,I",overRideCs11,Tumor
-3761,"Over-ride CS 12",2027,"A,M,C,I",overRideCs12,Tumor
-3762,"Over-ride CS 13",2028,"A,M,C,I",overRideCs13,Tumor
-3763,"Over-ride CS 14",2029,"A,M,C,I",overRideCs14,Tumor
-3764,"Over-ride CS 15",2030,"A,M,C,I",overRideCs15,Tumor
-3765,"Over-ride CS 16",2031,"A,M,C,I",overRideCs16,Tumor
-3766,"Over-ride CS 17",2032,"A,M,C,I",overRideCs17,Tumor
-3767,"Over-ride CS 18",2033,"A,M,C,I",overRideCs18,Tumor
-3768,"Over-ride CS 19",2034,"A,M,C,I",overRideCs19,Tumor
-3769,"Over-ride CS 20",2035,"A,M,C,I",overRideCs20,Tumor
-1650,"Reserved 08",2036,"A,M,C,I",reserved08,Tumor
-1750,"Date of Last Contact",2116,"A,M,C,I",dateOfLastContact,Patient
-1751,"Date of Last Contact Flag",2124,"A,M,C,I",dateOfLastContactFlag,Patient
-1760,"Vital Status",2126,"A,M,C,I",vitalStatus,Patient
-1770,"Cancer Status",2127,"A,M,C,I",cancerStatus,Tumor
-1780,"Quality of Survival",2128,"A,M,C,I",qualityOfSurvival,Tumor
-1790,"Follow-Up Source",2129,"A,M,C,I",followUpSource,Tumor
-1800,"Next Follow-Up Source",2130,"A,M,C,I",nextFollowUpSource,Tumor
-1810,"Addr Current--City",2131,"A,M,C,I",addrCurrentCity,Patient
-1820,"Addr Current--State",2181,"A,M,C,I",addrCurrentState,Patient
-1830,"Addr Current--Postal Code",2183,"A,M,C,I",addrCurrentPostalCode,Patient
-1840,"County--Current",2192,"A,M,C,I",countyCurrent,Patient
-2700,"Reserved 17",2195,"A,M,C,I",reserved17,Tumor
-1860,"Recurrence Date--1st",2196,"A,M,C,I",recurrenceDate1st,Tumor
-1861,"Recurrence Date--1st Flag",2204,"A,M,C,I",recurrenceDate1stFlag,Tumor
-1880,"Recurrence Type--1st",2206,"A,M,C,I",recurrenceType1st,Tumor
-1842,"Follow-Up Contact--City",2208,"A,M,C,I",followUpContactCity,Tumor
-1844,"Follow-Up Contact--State",2258,"A,M,C,I",followUpContactState,Tumor
-1846,"Follow-Up Contact--Postal",2260,"A,M,C,I",followUpContactPostal,Tumor
-1910,"Cause of Death",2269,"A,M,C,I",causeOfDeath,Patient
-1920,"ICD Revision Number",2273,"A,M,C,I",icdRevisionNumber,Patient
-1930,"Autopsy",2274,"A,M,C,I",autopsy,Patient
-1940,"Place of Death",2275,"A,M,C,I",placeOfDeath,Patient
-1791,"Follow-up Source Central",2278,"A,M,C,I",followUpSourceCentral,Tumor
-1755,"Date of Death--Canada",2280,"A,M,C,I",dateOfDeathCanada,Patient
-1756,"Date of Death--Canada Flag",2288,"A,M,C,I",dateOfDeathCanadaFlag,Patient
-1850,"Unusual Follow-Up Method",2290,"A,M,C,I",unusualFollowUpMethod,Tumor
-1782,"Surv-Date Active Followup",2292,"A,M,C,I",survDateActiveFollowup,Tumor
-1783,"Surv-Flag Active Followup",2300,"A,M,C,I",survFlagActiveFollowup,Tumor
-1784,"Surv-Mos Active Followup",2301,"A,M,C,I",survMosActiveFollowup,Tumor
-1785,"Surv-Date Presumed Alive",2305,"A,M,C,I",survDatePresumedAlive,Tumor
-1786,"Surv-Flag Presumed Alive",2313,"A,M,C,I",survFlagPresumedAlive,Tumor
-1787,"Surv-Mos Presumed Alive",2314,"A,M,C,I",survMosPresumedAlive,Tumor
-1788,"Surv-Date DX Recode",2318,"A,M,C,I",survDateDxRecode,Tumor
-1740,"Reserved 09",2326,"A,M,C,I",reserved09,Tumor
-2220,"State/Requestor Items",2340,"A,M,C,I",stateRequestorItems,Tumor
-2230,"Name--Last",3340,"A,M,C",nameLast,Patient
-2240,"Name--First",3380,"A,M,C",nameFirst,Patient
-2250,"Name--Middle",3420,"A,M,C",nameMiddle,Patient
-2260,"Name--Prefix",3460,"A,M,C",namePrefix,Patient
-2270,"Name--Suffix",3463,"A,M,C",nameSuffix,Patient
-2280,"Name--Alias",3466,"A,M,C",nameAlias,Patient
-2390,"Name--Maiden",3506,"A,M,C",nameMaiden,Patient
-2290,"Name--Spouse/Parent",3546,"A,M,C",nameSpouseParent,Tumor
-2300,"Medical Record Number",3606,"A,M,C",medicalRecordNumber,Tumor
-2310,"Military Record No Suffix",3617,"A,M,C",militaryRecordNoSuffix,Tumor
-2320,"Social Security Number",3619,"A,M,C",socialSecurityNumber,Patient
-2330,"Addr at DX--No & Street",3628,"A,M,C",addrAtDxNoStreet,Tumor
-2335,"Addr at DX--Supplementl",3688,"A,M,C",addrAtDxSupplementl,Tumor
-2350,"Addr Current--No & Street",3748,"A,M,C",addrCurrentNoStreet,Patient
-2355,"Addr Current--Supplementl",3808,"A,M,C",addrCurrentSupplementl,Patient
-2360,"Telephone",3868,"A,M,C",telephone,Patient
-2380,"DC State File Number",3878,"A,M,C",dcStateFileNumber,Patient
-2394,"Follow-Up Contact--Name",3884,"A,M,C",followUpContactName,Tumor
-2392,"Follow-Up Contact--No&St",3944,"A,M,C",followUpContactNost,Tumor
-2393,"Follow-Up Contact--Suppl",4004,"A,M,C",followUpContactSuppl,Tumor
-2352,"Latitude",4064,"A,M,C",latitude,Tumor
-2354,"Longitude",4074,"A,M,C",longitude,Tumor
-1835,"Reserved 10",4085,"A,M,C",reserved10,Tumor
-2445,"NPI--Following Registry",4285,"A,M,C",npiFollowingRegistry,Tumor
-2440,"Following Registry",4295,"A,M,C",followingRegistry,Tumor
-2415,"NPI--Inst Referred From",4305,"A,M,C",npiInstReferredFrom,Tumor
-2410,"Institution Referred From",4315,"A,M,C",institutionReferredFrom,Tumor
-2425,"NPI--Inst Referred To",4325,"A,M,C",npiInstReferredTo,Tumor
-2420,"Institution Referred To",4335,"A,M,C",institutionReferredTo,Tumor
-1900,"Reserved 11",4345,"A,M,C",reserved11,Tumor
-2465,"NPI--Physician--Managing",4395,"A,M,C",npiPhysicianManaging,Tumor
-2460,"Physician--Managing",4405,"A,M,C",physicianManaging,Tumor
-2475,"NPI--Physician--Follow-Up",4413,"A,M,C",npiPhysicianFollowUp,Tumor
-2470,"Physician--Follow-Up",4423,"A,M,C",physicianFollowUp,Tumor
-2485,"NPI--Physician--Primary Surg",4431,"A,M,C",npiPhysicianPrimarySurg,Tumor
-2480,"Physician--Primary Surg",4441,"A,M,C",physicianPrimarySurg,Tumor
-2495,"NPI--Physician 3",4449,"A,M,C",npiPhysician3,Tumor
-2490,"Physician 3",4459,"A,M,C",physician3,Tumor
-2505,"NPI--Physician 4",4467,"A,M,C",npiPhysician4,Tumor
-2500,"Physician 4",4477,"A,M,C",physician4,Tumor
-2510,"Reserved 12",4485,"A,M,C",reserved12,Tumor
-7010,"Path Reporting Fac ID 1",4535,"A,M,C",pathReportingFacId1,Tumor
-7090,"Path Report Number 1",4560,"A,M,C",pathReportNumber1,Tumor
-7320,"Path Date Spec Collect 1",4580,"A,M,C",pathDateSpecCollect1,Tumor
-7480,"Path Report Type 1",4594,"A,M,C",pathReportType1,Tumor
-7190,"Path Ordering Fac No 1",4596,"A,M,C",pathOrderingFacNo1,Tumor
-7100,"Path Order Phys Lic No 1",4621,"A,M,C",pathOrderPhysLicNo1,Tumor
-7011,"Path Reporting Fac ID 2",4641,"A,M,C",pathReportingFacId2,Tumor
-7091,"Path Report Number 2",4666,"A,M,C",pathReportNumber2,Tumor
-7321,"Path Date Spec Collect 2",4686,"A,M,C",pathDateSpecCollect2,Tumor
-7481,"Path Report Type 2",4700,"A,M,C",pathReportType2,Tumor
-7191,"Path Ordering Fac No 2",4702,"A,M,C",pathOrderingFacNo2,Tumor
-7101,"Path Order Phys Lic No 2",4727,"A,M,C",pathOrderPhysLicNo2,Tumor
-7012,"Path Reporting Fac ID 3",4747,"A,M,C",pathReportingFacId3,Tumor
-7092,"Path Report Number 3",4772,"A,M,C",pathReportNumber3,Tumor
-7322,"Path Date Spec Collect 3",4792,"A,M,C",pathDateSpecCollect3,Tumor
-7482,"Path Report Type 3",4806,"A,M,C",pathReportType3,Tumor
-7192,"Path Ordering Fac No 3",4808,"A,M,C",pathOrderingFacNo3,Tumor
-7102,"Path Order Phys Lic No 3",4833,"A,M,C",pathOrderPhysLicNo3,Tumor
-7013,"Path Reporting Fac ID 4",4853,"A,M,C",pathReportingFacId4,Tumor
-7093,"Path Report Number 4",4878,"A,M,C",pathReportNumber4,Tumor
-7323,"Path Date Spec Collect 4",4898,"A,M,C",pathDateSpecCollect4,Tumor
-7483,"Path Report Type 4",4912,"A,M,C",pathReportType4,Tumor
-7193,"Path Ordering Fac No 4",4914,"A,M,C",pathOrderingFacNo4,Tumor
-7103,"Path Order Phys Lic No 4",4939,"A,M,C",pathOrderPhysLicNo4,Tumor
-7014,"Path Reporting Fac ID 5",4959,"A,M,C",pathReportingFacId5,Tumor
-7094,"Path Report Number 5",4984,"A,M,C",pathReportNumber5,Tumor
-7324,"Path Date Spec Collect 5",5004,"A,M,C",pathDateSpecCollect5,Tumor
-7484,"Path Report Type 5",5018,"A,M,C",pathReportType5,Tumor
-7194,"Path Ordering Fac No 5",5020,"A,M,C",pathOrderingFacNo5,Tumor
-7104,"Path Order Phys Lic No 5",5045,"A,M,C",pathOrderPhysLicNo5,Tumor
-2080,"Reserved 13",5065,"A,M,C",reserved13,Tumor
-2520,"Text--DX Proc--PE",5565,"A,M",textDxProcPe,Tumor
-2530,"Text--DX Proc--X-ray/Scan",6565,"A,M",textDxProcXRayScan,Tumor
-2540,"Text--DX Proc--Scopes",7565,"A,M",textDxProcScopes,Tumor
-2550,"Text--DX Proc--Lab Tests",8565,"A,M",textDxProcLabTests,Tumor
-2560,"Text--DX Proc--Op",9565,"A,M",textDxProcOp,Tumor
-2570,"Text--DX Proc--Path",10565,"A,M",textDxProcPath,Tumor
-2580,"Text--Primary Site Title",11565,"A,M",textPrimarySiteTitle,Tumor
-2590,"Text--Histology Title",11665,"A,M",textHistologyTitle,Tumor
-2600,"Text--Staging",11765,"A,M",textStaging,Tumor
-2610,"RX Text--Surgery",12765,"A,M",rxTextSurgery,Tumor
-2620,"RX Text--Radiation (Beam)",13765,"A,M",rxTextRadiation,Tumor
-2630,"RX Text--Radiation Other",14765,"A,M",rxTextRadiationOther,Tumor
-2640,"RX Text--Chemo",15765,"A,M",rxTextChemo,Tumor
-2650,"RX Text--Hormone",16765,"A,M",rxTextHormone,Tumor
-2660,"RX Text--BRM",17765,"A,M",rxTextBrm,Tumor
-2670,"RX Text--Other",18765,"A,M",rxTextOther,Tumor
-2680,"Text--Remarks",19765,"A,M",textRemarks,Tumor
-2690,"Text--Place of Diagnosis",20765,"A,M",textPlaceOfDiagnosis,Tumor
-2210,"Reserved 14",20825,"A,M",reserved14,Tumor
+Item Number,Item Name,Item Start column,Item Length,Record Types,NAACCR XML ID,NAACCR XML Parent Element
+10,"Record Type",1,1,"A,M,C,I",recordType,NaaccrData
+30,"Registry Type",2,1,"A,M,C,I",registryType,NaaccrData
+37,"Reserved 00",3,14,"A,M,C,I",reserved00,Tumor
+50,"NAACCR Record Version",17,3,"A,M,C,I",naaccrRecordVersion,NaaccrData
+45,"NPI--Registry ID",20,10,"A,M,C,I",npiRegistryId,NaaccrData
+40,"Registry ID",30,10,"A,M,C,I",registryId,NaaccrData
+60,"Tumor Record Number",40,2,"A,M,C,I",tumorRecordNumber,Tumor
+20,"Patient ID Number",42,8,"A,M,C,I",patientIdNumber,Patient
+21,"Patient System ID-Hosp",50,8,"A,M,C,I",patientSystemIdHosp,Tumor
+370,"Reserved 01",58,37,"A,M,C,I",reserved01,Tumor
+70,"Addr at DX--City",95,50,"A,M,C,I",addrAtDxCity,Tumor
+80,"Addr at DX--State",145,2,"A,M,C,I",addrAtDxState,Tumor
+100,"Addr at DX--Postal Code",147,9,"A,M,C,I",addrAtDxPostalCode,Tumor
+90,"County at DX",156,3,"A,M,C,I",countyAtDx,Tumor
+110,"Census Tract 1970/80/90",159,6,"A,M,C,I",censusTract19708090,Tumor
+368,"Census Block Grp 1970-90",165,1,"A,M,C,I",censusBlockGrp197090,Tumor
+120,"Census Cod Sys 1970/80/90",166,1,"A,M,C,I",censusCodSys19708090,Tumor
+364,"Census Tr Cert 1970/80/90",167,1,"A,M,C,I",censusTrCert19708090,Tumor
+130,"Census Tract 2000",168,6,"A,M,C,I",censusTract2000,Tumor
+362,"Census Block Group 2000",174,1,"A,M,C,I",censusBlockGroup2000,Tumor
+365,"Census Tr Certainty 2000",175,1,"A,M,C,I",censusTrCertainty2000,Tumor
+150,"Marital Status at DX",176,1,"A,M,C,I",maritalStatusAtDx,Tumor
+160,"Race 1",177,2,"A,M,C,I",race1,Patient
+161,"Race 2",179,2,"A,M,C,I",race2,Patient
+162,"Race 3",181,2,"A,M,C,I",race3,Patient
+163,"Race 4",183,2,"A,M,C,I",race4,Patient
+164,"Race 5",185,2,"A,M,C,I",race5,Patient
+170,"Race Coding Sys--Current",187,1,"A,M,C,I",raceCodingSysCurrent,Patient
+180,"Race Coding Sys--Original",188,1,"A,M,C,I",raceCodingSysOriginal,Patient
+190,"Spanish/Hispanic Origin",189,1,"A,M,C,I",spanishHispanicOrigin,Patient
+200,"Computed Ethnicity",190,1,"A,M,C,I",computedEthnicity,Patient
+210,"Computed Ethnicity Source",191,1,"A,M,C,I",computedEthnicitySource,Patient
+220,"Sex",192,1,"A,M,C,I",sex,Patient
+230,"Age at Diagnosis",193,3,"A,M,C,I",ageAtDiagnosis,Tumor
+240,"Date of Birth",196,8,"A,M,C,I",dateOfBirth,Patient
+241,"Date of Birth Flag",204,2,"A,M,C,I",dateOfBirthFlag,Patient
+250,"Birthplace",206,3,"A,M,C,I",birthplace,Patient
+270,"Census Occ Code 1970-2000",209,3,"A,M,C,I",censusOccCode19702000,Tumor
+280,"Census Ind Code 1970-2000",212,3,"A,M,C,I",censusIndCode19702000,Tumor
+290,"Occupation Source",215,1,"A,M,C,I",occupationSource,Tumor
+300,"Industry Source",216,1,"A,M,C,I",industrySource,Tumor
+310,"Text--Usual Occupation",217,100,"A,M,C,I",textUsualOccupation,Tumor
+320,"Text--Usual Industry",317,100,"A,M,C,I",textUsualIndustry,Tumor
+330,"Census Occ/Ind Sys 70-00",417,1,"A,M,C,I",censusOccIndSys7000,Tumor
+191,"NHIA Derived Hisp Origin",418,1,"A,M,C,I",nhiaDerivedHispOrigin,Patient
+193,"Race--NAPIIA(derived API)",419,2,"A,M,C,I",raceNapiia,Patient
+192,"IHS Link",421,1,"A,M,C,I",ihsLink,Patient
+366,"GIS Coordinate Quality",422,2,"A,M,C,I",gisCoordinateQuality,Tumor
+3300,"RuralUrban Continuum 1993",424,2,"A,M,C,I",ruralurbanContinuum1993,Tumor
+3310,"RuralUrban Continuum 2003",426,2,"A,M,C,I",ruralurbanContinuum2003,Tumor
+135,"Census Tract 2010",428,6,"A,M,C,I",censusTract2010,Tumor
+363,"Census Block Group 2010",434,1,"A,M,C,I",censusBlockGroup2010,Tumor
+367,"Census Tr Certainty 2010",435,1,"A,M,C,I",censusTrCertainty2010,Tumor
+102,"Addr at DX--Country",436,3,"A,M,C,I",addrAtDxCountry,Tumor
+1832,"Addr Current--Country",439,3,"A,M,C,I",addrCurrentCountry,Patient
+252,"Birthplace--State",442,2,"A,M,C,I",birthplaceState,Patient
+254,"Birthplace--Country",444,3,"A,M,C,I",birthplaceCountry,Patient
+1847,"FollowUp Contact--Country",447,3,"A,M,C,I",followupContactCountry,Tumor
+1942,"Place of Death--State",450,2,"A,M,C,I",placeOfDeathState,Patient
+1944,"Place of Death--Country",452,3,"A,M,C,I",placeOfDeathCountry,Patient
+272,"Census Ind Code 2010 CDC",455,4,"A,M,C,I",censusIndCode2010,Tumor
+282,"Census Occ Code 2010 CDC",459,4,"A,M,C,I",censusOccCode2010,Tumor
+145,"Census Tr Poverty Indictr",463,1,"A,M,C,I",censusTrPovertyIndictr,Tumor
+94,"County at DX Geocode1990",464,3,"A,M,C,I",countyAtDxGeocode1990,Tumor
+95,"County at DX Geocode2000",467,3,"A,M,C,I",countyAtDxGeocode2000,Tumor
+96,"County at DX Geocode2010",470,3,"A,M,C,I",countyAtDxGeocode2010,Tumor
+97,"County at DX Geocode2020",473,3,"A,M,C,I",countyAtDxGeocode2020,Tumor
+3312,"RuralUrban Continuum 2013",476,2,"A,M,C,I",ruralurbanContinuum2013,Tumor
+530,"Reserved 02",478,50,"A,M,C,I",reserved02,Tumor
+380,"Sequence Number--Central",528,2,"A,M,C,I",sequenceNumberCentral,Tumor
+390,"Date of Diagnosis",530,8,"A,M,C,I",dateOfDiagnosis,Tumor
+391,"Date of Diagnosis Flag",538,2,"A,M,C,I",dateOfDiagnosisFlag,Tumor
+400,"Primary Site",540,4,"A,M,C,I",primarySite,Tumor
+410,"Laterality",544,1,"A,M,C,I",laterality,Tumor
+420,"Histology (92-00) ICD-O-2",545,4,"A,M,C,I",histologyIcdO2,Tumor
+430,"Behavior (92-00) ICD-O-2",549,1,"A,M,C,I",behaviorIcdO2,Tumor
+522,"Histologic Type ICD-O-3",550,4,"A,M,C,I",histologicTypeIcdO3,Tumor
+523,"Behavior Code ICD-O-3",554,1,"A,M,C,I",behaviorCodeIcdO3,Tumor
+440,"Grade",555,1,"A,M,C,I",grade,Tumor
+441,"Grade Path Value",556,1,"A,M,C,I",gradePathValue,Tumor
+449,"Grade Path System",557,1,"A,M,C,I",gradePathSystem,Tumor
+450,"Site Coding Sys--Current",558,1,"A,M,C,I",siteCodingSysCurrent,Tumor
+460,"Site Coding Sys--Original",559,1,"A,M,C,I",siteCodingSysOriginal,Tumor
+470,"Morph Coding Sys--Current",560,1,"A,M,C,I",morphCodingSysCurrent,Tumor
+480,"Morph Coding Sys--Originl",561,1,"A,M,C,I",morphCodingSysOriginl,Tumor
+490,"Diagnostic Confirmation",562,1,"A,M,C,I",diagnosticConfirmation,Tumor
+500,"Type of Reporting Source",563,1,"A,M,C,I",typeOfReportingSource,Tumor
+501,"Casefinding Source",564,2,"A,M,C,I",casefindingSource,Tumor
+442,"Ambiguous Terminology DX",566,1,"A,M,C,I",ambiguousTerminologyDx,Tumor
+443,"Date Conclusive DX",567,8,"A,M,C,I",dateConclusiveDx,Tumor
+448,"Date Conclusive DX Flag",575,2,"A,M,C,I",dateConclusiveDxFlag,Tumor
+444,"Mult Tum Rpt as One Prim",577,2,"A,M,C,I",multTumRptAsOnePrim,Tumor
+445,"Date of Mult Tumors",579,8,"A,M,C,I",dateOfMultTumors,Tumor
+439,"Date of Mult Tumors Flag",587,2,"A,M,C,I",dateOfMultTumorsFlag,Tumor
+446,"Multiplicity Counter",589,2,"A,M,C,I",multiplicityCounter,Tumor
+680,"Reserved 03",591,100,"A,M,C,I",reserved03,Tumor
+545,"NPI--Reporting Facility",691,10,"A,M,C,I",npiReportingFacility,Tumor
+540,"Reporting Facility",701,10,"A,M,C,I",reportingFacility,Tumor
+3105,"NPI--Archive FIN",711,10,"A,M,C,I",npiArchiveFin,Tumor
+3100,"Archive FIN",721,10,"A,M,C,I",archiveFin,Tumor
+550,"Accession Number--Hosp",731,9,"A,M,C,I",accessionNumberHosp,Tumor
+560,"Sequence Number--Hospital",740,2,"A,M,C,I",sequenceNumberHospital,Tumor
+570,"Abstracted By",742,3,"A,M,C,I",abstractedBy,Tumor
+580,"Date of 1st Contact",745,8,"A,M,C,I",dateOf1stContact,Tumor
+581,"Date of 1st Contact Flag",753,2,"A,M,C,I",dateOf1stContactFlag,Tumor
+590,"Date of Inpt Adm",755,8,"A,M,C,I",dateOfInptAdm,Tumor
+591,"Date of Inpt Adm Flag",763,2,"A,M,C,I",dateOfInptAdmFlag,Tumor
+600,"Date of Inpt Disch",765,8,"A,M,C,I",dateOfInptDisch,Tumor
+601,"Date of Inpt Disch Flag",773,2,"A,M,C,I",dateOfInptDischFlag,Tumor
+605,"Inpatient Status",775,1,"A,M,C,I",inpatientStatus,Tumor
+610,"Class of Case",776,2,"A,M,C,I",classOfCase,Tumor
+630,"Primary Payer at DX",778,2,"A,M,C,I",primaryPayerAtDx,Tumor
+2400,"Reserved 15",780,1,"A,M,C,I",reserved15,Tumor
+668,"RX Hosp--Surg App 2010",781,1,"A,M,C,I",rxHospSurgApp2010,Tumor
+670,"RX Hosp--Surg Prim Site",782,2,"A,M,C,I",rxHospSurgPrimSite,Tumor
+672,"RX Hosp--Scope Reg LN Sur",784,1,"A,M,C,I",rxHospScopeRegLnSur,Tumor
+674,"RX Hosp--Surg Oth Reg/Dis",785,1,"A,M,C,I",rxHospSurgOthRegDis,Tumor
+676,"RX Hosp--Reg LN Removed",786,2,"A,M,C,I",rxHospRegLnRemoved,Tumor
+2450,"Reserved 16",788,1,"A,M,C,I",reserved16,Tumor
+690,"RX Hosp--Radiation",789,1,"A,M,C,I",rxHospRadiation,Tumor
+700,"RX Hosp--Chemo",790,2,"A,M,C,I",rxHospChemo,Tumor
+710,"RX Hosp--Hormone",792,2,"A,M,C,I",rxHospHormone,Tumor
+720,"RX Hosp--BRM",794,2,"A,M,C,I",rxHospBrm,Tumor
+730,"RX Hosp--Other",796,1,"A,M,C,I",rxHospOther,Tumor
+740,"RX Hosp--DX/Stg Proc",797,2,"A,M,C,I",rxHospDxStgProc,Tumor
+3280,"RX Hosp--Palliative Proc",799,1,"A,M,C,I",rxHospPalliativeProc,Tumor
+746,"RX Hosp--Surg Site 98-02",800,2,"A,M,C,I",rxHospSurgSite9802,Tumor
+747,"RX Hosp--Scope Reg 98-02",802,1,"A,M,C,I",rxHospScopeReg9802,Tumor
+748,"RX Hosp--Surg Oth 98-02",803,1,"A,M,C,I",rxHospSurgOth9802,Tumor
+750,"Reserved 04",804,30,"A,M,C,I",reserved04,Tumor
+930,"TNM Path Staged By",834,2,"A,M,C,I",tnmPathStagedBy,Tumor
+990,"TNM Clin Staged By",836,2,"A,M,C,I",tnmClinStagedBy,Tumor
+1112,"Mets at DX-Bone",838,1,"A,M,C,I",metsAtDxBone,Tumor
+1113,"Mets at DX-Brain",839,1,"A,M,C,I",metsAtDxBrain,Tumor
+1114,"Mets at DX-Distant LN",840,1,"A,M,C,I",metsAtDxDistantLn,Tumor
+1115,"Mets at DX-Liver",841,1,"A,M,C,I",metsAtDxLiver,Tumor
+1116,"Mets at DX-Lung",842,1,"A,M,C,I",metsAtDxLung,Tumor
+1117,"Mets at DX-Other",843,1,"A,M,C,I",metsAtDxOther,Tumor
+752,"Tumor Size Clinical",844,3,"A,M,C,I",tumorSizeClinical,Tumor
+754,"Tumor Size Pathologic",847,3,"A,M,C,I",tumorSizePathologic,Tumor
+756,"Tumor Size Summary",850,3,"A,M,C,I",tumorSizeSummary,Tumor
+3605,"Derived SEER Path Stg Grp",853,5,"A,M,C,I",derivedSeerPathStgGrp,Tumor
+3610,"Derived SEER Clin Stg Grp",858,5,"A,M,C,I",derivedSeerClinStgGrp,Tumor
+3614,"Derived SEER Cmb Stg Grp",863,5,"A,M,C,I",derivedSeerCmbStgGrp,Tumor
+3616,"Derived SEER Combined T",868,5,"A,M,C,I",derivedSeerCombinedT,Tumor
+3618,"Derived SEER Combined N",873,5,"A,M,C,I",derivedSeerCombinedN,Tumor
+3620,"Derived SEER Combined M",878,5,"A,M,C,I",derivedSeerCombinedM,Tumor
+3622,"Derived SEER Cmb T Src",883,1,"A,M,C,I",derivedSeerCmbTSrc,Tumor
+3624,"Derived SEER Cmb N Src",884,1,"A,M,C,I",derivedSeerCmbNSrc,Tumor
+3626,"Derived SEER Cmb M Src",885,1,"A,M,C,I",derivedSeerCmbMSrc,Tumor
+772,"SEER Primary Tumor",886,3,"A,M,C,I",seerPrimaryTumor,Tumor
+774,"SEER Regional Nodes",889,3,"A,M,C,I",seerRegionalNodes,Tumor
+776,"SEER Mets",892,2,"A,M,C,I",seerMets,Tumor
+762,"Derived SS2017",894,1,"A,M,C,I",derivedSs2017,Tumor
+764,"Directly Assigned SS2017",895,1,"A,M,C,I",directlyAssignedSs2017,Tumor
+3650,"NPCR Derived Clin Stg Grp",896,4,"A,M,C,I",npcrDerivedClinStgGrp,Tumor
+3655,"NPCR Derived Path Stg Grp",900,4,"A,M,C,I",npcrDerivedPathStgGrp,Tumor
+759,"SEER Summary Stage 2000",904,1,"A,M,C,I",seerSummaryStage2000,Tumor
+760,"SEER Summary Stage 1977",905,1,"A,M,C,I",seerSummaryStage1977,Tumor
+780,"EOD--Tumor Size",906,3,"A,M,C,I",eodTumorSize,Tumor
+790,"EOD--Extension",909,2,"A,M,C,I",eodExtension,Tumor
+800,"EOD--Extension Prost Path",911,2,"A,M,C,I",eodExtensionProstPath,Tumor
+810,"EOD--Lymph Node Involv",913,1,"A,M,C,I",eodLymphNodeInvolv,Tumor
+820,"Regional Nodes Positive",914,2,"A,M,C,I",regionalNodesPositive,Tumor
+830,"Regional Nodes Examined",916,2,"A,M,C,I",regionalNodesExamined,Tumor
+840,"EOD--Old 13 Digit",918,13,"A,M,C,I",eodOld13Digit,Tumor
+850,"EOD--Old 2 Digit",931,2,"A,M,C,I",eodOld2Digit,Tumor
+860,"EOD--Old 4 Digit",933,4,"A,M,C,I",eodOld4Digit,Tumor
+870,"Coding System for EOD",937,1,"A,M,C,I",codingSystemForEod,Tumor
+1060,"TNM Edition Number",938,2,"A,M,C,I",tnmEditionNumber,Tumor
+880,"TNM Path T",940,4,"A,M,C,I",tnmPathT,Tumor
+890,"TNM Path N",944,4,"A,M,C,I",tnmPathN,Tumor
+900,"TNM Path M",948,4,"A,M,C,I",tnmPathM,Tumor
+910,"TNM Path Stage Group",952,4,"A,M,C,I",tnmPathStageGroup,Tumor
+920,"TNM Path Descriptor",956,1,"A,M,C,I",tnmPathDescriptor,Tumor
+2162,"Reserved 19",957,1,"A,M,C,I",reserved19,Tumor
+940,"TNM Clin T",958,4,"A,M,C,I",tnmClinT,Tumor
+950,"TNM Clin N",962,4,"A,M,C,I",tnmClinN,Tumor
+960,"TNM Clin M",966,4,"A,M,C,I",tnmClinM,Tumor
+970,"TNM Clin Stage Group",970,4,"A,M,C,I",tnmClinStageGroup,Tumor
+980,"TNM Clin Descriptor",974,1,"A,M,C,I",tnmClinDescriptor,Tumor
+2163,"Reserved 20",975,1,"A,M,C,I",reserved20,Tumor
+1120,"Pediatric Stage",976,2,"A,M,C,I",pediatricStage,Tumor
+1130,"Pediatric Staging System",978,2,"A,M,C,I",pediatricStagingSystem,Tumor
+1140,"Pediatric Staged By",980,1,"A,M,C,I",pediatricStagedBy,Tumor
+1150,"Tumor Marker 1",981,1,"A,M,C,I",tumorMarker1,Tumor
+1160,"Tumor Marker 2",982,1,"A,M,C,I",tumorMarker2,Tumor
+1170,"Tumor Marker 3",983,1,"A,M,C,I",tumorMarker3,Tumor
+1182,"Lymph-vascular Invasion",984,1,"A,M,C,I",lymphVascularInvasion,Tumor
+2800,"CS Tumor Size",985,3,"A,M,C,I",csTumorSize,Tumor
+2810,"CS Extension",988,3,"A,M,C,I",csExtension,Tumor
+2820,"CS Tumor Size/Ext Eval",991,1,"A,M,C,I",csTumorSizeExtEval,Tumor
+2830,"CS Lymph Nodes",992,3,"A,M,C,I",csLymphNodes,Tumor
+2840,"CS Lymph Nodes Eval",995,1,"A,M,C,I",csLymphNodesEval,Tumor
+2850,"CS Mets at DX",996,2,"A,M,C,I",csMetsAtDx,Tumor
+2860,"CS Mets Eval",998,1,"A,M,C,I",csMetsEval,Tumor
+2851,"CS Mets at Dx-Bone",999,1,"A,M,C,I",csMetsAtDxBone,Tumor
+2852,"CS Mets at Dx-Brain",1000,1,"A,M,C,I",csMetsAtDxBrain,Tumor
+2853,"CS Mets at Dx-Liver",1001,1,"A,M,C,I",csMetsAtDxLiver,Tumor
+2854,"CS Mets at Dx-Lung",1002,1,"A,M,C,I",csMetsAtDxLung,Tumor
+2880,"CS Site-Specific Factor 1",1003,3,"A,M,C,I",csSiteSpecificFactor1,Tumor
+2890,"CS Site-Specific Factor 2",1006,3,"A,M,C,I",csSiteSpecificFactor2,Tumor
+2900,"CS Site-Specific Factor 3",1009,3,"A,M,C,I",csSiteSpecificFactor3,Tumor
+2910,"CS Site-Specific Factor 4",1012,3,"A,M,C,I",csSiteSpecificFactor4,Tumor
+2920,"CS Site-Specific Factor 5",1015,3,"A,M,C,I",csSiteSpecificFactor5,Tumor
+2930,"CS Site-Specific Factor 6",1018,3,"A,M,C,I",csSiteSpecificFactor6,Tumor
+2861,"CS Site-Specific Factor 7",1021,3,"A,M,C,I",csSiteSpecificFactor7,Tumor
+2862,"CS Site-Specific Factor 8",1024,3,"A,M,C,I",csSiteSpecificFactor8,Tumor
+2863,"CS Site-Specific Factor 9",1027,3,"A,M,C,I",csSiteSpecificFactor9,Tumor
+2864,"CS Site-Specific Factor10",1030,3,"A,M,C,I",csSiteSpecificFactor10,Tumor
+2865,"CS Site-Specific Factor11",1033,3,"A,M,C,I",csSiteSpecificFactor11,Tumor
+2866,"CS Site-Specific Factor12",1036,3,"A,M,C,I",csSiteSpecificFactor12,Tumor
+2867,"CS Site-Specific Factor13",1039,3,"A,M,C,I",csSiteSpecificFactor13,Tumor
+2868,"CS Site-Specific Factor14",1042,3,"A,M,C,I",csSiteSpecificFactor14,Tumor
+2869,"CS Site-Specific Factor15",1045,3,"A,M,C,I",csSiteSpecificFactor15,Tumor
+2870,"CS Site-Specific Factor16",1048,3,"A,M,C,I",csSiteSpecificFactor16,Tumor
+2871,"CS Site-Specific Factor17",1051,3,"A,M,C,I",csSiteSpecificFactor17,Tumor
+2872,"CS Site-Specific Factor18",1054,3,"A,M,C,I",csSiteSpecificFactor18,Tumor
+2873,"CS Site-Specific Factor19",1057,3,"A,M,C,I",csSiteSpecificFactor19,Tumor
+2874,"CS Site-Specific Factor20",1060,3,"A,M,C,I",csSiteSpecificFactor20,Tumor
+2875,"CS Site-Specific Factor21",1063,3,"A,M,C,I",csSiteSpecificFactor21,Tumor
+2876,"CS Site-Specific Factor22",1066,3,"A,M,C,I",csSiteSpecificFactor22,Tumor
+2877,"CS Site-Specific Factor23",1069,3,"A,M,C,I",csSiteSpecificFactor23,Tumor
+2878,"CS Site-Specific Factor24",1072,3,"A,M,C,I",csSiteSpecificFactor24,Tumor
+2879,"CS Site-Specific Factor25",1075,3,"A,M,C,I",csSiteSpecificFactor25,Tumor
+2730,"CS PreRx Tumor Size",1078,3,"A,M,C,I",csPrerxTumorSize,Tumor
+2735,"CS PreRx Extension",1081,3,"A,M,C,I",csPrerxExtension,Tumor
+2740,"CS PreRx Tum Sz/Ext Eval",1084,1,"A,M,C,I",csPrerxTumSzExtEval,Tumor
+2750,"CS PreRx Lymph Nodes",1085,3,"A,M,C,I",csPrerxLymphNodes,Tumor
+2755,"CS PreRx Reg Nodes Eval",1088,1,"A,M,C,I",csPrerxRegNodesEval,Tumor
+2760,"CS PreRx Mets at DX",1089,2,"A,M,C,I",csPrerxMetsAtDx,Tumor
+2765,"CS PreRx Mets Eval",1091,1,"A,M,C,I",csPrerxMetsEval,Tumor
+2770,"CS PostRx Tumor Size",1092,3,"A,M,C,I",csPostrxTumorSize,Tumor
+2775,"CS PostRx Extension",1095,3,"A,M,C,I",csPostrxExtension,Tumor
+2780,"CS PostRx Lymph Nodes",1098,3,"A,M,C,I",csPostrxLymphNodes,Tumor
+2785,"CS PostRx Mets at DX",1101,2,"A,M,C,I",csPostrxMetsAtDx,Tumor
+2940,"Derived AJCC-6 T",1103,2,"A,M,C,I",derivedAjcc6T,Tumor
+2950,"Derived AJCC-6 T Descript",1105,1,"A,M,C,I",derivedAjcc6TDescript,Tumor
+2960,"Derived AJCC-6 N",1106,2,"A,M,C,I",derivedAjcc6N,Tumor
+2970,"Derived AJCC-6 N Descript",1108,1,"A,M,C,I",derivedAjcc6NDescript,Tumor
+2980,"Derived AJCC-6 M",1109,2,"A,M,C,I",derivedAjcc6M,Tumor
+2990,"Derived AJCC-6 M Descript",1111,1,"A,M,C,I",derivedAjcc6MDescript,Tumor
+3000,"Derived AJCC-6 Stage Grp",1112,2,"A,M,C,I",derivedAjcc6StageGrp,Tumor
+3400,"Derived AJCC-7 T",1114,3,"A,M,C,I",derivedAjcc7T,Tumor
+3402,"Derived AJCC-7 T Descript",1117,1,"A,M,C,I",derivedAjcc7TDescript,Tumor
+3410,"Derived AJCC-7 N",1118,3,"A,M,C,I",derivedAjcc7N,Tumor
+3412,"Derived AJCC-7 N Descript",1121,1,"A,M,C,I",derivedAjcc7NDescript,Tumor
+3420,"Derived AJCC-7 M",1122,3,"A,M,C,I",derivedAjcc7M,Tumor
+3422,"Derived AJCC-7 M Descript",1125,1,"A,M,C,I",derivedAjcc7MDescript,Tumor
+3430,"Derived AJCC-7 Stage Grp",1126,3,"A,M,C,I",derivedAjcc7StageGrp,Tumor
+3440,"Derived PreRx-7 T",1129,3,"A,M,C,I",derivedPrerx7T,Tumor
+3442,"Derived PreRx-7 T Descrip",1132,1,"A,M,C,I",derivedPrerx7TDescrip,Tumor
+3450,"Derived PreRx-7 N",1133,3,"A,M,C,I",derivedPrerx7N,Tumor
+3452,"Derived PreRx-7 N Descrip",1136,1,"A,M,C,I",derivedPrerx7NDescrip,Tumor
+3460,"Derived PreRx-7 M",1137,3,"A,M,C,I",derivedPrerx7M,Tumor
+3462,"Derived PreRx-7 M Descrip",1140,1,"A,M,C,I",derivedPrerx7MDescrip,Tumor
+3470,"Derived PreRx-7 Stage Grp",1141,3,"A,M,C,I",derivedPrerx7StageGrp,Tumor
+3480,"Derived PostRx-7 T",1144,3,"A,M,C,I",derivedPostrx7T,Tumor
+3482,"Derived PostRx-7 N",1147,3,"A,M,C,I",derivedPostrx7N,Tumor
+3490,"Derived PostRx-7 M",1150,2,"A,M,C,I",derivedPostrx7M,Tumor
+3492,"Derived PostRx-7 Stge Grp",1152,3,"A,M,C,I",derivedPostrx7StgeGrp,Tumor
+3010,"Derived SS1977",1155,1,"A,M,C,I",derivedSs1977,Tumor
+3020,"Derived SS2000",1156,1,"A,M,C,I",derivedSs2000,Tumor
+3600,"Derived Neoadjuv Rx Flag",1157,1,"A,M,C,I",derivedNeoadjuvRxFlag,Tumor
+3030,"Derived AJCC--Flag",1158,1,"A,M,C,I",derivedAjccFlag,Tumor
+3040,"Derived SS1977--Flag",1159,1,"A,M,C,I",derivedSs1977Flag,Tumor
+3050,"Derived SS2000--Flag",1160,1,"A,M,C,I",derivedSs2000Flag,Tumor
+2937,"CS Version Input Current",1161,6,"A,M,C,I",csVersionInputCurrent,Tumor
+2935,"CS Version Input Original",1167,6,"A,M,C,I",csVersionInputOriginal,Tumor
+2936,"CS Version Derived",1173,6,"A,M,C,I",csVersionDerived,Tumor
+3700,"SEER Site-Specific Fact 1",1179,1,"A,M,C,I",seerSiteSpecificFact1,Tumor
+3702,"SEER Site-Specific Fact 2",1180,1,"A,M,C,I",seerSiteSpecificFact2,Tumor
+3704,"SEER Site-Specific Fact 3",1181,1,"A,M,C,I",seerSiteSpecificFact3,Tumor
+3706,"SEER Site-Specific Fact 4",1182,1,"A,M,C,I",seerSiteSpecificFact4,Tumor
+3708,"SEER Site-Specific Fact 5",1183,1,"A,M,C,I",seerSiteSpecificFact5,Tumor
+3710,"SEER Site-Specific Fact 6",1184,1,"A,M,C,I",seerSiteSpecificFact6,Tumor
+3165,"ICD Revision Comorbid",1185,1,"A,M,C,I",icdRevisionComorbid,Tumor
+3110,"Comorbid/Complication 1",1186,5,"A,M,C,I",comorbidComplication1,Tumor
+3120,"Comorbid/Complication 2",1191,5,"A,M,C,I",comorbidComplication2,Tumor
+3130,"Comorbid/Complication 3",1196,5,"A,M,C,I",comorbidComplication3,Tumor
+3140,"Comorbid/Complication 4",1201,5,"A,M,C,I",comorbidComplication4,Tumor
+3150,"Comorbid/Complication 5",1206,5,"A,M,C,I",comorbidComplication5,Tumor
+3160,"Comorbid/Complication 6",1211,5,"A,M,C,I",comorbidComplication6,Tumor
+3161,"Comorbid/Complication 7",1216,5,"A,M,C,I",comorbidComplication7,Tumor
+3162,"Comorbid/Complication 8",1221,5,"A,M,C,I",comorbidComplication8,Tumor
+3163,"Comorbid/Complication 9",1226,5,"A,M,C,I",comorbidComplication9,Tumor
+3164,"Comorbid/Complication 10",1231,5,"A,M,C,I",comorbidComplication10,Tumor
+3780,"Secondary Diagnosis 1",1236,7,"A,M,C,I",secondaryDiagnosis1,Tumor
+3782,"Secondary Diagnosis 2",1243,7,"A,M,C,I",secondaryDiagnosis2,Tumor
+3784,"Secondary Diagnosis 3",1250,7,"A,M,C,I",secondaryDiagnosis3,Tumor
+3786,"Secondary Diagnosis 4",1257,7,"A,M,C,I",secondaryDiagnosis4,Tumor
+3788,"Secondary Diagnosis 5",1264,7,"A,M,C,I",secondaryDiagnosis5,Tumor
+3790,"Secondary Diagnosis 6",1271,7,"A,M,C,I",secondaryDiagnosis6,Tumor
+3792,"Secondary Diagnosis 7",1278,7,"A,M,C,I",secondaryDiagnosis7,Tumor
+3794,"Secondary Diagnosis 8",1285,7,"A,M,C,I",secondaryDiagnosis8,Tumor
+3796,"Secondary Diagnosis 9",1292,7,"A,M,C,I",secondaryDiagnosis9,Tumor
+3798,"Secondary Diagnosis 10",1299,7,"A,M,C,I",secondaryDiagnosis10,Tumor
+3720,"NPCR Specific Field",1306,75,"A,M,C,I",npcrSpecificField,Tumor
+1180,"Reserved 05",1381,55,"A,M,C,I",reserved05,Tumor
+1260,"Date Initial RX SEER",1436,8,"A,M,C,I",dateInitialRxSeer,Tumor
+1261,"Date Initial RX SEER Flag",1444,2,"A,M,C,I",dateInitialRxSeerFlag,Tumor
+1270,"Date 1st Crs RX CoC",1446,8,"A,M,C,I",date1stCrsRxCoc,Tumor
+1271,"Date 1st Crs RX CoC Flag",1454,2,"A,M,C,I",date1stCrsRxCocFlag,Tumor
+1200,"RX Date Surgery",1456,8,"A,M,C,I",rxDateSurgery,Tumor
+1201,"RX Date Surgery Flag",1464,2,"A,M,C,I",rxDateSurgeryFlag,Tumor
+3170,"RX Date Most Defin Surg",1466,8,"A,M,C,I",rxDateMostDefinSurg,Tumor
+3171,"RX Date Most Defin Surg Flag",1474,2,"A,M,C,I",rxDateMostDefinSurgFlag,Tumor
+3180,"RX Date Surgical Disch",1476,8,"A,M,C,I",rxDateSurgicalDisch,Tumor
+3181,"RX Date Surgical Disch Flag",1484,2,"A,M,C,I",rxDateSurgicalDischFlag,Tumor
+1210,"RX Date Radiation",1486,8,"A,M,C,I",rxDateRadiation,Tumor
+1211,"RX Date Radiation Flag",1494,2,"A,M,C,I",rxDateRadiationFlag,Tumor
+3220,"RX Date Radiation Ended",1496,8,"A,M,C,I",rxDateRadiationEnded,Tumor
+3221,"RX Date Radiation Ended Flag",1504,2,"A,M,C,I",rxDateRadiationEndedFlag,Tumor
+3230,"RX Date Systemic",1506,8,"A,M,C,I",rxDateSystemic,Tumor
+3231,"RX Date Systemic Flag",1514,2,"A,M,C,I",rxDateSystemicFlag,Tumor
+1220,"RX Date Chemo",1516,8,"A,M,C,I",rxDateChemo,Tumor
+1221,"RX Date Chemo Flag",1524,2,"A,M,C,I",rxDateChemoFlag,Tumor
+1230,"RX Date Hormone",1526,8,"A,M,C,I",rxDateHormone,Tumor
+1231,"RX Date Hormone Flag",1534,2,"A,M,C,I",rxDateHormoneFlag,Tumor
+1240,"RX Date BRM",1536,8,"A,M,C,I",rxDateBrm,Tumor
+1241,"RX Date BRM Flag",1544,2,"A,M,C,I",rxDateBrmFlag,Tumor
+1250,"RX Date Other",1546,8,"A,M,C,I",rxDateOther,Tumor
+1251,"RX Date Other Flag",1554,2,"A,M,C,I",rxDateOtherFlag,Tumor
+1280,"RX Date DX/Stg Proc",1556,8,"A,M,C,I",rxDateDxStgProc,Tumor
+1281,"RX Date DX/Stg Proc Flag",1564,2,"A,M,C,I",rxDateDxStgProcFlag,Tumor
+1285,"RX Summ--Treatment Status",1566,1,"A,M,C,I",rxSummTreatmentStatus,Tumor
+1290,"RX Summ--Surg Prim Site",1567,2,"A,M,C,I",rxSummSurgPrimSite,Tumor
+1292,"RX Summ--Scope Reg LN Sur",1569,1,"A,M,C,I",rxSummScopeRegLnSur,Tumor
+1294,"RX Summ--Surg Oth Reg/Dis",1570,1,"A,M,C,I",rxSummSurgOthRegDis,Tumor
+1296,"RX Summ--Reg LN Examined",1571,2,"A,M,C,I",rxSummRegLnExamined,Tumor
+1310,"RX Summ--Surgical Approch",1573,1,"A,M,C,I",rxSummSurgicalApproch,Tumor
+1320,"RX Summ--Surgical Margins",1574,1,"A,M,C,I",rxSummSurgicalMargins,Tumor
+1330,"RX Summ--Reconstruct 1st",1575,1,"A,M,C,I",rxSummReconstruct1st,Tumor
+1340,"Reason for No Surgery",1576,1,"A,M,C,I",reasonForNoSurgery,Tumor
+1350,"RX Summ--DX/Stg Proc",1577,2,"A,M,C,I",rxSummDxStgProc,Tumor
+3270,"RX Summ--Palliative Proc",1579,1,"A,M,C,I",rxSummPalliativeProc,Tumor
+1360,"RX Summ--Radiation",1580,1,"A,M,C,I",rxSummRadiation,Tumor
+1370,"RX Summ--Rad to CNS",1581,1,"A,M,C,I",rxSummRadToCns,Tumor
+1380,"RX Summ--Surg/Rad Seq",1582,1,"A,M,C,I",rxSummSurgRadSeq,Tumor
+3250,"RX Summ--Transplnt/Endocr",1583,2,"A,M,C,I",rxSummTransplntEndocr,Tumor
+1390,"RX Summ--Chemo",1585,2,"A,M,C,I",rxSummChemo,Tumor
+1400,"RX Summ--Hormone",1587,2,"A,M,C,I",rxSummHormone,Tumor
+1410,"RX Summ--BRM",1589,2,"A,M,C,I",rxSummBrm,Tumor
+1420,"RX Summ--Other",1591,1,"A,M,C,I",rxSummOther,Tumor
+1430,"Reason for No Radiation",1592,1,"A,M,C,I",reasonForNoRadiation,Tumor
+1460,"RX Coding System--Current",1593,2,"A,M,C,I",rxCodingSystemCurrent,Tumor
+2161,"Reserved 18",1595,1,"A,M,C,I",reserved18,Tumor
+1510,"Rad--Regional Dose: cGy",1596,5,"A,M,C,I",radRegionalDoseCgy,Tumor
+1520,"Rad--No of Treatment Vol",1601,3,"A,M,C,I",radNoOfTreatmentVol,Tumor
+1540,"Rad--Treatment Volume",1604,2,"A,M,C,I",radTreatmentVolume,Tumor
+1550,"Rad--Location of RX",1606,1,"A,M,C,I",radLocationOfRx,Tumor
+1570,"Rad--Regional RX Modality",1607,2,"A,M,C,I",radRegionalRxModality,Tumor
+3200,"Rad--Boost RX Modality",1609,2,"A,M,C,I",radBoostRxModality,Tumor
+3210,"Rad--Boost Dose cGy",1611,5,"A,M,C,I",radBoostDoseCgy,Tumor
+1639,"RX Summ--Systemic/Sur Seq",1616,1,"A,M,C,I",rxSummSystemicSurSeq,Tumor
+1640,"RX Summ--Surgery Type",1617,2,"A,M,C,I",rxSummSurgeryType,Tumor
+3190,"Readm Same Hosp 30 Days",1619,1,"A,M,C,I",readmSameHosp30Days,Tumor
+1646,"RX Summ--Surg Site 98-02",1620,2,"A,M,C,I",rxSummSurgSite9802,Tumor
+1647,"RX Summ--Scope Reg 98-02",1622,1,"A,M,C,I",rxSummScopeReg9802,Tumor
+1648,"RX Summ--Surg Oth 98-02",1623,1,"A,M,C,I",rxSummSurgOth9802,Tumor
+1190,"Reserved 06",1624,100,"A,M,C,I",reserved06,Tumor
+1660,"Subsq RX 2nd Course Date",1724,8,"A,M,C,I",subsqRx2ndCourseDate,Tumor
+1661,"Subsq RX 2ndCrs Date Flag",1732,2,"A,M,C,I",subsqRx2ndcrsDateFlag,Tumor
+1671,"Subsq RX 2nd Course Surg",1734,2,"A,M,C,I",subsqRx2ndCourseSurg,Tumor
+1677,"Subsq RX 2nd--Scope LN SU",1736,1,"A,M,C,I",subsqRx2ndScopeLnSu,Tumor
+1678,"Subsq RX 2nd--Surg Oth",1737,1,"A,M,C,I",subsqRx2ndSurgOth,Tumor
+1679,"Subsq RX 2nd--Reg LN Rem",1738,2,"A,M,C,I",subsqRx2ndRegLnRem,Tumor
+1672,"Subsq RX 2nd Course Rad",1740,1,"A,M,C,I",subsqRx2ndCourseRad,Tumor
+1673,"Subsq RX 2nd Course Chemo",1741,1,"A,M,C,I",subsqRx2ndCourseChemo,Tumor
+1674,"Subsq RX 2nd Course Horm",1742,1,"A,M,C,I",subsqRx2ndCourseHorm,Tumor
+1675,"Subsq RX 2nd Course BRM",1743,1,"A,M,C,I",subsqRx2ndCourseBrm,Tumor
+1676,"Subsq RX 2nd Course Oth",1744,1,"A,M,C,I",subsqRx2ndCourseOth,Tumor
+1680,"Subsq RX 3rd Course Date",1745,8,"A,M,C,I",subsqRx3rdCourseDate,Tumor
+1681,"Subsq RX 3rdCrs Date Flag",1753,2,"A,M,C,I",subsqRx3rdcrsDateFlag,Tumor
+1691,"Subsq RX 3rd Course Surg",1755,2,"A,M,C,I",subsqRx3rdCourseSurg,Tumor
+1697,"Subsq RX 3rd--Scope LN Su",1757,1,"A,M,C,I",subsqRx3rdScopeLnSu,Tumor
+1698,"Subsq RX 3rd--Surg Oth",1758,1,"A,M,C,I",subsqRx3rdSurgOth,Tumor
+1699,"Subsq RX 3rd--Reg LN Rem",1759,2,"A,M,C,I",subsqRx3rdRegLnRem,Tumor
+1692,"Subsq RX 3rd Course Rad",1761,1,"A,M,C,I",subsqRx3rdCourseRad,Tumor
+1693,"Subsq RX 3rd Course Chemo",1762,1,"A,M,C,I",subsqRx3rdCourseChemo,Tumor
+1694,"Subsq RX 3rd Course Horm",1763,1,"A,M,C,I",subsqRx3rdCourseHorm,Tumor
+1695,"Subsq RX 3rd Course BRM",1764,1,"A,M,C,I",subsqRx3rdCourseBrm,Tumor
+1696,"Subsq RX 3rd Course Oth",1765,1,"A,M,C,I",subsqRx3rdCourseOth,Tumor
+1700,"Subsq RX 4th Course Date",1766,8,"A,M,C,I",subsqRx4thCourseDate,Tumor
+1701,"Subsq RX 4thCrs Date Flag",1774,2,"A,M,C,I",subsqRx4thcrsDateFlag,Tumor
+1711,"Subsq RX 4th Course Surg",1776,2,"A,M,C,I",subsqRx4thCourseSurg,Tumor
+1717,"Subsq RX 4th--Scope LN Su",1778,1,"A,M,C,I",subsqRx4thScopeLnSu,Tumor
+1718,"Subsq RX 4th--Surg Oth",1779,1,"A,M,C,I",subsqRx4thSurgOth,Tumor
+1719,"Subsq RX 4th--Reg LN Rem",1780,2,"A,M,C,I",subsqRx4thRegLnRem,Tumor
+1712,"Subsq RX 4th Course Rad",1782,1,"A,M,C,I",subsqRx4thCourseRad,Tumor
+1713,"Subsq RX 4th Course Chemo",1783,1,"A,M,C,I",subsqRx4thCourseChemo,Tumor
+1714,"Subsq RX 4th Course Horm",1784,1,"A,M,C,I",subsqRx4thCourseHorm,Tumor
+1715,"Subsq RX 4th Course BRM",1785,1,"A,M,C,I",subsqRx4thCourseBrm,Tumor
+1716,"Subsq RX 4th Course Oth",1786,1,"A,M,C,I",subsqRx4thCourseOth,Tumor
+1741,"Subsq RX--Reconstruct Del",1787,1,"A,M,C,I",subsqRxReconstructDel,Tumor
+1300,"Reserved 07",1788,100,"A,M,C,I",reserved07,Tumor
+1981,"Over-ride SS/NodesPos",1888,1,"A,M,C,I",overRideSsNodespos,Tumor
+1982,"Over-ride SS/TNM-N",1889,1,"A,M,C,I",overRideSsTnmN,Tumor
+1983,"Over-ride SS/TNM-M",1890,1,"A,M,C,I",overRideSsTnmM,Tumor
+1985,"Over-ride Acsn/Class/Seq",1891,1,"A,M,C,I",overRideAcsnClassSeq,Tumor
+1986,"Over-ride HospSeq/DxConf",1892,1,"A,M,C,I",overRideHospseqDxconf,Tumor
+1987,"Over-ride CoC-Site/Type",1893,1,"A,M,C,I",overRideCocSiteType,Tumor
+1988,"Over-ride HospSeq/Site",1894,1,"A,M,C,I",overRideHospseqSite,Tumor
+1989,"Over-ride Site/TNM-StgGrp",1895,1,"A,M,C,I",overRideSiteTnmStggrp,Tumor
+1990,"Over-ride Age/Site/Morph",1896,1,"A,M,C,I",overRideAgeSiteMorph,Tumor
+2000,"Over-ride SeqNo/DxConf",1897,1,"A,M,C,I",overRideSeqnoDxconf,Tumor
+2010,"Over-ride Site/Lat/SeqNo",1898,1,"A,M,C,I",overRideSiteLatSeqno,Tumor
+2020,"Over-ride Surg/DxConf",1899,1,"A,M,C,I",overRideSurgDxconf,Tumor
+2030,"Over-ride Site/Type",1900,1,"A,M,C,I",overRideSiteType,Tumor
+2040,"Over-ride Histology",1901,1,"A,M,C,I",overRideHistology,Tumor
+2050,"Over-ride Report Source",1902,1,"A,M,C,I",overRideReportSource,Tumor
+2060,"Over-ride Ill-define Site",1903,1,"A,M,C,I",overRideIllDefineSite,Tumor
+2070,"Over-ride Leuk, Lymphoma",1904,1,"A,M,C,I",overRideLeukLymphoma,Tumor
+2071,"Over-ride Site/Behavior",1905,1,"A,M,C,I",overRideSiteBehavior,Tumor
+2072,"Over-ride Site/EOD/DX Dt",1906,1,"A,M,C,I",overRideSiteEodDxDt,Tumor
+2073,"Over-ride Site/Lat/EOD",1907,1,"A,M,C,I",overRideSiteLatEod,Tumor
+2074,"Over-ride Site/Lat/Morph",1908,1,"A,M,C,I",overRideSiteLatMorph,Tumor
+1960,"Site (73-91) ICD-O-1",1909,4,"A,M,C,I",siteIcdO1,Tumor
+1971,"Histology (73-91) ICD-O-1",1913,4,"A,M,C,I",histologyIcdO1,Tumor
+1972,"Behavior (73-91) ICD-O-1",1917,1,"A,M,C,I",behaviorIcdO1,Tumor
+1973,"Grade (73-91) ICD-O-1",1918,1,"A,M,C,I",gradeIcdO1,Tumor
+1980,"ICD-O-2 Conversion Flag",1919,1,"A,M,C,I",icdO2ConversionFlag,Tumor
+2081,"CRC CHECKSUM",1920,10,"A,M,C,I",crcChecksum,Tumor
+2120,"SEER Coding Sys--Current",1930,1,"A,M,C,I",seerCodingSysCurrent,Tumor
+2130,"SEER Coding Sys--Original",1931,1,"A,M,C,I",seerCodingSysOriginal,Tumor
+2140,"CoC Coding Sys--Current",1932,2,"A,M,C,I",cocCodingSysCurrent,Tumor
+2150,"CoC Coding Sys--Original",1934,2,"A,M,C,I",cocCodingSysOriginal,Tumor
+2170,"Vendor Name",1936,10,"A,M,C,I",vendorName,Tumor
+2180,"SEER Type of Follow-Up",1946,1,"A,M,C,I",seerTypeOfFollowUp,Tumor
+2190,"SEER Record Number",1947,2,"A,M,C,I",seerRecordNumber,Tumor
+2200,"Diagnostic Proc 73-87",1949,2,"A,M,C,I",diagnosticProc7387,Tumor
+2085,"Date Case Initiated",1951,8,"A,M,C,I",dateCaseInitiated,Tumor
+2090,"Date Case Completed",1959,8,"A,M,C,I",dateCaseCompleted,Tumor
+2092,"Date Case Completed--CoC",1967,8,"A,M,C,I",dateCaseCompletedCoc,Tumor
+2100,"Date Case Last Changed",1975,8,"A,M,C,I",dateCaseLastChanged,Tumor
+2110,"Date Case Report Exported",1983,8,"A,M,C,I",dateCaseReportExported,Tumor
+2111,"Date Case Report Received",1991,8,"A,M,C,I",dateCaseReportReceived,Tumor
+2112,"Date Case Report Loaded",1999,8,"A,M,C,I",dateCaseReportLoaded,Tumor
+2113,"Date Tumor Record Availbl",2007,8,"A,M,C,I",dateTumorRecordAvailbl,Tumor
+2116,"ICD-O-3 Conversion Flag",2015,1,"A,M,C,I",icdO3ConversionFlag,Tumor
+3750,"Over-ride CS 1",2016,1,"A,M,C,I",overRideCs1,Tumor
+3751,"Over-ride CS 2",2017,1,"A,M,C,I",overRideCs2,Tumor
+3752,"Over-ride CS 3",2018,1,"A,M,C,I",overRideCs3,Tumor
+3753,"Over-ride CS 4",2019,1,"A,M,C,I",overRideCs4,Tumor
+3754,"Over-ride CS 5",2020,1,"A,M,C,I",overRideCs5,Tumor
+3755,"Over-ride CS 6",2021,1,"A,M,C,I",overRideCs6,Tumor
+3756,"Over-ride CS 7",2022,1,"A,M,C,I",overRideCs7,Tumor
+3757,"Over-ride CS 8",2023,1,"A,M,C,I",overRideCs8,Tumor
+3758,"Over-ride CS 9",2024,1,"A,M,C,I",overRideCs9,Tumor
+3759,"Over-ride CS 10",2025,1,"A,M,C,I",overRideCs10,Tumor
+3760,"Over-ride CS 11",2026,1,"A,M,C,I",overRideCs11,Tumor
+3761,"Over-ride CS 12",2027,1,"A,M,C,I",overRideCs12,Tumor
+3762,"Over-ride CS 13",2028,1,"A,M,C,I",overRideCs13,Tumor
+3763,"Over-ride CS 14",2029,1,"A,M,C,I",overRideCs14,Tumor
+3764,"Over-ride CS 15",2030,1,"A,M,C,I",overRideCs15,Tumor
+3765,"Over-ride CS 16",2031,1,"A,M,C,I",overRideCs16,Tumor
+3766,"Over-ride CS 17",2032,1,"A,M,C,I",overRideCs17,Tumor
+3767,"Over-ride CS 18",2033,1,"A,M,C,I",overRideCs18,Tumor
+3768,"Over-ride CS 19",2034,1,"A,M,C,I",overRideCs19,Tumor
+3769,"Over-ride CS 20",2035,1,"A,M,C,I",overRideCs20,Tumor
+1650,"Reserved 08",2036,80,"A,M,C,I",reserved08,Tumor
+1750,"Date of Last Contact",2116,8,"A,M,C,I",dateOfLastContact,Patient
+1751,"Date of Last Contact Flag",2124,2,"A,M,C,I",dateOfLastContactFlag,Patient
+1760,"Vital Status",2126,1,"A,M,C,I",vitalStatus,Patient
+1770,"Cancer Status",2127,1,"A,M,C,I",cancerStatus,Tumor
+1780,"Quality of Survival",2128,1,"A,M,C,I",qualityOfSurvival,Tumor
+1790,"Follow-Up Source",2129,1,"A,M,C,I",followUpSource,Tumor
+1800,"Next Follow-Up Source",2130,1,"A,M,C,I",nextFollowUpSource,Tumor
+1810,"Addr Current--City",2131,50,"A,M,C,I",addrCurrentCity,Patient
+1820,"Addr Current--State",2181,2,"A,M,C,I",addrCurrentState,Patient
+1830,"Addr Current--Postal Code",2183,9,"A,M,C,I",addrCurrentPostalCode,Patient
+1840,"County--Current",2192,3,"A,M,C,I",countyCurrent,Patient
+2700,"Reserved 17",2195,1,"A,M,C,I",reserved17,Tumor
+1860,"Recurrence Date--1st",2196,8,"A,M,C,I",recurrenceDate1st,Tumor
+1861,"Recurrence Date--1st Flag",2204,2,"A,M,C,I",recurrenceDate1stFlag,Tumor
+1880,"Recurrence Type--1st",2206,2,"A,M,C,I",recurrenceType1st,Tumor
+1842,"Follow-Up Contact--City",2208,50,"A,M,C,I",followUpContactCity,Tumor
+1844,"Follow-Up Contact--State",2258,2,"A,M,C,I",followUpContactState,Tumor
+1846,"Follow-Up Contact--Postal",2260,9,"A,M,C,I",followUpContactPostal,Tumor
+1910,"Cause of Death",2269,4,"A,M,C,I",causeOfDeath,Patient
+1920,"ICD Revision Number",2273,1,"A,M,C,I",icdRevisionNumber,Patient
+1930,"Autopsy",2274,1,"A,M,C,I",autopsy,Patient
+1940,"Place of Death",2275,3,"A,M,C,I",placeOfDeath,Patient
+1791,"Follow-up Source Central",2278,2,"A,M,C,I",followUpSourceCentral,Tumor
+1755,"Date of Death--Canada",2280,8,"A,M,C,I",dateOfDeathCanada,Patient
+1756,"Date of Death--Canada Flag",2288,2,"A,M,C,I",dateOfDeathCanadaFlag,Patient
+1850,"Unusual Follow-Up Method",2290,2,"A,M,C,I",unusualFollowUpMethod,Tumor
+1782,"Surv-Date Active Followup",2292,8,"A,M,C,I",survDateActiveFollowup,Tumor
+1783,"Surv-Flag Active Followup",2300,1,"A,M,C,I",survFlagActiveFollowup,Tumor
+1784,"Surv-Mos Active Followup",2301,4,"A,M,C,I",survMosActiveFollowup,Tumor
+1785,"Surv-Date Presumed Alive",2305,8,"A,M,C,I",survDatePresumedAlive,Tumor
+1786,"Surv-Flag Presumed Alive",2313,1,"A,M,C,I",survFlagPresumedAlive,Tumor
+1787,"Surv-Mos Presumed Alive",2314,4,"A,M,C,I",survMosPresumedAlive,Tumor
+1788,"Surv-Date DX Recode",2318,8,"A,M,C,I",survDateDxRecode,Tumor
+1740,"Reserved 09",2326,14,"A,M,C,I",reserved09,Tumor
+2220,"State/Requestor Items",2340,1000,"A,M,C,I",stateRequestorItems,Tumor
+2230,"Name--Last",3340,40,"A,M,C",nameLast,Patient
+2240,"Name--First",3380,40,"A,M,C",nameFirst,Patient
+2250,"Name--Middle",3420,40,"A,M,C",nameMiddle,Patient
+2260,"Name--Prefix",3460,3,"A,M,C",namePrefix,Patient
+2270,"Name--Suffix",3463,3,"A,M,C",nameSuffix,Patient
+2280,"Name--Alias",3466,40,"A,M,C",nameAlias,Patient
+2390,"Name--Maiden",3506,40,"A,M,C",nameMaiden,Patient
+2290,"Name--Spouse/Parent",3546,60,"A,M,C",nameSpouseParent,Tumor
+2300,"Medical Record Number",3606,11,"A,M,C",medicalRecordNumber,Tumor
+2310,"Military Record No Suffix",3617,2,"A,M,C",militaryRecordNoSuffix,Tumor
+2320,"Social Security Number",3619,9,"A,M,C",socialSecurityNumber,Patient
+2330,"Addr at DX--No & Street",3628,60,"A,M,C",addrAtDxNoStreet,Tumor
+2335,"Addr at DX--Supplementl",3688,60,"A,M,C",addrAtDxSupplementl,Tumor
+2350,"Addr Current--No & Street",3748,60,"A,M,C",addrCurrentNoStreet,Patient
+2355,"Addr Current--Supplementl",3808,60,"A,M,C",addrCurrentSupplementl,Patient
+2360,"Telephone",3868,10,"A,M,C",telephone,Patient
+2380,"DC State File Number",3878,6,"A,M,C",dcStateFileNumber,Patient
+2394,"Follow-Up Contact--Name",3884,60,"A,M,C",followUpContactName,Tumor
+2392,"Follow-Up Contact--No&St",3944,60,"A,M,C",followUpContactNost,Tumor
+2393,"Follow-Up Contact--Suppl",4004,60,"A,M,C",followUpContactSuppl,Tumor
+2352,"Latitude",4064,10,"A,M,C",latitude,Tumor
+2354,"Longitude",4074,11,"A,M,C",longitude,Tumor
+1835,"Reserved 10",4085,200,"A,M,C",reserved10,Tumor
+2445,"NPI--Following Registry",4285,10,"A,M,C",npiFollowingRegistry,Tumor
+2440,"Following Registry",4295,10,"A,M,C",followingRegistry,Tumor
+2415,"NPI--Inst Referred From",4305,10,"A,M,C",npiInstReferredFrom,Tumor
+2410,"Institution Referred From",4315,10,"A,M,C",institutionReferredFrom,Tumor
+2425,"NPI--Inst Referred To",4325,10,"A,M,C",npiInstReferredTo,Tumor
+2420,"Institution Referred To",4335,10,"A,M,C",institutionReferredTo,Tumor
+1900,"Reserved 11",4345,50,"A,M,C",reserved11,Tumor
+2465,"NPI--Physician--Managing",4395,10,"A,M,C",npiPhysicianManaging,Tumor
+2460,"Physician--Managing",4405,8,"A,M,C",physicianManaging,Tumor
+2475,"NPI--Physician--Follow-Up",4413,10,"A,M,C",npiPhysicianFollowUp,Tumor
+2470,"Physician--Follow-Up",4423,8,"A,M,C",physicianFollowUp,Tumor
+2485,"NPI--Physician--Primary Surg",4431,10,"A,M,C",npiPhysicianPrimarySurg,Tumor
+2480,"Physician--Primary Surg",4441,8,"A,M,C",physicianPrimarySurg,Tumor
+2495,"NPI--Physician 3",4449,10,"A,M,C",npiPhysician3,Tumor
+2490,"Physician 3",4459,8,"A,M,C",physician3,Tumor
+2505,"NPI--Physician 4",4467,10,"A,M,C",npiPhysician4,Tumor
+2500,"Physician 4",4477,8,"A,M,C",physician4,Tumor
+2510,"Reserved 12",4485,50,"A,M,C",reserved12,Tumor
+7010,"Path Reporting Fac ID 1",4535,25,"A,M,C",pathReportingFacId1,Tumor
+7090,"Path Report Number 1",4560,20,"A,M,C",pathReportNumber1,Tumor
+7320,"Path Date Spec Collect 1",4580,14,"A,M,C",pathDateSpecCollect1,Tumor
+7480,"Path Report Type 1",4594,2,"A,M,C",pathReportType1,Tumor
+7190,"Path Ordering Fac No 1",4596,25,"A,M,C",pathOrderingFacNo1,Tumor
+7100,"Path Order Phys Lic No 1",4621,20,"A,M,C",pathOrderPhysLicNo1,Tumor
+7011,"Path Reporting Fac ID 2",4641,25,"A,M,C",pathReportingFacId2,Tumor
+7091,"Path Report Number 2",4666,20,"A,M,C",pathReportNumber2,Tumor
+7321,"Path Date Spec Collect 2",4686,14,"A,M,C",pathDateSpecCollect2,Tumor
+7481,"Path Report Type 2",4700,2,"A,M,C",pathReportType2,Tumor
+7191,"Path Ordering Fac No 2",4702,25,"A,M,C",pathOrderingFacNo2,Tumor
+7101,"Path Order Phys Lic No 2",4727,20,"A,M,C",pathOrderPhysLicNo2,Tumor
+7012,"Path Reporting Fac ID 3",4747,25,"A,M,C",pathReportingFacId3,Tumor
+7092,"Path Report Number 3",4772,20,"A,M,C",pathReportNumber3,Tumor
+7322,"Path Date Spec Collect 3",4792,14,"A,M,C",pathDateSpecCollect3,Tumor
+7482,"Path Report Type 3",4806,2,"A,M,C",pathReportType3,Tumor
+7192,"Path Ordering Fac No 3",4808,25,"A,M,C",pathOrderingFacNo3,Tumor
+7102,"Path Order Phys Lic No 3",4833,20,"A,M,C",pathOrderPhysLicNo3,Tumor
+7013,"Path Reporting Fac ID 4",4853,25,"A,M,C",pathReportingFacId4,Tumor
+7093,"Path Report Number 4",4878,20,"A,M,C",pathReportNumber4,Tumor
+7323,"Path Date Spec Collect 4",4898,14,"A,M,C",pathDateSpecCollect4,Tumor
+7483,"Path Report Type 4",4912,2,"A,M,C",pathReportType4,Tumor
+7193,"Path Ordering Fac No 4",4914,25,"A,M,C",pathOrderingFacNo4,Tumor
+7103,"Path Order Phys Lic No 4",4939,20,"A,M,C",pathOrderPhysLicNo4,Tumor
+7014,"Path Reporting Fac ID 5",4959,25,"A,M,C",pathReportingFacId5,Tumor
+7094,"Path Report Number 5",4984,20,"A,M,C",pathReportNumber5,Tumor
+7324,"Path Date Spec Collect 5",5004,14,"A,M,C",pathDateSpecCollect5,Tumor
+7484,"Path Report Type 5",5018,2,"A,M,C",pathReportType5,Tumor
+7194,"Path Ordering Fac No 5",5020,25,"A,M,C",pathOrderingFacNo5,Tumor
+7104,"Path Order Phys Lic No 5",5045,20,"A,M,C",pathOrderPhysLicNo5,Tumor
+2080,"Reserved 13",5065,500,"A,M,C",reserved13,Tumor
+2520,"Text--DX Proc--PE",5565,1000,"A,M",textDxProcPe,Tumor
+2530,"Text--DX Proc--X-ray/Scan",6565,1000,"A,M",textDxProcXRayScan,Tumor
+2540,"Text--DX Proc--Scopes",7565,1000,"A,M",textDxProcScopes,Tumor
+2550,"Text--DX Proc--Lab Tests",8565,1000,"A,M",textDxProcLabTests,Tumor
+2560,"Text--DX Proc--Op",9565,1000,"A,M",textDxProcOp,Tumor
+2570,"Text--DX Proc--Path",10565,1000,"A,M",textDxProcPath,Tumor
+2580,"Text--Primary Site Title",11565,100,"A,M",textPrimarySiteTitle,Tumor
+2590,"Text--Histology Title",11665,100,"A,M",textHistologyTitle,Tumor
+2600,"Text--Staging",11765,1000,"A,M",textStaging,Tumor
+2610,"RX Text--Surgery",12765,1000,"A,M",rxTextSurgery,Tumor
+2620,"RX Text--Radiation (Beam)",13765,1000,"A,M",rxTextRadiation,Tumor
+2630,"RX Text--Radiation Other",14765,1000,"A,M",rxTextRadiationOther,Tumor
+2640,"RX Text--Chemo",15765,1000,"A,M",rxTextChemo,Tumor
+2650,"RX Text--Hormone",16765,1000,"A,M",rxTextHormone,Tumor
+2660,"RX Text--BRM",17765,1000,"A,M",rxTextBrm,Tumor
+2670,"RX Text--Other",18765,1000,"A,M",rxTextOther,Tumor
+2680,"Text--Remarks",19765,1000,"A,M",textRemarks,Tumor
+2690,"Text--Place of Diagnosis",20765,60,"A,M",textPlaceOfDiagnosis,Tumor
+2210,"Reserved 14",20825,2000,"A,M",reserved14,Tumor
