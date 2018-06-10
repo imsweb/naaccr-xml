@@ -19,8 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import com.imsweb.naaccrxml.NaaccrXmlUtils;
-
 /**
  * Use this class to convert a given CSV file into a NAACCR XML file.
  */
@@ -126,8 +124,8 @@ public class SasCsvToXml {
                     writer.write("<NaaccrData");
                     writer.write(" baseDictionaryUri=\"http://naaccr.org/naaccrxml/naaccr-dictionary-" + _naaccrVersion + ".xml\"");
                     writer.write(" recordType=\"" + _recordType + "\"");
-                    writer.write(" specificationVersion=\"" + NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION + "\"");
-                    writer.write(" xmlns=\"" + NaaccrXmlUtils.NAACCR_XML_NAMESPACE + "\"");
+                    writer.write(" specificationVersion=\"1.3\"");
+                    writer.write(" xmlns=\"http://naaccr.org/naaccrxml\"");
                     writer.write(">\n");
                     for (String id : rootFields) {
                         String val = values.get(id);
