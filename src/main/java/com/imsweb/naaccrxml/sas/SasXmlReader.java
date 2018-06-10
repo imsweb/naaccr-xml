@@ -89,7 +89,8 @@ public class SasXmlReader {
 
     public void close() {
         try {
-            _reader.close();
+            if (_reader != null)
+                _reader.close();
         }
         catch (IOException e) {
             // ignored

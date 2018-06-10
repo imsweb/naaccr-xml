@@ -73,7 +73,7 @@ public class SasCsvToXml {
         System.out.println("Starting converting CSV to XML...");
         try {
             Set<String> requestedFields = null;
-            if (fields != null) {
+            if (fields != null && !fields.trim().isEmpty()) {
                 requestedFields = new HashSet<>();
                 for (String s : fields.split(","))
                     requestedFields.add(s.trim());
