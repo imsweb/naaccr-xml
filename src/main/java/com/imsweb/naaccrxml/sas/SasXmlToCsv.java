@@ -9,9 +9,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+/**
+ * Use this class to convert a given NAACCR XML file into a CSV file.
+ */
 public class SasXmlToCsv {
 
     private File _xmlFile, _csvFile;
@@ -53,11 +58,19 @@ public class SasXmlToCsv {
         return _recordType;
     }
 
+    public List<SasFieldInfo> getFields() {
+        return SasUtils.getFields(_recordType, _naaccrVersion);
+    }
+
     public void convert() throws IOException {
         convert(null);
     }
 
     public void convert(String fields) throws IOException {
+        convert(fields, true);
+    }
+
+    public void convert(String fields, boolean addExtraCharFields) throws IOException {
 
         Set<String> requestedFields = null;
         if (fields != null) {
@@ -66,39 +79,42 @@ public class SasXmlToCsv {
                 requestedFields.add(s.trim());
         }
 
+        List<String> allFields = new ArrayList<>();
+        for (SasFieldInfo field : getFields())
+            if (requestedFields == null || requestedFields.contains(field.getNaaccrId()))
+                allFields.add(field.getNaaccrId());
+
         SasXmlReader reader = null;
         BufferedWriter writer = null;
         try {
-            reader = new SasXmlReader(_xmlFile.getPath(), _naaccrVersion, _recordType);
+            reader = new SasXmlReader(_xmlFile.getPath());
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_csvFile), StandardCharsets.UTF_8));
             StringBuilder buf = new StringBuilder();
 
             // write the headers
-            for (String field : reader.getFields())
-                if (requestedFields == null || requestedFields.contains(field))
-                    buf.append(field).append(",");
+            for (String field : allFields)
+                buf.append(field).append(",");
             buf.setLength(buf.length() - 1);
             writer.write(buf.toString());
             writer.write("\n");
             buf.setLength(0);
 
             // hack alert - force SAS to recognize all variables as characters...  Sigh...
-            for (String field : reader.getFields())
-                if (requestedFields == null || requestedFields.contains(field))
+            if (addExtraCharFields) {
+                for (String field : allFields)
                     buf.append("-,");
-            buf.setLength(buf.length() - 1);
-            writer.write(buf.toString());
-            writer.write("\n");
-            buf.setLength(0);
+                buf.setLength(buf.length() - 1);
+                writer.write(buf.toString());
+                writer.write("\n");
+                buf.setLength(0);
+            }
 
             while (reader.nextRecord() > 0) {
-                for (String field : reader.getFields()) {
-                    if (requestedFields == null || requestedFields.contains(field)) {
-                        String val = reader.getValue(field);
-                        if (val != null && val.contains(","))
-                            val = "\"" + val + "\"";
-                        buf.append(val == null ? "" : val).append(",");
-                    }
+                for (String field : allFields) {
+                    String val = reader.getValue(field);
+                    if (val != null && val.contains(","))
+                        val = "\"" + val + "\"";
+                    buf.append(val == null ? "" : val).append(",");
                 }
                 buf.setLength(buf.length() - 1);
                 writer.write(buf.toString());
@@ -118,16 +134,4 @@ public class SasXmlToCsv {
         if (!_csvFile.delete())
             System.err.println("!!! Unable to cleanup tmp CSV file.");
     }
-
-    /**
-     public static void main(String[] args) throws IOException {
-     String xmlPath = "YOUR_PATH_HERE";
-
-     long start = System.currentTimeMillis();
-     SasXmlToCsv reader = new SasXmlToCsv(xmlPath, "180", "I");
-     reader.convert();
-     //reader.cleanup();
-     System.out.println((System.currentTimeMillis() - start) + "ms");
-     }
-     */
 }

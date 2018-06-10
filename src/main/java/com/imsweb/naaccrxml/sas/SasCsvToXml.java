@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +19,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-// TODO looks like SAS removes leading 0's of all values!
+import com.imsweb.naaccrxml.NaaccrXmlUtils;
+
+/**
+ * Use this class to convert a given CSV file into a NAACCR XML file.
+ */
 public class SasCsvToXml {
 
     private File _csvFile, _xmlFile;
@@ -58,13 +63,16 @@ public class SasCsvToXml {
         return _recordType;
     }
 
+    public List<SasFieldInfo> getFields() {
+        return SasUtils.getFields(_recordType, _naaccrVersion);
+    }
+
     public void convert() throws IOException {
         convert(null);
     }
 
     public void convert(String fields) throws IOException {
 
-        // TODO use requested fields
         Set<String> requestedFields = null;
         if (fields != null) {
             requestedFields = new HashSet<>();
@@ -73,14 +81,15 @@ public class SasCsvToXml {
         }
 
         List<String> rootFields = new ArrayList<>(), patientFields = new ArrayList<>(), tumorFields = new ArrayList<>();
-        for (Map.Entry<String, String> entry : SasUtils.getFields(_naaccrVersion, _recordType).entrySet()) {
-            if ("NaaccrData".equals(entry.getValue()))
-                rootFields.add(entry.getKey());
-            else if ("Patient".equals(entry.getValue()))
-                patientFields.add(entry.getKey());
-            else if ("Tumor".equals(entry.getValue()))
-                tumorFields.add(entry.getKey());
-
+        for (SasFieldInfo field : getFields()) {
+            if (requestedFields == null || requestedFields.contains(field.getNaaccrId())) {
+                if ("NaaccrData".equals(field.getParentTag()))
+                    rootFields.add(field.getNaaccrId());
+                else if ("Patient".equals(field.getParentTag()))
+                    patientFields.add(field.getNaaccrId());
+                else if ("Tumor".equals(field.getParentTag()))
+                    tumorFields.add(field.getNaaccrId());
+            }
         }
 
         LineNumberReader reader = null;
@@ -92,8 +101,7 @@ public class SasCsvToXml {
             Pattern p = Pattern.compile(",");
 
             List<String> headers = new ArrayList<>();
-            for (String s : p.split(reader.readLine()))
-                headers.add(s);
+            headers.addAll(Arrays.asList(p.split(reader.readLine())));
 
             int patNumIdx = headers.indexOf("patientIdNumber");
             if (patNumIdx == -1)
@@ -115,8 +123,12 @@ public class SasCsvToXml {
                 if (currentPatNum == null) {
                     writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
                     writer.write("\n");
-                    writer.write("<NaaccrData baseDictionaryUri=\"http://naaccr.org/naaccrxml/naaccr-dictionary-" + _naaccrVersion + ".xml\" recordType=\"" + _recordType
-                            + "\" xmlns=\"http://naaccr.org/naaccrxml\">\n");
+                    writer.write("<NaaccrData");
+                    writer.write(" baseDictionaryUri=\"http://naaccr.org/naaccrxml/naaccr-dictionary-" + _naaccrVersion + ".xml\"");
+                    writer.write(" recordType=\"" + _recordType + "\"");
+                    writer.write(" specificationVersion=\"" + NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION + "\"");
+                    writer.write(" xmlns=\"" + NaaccrXmlUtils.NAACCR_XML_NAMESPACE + "\"");
+                    writer.write(">\n");
                     for (String id : rootFields) {
                         String val = values.get(id);
                         if (val != null && !val.trim().isEmpty())
@@ -164,17 +176,4 @@ public class SasCsvToXml {
         if (!_csvFile.delete())
             System.err.println("!!! Unable to cleanup tmp CSV file.");
     }
-
-    /**
-    public static void main(String[] args) throws IOException {
-        String xmlPath = "D:\\Users\\depryf\\dev\\synthetic-data_naaccr-18-incidence_100-recs-copy.xml";
-        String csvPath = "D:\\Users\\depryf\\dev\\synthetic-data_naaccr-18-incidence_100-recs-copy.csv";
-
-        long start = System.currentTimeMillis();
-        SasCsvToXml converter = new SasCsvToXml(csvPath, xmlPath, "180", "I");
-        converter.convert();
-        //reader.cleanup();
-        System.out.println((System.currentTimeMillis() - start) + "ms");
-    }
-     */
 }

@@ -6,39 +6,27 @@ package com.imsweb.naaccrxml.sas;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This class is a simplified NAACCR XML reader.
+ * <br/><br/>
+ * It doesn't use an XML parser; it expects the XML to be well formatted (one item per line) and uses regular expressions to find the values.
+ */
 public class SasXmlReader {
 
     private File _xmlFile;
 
     private BufferedReader _reader;
 
-    private List<String> _fields;
-
-    private boolean _inPatient = false, _inTumor = false;
+    private boolean _inPatient, _inTumor;
 
     private Map<String, String> _naaccrDataValues = new HashMap<>(), _patientValues = new HashMap<>(), _tumorValues = new HashMap<>();
 
-    public SasXmlReader(String xmlPath, String version, String recordType) {
+    public SasXmlReader(String xmlPath) {
         _xmlFile = new File(xmlPath);
-        if (!_xmlFile.exists())
-            System.err.println("!!! Invalid XML file: " + xmlPath);
-
-        System.out.println("Created NAACCR XML reader for following file: ");
-        System.out.println(" > input XML: " + _xmlFile.getAbsolutePath());
-
-        _fields = new ArrayList<>();
-        for (Map.Entry<String, String> entry : SasUtils.getFields(version, recordType).entrySet())
-            _fields.add(entry.getKey());
-    }
-
-    public List<String> getFields() {
-        return _fields;
     }
 
     public int nextRecord() throws IOException {
@@ -100,22 +88,4 @@ public class SasXmlReader {
             // ignored
         }
     }
-
-    /**
-     public static void main(String[] args) throws IOException {
-     String xmlPath = "YOUR_PATH_HERE";
-
-     long start = System.currentTimeMillis();
-     SasXmlReader reader = new SasXmlReader(xmlPath, "180", "I");
-     int count = 0;
-     while (reader.nextRecord() == 1) {
-     reader.getValue("primarySite");
-     if (count < 5)
-     System.out.println(reader.getValue("primarySite"));
-     count++;
-     }
-     reader.close();
-     System.out.println((System.currentTimeMillis() - start) + "ms (" + count + ")");
-     }
-     */
 }

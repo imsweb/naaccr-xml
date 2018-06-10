@@ -22,6 +22,16 @@ public class TestingUtils {
     }
 
     /**
+     * Returns the project root folder.
+     */
+    public static File getBuildDirectory() {
+        File file = new File(getWorkingDirectory() + "/build");
+        if (!file.exists() && !file.mkdir())
+            throw new RuntimeException("Unable to create build folder");
+        return file;
+    }
+
+    /**
      * Create a user-defined dictionary that can be used in various unit tests.
      */
     public static NaaccrDictionary createUserDictionary() {
@@ -103,7 +113,7 @@ public class TestingUtils {
     public static File createFile(String filename, boolean autoDelete) throws IOException {
 
         // create the tmp folder
-        File tmpDir = new File(System.getProperty("user.dir") + "/build/test-tmp");
+        File tmpDir = new File(getBuildDirectory(), "test-tmp");
         if (!tmpDir.exists() && !tmpDir.mkdirs())
             throw new IOException("Unable to create tmp dir...");
 
