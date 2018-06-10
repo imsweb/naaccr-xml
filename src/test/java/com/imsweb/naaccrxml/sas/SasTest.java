@@ -37,7 +37,7 @@ public class SasTest {
         File csvFile = new File(TestingUtils.getBuildDirectory(), "test.csv");
         File xmlFile2 = new File(TestingUtils.getBuildDirectory(), "test2.xml");
 
-        assertXmlData(xmlFile, true);
+        assertXmlData(xmlFile, false);
 
         SasXmlToCsv xmlToCsv = new SasXmlToCsv(xmlFile.getPath(), csvFile.getPath(), "180", "I") {
             @Override
@@ -59,7 +59,7 @@ public class SasTest {
         Assert.assertNotNull(csvToXml.getCsvPath());
         csvToXml.convert();
 
-        assertXmlData(xmlFile2, true);
+        assertXmlData(xmlFile2, false);
 
         Assert.assertTrue(csvFile.exists());
         xmlToCsv.cleanup();
@@ -68,7 +68,7 @@ public class SasTest {
         // redo the full conversion but ignore some fields
         xmlToCsv.convert("patientIdNumber,primarySite", false);
         csvToXml.convert("patientIdNumber,primarySite");
-        assertXmlData(xmlFile2, false);
+        assertXmlData(xmlFile2, true);
     }
 
     private List<SasFieldInfo> getFields() {
@@ -80,17 +80,22 @@ public class SasTest {
         }
     }
 
-    private void assertXmlData(File xmlFile, boolean expectRegistryId) throws IOException {
+    private void assertXmlData(File xmlFile, boolean ignoreFields) throws IOException {
         NaaccrData data = NaaccrXmlUtils.readXmlFile(xmlFile, null, null, null);
-        if (expectRegistryId)
+        if (!ignoreFields)
             Assert.assertEquals("0000000001", data.getItemValue("registryId"));
         else
             Assert.assertNull(data.getItemValue("registryId"));
         Assert.assertEquals(2, data.getPatients().size());
         Assert.assertEquals("00000001", data.getPatients().get(0).getItemValue("patientIdNumber"));
+        if (!ignoreFields)
+            Assert.assertEquals("1", data.getPatients().get(0).getItemValue("sex"));
+        else
+            Assert.assertNull(data.getPatients().get(0).getItemValue("sex"));
         Assert.assertEquals(1, data.getPatients().get(0).getTumors().size());
         Assert.assertEquals("C123", data.getPatients().get(0).getTumors().get(0).getItemValue("primarySite"));
         Assert.assertEquals("00000002", data.getPatients().get(1).getItemValue("patientIdNumber"));
+        Assert.assertNull(data.getPatients().get(1).getItemValue("sex"));
         Assert.assertEquals(2, data.getPatients().get(1).getTumors().size());
         Assert.assertEquals("C456", data.getPatients().get(1).getTumors().get(0).getItemValue("primarySite"));
         Assert.assertEquals("C789", data.getPatients().get(1).getTumors().get(1).getItemValue("primarySite"));

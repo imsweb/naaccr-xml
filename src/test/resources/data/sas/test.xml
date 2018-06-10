@@ -4,6 +4,7 @@
     <Item naaccrId="registryId">0000000001</Item>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
+        <Item naaccrId="sex">1</Item>
         <Tumor>
             <Item naaccrId="primarySite">C123</Item>
         </Tumor>

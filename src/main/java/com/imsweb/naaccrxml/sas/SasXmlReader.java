@@ -43,7 +43,14 @@ public class SasXmlReader {
                 int idIdx2 = line.indexOf('\"', idIdx1 + 1);
                 int valIdx1 = line.indexOf('>', idIdx2 + 1);
                 int valIdx2 = line.indexOf('<', valIdx1 + 1);
-                _naaccrDataValues.put(line.substring(idIdx1 + 1, idIdx2), line.substring(valIdx1 + 1, valIdx2));
+                String key = line.substring(idIdx1 + 1, idIdx2);
+                String val = line.substring(valIdx1 + 1, valIdx2);
+                if (_inPatient)
+                    _patientValues.put(key, val);
+                else if (_inTumor)
+                    _tumorValues.put(key, val);
+                else
+                    _naaccrDataValues.put(key, val);
             }
             else if (line.contains("<Patient>")) {
                 _inPatient = true;
