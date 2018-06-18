@@ -16,9 +16,12 @@ public class SasFieldInfo {
 
     private String _parentTag;
 
-    public SasFieldInfo(String naaccrId, String parentTag) {
+    private Integer _length;
+
+    public SasFieldInfo(String naaccrId, String parentTag, String length) {
         _naaccrId = naaccrId;
         _parentTag = parentTag;
+        _length = Integer.valueOf(length);
     }
 
     public String getNaaccrId() {
@@ -27,5 +30,9 @@ public class SasFieldInfo {
 
     public String getParentTag() {
         return _parentTag;
+    }
+
+    public Integer getLength() {
+        return _length;
     }
 }

@@ -23,7 +23,7 @@ public class SasTest {
     @Test
     public void testGetFields() throws IOException {
         Map<String, String> fields = new HashMap<>();
-        for (SasFieldInfo field : SasUtils.getFields("I", new FileInputStream("docs/naaccr-xml-items-180.csv")))
+        for (SasFieldInfo field : SasUtils.getFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "docs/naaccr-xml-items-180.csv")))
             fields.put(field.getNaaccrId(), field.getParentTag());
 
         Assert.assertTrue(fields.containsKey("primarySite"));

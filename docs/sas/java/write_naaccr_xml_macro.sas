@@ -13,6 +13,10 @@
 
     Note that the macro creates a tmp CSV file in the same folder as the target file; that file will be 
     automatically deleted by the macro when it's done executing.
+
+    Changelog
+    *********
+    06/10/2018 - Fabian Depry - Initial version.
  ************************************************************************************************************/;
 
 /*

@@ -84,10 +84,12 @@ public class SasUtils {
             while (line != null) {
                 int idx2 = line.lastIndexOf('"');
                 int idx1 = line.lastIndexOf('"', idx2 - 1);
+                int idx0 = line.lastIndexOf(',', idx1 - 2);
                 int idx3 = line.lastIndexOf(',');
                 String recTypes = line.substring(idx1 + 1, idx2);
                 String naaccrId = line.substring(idx2 + 2, idx3);
                 String parentTag = line.substring(idx3 + 1);
+                String length = line.substring(idx0 + 1, idx1 - 1);
 
                 if (naaccrId.length() > 32) {
                     String prefix = naaccrId.substring(0, 30);
@@ -100,7 +102,7 @@ public class SasUtils {
                 }
 
                 if (recTypes.contains(recordType))
-                    result.add(new SasFieldInfo(naaccrId, parentTag));
+                    result.add(new SasFieldInfo(naaccrId, parentTag, length));
 
                 line = reader.readLine();
             }

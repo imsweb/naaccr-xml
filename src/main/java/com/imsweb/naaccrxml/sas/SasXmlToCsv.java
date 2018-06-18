@@ -9,9 +9,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -81,10 +83,10 @@ public class SasXmlToCsv {
                     requestedFields.add(s.trim());
             }
 
-            List<String> allFields = new ArrayList<>();
+            Map<String, Integer> allFields = new LinkedHashMap<>();
             for (SasFieldInfo field : getFields())
                 if (requestedFields == null || requestedFields.contains(field.getNaaccrId()))
-                    allFields.add(field.getNaaccrId());
+                    allFields.put(field.getNaaccrId(), field.getLength());
 
             SasXmlReader reader = null;
             BufferedWriter writer = null;
@@ -94,7 +96,7 @@ public class SasXmlToCsv {
                 StringBuilder buf = new StringBuilder();
 
                 // write the headers
-                for (String field : allFields)
+                for (String field : allFields.keySet())
                     buf.append(field).append(",");
                 buf.setLength(buf.length() - 1);
                 writer.write(buf.toString());
@@ -103,8 +105,11 @@ public class SasXmlToCsv {
 
                 // hack alert - force SAS to recognize all variables as characters...  Sigh...
                 if (addExtraCharFields) {
-                    for (String field : allFields)
-                        buf.append("-,");
+                    for (Entry<String, Integer> field : allFields.entrySet()) {
+                        for (int i = 0; i < field.getValue(); i++)
+                            buf.append("-");
+                        buf.append(",");
+                    }
                     buf.setLength(buf.length() - 1);
                     writer.write(buf.toString());
                     writer.write("\n");
@@ -112,7 +117,7 @@ public class SasXmlToCsv {
                 }
 
                 while (reader.nextRecord() > 0) {
-                    for (String field : allFields) {
+                    for (String field : allFields.keySet()) {
                         String val = reader.getValue(field);
                         if (val != null && val.contains(","))
                             val = "\"" + val + "\"";

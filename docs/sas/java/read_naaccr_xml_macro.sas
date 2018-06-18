@@ -14,6 +14,11 @@
 
     Note that the macro creates a tmp CSV file in the same folder as the input file; that file will be 
     automatically deleted by the macro when it's done executing.
+
+    Changelog
+    *********
+    06/10/2018 - Fabian Depry - Initial version.
+    06/18/2018 - Fabian Depry - Added "replace" to CSV import proc.
  ************************************************************************************************************/;
 
 /*
@@ -38,7 +43,7 @@ run;
 /*
    Import the tmp CSV file.
 */
-proc import datafile="&csvfile" out=&dataset dbms=csv;
+proc import datafile="&csvfile" out=&dataset dbms=csv replace;
     getnames=yes;
 run;
 
