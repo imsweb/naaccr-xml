@@ -13,7 +13,7 @@
     Note that the macro creates a tmp CSV file in the same folder as the target file; that file will be 
     automatically deleted by the macro when it's done executing.
  ************************************************************************************************************/;
-%include "read_naaccr_xml_macro_1.0.sas";
+%include "read_naaccr_xml_macro.sas";
 %readNaaccrXml(
   libpath="naaccr-xml-4.9-sas.jar",
   sourcefile="synthetic-data_naaccr-180-incidence_10-tumors.xml",
