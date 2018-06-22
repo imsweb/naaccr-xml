@@ -69,6 +69,21 @@ public class SasTest {
         xmlToCsv.convert("patientIdNumber,primarySite", false);
         csvToXml.convert("patientIdNumber,primarySite");
         assertXmlData(xmlFile2, true);
+
+        // test some corner cases
+        xmlFile = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/test2.xml");
+        csvFile = new File(TestingUtils.getBuildDirectory(), "test2.csv");
+        xmlFile2 = new File(TestingUtils.getBuildDirectory(), "test3.xml");
+        xmlToCsv = new SasXmlToCsv(xmlFile.getPath(), csvFile.getPath(), "180", "I") {
+            @Override
+            public List<SasFieldInfo> getFields() {
+                return SasTest.this.getFields();
+            }
+        };
+        xmlToCsv.convert(null, false);
+
+        // TODO FD finish this
+
     }
 
     private List<SasFieldInfo> getFields() {
