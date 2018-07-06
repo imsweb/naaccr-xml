@@ -39,12 +39,36 @@ public class SasXmlReader {
         while (line != null) {
             int itemIdx = line.indexOf("<Item");
             if (itemIdx > -1) {
-                int idIdx1 = line.indexOf('\"', itemIdx + 1);
-                int idIdx2 = line.indexOf('\"', idIdx1 + 1);
-                int valIdx1 = line.indexOf('>', idIdx2 + 1);
-                int valIdx2 = line.indexOf('<', valIdx1 + 1);
-                String key = line.substring(idIdx1 + 1, idIdx2);
-                String val = line.substring(valIdx1 + 1, valIdx2);
+                int naaccrIdStart = line.indexOf('\"', itemIdx + 1);
+                if (naaccrIdStart == -1)
+                    naaccrIdStart = line.indexOf('\'', itemIdx + 1);
+                if (naaccrIdStart == -1)
+                    throw new IOException("Unable to find start of NAACCR ID attribute for: " + line);
+                int naaccrIdEnd = line.indexOf('\"', naaccrIdStart + 1);
+                if (naaccrIdEnd == -1)
+                    naaccrIdEnd = line.indexOf('\'', naaccrIdStart + 1);
+                if (naaccrIdEnd == -1)
+                    throw new IOException("Unable to find end of NAACCR ID attribute for: " + line);
+
+                int valueStart = line.indexOf('>', naaccrIdEnd + 1);
+                if (valueStart == -1)
+                    throw new IOException("Unable to find start of value for: " + line);
+                int valueEnd = line.indexOf('<', valueStart + 1);
+                if (valueEnd == -1)
+                    throw new IOException("Unable to find end of value for: " + line);
+
+                // adjust for CDATA sections
+                if (valueEnd == valueStart + 1 && line.charAt(valueEnd + 1) == '!' && line.charAt(valueEnd + 2) == '[') {
+                    valueStart = line.indexOf('[', valueStart + 4);
+                    if (valueStart == -1)
+                        throw new IOException("Unable to find start of value for: " + line);
+                    valueEnd = line.indexOf(']', valueStart + 1);
+                    if (valueEnd == -1)
+                        throw new IOException("Unable to find end of value for: " + line);
+                }
+
+                String key = line.substring(naaccrIdStart + 1, naaccrIdEnd);
+                String val = line.substring(valueStart + 1, valueEnd);
                 if (_inPatient)
                     _patientValues.put(key, val);
                 else if (_inTumor)
