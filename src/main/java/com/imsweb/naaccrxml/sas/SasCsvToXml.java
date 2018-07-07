@@ -131,7 +131,7 @@ public class SasCsvToXml {
                         for (String id : rootFields) {
                             String val = values.get(id);
                             if (val != null && !val.trim().isEmpty())
-                                writer.write("    <Item naaccrId=\"" + id + "\">" + val + "</Item>\n");
+                                writer.write("    <Item naaccrId=\"" + id + "\">" + val.replace("::", "\n") + "</Item>\n");
                         }
                     }
 
@@ -143,7 +143,7 @@ public class SasCsvToXml {
                         for (String id : patientFields) {
                             String val = values.get(id);
                             if (val != null && !val.trim().isEmpty())
-                                writer.write("        <Item naaccrId=\"" + id + "\">" + val + "</Item>\n");
+                                writer.write("        <Item naaccrId=\"" + id + "\">" + val.replace("::", "\n") + "</Item>\n");
                         }
                     }
 
@@ -152,7 +152,7 @@ public class SasCsvToXml {
                     for (String id : tumorFields) {
                         String val = values.get(id);
                         if (val != null && !val.trim().isEmpty())
-                            writer.write("            <Item naaccrId=\"" + id + "\">" + val + "</Item>\n");
+                            writer.write("            <Item naaccrId=\"" + id + "\">" + val.replace("::", "\n") + "</Item>\n");
                     }
                     writer.write("        </Tumor>\n");
 

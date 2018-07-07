@@ -42,14 +42,14 @@ public class SasTest {
         assertXmlData(xmlFile, false);
 
         // translate XML to CSV
-        SasXmlToCsv xmlToCsv = createXmlToCsvConverter(xmlFile, csvFile);
+        SasXmlToCsv xmlToCsv = createXmlToCsvConverter(xmlFile, csvFile, "180", "I");
         Assert.assertNotNull(xmlToCsv.getXmlPath());
         Assert.assertNotNull(xmlToCsv.getCsvPath());
         xmlToCsv.convert(null, false); // extra row of fields are added for SAS, it messes up this test so it's not added here
         Assert.assertTrue(csvFile.exists());
 
         // translate CSV to XML, make sure we get back to the same data
-        SasCsvToXml csvToXml = createCsvToXmlConverter(csvFile, xmlCopyFile);
+        SasCsvToXml csvToXml = createCsvToXmlConverter(csvFile, xmlCopyFile, "180", "I");
         Assert.assertNotNull(csvToXml.getXmlPath());
         Assert.assertNotNull(csvToXml.getCsvPath());
         csvToXml.convert();
@@ -71,8 +71,8 @@ public class SasTest {
         File xmlFile = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/test-cdata.xml");
         File csvFile = new File(TestingUtils.getBuildDirectory(), "test-cdata.csv");
         File xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-cdata-copy.xml");
-        createXmlToCsvConverter(xmlFile, csvFile).convert(null, false);
-        createCsvToXmlConverter(csvFile, xmlCopyFile).convert();
+        createXmlToCsvConverter(xmlFile, csvFile, "180", "I").convert(null, false);
+        createCsvToXmlConverter(csvFile, xmlCopyFile, "180", "I").convert();
         Tumor tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(0).getTumors().get(0);
         Assert.assertEquals("C123", tumor.getItemValue("primarySite"));
     }
@@ -82,18 +82,28 @@ public class SasTest {
         File xmlFile = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/test-multi-line.xml");
         File csvFile = new File(TestingUtils.getBuildDirectory(), "test-multi-line.csv");
         File xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-multi-line-copy.xml");
-        createXmlToCsvConverter(xmlFile, csvFile).convert(null, false);
-        createCsvToXmlConverter(csvFile, xmlCopyFile).convert();
+        createXmlToCsvConverter(xmlFile, csvFile, "180", "A").convert(null, false);
+        createCsvToXmlConverter(csvFile, xmlCopyFile, "180", "A").convert();
         Tumor tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(0).getTumors().get(0);
-        Assert.assertEquals("Some\ntext", tumor.getItemValue("textRemarks").replace("\r\n", "\n"));
+        Assert.assertEquals("Some\ntext", tumor.getItemValue("textRemarks"));
+
+        // same test but this file uses a CDATA section
+        xmlFile = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/test-multi-line-cdata.xml");
+        csvFile = new File(TestingUtils.getBuildDirectory(), "test-multi-line-cdata.csv");
+        xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-multi-line-cdata-copy.xml");
+        createXmlToCsvConverter(xmlFile, csvFile, "180", "A").convert(null, false);
+        createCsvToXmlConverter(csvFile, xmlCopyFile, "180", "A").convert();
+        tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(0).getTumors().get(0);
+        Assert.assertEquals("Some\ntext", tumor.getItemValue("textRemarks"));
     }
 
-    private SasXmlToCsv createXmlToCsvConverter(File xmlFile, File csvFile) {
-        return new SasXmlToCsv(xmlFile.getPath(), csvFile.getPath(), "180", "I") {
+    @SuppressWarnings("SameParameterValue")
+    private SasXmlToCsv createXmlToCsvConverter(File xmlFile, File csvFile, String naaccrVersion, String recordType) {
+        return new SasXmlToCsv(xmlFile.getPath(), csvFile.getPath(), naaccrVersion, recordType) {
             @Override
             public List<SasFieldInfo> getFields() {
                 try {
-                    return SasUtils.getFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-180.csv"));
+                    return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"));
                 }
                 catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
@@ -102,12 +112,13 @@ public class SasTest {
         };
     }
 
-    private SasCsvToXml createCsvToXmlConverter(File csvFile, File xmlFile) {
-        return new SasCsvToXml(csvFile.getPath(), xmlFile.getPath(), "180", "I") {
+    @SuppressWarnings("SameParameterValue")
+    private SasCsvToXml createCsvToXmlConverter(File csvFile, File xmlFile, String naaccrVersion, String recordType) {
+        return new SasCsvToXml(csvFile.getPath(), xmlFile.getPath(), naaccrVersion, recordType) {
             @Override
             public List<SasFieldInfo> getFields() {
                 try {
-                    return SasUtils.getFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-180.csv"));
+                    return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"));
                 }
                 catch (FileNotFoundException e) {
                     throw new RuntimeException(e);

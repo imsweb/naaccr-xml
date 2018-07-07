@@ -35,6 +35,9 @@ public class SasXmlReader {
 
         _tumorValues.clear();
 
+        String currentKey = null;
+        StringBuilder currentVal = null;
+
         String line = _reader.readLine();
         while (line != null) {
             int itemIdx = line.indexOf("<Item");
@@ -50,12 +53,16 @@ public class SasXmlReader {
                 if (naaccrIdEnd == -1)
                     throw new IOException("Unable to find end of NAACCR ID attribute for: " + line);
 
+                String key = line.substring(naaccrIdStart + 1, naaccrIdEnd);
+
                 int valueStart = line.indexOf('>', naaccrIdEnd + 1);
                 if (valueStart == -1)
                     throw new IOException("Unable to find start of value for: " + line);
                 int valueEnd = line.indexOf('<', valueStart + 1);
-                if (valueEnd == -1)
-                    throw new IOException("Unable to find end of value for: " + line);
+                if (valueEnd == -1) { // could be the start of a multi-line value...
+                    currentKey = key;
+                    currentVal = new StringBuilder(line.substring(valueStart + 1));
+                }
 
                 // adjust for CDATA sections
                 if (valueEnd == valueStart + 1 && line.charAt(valueEnd + 1) == '!' && line.charAt(valueEnd + 2) == '[') {
@@ -63,24 +70,31 @@ public class SasXmlReader {
                     if (valueStart == -1)
                         throw new IOException("Unable to find start of value for: " + line);
                     valueEnd = line.indexOf(']', valueStart + 1);
-                    if (valueEnd == -1)
-                        throw new IOException("Unable to find end of value for: " + line);
+                    if (valueEnd == -1) { // could be the start of a multi-line value...
+                        currentKey = key;
+                        currentVal = new StringBuilder(line.substring(valueStart + 1));
+                    }
                 }
 
-                String key = line.substring(naaccrIdStart + 1, naaccrIdEnd);
-                String val = line.substring(valueStart + 1, valueEnd);
-                if (_inPatient)
-                    _patientValues.put(key, val);
-                else if (_inTumor)
-                    _tumorValues.put(key, val);
-                else
-                    _naaccrDataValues.put(key, val);
+                if (currentVal == null) {
+                    String val = line.substring(valueStart + 1, valueEnd);
+                    if (_inPatient)
+                        _patientValues.put(key, val);
+                    else if (_inTumor)
+                        _tumorValues.put(key, val);
+                    else
+                        _naaccrDataValues.put(key, val);
+                }
             }
             else if (line.contains("<Patient>")) {
+                if (currentVal != null)
+                    throw new IOException("Unable to find end of value for " + currentKey);
                 _inPatient = true;
                 _inTumor = false;
             }
             else if (line.contains("<Tumor>")) {
+                if (currentVal != null)
+                    throw new IOException("Unable to find end of value for " + currentKey);
                 _inPatient = false;
                 _inTumor = true;
             }
@@ -88,17 +102,42 @@ public class SasXmlReader {
                 int endIdx = line.indexOf("</");
                 if (endIdx > -1) {
                     if (line.indexOf("Patient>", endIdx) > -1) {
+                        if (currentVal != null)
+                            throw new IOException("Unable to find end of value for " + currentKey);
                         _inPatient = false;
                         _patientValues.clear();
                     }
                     else if (line.indexOf("Tumor>", endIdx) > -1) {
+                        if (currentVal != null)
+                            throw new IOException("Unable to find end of value for " + currentKey);
                         _tumorValues.putAll(_naaccrDataValues);
                         _tumorValues.putAll(_patientValues);
                         break;
                     }
-                    else if (line.indexOf("NaaccrData>", endIdx) > -1)
+                    else if (line.indexOf("Item>", endIdx) > -1) {
+                        if (currentVal != null) {
+                            // adjust end value for CDATA
+                            if (endIdx > 3 && line.charAt(endIdx - 1) == '>' && line.charAt(endIdx - 2) == ']' && line.charAt(endIdx - 3) == ']')
+                                endIdx = endIdx - 3;
+                            currentVal.append("::").append(line, 0, endIdx);
+                            if (_inPatient)
+                                _patientValues.put(currentKey, currentVal.toString());
+                            else if (_inTumor)
+                                _tumorValues.put(currentKey, currentVal.toString());
+                            else
+                                _naaccrDataValues.put(currentKey, currentVal.toString());
+                            currentKey = null;
+                            currentVal = null;
+                        }
+                    }
+                    else if (line.indexOf("NaaccrData>", endIdx) > -1) {
+                        if (currentVal != null)
+                            throw new IOException("Unable to find end of value for " + currentKey);
                         return 0;
+                    }
                 }
+                else if (currentVal != null)
+                    currentVal.append("::").append(line);
             }
 
             line = _reader.readLine();

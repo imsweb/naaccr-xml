@@ -7,8 +7,8 @@
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
         <Tumor>
-            <Item naaccrId='textRemarks'>Some
-text</Item>
+            <Item naaccrId='textRemarks'><![CDATA[Some
+text]]></Item>
         </Tumor>
     </Patient>
 </NaaccrData>
