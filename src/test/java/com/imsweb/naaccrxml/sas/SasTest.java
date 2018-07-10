@@ -22,6 +22,7 @@ import com.imsweb.naaccrxml.entity.Tumor;
 /**
  * TODO FD - this case still doesn't work properly:
  *    <Item naaccrId="rxTextChemo" naaccrNum="2640"><![CDATA[1/10/2016 DrugB (Part1, Part2, & Part3) @ Facility w/ Dr. Name. [DrugA started in 1/2015, but DrugB regimen planned] 1/15/2017 Drugc @ Facility w/ Dr Name2]]></Item>
+ * TODO FD - explain that some NAACCR IDs are shorten in the wiki...
  */
 public class SasTest {
 
