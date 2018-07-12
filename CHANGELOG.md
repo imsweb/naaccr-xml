@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 4.10**
+
+- Writing unknown items is now tied to the 'unknownItemHandling' option.
+
 **Version 4.9**
 
 - Added a missing flush to the PatientFlatWriter.closeAndKeepAlive method.

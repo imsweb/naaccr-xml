@@ -199,50 +199,56 @@ public class NaaccrPatientConverter implements Converter {
         if (!_context.getOptions().processItem(item.getNaaccrId()))
             return;
         RuntimeNaaccrDictionaryItem itemDef = _context.getDictionary().getItemByNaaccrId(item.getNaaccrId());
-        if (itemDef == null)
-            reportSyntaxError("unable to find item definition for NAACCR ID " + item.getNaaccrId());
-        else {
-            if (item.getNaaccrNum() != null && !item.getNaaccrNum().equals(itemDef.getNaaccrNum()))
-                reportSyntaxError("provided NAACCR Number '" + item.getNaaccrNum() + "' doesn't correspond to the provided NAACCR ID '" + item.getNaaccrId() + "'");
-
-            // write the item
-            writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
-            writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID, itemDef.getNaaccrId());
-            if (itemDef.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
-                writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, itemDef.getNaaccrNum().toString());
-
-            // first, let's remove any CR, we only want to use LF for new lines (because this library generates "&#xd;" for CR, which is technically correct but causes a lot of confusion)
-            String value = _CARRIAGE_RETURN_PATTERN.matcher(item.getValue()).replaceAll("\n");
-
-            // then deal with the control characters
-            Matcher matcher = _CONTROL_CHARACTERS_PATTERN.matcher(value);
-            if (matcher.find()) {
-                if (Boolean.TRUE.equals(_context.getOptions().getIgnoreControlCharacters()))
-                    value = matcher.replaceAll("");
-                else
-                    reportSyntaxError("value for item '" + item.getNaaccrId() + "' contains non-printable control characters");
-            }
-
-            // handle the padding - only 0-padding is taken into account when writting XML; blank padding (left or right) is completely ignored
-            if (Boolean.TRUE.equals(_context.getOptions().getApplyPaddingRules()) && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef.getLength()) {
-                if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(itemDef.getPadding()))
-                    value = StringUtils.leftPad(value, itemDef.getLength(), '0');
-                else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_ZERO.equals(itemDef.getPadding()))
-                    value = StringUtils.rightPad(value, itemDef.getLength(), '0');
-                else if (!NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(itemDef.getPadding()) && !NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(itemDef.getPadding()))
-                    throw new RuntimeException("Unknown padding option: " + itemDef.getPadding());
-            }
-
-            // do we need to truncate the value?
-            if (itemDef.getLength() != null && value.length() > itemDef.getLength() && !Boolean.TRUE.equals(itemDef.getAllowUnlimitedText())) {
-                if (_context.getOptions().getReportValuesTooLong())
-                    reportError(item, null, null, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());
-                value = value.substring(0, itemDef.getLength());
-            }
-
-            writer.setValue(value);
-            writer.endNode();
+        if (itemDef == null) {
+            if (NaaccrOptions.ITEM_HANDLING_ERROR.equals(_context.getOptions().getUnknownItemHandling()))
+                reportSyntaxError("unable to find item definition for NAACCR ID " + item.getNaaccrId());
+            else if (NaaccrOptions.ITEM_HANDLING_IGNORE.equals(_context.getOptions().getUnknownItemHandling()))
+                return;
+            else if (!NaaccrOptions.ITEM_HANDLING_PROCESS.equals(_context.getOptions().getUnknownItemHandling()))
+                throw new RuntimeException("Unknown option: " + _context.getOptions().getUnknownItemHandling());
         }
+
+        if (itemDef != null && item.getNaaccrNum() != null && !item.getNaaccrNum().equals(itemDef.getNaaccrNum()))
+            reportSyntaxError("provided NAACCR Number '" + item.getNaaccrNum() + "' doesn't correspond to the provided NAACCR ID '" + item.getNaaccrId() + "'");
+
+        // write the item
+        writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
+        writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID, itemDef != null ? itemDef.getNaaccrId() : item.getNaaccrId());
+        if (itemDef != null && itemDef.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
+            writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, itemDef.getNaaccrNum().toString());
+
+        // first, let's remove any CR, we only want to use LF for new lines (because this library generates "&#xd;" for CR, which is technically correct but causes a lot of confusion)
+        String value = _CARRIAGE_RETURN_PATTERN.matcher(item.getValue()).replaceAll("\n");
+
+        // then deal with the control characters
+        Matcher matcher = _CONTROL_CHARACTERS_PATTERN.matcher(value);
+        if (matcher.find()) {
+            if (Boolean.TRUE.equals(_context.getOptions().getIgnoreControlCharacters()))
+                value = matcher.replaceAll("");
+            else
+                reportSyntaxError("value for item '" + item.getNaaccrId() + "' contains non-printable control characters");
+        }
+
+        // handle the padding - only 0-padding is taken into account when writing XML; blank padding (left or right) is completely ignored
+        if (itemDef != null && Boolean.TRUE.equals(_context.getOptions().getApplyPaddingRules()) && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef
+                .getLength()) {
+            if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(itemDef.getPadding()))
+                value = StringUtils.leftPad(value, itemDef.getLength(), '0');
+            else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_ZERO.equals(itemDef.getPadding()))
+                value = StringUtils.rightPad(value, itemDef.getLength(), '0');
+            else if (!NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(itemDef.getPadding()) && !NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(itemDef.getPadding()))
+                throw new RuntimeException("Unknown padding option: " + itemDef.getPadding());
+        }
+
+        // do we need to truncate the value?
+        if (itemDef != null && itemDef.getLength() != null && value.length() > itemDef.getLength() && !Boolean.TRUE.equals(itemDef.getAllowUnlimitedText())) {
+            if (_context.getOptions().getReportValuesTooLong())
+                reportError(item, null, null, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());
+            value = value.substring(0, itemDef.getLength());
+        }
+
+        writer.setValue(value);
+        writer.endNode();
     }
 
     public void readItem(AbstractEntity entity, String currentPath, String parentTag, String rawId, String rawNum, String value) {

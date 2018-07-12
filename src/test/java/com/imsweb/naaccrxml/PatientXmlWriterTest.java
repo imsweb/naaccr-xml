@@ -266,6 +266,41 @@ public class PatientXmlWriterTest {
         Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"comorbidComplication1\">2</Item>"));
         Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"medicalRecordNumber\">3</Item>"));
         Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"primarySite\">4</Item>"));
+
+        data.addItem(new Item("unknown", "1"));
+
+        // unknown item - default option - should report an error
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
+            writer.writePatient(patient);
+            throw new AssertionError("Was expecting an exception here!");
+        }
+        catch (NaaccrIOException e) {
+            // expected
+        }
+
+        // unknown item - report error
+        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_ERROR);
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
+            writer.writePatient(patient);
+            throw new AssertionError("Was expecting an exception here!");
+        }
+        catch (NaaccrIOException e) {
+            // expected
+        }
+
+        // unknown item - process
+        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_PROCESS);
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
+            writer.writePatient(patient);
+        }
+        Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("<Item naaccrId=\"unknown\">1</Item>"));
+
+        // unknown item - ignore
+        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_IGNORE);
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
+            writer.writePatient(patient);
+        }
+        Assert.assertFalse(TestingUtils.readFileAsOneString(file).contains("<Item naaccrId=\"unknown\">1</Item>"));
     }
 
     @Test
