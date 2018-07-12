@@ -216,6 +216,18 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
         item.setNaaccrNum(999999);
         Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+
+        // this one defines an item that is too long
+        item = new NaaccrDictionaryItem();
+        item.setNaaccrId("myVariableWithSomeVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongId!");
+        item.setNaaccrName("My Variable");
+        item.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+        item.setNaaccrNum(10000);
+        item.setLength(1);
+        dict.setItems(Collections.singletonList(item));
+        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+        item.setNaaccrId("myVariable");
+        Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
     }
 
     @Test

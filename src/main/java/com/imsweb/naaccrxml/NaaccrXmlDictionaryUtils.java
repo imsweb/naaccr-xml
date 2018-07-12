@@ -360,6 +360,8 @@ public final class NaaccrXmlDictionaryUtils {
                 return "'naaccrId' attribute is required";
             if (!idPattern.matcher(item.getNaaccrId()).matches())
                 return "'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + item.getNaaccrId();
+            if (item.getNaaccrId().length() > 50)
+                return "'naaccrId' attribute can only be 50 characters long: " + item.getNaaccrId();
             if (naaccrIds.contains(item.getNaaccrId()))
                 return "'naaccrId' attribute must be unique, already saw " + item.getNaaccrId();
             naaccrIds.add(item.getNaaccrId());

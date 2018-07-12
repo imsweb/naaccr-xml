@@ -2,6 +2,7 @@
 
 **Version 4.10**
 
+- Added maximum length of 50 characters for NaaccrId attribute in the dictionaries.
 - Added new DuplicateItemException to deal with duplicate items, which are never allowed in this standard.
 - Writing unknown items is now tied to the 'unknownItemHandling' option.
 

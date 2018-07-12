@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
@@ -46,6 +47,7 @@ public class DictionaryToCsv {
     }
 
     private static void fullAbstract() throws IOException {
+        AtomicInteger max = new AtomicInteger();
         for (String version : NaaccrFormat.getSupportedVersions()) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get("docs/naaccr-xml-items-" + version + ".csv").toFile()))) {
                 writer.write("Item Number,Item Name,Item Start column,Item Length,Record Types,NAACCR XML ID,NAACCR XML Parent Element");
@@ -61,6 +63,7 @@ public class DictionaryToCsv {
                             return o1.getStartColumn().compareTo(o2.getStartColumn());
                         })
                         .forEach(item -> {
+                            max.set(Math.max(max.get(), item.getNaaccrId().length()));
                             try {
                                 writer.write(
                                         item.getNaaccrNum() + ",\"" + item.getNaaccrName() + "\"," + item.getStartColumn() + "," + item.getLength() + ",\"" + item.getRecordTypes() + "\"," + item
@@ -73,6 +76,7 @@ public class DictionaryToCsv {
                         });
             }
         }
+        System.out.println(max.get());
     }
 
     private static void incidenceOnly() throws IOException {
