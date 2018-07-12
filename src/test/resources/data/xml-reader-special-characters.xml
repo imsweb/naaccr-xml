@@ -1,0 +1,9 @@
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml" recordType="A" specificationVersion="1.1">
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000001</Item>
+        <Tumor>
+            <Item naaccrId="rxTextHormone">&amp; &lt; &gt; &quot; &apos;</Item>
+            <Item naaccrId="rxTextChemo"><![CDATA[& < > " ']]></Item>
+        </Tumor>
+    </Patient>
+</NaaccrData>

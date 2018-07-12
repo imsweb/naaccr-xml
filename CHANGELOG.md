@@ -5,6 +5,7 @@
 - Added maximum length of 50 characters for NaaccrId attribute in the dictionaries.
 - Added new DuplicateItemException to deal with duplicate items, which are never allowed in this standard.
 - Writing unknown items is now tied to the 'unknownItemHandling' option.
+- Improved handling of CDATA sections when reading/writing XML for SAS.
 
 **Version 4.9**
 

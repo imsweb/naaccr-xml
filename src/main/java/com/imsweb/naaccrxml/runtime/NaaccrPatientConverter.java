@@ -17,7 +17,6 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
-import com.imsweb.naaccrxml.DuplicateItemException;
 import com.imsweb.naaccrxml.NaaccrErrorUtils;
 import com.imsweb.naaccrxml.NaaccrIOException;
 import com.imsweb.naaccrxml.NaaccrOptions;
@@ -112,11 +111,11 @@ public class NaaccrPatientConverter implements Converter {
                     String path = "/Patient/Item[" + patItemCount + "]";
                     String rawId = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID);
                     String rawNum = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM);
-                    readItem(patient, path, NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT, rawId, rawNum, reader.getValue());
                     if (rawId != null && itemsAlreadySeen.contains(rawId))
                         reportSyntaxError("item '" + rawId + "' should be unique within the " + NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT + " tags");
                     else
                         itemsAlreadySeen.add(rawId);
+                    readItem(patient, path, NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT, rawId, rawNum, reader.getValue());
                 }
                 // handle tumors
                 else if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(_context.extractTag(reader.getNodeName()))) {
@@ -142,11 +141,11 @@ public class NaaccrPatientConverter implements Converter {
                             String path = "/Patient/Tumor[" + tumorCount + "]/Item[" + tumorItemCount + "]";
                             String rawId = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID);
                             String rawNum = reader.getAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM);
-                            readItem(tumor, path, NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR, rawId, rawNum, reader.getValue());
                             if (rawId != null && itemsAlreadySeen.contains(rawId))
                                 reportSyntaxError("item '" + rawId + "' should be unique within the " + NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR + " tags");
                             else
                                 itemsAlreadySeen.add(rawId);
+                            readItem(tumor, path, NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR, rawId, rawNum, reader.getValue());
                         }
                         else {
                             if (!Boolean.TRUE.equals(_context.getOptions().getIgnoreExtensions())) {
@@ -329,12 +328,7 @@ public class NaaccrPatientConverter implements Converter {
             }
         }
 
-        try {
-            entity.addItem(item);
-        }
-        catch (DuplicateItemException e) {
-            reportSyntaxError(e.getMessage());
-        }
+        entity.addItem(item);
     }
 
     protected void reportError(Object obj, Integer line, String path, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {

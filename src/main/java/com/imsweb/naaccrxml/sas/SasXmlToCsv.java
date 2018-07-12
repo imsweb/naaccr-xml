@@ -120,7 +120,7 @@ public class SasXmlToCsv {
                     for (String field : allFields.keySet()) {
                         String val = reader.getValue(field);
                         if (val != null && val.contains(","))
-                            val = "\"" + val + "\"";
+                            val = "\"" + val.replace("\"", "\"\"") + "\"";
                         buf.append(val == null ? "" : val).append(",");
                     }
                     buf.setLength(buf.length() - 1);

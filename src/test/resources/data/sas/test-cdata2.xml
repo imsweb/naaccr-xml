@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- some comments -->
+
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml" recordType="A" specificationVersion="1.1" xmlns="http://naaccr.org/naaccrxml">
+    <Item naaccrId="registryId">0000000001</Item>
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000001</Item>
+        <Tumor>
+            <Item naaccrId="rxTextChemo" naaccrNum="2640"><![CDATA[1/10/2016 DrugB (Part1, Part2, & Part3) @ Facility w/ Dr. Name. [DrugA started in 1/2015 & DrugB regimen planned] 1/15/2017 Drugc @ Facility w/ Dr Name2]]></Item>
+            <Item naaccrId="rxTextHormone" naaccrNum="2640">1/10/2016 DrugB (Part1, Part2, &amp; Part3) @ Facility w/ Dr. Name. [DrugA started in 1/2015 &amp; DrugB regimen planned] 1/15/2017 Drugc @ Facility w/ Dr Name2</Item>
+        </Tumor>
+    </Patient>
+</NaaccrData>

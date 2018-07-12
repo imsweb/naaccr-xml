@@ -19,11 +19,6 @@ import com.imsweb.naaccrxml.TestingUtils;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Tumor;
 
-/**
- * TODO FD - this case still doesn't work properly:
- *    <Item naaccrId="rxTextChemo" naaccrNum="2640"><![CDATA[1/10/2016 DrugB (Part1, Part2, & Part3) @ Facility w/ Dr. Name. [DrugA started in 1/2015, but DrugB regimen planned] 1/15/2017 Drugc @ Facility w/ Dr Name2]]></Item>
- * TODO FD - explain that some NAACCR IDs are shorten in the wiki...
- */
 public class SasTest {
 
     @Test
@@ -80,6 +75,17 @@ public class SasTest {
         createCsvToXmlConverter(csvFile, xmlCopyFile, "180", "I").convert();
         Tumor tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(0).getTumors().get(0);
         Assert.assertEquals("C123", tumor.getItemValue("primarySite"));
+
+        xmlFile = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/test-cdata2.xml");
+        csvFile = new File(TestingUtils.getBuildDirectory(), "test-cdata2.csv");
+        xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-cdata2-copy.xml");
+        createXmlToCsvConverter(xmlFile, csvFile, "180", "A").convert(null, false);
+        createCsvToXmlConverter(csvFile, xmlCopyFile, "180", "A").convert();
+        tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(0).getTumors().get(0);
+        Assert.assertEquals("1/10/2016 DrugB (Part1, Part2, & Part3) @ Facility w/ Dr. Name. [DrugA started in 1/2015 & DrugB regimen planned] 1/15/2017 Drugc @ Facility w/ Dr Name2",
+                tumor.getItemValue("rxTextChemo"));
+        Assert.assertEquals("1/10/2016 DrugB (Part1, Part2, & Part3) @ Facility w/ Dr. Name. [DrugA started in 1/2015 & DrugB regimen planned] 1/15/2017 Drugc @ Facility w/ Dr Name2",
+                tumor.getItemValue("rxTextHormone"));
     }
 
     @Test

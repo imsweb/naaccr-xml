@@ -17,11 +17,21 @@ import java.util.Objects;
  */
 public class SasXmlReader {
 
+    private static final Map<String, String> _TO_ESCAPE = new HashMap<>();
+
+    static {
+        _TO_ESCAPE.put("&amp;", "&");
+        _TO_ESCAPE.put("&lt;", "<");
+        _TO_ESCAPE.put("&gt;", ">");
+        _TO_ESCAPE.put("&quot;", "\"");
+        _TO_ESCAPE.put("&apos;", "'");
+    }
+
     private File _xmlFile;
 
     private BufferedReader _reader;
 
-    private boolean _inPatient, _inTumor;
+    private boolean _inPatient, _inTumor, _inCdata;
 
     private Map<String, String> _naaccrDataValues = new HashMap<>(), _patientValues = new HashMap<>(), _tumorValues = new HashMap<>();
 
@@ -66,10 +76,11 @@ public class SasXmlReader {
 
                 // adjust for CDATA sections
                 if (valueEnd == valueStart + 1 && line.charAt(valueEnd + 1) == '!' && line.charAt(valueEnd + 2) == '[') {
+                    _inCdata = true;
                     valueStart = line.indexOf('[', valueStart + 4);
                     if (valueStart == -1)
                         throw new IOException("Unable to find start of value for: " + line);
-                    valueEnd = line.indexOf(']', valueStart + 1);
+                    valueEnd = line.indexOf("]]>", valueStart + 1);
                     if (valueEnd == -1) { // could be the start of a multi-line value...
                         currentKey = key;
                         currentVal = new StringBuilder(line.substring(valueStart + 1));
@@ -77,13 +88,14 @@ public class SasXmlReader {
                 }
 
                 if (currentVal == null) {
-                    String val = line.substring(valueStart + 1, valueEnd);
+                    String val = _inCdata ? line.substring(valueStart + 1, valueEnd) : cleanUpValue(new StringBuilder(line.substring(valueStart + 1, valueEnd)));
                     if (_inPatient)
                         _patientValues.put(key, val);
                     else if (_inTumor)
                         _tumorValues.put(key, val);
                     else
                         _naaccrDataValues.put(key, val);
+                    _inCdata = false;
                 }
             }
             else if (line.contains("<Patient>")) {
@@ -120,12 +132,14 @@ public class SasXmlReader {
                             if (endIdx > 3 && line.charAt(endIdx - 1) == '>' && line.charAt(endIdx - 2) == ']' && line.charAt(endIdx - 3) == ']')
                                 endIdx = endIdx - 3;
                             currentVal.append("::").append(line, 0, endIdx);
+                            String val = _inCdata ? currentVal.toString() : cleanUpValue(currentVal);
                             if (_inPatient)
-                                _patientValues.put(currentKey, currentVal.toString());
+                                _patientValues.put(currentKey, val);
                             else if (_inTumor)
-                                _tumorValues.put(currentKey, currentVal.toString());
+                                _tumorValues.put(currentKey, val);
                             else
-                                _naaccrDataValues.put(currentKey, currentVal.toString());
+                                _naaccrDataValues.put(currentKey, val);
+                            _inCdata = false;
                             currentKey = null;
                             currentVal = null;
                         }
@@ -158,5 +172,16 @@ public class SasXmlReader {
         catch (IOException e) {
             // ignored
         }
+    }
+
+    private String cleanUpValue(StringBuilder buf) {
+        for (Map.Entry<String, String> entry : _TO_ESCAPE.entrySet()) {
+            int idx = buf.indexOf(entry.getKey());
+            while (idx != -1) {
+                buf.replace(idx, idx + entry.getKey().length(), entry.getValue());
+                idx = buf.indexOf(entry.getKey(), idx + 1);
+            }
+        }
+        return buf.toString();
     }
 }

@@ -95,17 +95,6 @@ public class PatientXmlReaderTest {
             Assert.assertEquals(1, data.getItems().size());
         }
 
-        // this file has a duplicate item for the patient
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-validation-1.xml")), options)) {
-            try {
-                reader.readPatient();
-                Assert.fail("Should have been an exception!");
-            }
-            catch (NaaccrIOException e) {
-                // expected
-            }
-        }
-
         // by default, a value too long should be reported as an error but shouldn't be truncated
         NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(TestingUtils.getDataFile("dictionary/testing-user-dictionary.xml"));
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-too-long.xml")), options, dict)) {
@@ -125,6 +114,13 @@ public class PatientXmlReaderTest {
             Assert.assertTrue(ex.getMessage().contains("primarySite"));
         }
 
+        // test some special characters
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-special-characters.xml")), options)) {
+            Tumor tumor = reader.readPatient().getTumors().get(0);
+            Assert.assertEquals("& < > \" '", tumor.getItemValue("rxTextHormone"));
+            Assert.assertEquals("& < > \" '", tumor.getItemValue("rxTextChemo"));
+
+        }
     }
 
     @Test

@@ -275,12 +275,12 @@ public class PatientXmlReader implements PatientReader {
             while (isItemTag(_reader.getNodeName())) {
                 String rawId = _reader.getAttribute(NAACCR_XML_ITEM_ATT_ID);
                 String rawNum = _reader.getAttribute(NAACCR_XML_ITEM_ATT_NUM);
-                // following call will ensure that proper validation runs
-                conf.getPatientConverter().readItem(_rootData, "/NaaccrData", NAACCR_XML_TAG_ROOT, rawId, rawNum, _reader.getValue());
                 if (rawId != null && itemsAlreadySeen.contains(rawId))
                     throw new NaaccrIOException("item '" + rawId + "' should be unique within the \"" + NAACCR_XML_TAG_ROOT + "\" tags");
                 else
                     itemsAlreadySeen.add(rawId);
+                // following call will ensure that proper validation runs
+                conf.getPatientConverter().readItem(_rootData, "/NaaccrData", NAACCR_XML_TAG_ROOT, rawId, rawNum, _reader.getValue());
                 _reader.moveUp();
                 if (_reader.hasMoreChildren())
                     _reader.moveDown();
