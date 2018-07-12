@@ -109,14 +109,17 @@ public class SasCsvToXml {
                 writer = SasUtils.createWriter(_xmlFile);
 
                 List<String> headers = new ArrayList<>();
-                headers.addAll(Arrays.asList(reader.readLine().split(",")));
+                String line = reader.readLine();
+                if (line == null)
+                    throw new IOException("Was expecting to find column headers, didn't find them!");
+                headers.addAll(Arrays.asList(line.split(",")));
 
                 int patNumIdx = headers.indexOf("patientIdNumber");
                 if (patNumIdx == -1)
                     throw new IOException("Unable to find 'patientIdNumber' in the headers");
 
                 String currentPatNum = null;
-                String line = reader.readLine();
+                line = reader.readLine();
                 while (line != null) {
                     List<String> valList = parseCsvLine(reader.getLineNumber(), line, '\"', ',');
                     if (headers.size() != valList.size())
