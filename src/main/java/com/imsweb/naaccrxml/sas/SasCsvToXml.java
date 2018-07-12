@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Use this class to convert a given CSV file into a NAACCR XML file.
  */
@@ -111,7 +109,7 @@ public class SasCsvToXml {
                 writer = SasUtils.createWriter(_xmlFile);
 
                 List<String> headers = new ArrayList<>();
-                headers.addAll(Arrays.asList(StringUtils.split(reader.readLine(), ',')));
+                headers.addAll(Arrays.asList(reader.readLine().split(",")));
 
                 int patNumIdx = headers.indexOf("patientIdNumber");
                 if (patNumIdx == -1)

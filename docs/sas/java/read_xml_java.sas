@@ -7,8 +7,8 @@
 	  compressed file, otherwise it will be processed as an uncompressed file (path can be relative or absolute)
 	- naaccrversion should be "140", "150", "160" or "180" (defaults to "180")
 	- recordtype should be "A", "M", "C" or "I" (defaults to "I")
-        - dataset should be the name of the dataset from which the data should be taken (defaults to alldata)
-        - items is an optional CSV list of fields to read (any other fields will be ignored);
+    - dataset should be the name of the dataset from which the data should be taken (defaults to alldata)
+    - items is an optional CSV list of fields (NAACCR ID) to read (any other fields will be ignored);
 
     Note that the macro creates a tmp CSV file in the same folder as the target file; that file will be 
     automatically deleted by the macro when it's done executing.
