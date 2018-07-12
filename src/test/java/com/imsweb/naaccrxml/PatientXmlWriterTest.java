@@ -134,6 +134,16 @@ public class PatientXmlWriterTest {
         catch (NaaccrIOException e) {
             // expected
         }
+
+        // duplicate items should generate an exception
+        try {
+            data.addItem(new Item("registryId", "0000000002"));
+            throw new AssertionError("Was expecting an exception here!");
+        }
+        catch (DuplicateItemException e) {
+            Assert.assertEquals("registryId", e.getItemId());
+            Assert.assertTrue(e.getMessage().contains("registryId"));
+        }
     }
 
     @Test

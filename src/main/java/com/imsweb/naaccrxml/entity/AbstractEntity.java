@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.imsweb.naaccrxml.DuplicateItemException;
 import com.imsweb.naaccrxml.NaaccrValidationError;
 
 /**
@@ -66,6 +67,9 @@ public class AbstractEntity {
      * @param item item to add, cannot be null
      */
     public void addItem(Item item) {
+        // it is important to keep the cache in the same state as the items and so item two identical items has to trigger an exception
+        if (_cachedById.containsKey(item.getNaaccrId()))
+            throw new DuplicateItemException(item.getNaaccrId(), "Duplicate item ID found for '" + item.getNaaccrId() + "'");
         _items.add(item);
         _cachedById.put(item.getNaaccrId(), item);
     }

@@ -2,6 +2,7 @@
 
 **Version 4.10**
 
+- Added new DuplicateItemException to deal with duplicate items, which are never allowed in this standard.
 - Writing unknown items is now tied to the 'unknownItemHandling' option.
 
 **Version 4.9**

@@ -17,6 +17,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
+import com.imsweb.naaccrxml.DuplicateItemException;
 import com.imsweb.naaccrxml.NaaccrErrorUtils;
 import com.imsweb.naaccrxml.NaaccrIOException;
 import com.imsweb.naaccrxml.NaaccrOptions;
@@ -328,7 +329,12 @@ public class NaaccrPatientConverter implements Converter {
             }
         }
 
-        entity.addItem(item);
+        try {
+            entity.addItem(item);
+        }
+        catch (DuplicateItemException e) {
+            reportSyntaxError(e.getMessage());
+        }
     }
 
     protected void reportError(Object obj, Integer line, String path, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {

@@ -115,6 +115,16 @@ public class PatientXmlReaderTest {
             NaaccrValidationError error = patient.getAllValidationErrors().get(0);
             Assert.assertTrue(error.getMessage().contains("long"));
         }
+
+        // multiple times the same item should throw an exception
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-duplicate-items.xml")), options)) {
+            reader.readPatient();
+            throw new AssertionError("Was expecting an exception here!");
+        }
+        catch (NaaccrIOException ex) {
+            Assert.assertTrue(ex.getMessage().contains("primarySite"));
+        }
+
     }
 
     @Test
