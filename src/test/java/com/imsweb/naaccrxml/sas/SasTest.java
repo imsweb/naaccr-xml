@@ -64,6 +64,16 @@ public class SasTest {
         xmlToCsv.convert("patientIdNumber,primarySite", false);
         csvToXml.convert("patientIdNumber,primarySite");
         assertXmlData(xmlCopyFile, true);
+
+        // another (more comlex) file
+        xmlFile = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/test2.xml");
+        csvFile = new File(TestingUtils.getBuildDirectory(), "test2.csv");
+        xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test2-copy.xml");
+        createXmlToCsvConverter(xmlFile, csvFile, "180", "A").convert(null, false);
+        createCsvToXmlConverter(csvFile, xmlCopyFile, "180", "A").convert(null);
+        List<Tumor> tumors = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(1).getTumors();
+        Assert.assertEquals("9-9/9-9-16 HOSPITAL, DR DOCTOR: XXX BRAIN (9999 CGY), 99 FX’S, XXXX & 9MV tumor #1", tumors.get(0).getItemValue("rxTextRadiation"));
+        Assert.assertEquals("9-9/9-9-16 HOSPITAL, DR DOCTOR: XXX BRAIN (9999 CGY), 99 FX’S, XXXX & 9MV tumor #2", tumors.get(1).getItemValue("rxTextRadiation"));
     }
 
     @Test
