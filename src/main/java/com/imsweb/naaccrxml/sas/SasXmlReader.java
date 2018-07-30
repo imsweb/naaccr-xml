@@ -14,6 +14,8 @@ import java.util.Objects;
  * This class is a simplified NAACCR XML reader.
  * <br/><br/>
  * It doesn't use an XML parser; it expects the XML to be well formatted (one item per line) and uses regular expressions to find the values.
+ * <br/><br/>
+ * THIS CLASS IS IMPLEMENTED TO BE COMPATIBLE WITH JAVA 7; BE CAREFUL WHEN MODIFYING IT.
  */
 public class SasXmlReader {
 

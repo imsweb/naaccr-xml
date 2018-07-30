@@ -12,6 +12,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
+import org.apache.commons.lang3.StringUtils;
+
 public abstract class AbstractPage extends JPanel {
 
     public AbstractPage() {
@@ -22,7 +24,7 @@ public abstract class AbstractPage extends JPanel {
     }
     
     protected String invertFilename(File file) {
-        String[] name = file.getName().split("\\.");
+        String[] name = StringUtils.split(file.getName(), '.');
         if (name.length < 2)
             return null;
         String extension = name[name.length - 1];

@@ -53,7 +53,7 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 import com.imsweb.naaccrxml.gui.Standalone;
 
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({"FieldCanBeLocal", "JdkObsolete"})
 public class DictionariesPage extends AbstractPage {
 
     // global GUI components

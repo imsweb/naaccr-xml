@@ -18,7 +18,10 @@ import java.util.Set;
 
 /**
  * Use this class to convert a given NAACCR XML file into a CSV file.
+ * <br/><br/>
+ * THIS CLASS IS IMPLEMENTED TO BE COMPATIBLE WITH JAVA 7; BE CAREFUL WHEN MODIFYING IT.
  */
+@SuppressWarnings("ALL")
 public class SasXmlToCsv {
 
     private File _xmlFile, _csvFile;
@@ -79,7 +82,7 @@ public class SasXmlToCsv {
             Set<String> requestedFields = null;
             if (fields != null && !fields.trim().isEmpty()) {
                 requestedFields = new HashSet<>();
-                for (String s : fields.split(","))
+                for (String s : fields.split(",", -1))
                     requestedFields.add(s.trim());
             }
 

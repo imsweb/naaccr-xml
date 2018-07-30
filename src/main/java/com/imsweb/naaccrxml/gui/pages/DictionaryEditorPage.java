@@ -65,7 +65,7 @@ import com.imsweb.naaccrxml.gui.components.SeerClickableLabel;
  * - add a "Create New Dictionary" toolbar button to start a new dictionary
  * - keep track whether the current dictionary has been modified or not, display that status and use confirmation upon closing if modified
  */
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({"FieldCanBeLocal", "JdkObsolete"})
 public class DictionaryEditorPage extends AbstractPage implements ActionListener {
 
     private static final String _BLANK_VERSION = "<Any>";

@@ -30,6 +30,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.imsweb.naaccrxml.entity.Patient;
 
 /**
@@ -102,7 +104,7 @@ public final class BatchProcessor {
         List<String> errorCodes = null;
         if (rawErrorCodes != null && !rawErrorCodes.isEmpty()) {
             errorCodes = new ArrayList<>();
-            for (String s : rawErrorCodes.split(","))
+            for (String s : StringUtils.split(rawErrorCodes, ','))
                 errorCodes.add(s.trim());
         }
         int numThreads = Math.min(Runtime.getRuntime().availableProcessors() + 1, 5);
@@ -151,6 +153,7 @@ public final class BatchProcessor {
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
         for (File inputFile : toProcess) {
             String outputFilename = invertFilename(inputFile, compression);
+            @SuppressWarnings("ConstantConditions")
             File outputFile = new File(outputDir, outputFilename);
             if (inputFile.equals(outputFile))
                 throw new RuntimeException("Was about to write output file into the input file, this can't be good!");
@@ -225,7 +228,7 @@ public final class BatchProcessor {
 
     private static String invertFilename(File file, String compression) {
         // first invert the filename
-        String[] name = file.getName().split("\\.");
+        String[] name = StringUtils.split(file.getName(), '.');
         if (name.length < 2)
             return null;
         String extension = name[name.length - 1];
@@ -271,8 +274,8 @@ public final class BatchProcessor {
         private File _outputFile;
         private List<String> _reportData;
         private boolean _deleteOutputFiles, _flatToXml;
-        private Map<String, AtomicInteger> _globalCounts = new HashMap<>();
-        private Map<String, Set<String>> _globalDetails = new HashMap<>();
+        private Map<String, AtomicInteger> _globalCounts;
+        private Map<String, Set<String>> _globalDetails;
         private AtomicInteger _globalTumorCount;
         private List<String> _errorCodes;
 
@@ -389,20 +392,10 @@ public final class BatchProcessor {
                 if (error.getNaaccrId() != null) {
 
                     // file properties
-                    Set<String> set = _warningDetails.get(error.getCode());
-                    if (set == null) {
-                        set = new HashSet<>();
-                        _warningDetails.put(error.getCode(), set);
-                    }
-                    set.add(error.getNaaccrId());
+                    _warningDetails.computeIfAbsent(error.getCode(), k -> new HashSet<>()).add(error.getNaaccrId());
 
                     // global properties
-                    Set<String> globalSet = _globalDetails.get(error.getCode());
-                    if (globalSet == null) {
-                        globalSet = new HashSet<>();
-                        _globalDetails.put(error.getCode(), globalSet);
-                    }
-                    globalSet.add(error.getNaaccrId());
+                    _globalDetails.computeIfAbsent(error.getCode(), k -> new HashSet<>()).add(error.getNaaccrId());
                 }
             }
         }

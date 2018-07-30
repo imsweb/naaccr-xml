@@ -20,7 +20,10 @@ import java.util.Set;
 
 /**
  * Use this class to convert a given CSV file into a NAACCR XML file.
+ * <br/><br/>
+ * THIS CLASS IS IMPLEMENTED TO BE COMPATIBLE WITH JAVA 7; BE CAREFUL WHEN MODIFYING IT.
  */
+@SuppressWarnings("ALL")
 public class SasCsvToXml {
 
     private static final Map<String, String> _TO_ESCAPE = new HashMap<>();
@@ -86,7 +89,7 @@ public class SasCsvToXml {
             Set<String> requestedFields = null;
             if (fields != null && !fields.trim().isEmpty()) {
                 requestedFields = new HashSet<>();
-                for (String s : fields.split(","))
+                for (String s : fields.split(",", -1))
                     requestedFields.add(s.trim());
             }
 
@@ -112,7 +115,7 @@ public class SasCsvToXml {
                 String line = reader.readLine();
                 if (line == null)
                     throw new IOException("Was expecting to find column headers, didn't find them!");
-                headers.addAll(Arrays.asList(line.split(",")));
+                headers.addAll(Arrays.asList(line.split(",", -1)));
 
                 int patNumIdx = headers.indexOf("patientIdNumber");
                 if (patNumIdx == -1)

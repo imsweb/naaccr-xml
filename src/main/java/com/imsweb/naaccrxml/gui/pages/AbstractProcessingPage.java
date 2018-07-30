@@ -631,7 +631,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
                 List<NaaccrDictionary> userDictionaries = new ArrayList<>();
                 if (!_dictionaryFld.getText().isEmpty())
-                    for (String s : _dictionaryFld.getText().split(";"))
+                    for (String s : StringUtils.split(_dictionaryFld.getText(), ';'))
                         userDictionaries.add(NaaccrXmlDictionaryUtils.readDictionary(new File(s.trim())));
 
                 final long start = System.currentTimeMillis();

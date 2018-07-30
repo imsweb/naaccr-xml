@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * A format encapsulates a NAACCR version and a record type. It also makes the flat-file line length available based on those two fields.
  */
@@ -127,7 +129,7 @@ public final class NaaccrFormat {
         if (!isFormatSupported(format))
             throw new RuntimeException("Unsupported format: " + format);
 
-        String[] parts = format.split("\\-");
+        String[] parts = StringUtils.split(format, '-');
         if (!isVersionSupported(parts[1]))
             throw new RuntimeException("Unsupported version: " + parts[1]);
         _naaccrVersion = parts[1];
