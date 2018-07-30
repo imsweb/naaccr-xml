@@ -370,6 +370,8 @@ public final class NaaccrXmlDictionaryUtils {
             if (naaccrNums.contains(item.getNaaccrNum()))
                 return "'naaccrNum' attribute must be unique, already saw " + item.getNaaccrNum();
             naaccrNums.add(item.getNaaccrNum());
+            if (item.getNaaccrName() != null && item.getNaaccrName().length() > 50)
+                return "'naaccrName' attribute can only be 50 characters long: " + item.getNaaccrName();
             if (item.getLength() == null)
                 return "'length' attribute is required";
             boolean allowBlankStartCol = !isBaseDictionary && SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_1) >= 0;
