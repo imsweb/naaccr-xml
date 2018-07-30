@@ -3,7 +3,7 @@ import org.gradle.internal.jvm.Jvm
 plugins {
     id 'java-library'
     id 'checkstyle'
-    id "net.ltgt.errorprone" version "0.0.16"
+    id 'net.ltgt.errorprone' version '0.0.16'
     id 'com.bmuschko.nexus' version '2.3.1'
     id 'io.codearte.nexus-staging' version '0.8.0'
     id 'com.github.johnrengelman.shadow' version '2.0.4'
@@ -115,7 +115,6 @@ modifyPom {
 }
 
 // don't try to release a snapshot to a non-snapshot repository, that won't work anyway
-if (version.endsWith('-SNAPSHOT'))
 if (version.endsWith('-SNAPSHOT'))
     gradle.startParameter.excludedTaskNames += 'closeAndReleaseRepository'
 
