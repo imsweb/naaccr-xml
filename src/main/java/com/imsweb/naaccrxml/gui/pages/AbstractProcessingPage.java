@@ -82,7 +82,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected JTextField _sourceFld, _targetFld, _dictionaryFld;
     protected JComboBox<String> _compressionBox;
     protected JProgressBar _analysisBar, _processingBar;
-    protected JLabel _analysisErrorLbl, _processingErrorLbl, _processingResultLbl, _formatLbl, _numLinesLbl, _fileSizeLbl;
+    protected JLabel _analysisErrorLbl, _processingErrorLbl, _processingResult1Lbl, _processingResult2Lbl, _formatLbl, _numLinesLbl, _fileSizeLbl;
     protected JLabel _numPatLbl, _numTumLbl;
     protected JTextArea _warningsTextArea, _warningsSummaryTextArea;
     protected JTabbedPane _warningsPane;
@@ -476,11 +476,20 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
     private JPanel buildProcessingResultsPanel() {
         JPanel pnl = new JPanel();
-        pnl.setBorder(new EmptyBorder(10, 0, 0, 0));
-        pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        pnl.setBorder(new EmptyBorder(10, 0, 10, 0));
+        pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
 
-        _processingResultLbl = new JLabel(" ");
-        pnl.add(_processingResultLbl);
+        JPanel row1Pnl = new JPanel();
+        row1Pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        _processingResult1Lbl = new JLabel(" ");
+        row1Pnl.add(_processingResult1Lbl);
+        pnl.add(row1Pnl);
+
+        JPanel row2Pnl = new JPanel();
+        row2Pnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        _processingResult2Lbl = new JLabel();
+        row2Pnl.add(_processingResult2Lbl);
+        pnl.add(row2Pnl);
 
         return pnl;
     }
@@ -552,7 +561,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
         _centerPnl.setVisible(true);
         _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_PROCESSING);
-        _processingResultLbl.setText(null);
+        _processingResult1Lbl.setText(null);
+        _processingResult2Lbl.setText(null);
         _northProcessingPnl.setVisible(true);
         _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_ANALYSIS);
 
@@ -635,6 +645,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                         userDictionaries.add(NaaccrXmlDictionaryUtils.readDictionary(new File(s.trim())));
 
                 final long start = System.currentTimeMillis();
+                final AtomicInteger numPatients = new AtomicInteger();
+                final AtomicInteger numTumors = new AtomicInteger();
                 NaaccrFormat format = getFormatForInputFile(srcFile);
                 NaaccrDictionary baseDictionary = format == null ? null : NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(format.getNaaccrVersion());
                 runProcessing(srcFile, targetFile, _guiOptions.getOptions(baseDictionary, userDictionaries), userDictionaries, new NaaccrObserver() {
@@ -645,6 +657,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
                     @Override
                     public void patientWritten(Patient patient) {
+                        numPatients.getAndIncrement();
+                        numTumors.getAndAdd(patient.getTumors().size());
                     }
                 });
 
@@ -653,7 +667,10 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                     long processingTime = System.currentTimeMillis() - start;
                     String size = targetFile == null ? null : Standalone.formatFileSize(targetFile.length());
                     String path = targetFile == null ? null : targetFile.getPath();
-                    _processingResultLbl.setText(getProcessingResultText(path, analysisTime, processingTime, size));
+                    _processingResult1Lbl.setText(getProcessingResultRow1Text(path, analysisTime, processingTime, size));
+                    String row2Text = getProcessingResultRow2Text(numPatients.get(), numTumors.get());
+                    if (row2Text != null)
+                        _processingResult2Lbl.setText(row2Text);
                     _northProcessingLayout.show(_northProcessingPnl, _NORTH_PROCESSING_PANEL_ID_RESULTS);
                 });
 
@@ -762,11 +779,15 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
     protected abstract void runProcessing(File source, File target, NaaccrOptions options, List<NaaccrDictionary> dictionaries, NaaccrObserver observer) throws NaaccrIOException;
 
-    protected String getProcessingResultText(String path, long analysisTime, long processingTime, String size) {
+    protected String getProcessingResultRow1Text(String path, long analysisTime, long processingTime, String size) {
         String analysis = Standalone.formatTime(analysisTime);
         String processing = Standalone.formatTime(processingTime);
         String total = Standalone.formatTime(analysisTime + processingTime);
         return "Successfully created \"" + path + "\" (" + size + ") in " + total + " (analysis: " + analysis + ", processing: " + processing + ")";
+    }
+
+    protected String getProcessingResultRow2Text(int numPatients, int numTumors) {
+        return null;
     }
 
     protected void reportAnalysisError(Throwable e) {

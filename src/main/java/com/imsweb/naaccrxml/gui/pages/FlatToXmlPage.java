@@ -14,6 +14,7 @@ import com.imsweb.naaccrxml.NaaccrObserver;
 import com.imsweb.naaccrxml.NaaccrOptions;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.gui.Standalone;
 import com.imsweb.naaccrxml.gui.StandaloneOptions;
 
 public class FlatToXmlPage extends AbstractProcessingPage {
@@ -103,5 +104,18 @@ public class FlatToXmlPage extends AbstractProcessingPage {
         }
 
         return format;
+    }
+
+    @Override
+    protected String getProcessingResultRow2Text(int numPatients, int numTumors) {
+        StringBuilder buf = new StringBuilder("Wrote ");
+        buf.append(Standalone.formatNumber(numPatients)).append(" patient");
+        if (numPatients > 1)
+            buf.append("s");
+        buf.append(" and ").append(Standalone.formatNumber(numTumors)).append(" tumor");
+        if (numTumors > 1)
+            buf.append("s");
+        buf.append("...");
+        return buf.toString();
     }
 }

@@ -77,7 +77,7 @@ public class XmlValidationPage extends AbstractProcessingPage {
     }
 
     @Override
-    protected String getProcessingResultText(String path, long analysisTime, long processingTime, String size) {
+    protected String getProcessingResultRow1Text(String path, long analysisTime, long processingTime, String size) {
         return "Done validating source XML file.";
     }
 }
