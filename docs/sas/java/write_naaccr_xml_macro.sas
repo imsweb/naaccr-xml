@@ -32,7 +32,7 @@ options set=CLASSPATH &libpath;
 */
 data _null_;
     attrib csvpath length = $200;
-    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasCsvToXml', &targetfile, &naaccrversion, &recordtype, &dictfile);
+    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasCsvToXml', &targetfile, &naaccrversion, &recordtype);
     j1.callStringMethod('getCsvPath', csvpath);
     call symput('csvfile', csvpath);
     j1.delete();
@@ -51,7 +51,8 @@ run;
    Call the Java library to convert the CSV file into an XML file; delete the CSV file once we are done.
 */
 data _null_;
-    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasCsvToXml', &targetfile, &naaccrversion, &recordtype, &dictfile);
+    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasCsvToXml', &targetfile, &naaccrversion, &recordtype);
+    j1.callVoidMethod('setDictionary', &dictfile);
     j1.callVoidMethod('convert', &items);
     j1.callVoidMethod('cleanup');
     j1.delete();

@@ -34,10 +34,6 @@ public class SasXmlToCsv {
     }
 
     public SasXmlToCsv(String xmlPath, String csvPath, String naaccrVersion, String recordType) {
-        this(xmlPath, csvPath, naaccrVersion, recordType, null);
-    }
-
-    public SasXmlToCsv(String xmlPath, String csvPath, String naaccrVersion, String recordType, String dictPath) {
         _xmlFile = new File(xmlPath);
         if (!_xmlFile.exists())
             System.err.println("!!! Invalid XML file: " + xmlPath);
@@ -49,6 +45,11 @@ public class SasXmlToCsv {
         _csvFile = new File(csvPath);
         System.out.println(" > temp CSV: " + _csvFile.getAbsolutePath());
 
+        _naaccrVersion = naaccrVersion;
+        _recordType = recordType;
+    }
+
+    public void setDictionary(String dictPath) {
         if (dictPath != null && !dictPath.trim().isEmpty()) {
             _dictFile = new File(dictPath);
             if (!_dictFile.exists())
@@ -56,10 +57,6 @@ public class SasXmlToCsv {
             else
                 System.out.println(" > dictionary: " + _dictFile.getAbsolutePath());
         }
-
-        _naaccrVersion = naaccrVersion;
-        _recordType = recordType;
-
     }
 
     public String getXmlPath() {

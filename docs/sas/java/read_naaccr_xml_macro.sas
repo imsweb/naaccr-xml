@@ -35,10 +35,11 @@ options set=CLASSPATH &libpath;
 */
 data _null_;
     attrib csvpath length = $200;
-    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToCsv', &sourcefile, &naaccrversion, &recordtype, &dictfile);
+    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToCsv', &sourcefile, &naaccrversion, &recordtype);
+    j1.callVoidMethod('setDictionary', &dictfile);
     j1.callStringMethod('getCsvPath', csvpath);
     call symput('csvfile', csvpath);
-    j1.callVoidMethod ('convert', &items);
+    j1.callVoidMethod('convert', &items);
     j1.delete();
 run;
 
@@ -62,7 +63,7 @@ run;
     Cleanup the tmp CSV file.
 */
 data _null_;    
-    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToCsv', &sourcefile, &naaccrversion, &recordtype, &dictfile);
+    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToCsv', &sourcefile, &naaccrversion, &recordtype);
     j1.callVoidMethod('cleanup');
     j1.delete();
 run;
