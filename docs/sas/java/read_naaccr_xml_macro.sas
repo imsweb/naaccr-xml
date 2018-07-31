@@ -1,4 +1,4 @@
-%MACRO readNaaccrXml(libpath, sourcefile, naaccrversion="180", recordtype="I", dataset=alldata, items="");
+%MACRO readNaaccrXml(libpath, sourcefile, naaccrversion="180", recordtype="I", dataset=alldata, items="", dictfile="");
 
 /************************************************************************************************************;
     This macro reads a given NAACCR XML data file and loads the data into a dataset.
@@ -6,11 +6,12 @@
     Paramaters:
 	- libpath needs to point to the Java SAS library (path can be relative or absolute)
 	- sourcefile needs to point to the XML to import; if path ends with ".gz" it will be processed as a GZIP 
-	  compressed file, otherwise it will be processed as an uncompressed file (path can be relative or absolute)
+	    compressed file, otherwise it will be processed as an uncompressed file (path can be relative or absolute)
 	- naaccrversion should be "140", "150", "160" or "180" (defaults to "180")
 	- recordtype should be "A", "M", "C" or "I" (defaults to "I")
-        - dataset should be the name of the dataset into which the data should be loaded (defaults to alldata)
-        - items is an optional CSV list of fields to read (any other fields will be ignored);
+    - dataset should be the name of the dataset into which the data should be loaded (defaults to alldata)
+    - items is an optional CSV list of fields to read (any other fields will be ignored);
+    - dictfile is an optional user-defined dictionary in CSV format (see GUI tool to save an XML dictionary to CSV)
 
     Note that the macro creates a tmp CSV file in the same folder as the input file; that file will be 
     automatically deleted by the macro when it's done executing.
@@ -19,6 +20,7 @@
     *********
     06/10/2018 - Fabian Depry - Initial version.
     06/18/2018 - Fabian Depry - Added "replace" to CSV import proc.
+    07/31/2018 - Fabian Depry - Added new optional parameter for user-defined dictionary.
  ************************************************************************************************************/;
 
 /*
@@ -33,7 +35,7 @@ options set=CLASSPATH &libpath;
 */
 data _null_;
     attrib csvpath length = $200;
-    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToCsv', &sourcefile, &naaccrversion, &recordtype);
+    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToCsv', &sourcefile, &naaccrversion, &recordtype, &dictfile);
     j1.callStringMethod('getCsvPath', csvpath);
     call symput('csvfile', csvpath);
     j1.callVoidMethod ('convert', &items);
@@ -48,7 +50,7 @@ proc import datafile="&csvfile" out=&dataset dbms=csv replace;
 run;
 
 /*
-   To force SAS to recognize all variables as text (and stop droping leading 0's), the library adds a line of dashes; 
+   To force SAS to recognize all variables as text (and stop dropping leading 0's), the library adds a line of dashes;
    this code removes that fake line from the loaded dataset.
 */
 data &dataset;
@@ -60,7 +62,7 @@ run;
     Cleanup the tmp CSV file.
 */
 data _null_;    
-    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToCsv', &sourcefile, &naaccrversion, &recordtype);
+    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToCsv', &sourcefile, &naaccrversion, &recordtype, &dictfile);
     j1.callVoidMethod('cleanup');
     j1.delete();
 run;
