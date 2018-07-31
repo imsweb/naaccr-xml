@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * Use this class to convert a given NAACCR XML file into a CSV file.
@@ -24,7 +25,7 @@ import java.util.Set;
 @SuppressWarnings("ALL")
 public class SasXmlToCsv {
 
-    private File _xmlFile, _csvFile;
+    private File _xmlFile, _csvFile, _dictFile;
 
     private String _naaccrVersion, _recordType;
 
@@ -33,15 +34,28 @@ public class SasXmlToCsv {
     }
 
     public SasXmlToCsv(String xmlPath, String csvPath, String naaccrVersion, String recordType) {
+        this(xmlPath, xmlPath.replace(".xml", ".csv"), naaccrVersion, recordType, null);
+    }
+
+    public SasXmlToCsv(String xmlPath, String csvPath, String naaccrVersion, String recordType, String dictPath) {
         _xmlFile = new File(xmlPath);
         if (!_xmlFile.exists())
             System.err.println("!!! Invalid XML file: " + xmlPath);
-        System.out.println(" > input XML: " + _xmlFile.getAbsolutePath());
+        else
+            System.out.println(" > input XML: " + _xmlFile.getAbsolutePath());
 
         if (csvPath.endsWith(".gz"))
             csvPath = csvPath.replace(".gz", "");
         _csvFile = new File(csvPath);
         System.out.println(" > temp CSV: " + _csvFile.getAbsolutePath());
+
+        if (dictPath != null && !dictPath.trim().isEmpty()) {
+            _dictFile = new File(dictPath);
+            if (!_dictFile.exists())
+                System.err.println("!!! Invalid CSV dictionary " + dictPath);
+            else
+                System.out.println(" > dictionary: " + _dictFile.getAbsolutePath());
+        }
 
         _naaccrVersion = naaccrVersion;
         _recordType = recordType;
@@ -56,6 +70,10 @@ public class SasXmlToCsv {
         return _csvFile.getAbsolutePath();
     }
 
+    public String getDictionaryPath() {
+        return _dictFile.getAbsolutePath();
+    }
+
     public String getNaaccrVersion() {
         return _naaccrVersion;
     }
@@ -65,7 +83,7 @@ public class SasXmlToCsv {
     }
 
     public List<SasFieldInfo> getFields() {
-        return SasUtils.getFields(_naaccrVersion, _recordType);
+        return SasUtils.getFields(_naaccrVersion, _recordType, _dictFile);
     }
 
     public void convert() throws IOException {
@@ -77,19 +95,24 @@ public class SasXmlToCsv {
     }
 
     public void convert(String fields, boolean addExtraCharFields) throws IOException {
-        System.out.println("Starting converting XML to CSV...");
         try {
             Set<String> requestedFields = null;
             if (fields != null && !fields.trim().isEmpty()) {
                 requestedFields = new HashSet<>();
-                for (String s : fields.split(",", -1))
-                    requestedFields.add(s.trim());
+                for (String s : fields.replace(" ", "").split(",", -1))
+                    requestedFields.add(s);
             }
 
             Map<String, Integer> allFields = new LinkedHashMap<>();
-            for (SasFieldInfo field : getFields())
-                if (requestedFields == null || requestedFields.contains(field.getNaaccrId()))
-                    allFields.put(field.getNaaccrId(), field.getLength());
+            for (SasFieldInfo field : getFields()) {
+                if (requestedFields == null || requestedFields.contains(field.getNaaccrId())) {
+                    allFields.put(field.getTruncatedNaaccrId(), field.getLength());
+                    if (!field.getNaaccrId().equals(field.getTruncatedNaaccrId()))
+                        System.out.println("Truncated '" + field.getNaaccrId() + "' into '" + field.getTruncatedNaaccrId() + "'...");
+                }
+            }
+
+            System.out.println("Starting converting XML to CSV...");
 
             SasXmlReader reader = null;
             BufferedWriter writer = null;
@@ -119,11 +142,12 @@ public class SasXmlToCsv {
                     buf.setLength(0);
                 }
 
+                Pattern quotePattern = Pattern.compile("\"", Pattern.LITERAL);
                 while (reader.nextRecord() > 0) {
                     for (String field : allFields.keySet()) {
                         String val = reader.getValue(field);
                         if (val != null && val.contains(","))
-                            val = "\"" + val.replace("\"", "\"\"") + "\"";
+                            val = "\"" + quotePattern.matcher(val).replaceAll("\"\"") + "\"";
                         buf.append(val == null ? "" : val).append(",");
                     }
                     buf.setLength(buf.length() - 1);

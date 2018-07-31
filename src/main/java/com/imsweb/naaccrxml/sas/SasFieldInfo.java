@@ -13,15 +13,25 @@ package com.imsweb.naaccrxml.sas;
 public class SasFieldInfo {
 
     private String _naaccrId;
-
+    private String _truncatedNaaccrId;
     private String _parentTag;
-
     private Integer _length;
+    private Integer _num;
+    private String _name;
+    private Integer _start;
 
-    public SasFieldInfo(String naaccrId, String parentTag, String length) {
+    public SasFieldInfo(String naaccrId, String truncatedNaaccrId, String parentTag, Integer length, Integer num, String name, Integer start) {
         _naaccrId = naaccrId;
+        _truncatedNaaccrId = truncatedNaaccrId;
         _parentTag = parentTag;
-        _length = Integer.valueOf(length);
+        _length = length;
+        _num = num;
+        _name = name;
+        _start = start;
+    }
+
+    public String getTruncatedNaaccrId() {
+        return _truncatedNaaccrId;
     }
 
     public String getNaaccrId() {
@@ -34,5 +44,17 @@ public class SasFieldInfo {
 
     public Integer getLength() {
         return _length;
+    }
+
+    public Integer getNum() {
+        return _num;
+    }
+
+    public String getName() {
+        return _name;
+    }
+
+    public Integer getStart() {
+        return _start;
     }
 }

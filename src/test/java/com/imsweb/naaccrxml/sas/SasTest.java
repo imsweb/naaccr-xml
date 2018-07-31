@@ -24,12 +24,14 @@ public class SasTest {
     @Test
     public void testGetFields() throws IOException {
         Map<String, String> fields = new HashMap<>();
-        for (SasFieldInfo field : SasUtils.getFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-180.csv")))
+        for (SasFieldInfo field : SasUtils.getFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-180.csv"), null))
             fields.put(field.getNaaccrId(), field.getParentTag());
 
         Assert.assertTrue(fields.containsKey("primarySite"));
         Assert.assertEquals("Tumor", fields.get("primarySite"));
         Assert.assertFalse(fields.containsKey("nameLast"));
+
+        // TODO test with user-defined dictionary
     }
 
     @Test
@@ -124,7 +126,7 @@ public class SasTest {
             @Override
             public List<SasFieldInfo> getFields() {
                 try {
-                    return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"));
+                    return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"), null);
                 }
                 catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
@@ -139,7 +141,7 @@ public class SasTest {
             @Override
             public List<SasFieldInfo> getFields() {
                 try {
-                    return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"));
+                    return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"), null);
                 }
                 catch (FileNotFoundException e) {
                     throw new RuntimeException(e);

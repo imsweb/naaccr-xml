@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -38,7 +39,7 @@ public class SasCsvToXml {
         _TO_ESCAPE.put("::", "\n");
     }
 
-    private File _csvFile, _xmlFile;
+    private File _csvFile, _xmlFile, _dictFile;
 
     private String _naaccrVersion, _recordType;
 
@@ -47,13 +48,28 @@ public class SasCsvToXml {
     }
 
     public SasCsvToXml(String csvPath, String xmlPath, String naaccrVersion, String recordType) {
+        this(csvPath, xmlPath, naaccrVersion, recordType, null);
+    }
+
+    public SasCsvToXml(String csvPath, String xmlPath, String naaccrVersion, String recordType, String dictPath) {
         _xmlFile = new File(xmlPath);
         System.out.println(" > target XML: " + _xmlFile.getAbsolutePath());
 
         if (csvPath.endsWith(".gz"))
             csvPath = csvPath.replace(".gz", "");
         _csvFile = new File(csvPath);
-        System.out.println(" > temp CSV: " + _csvFile.getAbsolutePath());
+        if (!_csvFile.exists())
+            System.err.println("!!! Invalid CSV file: " + csvPath);
+        else
+            System.out.println(" > temp CSV: " + _csvFile.getAbsolutePath());
+
+        if (dictPath != null && !dictPath.trim().isEmpty()) {
+            _dictFile = new File(dictPath);
+            if (!_dictFile.exists())
+                System.err.println("!!! Invalid CSV dictionary: " + dictPath);
+            else
+                System.out.println(" > dictionary: " + _dictFile.getAbsolutePath());
+        }
 
         _naaccrVersion = naaccrVersion;
         _recordType = recordType;
@@ -76,7 +92,7 @@ public class SasCsvToXml {
     }
 
     public List<SasFieldInfo> getFields() {
-        return SasUtils.getFields(_naaccrVersion, _recordType);
+        return SasUtils.getFields(_naaccrVersion, _recordType, _dictFile);
     }
 
     public void convert() throws IOException {
@@ -93,15 +109,15 @@ public class SasCsvToXml {
                     requestedFields.add(s.trim());
             }
 
-            List<String> rootFields = new ArrayList<>(), patientFields = new ArrayList<>(), tumorFields = new ArrayList<>();
+            Map<String, String> rootFields = new HashMap<>(), patientFields = new HashMap<>(), tumorFields = new HashMap<>();
             for (SasFieldInfo field : getFields()) {
                 if (requestedFields == null || requestedFields.contains(field.getNaaccrId())) {
                     if ("NaaccrData".equals(field.getParentTag()))
-                        rootFields.add(field.getNaaccrId());
+                        rootFields.put(field.getTruncatedNaaccrId(), field.getNaaccrId());
                     else if ("Patient".equals(field.getParentTag()))
-                        patientFields.add(field.getNaaccrId());
+                        patientFields.put(field.getTruncatedNaaccrId(), field.getNaaccrId());
                     else if ("Tumor".equals(field.getParentTag()))
-                        tumorFields.add(field.getNaaccrId());
+                        tumorFields.put(field.getTruncatedNaaccrId(), field.getNaaccrId());
                 }
             }
 
@@ -124,7 +140,7 @@ public class SasCsvToXml {
                 String currentPatNum = null;
                 line = reader.readLine();
                 while (line != null) {
-                    List<String> valList = parseCsvLine(reader.getLineNumber(), line, '\"', ',');
+                    List<String> valList = SasUtils.parseCsvLine(reader.getLineNumber(), line);
                     if (headers.size() != valList.size())
                         throw new IOException("Line " + reader.getLineNumber() + ": expected " + headers.size() + " values but got " + valList.size());
 
@@ -146,10 +162,10 @@ public class SasCsvToXml {
                         writer.write(" specificationVersion=\"1.3\"");
                         writer.write(" xmlns=\"http://naaccr.org/naaccrxml\"");
                         writer.write(">\n");
-                        for (String id : rootFields) {
-                            String val = values.get(id);
+                        for (Entry<String, String> entry : rootFields.entrySet()) {
+                            String val = values.get(entry.getKey());
                             if (val != null && !val.trim().isEmpty())
-                                writer.write("    <Item naaccrId=\"" + id + "\">" + cleanUpValue(val) + "</Item>\n");
+                                writer.write("    <Item naaccrId=\"" + entry.getValue() + "\">" + cleanUpValue(val) + "</Item>\n");
                         }
                     }
 
@@ -158,19 +174,19 @@ public class SasCsvToXml {
                         if (currentPatNum != null)
                             writer.write("    </Patient>\n");
                         writer.write("    <Patient>\n");
-                        for (String id : patientFields) {
-                            String val = values.get(id);
+                        for (Entry<String, String> entry : patientFields.entrySet()) {
+                            String val = values.get(entry.getKey());
                             if (val != null && !val.trim().isEmpty())
-                                writer.write("        <Item naaccrId=\"" + id + "\">" + cleanUpValue(val) + "</Item>\n");
+                                writer.write("        <Item naaccrId=\"" + entry.getValue() + "\">" + cleanUpValue(val) + "</Item>\n");
                         }
                     }
 
-                    // we always have to write the tumor?
+                    // we always have to write the tumor!
                     writer.write("        <Tumor>\n");
-                    for (String id : tumorFields) {
-                        String val = values.get(id);
+                    for (Entry<String, String> entry : tumorFields.entrySet()) {
+                        String val = values.get(entry.getKey());
                         if (val != null && !val.trim().isEmpty())
-                            writer.write("            <Item naaccrId=\"" + id + "\">" + cleanUpValue(val) + "</Item>\n");
+                            writer.write("            <Item naaccrId=\"" + entry.getValue() + "\">" + cleanUpValue(val) + "</Item>\n");
                     }
                     writer.write("        </Tumor>\n");
 
@@ -215,98 +231,5 @@ public class SasCsvToXml {
             }
         }
         return buf.toString();
-    }
-
-    protected List<String> parseCsvLine(int lineNumber, String line, char cQuote, char cDelimiter) throws IOException {
-        List<String> result = new ArrayList<>();
-
-        int curIndex = 0, nextQuote, nextDelimiter;
-
-        StringBuilder buf = new StringBuilder();
-        buf.append(cQuote);
-        String singleQuotes = buf.toString();
-        buf.append(cQuote);
-        String doubleQuotes = buf.toString();
-
-        String value;
-        while (curIndex < line.length()) {
-            if (line.charAt(curIndex) == cQuote) {
-                // handle quoted value
-                nextQuote = getNextSingleQuote(line, cQuote, curIndex);
-                if (nextQuote < 0)
-                    throw new IOException("Line " + lineNumber + ": found an unmatched quote");
-                else {
-                    result.add(line.substring(curIndex + 1, nextQuote).replace(doubleQuotes, singleQuotes));
-                    // update the current index to be after delimiter, after the ending quote
-                    curIndex = nextQuote;
-                    if (curIndex + 1 < line.length()) {
-                        // if there is a next value, set current index to be after delimiter
-                        if (line.charAt(curIndex + 1) == cDelimiter) {
-                            curIndex += 2;
-                            // handle case where last value is empty
-                            if (curIndex == line.length())
-                                result.add("");
-                        }
-                        // else character after ending quote is not EOL and not delimiter, stop parsing
-                        else
-                            throw new IOException("Line " + lineNumber + ": expected a delimiter after the quote");
-                    }
-                    else
-                        // end of line is after ending quote, stop parsing
-                        curIndex++;
-                }
-            }
-            else {
-                // handle unquoted value
-                nextDelimiter = getNextDelimiter(line, cDelimiter, curIndex);
-                value = line.substring(curIndex, nextDelimiter).replace(doubleQuotes, singleQuotes);
-                // unquoted values should not contain any quotes
-                if (value.contains(singleQuotes))
-                    throw new IOException("Line " + lineNumber + ": value contains some quotes but does not start with a quote");
-                else {
-                    result.add(value);
-                    curIndex = nextDelimiter + 1;
-                    // handle case where last value is empty
-                    if (curIndex == line.length())
-                        result.add("");
-                }
-            }
-        }
-
-        return result;
-    }
-
-    private int getNextSingleQuote(String line, char quote, int from) {
-        if (from >= line.length())
-            return -1;
-
-        int index = from + 1;
-        boolean found = false;
-        while ((index < line.length()) && !found) {
-            if (line.charAt(index) != quote)
-                index++;
-            else {
-                if ((index + 1 == line.length()) || (line.charAt(index + 1) != quote))
-                    found = true;
-                else
-                    index += 2;
-            }
-
-        }
-
-        index = (index == line.length()) ? -1 : index;
-
-        return index;
-    }
-
-    private int getNextDelimiter(String line, char delimiter, int from) {
-        if (from >= line.length())
-            return line.length();
-
-        int index = from;
-        while ((index < line.length()) && (line.charAt(index) != delimiter))
-            index++;
-
-        return index;
     }
 }
