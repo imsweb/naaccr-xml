@@ -9,13 +9,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
 import java.util.Vector;
 import java.util.regex.PatternSyntaxException;
 
@@ -283,40 +278,15 @@ public class DictionariesPage extends AbstractPage {
                 if (result != JOptionPane.YES_OPTION)
                     return;
             }
-            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(targetFile), StandardCharsets.US_ASCII))) {
-                writer.write("NAACCR XML ID,NAACCR Number,Name,Start Column,Length,Record Types,Parent XML Element,Data Type");
-                writer.newLine();
-                dictionary.getDictionary().getItems().stream()
-                        .sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId))
-                        .forEach(item -> {
-                            try {
-                                writer.write(item.getNaaccrId());
-                                writer.write(",");
-                                writer.write(item.getNaaccrNum() == null ? "" : item.getNaaccrNum().toString());
-                                writer.write(",\"");
-                                writer.write(item.getNaaccrName() == null ? "" : item.getNaaccrName());
-                                writer.write("\",");
-                                writer.write(item.getStartColumn() == null ? "" : item.getStartColumn().toString());
-                                writer.write(",");
-                                writer.write(item.getLength().toString());
-                                writer.write(",\"");
-                                writer.write(item.getRecordTypes() == null ? "" : item.getRecordTypes());
-                                writer.write("\",");
-                                writer.write(item.getParentXmlElement() == null ? "" : item.getParentXmlElement());
-                                writer.write(",");
-                                writer.write(item.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : item.getDataType());
-                                writer.newLine();
-                            }
-                            catch (IOException | RuntimeException ex1) {
-                                throw new RuntimeException(ex1); // doing that to make sure the loop is broken...
-                            }
-                        });
+
+            try {
+                NaaccrXmlDictionaryUtils.writeDictionaryToCsv(dictionary.getDictionary(), targetFile);
+                JOptionPane.showMessageDialog(DictionariesPage.this, "Extract successfully created!", "Success", JOptionPane.INFORMATION_MESSAGE);
             }
-            catch (IOException | RuntimeException ex2) {
-                String msg = "Unexpected error creating CSV file\n\n" + ex2.getMessage();
+            catch (IOException | RuntimeException e) {
+                String msg = "Unexpected error creating CSV file\n\n" + e.getMessage();
                 JOptionPane.showMessageDialog(DictionariesPage.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
             }
-            JOptionPane.showMessageDialog(DictionariesPage.this, "Extract successfully created!", "Success", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 

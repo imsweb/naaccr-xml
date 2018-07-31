@@ -2,8 +2,10 @@
 
 **Version 4.11**
 
-- The standalone GUI now shows the number of written Patient and Tumor when creating XML files.
 - The 'naaccrName' attribute is now enforced to be up to 50 characters.
+- Standalone GUI now shows the number of written Patient and Tumor when creating XML files.
+- Added new menu item to standalone GUI to save a given dictionary as CSV file.
+- Added support for user-defined dictionary to SAS module.
 - Updated commons-lang3 dependency from version 3.6 to version 3.7.
 - Updated commons-io dependency from version 2.5 to version 2.6.
 - Updated XZ compression library from version 1.6 to version 1.8.

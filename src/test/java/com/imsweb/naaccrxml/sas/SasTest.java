@@ -26,12 +26,16 @@ public class SasTest {
         Map<String, String> fields = new HashMap<>();
         for (SasFieldInfo field : SasUtils.getFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-180.csv"), null))
             fields.put(field.getNaaccrId(), field.getParentTag());
-
         Assert.assertTrue(fields.containsKey("primarySite"));
         Assert.assertEquals("Tumor", fields.get("primarySite"));
         Assert.assertFalse(fields.containsKey("nameLast"));
 
-        // TODO test with user-defined dictionary
+        fields.clear();
+        File csvDictionary = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/user-dictionary.csv");
+        for (SasFieldInfo field : SasUtils.getFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-180.csv"), csvDictionary))
+            fields.put(field.getNaaccrId(), field.getParentTag());
+        Assert.assertTrue(fields.containsKey("myVariable"));
+        Assert.assertEquals("Tumor", fields.get("myVariable"));
     }
 
     @Test

@@ -25,6 +25,8 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * Utility methods used to read/write NAACCR XML data files to/from SAS.
+ * <br/><br/>
+ * THIS CLASS IS IMPLEMENTED TO BE COMPATIBLE WITH JAVA 7; BE CAREFUL WHEN MODIFYING IT.
  */
 public class SasUtils {
 
@@ -102,6 +104,7 @@ public class SasUtils {
         return result;
     }
 
+    @SuppressWarnings("TryFinallyCanBeTryWithResources")
     private static List<SasFieldInfo> readCsvDictionary(String recordType, InputStream is, Map<String, AtomicInteger> counters) {
         List<SasFieldInfo> result = new ArrayList<>();
 
@@ -113,27 +116,27 @@ public class SasUtils {
             while (line != null) {
                 List<String> values = parseCsvLine(reader.getLineNumber(), line);
 
-                Integer num = values.get(0).isEmpty() ? null : Integer.valueOf(values.get(0));
-                String name = values.get(1);
-                Integer start = values.get(2).isEmpty() ? null : Integer.valueOf(values.get(2));
-                Integer length = values.get(3).isEmpty() ? null : Integer.valueOf(values.get(3));
-                String recTypes = values.get(4);
-                String naaccrId = values.get(5);
+                String id = values.get(0);
+                Integer num = values.get(1).isEmpty() ? null : Integer.valueOf(values.get(1));
+                String name = values.get(2);
+                Integer start = values.get(3).isEmpty() ? null : Integer.valueOf(values.get(3));
+                Integer length = values.get(4).isEmpty() ? null : Integer.valueOf(values.get(4));
+                String recTypes = values.get(5);
                 String parentTag = values.get(6);
 
-                String truncatedNaaccrId = naaccrId;
-                if (truncatedNaaccrId.length() > 32) {
-                    String prefix = truncatedNaaccrId.substring(0, 30);
+                String truncatedId = id;
+                if (truncatedId.length() > 32) {
+                    String prefix = truncatedId.substring(0, 30);
                     AtomicInteger counter = counters.get(prefix);
                     if (counter == null) {
                         counter = new AtomicInteger();
                         counters.put(prefix, counter);
                     }
-                    truncatedNaaccrId = prefix + "_" + counter.getAndIncrement();
+                    truncatedId = prefix + "_" + counter.getAndIncrement();
                 }
 
                 if (recTypes.contains(recordType))
-                    result.add(new SasFieldInfo(naaccrId, truncatedNaaccrId, parentTag, length, num, name, start));
+                    result.add(new SasFieldInfo(id, truncatedId, parentTag, length, num, name, start));
 
                 line = reader.readLine();
             }

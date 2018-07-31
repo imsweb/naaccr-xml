@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
@@ -19,7 +18,11 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 public class DictionaryToCsv {
 
     public static void main(String[] args) throws IOException {
-        fullAbstract();
+
+        // re-create the csv standard dictionaries in the docs folder...
+        for (String version : NaaccrFormat.getSupportedVersions())
+            NaaccrXmlDictionaryUtils.writeDictionaryToCsv(NaaccrXmlDictionaryUtils.getMergedDictionaries(version), Paths.get("docs/naaccr-xml-items-" + version + ".csv").toFile());
+
         //incidenceOnly();
         //csv16to18diff();
     }
@@ -44,39 +47,6 @@ public class DictionaryToCsv {
             String n18Length = item18 != null ? item18.getLength().toString() : "";
             System.out.println(id + "," + num + "," + n16start + "," + n16Length + "," + n18start + "," + n18Length);
         }
-    }
-
-    private static void fullAbstract() throws IOException {
-        AtomicInteger max = new AtomicInteger();
-        for (String version : NaaccrFormat.getSupportedVersions()) {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get("docs/naaccr-xml-items-" + version + ".csv").toFile()))) {
-                writer.write("Item Number,Item Name,Item Start column,Item Length,Record Types,NAACCR XML ID,NAACCR XML Parent Element");
-                writer.newLine();
-                NaaccrXmlDictionaryUtils.getMergedDictionaries(version).getItems().stream()
-                        .sorted((o1, o2) -> {
-                            if (o1.getStartColumn() == null && o2.getStartColumn() == null)
-                                return o1.getNaaccrId().compareTo(o2.getNaaccrId());
-                            if (o1.getStartColumn() == null)
-                                return 1;
-                            if (o2.getStartColumn() == null)
-                                return -1;
-                            return o1.getStartColumn().compareTo(o2.getStartColumn());
-                        })
-                        .forEach(item -> {
-                            max.set(Math.max(max.get(), item.getNaaccrId().length()));
-                            try {
-                                writer.write(
-                                        item.getNaaccrNum() + ",\"" + item.getNaaccrName() + "\"," + item.getStartColumn() + "," + item.getLength() + ",\"" + item.getRecordTypes() + "\"," + item
-                                                .getNaaccrId() + "," + item.getParentXmlElement());
-                                writer.newLine();
-                            }
-                            catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
-            }
-        }
-        System.out.println(max.get());
     }
 
     private static void incidenceOnly() throws IOException {

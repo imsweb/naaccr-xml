@@ -34,7 +34,7 @@ public class SasXmlToCsv {
     }
 
     public SasXmlToCsv(String xmlPath, String csvPath, String naaccrVersion, String recordType) {
-        this(xmlPath, xmlPath.replace(".xml", ".csv"), naaccrVersion, recordType, null);
+        this(xmlPath, csvPath, naaccrVersion, recordType, null);
     }
 
     public SasXmlToCsv(String xmlPath, String csvPath, String naaccrVersion, String recordType, String dictPath) {

@@ -3,6 +3,7 @@
  */
 package com.imsweb.naaccrxml;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -664,6 +665,58 @@ public final class NaaccrXmlDictionaryUtils {
         result.setGroupedItems(groupedItems);
 
         return result;
+    }
+
+    /**
+     * Write the given dictionary to the give target file using the CSV format.
+     * <br/><br/>
+     * Columns:
+     * <ol>
+     * <li>NAACCR ID</li>
+     * <li>NAACCR number</li>
+     * <li>Name</li>
+     * <li>Start Column</li>
+     * <li>Length</li>
+     * <li>Record Types</li>
+     * <li>Parent XML Element</li>
+     * <li>Data Type</li>
+     * </ol>
+     * @param dictionary dictionary to write
+     * @param file target CSV file
+     */
+    public static void writeDictionaryToCsv(NaaccrDictionary dictionary, File file) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.US_ASCII))) {
+            writer.write("NAACCR XML ID,NAACCR Number,Name,Start Column,Length,Record Types,Parent XML Element,Data Type");
+            writer.newLine();
+            dictionary.getItems().stream()
+                    .sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId))
+                    .forEach(item -> {
+                        try {
+                            writer.write(item.getNaaccrId());
+                            writer.write(",");
+                            writer.write(item.getNaaccrNum() == null ? "" : item.getNaaccrNum().toString());
+                            writer.write(",\"");
+                            writer.write(item.getNaaccrName() == null ? "" : item.getNaaccrName());
+                            writer.write("\",");
+                            writer.write(item.getStartColumn() == null ? "" : item.getStartColumn().toString());
+                            writer.write(",");
+                            writer.write(item.getLength().toString());
+                            writer.write(",\"");
+                            writer.write(item.getRecordTypes() == null ? "" : item.getRecordTypes());
+                            writer.write("\",");
+                            writer.write(item.getParentXmlElement() == null ? "" : item.getParentXmlElement());
+                            writer.write(",");
+                            writer.write(item.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : item.getDataType());
+                            writer.newLine();
+                        }
+                        catch (IOException | RuntimeException ex1) {
+                            throw new RuntimeException(ex1); // doing that to make sure the loop is broken...
+                        }
+                    });
+        }
+        catch (RuntimeException ex2) {
+            throw new IOException(ex2);
+        }
     }
 
     /**

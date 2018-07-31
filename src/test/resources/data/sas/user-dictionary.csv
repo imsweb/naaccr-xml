@@ -1,0 +1,2 @@
+NAACCR XML ID,NAACCR Number,Name,Start Column,Length,Record Types,Parent XML Element,Data Type
+myVariable,10000,"My Variable",,1,"A,M,C,I",Tumor,text

@@ -52,11 +52,14 @@ import javax.swing.WindowConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.filechooser.FileFilter;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
+import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.gui.pages.DictionariesPage;
 import com.imsweb.naaccrxml.gui.pages.DictionaryEditorPage;
 import com.imsweb.naaccrxml.gui.pages.FlatToXmlPage;
@@ -80,6 +83,7 @@ public class Standalone extends JFrame implements ActionListener {
         this.getContentPane().setLayout(new BorderLayout());
 
         JMenuBar bar = new JMenuBar();
+
         // file
         JMenu fileMenu = new JMenu(" File ");
         fileMenu.setMnemonic(KeyEvent.VK_F);
@@ -88,6 +92,7 @@ public class Standalone extends JFrame implements ActionListener {
         exitItem.setActionCommand("menu-exit");
         exitItem.addActionListener(this);
         fileMenu.add(exitItem);
+
         // tools
         JMenu toolsMenu = new JMenu(" Tools ");
         toolsMenu.setMnemonic(KeyEvent.VK_T);
@@ -112,6 +117,12 @@ public class Standalone extends JFrame implements ActionListener {
             if (i != versions.size() - 1)
                 ((JMenu)sasMenu).addSeparator();
         }
+        toolsMenu.addSeparator();
+        JMenuItem dictionaryToCsvItem = new JMenuItem("Save Dictionary as CSV File");
+        dictionaryToCsvItem.setActionCommand("menu-dictionary-to-csv");
+        dictionaryToCsvItem.addActionListener(this);
+        toolsMenu.add(dictionaryToCsvItem);
+
         // help
         JMenu helpMenu = new JMenu(" Help ");
         helpMenu.setMnemonic(KeyEvent.VK_H);
@@ -255,7 +266,7 @@ public class Standalone extends JFrame implements ActionListener {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fileChooser.setDialogTitle("Select Target File");
-            fileChooser.setApproveButtonToolTipText("Create CSV");
+            fileChooser.setApproveButtonToolTipText("Create File");
             fileChooser.setMultiSelectionEnabled(false);
             fileChooser.setSelectedFile(new File(fileChooser.getCurrentDirectory(), prefix + naaccrVersion + suffix));
             if (fileChooser.showDialog(this, "Select") == JFileChooser.APPROVE_OPTION) {
@@ -272,6 +283,59 @@ public class Standalone extends JFrame implements ActionListener {
                 dlg.setLocation(center.x - dlg.getWidth() / 2, center.y - dlg.getHeight() / 2);
                 SwingUtilities.invokeLater(() -> dlg.setVisible(true));
             }
+        }
+        else if ("menu-dictionary-to-csv".equals(cmd)) {
+            JFileChooser inFileChooser = new JFileChooser();
+            inFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            inFileChooser.setDialogTitle("Select Source Dictionary");
+            inFileChooser.setApproveButtonToolTipText("Select");
+            inFileChooser.setMultiSelectionEnabled(false);
+            inFileChooser.addChoosableFileFilter(new FileFilter() {
+                @Override
+                public String getDescription() {
+                    return "XML files (*.xml)";
+                }
+
+                @Override
+                public boolean accept(File f) {
+                    return f != null && (f.isDirectory() || f.getName().toLowerCase().endsWith(".xml"));
+                }
+            });
+            if (inFileChooser.showDialog(this, "Select") == JFileChooser.APPROVE_OPTION) {
+
+                try {
+                    NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(inFileChooser.getSelectedFile());
+
+                    JFileChooser outFileChooser = new JFileChooser();
+                    outFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                    outFileChooser.setDialogTitle("Select Target File");
+                    outFileChooser.setApproveButtonToolTipText("Create");
+                    outFileChooser.setMultiSelectionEnabled(false);
+                    outFileChooser.setSelectedFile(new File(inFileChooser.getSelectedFile().getPath().replace(".xml", ".csv")));
+                    if (outFileChooser.showDialog(this, "Select") == JFileChooser.APPROVE_OPTION) {
+                        File targetFile = outFileChooser.getSelectedFile();
+                        if (targetFile.exists()) {
+                            int result = JOptionPane.showConfirmDialog(this, "Target file already exists, are you sure you want to replace it?", "Confirmation",
+                                    JOptionPane.YES_NO_OPTION);
+                            if (result != JOptionPane.YES_OPTION)
+                                return;
+                        }
+                        try {
+                            NaaccrXmlDictionaryUtils.writeDictionaryToCsv(dictionary, targetFile);
+                            JOptionPane.showMessageDialog(Standalone.this, "CSF file successfully created!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        catch (IOException ex2) {
+                            String msg = "Unable to write CSV file\n\n" + ex2.getMessage();
+                            JOptionPane.showMessageDialog(Standalone.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
+                catch (IOException ex) {
+                    String msg = "Unable to read dictionary\n\n" + ex.getMessage();
+                    JOptionPane.showMessageDialog(Standalone.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
         }
         else if ("menu-help".equals(cmd)) {
             try {
