@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 4.12**
+
+- Fixed alignment for items circumferentialResectionMargin (#3823) and hcgPostOrchiectomyLabValue (#3846).
+
 **Version 4.11**
 
 - The 'naaccrName' attribute is now enforced to be up to 50 characters.

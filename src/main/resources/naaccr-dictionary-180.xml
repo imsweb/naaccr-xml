@@ -2851,7 +2851,8 @@
             startColumn="1796"
             length="4"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"/>
+            parentXmlElement="Tumor"
+            padding="leftBlank"/>
         <ItemDef naaccrId="kras"
             naaccrNum="3866"
             naaccrName="KRAS"
@@ -3539,7 +3540,8 @@
             startColumn="1975"
             length="7"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"/>
+            parentXmlElement="Tumor"
+            padding="leftBlank"/>
         <ItemDef naaccrId="hcgPostOrchiectomyRange"
             naaccrNum="3847"
             naaccrName="hCG Post-Orchiectomy Range"
