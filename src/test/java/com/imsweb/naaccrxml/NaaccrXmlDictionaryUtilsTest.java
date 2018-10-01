@@ -403,13 +403,13 @@ public class NaaccrXmlDictionaryUtilsTest {
             Path path1 = Paths.get(TestingUtils.getWorkingDirectory() + "/src/main/resources/naaccr-dictionary-" + version + ".xml");
             Path path2 = Paths.get("build/tmp-dictionary-" + version + ".xml");
             NaaccrXmlDictionaryUtils.writeDictionary(NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(version), path2.toFile());
-            if (!TestingUtils.readFileAsOneString(path1.toFile()).equals(TestingUtils.readFileAsOneString(path2.toFile())))
+            if (!TestingUtils.readFileAsOneString(path1.toFile()).replace("\r", "").equals(TestingUtils.readFileAsOneString(path2.toFile()).replace("\r", "")))
                 Assert.fail("Dictionary for version " + version + " needs to be re-created, it contains differences from what would be created by the library!");
 
             path1 = Paths.get(TestingUtils.getWorkingDirectory() + "/src/main/resources/user-defined-naaccr-dictionary-" + version + ".xml");
             path2 = Paths.get("build/tmp-dictionary-" + version + ".xml");
             NaaccrXmlDictionaryUtils.writeDictionary(NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(version), path2.toFile());
-            if (!TestingUtils.readFileAsOneString(path1.toFile()).equals(TestingUtils.readFileAsOneString(path2.toFile())))
+            if (!TestingUtils.readFileAsOneString(path1.toFile()).replace("\r", "").equals(TestingUtils.readFileAsOneString(path2.toFile()).replace("\r", "")))
                 Assert.fail("User dictionary for version " + version + " needs to be re-created, it contains differences from what would be created by the library!");
         }
     }
