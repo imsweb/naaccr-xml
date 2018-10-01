@@ -179,19 +179,21 @@ public class PatientFlatWriterTest {
         patient.addTumor(tumor2);
         data.addPatient(patient);
 
-        // default behavior for new lines is to use LF
-        options = NaaccrOptions.getDefault();
+        // force new lines to LF
+        options.setNewLine(NaaccrOptions.NEW_LINE_LF);
         try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, options)) {
             writer.writePatient(patient);
+            Assert.assertEquals("\n", writer.getNewLine());
         }
         writtenContent = TestingUtils.readFileAsOneString(file);
         Assert.assertFalse(writtenContent.contains("\r\n"));
         Assert.assertEquals(2, writtenContent.split("\n").length);
 
         // force new lines to CRLF
-        options.setEndOfLineCharacter(NaaccrOptions.NEW_LINE_CRLF);
+        options.setNewLine(NaaccrOptions.NEW_LINE_CRLF);
         try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, options)) {
             writer.writePatient(patient);
+            Assert.assertEquals("\r\n", writer.getNewLine());
         }
         writtenContent = TestingUtils.readFileAsOneString(file);
         Assert.assertTrue(writtenContent.contains("\r\n"));

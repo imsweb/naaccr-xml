@@ -81,7 +81,7 @@ public class NaaccrOptions {
     private Boolean _ignoreControlCharacters;
 
     /**
-     * When writing flat or XML data, which new line flavor to use (this does not apply to new lines appearing in the data itself). Defaults to Line Feed only.
+     * When writing flat or XML data, which new line flavor to use (this does not apply to new lines appearing in the data itself). Defaults to the OS flavor.
      */
     private String _newLine;
 
@@ -113,7 +113,7 @@ public class NaaccrOptions {
         _useStrictNamespaces = true;
         _ignoreControlCharacters = true;
         _ignoreExtensions = false;
-        _newLine = NEW_LINE_LF;
+        _newLine = NEW_LINE_OS;
     }
 
     public Boolean getValidateReadValues() {
