@@ -13,6 +13,7 @@ group = 'com.imsweb'
 version = file('VERSION').text
 description = 'This library provides support for the NAACCR XML format.'
 sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 println "Starting build using ${Jvm.current()}"
 
