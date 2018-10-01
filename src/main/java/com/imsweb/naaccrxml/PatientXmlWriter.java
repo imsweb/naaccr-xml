@@ -32,6 +32,9 @@ import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamContext;
 import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
 
+import static com.imsweb.naaccrxml.NaaccrOptions.NEW_LINE_CRLF;
+import static com.imsweb.naaccrxml.NaaccrOptions.NEW_LINE_LF;
+
 /**
  * This class can be used to wrap a generic writer into a patient writer handling the NAACCR XML format.
  */
@@ -42,6 +45,9 @@ public class PatientXmlWriter implements PatientWriter {
 
     // the underlined writer
     protected HierarchicalStreamWriter _writer;
+
+    // cached value for new line character(s)
+    protected String _newLine;
 
     // sometimes we want to finalize the writing operation without closing the writer itself...
     protected boolean _hasBeenFinalized = false;
@@ -124,6 +130,9 @@ public class PatientXmlWriter implements PatientWriter {
             if (conf == null)
                 conf = NaaccrStreamConfiguration.getDefault();
 
+            // compute the end-of-line character(s)
+            _newLine = NEW_LINE_LF.equals(options.getNewLine()) ? "\n" : NEW_LINE_CRLF.equals(options.getNewLine()) ? "\r\n" : System.getProperty("line.separator");
+
             // need to expose xstream so the other methods can use it...
             _xstream = conf.getXstream();
 
@@ -143,7 +152,11 @@ public class PatientXmlWriter implements PatientWriter {
                         dictionaries.put(userDictionary.getDictionaryUri(), userDictionary);
 
             // create the writer
-            _writer = new PrettyPrintWriter(writer, new char[] {' ', ' ', ' ', ' '});
+            _writer = new PrettyPrintWriter(writer, new char[] {' ', ' ', ' ', ' '}) {
+                protected String getNewLine() {
+                    return _newLine;
+                }
+            };
 
             // would be better to use a "header writer", I think XStream has one actually; that would be better...
             try {
@@ -244,6 +257,13 @@ public class PatientXmlWriter implements PatientWriter {
     public void close() {
         closeAndKeepAlive();
         _writer.close();
+    }
+
+    /**
+     * Returns the new line character(s) this writer uses.
+     */
+    public String getNewLine() {
+        return _newLine;
     }
 
     /**

@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 4.13**
+
+- Added an option to specify the end-of-line characters when writing flat or XML data (does not apply to dictionaries).
+
 **Version 4.12**
 
 - Fixed alignment for items circumferentialResectionMargin (#3823) and hcgPostOrchiectomyLabValue (#3846).

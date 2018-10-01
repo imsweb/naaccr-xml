@@ -22,6 +22,9 @@ import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
 import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionaryItem;
 
+import static com.imsweb.naaccrxml.NaaccrOptions.NEW_LINE_CRLF;
+import static com.imsweb.naaccrxml.NaaccrOptions.NEW_LINE_LF;
+
 /**
  * This class can be used to wrap a generic writer into a patient writer handling the NAACCR flat-file format.
  */
@@ -41,6 +44,9 @@ public class PatientFlatWriter implements PatientWriter {
 
     // cached special data items
     protected RuntimeNaaccrDictionaryItem _naaccrVersionItem, _recordTypeItem;
+
+    // cached value for new line character(s)
+    protected String _newLine;
 
     // cached pattern for new lines
     private static final Pattern _NEW_LINES_PATTERN = Pattern.compile("(\r\n|\n|\r)");
@@ -116,6 +122,7 @@ public class PatientFlatWriter implements PatientWriter {
         _writer = new BufferedWriter(writer);
         _rootData = data;
         _options = options == null ? new NaaccrOptions() : options;
+        _newLine = NEW_LINE_LF.equals(_options.getNewLine()) ? "\n" : NEW_LINE_CRLF.equals(_options.getNewLine()) ? "\r\n" : System.getProperty("line.separator");
 
         // there should be better validation here...
 
@@ -142,7 +149,7 @@ public class PatientFlatWriter implements PatientWriter {
         for (String line : createLinesFromPatient(_rootData, patient)) {
             try {
                 _writer.write(line);
-                _writer.newLine();
+                _writer.write(_newLine);
             }
             catch (IOException e) {
                 throw new NaaccrIOException(e.getMessage());
@@ -169,6 +176,13 @@ public class PatientFlatWriter implements PatientWriter {
         catch (IOException e) {
             throw new NaaccrIOException(e.getMessage());
         }
+    }
+
+    /**
+     * Returns the new line character(s) this writer uses.
+     */
+    public String getNewLine() {
+        return _newLine;
     }
 
     protected List<String> createLinesFromPatient(NaaccrData root, Patient patient) throws NaaccrIOException {

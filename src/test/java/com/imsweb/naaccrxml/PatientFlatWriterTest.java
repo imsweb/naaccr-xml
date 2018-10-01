@@ -166,6 +166,36 @@ public class PatientFlatWriterTest {
         Assert.assertTrue(writtenContent.contains("          3")); // we can't really test this because the spaces exists (as part of the format) regardless...
         Assert.assertTrue(writtenContent.contains("4"));
         Assert.assertTrue(writtenContent.contains("4   ")); // we can't really test this because the spaces exists (as part of the format) regardless...
+
+        // **** test new lines
+        data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_18_ABSTRACT);
+        patient = new Patient();
+        patient.addItem(new Item("patientIdNumber", "00000001"));
+        Tumor tumor1 = new Tumor();
+        tumor1.addItem(new Item("primarySite", "C123"));
+        patient.addTumor(tumor1);
+        Tumor tumor2 = new Tumor();
+        tumor2.addItem(new Item("primarySite", "C123"));
+        patient.addTumor(tumor2);
+        data.addPatient(patient);
+
+        // default behavior for new lines is to use LF
+        options = NaaccrOptions.getDefault();
+        try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, options)) {
+            writer.writePatient(patient);
+        }
+        writtenContent = TestingUtils.readFileAsOneString(file);
+        Assert.assertFalse(writtenContent.contains("\r\n"));
+        Assert.assertEquals(2, writtenContent.split("\n").length);
+
+        // force new lines to CRLF
+        options.setEndOfLineCharacter(NaaccrOptions.NEW_LINE_CRLF);
+        try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, options)) {
+            writer.writePatient(patient);
+        }
+        writtenContent = TestingUtils.readFileAsOneString(file);
+        Assert.assertTrue(writtenContent.contains("\r\n"));
+        Assert.assertEquals(2, writtenContent.split("\r\n").length);
     }
 
     @Test

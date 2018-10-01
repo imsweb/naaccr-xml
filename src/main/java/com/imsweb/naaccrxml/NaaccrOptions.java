@@ -14,9 +14,16 @@ public class NaaccrOptions {
     /**
      * The different ways of handling an unknown item.
      */
-    public static final String ITEM_HANDLING_ERROR = "error";
-    public static final String ITEM_HANDLING_IGNORE = "ignore";
-    public static final String ITEM_HANDLING_PROCESS = "process";
+    public static final String ITEM_HANDLING_ERROR = "error"; // raise a validation error for the unknown item, do not copy the value
+    public static final String ITEM_HANDLING_IGNORE = "ignore"; // ignore the unknown item
+    public static final String ITEM_HANDLING_PROCESS = "process"; // copy the value of the unknown item into the patient data
+
+    /**
+     * The different ways of specifying new lines.
+     */
+    public static final String NEW_LINE_OS = "OS"; // let the Operating System decide
+    public static final String NEW_LINE_LF = "LF"; // Line Feed only
+    public static final String NEW_LINE_CRLF = "CRLF"; // Carriage Return followed by Line Feed
 
     /**
      * When reading data, if set to false, no validation of the values will take place (this applies only to data types, the length is always validated). Defaults to true.
@@ -74,6 +81,11 @@ public class NaaccrOptions {
     private Boolean _ignoreControlCharacters;
 
     /**
+     * When writing flat or XML data, which new line flavor to use (this does not apply to new lines appearing in the data itself). Defaults to Line Feed only.
+     */
+    private String _newLine;
+
+    /**
      * When reading or writing XML data, whether the extensions should be ignore or not (defaults to false)
      */
     private Boolean _ignoreExtensions;
@@ -101,6 +113,7 @@ public class NaaccrOptions {
         _useStrictNamespaces = true;
         _ignoreControlCharacters = true;
         _ignoreExtensions = false;
+        _newLine = NEW_LINE_LF;
     }
 
     public Boolean getValidateReadValues() {
@@ -189,6 +202,14 @@ public class NaaccrOptions {
 
     public void setIgnoreControlCharacters(Boolean ignoreControlCharacters) {
         _ignoreControlCharacters = ignoreControlCharacters;
+    }
+
+    public String getNewLine() {
+        return _newLine;
+    }
+
+    public void setNewLine(String newLine) {
+        _newLine = newLine;
     }
 
     public Boolean getIgnoreExtensions() {

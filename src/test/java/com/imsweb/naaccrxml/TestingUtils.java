@@ -6,8 +6,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.io.IOUtils;
 
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
@@ -160,9 +163,9 @@ public class TestingUtils {
      * Reads the content of the given file as one big string.
      */
     public static String readFileAsOneString(File file) throws IOException {
-        StringBuilder buf = new StringBuilder();
-        for (String line : readFile(file))
-            buf.append(line).append("\n");
-        return buf.toString();
+        try (FileReader reader = new FileReader(file); StringWriter writer = new StringWriter()) {
+            IOUtils.copy(reader, writer);
+            return writer.toString();
+        }
     }
 }

@@ -311,6 +311,34 @@ public class PatientXmlWriterTest {
             writer.writePatient(patient);
         }
         Assert.assertFalse(TestingUtils.readFileAsOneString(file).contains("<Item naaccrId=\"unknown\">1</Item>"));
+
+        // **** test new lines
+        data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_18_ABSTRACT);
+        patient = new Patient();
+        patient.addItem(new Item("patientIdNumber", "00000001"));
+        Tumor tumor1 = new Tumor();
+        tumor1.addItem(new Item("primarySite", "C123"));
+        patient.addTumor(tumor1);
+        Tumor tumor2 = new Tumor();
+        tumor2.addItem(new Item("primarySite", "C123"));
+        patient.addTumor(tumor2);
+        data.addPatient(patient);
+
+        // default behavior for new lines is to use LF
+        options = NaaccrOptions.getDefault();
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options)) {
+            writer.writePatient(patient);
+        }
+        writtenContent = TestingUtils.readFileAsOneString(file);
+        Assert.assertFalse(writtenContent.contains("\r\n"));
+
+        // force new lines to CRLF
+        options.setEndOfLineCharacter(NaaccrOptions.NEW_LINE_CRLF);
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options)) {
+            writer.writePatient(patient);
+        }
+        writtenContent = TestingUtils.readFileAsOneString(file);
+        Assert.assertTrue(writtenContent.contains("\r\n"));
     }
 
     @Test
