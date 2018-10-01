@@ -25,7 +25,6 @@ dependencies {
 
     implementation 'commons-io:commons-io:2.6'
     implementation 'org.apache.commons:commons-lang3:3.7'
-    implementation 'javax.xml.bind:jaxb-api:2.3.0'
     implementation 'org.tukaani:xz:1.8'
 
     testImplementation 'junit:junit:4.12'

@@ -3,9 +3,9 @@
  */
 package com.imsweb.naaccrxml;
 
-import java.text.ParseException;
-
-import javax.xml.bind.DatatypeConverter;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import org.junit.Test;
 public class DateConversionTest {
 
     @Test
-    public void testDateFormat() throws ParseException {
+    public void testDateFormat() {
         // following examples are from http://books.xmlschemata.org/relaxng/ch19-77049.html
 
         assertValidDateValue("2001-10-26T21:32:52");
@@ -26,9 +26,7 @@ public class DateConversionTest {
         assertValidDateValue("-2001-10-26T21:32:52");
         assertValidDateValue("2001-10-26T21:32:52.12679");
 
-        // weird, the link says that the following is invalid, but the Java framework seems to accept it...
-        assertValidDateValue("2001-10-26");
-
+        assertInvalidDateValue("2001-10-26");
         assertInvalidDateValue("2001-10-26T21:32");
         assertInvalidDateValue("2001-10-26T25:32:52+02:00");
         assertInvalidDateValue("01-10-26T21:32");
@@ -36,18 +34,24 @@ public class DateConversionTest {
 
     private void assertValidDateValue(String dateValue) {
         try {
-            DatatypeConverter.parseDateTime(dateValue);
+            ZonedDateTime.parse(dateValue, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         }
-        catch (IllegalArgumentException e) {
-            Assert.fail("Value should be valid, but isn't: " + dateValue);
+        catch (RuntimeException e1) {
+            try {
+                LocalDateTime.parse(dateValue, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            }
+            catch (RuntimeException e2) {
+                Assert.fail("Value should be valid, but isn't: " + dateValue);
+            }
         }
     }
 
     private void assertInvalidDateValue(String dateValue) {
         try {
-            DatatypeConverter.parseDateTime(dateValue);
+            ZonedDateTime.parse(dateValue, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            LocalDateTime.parse(dateValue, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         }
-        catch (IllegalArgumentException e) {
+        catch (RuntimeException e) {
             return;
         }
         Assert.fail("Value should be invalid, but isn't: " + dateValue);
