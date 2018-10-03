@@ -28,6 +28,7 @@ import com.imsweb.naaccrxml.entity.AbstractEntity;
 import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 /**
  * This class is telling the library how to read/write patients from/to XML.
@@ -279,7 +280,11 @@ public class NaaccrPatientConverter implements Converter {
             if (NaaccrOptions.ITEM_HANDLING_PROCESS.equals(_context.getOptions().getUnknownItemHandling()))
                 item.setNaaccrId(rawId);
             else if (NaaccrOptions.ITEM_HANDLING_ERROR.equals(_context.getOptions().getUnknownItemHandling())) {
-                reportError(entity, lineNumber, currentPath, null, null, NaaccrErrorUtils.CODE_BAD_NAACCR_ID, rawId);
+                NaaccrDictionaryItem badItem = new NaaccrDictionaryItem();
+                badItem.setNaaccrId(rawId);
+                if (StringUtils.isNumeric(rawNum))
+                    badItem.setNaaccrNum(Integer.parseInt(rawNum));
+                reportError(entity, lineNumber, currentPath, new RuntimeNaaccrDictionaryItem(badItem), value, NaaccrErrorUtils.CODE_BAD_NAACCR_ID, rawId);
                 return;
             }
             else if (NaaccrOptions.ITEM_HANDLING_IGNORE.equals(_context.getOptions().getUnknownItemHandling()))

@@ -180,9 +180,9 @@ public class PatientXmlReaderTest {
             NaaccrValidationError error = patient.getValidationErrors().get(0);
             Assert.assertNotNull(error.getMessage());
             Assert.assertNotNull(error.getLineNumber());
-            Assert.assertNull(error.getNaaccrId());
+            Assert.assertEquals("unknown", error.getNaaccrId());
             Assert.assertNull(error.getNaaccrNum());
-            Assert.assertNull(error.getValue());
+            Assert.assertEquals("X",error.getValue());
         }
     }
 
