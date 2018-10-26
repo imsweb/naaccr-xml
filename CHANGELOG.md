@@ -2,6 +2,7 @@
 
 **Version 4.13**
 
+- Changed dictionary validation methods to return all errors instead of just the first one.
 - Added setTumors on Patient class and setPatients on NaaccrData class.
 - Removed dependency to XZ compression since it doesn't look anyone uses it.
 - Fixed first two new lines characters in data files not honoring the new line character option.

@@ -54,9 +54,9 @@ public class RuntimeNaaccrDictionary {
         // assign the ID based on the URI (done on the raw input so the behavior is the same when called outside of this constructor)
         _id = computeId(recordType, baseDictionary, dictionaries);
 
-        String error = NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, dictionaries);
-        if (error != null)
-            throw new NaaccrIOException(StringUtils.capitalize(error));
+        List<String> errors = NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, dictionaries);
+        if (!errors.isEmpty())
+            throw new NaaccrIOException(StringUtils.capitalize(errors.get(0)));
 
         // use the default user dictionary if one is not provided...
         if (dictionaries.isEmpty())

@@ -19,6 +19,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -588,9 +589,9 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         if (_BLANK_VERSION.equals(naaccrVersion))
             naaccrVersion = NaaccrFormat.getSupportedVersions().stream().max(String.CASE_INSENSITIVE_ORDER).orElse(null);
 
-        String errorMsg = NaaccrXmlDictionaryUtils.validateUserDictionary(dictionary, naaccrVersion);
-        if (errorMsg != null) {
-            JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Dictionary is not valid.\r\n\r\nError: " + errorMsg, "Error", JOptionPane.ERROR_MESSAGE);
+        List<String> errors = NaaccrXmlDictionaryUtils.validateUserDictionary(dictionary, naaccrVersion);
+        if (!errors.isEmpty()) {
+            JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Dictionary is not valid.\r\n\r\nError: " + errors.get(0), "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
 

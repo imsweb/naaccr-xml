@@ -261,9 +261,9 @@ public final class NaaccrXmlDictionaryUtils {
             if (uri == null || uri.trim().isEmpty())
                 throw new IOException("'dictionaryUri' attribute is required");
             else if (!BASE_DICTIONARY_URI_PATTERN.matcher(uri).matches() && !DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(uri).matches()) {
-                String error = validateUserDictionary(dictionary);
-                if (error != null)
-                    throw new IOException(error);
+                List<String> errors = validateUserDictionary(dictionary);
+                if (!errors.isEmpty())
+                    throw new IOException(errors.get(0));
             }
 
             return dictionary;
@@ -303,9 +303,9 @@ public final class NaaccrXmlDictionaryUtils {
     /**
      * Validates the provided base dictionary.
      * @param dictionary dictionary to validate, can't be null
-     * @return null if the dictionary is valid, the error message otherwise
+     * @return list of errors, empty if valid
      */
-    public static String validateBaseDictionary(NaaccrDictionary dictionary) {
+    public static List<String> validateBaseDictionary(NaaccrDictionary dictionary) {
         return validateDictionary(dictionary, true, null);
     }
 
@@ -314,9 +314,9 @@ public final class NaaccrXmlDictionaryUtils {
      * <br/><br/>
      * If the dictionary doesn't contain a NAACCR version, any validation that needs a specific version will be skipped.
      * @param dictionary dictionary to validate, can't be null
-     * @return null if the dictionary is valid, the error message otherwise
+     * @return list of errors, empty if valid
      */
-    public static String validateUserDictionary(NaaccrDictionary dictionary) {
+    public static List<String> validateUserDictionary(NaaccrDictionary dictionary) {
         return validateDictionary(dictionary, false, null);
     }
 
@@ -324,9 +324,9 @@ public final class NaaccrXmlDictionaryUtils {
      * Validates the provided user dictionary.
      * @param dictionary dictionary to validate, can't be null
      * @param naaccrVersion naaccrVersion to assume if it's not provided on the dictionary (can be null)
-     * @return null if the dictionary is valid, the error message otherwise
+     * @return list of errors, empty if valid
      */
-    public static String validateUserDictionary(NaaccrDictionary dictionary, String naaccrVersion) {
+    public static List<String> validateUserDictionary(NaaccrDictionary dictionary, String naaccrVersion) {
         return validateDictionary(dictionary, false, naaccrVersion);
     }
 
@@ -334,74 +334,75 @@ public final class NaaccrXmlDictionaryUtils {
      * Validates the provided dictionary
      * @param dictionary dictionary to validate, can't be null
      * @param isBaseDictionary true if the dictionary is a base dictionary, false otherwise
-     * @return null if the dictionary is valid, the error message otherwise
+     * @return list of errors, empty if valid
      */
-    private static String validateDictionary(NaaccrDictionary dictionary, boolean isBaseDictionary, String naaccrVersion) {
+    private static List<String> validateDictionary(NaaccrDictionary dictionary, boolean isBaseDictionary, String naaccrVersion) {
+        List<String> errors = new ArrayList<>();
 
         // some of the validation is based on the specification version; assume 1.0 if it's not available
         String specVersion = dictionary.getSpecificationVersion() == null ? SpecificationVersion.SPEC_1_0 : dictionary.getSpecificationVersion();
         if (!SpecificationVersion.isSpecificationSupported(specVersion))
-            return "'specificationVersion' attribute is not valid";
+            errors.add("'specificationVersion' attribute is not valid");
 
         if (dictionary.getDictionaryUri() == null || dictionary.getDictionaryUri().trim().isEmpty())
-            return "'dictionaryUri' attribute is required";
+            errors.add("'dictionaryUri' attribute is required");
 
         boolean allowBlankNaaccrVersion = !isBaseDictionary && SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_1) >= 0;
         if (!allowBlankNaaccrVersion && (dictionary.getNaaccrVersion() == null || dictionary.getNaaccrVersion().trim().isEmpty()))
-            return "'naaccrVersion' attribute is required";
+            errors.add("'naaccrVersion' attribute is required");
 
         if (dictionary.getItems().isEmpty())
-            return "a dictionary must contain at least one item definition";
+            errors.add("a dictionary must contain at least one item definition");
 
         Pattern idPattern = Pattern.compile("^[a-z][a-zA-Z0-9]+$");
         Set<String> naaccrIds = new HashSet<>();
         Set<Integer> naaccrNums = new HashSet<>();
         for (NaaccrDictionaryItem item : dictionary.getItems()) {
             if (item.getNaaccrId() == null || item.getNaaccrId().trim().isEmpty())
-                return "'naaccrId' attribute is required";
+                errors.add("'naaccrId' attribute is required");
             if (!idPattern.matcher(item.getNaaccrId()).matches())
-                return "'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + item.getNaaccrId();
+                errors.add("'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + item.getNaaccrId());
             if (item.getNaaccrId().length() > 50)
-                return "'naaccrId' attribute can only be 50 characters long: " + item.getNaaccrId();
+                errors.add("'naaccrId' attribute can only be 50 characters long: " + item.getNaaccrId());
             if (naaccrIds.contains(item.getNaaccrId()))
-                return "'naaccrId' attribute must be unique, already saw " + item.getNaaccrId();
+                errors.add("'naaccrId' attribute must be unique, already saw " + item.getNaaccrId());
             naaccrIds.add(item.getNaaccrId());
             if (item.getNaaccrNum() == null)
-                return "'naaccrNum' attribute is required";
+                errors.add("'naaccrNum' attribute is required");
             if (naaccrNums.contains(item.getNaaccrNum()))
-                return "'naaccrNum' attribute must be unique, already saw " + item.getNaaccrNum();
+                errors.add("'naaccrNum' attribute must be unique, already saw " + item.getNaaccrNum());
             naaccrNums.add(item.getNaaccrNum());
             if (item.getNaaccrName() != null && item.getNaaccrName().length() > 50)
-                return "'naaccrName' attribute can only be 50 characters long: " + item.getNaaccrName();
+                errors.add("'naaccrName' attribute can only be 50 characters long: " + item.getNaaccrName());
             if (item.getLength() == null)
-                return "'length' attribute is required";
+                errors.add("'length' attribute is required");
             boolean allowBlankStartCol = !isBaseDictionary && SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_1) >= 0;
             if (!allowBlankStartCol && item.getStartColumn() == null)
-                return "'startColumn' attribute is required";
+                errors.add("'startColumn' attribute is required");
             if (item.getParentXmlElement() == null || item.getParentXmlElement().trim().isEmpty())
-                return "'parentXmlElement' attribute is required";
+                errors.add("'parentXmlElement' attribute is required");
             if (!NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(item.getParentXmlElement()) && !NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(item.getParentXmlElement())
                     && !NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(item.getParentXmlElement()))
-                return "invalid value for 'parentXmlElement' attribute: " + item.getParentXmlElement();
+                errors.add("invalid value for 'parentXmlElement' attribute: " + item.getParentXmlElement());
             if (item.getDataType() != null && (!NAACCR_DATA_TYPE_ALPHA.equals(item.getDataType()) && !NAACCR_DATA_TYPE_DIGITS.equals(item.getDataType()) && !NAACCR_DATA_TYPE_MIXED.equals(
                     item.getDataType())) && !NAACCR_DATA_TYPE_NUMERIC.equals(item.getDataType()) && !NAACCR_DATA_TYPE_TEXT.equals(item.getDataType()) && !NAACCR_DATA_TYPE_DATE.equals(
                     item.getDataType()))
-                return "invalid value for 'dataType' attribute: " + item.getDataType();
+                errors.add("invalid value for 'dataType' attribute: " + item.getDataType());
             if (item.getPadding() != null && (!NAACCR_PADDING_LEFT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_LEFT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_RIGHT_BLANK.equals(
                     item.getPadding()) && !NAACCR_PADDING_RIGHT_ZERO.equals(item.getPadding())))
-                return "invalid value for 'padding' attribute: " + item.getPadding();
+                errors.add("invalid value for 'padding' attribute: " + item.getPadding());
             if (item.getTrim() != null && (!NAACCR_TRIM_ALL.equals(item.getTrim()) && !NAACCR_TRIM_NONE.equals(item.getTrim())))
-                return "invalid value for 'trim' attribute: " + item.getTrim();
+                errors.add("invalid value for 'trim' attribute: " + item.getTrim());
             if (item.getRegexValidation() != null) {
                 if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_2) >= 0)
-                    return "invalid attribute 'regexValidation'";
+                    errors.add("invalid attribute 'regexValidation'");
                 else {
                     try {
                         //noinspection ResultOfMethodCallIgnored
                         Pattern.compile(item.getRegexValidation());
                     }
                     catch (PatternSyntaxException e) {
-                        return "invalid value for 'regexValidation' attribute: " + item.getRegexValidation();
+                        errors.add("invalid value for 'regexValidation' attribute: " + item.getRegexValidation());
                     }
                 }
             }
@@ -411,26 +412,26 @@ public final class NaaccrXmlDictionaryUtils {
         if (isBaseDictionary) {
             for (NaaccrDictionaryGroupedItem groupedItem : dictionary.getGroupedItems()) {
                 if (groupedItem.getNaaccrId() == null || groupedItem.getNaaccrId().trim().isEmpty())
-                    return "'naaccrId' attribute is required";
+                    errors.add("'naaccrId' attribute is required");
                 if (!idPattern.matcher(groupedItem.getNaaccrId()).matches())
-                    return "'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + groupedItem.getNaaccrId();
+                    errors.add("'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + groupedItem.getNaaccrId());
                 if (naaccrIds.contains(groupedItem.getNaaccrId()))
-                    return "'naaccrId' attribute for grouped item " + groupedItem.getNaaccrId() + " is not unique";
+                    errors.add("'naaccrId' attribute for grouped item " + groupedItem.getNaaccrId() + " is not unique");
                 naaccrIds.add(groupedItem.getNaaccrId());
                 if (groupedItem.getNaaccrNum() == null)
-                    return "'naaccrNum' attribute for grouped item " + groupedItem.getNaaccrId() + " is missing";
+                    errors.add("'naaccrNum' attribute for grouped item " + groupedItem.getNaaccrId() + " is missing");
                 if (naaccrNums.contains(groupedItem.getNaaccrNum()))
-                    return "'naaccrNum' attribute for grouped item " + groupedItem.getNaaccrId() + " must be unique, already saw " + groupedItem.getNaaccrNum();
+                    errors.add("'naaccrNum' attribute for grouped item " + groupedItem.getNaaccrId() + " must be unique, already saw " + groupedItem.getNaaccrNum());
                 naaccrNums.add(groupedItem.getNaaccrNum());
                 naaccrIds.add(groupedItem.getNaaccrId());
                 if (groupedItem.getStartColumn() == null)
-                    return "'startColumn' attribute for grouped item " + groupedItem.getNaaccrId() + " is missing";
+                    errors.add("'startColumn' attribute for grouped item " + groupedItem.getNaaccrId() + " is missing");
                 for (int idx = 0; idx < groupedItem.getContainedItemId().size(); idx++) {
                     NaaccrDictionaryItem containedItem = dictionary.getItemByNaaccrId(groupedItem.getContainedItemId().get(idx));
                     if (containedItem == null)
-                        return "grouped item " + groupedItem.getNaaccrId() + " references unknown item " + groupedItem.getContainedItemId().get(idx);
-                    if (idx == 0 && !groupedItem.getStartColumn().equals(containedItem.getStartColumn()))
-                        return "'startColumn' attribute for grouped item " + groupedItem.getNaaccrId() + " is not consistent with first contained item";
+                        errors.add("grouped item " + groupedItem.getNaaccrId() + " references unknown item " + groupedItem.getContainedItemId().get(idx));
+                    else if (idx == 0 && !groupedItem.getStartColumn().equals(containedItem.getStartColumn()))
+                        errors.add("'startColumn' attribute for grouped item " + groupedItem.getNaaccrId() + " is not consistent with first contained item");
                 }
             }
         }
@@ -451,39 +452,39 @@ public final class NaaccrXmlDictionaryUtils {
 
                     // can't use an internal base ID, ever
                     if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
-                        return "invalid value for 'naaccrId' attribute: " + item.getNaaccrId() + "; this ID is used in the standard dictionary";
+                        errors.add("invalid value for 'naaccrId' attribute: " + item.getNaaccrId() + "; this ID is used in the standard dictionary");
 
                     // if an internal default user dictionary ID is used, then there are a bunch of attributes it can't re-defined.
                     NaaccrDictionaryItem defaultUserItem = defaultUserDictionary.getItemByNaaccrId(item.getNaaccrId());
                     if (defaultUserItem != null) {
                         if (!Objects.equals(defaultUserItem.getNaaccrNum(), item.getNaaccrNum()))
-                            return "invalid value for 'naaccrNum' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getNaaccrNum();
+                            errors.add("invalid value for 'naaccrNum' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getNaaccrNum());
                         if (!Objects.equals(defaultUserItem.getNaaccrName(), item.getNaaccrName()))
-                            return "invalid value for 'naaccrName' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getNaaccrName();
+                            errors.add("invalid value for 'naaccrName' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getNaaccrName());
                         if (item.getStartColumn() != null && !Objects.equals(defaultUserItem.getStartColumn(), item.getStartColumn()))
-                            return "invalid value for 'startColumn' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getStartColumn();
+                            errors.add("invalid value for 'startColumn' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getStartColumn());
                         if (!Objects.equals(defaultUserItem.getLength(), item.getLength()))
-                            return "invalid value for 'length' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getLength();
+                            errors.add("invalid value for 'length' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getLength());
                         if (!Objects.equals(defaultUserItem.getRecordTypes(), item.getRecordTypes()))
-                            return "invalid value for 'recordTypes' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getRecordTypes();
+                            errors.add("invalid value for 'recordTypes' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getRecordTypes());
                         if (!Objects.equals(defaultUserItem.getParentXmlElement(), item.getParentXmlElement()))
-                            return "invalid value for 'parentXmlElement' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getParentXmlElement();
+                            errors.add("invalid value for 'parentXmlElement' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getParentXmlElement());
                         // I really hate that the defaults are not loaded right away in the Java bean; I think that was a mistake!
                         String defaultUserItemType = defaultUserItem.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : defaultUserItem.getDataType();
                         String itemType = item.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : item.getDataType();
                         if (!Objects.equals(defaultUserItemType, itemType))
-                            return "invalid value for 'dataType' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItemType;
+                            errors.add("invalid value for 'dataType' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItemType);
                     }
                     else {
 
                         // number cannot be one of the numbers from the base dictionary
                         if (baseNumbers.contains(item.getNaaccrNum()))
-                            return "invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; number is already defined in corresponding base dictionary";
+                            errors.add("invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; number is already defined in corresponding base dictionary");
 
                         // range must be very specific for a user dictionary (deprecated)
                         if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_3) < 0)
                             if (item.getNaaccrNum() < 9500 || item.getNaaccrNum() > 99999)
-                                return "invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999";
+                                errors.add("invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999");
 
                         // this is tricky, but an item must fall into the columns of one of the items defined in the corresponding items defined in the default user dictionary
                         if (item.getStartColumn() != null) {
@@ -495,17 +496,17 @@ public final class NaaccrXmlDictionaryUtils {
                                 }
                             }
                             if (!fallInAllowedRange)
-                                return "invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps";
+                                errors.add("invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps");
                         }
                     }
                 }
             }
 
             if (!dictionary.getGroupedItems().isEmpty())
-                return "user-defined dictionaries cannot defined grouped items";
+                errors.add("user-defined dictionaries cannot defined grouped items");
         }
 
-        return null;
+        return errors;
     }
 
     /**
@@ -514,44 +515,40 @@ public final class NaaccrXmlDictionaryUtils {
      * @param userDictionaries user-defined dictionaries, can be empty but not null
      * @return null if the combination of dictionaries is valid, the error message otherwise
      */
-    public static String validateDictionaries(NaaccrDictionary baseDictionary, Collection<NaaccrDictionary> userDictionaries) {
+    public static List<String> validateDictionaries(NaaccrDictionary baseDictionary, Collection<NaaccrDictionary> userDictionaries) {
 
         // validate the base dictionary
-        String error = validateBaseDictionary(baseDictionary);
-        if (error != null)
-            return error;
+        List<String> errors = new ArrayList<>(validateBaseDictionary(baseDictionary));
 
         // validate each user dictionary
         Map<String, String> idsDejaVu = new HashMap<>();
         Map<Integer, String> numbersDejaVue = new HashMap<>();
         for (NaaccrDictionary userDictionary : userDictionaries) {
-            error = validateUserDictionary(userDictionary, baseDictionary.getNaaccrVersion());
-            if (error != null)
-                return error;
+            errors.addAll(validateUserDictionary(userDictionary, baseDictionary.getNaaccrVersion()));
 
             // make sure the provided version (if one is provided) agrees with the base version
             if (userDictionary.getNaaccrVersion() != null && !baseDictionary.getNaaccrVersion().equals(userDictionary.getNaaccrVersion()))
-                return "user-defined dictionary '" + userDictionary.getDictionaryUri() + "' doesn't define the same version as the base dictionary";
+                errors.add("user-defined dictionary '" + userDictionary.getDictionaryUri() + "' doesn't define the same version as the base dictionary");
 
             // validate the items
             String dictId = userDictionary.getDictionaryUri();
             for (NaaccrDictionaryItem item : userDictionary.getItems()) {
                 // NAACCR IDs defined in user dictionaries cannot be the same as the base NAACCR IDs
                 if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
-                    return "user-defined dictionary '" + dictId + "' cannot use same NAACCR ID as a base item: " + item.getNaaccrId();
+                    errors.add("user-defined dictionary '" + dictId + "' cannot use same NAACCR ID as a base item: " + item.getNaaccrId());
 
                 // NAACCR Numbers defined in user dictionaries cannot be the same as the base NAACCR Numbers
                 if (baseDictionary.getItemByNaaccrNum(item.getNaaccrNum()) != null)
-                    return "user-defined dictionary '" + dictId + "' cannot use same NAACCR Number as a base item: " + item.getNaaccrNum();
+                    errors.add("user-defined dictionary '" + dictId + "' cannot use same NAACCR Number as a base item: " + item.getNaaccrNum());
 
                 // NAACCR IDs must be unique among all user dictionaries
                 if (idsDejaVu.containsKey(item.getNaaccrId()))
-                    return "user-defined dictionary '" + dictId + "' and '" + idsDejaVu.get(item.getNaaccrId()) + "' both  define NAACCR ID '" + item.getNaaccrId() + "'";
+                    errors.add("user-defined dictionary '" + dictId + "' and '" + idsDejaVu.get(item.getNaaccrId()) + "' both  define NAACCR ID '" + item.getNaaccrId() + "'");
                 idsDejaVu.put(item.getNaaccrId(), dictId);
 
                 // NAACCR Numbers must be unique among all user dictionaries
                 if (numbersDejaVue.containsKey(item.getNaaccrNum()))
-                    return "user-defined dictionary '" + dictId + "' and '" + numbersDejaVue.get(item.getNaaccrNum()) + "' both  define NAACCR ID '" + item.getNaaccrNum() + "'";
+                    errors.add("user-defined dictionary '" + dictId + "' and '" + numbersDejaVue.get(item.getNaaccrNum()) + "' both  define NAACCR ID '" + item.getNaaccrNum() + "'");
                 numbersDejaVue.put(item.getNaaccrNum(), dictId);
             }
         }
@@ -564,11 +561,11 @@ public final class NaaccrXmlDictionaryUtils {
         NaaccrDictionaryItem currentItem = null;
         for (NaaccrDictionaryItem item : items) {
             if (currentItem != null && item.getStartColumn() <= currentItem.getStartColumn() + currentItem.getLength() - 1)
-                return "user-defined dictionaries define overlapping columns for items '" + currentItem.getNaaccrId() + "' and '" + item.getNaaccrId() + "'";
+                errors.add("user-defined dictionaries define overlapping columns for items '" + currentItem.getNaaccrId() + "' and '" + item.getNaaccrId() + "'");
             currentItem = item;
         }
 
-        return null;
+        return errors;
     }
 
     /**
