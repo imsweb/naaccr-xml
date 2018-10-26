@@ -591,7 +591,10 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
 
         List<String> errors = NaaccrXmlDictionaryUtils.validateUserDictionary(dictionary, naaccrVersion);
         if (!errors.isEmpty()) {
-            JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Dictionary is not valid.\r\n\r\nError: " + errors.get(0), "Error", JOptionPane.ERROR_MESSAGE);
+            StringBuilder msg = new StringBuilder("Dictionary is not valid:");
+            for (String error : errors)
+                msg.append("\r\n   - ").append(error);
+            JOptionPane.showMessageDialog(DictionaryEditorPage.this, msg.toString(), "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
 

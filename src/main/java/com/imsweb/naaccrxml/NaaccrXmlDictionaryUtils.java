@@ -358,41 +358,60 @@ public final class NaaccrXmlDictionaryUtils {
         Set<String> naaccrIds = new HashSet<>();
         Set<Integer> naaccrNums = new HashSet<>();
         for (NaaccrDictionaryItem item : dictionary.getItems()) {
+            // validate ID
             if (item.getNaaccrId() == null || item.getNaaccrId().trim().isEmpty())
                 errors.add("'naaccrId' attribute is required");
-            if (!idPattern.matcher(item.getNaaccrId()).matches())
+            else if (!idPattern.matcher(item.getNaaccrId()).matches())
                 errors.add("'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + item.getNaaccrId());
-            if (item.getNaaccrId().length() > 50)
+            else if (item.getNaaccrId().length() > 50)
                 errors.add("'naaccrId' attribute can only be 50 characters long: " + item.getNaaccrId());
-            if (naaccrIds.contains(item.getNaaccrId()))
+            else if (naaccrIds.contains(item.getNaaccrId()))
                 errors.add("'naaccrId' attribute must be unique, already saw " + item.getNaaccrId());
             naaccrIds.add(item.getNaaccrId());
+
+            // validate number
             if (item.getNaaccrNum() == null)
                 errors.add("'naaccrNum' attribute is required");
-            if (naaccrNums.contains(item.getNaaccrNum()))
+            else if (naaccrNums.contains(item.getNaaccrNum()))
                 errors.add("'naaccrNum' attribute must be unique, already saw " + item.getNaaccrNum());
             naaccrNums.add(item.getNaaccrNum());
+
+            // validate name
             if (item.getNaaccrName() != null && item.getNaaccrName().length() > 50)
                 errors.add("'naaccrName' attribute can only be 50 characters long: " + item.getNaaccrName());
+
+            // validate length
             if (item.getLength() == null)
                 errors.add("'length' attribute is required");
+
+            // validate start column
             boolean allowBlankStartCol = !isBaseDictionary && SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_1) >= 0;
             if (!allowBlankStartCol && item.getStartColumn() == null)
                 errors.add("'startColumn' attribute is required");
+
+            // validate parent element
             if (item.getParentXmlElement() == null || item.getParentXmlElement().trim().isEmpty())
                 errors.add("'parentXmlElement' attribute is required");
-            if (!NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(item.getParentXmlElement()) && !NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(item.getParentXmlElement())
+            else if (!NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(item.getParentXmlElement()) && !NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(item.getParentXmlElement())
                     && !NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(item.getParentXmlElement()))
                 errors.add("invalid value for 'parentXmlElement' attribute: " + item.getParentXmlElement());
-            if (item.getDataType() != null && (!NAACCR_DATA_TYPE_ALPHA.equals(item.getDataType()) && !NAACCR_DATA_TYPE_DIGITS.equals(item.getDataType()) && !NAACCR_DATA_TYPE_MIXED.equals(
-                    item.getDataType())) && !NAACCR_DATA_TYPE_NUMERIC.equals(item.getDataType()) && !NAACCR_DATA_TYPE_TEXT.equals(item.getDataType()) && !NAACCR_DATA_TYPE_DATE.equals(
-                    item.getDataType()))
+
+            // validate data type
+            String type = item.getDataType();
+            if (type != null && (!NAACCR_DATA_TYPE_ALPHA.equals(type) && !NAACCR_DATA_TYPE_DIGITS.equals(type) && !NAACCR_DATA_TYPE_MIXED.equals(type)) && !NAACCR_DATA_TYPE_NUMERIC.equals(type)
+                    && !NAACCR_DATA_TYPE_TEXT.equals(type) && !NAACCR_DATA_TYPE_DATE.equals(type))
                 errors.add("invalid value for 'dataType' attribute: " + item.getDataType());
+
+            // validate padding
             if (item.getPadding() != null && (!NAACCR_PADDING_LEFT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_LEFT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_RIGHT_BLANK.equals(
                     item.getPadding()) && !NAACCR_PADDING_RIGHT_ZERO.equals(item.getPadding())))
                 errors.add("invalid value for 'padding' attribute: " + item.getPadding());
+
+            // validate trimming
             if (item.getTrim() != null && (!NAACCR_TRIM_ALL.equals(item.getTrim()) && !NAACCR_TRIM_NONE.equals(item.getTrim())))
                 errors.add("invalid value for 'trim' attribute: " + item.getTrim());
+
+            // validate regex
             if (item.getRegexValidation() != null) {
                 if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_2) >= 0)
                     errors.add("invalid attribute 'regexValidation'");
@@ -411,27 +430,33 @@ public final class NaaccrXmlDictionaryUtils {
         // validate grouped items; since those can only appear in base dictionaries, the validation is going to be minimal
         if (isBaseDictionary) {
             for (NaaccrDictionaryGroupedItem groupedItem : dictionary.getGroupedItems()) {
+                // validate ID
                 if (groupedItem.getNaaccrId() == null || groupedItem.getNaaccrId().trim().isEmpty())
                     errors.add("'naaccrId' attribute is required");
-                if (!idPattern.matcher(groupedItem.getNaaccrId()).matches())
+                else if (!idPattern.matcher(groupedItem.getNaaccrId()).matches())
                     errors.add("'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + groupedItem.getNaaccrId());
-                if (naaccrIds.contains(groupedItem.getNaaccrId()))
+                else if (naaccrIds.contains(groupedItem.getNaaccrId()))
                     errors.add("'naaccrId' attribute for grouped item " + groupedItem.getNaaccrId() + " is not unique");
                 naaccrIds.add(groupedItem.getNaaccrId());
+
+                // validate number
                 if (groupedItem.getNaaccrNum() == null)
                     errors.add("'naaccrNum' attribute for grouped item " + groupedItem.getNaaccrId() + " is missing");
-                if (naaccrNums.contains(groupedItem.getNaaccrNum()))
+                else if (naaccrNums.contains(groupedItem.getNaaccrNum()))
                     errors.add("'naaccrNum' attribute for grouped item " + groupedItem.getNaaccrId() + " must be unique, already saw " + groupedItem.getNaaccrNum());
                 naaccrNums.add(groupedItem.getNaaccrNum());
-                naaccrIds.add(groupedItem.getNaaccrId());
+
+                // validate start column
                 if (groupedItem.getStartColumn() == null)
                     errors.add("'startColumn' attribute for grouped item " + groupedItem.getNaaccrId() + " is missing");
-                for (int idx = 0; idx < groupedItem.getContainedItemId().size(); idx++) {
-                    NaaccrDictionaryItem containedItem = dictionary.getItemByNaaccrId(groupedItem.getContainedItemId().get(idx));
-                    if (containedItem == null)
-                        errors.add("grouped item " + groupedItem.getNaaccrId() + " references unknown item " + groupedItem.getContainedItemId().get(idx));
-                    else if (idx == 0 && !groupedItem.getStartColumn().equals(containedItem.getStartColumn()))
-                        errors.add("'startColumn' attribute for grouped item " + groupedItem.getNaaccrId() + " is not consistent with first contained item");
+                else {
+                    for (int idx = 0; idx < groupedItem.getContainedItemId().size(); idx++) {
+                        NaaccrDictionaryItem containedItem = dictionary.getItemByNaaccrId(groupedItem.getContainedItemId().get(idx));
+                        if (containedItem == null)
+                            errors.add("grouped item " + groupedItem.getNaaccrId() + " references unknown item " + groupedItem.getContainedItemId().get(idx));
+                        else if (idx == 0 && !groupedItem.getStartColumn().equals(containedItem.getStartColumn()))
+                            errors.add("'startColumn' attribute for grouped item " + groupedItem.getNaaccrId() + " is not consistent with first contained item");
+                    }
                 }
             }
         }
