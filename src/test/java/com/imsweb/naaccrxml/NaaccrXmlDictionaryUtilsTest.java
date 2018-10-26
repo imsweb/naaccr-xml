@@ -35,7 +35,7 @@ public class NaaccrXmlDictionaryUtilsTest {
             // make sure internal base dictionaries are valid
             try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-" + version + ".xml"))) {
                 NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
-                Assert.assertNull(version, NaaccrXmlDictionaryUtils.validateBaseDictionary(dict));
+                Assert.assertTrue(version, NaaccrXmlDictionaryUtils.validateBaseDictionary(dict).isEmpty());
                 Assert.assertTrue(version, NaaccrXmlDictionaryUtils.BASE_DICTIONARY_URI_PATTERN.matcher(dict.getDictionaryUri()).matches());
                 items.addAll(dict.getItems());
             }
@@ -43,7 +43,7 @@ public class NaaccrXmlDictionaryUtilsTest {
             // make sure internal default user dictionaries are valid
             try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("user-defined-naaccr-dictionary-" + version + ".xml"))) {
                 NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
-                Assert.assertNull(version, NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+                Assert.assertTrue(version, NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
                 Assert.assertTrue(version, NaaccrXmlDictionaryUtils.DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(dict.getDictionaryUri()).matches());
                 items.addAll(dict.getItems());
             }
@@ -114,9 +114,9 @@ public class NaaccrXmlDictionaryUtilsTest {
         // this one defines an item in a bad location, but it doesn't define a NAACCR version, so no exception, but if a NAACCR version is provided, the validation should fail
         try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140-bad3.xml"))) {
             NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
-            Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
-            Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict, "140"));
-            Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict, "160"));
+            Assert.assertTrue(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
+            Assert.assertFalse(NaaccrXmlDictionaryUtils.validateUserDictionary(dict, "140").isEmpty());
+            Assert.assertFalse(NaaccrXmlDictionaryUtils.validateUserDictionary(dict, "160").isEmpty());
         }
 
         // try to read a user dictionary with another error (missing dictionaryUri attribute)
@@ -192,7 +192,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         item.setNaaccrNum(10000);
         item.setLength(1);
         dict.setItems(Collections.singletonList(item));
-        Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+        Assert.assertTrue(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
 
         // this one re-defines the NPCR field but with a different number, which is not allowed
         item = new NaaccrDictionaryItem();
@@ -215,7 +215,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         dict.setItems(Collections.singletonList(item));
         Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
         item.setNaaccrNum(999999);
-        Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+        Assert.assertTrue(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
 
         // this one defines an item that is too long
         item = new NaaccrDictionaryItem();
@@ -227,7 +227,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         dict.setItems(Collections.singletonList(item));
         Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
         item.setNaaccrId("myVariable");
-        Assert.assertNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+        Assert.assertTrue(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
     }
 
     @Test
@@ -235,7 +235,7 @@ public class NaaccrXmlDictionaryUtilsTest {
 
         // base dictionary by itself is valid
         NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("160");
-        Assert.assertNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, Collections.emptyList()));
+        Assert.assertTrue(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, Collections.emptyList()).isEmpty());
 
         // add two valid user-defined dictionaries
         List<NaaccrDictionary> userDictionaries = new ArrayList<>();
@@ -262,32 +262,32 @@ public class NaaccrXmlDictionaryUtilsTest {
         item2.setLength(1);
         userDictionary2.setItems(Collections.singletonList(item2));
         userDictionaries.add(userDictionary2);
-        Assert.assertNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries));
+        Assert.assertTrue(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries).isEmpty());
 
         // NAACCR ID repeats a base one
         item2.setNaaccrId("vitalStatus");
-        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries));
+        Assert.assertFalse(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries).isEmpty());
         item2.setNaaccrId("myVariable2");
 
         // NAACCR ID repeats a user-defined ones
         item2.setNaaccrId("myVariable1");
-        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries));
+        Assert.assertFalse(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries).isEmpty());
         item2.setNaaccrId("myVariable2");
 
         // NAACCR number repeats a base one
         item2.setNaaccrNum(10);
-        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries));
+        Assert.assertFalse(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries).isEmpty());
         item2.setNaaccrNum(10001);
 
         // NAACCR number repeats a user-defined one
         item2.setNaaccrNum(10000);
-        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries));
+        Assert.assertFalse(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries).isEmpty());
         item2.setNaaccrNum(10001);
 
         // items overlap
         item1.setStartColumn(2340);
         item2.setStartColumn(2340);
-        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries));
+        Assert.assertFalse(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries).isEmpty());
     }
 
     @Test
