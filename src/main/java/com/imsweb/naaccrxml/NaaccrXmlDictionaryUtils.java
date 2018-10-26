@@ -792,7 +792,7 @@ public final class NaaccrXmlDictionaryUtils {
             _namespaceWritten = false;
 
             try {
-                writer.write("<?xml version=\"1.0\"?>\n\n");
+                writer.write("<?xml version=\"1.0\"?>" + System.lineSeparator() + System.lineSeparator());
             }
             catch (IOException e) {
                 // ignore this one, the exception will happen again anyway...
@@ -824,7 +824,7 @@ public final class NaaccrXmlDictionaryUtils {
             if ("naaccrId".equals(key))
                 _currentItemId = value;
             if (!isLastAttribute(key))
-                _internalWriter.write("\r\n           ");
+                _internalWriter.write(System.lineSeparator() + "           ");
 
             if (!_namespaceWritten) {
                 boolean hasDesc = !StringUtils.isBlank(_dictionary.getDescription());
