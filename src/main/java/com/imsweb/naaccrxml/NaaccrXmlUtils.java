@@ -24,10 +24,6 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.tukaani.xz.LZMA2Options;
-import org.tukaani.xz.XZInputStream;
-import org.tukaani.xz.XZOutputStream;
-
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 
 import com.imsweb.naaccrxml.entity.NaaccrData;
@@ -483,8 +479,6 @@ public class NaaccrXmlUtils {
 
             if (file.getName().endsWith(".gz"))
                 is = new GZIPInputStream(is);
-            else if (file.getName().endsWith(".xz"))
-                is = new XZInputStream(is);
 
             return new InputStreamReader(is, StandardCharsets.UTF_8);
         }
@@ -514,8 +508,6 @@ public class NaaccrXmlUtils {
 
             if (file.getName().endsWith(".gz"))
                 os = new GZIPOutputStream(os);
-            else if (file.getName().endsWith(".xz"))
-                os = new XZOutputStream(os, new LZMA2Options(3));
 
             return new OutputStreamWriter(os, StandardCharsets.UTF_8);
         }

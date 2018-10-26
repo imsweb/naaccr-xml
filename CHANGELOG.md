@@ -2,6 +2,10 @@
 
 **Version 4.13**
 
+- Removed dependency to XZ compression since it doesn't look anyone uses it.
+
+**Version 4.13**
+
 - Removed dependency to JAXB API; this library now uses the standard date/time classes to deal with ISO 8601 dates.
 - Added an option to specify the end-of-line characters when writing flat or XML data (does not apply to dictionaries).
 - Set NAACCR ID and value on NaaccrValidationError object for CODE_BAD_NAACCR_ID errors
