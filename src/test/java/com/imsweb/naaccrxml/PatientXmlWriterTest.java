@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -62,10 +63,9 @@ public class PatientXmlWriterTest {
             patient.addItem(new Item("patientIdNumber", "00000001"));
             Tumor tumor1 = new Tumor();
             tumor1.addItem(new Item("primarySite", "C123"));
-            patient.addTumor(tumor1);
-            tumor1 = new Tumor();
-            tumor1.addItem(new Item("primarySite", "C456"));
-            patient.addTumor(tumor1);
+            Tumor tumor2 = new Tumor();
+            tumor2.addItem(new Item("primarySite", "C456"));
+            patient.setTumors(Arrays.asList(tumor1, tumor2));
             writer.writePatient(patient);
         }
         patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().get(0);

@@ -41,4 +41,10 @@ public class Patient extends AbstractEntity {
     public void addTumor(Tumor tumor) {
         _tumors.add(tumor);
     }
+
+    public void setTumors(List<Tumor> tumors) {
+        _tumors.clear();
+        if (tumors != null)
+            _tumors.addAll(tumors);
+    }
 }

@@ -102,4 +102,10 @@ public class NaaccrData extends AbstractEntity {
     public void addPatient(Patient patient) {
         _patients.add(patient);
     }
+
+    public void setPatients(List<Patient> patients) {
+        _patients.clear();
+        if (patients != null)
+            _patients.addAll(patients);
+    }
 }

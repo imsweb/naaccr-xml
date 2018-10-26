@@ -2,6 +2,7 @@
 
 **Version 4.13**
 
+- Added setTumors on Patient class and setPatients on NaaccrData class.
 - Removed dependency to XZ compression since it doesn't look anyone uses it.
 
 **Version 4.13**

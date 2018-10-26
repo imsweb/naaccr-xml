@@ -195,8 +195,8 @@ public class NaaccrXmlUtilsTest {
 
         List<NaaccrDictionary> dictionaries = Collections.singletonList(TestingUtils.createUserDictionary());
         Tumor tumor = new Tumor();
-        patient.addTumor(tumor);
         tumor.addItem(new Item("myVariable", "00"));
+        patient.setTumors(Collections.singletonList(tumor));
         context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT, dictionaries);
         line = NaaccrXmlUtils.patientToLine(patient, context);
         Assert.assertEquals("00", line.substring(2339, 2341));
@@ -209,7 +209,7 @@ public class NaaccrXmlUtilsTest {
     }
 
     @Test
-    public void testGetFormatFromFlatFile() throws IOException {
+    public void testGetFormatFromFlatFile() {
 
         // regular file
         File file = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/fake-naaccr14inc-1-rec.txt");
