@@ -120,7 +120,7 @@ if (version.endsWith('-SNAPSHOT'))
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '4.9'
+    gradleVersion = '4.10'
 }
 
 // the SAS library is compiled under Java 7 code-compatibility; Intellij can't handle that!
