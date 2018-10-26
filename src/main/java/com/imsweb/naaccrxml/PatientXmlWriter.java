@@ -131,7 +131,7 @@ public class PatientXmlWriter implements PatientWriter {
                 conf = NaaccrStreamConfiguration.getDefault();
 
             // compute the end-of-line character(s)
-            _newLine = NEW_LINE_LF.equals(options.getNewLine()) ? "\n" : NEW_LINE_CRLF.equals(options.getNewLine()) ? "\r\n" : System.getProperty("line.separator");
+            _newLine = NEW_LINE_LF.equals(options.getNewLine()) ? "\n" : NEW_LINE_CRLF.equals(options.getNewLine()) ? "\r\n" : System.lineSeparator();
 
             // need to expose xstream so the other methods can use it...
             _xstream = conf.getXstream();
@@ -160,7 +160,7 @@ public class PatientXmlWriter implements PatientWriter {
 
             // would be better to use a "header writer", I think XStream has one actually; that would be better...
             try {
-                writer.write("<?xml version=\"1.0\"?>\n\n");
+                writer.write("<?xml version=\"1.0\"?>" + _newLine + _newLine);
             }
             catch (IOException e) {
                 throw new NaaccrIOException(e.getMessage());
