@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 4.15**
+
+- Fixed warnings in the console about unsafe access to private fields.
+
 **Version 4.14**
 
 - Changed dictionary validation methods to return all errors instead of just the first one.

@@ -15,6 +15,18 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.basic.BooleanConverter;
+import com.thoughtworks.xstream.converters.basic.ByteConverter;
+import com.thoughtworks.xstream.converters.basic.DateConverter;
+import com.thoughtworks.xstream.converters.basic.DoubleConverter;
+import com.thoughtworks.xstream.converters.basic.FloatConverter;
+import com.thoughtworks.xstream.converters.basic.IntConverter;
+import com.thoughtworks.xstream.converters.basic.LongConverter;
+import com.thoughtworks.xstream.converters.basic.NullConverter;
+import com.thoughtworks.xstream.converters.basic.ShortConverter;
+import com.thoughtworks.xstream.converters.basic.StringConverter;
+import com.thoughtworks.xstream.converters.collections.CollectionConverter;
+import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 import com.thoughtworks.xstream.security.NoTypePermission;
@@ -99,7 +111,7 @@ public class NaaccrStreamConfiguration {
     protected HierarchicalStreamDriver createDriver(XmlPullParser parser) {
         return new XppDriver() {
             @Override
-            protected synchronized XmlPullParser createParser() throws XmlPullParserException {
+            protected synchronized XmlPullParser createParser() {
                 return parser;
             }
         };
@@ -120,7 +132,23 @@ public class NaaccrStreamConfiguration {
      * @return an instance of XStream, never null
      */
     protected XStream createXStream(HierarchicalStreamDriver driver, NaaccrPatientConverter patientConverter) {
-        XStream xstream = new XStream(driver);
+        XStream xstream = new XStream(driver) {
+            @Override
+            protected void setupConverters() {
+                registerConverter(new NullConverter(), PRIORITY_VERY_HIGH);
+                registerConverter(new IntConverter(), PRIORITY_NORMAL);
+                registerConverter(new FloatConverter(), PRIORITY_NORMAL);
+                registerConverter(new DoubleConverter(), PRIORITY_NORMAL);
+                registerConverter(new LongConverter(), PRIORITY_NORMAL);
+                registerConverter(new ShortConverter(), PRIORITY_NORMAL);
+                registerConverter(new BooleanConverter(), PRIORITY_NORMAL);
+                registerConverter(new ByteConverter(), PRIORITY_NORMAL);
+                registerConverter(new StringConverter(), PRIORITY_NORMAL);
+                registerConverter(new DateConverter(), PRIORITY_NORMAL);
+                registerConverter(new CollectionConverter(getMapper()), PRIORITY_NORMAL);
+                registerConverter(new ReflectionConverter(getMapper(), getReflectionProvider()), PRIORITY_VERY_LOW);
+            }
+        };
 
         // setup proper security environment
         xstream.addPermission(NoTypePermission.NONE);

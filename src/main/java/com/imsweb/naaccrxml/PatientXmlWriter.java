@@ -153,6 +153,7 @@ public class PatientXmlWriter implements PatientWriter {
 
             // create the writer
             _writer = new PrettyPrintWriter(writer, new char[] {' ', ' ', ' ', ' '}) {
+                @Override
                 protected String getNewLine() {
                     return _newLine;
                 }
