@@ -390,6 +390,7 @@ public class NaaccrXmlDictionaryUtilsTest {
 
         Assert.assertEquals("phase1NumberOfFractions", NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName("Phase I Number of Fractions"));
         Assert.assertEquals("lnHeadAndNeckLevels6To7", NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName("LN Head and Neck Levels VI-VII"));
+        Assert.assertEquals("headNeck", NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName("Head&Neck"));
     }
 
     @Test

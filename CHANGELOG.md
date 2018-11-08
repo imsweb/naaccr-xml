@@ -2,6 +2,7 @@
 
 **Version 4.15**
 
+- The ampersand is now considered as a word separator when generating an NAACCR ID from a data item name.
 - Changed data types of RUCA/URIC from digits to mixed.
 - Fixed warnings in the console about unsafe access to private fields.
 

@@ -608,7 +608,7 @@ public final class NaaccrXmlDictionaryUtils {
     /**
      * Utility method to create a NAACCR ID from a display name:
      * <ol>
-     * <li>Spaces, dashes, slashes periods and underscores are considered as word separators and replaced by a single space</li>
+     * <li>Spaces, dashes, slashes, periods, underscores and ampersand are considered as word separators and replaced by a single space</li>
      * <li>Anything in parenthesis is removed (along with the parenthesis)</li>
      * <li>Any non-digit and non-letter character is removed</li>
      * <li>The result is split by spaces</li>
@@ -634,7 +634,7 @@ public final class NaaccrXmlDictionaryUtils {
         romanNumerals.put("VIII", "8");
         romanNumerals.put("IX", "9");
 
-        String[] parts = StringUtils.split(name.replaceAll("\\s+|-+|/|_|\\.", " ").replaceAll("\\(.+\\)|[\\W&&[^\\s]]", ""), ' ');
+        String[] parts = StringUtils.split(name.replaceAll("\\s+|-+|/|_|\\.|&", " ").replaceAll("\\(.+\\)|[\\W&&[^\\s]]", ""), ' ');
 
         // special case, if the last two parts are both roman numeral, then put a "to" between them
         if (parts.length > 2 && romanNumerals.containsKey(parts[parts.length - 1]) && romanNumerals.containsKey(parts[parts.length - 2])) {
