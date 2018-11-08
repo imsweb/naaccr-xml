@@ -537,7 +537,7 @@
             length="1"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="ruca2010"
             naaccrNum="341"
             naaccrName="RUCA 2010"
@@ -545,7 +545,7 @@
             length="1"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="uric2000"
             naaccrNum="345"
             naaccrName="URIC 2000"
@@ -553,7 +553,7 @@
             length="1"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="uric2010"
             naaccrNum="346"
             naaccrName="URIC 2010"
@@ -561,7 +561,7 @@
             length="1"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="addrAtDxCountry"
             naaccrNum="102"
             naaccrName="Addr at DX--Country"

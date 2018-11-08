@@ -579,8 +579,8 @@ reserved16,2450,"Reserved 16",138,12,"A,M,C,I",Tumor,text
 residualTumorVolumePostCytoreduction,3921,"Residual Tumor Volume Post Cytoreduction",1920,2,"A,M,C,I",Tumor,digits
 responseToNeoadjuvantTherapy,3922,"Response to Neoadjuvant Therapy",1751,1,"A,M,C,I",Tumor,digits
 rqrsNcdbSubmissionFlag,2155,"RQRS NCDB Submission Flag",2623,1,"A,M,C,I",Tumor,digits
-ruca2000,339,"RUCA 2000",460,1,"A,M,C,I",Tumor,digits
-ruca2010,341,"RUCA 2010",461,1,"A,M,C,I",Tumor,digits
+ruca2000,339,"RUCA 2000",460,1,"A,M,C,I",Tumor,mixed
+ruca2010,341,"RUCA 2010",461,1,"A,M,C,I",Tumor,mixed
 ruralurbanContinuum1993,3300,"RuralUrban Continuum 1993",454,2,"A,M,C,I",Tumor,digits
 ruralurbanContinuum2003,3310,"RuralUrban Continuum 2003",456,2,"A,M,C,I",Tumor,digits
 ruralurbanContinuum2013,3312,"RuralUrban Continuum 2013",458,2,"A,M,C,I",Tumor,digits
@@ -784,8 +784,8 @@ tumorSizeSummary,756,"Tumor Size Summary",882,3,"A,M,C,I",Tumor,digits
 typeOfReportingSource,500,"Type of Reporting Source",577,1,"A,M,C,I",Tumor,digits
 ulceration,3936,"Ulceration",1905,1,"A,M,C,I",Tumor,digits
 unusualFollowUpMethod,1850,"Unusual Follow-Up Method",2963,2,"A,M,C,I",Tumor,digits
-uric2000,345,"URIC 2000",462,1,"A,M,C,I",Tumor,digits
-uric2010,346,"URIC 2010",463,1,"A,M,C,I",Tumor,digits
+uric2000,345,"URIC 2000",462,1,"A,M,C,I",Tumor,mixed
+uric2010,346,"URIC 2010",463,1,"A,M,C,I",Tumor,mixed
 vendorName,2170,"Vendor Name",2625,10,"A,M,C,I",Tumor,text
 visceralAndParietalPleuralInvasion,3937,"Visceral and Parietal Pleural Invasion",1867,1,"A,M,C,I",Tumor,digits
 vitalStatus,1760,"Vital Status",2785,1,"A,M,C,I",Patient,digits

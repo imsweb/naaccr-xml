@@ -2,6 +2,7 @@
 
 **Version 4.15**
 
+- Changed data types of RUCA/URIC from digits to mixed.
 - Fixed warnings in the console about unsafe access to private fields.
 
 **Version 4.14**
