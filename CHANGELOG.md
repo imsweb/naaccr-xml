@@ -5,6 +5,7 @@
 - The ampersand is now considered as a word separator when generating an NAACCR ID from a data item name.
 - Changed data types of RUCA/URIC from digits to mixed.
 - Fixed warnings in the console about unsafe access to private fields.
+- Updated XStream dependency from version 1.4.10 to version 1.4.11.1.
 
 **Version 4.14**
 

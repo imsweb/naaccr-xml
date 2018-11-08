@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    api 'com.thoughtworks.xstream:xstream:1.4.10'
+    api 'com.thoughtworks.xstream:xstream:1.4.11.1'
 
     implementation 'commons-io:commons-io:2.6'
     implementation 'org.apache.commons:commons-lang3:3.7'
