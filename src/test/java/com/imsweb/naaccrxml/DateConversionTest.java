@@ -30,6 +30,7 @@ public class DateConversionTest {
         assertInvalidDateValue("2001-10-26T21:32");
         assertInvalidDateValue("2001-10-26T25:32:52+02:00");
         assertInvalidDateValue("01-10-26T21:32");
+        assertInvalidDateValue("2001-10-26T21:32:52+2:00");
     }
 
     private void assertValidDateValue(String dateValue) {
