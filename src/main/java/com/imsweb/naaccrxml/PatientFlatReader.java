@@ -244,7 +244,7 @@ public class PatientFlatReader implements PatientReader {
             Integer lineNumber = lineNumbers.get(i);
 
             if (line.length() != _format.getLineLength())
-                reportError(patient, lineNumber, null, null, NaaccrErrorUtils.CODE_BADE_LINE_LENGTH, _format.getLineLength(), line.length());
+                reportError(patient, lineNumber, null, null, NaaccrErrorUtils.CODE_BAD_LINE_LENGTH, _format.getLineLength(), line.length());
 
             Tumor tumor = new Tumor();
             tumor.setStartLineNumber(lineNumber);

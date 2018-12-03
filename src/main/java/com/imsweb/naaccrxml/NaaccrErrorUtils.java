@@ -13,7 +13,7 @@ import java.util.Map;
 public class NaaccrErrorUtils {
 
     // the possible validation errors
-    public static final String CODE_BADE_LINE_LENGTH = "Invalid line length";
+    public static final String CODE_BAD_LINE_LENGTH = "Invalid line length";
     public static final String CODE_BAD_NAACCR_ID = "Unknown NAACCR ID";
     public static final String CODE_BAD_NAACCR_NUM = "Wrong NAACCR Number";
     public static final String CODE_VAL_TOO_LONG = "Value too long";
@@ -22,12 +22,13 @@ public class NaaccrErrorUtils {
     public static final String CODE_VAL_REGEX = "Value invalid for regular expression";
     public static final String CODE_VAL_PAT_VS_TUM = "Patient value not consistent among tumors";
     public static final String CODE_VAL_ROOT_VS_TUM = "NaaccrData value not consistent among tumors";
+    public static final String CODE_BAD_TIME_GENERATED = "Invalid Time Generated";
 
     // data structure that holds the corresponding error messages (using a linked hash map to keep the original order)
     private static final Map<String, String> _MESSAGES = new LinkedHashMap<>();
 
     static {
-        _MESSAGES.put(CODE_BADE_LINE_LENGTH, "invalid line length, expected ${0} but got ${1}");
+        _MESSAGES.put(CODE_BAD_LINE_LENGTH, "invalid line length, expected ${0} but got ${1}");
         _MESSAGES.put(CODE_BAD_NAACCR_ID, "unknown NAACCR ID: ${0}");
         _MESSAGES.put(CODE_BAD_NAACCR_NUM, "NAACCR Number '${0}' does not correspond to NAACCR ID '${1}'");
         _MESSAGES.put(CODE_VAL_TOO_LONG, "value too long, expected at most ${0} character(s) but got ${1}");
@@ -36,6 +37,7 @@ public class NaaccrErrorUtils {
         _MESSAGES.put(CODE_VAL_REGEX, "invalid value according to regular expression '${0}'");
         _MESSAGES.put(CODE_VAL_PAT_VS_TUM, "item '${0}' is a patient-level and should have the same value for all the records of the patient");
         _MESSAGES.put(CODE_VAL_ROOT_VS_TUM, "item '${0}' is a root-level item and should have the same value for all the records of the transmitted data");
+        _MESSAGES.put(CODE_BAD_TIME_GENERATED, "invalid value for 'timeGenerated' attribute: {0}");
     }
 
     /**

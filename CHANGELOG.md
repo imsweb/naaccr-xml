@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 4.16**
+
+- Invalid TimeGenerated is now reported as a validation error instead of an exception.
+
 **Version 4.15**
 
 - The ampersand is now considered as a word separator when generating an NAACCR ID from a data item name.

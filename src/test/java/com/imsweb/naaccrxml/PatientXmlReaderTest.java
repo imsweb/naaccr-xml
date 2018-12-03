@@ -32,6 +32,8 @@ public class PatientXmlReaderTest {
 
         // one patient with no tumor
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-one-patient-no-tumor.xml")), options)) {
+            Assert.assertNull(reader.getRootData().getTimeGenerated());
+            Assert.assertEquals(1, reader.getRootData().getValidationErrors().size());
             Patient patient = reader.readPatient();
             Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
             Assert.assertEquals(3, patient.getItem("patientIdNumber").getStartLineNumber().intValue());
@@ -182,7 +184,7 @@ public class PatientXmlReaderTest {
             Assert.assertNotNull(error.getLineNumber());
             Assert.assertEquals("unknown", error.getNaaccrId());
             Assert.assertNull(error.getNaaccrNum());
-            Assert.assertEquals("X",error.getValue());
+            Assert.assertEquals("X", error.getValue());
         }
     }
 

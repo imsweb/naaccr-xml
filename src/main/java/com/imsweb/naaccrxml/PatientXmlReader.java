@@ -206,7 +206,7 @@ public class PatientXmlReader implements PatientReader {
                         _rootData.setTimeGenerated(Date.from(LocalDateTime.parse(generatedTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME).toInstant(ZoneOffset.UTC)));
                     }
                     catch (RuntimeException e2) {
-                        throw new NaaccrIOException("invalid time generated value: " + generatedTime, conf.getParser().getLineNumber());
+                        _rootData.addValidationError(new NaaccrValidationError(NaaccrErrorUtils.CODE_BAD_TIME_GENERATED, generatedTime));
                     }
                 }
             }
