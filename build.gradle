@@ -6,7 +6,6 @@ plugins {
     id 'com.github.spotbugs' version '1.6.5'
     id 'com.bmuschko.nexus' version '2.3.1'
     id 'io.codearte.nexus-staging' version '0.8.0'
-    id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
 
 group = 'com.imsweb'
@@ -54,18 +53,6 @@ jar {
                 'Automatic-Module-Name': 'com.imsweb.naaccrxml',
                 'Main-Class': 'com.imsweb.naaccrxml.gui.Standalone')
     }
-    from('VERSION') {
-        rename 'VERSION', 'NAACCR-XML-VERSION'
-    }
-    from('LICENSE') {
-        rename 'LICENSE', 'NAACCR-XML-LICENSE'
-    }
-}
-
-// we don't want these files in the "all" jar, it's confusing
-shadowJar {
-    exclude('XMLPULL_1_1_3_1_VERSION')
-    exclude('XPP3_1.1.4c_MIN_VERSION')
     from('VERSION') {
         rename 'VERSION', 'NAACCR-XML-VERSION'
     }
@@ -125,8 +112,11 @@ if (version.endsWith('-SNAPSHOT'))
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
     gradleVersion = '4.10.2'
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 // the SAS library is compiled under Java 7 code-compatibility; Intellij can't handle that!
 if (System.getProperty("idea.active") != 'true')
     apply from: 'gradle/sas.gradle'
+
+apply from: 'gradle/release.gradle'

@@ -1,0 +1,12 @@
+task release(dependsOn: 'assemble') {
+    doLast {
+        copy {
+            from configurations.runtimeClasspath
+            into "build/dist/libs"
+        }
+        // TODO add main JAR
+        // TODO add JRE
+        // TODO add readme file
+        // TODO add EXE file
+    }
+}
