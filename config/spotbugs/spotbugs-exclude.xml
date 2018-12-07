@@ -10,7 +10,7 @@
   <Package name="lab"/>
 </Match>
 <Match>
-  <Class name="**/Standalone"/>
+  <Class name="com.imsweb.naaccrxml.gui.Standalone"/>
   <Bug code="RCN"/>/>
 </Match>
 </FindBugsFilter>
