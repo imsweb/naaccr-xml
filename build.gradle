@@ -50,8 +50,7 @@ jar {
                 'Built-By': System.getProperty('user.name'),
                 'Built-Date': new Date(),
                 'Built-JDK': System.getProperty('java.version'),
-                'Automatic-Module-Name': 'com.imsweb.naaccrxml',
-                'Main-Class': 'com.imsweb.naaccrxml.gui.Standalone')
+                'Automatic-Module-Name': 'com.imsweb.naaccrxml')
     }
     from('VERSION') {
         rename 'VERSION', 'NAACCR-XML-VERSION'

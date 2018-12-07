@@ -1,3 +1,5 @@
+// this gradle file is used to create Java-7 compliant code to be used with SAS.
+
 sourceSets {
     sas {
         java {

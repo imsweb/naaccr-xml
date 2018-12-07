@@ -1,12 +1,54 @@
-task release(dependsOn: 'assemble') {
+// this Gradle file is used to release a Standlone GUI version of the library.
+
+task createLaunchJar(type: Jar) {
+    archiveName = 'naaccr-xml-utility.jar'
+    destinationDir = file('build/dist/lib')
+    manifest {
+        attributes('Implementation-Title': project.name,
+                'Implementation-Version': version,
+                'Implementation-Vendor': 'Information Management Services Inc.',
+                'Created-By': System.properties['java.vm.version'] + ' (' + System.properties['java.vm.vendor'] + ')',
+                'Built-By': System.getProperty('user.name'),
+                'Built-Date': new Date(),
+                'Built-JDK': System.getProperty('java.version'),
+                'Main-Class': 'com.imsweb.naaccrxml.gui.Standalone',
+                'Class-Path': (configurations.runtimeClasspath.collect { it.getName() } + List.of("${project.name}-${version}.jar")).join(' '))
+    }
+}
+
+task release(dependsOn: ['assemble', 'createLaunchJar', 'jarSas', 'sourcesSasJar']) {
     doLast {
+        // dependencies
         copy {
+            from "build/libs/${project.name}-${version}.jar"
             from configurations.runtimeClasspath
-            into "build/dist/libs"
+            into 'build/dist/lib'
         }
-        // TODO add main JAR
-        // TODO add JRE
-        // TODO add readme file
-        // TODO add EXE file
+
+        // JRE
+        copy {
+            from 'jre/jre-11.0.1'
+            into 'build/dist/jre'
+        }
+        
+        // SAS stuff
+        copy {
+            from "build/libs/${project.name}-${version}-sas.jar"
+            from "build/libs/${project.name}-${version}-sas-source.jar"
+            from 'docs/sas/java/read_naaccr_xml_macro.sas'
+            from 'docs/sas/java/write_naaccr_xml_macro.sas'
+            into 'build/dist/sas'
+        }
+
+        // EXE launcher and readme file
+        copy {
+            from file('config/launch4j/NAACCR XML Utility.exe')
+            from file('config/readme.txt')
+            into 'build/dist'
+        }
+
+        // TODO find an icon?
+        // TODO confirm and finish the app properties on the EXE creation
+        // TODO finish readme file
     }
 }
