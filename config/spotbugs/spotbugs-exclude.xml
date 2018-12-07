@@ -9,4 +9,8 @@
 <Match>
   <Package name="lab"/>
 </Match>
+<Match>
+  <Class name="**/Standalone"/>
+  <Bug code="RCN"/>/>
+</Match>
 </FindBugsFilter>
