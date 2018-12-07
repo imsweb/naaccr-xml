@@ -1,7 +1,8 @@
 ## NAACCR XML Version History
 
-**Version 4.16**
+**Version 5.0**
 
+- Changed the release of the standalone GUI tool.
 - Invalid TimeGenerated is now reported as a validation error instead of an exception.
 
 **Version 4.15**
