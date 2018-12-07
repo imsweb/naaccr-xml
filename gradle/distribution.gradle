@@ -1,7 +1,9 @@
 // this Gradle file is used to release a Standlone GUI version of the library.
 
-task createLaunchJar(type: Jar) {
-    archiveName = 'naaccr-xml-utility.jar'
+task assembleDistribution(type: Jar, dependsOn: ['assemble', 'jarSas', 'sourcesSasJar']) {
+    group = 'distribution'
+
+    // create JAR launcher file (its name doesn't chagne over time and so it's the one referenced by the EXE launcher)
     destinationDir = file('build/dist/lib')
     manifest {
         attributes('Implementation-Title': project.name,
@@ -14,10 +16,8 @@ task createLaunchJar(type: Jar) {
                 'Main-Class': 'com.imsweb.naaccrxml.gui.Standalone',
                 'Class-Path': (configurations.runtimeClasspath.collect { it.getName() } + List.of("${project.name}-${version}.jar")).join(' '))
     }
-}
-
-task release(dependsOn: ['assemble', 'createLaunchJar', 'jarSas', 'sourcesSasJar']) {
     doLast {
+
         // dependencies
         copy {
             from "build/libs/${project.name}-${version}.jar"
@@ -51,4 +51,12 @@ task release(dependsOn: ['assemble', 'createLaunchJar', 'jarSas', 'sourcesSasJar
         // TODO confirm and finish the app properties on the EXE creation
         // TODO finish readme file
     }
+}
+
+task createDistribution(type: Zip, dependsOn: 'assembleDistribution') {
+    group = 'distribution'
+    archiveName = "naaccr-xml-utility-${version}.zip"
+    destinationDir = file('build')
+    from 'build/dist'
+    into "naaccr-xml-utility-${version}"
 }

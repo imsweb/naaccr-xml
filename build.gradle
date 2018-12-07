@@ -113,10 +113,8 @@ wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
 
-// the SAS library is compiled under Java 7 code-compatibility; Intellij can't handle that!
+// the SAS library is compiled under Java 7 code-compatibility; Intellij can't handle that (only because I didn't properly set it up as a module)
 if (System.getProperty("idea.active") != 'true')
     apply from: 'gradle/sas.gradle'
 
-// the release is also not for Intellij...
-if (System.getProperty("idea.active") != 'true')
-    apply from: 'gradle/release.gradle'
+apply from: 'gradle/distribution.gradle'
