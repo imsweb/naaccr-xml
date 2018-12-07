@@ -66,6 +66,7 @@ checkstyle {
 
 // spotbugs plugin settings
 spotbugs {
+    toolVersion = '3.1.9'
     ignoreFailures = true
     excludeFilter = file('config/spotbugs/spotbugs-exclude.xml')
 }
@@ -104,11 +105,11 @@ modifyPom {
 
 // don't try to release a snapshot to a non-snapshot repository, that won't work anyway
 if (version.endsWith('-SNAPSHOT'))
-    gradle.startParameter.excludedTaskNames += 'closeAndReleaseRepository'
+    gradle.startParameter.excludedTaskNames.add('closeAndReleaseRepository')
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '4.10.2'
+    gradleVersion = '5.0'
     distributionType = Wrapper.DistributionType.ALL
 }
 
