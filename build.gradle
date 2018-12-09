@@ -117,4 +117,4 @@ wrapper {
 if (System.getProperty("idea.active") != 'true')
     apply from: 'gradle/sas.gradle'
 
-apply from: 'gradle/distribution.gradle'
+apply from: 'gradle/release.gradle'

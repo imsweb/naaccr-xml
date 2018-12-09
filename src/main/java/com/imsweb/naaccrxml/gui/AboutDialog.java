@@ -33,37 +33,38 @@ public class AboutDialog extends JDialog {
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
-        
+
         JPanel contentPnl = new JPanel(new BorderLayout());
         contentPnl.setOpaque(true);
         contentPnl.setBackground(new Color(167, 191, 205));
         contentPnl.setBorder(new EmptyBorder(5, 5, 5, 5));
         this.getContentPane().add(contentPnl, BorderLayout.CENTER);
-        
+
         JPanel centerPnl = new JPanel();
         centerPnl.setLayout(new BoxLayout(centerPnl, BoxLayout.Y_AXIS));
         centerPnl.setBorder(new CompoundBorder(new LineBorder(Color.GRAY), new EmptyBorder(10, 25, 10, 25)));
         contentPnl.add(centerPnl, BorderLayout.CENTER);
-        
+
         centerPnl.add(buildTextPnl("NAACCR XML Utility", true));
 
         centerPnl.add(Box.createVerticalStrut(5));
         JPanel iconPnl = new JPanel();
         iconPnl.setLayout(new GridBagLayout());
+        //noinspection ConstantConditions
         iconPnl.add(new JLabel(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("gui/icons/app_32.png"))));
         centerPnl.add(iconPnl);
 
         centerPnl.add(Box.createVerticalStrut(5));
         centerPnl.add(buildTextPnl(Standalone.VERSION, false));
-        
+
         centerPnl.add(Box.createVerticalStrut(25));
         centerPnl.add(buildTextPnl("Provided by the", false));
         centerPnl.add(Box.createVerticalStrut(3));
         centerPnl.add(buildTextPnl("NAACCR XML Work Group", true));
-        
+
         centerPnl.add(Box.createVerticalStrut(15));
         centerPnl.add(buildTextPnl("Implements NAACCR XML Specification " + NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION, false));
-        
+
         centerPnl.add(Box.createVerticalStrut(25));
         centerPnl.add(buildTextPnl("Developed by", false));
         centerPnl.add(Box.createVerticalStrut(3));
@@ -72,8 +73,7 @@ public class AboutDialog extends JDialog {
         centerPnl.add(buildTextPnl("under contract to the", false));
         centerPnl.add(Box.createVerticalStrut(3));
         centerPnl.add(buildTextPnl("National Cancer Institute", true));
-        
-        
+
     }
 
     private JPanel buildTextPnl(String text, boolean bold) {
