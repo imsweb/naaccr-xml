@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.IllegalComponentStateException;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -81,6 +82,12 @@ public class Standalone extends JFrame implements ActionListener {
         this.setTitle("NAACCR XML Utility " + VERSION);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
+
+        List<Image> appIcons = new ArrayList<>();
+        appIcons.add(Toolkit.getDefaultToolkit().getImage(Thread.currentThread().getContextClassLoader().getResource("gui/icons/app_64.png")));
+        appIcons.add(Toolkit.getDefaultToolkit().getImage(Thread.currentThread().getContextClassLoader().getResource("gui/icons/app_32.png")));
+        appIcons.add(Toolkit.getDefaultToolkit().getImage(Thread.currentThread().getContextClassLoader().getResource("gui/icons/app_16.png")));
+        this.setIconImages(appIcons);
 
         JMenuBar bar = new JMenuBar();
 

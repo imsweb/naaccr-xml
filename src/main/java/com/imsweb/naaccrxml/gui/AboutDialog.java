@@ -7,10 +7,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.Window;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -44,6 +46,14 @@ public class AboutDialog extends JDialog {
         contentPnl.add(centerPnl, BorderLayout.CENTER);
         
         centerPnl.add(buildTextPnl("NAACCR XML Utility", true));
+
+        centerPnl.add(Box.createVerticalStrut(5));
+        JPanel iconPnl = new JPanel();
+        iconPnl.setLayout(new GridBagLayout());
+        iconPnl.add(new JLabel(new ImageIcon(Thread.currentThread().getContextClassLoader().getResource("gui/icons/app_32.png"))));
+        centerPnl.add(iconPnl);
+
+        centerPnl.add(Box.createVerticalStrut(5));
         centerPnl.add(buildTextPnl(Standalone.VERSION, false));
         
         centerPnl.add(Box.createVerticalStrut(25));
