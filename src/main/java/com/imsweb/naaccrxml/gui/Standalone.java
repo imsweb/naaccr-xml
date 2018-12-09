@@ -97,7 +97,7 @@ public class Standalone extends JFrame implements ActionListener {
         JMenu toolsMenu = new JMenu(" Tools ");
         toolsMenu.setMnemonic(KeyEvent.VK_T);
         bar.add(toolsMenu);
-        JMenuItem sasMenu = new JMenu("Create SAS XMLMapper Definition File");
+        JMenu sasMenu = new JMenu("Create SAS XMLMapper Definition File");
         toolsMenu.add(sasMenu);
         List<String> versions = NaaccrFormat.getSupportedVersions().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
         for (int i = 0; i < versions.size(); i++) {
@@ -115,7 +115,7 @@ public class Standalone extends JFrame implements ActionListener {
             sasIncItem.addActionListener(this);
             sasMenu.add(sasIncItem);
             if (i != versions.size() - 1)
-                ((JMenu)sasMenu).addSeparator();
+                sasMenu.addSeparator();
         }
         toolsMenu.addSeparator();
         JMenuItem dictionaryToCsvItem = new JMenuItem("Save Dictionary as CSV File");
@@ -341,11 +341,13 @@ public class Standalone extends JFrame implements ActionListener {
             try {
                 File targetFile = File.createTempFile("naaccr-xml-help", ".html");
                 targetFile.deleteOnExit();
-                InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("gui/help/help.html");
-                OutputStream os = new FileOutputStream(targetFile);
-                IOUtils.copy(is, os);
-                is.close();
-                os.close();
+                try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("gui/help/help.html")) {
+                    if (is != null) {
+                        try (OutputStream os = new FileOutputStream(targetFile)) {
+                            IOUtils.copy(is, os);
+                        }
+                    }
+                }
                 Desktop.getDesktop().open(targetFile);
             }
             catch (IOException ex) {

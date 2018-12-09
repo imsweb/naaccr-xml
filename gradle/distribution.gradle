@@ -1,6 +1,7 @@
 // this Gradle file is used to release a Standlone GUI version of the library.
 
-task createLaunchJar(type: Jar) {
+task createLauncherJar(type: Jar) {
+    group = 'distribution'
     archiveName = 'naaccr-xml-utility.jar'
     destinationDir = file('build/dist/lib')
     manifest {
@@ -16,8 +17,10 @@ task createLaunchJar(type: Jar) {
     }
 }
 
-task release(dependsOn: ['assemble', 'createLaunchJar', 'jarSas', 'sourcesSasJar']) {
+task assembleDistribution(dependsOn: ['assemble', 'createLauncherJar', 'jarSas', 'sourcesSasJar']) {
+    group = 'distribution'
     doLast {
+
         // dependencies
         copy {
             from "build/libs/${project.name}-${version}.jar"
@@ -47,4 +50,12 @@ task release(dependsOn: ['assemble', 'createLaunchJar', 'jarSas', 'sourcesSasJar
             into 'build/dist'
         }
     }
+}
+
+task createDistribution(type: Zip, dependsOn: 'assembleDistribution') {
+    group = 'distribution'
+    archiveName = "naaccr-xml-utility-${version}.zip"
+    destinationDir = file('build')
+    from 'build/dist'
+    into "naaccr-xml-utility-${version}"
 }
