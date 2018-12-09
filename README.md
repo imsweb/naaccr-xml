@@ -89,14 +89,12 @@ The methods translating a single line or single patient takes a context as param
 
 The library contains an standalone GUI that wraps some of the utility methods and provides a more user-friendly environment for processing files.
 
-To start the GUI, just double-click the JAR file created from this project; it will invoke the main GUI class 
-([Standalone](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/gui/Standalone.java)).
+To start the GUI, unzip the distributed ZIP file anywhere on your computer and double-click the EXE file.
 
-You can also type the following in a DOS prompt, after navigating to the folder containing the JAR file:
+You can also type the following in a DOS prompt/terminal, after navigating to the folder containing the EXE file:
 ```
-java -jar naaccr-xml-x.x-all.jar
+java -jar lib\naaccr-xml-utility.jar
 ```
-where X.x.x is the downloaded version.
 
 ### Using the no-GUI batch class (BatchProcessor)
 
@@ -105,11 +103,10 @@ The library also contains an experimental no-GUI class that can be used to proce
 
 Here is an example of how to start it:
 ```
-java -cp naaccr-xml-x.x.jar BatchProcessor options.properties
+java -cp lib\naaccr-xml-utility.jar BatchProcessor options.properties
 ```
-where x.x is the downloaded version.
 
-This assumes the options file is in the same folder as the JAR file (but it can be anywhere and a full path can be provided on the command line).
+This assumes the options file is in the same folder as the EXE file (but it can be anywhere and a full path can be provided on the command line).
 
 See the [BatchProcessor](https://github.com/imsweb/naaccr-xml/blob/master/src/main/java/com/imsweb/naaccrxml/BatchProcessor.java) class for a description of each individual option.
 
