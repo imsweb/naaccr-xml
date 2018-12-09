@@ -46,9 +46,5 @@ task release(dependsOn: ['assemble', 'createLaunchJar', 'jarSas', 'sourcesSasJar
             from file('config/readme.txt')
             into 'build/dist'
         }
-
-        // TODO find an icon?
-        // TODO confirm and finish the app properties on the EXE creation
-        // TODO finish readme file
     }
 }

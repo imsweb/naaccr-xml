@@ -13,7 +13,7 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon></icon>
+  <icon>app.ico</icon>
   <jre>
     <path>jre</path>
     <bundledJre64Bit>true</bundledJre64Bit>
@@ -23,4 +23,18 @@
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
   </jre>
+  <versionInfo>
+    <fileVersion>0.0.0.0</fileVersion>
+    <txtFileVersion>n/a</txtFileVersion>
+    <fileDescription>NAACCR XML Utility</fileDescription>
+    <copyright>National Cancer Institue</copyright>
+    <productVersion>0.0.0.0</productVersion>
+    <txtProductVersion>n/a</txtProductVersion>
+    <productName>NAACCR XML Utility</productName>
+    <companyName>Information Management Services, Inc.</companyName>
+    <internalName>NAACCR XML Utility</internalName>
+    <originalFilename>NAACCR XML Utility.exe</originalFilename>
+    <trademarks></trademarks>
+    <language>ENGLISH_US</language>
+  </versionInfo>
 </launch4jConfig>
