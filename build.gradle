@@ -109,7 +109,7 @@ if (version.endsWith('-SNAPSHOT'))
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '5.0'
+    gradleVersion = '5.1'
     distributionType = Wrapper.DistributionType.ALL
 }
 
