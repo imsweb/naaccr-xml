@@ -159,7 +159,7 @@
         <module name="HiddenField"/>
     </module>
     <module name="SuppressionFilter">
-        <property name="file" value="config/checkstyle/checkstyle-exclude.xml"/>
+        <property name="file" value="${suppressionFile}"/>
     </module>
     <module name="Translation"/>
 </module>
