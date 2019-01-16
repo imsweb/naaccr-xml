@@ -57,6 +57,9 @@ public class AboutDialog extends JDialog {
         centerPnl.add(Box.createVerticalStrut(5));
         centerPnl.add(buildTextPnl(Standalone.VERSION, false));
 
+        centerPnl.add(Box.createVerticalStrut(5));
+        centerPnl.add(buildTextPnl("Java " + System.getProperty("java.version"), false));
+
         centerPnl.add(Box.createVerticalStrut(25));
         centerPnl.add(buildTextPnl("Provided by the", false));
         centerPnl.add(Box.createVerticalStrut(3));
