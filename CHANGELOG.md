@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 5.1**
+
+- Updated embedded version of Java to 11.0.2.
+
 **Version 5.0**
 
 - Changed the release of the standalone GUI tool.
