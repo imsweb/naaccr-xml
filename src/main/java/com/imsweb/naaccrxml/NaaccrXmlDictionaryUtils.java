@@ -265,8 +265,15 @@ public final class NaaccrXmlDictionaryUtils {
         try {
             NaaccrDictionary dictionary = (NaaccrDictionary)instanciateXStream().fromXML(reader);
 
+            // default value for specifications
             if (dictionary.getSpecificationVersion() == null)
                 dictionary.setSpecificationVersion(SpecificationVersion.SPEC_1_0);
+
+            // default value for record types
+            if (dictionary.getItems() != null)
+                for (NaaccrDictionaryItem item : dictionary.getItems())
+                    if (item.getRecordTypes() == null)
+                        item.setRecordTypes(NaaccrFormat.ALL_RECORD_TYPES);
 
             // let's not validate the internal dictionaries, we know they are valid
             String uri = dictionary.getDictionaryUri();
@@ -407,6 +414,10 @@ public final class NaaccrXmlDictionaryUtils {
             else if (!NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(item.getParentXmlElement()) && !NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(item.getParentXmlElement())
                     && !NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(item.getParentXmlElement()))
                 errors.add("invalid value for 'parentXmlElement' attribute: " + item.getParentXmlElement());
+
+            // validate record type (null means all types, so that's OK)
+            if (item.getRecordTypes() != null && !item.getRecordTypes().matches("[AMCI](,[AMCI])*"))
+                errors.add("invalid value for 'recordTypes' attribute: " + item.getRecordTypes());
 
             // validate data type
             String type = item.getDataType();

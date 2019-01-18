@@ -3,6 +3,7 @@
 **Version 5.1**
 
 - Fixed recordNumberRecode item in base 18 dictionary to have Tumor instead of Patient as its ParentXmlTag.
+- Added missing validation on record type attribute when loading a dictionary.
 - Updated embedded version of Java to 11.0.2.
 
 **Version 5.0**

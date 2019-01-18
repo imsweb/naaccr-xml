@@ -103,6 +103,9 @@ public final class NaaccrFormat {
         _SUPPORTED_REC_TYPES.add(NAACCR_REC_TYPE_INCIDENCE);
     }
 
+    // default value if a record type is not provided
+    public static final String ALL_RECORD_TYPES = "A,M,C,I";
+
     public static boolean isRecordTypeSupported(String recordType) {
         return _SUPPORTED_REC_TYPES.contains(recordType);
     }
