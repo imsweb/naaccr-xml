@@ -5241,7 +5241,7 @@
             startColumn="2798"
             length="2"
             recordTypes="A,M,C,I"
-            parentXmlElement="Patient"
+            parentXmlElement="Tumor"
             dataType="digits"/>
         <ItemDef naaccrId="qualityOfSurvival"
             naaccrNum="1780"

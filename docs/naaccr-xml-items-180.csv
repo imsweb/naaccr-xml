@@ -549,7 +549,7 @@ radiationTreatmentDiscontinuedEarly,1531,"Radiation Treatment Discontinued Early
 readmSameHosp30Days,3190,"Readm Same Hosp 30 Days",2276,1,"A,M,C,I",Tumor,digits
 reasonForNoRadiation,1430,"Reason for No Radiation",2250,1,"A,M,C,I",Tumor,digits
 reasonForNoSurgery,1340,"Reason for No Surgery",2234,1,"A,M,C,I",Tumor,digits
-recordNumberRecode,1775,"Record Number Recode",2798,2,"A,M,C,I",Patient,digits
+recordNumberRecode,1775,"Record Number Recode",2798,2,"A,M,C,I",Tumor,digits
 recordType,10,"Record Type",1,1,"A,M,C,I",NaaccrData,text
 recurrenceDate1st,1860,"Recurrence Date--1st",2867,8,"A,M,C,I",Tumor,date
 recurrenceDate1stFlag,1861,"Recurrence Date--1st Flag",2875,2,"A,M,C,I",Tumor,digits
