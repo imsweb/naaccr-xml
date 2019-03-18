@@ -156,6 +156,9 @@ public class PatientXmlReader implements PatientReader {
             // create the root data holder (it will be use for every field except the list of patients)
             _rootData = createRootData();
 
+            // line number
+            _rootData.setStartLineNumber(conf.getParser().getLineNumber());
+
             // read the standard attribute: specification version (we do it first because the format of other attributes can depend on the specs version)
             String specVersion = _reader.getAttribute(NAACCR_XML_ROOT_ATT_SPEC_VERSION);
             if (specVersion == null)
