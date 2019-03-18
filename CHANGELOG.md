@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 5.2**
+
+- Now setting the line number of the root naaccrData objects.
+
 **Version 5.1**
 
 - Fixed recordNumberRecode item in base 18 dictionary to have Tumor instead of Patient as its ParentXmlTag.
