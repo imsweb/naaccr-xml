@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 5.3**
+
+- Updated embedded version of Java to 12.
+
 **Version 5.2**
 
 - Now setting the line number of the root naaccrData objects.
