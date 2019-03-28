@@ -1,0 +1,2 @@
+JAVA_VERSION="12"
+MODULES="java.base java.datatransfer java.xml java.prefs java.desktop java.logging java.transaction.xa java.sql jdk.unsupported"
