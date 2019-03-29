@@ -14,8 +14,9 @@ public class SpecificationVersionTest {
         Assert.assertTrue(SpecificationVersion.isSpecificationSupported("1.1"));
         Assert.assertTrue(SpecificationVersion.isSpecificationSupported("1.2"));
         Assert.assertTrue(SpecificationVersion.isSpecificationSupported("1.3"));
+        Assert.assertTrue(SpecificationVersion.isSpecificationSupported("1.4"));
 
-        Assert.assertFalse(SpecificationVersion.isSpecificationSupported("1.4"));
+        Assert.assertFalse(SpecificationVersion.isSpecificationSupported("1.5"));
         Assert.assertFalse(SpecificationVersion.isSpecificationSupported("2.2"));
 
         Assert.assertFalse(SpecificationVersion.isSpecificationSupported(null));

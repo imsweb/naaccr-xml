@@ -2,7 +2,7 @@
 
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml"
             naaccrVersion="180"
-            specificationVersion="1.3"
+            specificationVersion="1.4"
             description="NAACCR 18 base dictionary"
             xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>
@@ -1396,7 +1396,7 @@
             parentXmlElement="Tumor"
             dataType="digits"
             padding="leftZero"/>
-        <ItemDef naaccrId="dateRegionalLymphNodeDissection"
+        <ItemDef naaccrId="dateRegionalLNDissection"
             naaccrNum="682"
             naaccrName="Date Regional Lymph Node Dissection"
             startColumn="1002"
@@ -1404,7 +1404,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="date"/>
-        <ItemDef naaccrId="dateRegionalLymphNodeDissectionFlag"
+        <ItemDef naaccrId="dateRegionalLNDissectionFlag"
             naaccrNum="683"
             naaccrName="Date Regional Lymph Node Dissection Flag"
             startColumn="1010"
@@ -1428,7 +1428,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="dateOfSentinelLymphNodeBiopsy"
+        <ItemDef naaccrId="dateSentinelLymphNodeBiopsy"
             naaccrNum="832"
             naaccrName="Date of Sentinel Lymph Node Biopsy"
             startColumn="1016"
@@ -2353,7 +2353,7 @@
             length="15"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
-        <ItemDef naaccrId="npcrDerivedAjcc8TnmPostTherapyStgGrp"
+        <ItemDef naaccrId="npcrDerivedAjcc8TnmPostStgGrp"
             naaccrNum="3647"
             naaccrName="NPCR Derived AJCC 8 TNM Post Therapy Stg Grp"
             startColumn="1487"
@@ -2642,7 +2642,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             padding="leftBlank"/>
-        <ItemDef naaccrId="chromosome1pLossOfHeterozygosity"
+        <ItemDef naaccrId="chromosome1pLossHeterozygosity"
             naaccrNum="3801"
             naaccrName="Chromosome 1p: Loss of Heterozygosity (LOH)"
             startColumn="1740"
@@ -2650,7 +2650,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="chromosome19qLossOfHeterozygosity"
+        <ItemDef naaccrId="chromosome19qLossHeterozygosity"
             naaccrNum="3802"
             naaccrName="Chromosome 19q: Loss of Heterozygosity (LOH)"
             startColumn="1741"
@@ -2658,7 +2658,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="methylationOfO6MethylguanineMethyltransferase"
+        <ItemDef naaccrId="methylationOfO6MGMT"
             naaccrNum="3889"
             naaccrName="Methylation of O6-Methylguanine-Methyltransferase"
             startColumn="1742"
@@ -2704,7 +2704,7 @@
             length="2"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
-        <ItemDef naaccrId="progesteroneReceptorSummary"
+        <ItemDef naaccrId="progesteroneRecepSummary"
             naaccrNum="3915"
             naaccrName="Progesterone Receptor Summary"
             startColumn="1750"
@@ -2720,7 +2720,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="estrogenReceptorPercentPositiveOrRange"
+        <ItemDef naaccrId="estrogenReceptorPercntPosOrRange"
             naaccrNum="3826"
             naaccrName="Estrogen Receptor Percent Positive or Range"
             startColumn="1752"
@@ -2791,7 +2791,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             padding="leftZero"/>
-        <ItemDef naaccrId="oncotypeDxRecurrenceScoreInvasive"
+        <ItemDef naaccrId="oncotypeDxRecurrenceScoreInvasiv"
             naaccrNum="3904"
             naaccrName="Oncotype Dx Recurrence Score-Invasive"
             startColumn="1779"
@@ -2815,14 +2815,14 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="progesteroneReceptorPercentPositiveOrRange"
+        <ItemDef naaccrId="progesteroneRecepPrcntPosOrRange"
             naaccrNum="3914"
             naaccrName="Progesterone Receptor Percent Positive or Range"
             startColumn="1784"
             length="3"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
-        <ItemDef naaccrId="progesteroneReceptorTotalAllredScore"
+        <ItemDef naaccrId="progesteroneRecepTotalAllredScor"
             naaccrNum="3916"
             naaccrName="Progesterone Receptor Total Allred Score"
             startColumn="1787"
@@ -2944,7 +2944,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="extranodalExtensionHeadAndNeckClinical"
+        <ItemDef naaccrId="extranodalExtensionHeadNeckClin"
             naaccrNum="3831"
             naaccrName="Extranodal Extension Head and Neck Clinical"
             startColumn="1818"
@@ -2952,7 +2952,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="extranodalExtensionHeadAndNeckPathological"
+        <ItemDef naaccrId="extranodalExtensionHeadNeckPath"
             naaccrNum="3832"
             naaccrName="Extranodal Extension Head and Neck Pathological"
             startColumn="1819"
@@ -3023,7 +3023,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="ipsilateralAdrenalGlandInvolvement"
+        <ItemDef naaccrId="ipsilateralAdrenalGlandInvolve"
             naaccrNum="3861"
             naaccrName="Ipsilateral Adrenal Gland Involvement"
             startColumn="1833"
@@ -3078,7 +3078,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             padding="leftBlank"/>
-        <ItemDef naaccrId="bilirubinPretreatmentTotalLabValue"
+        <ItemDef naaccrId="bilirubinPretxTotalLabValue"
             naaccrNum="3813"
             naaccrName="Bilirubin Pretreatment Total Lab Value"
             startColumn="1851"
@@ -3086,7 +3086,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             padding="leftBlank"/>
-        <ItemDef naaccrId="bilirubinPretreatmentUnitOfMeasure"
+        <ItemDef naaccrId="bilirubinPretxUnitOfMeasure"
             naaccrNum="3814"
             naaccrName="Bilirubin Pretreatment Unit of Measure"
             startColumn="1856"
@@ -3102,7 +3102,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             padding="leftBlank"/>
-        <ItemDef naaccrId="creatininePretreatmentUnitOfMeasure"
+        <ItemDef naaccrId="creatininePretxUnitOfMeasure"
             naaccrNum="3825"
             naaccrName="Creatinine Pretreatment Unit of Measure"
             startColumn="1861"
@@ -3118,7 +3118,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="internationalNormalizedRatioForProthrombinTime"
+        <ItemDef naaccrId="iNRProthrombinTime"
             naaccrNum="3860"
             naaccrName="International Normalized Ratio Prothrombin Time"
             startColumn="1863"
@@ -3133,7 +3133,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="visceralAndParietalPleuralInvasion"
+        <ItemDef naaccrId="visceralParietalPleuralInvasion"
             naaccrNum="3937"
             naaccrName="Visceral and Parietal Pleural Invasion"
             startColumn="1867"
@@ -3351,7 +3351,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="serumBeta2MicroglobulinPretreatmentLevel"
+        <ItemDef naaccrId="serumBeta2MicroglobulinPretxLvl"
             naaccrNum="3931"
             naaccrName="Serum Beta-2 Microglobulin Pretreatment Level"
             startColumn="1918"
@@ -3367,7 +3367,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="residualTumorVolumePostCytoreduction"
+        <ItemDef naaccrId="residualTumVolPostCytoreduction"
             naaccrNum="3921"
             naaccrName="Residual Tumor Volume Post Cytoreduction"
             startColumn="1920"
@@ -3391,7 +3391,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="gestationalTrophoblasticPrognosticScoringIndex"
+        <ItemDef naaccrId="gestationalTrophoblasticPxIndex"
             naaccrNum="3837"
             naaccrName="Gestational Trophoblastic Prognostic Scoring Index"
             startColumn="1924"
@@ -3582,7 +3582,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="lnAssessmentMethodParaAortic"
+        <ItemDef naaccrId="lnAssessMethodParaaortic"
             naaccrNum="3872"
             naaccrName="LN Assessment Method Para-Aortic"
             startColumn="1987"
@@ -3590,7 +3590,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="lnAssessmentMethodPelvic"
+        <ItemDef naaccrId="lnAssessMethodPelvic"
             naaccrNum="3873"
             naaccrName="LN Assessment Method Pelvic"
             startColumn="1988"
@@ -3598,7 +3598,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="lnDistantAssessmentMethod"
+        <ItemDef naaccrId="lnDistantAssessMethod"
             naaccrNum="3874"
             naaccrName="LN Distant Assessment Method"
             startColumn="1989"
@@ -3614,7 +3614,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="lnStatusFemoralInguinalParaAorticPelvic"
+        <ItemDef naaccrId="lnStatusFemorInguinParaaortPelv"
             naaccrNum="3884"
             naaccrName="LN Status Femoral-Inguinal, Para-Aortic, Pelvic"
             startColumn="1991"
@@ -3622,7 +3622,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="lnAssessmentMethodFemoralInguinal"
+        <ItemDef naaccrId="lnAssessMethodFemoralInguinal"
             naaccrNum="3871"
             naaccrName="LN Assessment Method Femoral-Inguinal"
             startColumn="1992"
@@ -4142,14 +4142,14 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="phase1RadiationPrimaryTreatmentVolume"
+        <ItemDef naaccrId="phase1RadiationPrimaryTxVolume"
             naaccrNum="1504"
             naaccrName="Phase I Radiation Primary Treatment Volume"
             startColumn="2281"
             length="2"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
-        <ItemDef naaccrId="phase1RadiationToDrainingLymphNodes"
+        <ItemDef naaccrId="phase1RadiationToDrainingLN"
             naaccrNum="1505"
             naaccrName="Phase I Radiation to Draining Lymph Nodes"
             startColumn="2283"
@@ -4165,7 +4165,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="phase1RadiationExternalBeamPlanningTech"
+        <ItemDef naaccrId="phase1RadiationExternalBeamTech"
             naaccrNum="1502"
             naaccrName="Phase I Radiation External Beam Planning Tech"
             startColumn="2287"
@@ -4199,7 +4199,7 @@
             parentXmlElement="Tumor"
             dataType="digits"
             padding="leftZero"/>
-        <ItemDef naaccrId="phase2RadiationPrimaryTreatmentVolume"
+        <ItemDef naaccrId="phase2RadiationPrimaryTxVolume"
             naaccrNum="1514"
             naaccrName="Phase II Radiation Primary Treatment Volume"
             startColumn="2303"
@@ -4207,7 +4207,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="phase2RadiationToDrainingLymphNodes"
+        <ItemDef naaccrId="phase2RadiationToDrainingLN"
             naaccrNum="1515"
             naaccrName="Phase II Radiation to Draining Lymph Nodes"
             startColumn="2305"
@@ -4223,7 +4223,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="phase2RadiationExternalBeamPlanningTech"
+        <ItemDef naaccrId="phase2RadiationExternalBeamTech"
             naaccrNum="1512"
             naaccrName="Phase II Radiation External Beam Planning Tech"
             startColumn="2309"
@@ -4257,7 +4257,7 @@
             parentXmlElement="Tumor"
             dataType="digits"
             padding="leftZero"/>
-        <ItemDef naaccrId="phase3RadiationPrimaryTreatmentVolume"
+        <ItemDef naaccrId="phase3RadiationPrimaryTxVolume"
             naaccrNum="1524"
             naaccrName="Phase III Radiation Primary Treatment Volume"
             startColumn="2325"
@@ -4265,7 +4265,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="phase3RadiationToDrainingLymphNodes"
+        <ItemDef naaccrId="phase3RadiationToDrainingLN"
             naaccrNum="1525"
             naaccrName="Phase III Radiation to Draining Lymph Nodes"
             startColumn="2327"
@@ -4281,7 +4281,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
             dataType="digits"/>
-        <ItemDef naaccrId="phase3RadiationExternalBeamPlanningTech"
+        <ItemDef naaccrId="phase3RadiationExternalBeamTech"
             naaccrNum="1522"
             naaccrName="Phase III Radiation External Beam Planning Tech"
             startColumn="2331"
@@ -4315,7 +4315,7 @@
             parentXmlElement="Tumor"
             dataType="digits"
             padding="leftZero"/>
-        <ItemDef naaccrId="numberOfPhasesOfRadTreatmentToThisVolume"
+        <ItemDef naaccrId="numberPhasesOfRadTxToVolume"
             naaccrNum="1532"
             naaccrName="Number of Phases of Rad Treatment to this Volume"
             startColumn="2347"
@@ -4324,7 +4324,7 @@
             parentXmlElement="Tumor"
             dataType="digits"
             padding="leftZero"/>
-        <ItemDef naaccrId="radiationTreatmentDiscontinuedEarly"
+        <ItemDef naaccrId="radiationTxDiscontinuedEarly"
             naaccrNum="1531"
             naaccrName="Radiation Treatment Discontinued Early"
             startColumn="2349"

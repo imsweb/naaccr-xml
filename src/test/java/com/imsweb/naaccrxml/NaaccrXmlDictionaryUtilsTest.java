@@ -84,6 +84,10 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertEquals(defaultUserDictionary1.getItems().size(), defaultUserDictionary2.getItems().size());
         Assert.assertEquals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION, defaultUserDictionary1.getSpecificationVersion());
 
+        // make sure N18 dictionary doesn't have any references to the long IDs
+        for (String oldId : NaaccrXmlDictionaryUtils.getRenamedLongNaaccr18Ids().keySet())
+            Assert.assertNull(NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(NaaccrFormat.NAACCR_VERSION_180).getItemByNaaccrId(oldId));
+
         // read a provided user dictionary
         try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140.xml"))) {
             NaaccrDictionary defaultUserDictionary = NaaccrXmlDictionaryUtils.readDictionary(reader);

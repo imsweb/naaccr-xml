@@ -15,6 +15,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -101,10 +102,62 @@ public final class NaaccrXmlDictionaryUtils {
     // cached internal dictionaries
     private static Map<String, NaaccrDictionary> _INTERNAL_DICTIONARIES = new ConcurrentHashMap<>();
 
+    // NAACCR 18 IDs that got renamed as part of specifications 1.4 (those should be removed eventually)
+    private static Map<String, String> _RENAMED_LONG_NAACCR_18_IDS = new HashMap<>();
+
+    static {
+        _RENAMED_LONG_NAACCR_18_IDS.put("dateRegionalLymphNodeDissection", "dateRegionalLNDissection");
+        _RENAMED_LONG_NAACCR_18_IDS.put("dateRegionalLymphNodeDissectionFlag", "dateRegionalLNDissectionFlag");
+        _RENAMED_LONG_NAACCR_18_IDS.put("phase1RadiationExternalBeamPlanningTech", "phase1RadiationExternalBeamTech");
+        _RENAMED_LONG_NAACCR_18_IDS.put("phase1RadiationPrimaryTreatmentVolume", "phase1RadiationPrimaryTxVolume");
+        _RENAMED_LONG_NAACCR_18_IDS.put("phase1RadiationToDrainingLymphNodes", "phase1RadiationToDrainingLN");
+        _RENAMED_LONG_NAACCR_18_IDS.put("phase2RadiationExternalBeamPlanningTech", "phase2RadiationExternalBeamTech");
+        _RENAMED_LONG_NAACCR_18_IDS.put("phase2RadiationPrimaryTreatmentVolume", "phase2RadiationPrimaryTxVolume");
+        _RENAMED_LONG_NAACCR_18_IDS.put("phase2RadiationToDrainingLymphNodes", "phase2RadiationToDrainingLN");
+        _RENAMED_LONG_NAACCR_18_IDS.put("phase3RadiationExternalBeamPlanningTech", "phase3RadiationExternalBeamTech");
+        _RENAMED_LONG_NAACCR_18_IDS.put("phase3RadiationPrimaryTreatmentVolume", "phase3RadiationPrimaryTxVolume");
+        _RENAMED_LONG_NAACCR_18_IDS.put("phase3RadiationToDrainingLymphNodes", "phase3RadiationToDrainingLN");
+        _RENAMED_LONG_NAACCR_18_IDS.put("radiationTreatmentDiscontinuedEarly", "radiationTxDiscontinuedEarly");
+        _RENAMED_LONG_NAACCR_18_IDS.put("numberOfPhasesOfRadTreatmentToThisVolume", "numberPhasesOfRadTxToVolume");
+        _RENAMED_LONG_NAACCR_18_IDS.put("npcrDerivedAjcc8TnmPostTherapyStgGrp", "npcrDerivedAjcc8TnmPostStgGrp");
+        _RENAMED_LONG_NAACCR_18_IDS.put("chromosome1pLossOfHeterozygosity", "chromosome1pLossHeterozygosity");
+        _RENAMED_LONG_NAACCR_18_IDS.put("chromosome19qLossOfHeterozygosity", "chromosome19qLossHeterozygosity");
+        _RENAMED_LONG_NAACCR_18_IDS.put("bilirubinPretreatmentTotalLabValue", "bilirubinPretxTotalLabValue");
+        _RENAMED_LONG_NAACCR_18_IDS.put("bilirubinPretreatmentUnitOfMeasure", "bilirubinPretxUnitOfMeasure");
+        _RENAMED_LONG_NAACCR_18_IDS.put("creatininePretreatmentUnitOfMeasure", "creatininePretxUnitOfMeasure");
+        _RENAMED_LONG_NAACCR_18_IDS.put("estrogenReceptorPercentPositiveOrRange", "estrogenReceptorPercntPosOrRange");
+        _RENAMED_LONG_NAACCR_18_IDS.put("extranodalExtensionHeadAndNeckClinical", "extranodalExtensionHeadNeckClin");
+        _RENAMED_LONG_NAACCR_18_IDS.put("extranodalExtensionHeadAndNeckPathological", "extranodalExtensionHeadNeckPath");
+        _RENAMED_LONG_NAACCR_18_IDS.put("gestationalTrophoblasticPrognosticScoringIndex", "gestationalTrophoblasticPxIndex");
+        _RENAMED_LONG_NAACCR_18_IDS.put("internationalNormalizedRatioForProthrombinTime", "iNRProthrombinTime");
+        _RENAMED_LONG_NAACCR_18_IDS.put("ipsilateralAdrenalGlandInvolvement", "ipsilateralAdrenalGlandInvolve");
+        _RENAMED_LONG_NAACCR_18_IDS.put("lnAssessmentMethodFemoralInguinal", "lnAssessMethodFemoralInguinal");
+        _RENAMED_LONG_NAACCR_18_IDS.put("lnAssessmentMethodParaAortic", "lnAssessMethodParaaortic");
+        _RENAMED_LONG_NAACCR_18_IDS.put("lnAssessmentMethodPelvic", "lnAssessMethodPelvic");
+        _RENAMED_LONG_NAACCR_18_IDS.put("lnDistantAssessmentMethod", "lnDistantAssessMethod");
+        _RENAMED_LONG_NAACCR_18_IDS.put("lnStatusFemoralInguinalParaAorticPelvic", "lnStatusFemorInguinParaaortPelv");
+        _RENAMED_LONG_NAACCR_18_IDS.put("methylationOfO6MethylguanineMethyltransferase", "methylationOfO6MGMT");
+        _RENAMED_LONG_NAACCR_18_IDS.put("oncotypeDxRecurrenceScoreInvasive", "oncotypeDxRecurrenceScoreInvasiv");
+        _RENAMED_LONG_NAACCR_18_IDS.put("progesteroneReceptorPercentPositiveOrRange", "progesteroneRecepPrcntPosOrRange");
+        _RENAMED_LONG_NAACCR_18_IDS.put("progesteroneReceptorSummary", "progesteroneRecepSummary");
+        _RENAMED_LONG_NAACCR_18_IDS.put("progesteroneReceptorTotalAllredScore", "progesteroneRecepTotalAllredScor");
+        _RENAMED_LONG_NAACCR_18_IDS.put("residualTumorVolumePostCytoreduction", "residualTumVolPostCytoreduction");
+        _RENAMED_LONG_NAACCR_18_IDS.put("serumBeta2MicroglobulinPretreatmentLevel", "serumBeta2MicroglobulinPretxLvl");
+        _RENAMED_LONG_NAACCR_18_IDS.put("visceralAndParietalPleuralInvasion", "visceralParietalPleuralInvasion");
+        _RENAMED_LONG_NAACCR_18_IDS.put("dateOfSentinelLymphNodeBiopsy", "dateSentinelLymphNodeBiopsy");
+    }
+
     /**
      * Private constructor, no instanciation...
      */
     private NaaccrXmlDictionaryUtils() {
+    }
+
+    /**
+     * Returns the N18 IDs that got renamed as part of the new v1.4 specifications, keys are the old (long) IDs, values are the new (short) IDs.
+     */
+    public static Map<String, String> getRenamedLongNaaccr18Ids() {
+        return Collections.unmodifiableMap(_RENAMED_LONG_NAACCR_18_IDS);
     }
 
     /**
@@ -382,8 +435,8 @@ public final class NaaccrXmlDictionaryUtils {
                 errors.add("'naaccrId' attribute is required");
             else if (!idPattern.matcher(item.getNaaccrId()).matches())
                 errors.add("'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + item.getNaaccrId());
-            else if (item.getNaaccrId().length() > 50)
-                errors.add("'naaccrId' attribute can only be 50 characters long: " + item.getNaaccrId());
+            else if (item.getNaaccrId().length() > 32)
+                errors.add("'naaccrId' attribute can only be 32 characters long: " + item.getNaaccrId());
             else if (naaccrIds.contains(item.getNaaccrId()))
                 errors.add("'naaccrId' attribute must be unique, already saw " + item.getNaaccrId());
             naaccrIds.add(item.getNaaccrId());
@@ -440,7 +493,7 @@ public final class NaaccrXmlDictionaryUtils {
                     errors.add("invalid attribute 'regexValidation'");
                 else {
                     try {
-                        //noinspection ResultOfMethodCallIgnored
+                        //noinspection
                         Pattern.compile(item.getRegexValidation());
                     }
                     catch (PatternSyntaxException e) {

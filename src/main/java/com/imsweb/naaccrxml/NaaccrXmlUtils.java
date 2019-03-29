@@ -37,7 +37,7 @@ import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 public class NaaccrXmlUtils {
 
     // specification version that this library implements (will be used when writing XML files)
-    public static final String CURRENT_SPECIFICATION_VERSION = SpecificationVersion.SPEC_1_3;
+    public static final String CURRENT_SPECIFICATION_VERSION = SpecificationVersion.SPEC_1_4;
 
     // structure tags in the XML
     public static final String NAACCR_XML_TAG_ROOT = "NaaccrData";
@@ -257,14 +257,14 @@ public class NaaccrXmlUtils {
      * <br><br/>
      * This is NOT correct:
      * <code>
-     *     for (String line : lines)
-     *         NaaccrXmlUtils.lineToPatient(line, new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT));
+     * for (String line : lines)
+     * NaaccrXmlUtils.lineToPatient(line, new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT));
      * </code>
      * This is correct:
      * <code>
-     *     NaaccrContext context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT);
-     *     for (String line : lines)
-     *         NaaccrXmlUtils.lineToPatient(line, context);
+     * NaaccrContext context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT);
+     * for (String line : lines)
+     * NaaccrXmlUtils.lineToPatient(line, context);
      * </code>
      * @param line the line to translate, required
      * @param context the context to use for the translation, required
@@ -306,14 +306,14 @@ public class NaaccrXmlUtils {
      * <br><br/>
      * This is NOT correct:
      * <code>
-     *     for (Patient patient : patients)
-     *         NaaccrXmlUtils.patientToLine(patient, new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT));
+     * for (Patient patient : patients)
+     * NaaccrXmlUtils.patientToLine(patient, new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT));
      * </code>
      * This is correct:
      * <code>
-     *     NaaccrContext context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT);
-     *     for (Patient patient : patients)
-     *         NaaccrXmlUtils.patientToLine(patient, context);
+     * NaaccrContext context = new NaaccrContext(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT);
+     * for (Patient patient : patients)
+     * NaaccrXmlUtils.patientToLine(patient, context);
      * </code>
      * @param patient the patient to translate, required
      * @param context the context to use for the translation, required
