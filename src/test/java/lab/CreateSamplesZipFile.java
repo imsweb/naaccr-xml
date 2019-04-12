@@ -33,7 +33,7 @@ public class CreateSamplesZipFile {
         NaaccrXmlDataGenerator absGenerator = new NaaccrXmlDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_XML_18_INCIDENCE);
         IntStream.of(10, 100, 1000).forEach(i -> {
             try {
-                absGenerator.generateFile(Paths.get("docs/samples/naaccr-xml-sample-v180-incidence-" + i + ".gz").toFile(), i);
+                absGenerator.generateFile(Paths.get("docs/samples/naaccr-xml-sample-v180-incidence-" + i + ".xml.gz").toFile(), i);
             }
             catch (IOException e) {
                 throw new RuntimeException(e);
@@ -43,7 +43,7 @@ public class CreateSamplesZipFile {
         NaaccrXmlDataGenerator incGenerator = new NaaccrXmlDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_XML_18_ABSTRACT);
         IntStream.of(10, 100, 1000).forEach(i -> {
             try {
-                incGenerator.generateFile(Paths.get("docs/samples/naaccr-xml-sample-v180-abstract-" + i + ".gz").toFile(), i);
+                incGenerator.generateFile(Paths.get("docs/samples/naaccr-xml-sample-v180-abstract-" + i + ".xml.gz").toFile(), i);
             }
             catch (IOException e) {
                 throw new RuntimeException(e);
