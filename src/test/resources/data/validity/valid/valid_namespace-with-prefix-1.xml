@@ -2,7 +2,7 @@
 
 <!-- standard file defining a prefix for the NAACCR namespace -->
 
-<naaccr:NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml" recordType="I" specificationVersion="1.1" xmlns:naaccr="http://naaccr.org/naaccrxml">
+<naaccr:NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" recordType="I" specificationVersion="1.3" xmlns:naaccr="http://naaccr.org/naaccrxml">
     <naaccr:Item naaccrId="registryId">0000000001</naaccr:Item>
     <naaccr:Patient>
         <naaccr:Item naaccrId="patientIdNumber">00000001</naaccr:Item>
