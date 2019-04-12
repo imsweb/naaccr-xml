@@ -2,7 +2,7 @@
 
 <!-- invalid because the root contains a patient data item -->
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" recordType="A" specificationVersion="1.3" xmlns="http://naaccr.org/naaccrxml">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" recordType="A" specificationVersion="1.4" xmlns="http://naaccr.org/naaccrxml">
     <Item naaccrId="patientIdNumber">00000000</Item>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>

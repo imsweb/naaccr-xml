@@ -2,7 +2,7 @@
 
 <!-- user-define root-level extension, properly defined within its own namespace -->
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" recordType="I" specificationVersion="1.3" xmlns="http://naaccr.org/naaccrxml" xmlns:other="http://whatever.org">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" recordType="I" specificationVersion="1.4" xmlns="http://naaccr.org/naaccrxml" xmlns:other="http://whatever.org">
     <Item naaccrId="registryId">0000000001</Item>
     <other:MyOuterTag>
         <other:MyInnerTag>Something</other:MyInnerTag>

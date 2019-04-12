@@ -2,7 +2,7 @@
 
 <!-- invalid because the patient contains a tumor data item -->
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" recordType="A" specificationVersion="1.3" xmlns="http://naaccr.org/naaccrxml">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" recordType="A" specificationVersion="1.4" xmlns="http://naaccr.org/naaccrxml">
     <Item naaccrId="registryId">0000000001</Item>
     <Patient>
         <Item naaccrId="primarySite">C123</Item>

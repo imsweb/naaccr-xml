@@ -2,7 +2,7 @@
 
 <!-- invalid because the file is NAACCR 14 but it defines an item introduced in NAACCR 16 -->
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" recordType="A" specificationVersion="1.3" xmlns="http://naaccr.org/naaccrxml">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml" recordType="A" specificationVersion="1.4" xmlns="http://naaccr.org/naaccrxml">
     <Item naaccrId="registryId">0000000001</Item>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
