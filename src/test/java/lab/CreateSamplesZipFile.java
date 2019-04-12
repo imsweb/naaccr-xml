@@ -10,21 +10,45 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.IntStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
 
+import com.imsweb.datagenerator.naaccr.NaaccrXmlDataGenerator;
+import com.imsweb.layout.LayoutFactory;
+
 public class CreateSamplesZipFile {
 
     public static void main(String[] args) throws IOException {
-        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(Paths.get("docs/naaccr-xml-samples-v160.zip").toFile()))) {
+        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(Paths.get("docs/samples/naaccr-xml-samples-v180.zip").toFile()))) {
             Path dir = Paths.get("src/test/resources/data/validity");
             Files.newDirectoryStream(dir.resolve("valid")).forEach(path -> addToZip(path.toFile(), zos));
             Files.newDirectoryStream(dir.resolve("invalid")).forEach(path -> addToZip(path.toFile(), zos));
             Files.newDirectoryStream(dir.resolve("invalid_relaxed")).forEach(path -> addToZip(path.toFile(), zos));
             Files.newDirectoryStream(dir.resolve("invalid_library_only")).forEach(path -> addToZip(path.toFile(), zos));
         }
+
+        NaaccrXmlDataGenerator absGenerator = new NaaccrXmlDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_XML_18_INCIDENCE);
+        IntStream.of(10, 100, 1000).forEach(i -> {
+            try {
+                absGenerator.generateFile(Paths.get("docs/samples/naaccr-xml-sample-v180-incidence-" + i + ".gz").toFile(), i);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        NaaccrXmlDataGenerator incGenerator = new NaaccrXmlDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_XML_18_ABSTRACT);
+        IntStream.of(10, 100, 1000).forEach(i -> {
+            try {
+                incGenerator.generateFile(Paths.get("docs/samples/naaccr-xml-sample-v180-abstract-" + i + ".gz").toFile(), i);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     // helper

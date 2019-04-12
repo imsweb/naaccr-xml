@@ -1,5 +1,7 @@
 ## NAACCR XML Version History
 
+**Version 5.2 (not released yet)**
+
 **Version 6.0**
 
 - Updated default specifications version from 1.3 to 1.4.

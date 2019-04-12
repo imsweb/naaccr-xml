@@ -2,7 +2,7 @@
 
 <!-- invalid because patient tag provides an attribute (user-defined attributes are only allowed at the root level, and with proper namespace) -->
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml" recordType="I" xmlns="http://naaccr.org/naaccrxml">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" recordType="I" xmlns="http://naaccr.org/naaccrxml">
     <Item naaccrId="registryId">0000000001</Item>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
