@@ -1,10 +1,14 @@
 ## NAACCR XML Version History
 
-
 **Version 6.0 (not released yet)**
 
 - Updated default specifications version from 1.3 to 1.4.
 - Changed maximum length of NAACCR IDs from 50 to 32 characters (specifications 1.4).
+
+**Version 5.2**
+
+- Fixed wrong expected length for Confidential format.
+- Updated embedded version of Java to 12.
 - Now setting the line number of the root naaccrData objects.
 - Updated embedded version of Java to 12 (this only affects the standalone program).
 
