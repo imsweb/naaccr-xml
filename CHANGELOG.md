@@ -1,7 +1,8 @@
 ## NAACCR XML Version History
 
-**Version 5.2 (not released yet)**
+**Version 5.2**
 
+- Fixed wrong expected length for Confidential format.
 - Updated embedded version of Java to 12.
 - Now setting the line number of the root naaccrData objects.
 

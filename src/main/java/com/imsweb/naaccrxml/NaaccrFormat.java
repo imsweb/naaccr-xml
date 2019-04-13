@@ -148,7 +148,7 @@ public final class NaaccrFormat {
                 break;
             case "confidential":
                 _recordType = "C";
-                _lineLength = _naaccrVersion.equals("180") ? 6934 : 5564;
+                _lineLength = _naaccrVersion.equals("180") ? 6154 : 5564;
                 break;
             case "incidence":
                 _recordType = "I";
