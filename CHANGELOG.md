@@ -4,23 +4,23 @@
 
 - Updated default specifications version from 1.3 to 1.4.
 - Changed maximum length of NAACCR IDs from 50 to 32 characters (specifications 1.4).
+- Updated embedded JRE to Java 12.0.1 (this only affects the standalone program).
 
 **Version 5.2**
 
 - Fixed wrong expected length for Confidential format.
-- Updated embedded version of Java to 12.
+- Updated embedded JRE to Java 12 (this only affects the standalone program).
 - Now setting the line number of the root naaccrData objects.
-- Updated embedded version of Java to 12 (this only affects the standalone program).
 
 **Version 5.1**
 
 - Fixed recordNumberRecode item in base 18 dictionary to have Tumor instead of Patient as its ParentXmlTag.
 - Added missing validation on record type attribute when loading a dictionary.
-- Updated embedded version of Java to 11.0.2 (this only affects the standalone program).
+- Updated embedded JRE to Java 11.0.2 (this only affects the standalone program).
 
 **Version 5.0**
 
-- Changed the release of the standalone program.
+- Changed the release of the standalone program, it now contains an embedded JRE.
 - Invalid TimeGenerated is now reported as a validation error instead of an exception.
 
 **Version 4.15**
