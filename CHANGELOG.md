@@ -1,20 +1,24 @@
 ## NAACCR XML Version History
 
+**Version 5.3 (not released yet)**
+
+- Updated embedded JRE to Java 12.0.1.
+
 **Version 5.2**
 
 - Fixed wrong expected length for Confidential format.
-- Updated embedded version of Java to 12.
+- Updated embedded JRE to Java 12.
 - Now setting the line number of the root naaccrData objects.
 
 **Version 5.1**
 
 - Fixed recordNumberRecode item in base 18 dictionary to have Tumor instead of Patient as its ParentXmlTag.
 - Added missing validation on record type attribute when loading a dictionary.
-- Updated embedded version of Java to 11.0.2.
+- Updated embedded JRE to Java 11.0.2.
 
 **Version 5.0**
 
-- Changed the release of the standalone GUI tool.
+- Changed the release of the standalone GUI tool, it now contains an embedded JRE.
 - Invalid TimeGenerated is now reported as a validation error instead of an exception.
 
 **Version 4.15**
