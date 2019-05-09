@@ -75,6 +75,42 @@ public class AbstractEntity {
     }
 
     /**
+     * Removes an item from this entity.
+     * @param naaccrId the item NAACCR ID to remove
+     * @return true if the item was removed, false otherwise
+     */
+    public boolean removeItem(String naaccrId) {
+        return removeItem(getItem(naaccrId));
+    }
+
+    /**
+     * Removes an item from this entity.
+     * @param item the item to remove
+     * @return true if the item was removed, false otherwise
+     */
+    public boolean removeItem(Item item) {
+        if (item == null || item.getNaaccrId() == null)
+            return false;
+
+        // there is no equality defined on Item (one might argue this is wrong), and so we have to iterate over them and find the item by index...
+        int idx = -1;
+        for (int i = 0; i < _items.size(); i++) {
+            if (_items.get(i).getNaaccrId().equals(item.getNaaccrId())) {
+                idx = i;
+                break;
+            }
+        }
+
+        if (idx != -1) {
+            _items.remove(idx);
+            _cachedById.remove(item.getNaaccrId());
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the item corresponding to the requested ID, maybe null.
      * <br/><br/>
      * The returned item will be null if its value is null, so this method is not very useful.  If you want to just get the value,

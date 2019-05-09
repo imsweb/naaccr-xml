@@ -2,6 +2,7 @@
 
 **Version 5.3 (not released yet)**
 
+- Added new methods on Patient and Tumor to remove a given data item.
 - Updated embedded JRE to Java 12.0.1.
 
 **Version 5.2**

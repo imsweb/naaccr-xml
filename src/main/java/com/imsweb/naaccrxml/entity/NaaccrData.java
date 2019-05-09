@@ -18,20 +18,30 @@ import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
  */
 public class NaaccrData extends AbstractEntity {
 
+    // the base dictionary URI
     private String _baseDictionaryUri;
 
+    // the list of user-defined dictionary URIs
     private List<String> _userDictionaryUri;
 
+    // the record type(s)
     private String _recordType;
 
+    // the time generated
     private Date _timeGenerated;
 
+    // the NAACCR XML specification version
     private String _specificationVersion;
 
+    // any extra (non-standard) root attributes
     private Map<String, String> _extraRootParameters;
 
+    // the list of patients
     private List<Patient> _patients;
 
+    /**
+     * Constructor.
+     */
     public NaaccrData() {
         super();
         _userDictionaryUri = new ArrayList<>();
@@ -39,6 +49,10 @@ public class NaaccrData extends AbstractEntity {
         _patients = new ArrayList<>();
     }
 
+    /**
+     * Constructor.
+     * @param format the format for this naaccr data.
+     */
     public NaaccrData(String format) {
         this();
         NaaccrFormat naaccrFormat = NaaccrFormat.getInstance(format);
@@ -95,14 +109,33 @@ public class NaaccrData extends AbstractEntity {
         _extraRootParameters.put(key, value);
     }
 
+    /**
+     * Returns a non-modifiable view of the patients.
+     * @return the patients for this naaccr data
+     */
     public List<Patient> getPatients() {
         return Collections.unmodifiableList(_patients);
     }
 
+    /**
+     * Adds the given patient to this naaccr data.
+     */
     public void addPatient(Patient patient) {
         _patients.add(patient);
     }
 
+    /**
+     * Removes the patient for the specified index.
+     * @param patientIdx patient index, must fall in the range of existing patients.
+     */
+    public void removePatient(int patientIdx) {
+        _patients.remove(patientIdx);
+    }
+
+    /**
+     * Sets the patients for this naaccr data.
+     * @param patients patients to set, if null, an empty collection will be used.
+     */
     public void setPatients(List<Patient> patients) {
         _patients.clear();
         if (patients != null)

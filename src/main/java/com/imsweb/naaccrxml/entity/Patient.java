@@ -15,13 +15,21 @@ import com.imsweb.naaccrxml.NaaccrValidationError;
  */
 public class Patient extends AbstractEntity {
 
+    // the list of tumors
     protected List<Tumor> _tumors;
 
+    /**
+     * Constructor.
+     */
     public Patient() {
         super();
         _tumors = new ArrayList<>();
     }
 
+    /**
+     * Returns a non-modifiable view of the tumors.
+     * @return the tumors for this patient
+     */
     public List<Tumor> getTumors() {
         return Collections.unmodifiableList(_tumors);
     }
@@ -38,10 +46,25 @@ public class Patient extends AbstractEntity {
         return results;
     }
 
+    /**
+     * Adds the given tumor to this patient.
+     */
     public void addTumor(Tumor tumor) {
         _tumors.add(tumor);
     }
 
+    /**
+     * Removes the tumor for the specified index.
+     * @param tumorIdx tumor index, must fall in the range of existing tumors.
+     */
+    public void removeTumor(int tumorIdx) {
+        _tumors.remove(tumorIdx);
+    }
+
+    /**
+     * Sets the tumors for this patient.
+     * @param tumors tumors to set, if null, an empty collection will be used.
+     */
     public void setTumors(List<Tumor> tumors) {
         _tumors.clear();
         if (tumors != null)
