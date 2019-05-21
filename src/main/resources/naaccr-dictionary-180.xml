@@ -5358,7 +5358,7 @@
             startColumn="2944"
             length="1"
             recordTypes="A,M,C,I"
-            parentXmlElement="Patient"
+            parentXmlElement="Tumor"
             dataType="digits"/>
         <ItemDef naaccrId="seerOtherCod"
             naaccrNum="1915"
@@ -5366,7 +5366,7 @@
             startColumn="2945"
             length="1"
             recordTypes="A,M,C,I"
-            parentXmlElement="Patient"
+            parentXmlElement="Tumor"
             dataType="digits"/>
         <ItemDef naaccrId="icdRevisionNumber"
             naaccrNum="1920"
