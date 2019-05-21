@@ -3,23 +3,23 @@
 **Version 5.3 (not released yet)**
 
 - Added new methods on Patient and Tumor to remove a given data item.
-- Updated embedded JRE to Java 12.0.1.
+- Updated embedded JRE to Java 12.0.1 (this only affects the standalone program).
 
 **Version 5.2**
 
 - Fixed wrong expected length for Confidential format.
-- Updated embedded JRE to Java 12.
+- Updated embedded JRE to Java 12 (this only affects the standalone program).
 - Now setting the line number of the root naaccrData objects.
 
 **Version 5.1**
 
 - Fixed recordNumberRecode item in base 18 dictionary to have Tumor instead of Patient as its ParentXmlTag.
 - Added missing validation on record type attribute when loading a dictionary.
-- Updated embedded JRE to Java 11.0.2.
+- Updated embedded JRE to Java 11.0.2 (this only affects the standalone program).
 
 **Version 5.0**
 
-- Changed the release of the standalone GUI tool, it now contains an embedded JRE.
+- Changed the release of the standalone program, it now contains an embedded JRE.
 - Invalid TimeGenerated is now reported as a validation error instead of an exception.
 
 **Version 4.15**
@@ -118,7 +118,8 @@
 
 **Version 4.0**
 
-- Relaxed the validation of the NAACCR numbers in user-defined dictionaries (specification 1.3).
+- Updated default specifications version from 1.2 to 1.3.
+- Relaxed the validation of the NAACCR numbers in user-defined dictionaries (specifications 1.3).
 - Relaxed the rule requiring all the user dictionaries from data files to be provided to the library.
 - Changed type of causeOfDeath in all base dictionaries from digits to text.
 - Fixed start column of grouped item extendOfDisease10Dig in all base dictionaries.
@@ -127,13 +128,14 @@
 
 **Version 3.0**
 
+- Updated default specifications version from 1.1 to 1.2.
 - Added the ability to cache a runtime dictionary when using the XML reader/writer inside a loop.
 - Added 'getDefault()' method to options and configuration objects.
 - Now caching the internal dictionaries (base and default user) in the dictionary utility class.
-- Added support for multiple user dictionaries (specification 1.2).
-- Added support for grouped items definition in the base dictionaries (specification 1.2).
-- Relaxed the type of many items in standard base dictionaries (specification 1.2).
-- Removed support for "regexValidation" in dictionaries (specification 1.2).
+- Added support for multiple user dictionaries (specifications 1.2).
+- Added support for grouped items definition in the base dictionaries (specifications 1.2).
+- Relaxed the type of many items in standard base dictionaries (specifications 1.2).
+- Removed support for "regexValidation" in dictionaries (specifications 1.2).
 - Added full support for extensions (user-defined XML blocks) at the NaaccrData, Patient and Tumor levels.
 - Added better support for non-printable control characters; those will be ignored by default when writing item values; an error can be thrown instead by setting the 'ignoreControlCharacters' options to false.
 - Carriage Returns (CR) are now translated to Line Feed (LF) when writing item values; this library was writing it as '&#xd;' which it technically correct but was causing some confusion.
@@ -155,14 +157,15 @@
 
 **Version 2.0**
 
+- Updated default specifications version from 1.0 to 1.1.
 - Removed "any-attribute" from the XSD since those are not properly supported; only kept the one for the NaaccrData tag.
 - Added line number on the item object; populated only when reading items.
 - Validation errors for specific items are now reported directly on those items instead of the parent entity.
 - Added included/excluded list of items to the options of the standalone GUI.
 - Fixed a bug where values too long were not correctly reported as errors, or not correctly truncated.
-- Added optional attribute "allowUnlimitedText" to the dictionary item tag (specification 1.1).
-- Made start column optional in user-defined dictionaries (specification 1.1).
-- Made NAACCR version optional in user-defined dictionaries  specification 1.1).
+- Added optional attribute "allowUnlimitedText" to the dictionary item tag (specifications 1.1).
+- Made start column optional in user-defined dictionaries (specifications 1.1).
+- Made NAACCR version optional in user-defined dictionaries  specifications 1.1).
 - Added optional attribute "specificationVersion" to the root dictionary and data XML tags, now set to 1.1 by default.
 - Updated commons-lang3 dependency to version 3.4.
 - Updated commons-io dependency to version 2.5.
