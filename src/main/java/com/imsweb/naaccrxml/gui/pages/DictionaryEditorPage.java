@@ -337,6 +337,9 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         toolbar.add(createToolbarSeparation());
         toolbar.add(Box.createHorizontalStrut(10));
         toolbar.add(createToolbarButton("validate", "toolbar-validate", "Validate dictionary"));
+        toolbar.add(createToolbarSeparation());
+        toolbar.add(Box.createHorizontalStrut(10));
+        toolbar.add(createToolbarButton("csv", "toolbar-csv", "Extract to CSV"));
 
         return toolbar;
     }
@@ -604,6 +607,14 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         return dictionary;
     }
 
+    private void performExtractToCsv() {
+        NaaccrDictionary dictionary = performValidate(false);
+        if (dictionary != null)
+            performExtractToCsv(dictionary, dictionary.getNaaccrVersion() == null ? "my-naaccr-dictionary.csv" : ("my-naaccr-" + dictionary.getNaaccrVersion() + "-dictionary.csv"));
+        else
+            JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Only a valid dictionary can be extracted.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
     private void performAddRow(boolean relativeToSelected, boolean insertBefore) {
 
         Vector<Object> row = new Vector<>();
@@ -676,6 +687,9 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
                 break;
             case "toolbar-validate":
                 performValidate(true);
+                break;
+            case "toolbar-csv":
+                performExtractToCsv();
                 break;
             case "table-add-row-before":
                 performAddRow(true, true);

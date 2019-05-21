@@ -9,8 +9,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Vector;
 import java.util.regex.PatternSyntaxException;
 
@@ -18,9 +19,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -84,7 +83,11 @@ public class DictionariesPage extends AbstractPage {
         controlsPnl.add(Box.createHorizontalStrut(25));
         JButton extractBtn = new JButton("Extract to CSV...");
         extractBtn.setOpaque(false);
-        extractBtn.addActionListener(e -> performExtractToCsv((NaaccrDictionaryWrapper)selectionBox.getSelectedItem()));
+        extractBtn.addActionListener(e -> {
+            NaaccrDictionaryWrapper wrapper = (NaaccrDictionaryWrapper)selectionBox.getSelectedItem();
+            String targetFilename = (wrapper.isBase() ? "naaccr-dictionary-" : "user-defined-naaccr-dictionary-") + wrapper.getDictionary().getNaaccrVersion() + ".csv";
+            performExtractToCsv(wrapper.getDictionary(), targetFilename);
+        });
         controlsPnl.add(extractBtn);
         controlsPnl.add(Box.createHorizontalStrut(25));
 
@@ -248,46 +251,17 @@ public class DictionariesPage extends AbstractPage {
         _itemsTbl.getColumnModel().getColumn(7).setPreferredWidth(40); // data type
         _itemsTbl.getColumnModel().getColumn(9).setPreferredWidth(40); // trim
 
-        try {
-            if (dictionary.getDictionaryUri().contains("user-defined"))
-                _xmlArea.setText(
-                        IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("user-defined-naaccr-dictionary-" + dictionary.getNaaccrVersion() + ".xml"), "UTF-8"));
+        String dictionaryUrl = (dictionaryWrapper.isBase() ? "naaccr-dictionary-" : "\"user-defined-naaccr-dictionary-") + dictionary.getNaaccrVersion() + ".xml";
+        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(dictionaryUrl)) {
+            if (is != null)
+                _xmlArea.setText(IOUtils.toString(is, StandardCharsets.UTF_8));
             else
-                _xmlArea.setText(IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-" + dictionary.getNaaccrVersion() + ".xml"), "UTF-8"));
+                _xmlArea.setText("Unable to read internal dictionary...");
         }
         catch (IOException ex) {
             _xmlArea.setText("Unable to read dictionary...");
         }
         _xmlArea.setCaretPosition(0);
-    }
-
-    private void performExtractToCsv(NaaccrDictionaryWrapper dictionary) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setDialogTitle("Select Target File");
-        fileChooser.setApproveButtonToolTipText("Create CSV");
-        fileChooser.setMultiSelectionEnabled(false);
-        @SuppressWarnings("ConstantConditions")
-        String prefix = dictionary.isBase() ? "naaccr-dictionary-" : "user-defined-naaccr-dictionary-";
-        fileChooser.setSelectedFile(new File(fileChooser.getCurrentDirectory(), prefix + dictionary.getDictionary().getNaaccrVersion() + ".csv"));
-        if (fileChooser.showDialog(DictionariesPage.this, "Create CSV") == JFileChooser.APPROVE_OPTION) {
-            File targetFile = fileChooser.getSelectedFile();
-            if (targetFile.exists()) {
-                int result = JOptionPane.showConfirmDialog(DictionariesPage.this, "Target file already exists, are you sure you want to replace it?", "Confirmation",
-                        JOptionPane.YES_NO_OPTION);
-                if (result != JOptionPane.YES_OPTION)
-                    return;
-            }
-
-            try {
-                NaaccrXmlDictionaryUtils.writeDictionaryToCsv(dictionary.getDictionary(), targetFile);
-                JOptionPane.showMessageDialog(DictionariesPage.this, "Extract successfully created!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            }
-            catch (IOException | RuntimeException e) {
-                String msg = "Unexpected error creating CSV file\n\n" + e.getMessage();
-                JOptionPane.showMessageDialog(DictionariesPage.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
     }
 
     private static class NaaccrDictionaryWrapper {
