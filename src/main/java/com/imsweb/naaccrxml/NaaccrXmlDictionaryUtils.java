@@ -269,11 +269,23 @@ public final class NaaccrXmlDictionaryUtils {
             if (dictionary.getSpecificationVersion() == null)
                 dictionary.setSpecificationVersion(SpecificationVersion.SPEC_1_0);
 
-            // default value for record types
-            if (dictionary.getItems() != null)
-                for (NaaccrDictionaryItem item : dictionary.getItems())
+            // apply default values
+            if (dictionary.getItems() != null) {
+                for (NaaccrDictionaryItem item : dictionary.getItems()) {
+                    // record types (defaults to all types)
                     if (item.getRecordTypes() == null)
                         item.setRecordTypes(NaaccrFormat.ALL_RECORD_TYPES);
+                    // data type (defaults to text)
+                    if (item.getDataType() == null)
+                        item.setDataType(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
+                    // padding (defaults to right-blank)
+                    if (item.getPadding() == null)
+                        item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
+                    // trimming (defaults to all)
+                    if (item.getTrim() == null)
+                        item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL);
+                }
+            }
 
             // let's not validate the internal dictionaries, we know they are valid
             String uri = dictionary.getDictionaryUri();
@@ -440,7 +452,7 @@ public final class NaaccrXmlDictionaryUtils {
                     errors.add("invalid attribute 'regexValidation'");
                 else {
                     try {
-                        //noinspection ResultOfMethodCallIgnored
+                        //noinspection
                         Pattern.compile(item.getRegexValidation());
                     }
                     catch (PatternSyntaxException e) {
@@ -751,7 +763,7 @@ public final class NaaccrXmlDictionaryUtils {
                             writer.write("\",");
                             writer.write(item.getParentXmlElement() == null ? "" : item.getParentXmlElement());
                             writer.write(",");
-                            writer.write(item.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : item.getDataType());
+                            writer.write(item.getDataType() == null ? "" : item.getDataType());
                             writer.newLine();
                         }
                         catch (IOException | RuntimeException ex1) {
