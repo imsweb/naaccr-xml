@@ -2,6 +2,7 @@
 
 **Version 5.3 (not released yet)**
 
+- Fixed parent XML element to be Tumor instead of Patient for seerCaseSpecificCod (1914) and seerOtherCod (1915) in N18 dictionary. 
 - Added new methods on Patient and Tumor to remove a given data item.
 - Updated embedded JRE to Java 12.0.1 (this only affects the standalone program).
 

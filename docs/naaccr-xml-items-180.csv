@@ -669,10 +669,10 @@ secondaryDiagnosis6,3790,"Secondary Diagnosis 6",1612,7,"A,M,C,I",Tumor,text
 secondaryDiagnosis7,3792,"Secondary Diagnosis 7",1619,7,"A,M,C,I",Tumor,text
 secondaryDiagnosis8,3794,"Secondary Diagnosis 8",1626,7,"A,M,C,I",Tumor,text
 secondaryDiagnosis9,3796,"Secondary Diagnosis 9",1633,7,"A,M,C,I",Tumor,text
-seerCauseSpecificCod,1914,"SEER Cause Specific COD",2944,1,"A,M,C,I",Patient,digits
+seerCauseSpecificCod,1914,"SEER Cause Specific COD",2944,1,"A,M,C,I",Tumor,digits
 seerCodingSysCurrent,2120,"SEER Coding Sys--Current",2617,1,"A,M,C,I",Tumor,mixed
 seerCodingSysOriginal,2130,"SEER Coding Sys--Original",2618,1,"A,M,C,I",Tumor,mixed
-seerOtherCod,1915,"SEER Other COD",2945,1,"A,M,C,I",Patient,digits
+seerOtherCod,1915,"SEER Other COD",2945,1,"A,M,C,I",Tumor,digits
 seerRecordNumber,2190,"SEER Record Number",2636,2,"A,M,C,I",Tumor,digits
 seerSiteSpecificFact1,3700,"SEER Site-Specific Fact 1",1520,1,"A,M,C,I",Tumor,digits
 seerSiteSpecificFact2,3702,"SEER Site-Specific Fact 2",1521,1,"A,M,C,I",Tumor,digits
