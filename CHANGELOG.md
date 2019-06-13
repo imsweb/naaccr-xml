@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 5.4**
+
+- Fixed a few items being included by mistake in the confidential format.
+
 **Version 5.3**
 
 - Fixed parent XML element to be Tumor instead of Patient for seerCaseSpecificCod (1914) and seerOtherCod (1915) in N18 dictionary.

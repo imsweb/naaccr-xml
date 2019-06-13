@@ -23,6 +23,8 @@ import org.junit.Test;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
+import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_REC_TYPE_CONFIDENTIAL;
+import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_REC_TYPE_INCIDENCE;
 import static org.junit.Assert.fail;
 
 public class NaaccrXmlDictionaryUtilsTest {
@@ -58,6 +60,14 @@ public class NaaccrXmlDictionaryUtilsTest {
             for (NaaccrDictionaryItem item : items)
                 if (item.getNaaccrId().length() > 50)
                     fail("Found item with ID too long: " + item.getNaaccrId());
+
+            // check record type
+            for (NaaccrDictionaryItem item : items) {
+                if (item.getStartColumn() > NaaccrFormat.getInstance(version, NAACCR_REC_TYPE_INCIDENCE).getLineLength())
+                    Assert.assertFalse("Item " + item.getNaaccrId() + " has an invalid type definition: " + item.getRecordTypes(), item.getRecordTypes().contains(NAACCR_REC_TYPE_INCIDENCE));
+                if (item.getStartColumn() > NaaccrFormat.getInstance(version, NAACCR_REC_TYPE_CONFIDENTIAL).getLineLength())
+                    Assert.assertFalse("Item " + item.getNaaccrId() + " has an invalid type definition: " + item.getRecordTypes(), item.getRecordTypes().contains(NAACCR_REC_TYPE_CONFIDENTIAL));
+            }
         }
 
         // clear the caches, force other tests to reload them again
