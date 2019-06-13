@@ -2,7 +2,7 @@
 
 **Version 5.4**
 
-- Fixed a few items being included by mistake in the confidential format.
+- Fixed a few items being included by mistake in the confidential format in the version 18 dictionary.
 
 **Version 5.3**
 
