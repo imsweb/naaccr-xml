@@ -147,7 +147,7 @@
             naaccrName="Reserved 13"
             startColumn="6685"
             length="250"
-            recordTypes="A,M,C"
+            recordTypes="A,M"
             parentXmlElement="Tumor"
             trim="none"/>
         <ItemDef naaccrId="reserved14"

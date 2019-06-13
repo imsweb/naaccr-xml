@@ -5,6 +5,10 @@
 - Updated default specifications version from 1.3 to 1.4.
 - Changed maximum length of NAACCR IDs from 50 to 32 characters (specifications 1.4).
 
+**Version 5.4**
+
+- Fixed a few items being included by mistake in the confidential format in the version 18 dictionary.
+
 **Version 5.3**
 
 - Fixed parent XML element to be Tumor instead of Patient for seerCaseSpecificCod (1914) and seerOtherCod (1915) in N18 dictionary.

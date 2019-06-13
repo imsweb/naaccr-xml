@@ -451,36 +451,36 @@ overRideSurgDxconf,2020,"Over-ride Surg/DxConf",2585,1,"A,M,C,I",Tumor,digits
 overRideTnm3,1994,"Over-ride TNM 3",2582,1,"A,M,C,I",Tumor,digits
 overRideTnmStage,1992,"Over-ride TNM Stage",2580,1,"A,M,C,I",Tumor,digits
 overRideTnmTis,1993,"Over-ride TNM Tis",2581,1,"A,M,C,I",Tumor,digits
-pathDateSpecCollect1,7320,"Path Date Spec Collect 1",6200,14,"A,M,C",Tumor,date
-pathDateSpecCollect2,7321,"Path Date Spec Collect 2",6306,14,"A,M,C",Tumor,date
-pathDateSpecCollect3,7322,"Path Date Spec Collect 3",6412,14,"A,M,C",Tumor,date
-pathDateSpecCollect4,7323,"Path Date Spec Collect 4",6518,14,"A,M,C",Tumor,date
-pathDateSpecCollect5,7324,"Path Date Spec Collect 5",6624,14,"A,M,C",Tumor,date
-pathOrderPhysLicNo1,7100,"Path Order Phys Lic No 1",6241,20,"A,M,C",Tumor,text
-pathOrderPhysLicNo2,7101,"Path Order Phys Lic No 2",6347,20,"A,M,C",Tumor,text
-pathOrderPhysLicNo3,7102,"Path Order Phys Lic No 3",6453,20,"A,M,C",Tumor,text
-pathOrderPhysLicNo4,7103,"Path Order Phys Lic No 4",6559,20,"A,M,C",Tumor,text
-pathOrderPhysLicNo5,7104,"Path Order Phys Lic No 5",6665,20,"A,M,C",Tumor,text
-pathOrderingFacNo1,7190,"Path Ordering Fac No 1",6216,25,"A,M,C",Tumor,text
-pathOrderingFacNo2,7191,"Path Ordering Fac No 2",6322,25,"A,M,C",Tumor,text
-pathOrderingFacNo3,7192,"Path Ordering Fac No 3",6428,25,"A,M,C",Tumor,text
-pathOrderingFacNo4,7193,"Path Ordering Fac No 4",6534,25,"A,M,C",Tumor,text
-pathOrderingFacNo5,7194,"Path Ordering Fac No 5",6640,25,"A,M,C",Tumor,text
-pathReportNumber1,7090,"Path Report Number 1",6180,20,"A,M,C",Tumor,text
-pathReportNumber2,7091,"Path Report Number 2",6286,20,"A,M,C",Tumor,text
-pathReportNumber3,7092,"Path Report Number 3",6392,20,"A,M,C",Tumor,text
-pathReportNumber4,7093,"Path Report Number 4",6498,20,"A,M,C",Tumor,text
-pathReportNumber5,7094,"Path Report Number 5",6604,20,"A,M,C",Tumor,text
-pathReportType1,7480,"Path Report Type 1",6214,2,"A,M,C",Tumor,digits
-pathReportType2,7481,"Path Report Type 2",6320,2,"A,M,C",Tumor,digits
-pathReportType3,7482,"Path Report Type 3",6426,2,"A,M,C",Tumor,digits
-pathReportType4,7483,"Path Report Type 4",6532,2,"A,M,C",Tumor,digits
-pathReportType5,7484,"Path Report Type 5",6638,2,"A,M,C",Tumor,digits
-pathReportingFacId1,7010,"Path Reporting Fac ID 1",6155,25,"A,M,C",Tumor,text
-pathReportingFacId2,7011,"Path Reporting Fac ID 2",6261,25,"A,M,C",Tumor,text
-pathReportingFacId3,7012,"Path Reporting Fac ID 3",6367,25,"A,M,C",Tumor,text
-pathReportingFacId4,7013,"Path Reporting Fac ID 4",6473,25,"A,M,C",Tumor,text
-pathReportingFacId5,7014,"Path Reporting Fac ID 5",6579,25,"A,M,C",Tumor,text
+pathDateSpecCollect1,7320,"Path Date Spec Collect 1",6200,14,"A,M",Tumor,date
+pathDateSpecCollect2,7321,"Path Date Spec Collect 2",6306,14,"A,M",Tumor,date
+pathDateSpecCollect3,7322,"Path Date Spec Collect 3",6412,14,"A,M",Tumor,date
+pathDateSpecCollect4,7323,"Path Date Spec Collect 4",6518,14,"A,M",Tumor,date
+pathDateSpecCollect5,7324,"Path Date Spec Collect 5",6624,14,"A,M",Tumor,date
+pathOrderPhysLicNo1,7100,"Path Order Phys Lic No 1",6241,20,"A,M",Tumor,text
+pathOrderPhysLicNo2,7101,"Path Order Phys Lic No 2",6347,20,"A,M",Tumor,text
+pathOrderPhysLicNo3,7102,"Path Order Phys Lic No 3",6453,20,"A,M",Tumor,text
+pathOrderPhysLicNo4,7103,"Path Order Phys Lic No 4",6559,20,"A,M",Tumor,text
+pathOrderPhysLicNo5,7104,"Path Order Phys Lic No 5",6665,20,"A,M",Tumor,text
+pathOrderingFacNo1,7190,"Path Ordering Fac No 1",6216,25,"A,M",Tumor,text
+pathOrderingFacNo2,7191,"Path Ordering Fac No 2",6322,25,"A,M",Tumor,text
+pathOrderingFacNo3,7192,"Path Ordering Fac No 3",6428,25,"A,M",Tumor,text
+pathOrderingFacNo4,7193,"Path Ordering Fac No 4",6534,25,"A,M",Tumor,text
+pathOrderingFacNo5,7194,"Path Ordering Fac No 5",6640,25,"A,M",Tumor,text
+pathReportNumber1,7090,"Path Report Number 1",6180,20,"A,M",Tumor,text
+pathReportNumber2,7091,"Path Report Number 2",6286,20,"A,M",Tumor,text
+pathReportNumber3,7092,"Path Report Number 3",6392,20,"A,M",Tumor,text
+pathReportNumber4,7093,"Path Report Number 4",6498,20,"A,M",Tumor,text
+pathReportNumber5,7094,"Path Report Number 5",6604,20,"A,M",Tumor,text
+pathReportType1,7480,"Path Report Type 1",6214,2,"A,M",Tumor,digits
+pathReportType2,7481,"Path Report Type 2",6320,2,"A,M",Tumor,digits
+pathReportType3,7482,"Path Report Type 3",6426,2,"A,M",Tumor,digits
+pathReportType4,7483,"Path Report Type 4",6532,2,"A,M",Tumor,digits
+pathReportType5,7484,"Path Report Type 5",6638,2,"A,M",Tumor,digits
+pathReportingFacId1,7010,"Path Reporting Fac ID 1",6155,25,"A,M",Tumor,text
+pathReportingFacId2,7011,"Path Reporting Fac ID 2",6261,25,"A,M",Tumor,text
+pathReportingFacId3,7012,"Path Reporting Fac ID 3",6367,25,"A,M",Tumor,text
+pathReportingFacId4,7013,"Path Reporting Fac ID 4",6473,25,"A,M",Tumor,text
+pathReportingFacId5,7014,"Path Reporting Fac ID 5",6579,25,"A,M",Tumor,text
 patientIdNumber,20,"Patient ID Number",42,8,"A,M,C,I",Patient,digits
 patientSystemIdHosp,21,"Patient System ID-Hosp",50,8,"A,M,C,I",Tumor,digits
 pediatricStage,1120,"Pediatric Stage",1289,2,"A,M,C,I",Tumor,text
@@ -572,7 +572,7 @@ reserved09,1740,"Reserved 09",2999,50,"A,M,C,I",Tumor,text
 reserved10,1835,"Reserved 10",4805,100,"A,M,C",Tumor,text
 reserved11,1900,"Reserved 11",4965,50,"A,M,C",Tumor,text
 reserved12,2510,"Reserved 12",6105,50,"A,M,C",Tumor,text
-reserved13,2080,"Reserved 13",6685,250,"A,M,C",Tumor,text
+reserved13,2080,"Reserved 13",6685,250,"A,M",Tumor,text
 reserved14,2210,"Reserved 14",22195,2000,"A,M",Tumor,text
 reserved15,2400,"Reserved 15",1739,1,"A,M,C,I",Tumor,text
 reserved16,2450,"Reserved 16",138,12,"A,M,C,I",Tumor,text
