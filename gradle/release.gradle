@@ -13,7 +13,7 @@ task createLauncherJar(type: Jar) {
                 'Built-Date': new Date(),
                 'Built-JDK': System.getProperty('java.version'),
                 'Main-Class': 'com.imsweb.naaccrxml.gui.Standalone',
-                'Class-Path': (configurations.runtimeClasspath.collect { it.getName() } + List.of("${project.name}-${version}.jar")).join(' '))
+                'Class-Path': (configurations.runtimeClasspath.collect { it.getName() } + ["${project.name}-${version}.jar"]).join(' '))
     }
 }
 
