@@ -1,6 +1,10 @@
 Copyright (c) 2015, Information Management Services, Inc.
 All rights reserved.
 
+When applicable, the included Java Runtime Environment (JRE)
+falls under its own licensing (http://openjdk.java.net/legal/).
+The rest of the distributed files fall under this license.
+
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
