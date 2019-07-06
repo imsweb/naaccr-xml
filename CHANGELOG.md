@@ -1,9 +1,10 @@
 ## NAACCR XML Version History
 
-**Version 6.0 (not released yet)**
+**Version 6.0**
 
 - Updated default specifications version from 1.3 to 1.4.
 - Changed maximum length of NAACCR IDs from 50 to 32 characters (specifications 1.4).
+- Renamed a bunch of IDs in N18 dictionary to comply with new maximum length.
 
 **Version 5.4**
 
