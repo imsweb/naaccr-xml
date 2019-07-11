@@ -92,14 +92,14 @@ public class NaaccrOptions {
     private Boolean _ignoreExtensions;
 
     /**
-     * When reading XML data, should the renamed IDs be automatically translated (standard items are automatically renamed, non-standard items need to be provided using the setItemIdsTranslation method). Defaults to false.
+     * When reading XML data, should the renamed standard IDs be automatically translated. Defaults to false.
      */
-    private Boolean _translateRenamedItemIds;
+    private Boolean _translateRenamedStandardItemIds;
 
     /**
-     * When reading XML data, the provided IDs will be automatically translated (before any validation happens); only used if "translateRenamedItemIds" is set to true.
+     * When reading XML data, the provided IDs will be automatically translated (before any validation happens). Default is a null map, which means no translation.
      */
-    private Map<String, String> _itemIdsTranslation;
+    private Map<String, String> _itemIdsToTranslate;
 
     /**
      * Convenience method to make the code look nicer, but it really just calls the default constructor!
@@ -124,8 +124,8 @@ public class NaaccrOptions {
         _useStrictNamespaces = true;
         _ignoreControlCharacters = true;
         _ignoreExtensions = false;
-        _translateRenamedItemIds = false;
-        _itemIdsTranslation = null;
+        _translateRenamedStandardItemIds = false;
+        _itemIdsToTranslate = null;
         _newLine = NEW_LINE_OS;
     }
 
@@ -233,20 +233,20 @@ public class NaaccrOptions {
         _ignoreExtensions = ignoreExtensions;
     }
 
-    public Boolean getTranslateRenamedItemIds() {
-        return _translateRenamedItemIds;
+    public Boolean getTranslateRenamedStandardItemIds() {
+        return _translateRenamedStandardItemIds;
     }
 
-    public void setTranslateRenamedItemIds(Boolean translateRenamedItemIds) {
-        _translateRenamedItemIds = translateRenamedItemIds;
+    public void setTranslateRenamedStandardItemIds(Boolean translateRenamedStandardItemIds) {
+        _translateRenamedStandardItemIds = translateRenamedStandardItemIds;
     }
 
-    public Map<String, String> getItemIdsTranslation() {
-        return _itemIdsTranslation;
+    public Map<String, String> getItemIdsToTranslate() {
+        return _itemIdsToTranslate;
     }
 
-    public void setItemIdsTranslation(Map<String, String> itemIdsTranslation) {
-        _itemIdsTranslation = itemIdsTranslation;
+    public void setItemIdsToTranslate(Map<String, String> itemIdsToTranslate) {
+        _itemIdsToTranslate = itemIdsToTranslate;
     }
 
     /**

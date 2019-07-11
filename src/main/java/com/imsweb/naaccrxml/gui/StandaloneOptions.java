@@ -259,7 +259,7 @@ public class StandaloneOptions extends JPanel {
         }
 
         if (_readXml) {
-            options.setTranslateRenamedItemIds(_autoTranslateIdsBox.isSelected());
+            options.setTranslateRenamedStandardItemIds(_autoTranslateIdsBox.isSelected());
             options.setUseStrictNamespaces(_strictNameSpacesBox.isSelected());
         }
 

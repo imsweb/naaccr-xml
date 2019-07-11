@@ -189,7 +189,7 @@ public class PatientXmlReaderTest {
         }
 
         // test option to auto-translate renamed IDs - option is OFF
-        options.setTranslateRenamedItemIds(false);
+        options.setTranslateRenamedStandardItemIds(false);
         options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_ERROR);
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-translate-180.xml")), options)) {
             Tumor tumor = reader.readPatient().getTumors().get(0);
@@ -198,9 +198,11 @@ public class PatientXmlReaderTest {
             Assert.assertFalse(tumor.getValidationErrors().isEmpty());
         }
 
-        // test option to auto-translate renamed IDs - option is ON
-        options.setTranslateRenamedItemIds(true);
         options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_ERROR);
+
+        // test option to auto-translate renamed IDs - option is ON
+        options.setTranslateRenamedStandardItemIds(true);
+        options.setItemIdsToTranslate(null);
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-translate-180.xml")), options)) {
             Tumor tumor = reader.readPatient().getTumors().get(0);
             Assert.assertNull(tumor.getItemValue("dateOfSentinelLymphNodeBiopsy")); // old ID
@@ -208,20 +210,19 @@ public class PatientXmlReaderTest {
             Assert.assertTrue(tumor.getValidationErrors().isEmpty());
         }
 
-        // test option to auto-translate renamed IDs - option is ON but the standard item is being explicitly translated into something else
-        options.setTranslateRenamedItemIds(true);
-        options.setItemIdsTranslation(Collections.singletonMap("dateSentinelLymphNodeBiopsy", "other"));
+        // test option to auto-translate renamed IDs - option is OFF but the standard item is being explicitly translated into something else
+        options.setTranslateRenamedStandardItemIds(false);
+        options.setItemIdsToTranslate(Collections.singletonMap("dateOfSentinelLymphNodeBiopsy", "dateSentinelLymphNodeBiopsy"));
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-translate-180.xml")), options)) {
             Tumor tumor = reader.readPatient().getTumors().get(0);
             Assert.assertNull(tumor.getItemValue("dateOfSentinelLymphNodeBiopsy")); // old ID
-            Assert.assertNull(tumor.getItemValue("dateSentinelLymphNodeBiopsy")); // new ID
-            Assert.assertFalse(tumor.getValidationErrors().isEmpty()); // because "other" is not a valid ID
+            Assert.assertEquals("20190101", tumor.getItemValue("dateSentinelLymphNodeBiopsy")); // new ID
+            Assert.assertTrue(tumor.getValidationErrors().isEmpty());
         }
 
         // test option to auto-translate renamed IDs - option is ON but version is not 180 and so standard item should not be renamed
-        options.setTranslateRenamedItemIds(true);
-        options.setItemIdsTranslation(null);
-        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_ERROR);
+        options.setTranslateRenamedStandardItemIds(true);
+        options.setItemIdsToTranslate(null);
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-translate-160.xml")), options)) {
             Tumor tumor = reader.readPatient().getTumors().get(0);
             Assert.assertNull(tumor.getItemValue("dateOfSentinelLymphNodeBiopsy")); // old ID

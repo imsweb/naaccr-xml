@@ -272,12 +272,12 @@ public class NaaccrPatientConverter implements Converter {
             rawId = rawId.trim();
 
         // translate the ID on the fly if needed
-        if (Boolean.TRUE.equals(_context.getOptions().getTranslateRenamedItemIds())) {
+        if (Boolean.TRUE.equals(_context.getOptions().getTranslateRenamedStandardItemIds())) {
             if (NaaccrFormat.NAACCR_VERSION_180.equals(_context.getDictionary().getNaaccrVersion()))
                 rawId = NaaccrXmlDictionaryUtils.getRenamedLongNaaccr18Ids().getOrDefault(rawId, rawId);
-            if (_context.getOptions().getItemIdsTranslation() != null)
-                rawId = _context.getOptions().getItemIdsTranslation().getOrDefault(rawId, rawId);
         }
+        if (_context.getOptions().getItemIdsToTranslate() != null)
+            rawId = _context.getOptions().getItemIdsToTranslate().getOrDefault(rawId, rawId);
 
         if (!_context.getOptions().processItem(rawId))
             return;
