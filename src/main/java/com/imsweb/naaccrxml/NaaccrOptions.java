@@ -5,6 +5,7 @@ package com.imsweb.naaccrxml;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class encapsulates the options that a reader/writer can use to customize its operations.
@@ -91,9 +92,14 @@ public class NaaccrOptions {
     private Boolean _ignoreExtensions;
 
     /**
-     * When reading XML data, should the renamed IDs be automatically translated (this only applies to IDs renamed within a version, like the long N18 IDs that were shorten in N18 for example).
+     * When reading XML data, should the renamed IDs be automatically translated (standard items are automatically renamed, non-standard items need to be provided using the setItemIdsTranslation method). Defaults to false.
      */
     private Boolean _translateRenamedItemIds;
+
+    /**
+     * When reading XML data, the provided IDs will be automatically translated (before any validation happens); only used if "translateRenamedItemIds" is set to true.
+     */
+    private Map<String, String> _itemIdsTranslation;
 
     /**
      * Convenience method to make the code look nicer, but it really just calls the default constructor!
@@ -119,6 +125,7 @@ public class NaaccrOptions {
         _ignoreControlCharacters = true;
         _ignoreExtensions = false;
         _translateRenamedItemIds = false;
+        _itemIdsTranslation = null;
         _newLine = NEW_LINE_OS;
     }
 
@@ -232,6 +239,14 @@ public class NaaccrOptions {
 
     public void setTranslateRenamedItemIds(Boolean translateRenamedItemIds) {
         _translateRenamedItemIds = translateRenamedItemIds;
+    }
+
+    public Map<String, String> getItemIdsTranslation() {
+        return _itemIdsTranslation;
+    }
+
+    public void setItemIdsTranslation(Map<String, String> itemIdsTranslation) {
+        _itemIdsTranslation = itemIdsTranslation;
     }
 
     /**

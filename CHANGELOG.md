@@ -3,6 +3,7 @@
 **Version 6.1**
 
 - Added a new option to allow N18 renamed IDs to be automatically translated by the library when reading XML data.
+- Added a new option to allow non-standard items to be automatically translated by the library when reading XML data.
 - Updated LICENSE file that is included with the standalone program.
 
 **Version 6.0**
