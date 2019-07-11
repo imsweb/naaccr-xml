@@ -18,6 +18,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 import com.imsweb.naaccrxml.NaaccrErrorUtils;
+import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrIOException;
 import com.imsweb.naaccrxml.NaaccrOptions;
 import com.imsweb.naaccrxml.NaaccrValidationError;
@@ -269,6 +270,13 @@ public class NaaccrPatientConverter implements Converter {
             reportSyntaxError("attribute '" + NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID + "' is required");
         else
             rawId = rawId.trim();
+
+        // translate the ID on the fly if needed
+        if (Boolean.TRUE.equals(_context.getOptions().getTranslateRenamedItemIds())) {
+            if (NaaccrFormat.NAACCR_VERSION_180.equals(_context.getDictionary().getNaaccrVersion()))
+                rawId = NaaccrXmlDictionaryUtils.getRenamedLongNaaccr18Ids().getOrDefault(rawId, rawId);
+        }
+
         if (!_context.getOptions().processItem(rawId))
             return;
         RuntimeNaaccrDictionaryItem def = _context.getDictionary().getItemByNaaccrId(rawId);

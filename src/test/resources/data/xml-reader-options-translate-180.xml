@@ -1,0 +1,7 @@
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" recordType="I" specificationVersion="1.4">
+    <Patient>
+        <Tumor>
+            <Item naaccrId="dateOfSentinelLymphNodeBiopsy">20190101</Item>
+        </Tumor>
+    </Patient>
+</NaaccrData>

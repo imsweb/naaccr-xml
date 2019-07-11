@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+**Version 6.1**
+
+- Added a new option to allow N18 renamed IDs to be automatically translated by the library when reading XML data.
+- Updated LICENSE file that is included with the standalone program.
+
 **Version 6.0**
 
 - Updated default specifications version from 1.3 to 1.4.

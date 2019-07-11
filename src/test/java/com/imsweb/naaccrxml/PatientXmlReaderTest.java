@@ -187,6 +187,32 @@ public class PatientXmlReaderTest {
             Assert.assertNull(error.getNaaccrNum());
             Assert.assertEquals("X", error.getValue());
         }
+
+        // test option to auto-translate renamed IDs
+        options.setTranslateRenamedItemIds(false);
+        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_ERROR);
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-translate-180.xml")), options)) {
+            Tumor tumor = reader.readPatient().getTumors().get(0);
+            Assert.assertNull(tumor.getItemValue("dateOfSentinelLymphNodeBiopsy")); // old ID
+            Assert.assertNull(tumor.getItemValue("dateSentinelLymphNodeBiopsy")); // new ID
+            Assert.assertFalse(tumor.getValidationErrors().isEmpty());
+        }
+        options.setTranslateRenamedItemIds(true);
+        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_ERROR);
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-translate-180.xml")), options)) {
+            Tumor tumor = reader.readPatient().getTumors().get(0);
+            Assert.assertNull(tumor.getItemValue("dateOfSentinelLymphNodeBiopsy")); // old ID
+            Assert.assertEquals("20190101", tumor.getItemValue("dateSentinelLymphNodeBiopsy")); // new ID
+            Assert.assertTrue(tumor.getValidationErrors().isEmpty());
+        }
+        options.setTranslateRenamedItemIds(true);
+        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_ERROR);
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-translate-160.xml")), options)) {
+            Tumor tumor = reader.readPatient().getTumors().get(0);
+            Assert.assertNull(tumor.getItemValue("dateOfSentinelLymphNodeBiopsy")); // old ID
+            Assert.assertNull(tumor.getItemValue("dateSentinelLymphNodeBiopsy")); // new ID
+            Assert.assertFalse(tumor.getValidationErrors().isEmpty());
+        }
     }
 
     @Test

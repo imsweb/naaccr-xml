@@ -91,6 +91,11 @@ public class NaaccrOptions {
     private Boolean _ignoreExtensions;
 
     /**
+     * When reading XML data, should the renamed IDs be automatically translated (this only applies to IDs renamed within a version, like the long N18 IDs that were shorten in N18 for example).
+     */
+    private Boolean _translateRenamedItemIds;
+
+    /**
      * Convenience method to make the code look nicer, but it really just calls the default constructor!
      * @return an instance of the options with all default values.
      */
@@ -113,6 +118,7 @@ public class NaaccrOptions {
         _useStrictNamespaces = true;
         _ignoreControlCharacters = true;
         _ignoreExtensions = false;
+        _translateRenamedItemIds = false;
         _newLine = NEW_LINE_OS;
     }
 
@@ -218,6 +224,14 @@ public class NaaccrOptions {
 
     public void setIgnoreExtensions(Boolean ignoreExtensions) {
         _ignoreExtensions = ignoreExtensions;
+    }
+
+    public Boolean getTranslateRenamedItemIds() {
+        return _translateRenamedItemIds;
+    }
+
+    public void setTranslateRenamedItemIds(Boolean translateRenamedItemIds) {
+        _translateRenamedItemIds = translateRenamedItemIds;
     }
 
     /**

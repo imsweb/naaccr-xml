@@ -35,7 +35,7 @@ public class StandaloneOptions extends JPanel {
     private boolean _readFlat, _writeFlat, _readXml, _writeXml;
 
     // global GUI components
-    private JCheckBox _groupTumorBox, _reportMismatchBox, _validateValuesBox, _ignoreUnkItemsBox, _writeNumBox, _applyPaddingBox, _reportValTooLongBox, _strictNameSpacesBox;
+    private JCheckBox _groupTumorBox, _reportMismatchBox, _validateValuesBox, _ignoreUnkItemsBox, _writeNumBox, _applyPaddingBox, _reportValTooLongBox, _strictNameSpacesBox, _autoTranslateIdsBox;
     private JTextField _itemListFld;
     private JRadioButton _itemsIncludeBtn, _itemsExcludeBtn;
 
@@ -141,6 +141,16 @@ public class StandaloneOptions extends JPanel {
 
         if (readXml) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+            _autoTranslateIdsBox = new JCheckBox("When reading the file, automatically translate renamed NAACCR XML IDs.");
+            _autoTranslateIdsBox.setSelected(true);
+            pnl.add(_autoTranslateIdsBox);
+            contentPnl.add(pnl);
+            contentPnl.add(Box.createVerticalStrut(2));
+            contentPnl.add(addHelpRow("If this option is checked, the application will automatically translate the IDs that were shortened in NAACCR 18."));
+            contentPnl.add(addHelpRow("You can use this option to read an XML file with the old IDs and re-create it with the new ones."));
+            contentPnl.add(Box.createVerticalStrut(10));
+
+            pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
             _strictNameSpacesBox = new JCheckBox("When reading the file, use strict rules for the XML namespaces.");
             _strictNameSpacesBox.setSelected(true);
             pnl.add(_strictNameSpacesBox);
@@ -248,8 +258,10 @@ public class StandaloneOptions extends JPanel {
             }
         }
 
-        if (_readXml)
+        if (_readXml) {
+            options.setTranslateRenamedItemIds(_autoTranslateIdsBox.isSelected());
             options.setUseStrictNamespaces(_strictNameSpacesBox.isSelected());
+        }
 
         return options;
     }
