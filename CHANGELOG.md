@@ -2,7 +2,8 @@
 
 **Version 6.2**
 
-- Improved support for NAACCR XML extensions, added ability to report line number on embedded extensions.
+- Improved support for NAACCR XML extensions; added ability to report line number on embedded extensions.
+- Updated embedded JRE to Java 12.0.2 (this only affects the standalone program).
 
 **Version 6.1**
 
