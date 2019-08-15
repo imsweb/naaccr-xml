@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 6.2**
+
+- Improved support for NAACCR XML extensions, added ability to report line number on embedded extensions.
+
 **Version 6.1**
 
 - Added a new option to allow N18 renamed item IDs to be automatically translated by the library when reading XML data.

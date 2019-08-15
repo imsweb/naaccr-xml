@@ -342,56 +342,62 @@ public class PatientXmlReaderTest {
         conf.getXstream().autodetectAnnotations(true); // required only because we want to use annotation on the extension classes (it's more convenient)
         conf.registerNamespace("other", "http://whatever.org");
         conf.registerTag("other", "MyOuterTag", OuterTag.class);
+        conf.registerTag("other", "MyEmbeddedEntity", EmbeddedEntity.class);
 
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("standard-file-extension.xml")), null, (NaaccrDictionary)null, conf)) {
             // there should be no error, 1 item and 2 extensions for the root
             Assert.assertTrue(reader.getRootData().getValidationErrors().isEmpty());
             Assert.assertEquals(1, reader.getRootData().getItems().size());
             Assert.assertEquals(2, reader.getRootData().getExtensions().size());
-            Assert.assertEquals("root-extension-1", ((OuterTag)reader.getRootData().getExtensions().get(0)).getInnerTag());
-            Assert.assertEquals(5, ((OuterTag)reader.getRootData().getExtensions().get(0)).getStartLineNumber().intValue());
-            Assert.assertEquals("root-extension-2", ((OuterTag)reader.getRootData().getExtensions().get(1)).getInnerTag());
-            Assert.assertEquals(8, ((OuterTag)reader.getRootData().getExtensions().get(1)).getStartLineNumber().intValue());
+            OuterTag tag1 = ((OuterTag)reader.getRootData().getExtensions().get(0));
+            Assert.assertEquals("root-extension-1", tag1.getInnerTag());
+            Assert.assertEquals(5, tag1.getStartLineNumber().intValue());
+            Assert.assertNotNull(tag1.getEntity());
+            Assert.assertEquals("root-extension-embedded-1", tag1.getEntity().getEntityTag());
+            Assert.assertEquals(7, tag1.getEntity().getStartLineNumber().intValue());
+            OuterTag tag2 = ((OuterTag)reader.getRootData().getExtensions().get(1));
+            Assert.assertEquals("root-extension-2", tag2.getInnerTag());
+            Assert.assertEquals(11, tag2.getStartLineNumber().intValue());
 
             // there should be no error, 1 item and 2 extensions for the unique patient
             Patient patient = reader.readPatient();
             Assert.assertTrue(patient.getValidationErrors().isEmpty());
             Assert.assertEquals(1, patient.getItems().size());
             Assert.assertEquals(2, patient.getExtensions().size());
-            Assert.assertEquals("patient-extension-1", ((OuterTag)patient.getExtensions().get(0)).getInnerTag());
-            Assert.assertEquals(13, ((OuterTag)patient.getExtensions().get(0)).getStartLineNumber().intValue());
-            Assert.assertEquals("patient-extension-2", ((OuterTag)patient.getExtensions().get(1)).getInnerTag());
+            tag1 = ((OuterTag)patient.getExtensions().get(0));
+            Assert.assertEquals("patient-extension-1", tag1.getInnerTag());
+            Assert.assertEquals(16, tag1.getStartLineNumber().intValue());
+            tag2 = ((OuterTag)patient.getExtensions().get(1));
+            Assert.assertEquals("patient-extension-2", tag2.getInnerTag());
+            Assert.assertEquals(19, tag2.getStartLineNumber().intValue());
             Assert.assertEquals(1, patient.getTumors().size());
-            Assert.assertEquals(16, ((OuterTag)patient.getExtensions().get(1)).getStartLineNumber().intValue());
 
             // there should be no error, 1 item and 2 extensions for the unique tumor
             Tumor tumor = patient.getTumors().get(0);
             Assert.assertTrue(tumor.getValidationErrors().isEmpty());
             Assert.assertEquals(1, tumor.getItems().size());
             Assert.assertEquals(2, tumor.getExtensions().size());
-            Assert.assertEquals("tumor-extension-1", ((OuterTag)tumor.getExtensions().get(0)).getInnerTag());
-            Assert.assertEquals(21, ((OuterTag)tumor.getExtensions().get(0)).getStartLineNumber().intValue());
-            Assert.assertEquals("tumor-extension-2", ((OuterTag)tumor.getExtensions().get(1)).getInnerTag());
-            Assert.assertEquals(24, ((OuterTag)tumor.getExtensions().get(1)).getStartLineNumber().intValue());
+            tag1 = ((OuterTag)tumor.getExtensions().get(0));
+            Assert.assertEquals("tumor-extension-1", tag1.getInnerTag());
+            Assert.assertEquals(24, tag1.getStartLineNumber().intValue());
+            tag2 = ((OuterTag)tumor.getExtensions().get(1));
+            Assert.assertEquals("tumor-extension-2", tag2.getInnerTag());
+            Assert.assertEquals(27, tag2.getStartLineNumber().intValue());
         }
     }
 
+    @SuppressWarnings("unused")
     @XStreamAlias("MyOuterTag")
     private static class OuterTag implements NaaccrXmlExtension {
-
-        @XStreamAlias("other:MyInnerTag")
-        private String _innerTag;
 
         @XStreamOmitField
         private Integer _startLineNumber;
 
-        public String getInnerTag() {
-            return _innerTag;
-        }
+        @XStreamAlias("other:MyInnerTag")
+        private String _innerTag;
 
-        public void setInnerTag(String innerTag) {
-            _innerTag = innerTag;
-        }
+        @XStreamAlias("other:MyEmbeddedEntity")
+        private EmbeddedEntity _entity;
 
         @Override
         public Integer getStartLineNumber() {
@@ -401,6 +407,51 @@ public class PatientXmlReaderTest {
         @Override
         public void setStartLineNumber(Integer startLineNumber) {
             _startLineNumber = startLineNumber;
+        }
+
+        public String getInnerTag() {
+            return _innerTag;
+        }
+
+        public void setInnerTag(String innerTag) {
+            _innerTag = innerTag;
+        }
+
+        public EmbeddedEntity getEntity() {
+            return _entity;
+        }
+
+        public void setEntity(EmbeddedEntity entity) {
+            _entity = entity;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @XStreamAlias("MyEmbeddedEntity")
+    private static class EmbeddedEntity implements NaaccrXmlExtension {
+
+        @XStreamOmitField
+        private Integer _startLineNumber;
+
+        @XStreamAlias("other:MyEntityTag")
+        private String _entityTag;
+
+        @Override
+        public Integer getStartLineNumber() {
+            return _startLineNumber;
+        }
+
+        @Override
+        public void setStartLineNumber(Integer startLineNumber) {
+            _startLineNumber = startLineNumber;
+        }
+
+        public String getEntityTag() {
+            return _entityTag;
+        }
+
+        public void setEntityTag(String entityTag) {
+            _entityTag = entityTag;
         }
     }
 }

@@ -23,7 +23,6 @@ import com.imsweb.naaccrxml.NaaccrIOException;
 import com.imsweb.naaccrxml.NaaccrOptions;
 import com.imsweb.naaccrxml.NaaccrValidationError;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
-import com.imsweb.naaccrxml.NaaccrXmlExtension;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
 import com.imsweb.naaccrxml.entity.AbstractEntity;
 import com.imsweb.naaccrxml.entity.Item;
@@ -150,13 +149,8 @@ public class NaaccrPatientConverter implements Converter {
                             readItem(tumor, path, NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR, rawId, rawNum, reader.getValue());
                         }
                         else {
-                            if (!Boolean.TRUE.equals(_context.getOptions().getIgnoreExtensions())) {
-                                int lineNumber = _context.getLineNumber();
-                                Object extension = _context.getConfiguration().getXstream().unmarshal(reader);
-                                if (extension instanceof NaaccrXmlExtension)
-                                    ((NaaccrXmlExtension)extension).setStartLineNumber(lineNumber);
-                                tumor.addExtension(extension);
-                            }
+                            if (!Boolean.TRUE.equals(_context.getOptions().getIgnoreExtensions()))
+                                tumor.addExtension(_context.getConfiguration().getXstream().unmarshal(reader));
                             seenTumorExtension = true;
                         }
 
@@ -168,13 +162,8 @@ public class NaaccrPatientConverter implements Converter {
                 else {
                     if (tumorCount > 0)
                         reportSyntaxError("unexpected tag: " + _context.extractTag(reader.getNodeName()));
-                    if (!Boolean.TRUE.equals(_context.getOptions().getIgnoreExtensions())) {
-                        int lineNumber = _context.getLineNumber();
-                        Object extension = _context.getConfiguration().getXstream().unmarshal(reader);
-                        if (extension instanceof NaaccrXmlExtension)
-                            ((NaaccrXmlExtension)extension).setStartLineNumber(lineNumber);
-                        patient.addExtension(extension);
-                    }
+                    if (!Boolean.TRUE.equals(_context.getOptions().getIgnoreExtensions()))
+                        patient.addExtension(_context.getConfiguration().getXstream().unmarshal(reader));
                     seenPatientExtension = true;
                 }
 

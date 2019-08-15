@@ -88,6 +88,8 @@ public class NaaccrStreamConfiguration {
         defaultTags.add(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
         defaultTags.add(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
         _defaultTags = Collections.unmodifiableSet(defaultTags);
+
+        _xstream.registerConverter(new LineNumberExtensionConverter(this));
     }
 
     /**
