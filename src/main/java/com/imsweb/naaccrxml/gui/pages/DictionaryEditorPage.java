@@ -51,6 +51,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.text.JTextComponent;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
@@ -540,6 +541,10 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
             return;
         }
 
+        TableCellEditor cellEditor = _itemsTbl.getCellEditor();
+        if (cellEditor != null)
+            cellEditor.stopCellEditing();
+
         NaaccrDictionary dictionary = performValidate(false);
         if (dictionary == null)
             return;
@@ -560,6 +565,10 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         NaaccrDictionary dictionary = performValidate(false);
         if (dictionary == null)
             return;
+
+        TableCellEditor cellEditor = _itemsTbl.getCellEditor();
+        if (cellEditor != null)
+            cellEditor.stopCellEditing();
 
         if (_outputFileChooser.showDialog(DictionaryEditorPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
             try {

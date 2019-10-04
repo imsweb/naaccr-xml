@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+**Version 6.3**
+
+- Now always applying space padding rules when writing fixed-columns; the padding options only applies to zero-padding.
+- Fixed cell editing issue in the items table of the standalone program.
+
 **Version 6.2**
 
 - Improved support for NAACCR XML extensions; added ability to report line number on embedded extensions.
