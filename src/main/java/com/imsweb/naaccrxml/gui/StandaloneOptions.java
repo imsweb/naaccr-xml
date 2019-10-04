@@ -117,7 +117,7 @@ public class StandaloneOptions extends JPanel {
 
         if (writeFlat || writeXml) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-            _applyPaddingBox = new JCheckBox(" When writing the items, apply padding rules (this might change the actual values being written).");
+            _applyPaddingBox = new JCheckBox(" When writing the items, apply zero-padding rules (this might change the actual values being written).");
             _applyPaddingBox.setSelected(false);
             pnl.add(_applyPaddingBox);
             contentPnl.add(pnl);
@@ -225,7 +225,7 @@ public class StandaloneOptions extends JPanel {
             options.setWriteItemNumber(_writeNumBox.isSelected());
 
         if (_writeFlat || _writeXml)
-            options.setApplyPaddingRules(_applyPaddingBox.isSelected());
+            options.setApplyZeroPaddingRules(_applyPaddingBox.isSelected());
 
         if (_writeFlat)
             options.setReportValuesTooLong(_reportValTooLongBox.isSelected());

@@ -213,7 +213,7 @@ public class PatientFlatWriter implements PatientWriter {
                             line.append(' ');
                     currentIndex = start;
 
-                    String value = getValueForItem(itemDef, root, patient, tumor, Boolean.TRUE.equals(_options.getApplyPaddingRules()));
+                    String value = getValueForItem(itemDef, root, patient, tumor, Boolean.TRUE.equals(_options.getApplyZeroPaddingRules()));
                     if (value != null) {
                         line.append(value);
                         currentIndex = start + value.length();
@@ -244,7 +244,7 @@ public class PatientFlatWriter implements PatientWriter {
         return lines;
     }
 
-    protected String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, NaaccrData root, Patient patient, Tumor tumor, boolean applyPadding) throws NaaccrIOException {
+    protected String getValueForItem(RuntimeNaaccrDictionaryItem itemDef, NaaccrData root, Patient patient, Tumor tumor, boolean applyZeroPadding) throws NaaccrIOException {
         String value;
 
         AbstractEntity entityToUse;
@@ -258,16 +258,20 @@ public class PatientFlatWriter implements PatientWriter {
             throw new NaaccrIOException("unsupported parent element: " + itemDef.getParentXmlElement());
         value = entityToUse.getItemValue(itemDef.getNaaccrId());
 
-        // handle the padding
-        if (applyPadding && value != null && !value.isEmpty() && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef.getLength()) {
+        // handle the padding (always apply the space padding because it's an attribute of the format more than the data)
+        if (value != null && !value.isEmpty() && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef.getLength()) {
             if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(itemDef.getPadding()))
                 value = StringUtils.leftPad(value, itemDef.getLength(), ' ');
             else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(itemDef.getPadding()))
                 value = StringUtils.rightPad(value, itemDef.getLength(), ' ');
-            else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(itemDef.getPadding()))
-                value = StringUtils.leftPad(value, itemDef.getLength(), '0');
-            else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_ZERO.equals(itemDef.getPadding()))
-                value = StringUtils.rightPad(value, itemDef.getLength(), '0');
+            else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(itemDef.getPadding())) {
+                if (applyZeroPadding)
+                    value = StringUtils.leftPad(value, itemDef.getLength(), '0');
+            }
+            else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_ZERO.equals(itemDef.getPadding())) {
+                if (applyZeroPadding)
+                    value = StringUtils.rightPad(value, itemDef.getLength(), '0');
+            }
             else
                 throw new RuntimeException("Unknown padding option: " + itemDef.getPadding());
         }

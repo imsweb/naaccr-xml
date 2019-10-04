@@ -134,7 +134,7 @@ public class PatientFlatWriterTest {
         File file = TestingUtils.createFile("test-flat-writer-options.txt");
 
         // option is set to pad the values
-        options.setApplyPaddingRules(true);
+        options.setApplyZeroPaddingRules(true);
         // test a "leftZero" (registryId)
         data.addItem(new Item("registryId", "1"));
         // test a "rightZero" (comorbidComplication1)
@@ -153,7 +153,7 @@ public class PatientFlatWriterTest {
         Assert.assertTrue(writtenContent.contains("4   "));
 
         // same test, but option is set to NOT pad the values
-        options.setApplyPaddingRules(false);
+        options.setApplyZeroPaddingRules(false);
         try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, options, dict)) {
             writer.writePatient(patient);
         }

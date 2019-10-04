@@ -62,9 +62,9 @@ public class NaaccrOptions {
     private Boolean _writeItemNumber;
 
     /**
-     * When writing data (to XML or flat file format), whether or not the padding rules should be applied. Defaults to false.
+     * When writing data (to XML or flat file format), whether or not the zero-padding rules should be applied. Defaults to false.
      */
-    private Boolean _applyPaddingRules;
+    private Boolean _applyZeroPaddingRules;
 
     /**
      * When writing data, whether or not errors need to be reported for values too long (values will always be truncated, this only affect the error reporting mechanism). Defaults to false.
@@ -119,7 +119,7 @@ public class NaaccrOptions {
         _tumorGroupingItems.add(NaaccrXmlUtils.DEFAULT_TUMOR_GROUPING_ITEM);
         _reportLevelMismatch = false;
         _writeItemNumber = false;
-        _applyPaddingRules = false;
+        _applyZeroPaddingRules = false;
         _reportValuesTooLong = false;
         _useStrictNamespaces = true;
         _ignoreControlCharacters = true;
@@ -185,12 +185,12 @@ public class NaaccrOptions {
         _writeItemNumber = writeItemNumber;
     }
 
-    public Boolean getApplyPaddingRules() {
-        return _applyPaddingRules;
+    public Boolean getApplyZeroPaddingRules() {
+        return _applyZeroPaddingRules;
     }
 
-    public void setApplyPaddingRules(Boolean applyPaddingRules) {
-        _applyPaddingRules = applyPaddingRules;
+    public void setApplyZeroPaddingRules(Boolean applyZeroPaddingRules) {
+        _applyZeroPaddingRules = applyZeroPaddingRules;
     }
 
     public Boolean getReportValuesTooLong() {

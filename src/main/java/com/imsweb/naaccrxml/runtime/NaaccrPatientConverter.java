@@ -221,12 +221,16 @@ public class NaaccrPatientConverter implements Converter {
         }
 
         // handle the padding - only 0-padding is taken into account when writing XML; blank padding (left or right) is completely ignored
-        if (itemDef != null && Boolean.TRUE.equals(_context.getOptions().getApplyPaddingRules()) && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef
-                .getLength()) {
-            if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(itemDef.getPadding()))
-                value = StringUtils.leftPad(value, itemDef.getLength(), '0');
-            else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_ZERO.equals(itemDef.getPadding()))
-                value = StringUtils.rightPad(value, itemDef.getLength(), '0');
+        boolean applyZeroPadding = Boolean.TRUE.equals(_context.getOptions().getApplyZeroPaddingRules());
+        if (itemDef != null && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef.getLength()) {
+            if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(itemDef.getPadding())) {
+                if (applyZeroPadding)
+                    value = StringUtils.leftPad(value, itemDef.getLength(), '0');
+            }
+            else if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_ZERO.equals(itemDef.getPadding())) {
+                if (applyZeroPadding)
+                    value = StringUtils.rightPad(value, itemDef.getLength(), '0');
+            }
             else if (!NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(itemDef.getPadding()) && !NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(itemDef.getPadding()))
                 throw new RuntimeException("Unknown padding option: " + itemDef.getPadding());
         }

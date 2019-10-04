@@ -248,7 +248,7 @@ public class PatientXmlWriterTest {
         Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
 
         // option is set to pad the values
-        options.setApplyPaddingRules(true);
+        options.setApplyZeroPaddingRules(true);
         // test a "leftZero" (registryId)
         data.addItem(new Item("registryId", "1"));
         // test a "rightZero" (comorbidComplication1)
@@ -267,7 +267,7 @@ public class PatientXmlWriterTest {
         Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"primarySite\">4</Item>")); // spaces are not taken into account!
 
         // same test, but option is set to NOT pad the values
-        options.setApplyPaddingRules(false);
+        options.setApplyZeroPaddingRules(false);
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
             writer.writePatient(patient);
         }
