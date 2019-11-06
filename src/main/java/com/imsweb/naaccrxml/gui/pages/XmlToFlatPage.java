@@ -4,7 +4,11 @@
 package com.imsweb.naaccrxml.gui.pages;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrIOException;
@@ -31,8 +35,15 @@ public class XmlToFlatPage extends AbstractProcessingPage {
     }
 
     @Override
-    protected boolean showUserDictionaryDisclaimer(File file) {
-        return !(file == null || !file.exists()) && NaaccrXmlUtils.getAttributesFromXmlFile(file).get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT) != null;
+    protected List<String> getRequiredUserDefinedDictionaries(File file) {
+        if (file == null || !file.exists())
+            return Collections.emptyList();
+
+        String rawDictionaries = NaaccrXmlUtils.getAttributesFromXmlFile(file).get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT);
+        if (StringUtils.isEmpty(rawDictionaries))
+            return Collections.emptyList();
+
+        return Arrays.asList(StringUtils.split(rawDictionaries, ' '));
     }
 
     @Override
@@ -54,7 +65,15 @@ public class XmlToFlatPage extends AbstractProcessingPage {
         }
 
         try {
-            return NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromXmlFile(file));
+            NaaccrFormat format = NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromXmlFile(file));
+
+            // if the format was properly found but the file references more than one user-defined dictionary, fail the analysis
+            if (getRequiredUserDefinedDictionaries(file).size() > 1) {
+                reportAnalysisError(new Exception("the source file references more than one user-defined dictionary, this application only supports a single one."));
+                return null;
+            }
+
+            return format;
         }
         catch (RuntimeException e) {
             reportAnalysisError(new Exception("unable to identify file format"));

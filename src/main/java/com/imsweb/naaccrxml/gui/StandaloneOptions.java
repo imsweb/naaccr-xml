@@ -95,7 +95,6 @@ public class StandaloneOptions extends JPanel {
         if (readXml) {
             JPanel pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
             _ignoreUnkItemsBox = new JCheckBox(" When reading the file, ignore unknown items.");
-            _ignoreUnkItemsBox.setSelected(true);
             pnl.add(_ignoreUnkItemsBox);
             contentPnl.add(pnl);
             contentPnl.add(Box.createVerticalStrut(2));

@@ -83,7 +83,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected JComboBox<String> _compressionBox;
     protected JProgressBar _analysisBar, _processingBar;
     protected JLabel _analysisErrorLbl, _processingErrorLbl, _processingResult1Lbl, _processingResult2Lbl, _formatLbl, _numLinesLbl, _fileSizeLbl;
-    protected JLabel _numPatLbl, _numTumLbl;
+    protected JLabel _numPatLbl, _numTumLbl, _dictionaryDisclaimerLbl;
     protected JTextArea _warningsTextArea, _warningsSummaryTextArea;
     protected JTabbedPane _warningsPane;
     protected StandaloneOptions _guiOptions;
@@ -309,9 +309,9 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
         _dictionaryDisclaimerPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         _dictionaryDisclaimerPnl.setBorder(new EmptyBorder(15, 0, 0, 0));
-        JLabel dictionaryDisclaimerLbl = Standalone.createBoldLabel("The XML data file references a user-defined dictionary, you must provide it or the file won't be processed successfully.");
-        dictionaryDisclaimerLbl.setForeground(new Color(150, 0, 0));
-        _dictionaryDisclaimerPnl.add(dictionaryDisclaimerLbl);
+        _dictionaryDisclaimerLbl = Standalone.createBoldLabel("The XML data file references the following a user-defined dictionary, you must provide it or the file won't be processed successfully.");
+        _dictionaryDisclaimerLbl.setForeground(new Color(150, 0, 0));
+        _dictionaryDisclaimerPnl.add(_dictionaryDisclaimerLbl);
         allOptionsPnl.add(_dictionaryDisclaimerPnl);
 
         JPanel dictionaryPnl = new JPanel();
@@ -350,8 +350,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         return true;
     }
 
-    protected boolean showUserDictionaryDisclaimer(File file) {
-        return false;
+    protected List<String> getRequiredUserDefinedDictionaries(File file) {
+        return Collections.emptyList();
     }
 
     protected abstract StandaloneOptions createOptions();
@@ -536,7 +536,11 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             _fileSizeLbl.setText(Standalone.formatFileSize(file.length()));
             _northLayout.show(_northPnl, _NORTH_PANEL_ID_ANALYSIS_RESULTS);
             _centerPnl.setVisible(true);
-            _dictionaryDisclaimerPnl.setVisible(showUserDictionaryDisclaimer(file));
+            List<String> requiredDictionaries = getRequiredUserDefinedDictionaries(file);
+            if (!requiredDictionaries.isEmpty()) { // at this point the collection is either empty or of size 1 (we failed earlier if there is more than 1)
+                _dictionaryDisclaimerLbl.setText("Please provide the following user-defined dictionary that the source data file references: " + requiredDictionaries.get(0));
+                _dictionaryDisclaimerPnl.setVisible(!getRequiredUserDefinedDictionaries(file).isEmpty());
+            }
             _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_OPTIONS);
             if (_targetFld != null) {
                 _targetFld.setText(invertFilename(file));
@@ -553,6 +557,19 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected abstract NaaccrFormat getFormatForInputFile(File file);
 
     private void performAnalysis() {
+
+        List<String> requiredDictionaries = getRequiredUserDefinedDictionaries(new File(_sourceFld.getText()));
+        if (!requiredDictionaries.isEmpty() && _dictionaryFld.getText().isEmpty()) { // at this point the collection is either empty or of size 1 (we failed earlier if there is more than 1)
+            String message = "The data file requires the following user-defined dictionary:"
+                    + "\n\n   - " + requiredDictionaries.get(0)
+                    + "\n\nWithout the dictionary, some data items might not be properly recognized and will be ignored."
+                    + "\n\nAre you sure you want to continue without providing the dictionary?";
+            int result = JOptionPane.showConfirmDialog(this, message, "Confirmation",
+                    JOptionPane.YES_NO_OPTION);
+            if (result != JOptionPane.YES_OPTION)
+                return;
+        }
+
         if (_targetFld != null && new File(_targetFld.getText()).exists()) {
             int result = JOptionPane.showConfirmDialog(this, "Target file already exists, are you sure you want to replace it?", "Confirmation", JOptionPane.YES_NO_OPTION);
             if (result != JOptionPane.YES_OPTION)
