@@ -25,7 +25,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.7'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'com.imsweb:data-generator:1.10'
+    testImplementation 'com.imsweb:data-generator:1.12'
 }
 
 // enforce UTF-8, display the compilation warnings

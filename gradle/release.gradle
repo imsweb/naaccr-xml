@@ -30,7 +30,7 @@ task assembleDistribution(dependsOn: ['assemble', 'createLauncherJar', 'jarSas',
 
         // JRE
         copy {
-            from 'jre/jre-12'
+            from 'jre/jre-11'
             into 'build/dist/jre'
         }
         
