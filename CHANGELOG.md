@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+**Version 6.4**
+
+- Improved the feedback when processing an XML file referencing a missing user-defined dictionary.
+- Updated embedded JRE to Java 11.0.5 (this only affects the standalone program).
+
 **Version 6.3**
 
 - Now always applying space padding rules when writing fixed-columns; the padding options only applies to zero-padding.
