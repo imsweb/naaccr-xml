@@ -10,7 +10,7 @@
 	- naaccrversion should be "140", "150", "160" or "180" (defaults to "180")
 	- recordtype should be "A", "M", "C" or "I" (defaults to "I")
     - dataset should be the name of the dataset from which the data should be taken (defaults to alldata)
-    - items is an optional CSV list of fields to read (any other fields will be ignored);
+    - items is an optional CSV list of fields to write (any other fields will be ignored);
     - dictfile is an optional user-defined dictionary in CSV format (see GUI tool to save an XML dictionary to CSV)
 
     Note that the macro creates a tmp CSV file in the same folder as the target file; that file will be 
@@ -20,6 +20,7 @@
     *********
     06/10/2018 - Fabian Depry - Initial version.
     07/31/2018 - Fabian Depry - Added new optional parameter for user-defined dictionary.
+    12/08/2019 - Fabian Depry - Fixed a mistake in this comment, no change to the behavior of the macro.
  ************************************************************************************************************/;
 
 /*
