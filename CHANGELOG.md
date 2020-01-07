@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 6.5**
+
+- Updated commons-lang3 dependency from version 3.7 to version 3.9.
+
 **Version 6.4**
 
 - Improved the feedback when processing an XML file referencing a missing user-defined dictionary.

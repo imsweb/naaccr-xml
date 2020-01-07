@@ -22,9 +22,9 @@ dependencies {
     api 'com.thoughtworks.xstream:xstream:1.4.11.1'
 
     implementation 'commons-io:commons-io:2.6'
-    implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'org.apache.commons:commons-lang3:3.9'
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     testImplementation 'com.imsweb:data-generator:1.12'
 }
 
