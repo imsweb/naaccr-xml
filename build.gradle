@@ -1,9 +1,9 @@
 plugins {
     id 'java-library'
     id 'checkstyle'
-    id 'com.github.spotbugs' version '2.0.0'
+    id 'com.github.spotbugs' version '3.0.0'
     id 'com.bmuschko.nexus' version '2.3.1'
-    id 'io.codearte.nexus-staging' version '0.8.0'
+    id 'io.codearte.nexus-staging' version '0.21.2'
 }
 
 group = 'com.imsweb'
@@ -110,7 +110,7 @@ if (version.endsWith('-SNAPSHOT'))
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '5.5.1'
+    gradleVersion = '6.0.1'
     distributionType = Wrapper.DistributionType.ALL
 }
 
