@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.io.File;
+import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,20 +77,26 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected static final String _NORTH_PROCESSING_PANEL_ID_INTERRUPTED = "processing-interrupted";
     protected static final String _NORTH_PROCESSING_PANEL_ID_ERROR = "processing-error";
 
+    private static final String _TXT_DICT_NOT_NEEDED = "The data file does not reference user-defined dictionaries.";
+    private static final String _TXT_DICT_NEEDED = "The following user-defined dictionaries need to be provided (use the Browse button to select them):";
+    private static final String _TXT_DICT_PROVIDED = "All the user-defined dictionaries have been provided";
+
     protected JFileChooser _fileChooser, _dictionaryFileChooser;
     protected CardLayout _northLayout, _centerLayout, _northProcessingLayout;
-    protected JPanel _northPnl, _centerPnl, _northProcessingPnl, _dictionaryDisclaimerPnl;
-    protected JTextField _sourceFld, _targetFld, _dictionaryFld;
+    protected JPanel _northPnl, _centerPnl, _northProcessingPnl, _dictionaryPnl;
+    protected JTextField _sourceFld, _targetFld;
     protected JComboBox<String> _compressionBox;
     protected JProgressBar _analysisBar, _processingBar;
     protected JLabel _analysisErrorLbl, _processingErrorLbl, _processingResult1Lbl, _processingResult2Lbl, _formatLbl, _numLinesLbl, _fileSizeLbl;
-    protected JLabel _numPatLbl, _numTumLbl, _dictionaryDisclaimerLbl;
+    protected JLabel _numPatLbl, _numTumLbl, _dictionaryLbl, _dictionaryDisclaimerLbl;
     protected JTextArea _warningsTextArea, _warningsSummaryTextArea;
     protected JTabbedPane _warningsPane;
     protected StandaloneOptions _guiOptions;
 
     protected transient SwingWorker<Void, Void> _analysisWorker;
     protected transient SwingWorker<Void, Patient> _processingWorker;
+
+    protected Map<String, NaaccrDictionary> _userDictionaries = new HashMap<>();
 
     protected boolean _maxWarningsReached = false, _maxWarningsDiscAdded = false;
     protected Map<String, AtomicInteger> _warningStats = new HashMap<>();
@@ -307,30 +314,51 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         optionsPnl.add(_guiOptions);
         allOptionsPnl.add(optionsPnl);
 
-        _dictionaryDisclaimerPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        _dictionaryDisclaimerPnl.setBorder(new EmptyBorder(15, 0, 0, 0));
-        _dictionaryDisclaimerLbl = Standalone.createBoldLabel("The XML data file references the following a user-defined dictionary, you must provide it or the file won't be processed successfully.");
-        _dictionaryDisclaimerLbl.setForeground(new Color(150, 0, 0));
-        _dictionaryDisclaimerPnl.add(_dictionaryDisclaimerLbl);
-        allOptionsPnl.add(_dictionaryDisclaimerPnl);
+        JPanel dictionaryDisclaimerPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        dictionaryDisclaimerPnl.setBorder(new EmptyBorder(15, 0, 0, 0));
+        _dictionaryDisclaimerLbl = Standalone.createBoldLabel(_TXT_DICT_NOT_NEEDED);
+        dictionaryDisclaimerPnl.add(_dictionaryDisclaimerLbl);
+        allOptionsPnl.add(dictionaryDisclaimerPnl);
 
-        JPanel dictionaryPnl = new JPanel();
-        dictionaryPnl.setBorder(new EmptyBorder(15, 0, 0, 0));
-        dictionaryPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        dictionaryPnl.add(Standalone.createBoldLabel("User Dictionary:"));
-        dictionaryPnl.add(Box.createHorizontalStrut(10));
-        _dictionaryFld = new JTextField(60);
-        _dictionaryFld.setBackground(Color.WHITE);
-        dictionaryPnl.add(_dictionaryFld);
-        dictionaryPnl.add(Box.createHorizontalStrut(10));
+        _dictionaryPnl = new JPanel();
+        _dictionaryPnl.setLayout(new BoxLayout(_dictionaryPnl, BoxLayout.Y_AXIS));
+        JPanel dictionarySelectionPnl = new JPanel();
+        dictionarySelectionPnl.setBorder(new EmptyBorder(15, 0, 0, 0));
+        dictionarySelectionPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        dictionarySelectionPnl.add(Box.createHorizontalStrut(25));
+        _dictionaryLbl = new JLabel(" ");
+        dictionarySelectionPnl.add(_dictionaryLbl);
+        dictionarySelectionPnl.add(Box.createHorizontalStrut(10));
         JButton dictionaryBrowseBtn = new JButton("Browse...");
         dictionaryBrowseBtn.addActionListener(e -> {
-            _dictionaryFileChooser.setCurrentDirectory(new File(_targetFld.getText())); // dictionaries tend to be in same folder as data files...
-            if (_dictionaryFileChooser.showDialog(AbstractProcessingPage.this, "Select") == JFileChooser.APPROVE_OPTION)
-                _dictionaryFld.setText(_dictionaryFileChooser.getSelectedFile().getAbsolutePath());
+
+            // dictionaries tend to be in same folder as data files...
+            if (_targetFld != null)
+                _dictionaryFileChooser.setCurrentDirectory(new File(_targetFld.getText()));
+
+            if (_dictionaryFileChooser.showDialog(AbstractProcessingPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
+                try {
+                    NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(_dictionaryFileChooser.getSelectedFile());
+                    _userDictionaries.put(dictionary.getDictionaryUri(), dictionary);
+                    List<String> neededDictionaries = new ArrayList<>(getRequiredUserDefinedDictionaries(new File(_sourceFld.getText())));
+                    neededDictionaries.remove(dictionary.getDictionaryUri());
+                    if (neededDictionaries.isEmpty()) {
+                        _dictionaryDisclaimerLbl.setText(_TXT_DICT_PROVIDED);
+                        _dictionaryDisclaimerLbl.setForeground(Color.BLACK);
+                        _dictionaryLbl.setText("");
+                        _dictionaryPnl.setVisible(false);
+                    }
+                    else
+                        _dictionaryLbl.setText(String.join("     ", neededDictionaries));
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace(); // TODO FD
+                }
+            }
         });
-        dictionaryPnl.add(dictionaryBrowseBtn);
-        allOptionsPnl.add(dictionaryPnl);
+        dictionarySelectionPnl.add(dictionaryBrowseBtn);
+        _dictionaryPnl.add(dictionarySelectionPnl);
+        allOptionsPnl.add(_dictionaryPnl);
 
         JPanel controlsPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         controlsPnl.setBorder(new EmptyBorder(25, 300, 10, 0));
@@ -537,10 +565,19 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             _fileSizeLbl.setText(Standalone.formatFileSize(file.length()));
             _northLayout.show(_northPnl, _NORTH_PANEL_ID_ANALYSIS_RESULTS);
             _centerPnl.setVisible(true);
+            _userDictionaries.clear();
             List<String> requiredDictionaries = getRequiredUserDefinedDictionaries(file);
-            if (!requiredDictionaries.isEmpty()) { // at this point the collection is either empty or of size 1 (we failed earlier if there is more than 1)
-                _dictionaryDisclaimerLbl.setText("Please provide the following user-defined dictionary that the source data file references: " + requiredDictionaries.get(0));
-                _dictionaryDisclaimerPnl.setVisible(!getRequiredUserDefinedDictionaries(file).isEmpty());
+            if (!requiredDictionaries.isEmpty()) {
+                _dictionaryDisclaimerLbl.setText(_TXT_DICT_NEEDED);
+                _dictionaryDisclaimerLbl.setForeground(new Color(150, 0, 0));
+                _dictionaryLbl.setText(String.join("     ", requiredDictionaries));
+                _dictionaryPnl.setVisible(true);
+            }
+            else {
+                _dictionaryDisclaimerLbl.setText(_TXT_DICT_NOT_NEEDED);
+                _dictionaryDisclaimerLbl.setForeground(Color.BLACK);
+                _dictionaryLbl.setText("");
+                _dictionaryPnl.setVisible(false);
             }
             _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_OPTIONS);
             if (_targetFld != null) {
@@ -559,12 +596,14 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
     private void performAnalysis() {
 
-        List<String> requiredDictionaries = getRequiredUserDefinedDictionaries(new File(_sourceFld.getText()));
-        if (!requiredDictionaries.isEmpty() && _dictionaryFld.getText().isEmpty()) { // at this point the collection is either empty or of size 1 (we failed earlier if there is more than 1)
-            String message = "The data file requires the following user-defined dictionary:"
-                    + "\n\n   - " + requiredDictionaries.get(0)
-                    + "\n\nWithout the dictionary, some data items might not be properly recognized and will be ignored."
-                    + "\n\nAre you sure you want to continue without providing the dictionary?";
+        List<String> requiredDictionaries = new ArrayList<>(getRequiredUserDefinedDictionaries(new File(_sourceFld.getText())));
+        requiredDictionaries.removeAll(_userDictionaries.keySet());
+        if (!requiredDictionaries.isEmpty()) {
+            StringBuilder message = new StringBuilder("The data file requires the following user-defined dictionaries:\n");
+            for (String requiredDictionary : requiredDictionaries)
+                message.append("\n   - ").append(requiredDictionary);
+            message.append("\n\nWithout those dictionaries, some data items might not be properly recognized and will be ignored.");
+            message.append("\n\nAre you sure you want to continue without providing the dictionaries?");
             int result = JOptionPane.showConfirmDialog(this, message, "Confirmation",
                     JOptionPane.YES_NO_OPTION);
             if (result != JOptionPane.YES_OPTION)
@@ -657,10 +696,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             protected Void doInBackground() throws Exception {
                 final File targetFile = _targetFld == null ? null : new File(fixFileExtension(_targetFld.getText(), (String)_compressionBox.getSelectedItem()));
 
-                List<NaaccrDictionary> userDictionaries = new ArrayList<>();
-                if (!_dictionaryFld.getText().isEmpty())
-                    for (String s : StringUtils.split(_dictionaryFld.getText(), ';'))
-                        userDictionaries.add(NaaccrXmlDictionaryUtils.readDictionary(new File(s.trim())));
+                List<NaaccrDictionary> userDictionaries = new ArrayList<>(_userDictionaries.values());
 
                 final long start = System.currentTimeMillis();
                 final AtomicInteger numPatients = new AtomicInteger();

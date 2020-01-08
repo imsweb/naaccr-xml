@@ -79,15 +79,7 @@ public class XmlValidationPage extends AbstractProcessingPage {
         }
 
         try {
-            NaaccrFormat format = NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromXmlFile(file));
-
-            // if the format was properly found but the file references more than one user-defined dictionary, fail the analysis
-            if (getRequiredUserDefinedDictionaries(file).size() > 1) {
-                reportAnalysisError(new Exception("the source file references more than one user-defined dictionary, this application only supports a single one."));
-                return null;
-            }
-
-            return format;
+            return NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromXmlFile(file));
         }
         catch (RuntimeException e) {
             reportAnalysisError(new Exception("unable to identify file format"));
