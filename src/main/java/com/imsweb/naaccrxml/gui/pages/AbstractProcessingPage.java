@@ -352,7 +352,8 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                         _dictionaryLbl.setText(String.join("     ", neededDictionaries));
                 }
                 catch (IOException ex) {
-                    ex.printStackTrace(); // TODO FD
+                    String msg = "Unexpected error reading dictionary\n\n" + ex.getMessage();
+                    JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
