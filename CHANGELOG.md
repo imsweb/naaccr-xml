@@ -3,6 +3,7 @@
 **Version 6.5**
 
 - Added support for reporting end lines for Patient and Tumor entities.
+- Dictionary selection dialog will now default to same folder as selected data file.
 - Updated commons-lang3 dependency from version 3.7 to version 3.9.
 
 **Version 6.4**

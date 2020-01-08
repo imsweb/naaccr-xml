@@ -325,6 +325,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         dictionaryPnl.add(Box.createHorizontalStrut(10));
         JButton dictionaryBrowseBtn = new JButton("Browse...");
         dictionaryBrowseBtn.addActionListener(e -> {
+            _dictionaryFileChooser.setCurrentDirectory(new File(_targetFld.getText())); // dictionaries tend to be in same folder as data files...
             if (_dictionaryFileChooser.showDialog(AbstractProcessingPage.this, "Select") == JFileChooser.APPROVE_OPTION)
                 _dictionaryFld.setText(_dictionaryFileChooser.getSelectedFile().getAbsolutePath());
         });
