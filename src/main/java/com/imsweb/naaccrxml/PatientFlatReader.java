@@ -238,6 +238,7 @@ public class PatientFlatReader implements PatientReader {
     protected Patient createPatientFromLines(List<String> lines, List<Integer> lineNumbers) {
         Patient patient = new Patient();
         patient.setStartLineNumber(lineNumbers.get(0));
+        patient.setEndLineNumber(lineNumbers.get(0)); // for flat, start and end are the same
 
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
@@ -248,6 +249,7 @@ public class PatientFlatReader implements PatientReader {
 
             Tumor tumor = new Tumor();
             tumor.setStartLineNumber(lineNumber);
+            tumor.setEndLineNumber(lineNumber); // for flat, start and end are the same
             for (RuntimeNaaccrDictionaryItem def : _dictionary.getItems()) {
                 if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(def.getParentXmlElement())) {
                     if (_options.getReportLevelMismatch()) {

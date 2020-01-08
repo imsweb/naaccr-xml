@@ -2,6 +2,7 @@
 
 **Version 6.5**
 
+- Added support for reporting end lines for Patient and Tumor entities.
 - Updated commons-lang3 dependency from version 3.7 to version 3.9.
 
 **Version 6.4**

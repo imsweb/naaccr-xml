@@ -36,12 +36,12 @@ public class AbstractEntityTest {
         Assert.assertEquals(1, patient1.getTumors().size());
 
         Assert.assertEquals(2, patient1.getItems().size());
-        patient1.removeItem("nameLast");
+        Assert.assertTrue(patient1.removeItem("nameLast"));
         Assert.assertEquals(1, patient1.getItems().size());
         Assert.assertEquals("00000001", patient1.getItemValue("patientIdNumber"));
 
         Assert.assertEquals(2, tumor2.getItems().size());
-        tumor2.removeItem("primarySite");
+        Assert.assertTrue(tumor2.removeItem("primarySite"));
         Assert.assertEquals(1, tumor2.getItems().size());
         Assert.assertEquals("1", tumor2.getItemValue("laterality"));
     }

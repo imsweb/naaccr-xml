@@ -36,6 +36,8 @@ public class PatientXmlReaderTest {
             Assert.assertNull(reader.getRootData().getTimeGenerated());
             Assert.assertEquals(1, reader.getRootData().getValidationErrors().size());
             Patient patient = reader.readPatient();
+            Assert.assertEquals(2, patient.getStartLineNumber().intValue());
+            Assert.assertEquals(4, patient.getEndLineNumber().intValue());
             Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
             Assert.assertEquals(3, patient.getItem("patientIdNumber").getStartLineNumber().intValue());
             Assert.assertEquals(0, patient.getTumors().size());
@@ -45,34 +47,52 @@ public class PatientXmlReaderTest {
         // one patient with one tumor
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-one-patient-one-tumor.xml")), options)) {
             Patient patient = reader.readPatient();
+            Assert.assertEquals(2, patient.getStartLineNumber().intValue());
+            Assert.assertEquals(7, patient.getEndLineNumber().intValue());
             Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
             Assert.assertEquals(1, patient.getTumors().size());
-            Assert.assertEquals("C123", patient.getTumors().get(0).getItem("primarySite").getValue());
+            Assert.assertEquals(4, patient.getTumor(0).getStartLineNumber().intValue());
+            Assert.assertEquals(6, patient.getTumor(0).getEndLineNumber().intValue());
+            Assert.assertEquals("C123", patient.getTumor(0).getItem("primarySite").getValue());
             Assert.assertNull(reader.readPatient());
         }
 
         // one patient with two tumors
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-one-patient-two-tumors.xml")), options)) {
             Patient patient = reader.readPatient();
+            Assert.assertEquals(4, patient.getStartLineNumber().intValue());
+            Assert.assertEquals(10, patient.getEndLineNumber().intValue());
             Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
             Assert.assertEquals(2, patient.getTumors().size());
-            Assert.assertEquals("C123", patient.getTumors().get(0).getItem("primarySite").getValue());
-            Assert.assertEquals("C456", patient.getTumors().get(1).getItem("primarySite").getValue());
+            Assert.assertEquals(4, patient.getTumor(0).getStartLineNumber().intValue());
+            Assert.assertEquals(6, patient.getTumor(0).getEndLineNumber().intValue());
+            Assert.assertEquals("C123", patient.getTumor(0).getItem("primarySite").getValue());
+            Assert.assertEquals(7, patient.getTumor(1).getStartLineNumber().intValue());
+            Assert.assertEquals(9, patient.getTumor(1).getEndLineNumber().intValue());
+            Assert.assertEquals("C456", patient.getTumor(1).getItem("primarySite").getValue());
             Assert.assertNull(reader.readPatient());
         }
 
         // two patients with one tumor each
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-two-patients.xml")), options)) {
             Patient patient1 = reader.readPatient();
+            Assert.assertEquals(3, patient1.getStartLineNumber().intValue());
+            Assert.assertEquals(8, patient1.getEndLineNumber().intValue());
             Assert.assertEquals("00000001", patient1.getItem("patientIdNumber").getValue());
             Assert.assertEquals(1, patient1.getTumors().size());
-            Assert.assertEquals("C123", patient1.getTumors().get(0).getItem("primarySite").getValue());
-            Assert.assertEquals(6, patient1.getTumors().get(0).getItem("primarySite").getStartLineNumber().intValue());
+            Assert.assertEquals(5, patient1.getTumor(0).getStartLineNumber().intValue());
+            Assert.assertEquals(7, patient1.getTumor(0).getEndLineNumber().intValue());
+            Assert.assertEquals("C123", patient1.getTumor(0).getItem("primarySite").getValue());
+            Assert.assertEquals(6, patient1.getTumor(0).getItem("primarySite").getStartLineNumber().intValue());
             Patient patient2 = reader.readPatient();
+            Assert.assertEquals(9, patient2.getStartLineNumber().intValue());
+            Assert.assertEquals(14, patient2.getEndLineNumber().intValue());
             Assert.assertEquals("00000002", patient2.getItem("patientIdNumber").getValue());
             Assert.assertEquals(1, patient2.getTumors().size());
-            Assert.assertEquals("C456", patient2.getTumors().get(0).getItem("primarySite").getValue());
-            Assert.assertEquals(12, patient2.getTumors().get(0).getItem("primarySite").getStartLineNumber().intValue());
+            Assert.assertEquals(11, patient2.getTumor(0).getStartLineNumber().intValue());
+            Assert.assertEquals(13, patient2.getTumor(0).getEndLineNumber().intValue());
+            Assert.assertEquals("C456", patient2.getTumor(0).getItem("primarySite").getValue());
+            Assert.assertEquals(12, patient2.getTumor(0).getItem("primarySite").getStartLineNumber().intValue());
             Assert.assertNull(reader.readPatient());
         }
 
@@ -119,7 +139,7 @@ public class PatientXmlReaderTest {
 
         // test some special characters
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-special-characters.xml")), options)) {
-            Tumor tumor = reader.readPatient().getTumors().get(0);
+            Tumor tumor = reader.readPatient().getTumor(0);
             Assert.assertEquals("& < > \" '", tumor.getItemValue("rxTextHormone"));
             Assert.assertEquals("& < > \" '", tumor.getItemValue("rxTextChemo"));
 
@@ -192,7 +212,7 @@ public class PatientXmlReaderTest {
         options.setTranslateRenamedStandardItemIds(false);
         options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_ERROR);
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-translate-180.xml")), options)) {
-            Tumor tumor = reader.readPatient().getTumors().get(0);
+            Tumor tumor = reader.readPatient().getTumor(0);
             Assert.assertNull(tumor.getItemValue("dateOfSentinelLymphNodeBiopsy")); // old ID
             Assert.assertNull(tumor.getItemValue("dateSentinelLymphNodeBiopsy")); // new ID
             Assert.assertFalse(tumor.getValidationErrors().isEmpty());
@@ -204,7 +224,7 @@ public class PatientXmlReaderTest {
         options.setTranslateRenamedStandardItemIds(true);
         options.setItemIdsToTranslate(null);
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-translate-180.xml")), options)) {
-            Tumor tumor = reader.readPatient().getTumors().get(0);
+            Tumor tumor = reader.readPatient().getTumor(0);
             Assert.assertNull(tumor.getItemValue("dateOfSentinelLymphNodeBiopsy")); // old ID
             Assert.assertEquals("20190101", tumor.getItemValue("dateSentinelLymphNodeBiopsy")); // new ID
             Assert.assertTrue(tumor.getValidationErrors().isEmpty());
@@ -214,7 +234,7 @@ public class PatientXmlReaderTest {
         options.setTranslateRenamedStandardItemIds(false);
         options.setItemIdsToTranslate(Collections.singletonMap("dateOfSentinelLymphNodeBiopsy", "dateSentinelLymphNodeBiopsy"));
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-translate-180.xml")), options)) {
-            Tumor tumor = reader.readPatient().getTumors().get(0);
+            Tumor tumor = reader.readPatient().getTumor(0);
             Assert.assertNull(tumor.getItemValue("dateOfSentinelLymphNodeBiopsy")); // old ID
             Assert.assertEquals("20190101", tumor.getItemValue("dateSentinelLymphNodeBiopsy")); // new ID
             Assert.assertTrue(tumor.getValidationErrors().isEmpty());
@@ -224,7 +244,7 @@ public class PatientXmlReaderTest {
         options.setTranslateRenamedStandardItemIds(true);
         options.setItemIdsToTranslate(null);
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-options-translate-160.xml")), options)) {
-            Tumor tumor = reader.readPatient().getTumors().get(0);
+            Tumor tumor = reader.readPatient().getTumor(0);
             Assert.assertNull(tumor.getItemValue("dateOfSentinelLymphNodeBiopsy")); // old ID
             Assert.assertNull(tumor.getItemValue("dateSentinelLymphNodeBiopsy")); // new ID
             Assert.assertFalse(tumor.getValidationErrors().isEmpty());
@@ -244,22 +264,22 @@ public class PatientXmlReaderTest {
         // regular value for the extra variable
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-1.xml")), options, dict, null)) {
             Patient patient = reader.readPatient();
-            Assert.assertEquals("01", patient.getTumors().get(0).getItemValue("myVariable"));
+            Assert.assertEquals("01", patient.getTumor(0).getItemValue("myVariable"));
         }
 
         // padding (and trimming) only applies to reading from flat-file, not XML...
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-2.xml")), options, dict, null)) {
             Patient patient = reader.readPatient();
-            Assert.assertEquals("1", patient.getTumors().get(0).getItemValue("myVariable"));
+            Assert.assertEquals("1", patient.getTumor(0).getItemValue("myVariable"));
         }
 
         // value is not correct according to the provided regex (error should be reported on the item itself)
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-3.xml")), options, dict, null)) {
             Patient patient = reader.readPatient();
-            Assert.assertEquals("09", patient.getTumors().get(0).getItemValue("myVariable"));
-            Assert.assertNotNull(patient.getTumors().get(0).getItem("myVariable").getValidationError());
-            Assert.assertFalse(patient.getTumors().get(0).getAllValidationErrors().isEmpty());
-            Assert.assertTrue(patient.getTumors().get(0).getValidationErrors().isEmpty());
+            Assert.assertEquals("09", patient.getTumor(0).getItemValue("myVariable"));
+            Assert.assertNotNull(patient.getTumor(0).getItem("myVariable").getValidationError());
+            Assert.assertFalse(patient.getTumor(0).getAllValidationErrors().isEmpty());
+            Assert.assertTrue(patient.getTumor(0).getValidationErrors().isEmpty());
         }
 
         // create a list with two user dictionaries
@@ -373,7 +393,7 @@ public class PatientXmlReaderTest {
             Assert.assertEquals(1, patient.getTumors().size());
 
             // there should be no error, 1 item and 2 extensions for the unique tumor
-            Tumor tumor = patient.getTumors().get(0);
+            Tumor tumor = patient.getTumor(0);
             Assert.assertTrue(tumor.getValidationErrors().isEmpty());
             Assert.assertEquals(1, tumor.getItems().size());
             Assert.assertEquals(2, tumor.getExtensions().size());

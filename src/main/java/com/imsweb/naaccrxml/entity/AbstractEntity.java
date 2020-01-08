@@ -30,8 +30,11 @@ public class AbstractEntity {
     // the validation errors for this entity (most errors are attached to individual items; to gather all errors for an entity, use the getAllValidationErrors() method)
     protected List<NaaccrValidationError> _errors;
 
-    // the line number for this entity; available only when reading from a file
+    // the starting line number (start tag) for this entity; available only when reading from a file
     protected Integer _startLineNumber;
+
+    // the ending line number (end tag) for this entity; available only when reading from a file
+    protected Integer _endLineNumber;
 
     // the extension objects
     protected List<Object> _extensions;
@@ -151,21 +154,41 @@ public class AbstractEntity {
     }
 
     /**
-     * Returns the line number of the current entity from the file it was read from.
+     * Returns the start line number of the current entity from the file it was read from.
      * <br/><br/>
      * Since it is not a requirement to create patients from a file, this might return null.
-     * @return the line number of the current entity, maybe null
+     * @return the start line number of the current entity, maybe null
      */
     public Integer getStartLineNumber() {
         return _startLineNumber;
     }
 
     /**
-     * Sets the line number of the current entity.
+     * Sets the start line number of the current entity.
      * @param startLineNumber line number to set
      */
     public void setStartLineNumber(Integer startLineNumber) {
         _startLineNumber = startLineNumber;
+    }
+
+    /**
+     * Returns the end line number of the current entity from the file it was read from.
+     * <br/><br/>
+     * Since it is not a requirement to create patients from a file, this might return null.
+     * <br/><br/>
+     * This is not populated for the NaaccrData root tag since it would require the entire file to be read when initializing the reader.
+     * @return the end line number of the current entity, maybe null
+     */
+    public Integer getEndLineNumber() {
+        return _endLineNumber;
+    }
+
+    /**
+     * Sets the end line number of the current entity.
+     * @param endLineNumber line number to set
+     */
+    public void setEndLineNumber(Integer endLineNumber) {
+        _endLineNumber = endLineNumber;
     }
 
     /**

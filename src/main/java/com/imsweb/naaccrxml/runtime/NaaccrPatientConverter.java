@@ -156,6 +156,7 @@ public class NaaccrPatientConverter implements Converter {
 
                         reader.moveUp();
                     }
+                    tumor.setEndLineNumber(_context.getLineNumber());
                     patient.addTumor(tumor);
                 }
                 // handle patient extension
@@ -169,6 +170,8 @@ public class NaaccrPatientConverter implements Converter {
 
                 reader.moveUp();
             }
+
+            patient.setEndLineNumber(_context.getLineNumber());
 
             return patient;
         }

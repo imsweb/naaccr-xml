@@ -35,6 +35,15 @@ public class Patient extends AbstractEntity {
     }
 
     /**
+     * Returns the tumor for the given index, throws an exception if the index is out of bound.
+     * @param tumorIdx the tumor index
+     * @return tumor corresponding to the tumor index
+     */
+    public Tumor getTumor(int tumorIdx) {
+        return _tumors.get(tumorIdx);
+    }
+
+    /**
      * This methods returns all the validation errors on the patient, any of its items and any of its tumors.
      * @return collection of validation errors, maybe empty but never null
      */
