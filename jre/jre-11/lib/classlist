@@ -96,7 +96,6 @@ jdk/internal/loader/ClassLoaders$AppClassLoader
 jdk/internal/loader/BuiltinClassLoader
 jdk/internal/loader/ClassLoaders$PlatformClassLoader
 java/security/CodeSource
-jdk/internal/module/ArchivedModuleGraph
 java/lang/StackTraceElement
 java/nio/Buffer
 java/lang/StackWalker
@@ -267,7 +266,10 @@ java/io/FileSystem
 java/io/ExpiringCache
 java/io/ExpiringCache$1
 java/util/LinkedHashMap
+java/util/ImmutableCollections
 jdk/internal/module/ModulePatcher
+java/util/ImmutableCollections$SetN
+jdk/internal/module/ArchivedModuleGraph
 jdk/internal/module/SystemModuleFinders
 java/net/URI
 java/net/URI$1
@@ -277,8 +279,6 @@ jdk/internal/module/SystemModules$all
 jdk/internal/module/SystemModules
 jdk/internal/module/Builder
 java/lang/module/ModuleDescriptor$Requires
-java/util/ImmutableCollections
-java/util/ImmutableCollections$SetN
 java/lang/module/ModuleDescriptor$Exports
 java/lang/module/ModuleDescriptor$Opens
 java/lang/module/ModuleDescriptor$Provides
@@ -336,6 +336,7 @@ jdk/internal/loader/BuiltinClassLoader$LoadedModule
 sun/net/www/protocol/jrt/Handler
 java/util/ImmutableCollections$SetN$SetNIterator
 java/lang/module/Configuration
+java/util/ImmutableCollections$ListN
 java/lang/module/ResolvedModule
 java/util/AbstractMap$1
 java/util/AbstractMap$1$1
@@ -347,7 +348,6 @@ java/util/HashMap$TreeNode
 jdk/internal/module/ModuleLoaderMap$Mapper
 java/util/function/Function
 java/lang/ModuleLayer
-java/util/ImmutableCollections$ListN
 java/util/ImmutableCollections$ListItr
 java/util/ListIterator
 java/util/ArrayList$Itr
@@ -782,7 +782,6 @@ java/util/ServiceLoader$LazyClassPathLookupIterator
 java/util/ServiceLoader$2
 java/util/ServiceLoader$3
 jdk/internal/loader/AbstractClassLoaderValue$Memoizer
-java/util/Collections$EmptyIterator
 jdk/internal/module/Resources
 jdk/internal/loader/BuiltinClassLoader$2
 jdk/internal/loader/BuiltinClassLoader$5
@@ -839,7 +838,7 @@ java/nio/IntBuffer
 jdk/internal/jimage/ImageStringsReader
 jdk/internal/jimage/ImageStrings
 jdk/internal/jimage/decompressor/Decompressor
-jdk/internal/jimage/ImageLocation
+java/util/Collections$EmptyIterator
 java/util/Collections$EmptyEnumeration
 jdk/internal/loader/BuiltinClassLoader$1
 java/lang/CompoundEnumeration
@@ -1161,6 +1160,7 @@ java/util/logging/LogManager$CloseOnReset
 java/time/zone/ZoneRulesProvider
 java/time/zone/ZoneRulesProvider$1
 java/time/zone/TzdbZoneRulesProvider
+jdk/internal/jimage/ImageLocation
 java/time/zone/Ser
 java/io/Externalizable
 java/time/Month

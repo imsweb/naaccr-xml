@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 6.6**
+
+- Updated embedded JRE to Java 11.0.6 (this only affects the standalone program).
+
 **Version 6.5**
 
 - Added support for reporting end lines for Patient and Tumor entities.
