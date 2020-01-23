@@ -35,6 +35,8 @@ public class XsdSchemaTest {
     public static final boolean STRICT_NAMESPACE_MODE = true;
     public static final boolean RELAXED_NAMESPACE_MODE = false;
 
+    private static final String _XSD_FILE = "xsd/naaccr_data_1.4.xsd";
+
     @Test
     public void testXsdAgainstLibrary() throws IOException {
         Path dir = Paths.get(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/validity");
@@ -67,7 +69,6 @@ public class XsdSchemaTest {
         });
     }
 
-    @SuppressWarnings("ConstantConditions")
     private void assertValidXmlFileForXsd(File xmlFile) {
         try (FileReader reader = new FileReader(xmlFile)) {
             createSchema().newValidator().validate(new StreamSource(reader));
@@ -77,7 +78,6 @@ public class XsdSchemaTest {
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     private void assertNotValidXmlFileForXsd(File xmlFile) {
         try (FileReader reader = new FileReader(xmlFile)) {
             createSchema().newValidator().validate(new StreamSource(reader));
@@ -132,7 +132,7 @@ public class XsdSchemaTest {
 
     @SuppressWarnings("ConstantConditions")
     private Schema createSchema() throws SAXException {
-        return SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(Thread.currentThread().getContextClassLoader().getResource("xsd/naaccr_data_1.1.xsd"));
+        return SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(Thread.currentThread().getContextClassLoader().getResource(_XSD_FILE));
     }
 
     private NaaccrStreamConfiguration createConfiguration() {
@@ -174,6 +174,7 @@ public class XsdSchemaTest {
         return userDictionary;
     }
 
+    @SuppressWarnings("unused")
     public static class MyOuterTag {
 
         public String _myInnerTag;

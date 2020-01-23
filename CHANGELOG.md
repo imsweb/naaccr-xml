@@ -2,6 +2,7 @@
 
 **Version 6.6**
 
+- Added missing specifications 1.4 XSD files, they are identical to the specifications 1.3 XSD files.
 - It is now possible to generate XML ID from item Name in the dictionary editor.
 - Updated embedded JRE to Java 11.0.6 (this only affects the standalone program).
 
