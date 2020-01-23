@@ -2,6 +2,7 @@
 
 **Version 6.6**
 
+- It is now possible to generate XML ID from item Name in the dictionary editor.
 - Updated embedded JRE to Java 11.0.6 (this only affects the standalone program).
 
 **Version 6.5**

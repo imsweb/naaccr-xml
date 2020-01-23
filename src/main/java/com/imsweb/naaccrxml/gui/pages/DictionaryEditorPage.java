@@ -220,6 +220,15 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
                     removeAllRowsItem.addActionListener(DictionaryEditorPage.this);
                     popup.add(removeAllRowsItem);
 
+                    popup.addSeparator();
+
+                    JMenuItem generateIdFromNameItem = new JMenuItem("Generate ID from Name");
+                    generateIdFromNameItem.setActionCommand("table-generate-id-from-name");
+                    generateIdFromNameItem.addActionListener(DictionaryEditorPage.this);
+                    if (!rowSelected)
+                        generateIdFromNameItem.setEnabled(false);
+                    popup.add(generateIdFromNameItem);
+
                     popup.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
@@ -282,6 +291,11 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
                 new JLabel(
                         "Double click a cell or select it and hit Enter to modify its content; hit Enter once you are done editing it (or Escape to cancel). Right click on the table to add or remove rows."));
         disclaimerPnl.add(line1Pnl);
+        JPanel line2Pnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 2));
+        line2Pnl.add(
+                new JLabel(
+                        "You can generate an ID from the name using a standard algorithm: double click the name cell, type the name and hit Enter, right click on the row and select \"Generate ID from Name\"."));
+        disclaimerPnl.add(line2Pnl);
         centerPnl.add(disclaimerPnl, BorderLayout.SOUTH);
 
         _dictionaryFileChooser = new JFileChooser();
@@ -682,6 +696,12 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
             _itemsModel.removeRow(selected);
     }
 
+    private void performGenerateIdFromName() {
+        String name = (String)_itemsTbl.getValueAt(_itemsTbl.getSelectedRow(), 2);
+        if (name != null)
+            _itemsTbl.setValueAt(NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName(name), _itemsTbl.getSelectedRow(), 0);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
@@ -720,6 +740,9 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
                 break;
             case "table-remove-all-other-rows":
                 performRemoveRow(true, true);
+                break;
+            case "table-generate-id-from-name":
+                performGenerateIdFromName();
                 break;
             default:
                 throw new RuntimeException("Unknown action: " + e.getActionCommand());
