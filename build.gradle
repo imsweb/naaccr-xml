@@ -72,6 +72,12 @@ spotbugs {
     excludeFilter =  project(':').file("config/spotbugs/spotbugs-exclude.xml")
 }
 
+// configure nexus staging plugin
+nexusStaging {
+    numberOfRetries = 50
+    delayBetweenRetriesInMillis = 5000
+}
+
 // needed to deploy to Maven Central
 modifyPom {
     project {
