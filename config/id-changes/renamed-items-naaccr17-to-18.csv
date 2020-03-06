@@ -1,0 +1,6 @@
+Item Number, Old XML ID, new XML ID
+772,seerPrimaryTumor,eodPrimaryTumor
+774,seerRegionalNodes,eodRegionalNodes
+776,seerMets,eodMets
+762,derivedSumStg2017,derivedSummaryStage2018
+764,directlyAssignedSumStg2017,summaryStage2018
