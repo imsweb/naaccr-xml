@@ -2,6 +2,7 @@
 
 **Version 6.7**
 
+- Updated conflict resolution for duplicate items in multiple user-defined dictionaries.
 - Updated embedded JRE to Java 11.0.7 (this only affects the standalone program).
 
 **Version 6.6**

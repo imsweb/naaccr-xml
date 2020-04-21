@@ -27,9 +27,11 @@ import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_REC_TYPE_CONFIDENTIAL;
 import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_REC_TYPE_INCIDENCE;
 import static org.junit.Assert.fail;
 
+@SuppressWarnings("ConstantConditions")
 public class NaaccrXmlDictionaryUtilsTest {
 
     @Test
+    @SuppressWarnings("CollectionAddAllCanBeReplacedWithConstructor")
     public void testInternalDictionaries() throws IOException {
         for (String version : NaaccrFormat.getSupportedVersions()) {
             List<NaaccrDictionaryItem> items = new ArrayList<>();
@@ -283,7 +285,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertFalse(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries).isEmpty());
         item2.setNaaccrId("myVariable2");
 
-        // NAACCR ID repeats a user-defined ones
+        // NAACCR ID repeats a user-defined ones (other attributes are different)
         item2.setNaaccrId("myVariable1");
         Assert.assertFalse(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries).isEmpty());
         item2.setNaaccrId("myVariable2");
@@ -293,7 +295,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertFalse(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries).isEmpty());
         item2.setNaaccrNum(10001);
 
-        // NAACCR number repeats a user-defined one
+        // NAACCR number repeats a user-defined one (other attributes are different)
         item2.setNaaccrNum(10000);
         Assert.assertFalse(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries).isEmpty());
         item2.setNaaccrNum(10001);
@@ -302,6 +304,25 @@ public class NaaccrXmlDictionaryUtilsTest {
         item1.setStartColumn(2340);
         item2.setStartColumn(2340);
         Assert.assertFalse(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries).isEmpty());
+        item1.setStartColumn(null);
+        item2.setStartColumn(null);
+
+        NaaccrDictionary userDictionary3 = new NaaccrDictionary();
+        userDictionary3.setNaaccrVersion("160");
+        userDictionary3.setDictionaryUri("whatever3");
+        userDictionary3.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
+        NaaccrDictionaryItem item3 = new NaaccrDictionaryItem();
+        item3.setNaaccrId("myVariable1");
+        item3.setNaaccrName("My Variable1");
+        item3.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT);
+        item3.setNaaccrNum(10000);
+        item3.setLength(1);
+        userDictionary3.setItems(Collections.singletonList(item3));
+        userDictionaries.add(userDictionary3);
+
+        // NAACCR ID repeats a user-defined ones (other attributes are the same)
+        Assert.assertTrue(NaaccrXmlDictionaryUtils.validateDictionaries(baseDictionary, userDictionaries).isEmpty());
+
     }
 
     @Test

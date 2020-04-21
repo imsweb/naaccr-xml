@@ -6,8 +6,10 @@ package com.imsweb.naaccrxml.runtime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -20,10 +22,10 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 public class RuntimeNaaccrDictionary {
 
     // used to uniquely identify a runtime dictionary (based on the URI of the base and user dictionaries)
-    private String _id;
+    private final String _id;
 
     // the format for this runtime dictionary
-    private NaaccrFormat _format;
+    private final NaaccrFormat _format;
 
     // the items for this runtime dictionary
     private List<RuntimeNaaccrDictionaryItem> _items;
@@ -67,10 +69,15 @@ public class RuntimeNaaccrDictionary {
         for (NaaccrDictionaryItem item : baseDictionary.getItems())
             if (item.getRecordTypes() == null || StringUtils.contains(item.getRecordTypes(), recordType))
                 _items.add(new RuntimeNaaccrDictionaryItem(item));
-        for (NaaccrDictionary userDictionary : dictionaries)
-            for (NaaccrDictionaryItem item : userDictionary.getItems())
-                if (item.getRecordTypes() == null || StringUtils.contains(item.getRecordTypes(), recordType))
+        Set<String> processedIds = new HashSet<>();
+        for (NaaccrDictionary userDictionary : dictionaries) {
+            for (NaaccrDictionaryItem item : userDictionary.getItems()) {
+                if ((item.getRecordTypes() == null || StringUtils.contains(item.getRecordTypes(), recordType) && !processedIds.contains(item.getNaaccrId()))) {
                     _items.add(new RuntimeNaaccrDictionaryItem(item));
+                    processedIds.add(item.getNaaccrId());
+                }
+            }
+        }
 
         // sort the fields by starting columns (no start columns go to the end)
         _items.sort((o1, o2) -> {

@@ -100,10 +100,10 @@ public final class NaaccrXmlDictionaryUtils {
     public static final Pattern DEFAULT_USER_DICTIONARY_URI_PATTERN = Pattern.compile("http://naaccr\\.org/naaccrxml/user-defined-naaccr-dictionary-(.+?)\\.xml");
 
     // cached internal dictionaries
-    private static Map<String, NaaccrDictionary> _INTERNAL_DICTIONARIES = new ConcurrentHashMap<>();
+    private static final Map<String, NaaccrDictionary> _INTERNAL_DICTIONARIES = new ConcurrentHashMap<>();
 
     // NAACCR 18 IDs that got renamed as part of specifications 1.4 (those should be removed eventually)
-    private static Map<String, String> _RENAMED_LONG_NAACCR_18_IDS = new HashMap<>();
+    private static final Map<String, String> _RENAMED_LONG_NAACCR_18_IDS = new HashMap<>();
 
     static {
         _RENAMED_LONG_NAACCR_18_IDS.put("dateRegionalLymphNodeDissection", "dateRegionalLNDissection");
@@ -633,6 +633,14 @@ public final class NaaccrXmlDictionaryUtils {
         // validate the base dictionary
         List<String> errors = new ArrayList<>(validateBaseDictionary(baseDictionary));
 
+        // cache the user dictionaries by their ID for quick lookup (and check the the dictionaries are unique)
+        Map<String, NaaccrDictionary> cachedUserDictionaries = new HashMap<>();
+        for (NaaccrDictionary userDictionary : userDictionaries) {
+            if (cachedUserDictionaries.containsKey(userDictionary.getDictionaryUri()))
+                errors.add("user-defined dictionaries must be unique; found multiple URI '" + userDictionary.getDictionaryUri() + "'");
+            cachedUserDictionaries.put(userDictionary.getDictionaryUri(), userDictionary);
+        }
+
         // validate each user dictionary
         Map<String, String> idsDejaVu = new HashMap<>();
         Map<Integer, String> numbersDejaVue = new HashMap<>();
@@ -655,14 +663,33 @@ public final class NaaccrXmlDictionaryUtils {
                     errors.add("user-defined dictionary '" + dictId + "' cannot use same NAACCR Number as a base item: " + item.getNaaccrNum());
 
                 // NAACCR IDs must be unique among all user dictionaries
-                if (idsDejaVu.containsKey(item.getNaaccrId()))
-                    errors.add("user-defined dictionary '" + dictId + "' and '" + idsDejaVu.get(item.getNaaccrId()) + "' both  define NAACCR ID '" + item.getNaaccrId() + "'");
-                idsDejaVu.put(item.getNaaccrId(), dictId);
+                if (idsDejaVu.containsKey(item.getNaaccrId())) {
+                    String existingItemDictId = idsDejaVu.get(item.getNaaccrId());
 
-                // NAACCR Numbers must be unique among all user dictionaries
-                if (numbersDejaVue.containsKey(item.getNaaccrNum()))
-                    errors.add("user-defined dictionary '" + dictId + "' and '" + numbersDejaVue.get(item.getNaaccrNum()) + "' both  define NAACCR ID '" + item.getNaaccrNum() + "'");
-                numbersDejaVue.put(item.getNaaccrNum(), dictId);
+                    // it is OK to have several time the same ID as long as the other attributes are the same...
+                    NaaccrDictionaryItem existingItem = cachedUserDictionaries.get(existingItemDictId).getItemByNaaccrId(item.getNaaccrId());
+
+                    boolean sameAttributes = Objects.equals(item.getNaaccrName(), existingItem.getNaaccrName());
+                    sameAttributes &= Objects.equals(item.getNaaccrNum(), existingItem.getNaaccrNum());
+                    sameAttributes &= Objects.equals(item.getDataType(), existingItem.getDataType());
+                    sameAttributes &= Objects.equals(item.getLength(), existingItem.getLength());
+                    sameAttributes &= Objects.equals(item.getRecordTypes(), existingItem.getRecordTypes());
+                    sameAttributes &= Objects.equals(item.getParentXmlElement(), existingItem.getParentXmlElement());
+                    sameAttributes &= Objects.equals(item.getStartColumn(), existingItem.getStartColumn());
+                    sameAttributes &= Objects.equals(item.getPadding(), existingItem.getPadding());
+                    sameAttributes &= Objects.equals(item.getTrim(), existingItem.getTrim());
+
+                    if (!sameAttributes)
+                        errors.add("user-defined dictionary '" + dictId + "' and '" + existingItemDictId + "' both  define NAACCR ID '" + item.getNaaccrId() + "'");
+                }
+                else {
+                    idsDejaVu.put(item.getNaaccrId(), dictId);
+
+                    // NAACCR Numbers must be unique among all user dictionaries
+                    if (numbersDejaVue.containsKey(item.getNaaccrNum()))
+                        errors.add("user-defined dictionary '" + dictId + "' and '" + numbersDejaVue.get(item.getNaaccrNum()) + "' both  define NAACCR ID '" + item.getNaaccrNum() + "'");
+                    numbersDejaVue.put(item.getNaaccrNum(), dictId);
+                }
             }
         }
 
@@ -763,8 +790,15 @@ public final class NaaccrXmlDictionaryUtils {
         result.setDescription(baseDictionary.getDescription());
 
         List<NaaccrDictionaryItem> items = new ArrayList<>(baseDictionary.getItems());
-        for (NaaccrDictionary userDictionary : userDictionaries)
-            items.addAll(userDictionary.getItems());
+        Set<String> processedIds = new HashSet<>();
+        for (NaaccrDictionary userDictionary : userDictionaries) {
+            for (NaaccrDictionaryItem item : userDictionary.getItems()) {
+                if (!processedIds.contains(item.getNaaccrId())) {
+                    items.addAll(userDictionary.getItems());
+                    processedIds.add(item.getNaaccrId());
+                }
+            }
+        }
         items.sort(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId));
         result.setItems(items);
 
@@ -906,8 +940,8 @@ public final class NaaccrXmlDictionaryUtils {
     private static class NaaccrPrettyPrintWriter extends PrettyPrintWriter {
 
         // why isn't the internal writer protected instead of private??? I hate when people do that!
+        private final NaaccrDictionary _dictionary;
         private QuickWriter _internalWriter;
-        private NaaccrDictionary _dictionary;
         private String _currentItemId;
         private boolean _namespaceWritten;
 

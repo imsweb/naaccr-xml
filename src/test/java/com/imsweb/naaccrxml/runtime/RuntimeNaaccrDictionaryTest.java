@@ -95,6 +95,32 @@ public class RuntimeNaaccrDictionaryTest {
         item2.setStartColumn(2341);
         item2.setLength(1);
         assertValid("A", baseDict, userDicts);
+        item1.setStartColumn(null);
+        item2.setStartColumn(null);
+
+        NaaccrDictionary dict3 = new NaaccrDictionary();
+        dict3.setNaaccrVersion(NaaccrFormat.NAACCR_VERSION_160);
+        dict3.setDictionaryUri("user-dictionary-3");
+        dict3.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
+        NaaccrDictionaryItem item3 = new NaaccrDictionaryItem();
+        item3.setNaaccrId("myVariable1");
+        item3.setNaaccrName("My Variable 1");
+        item3.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT);
+        item3.setNaaccrNum(10000);
+        item3.setLength(1);
+        dict3.addItem(item3);
+        userDicts.add(dict3);
+        assertValid("A", baseDict, userDicts);
+
+        // if name is different between the two duplicate items, error
+        item3.setNaaccrName("My Variable 1 and more!");
+        assertNotValid("A", baseDict, userDicts);
+        item3.setNaaccrName("My Variable 1");
+
+        // if number is different between the two duplicate items, error
+        item3.setNaaccrNum(10003);
+        assertNotValid("A", baseDict, userDicts);
+        item3.setNaaccrNum(10000);
     }
 
     private void assertValid(String recordType, NaaccrDictionary baseDictionary, Collection<NaaccrDictionary> userDictionaries) {
