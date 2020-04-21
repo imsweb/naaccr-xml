@@ -794,7 +794,7 @@ public final class NaaccrXmlDictionaryUtils {
         for (NaaccrDictionary userDictionary : userDictionaries) {
             for (NaaccrDictionaryItem item : userDictionary.getItems()) {
                 if (!processedIds.contains(item.getNaaccrId())) {
-                    items.addAll(userDictionary.getItems());
+                    items.add(item);
                     processedIds.add(item.getNaaccrId());
                 }
             }
