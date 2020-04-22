@@ -1,6 +1,6 @@
 /************************************************************************************************************;
     This programs demonstrates how to include and call the "write_naaccr_xml_macro.sas" macro.
-    While it's possible to use the write macro with the read, they are really meant to be used together.
+    While it's possible to use the write macro without the read one, they are really meant to be used together.
  ************************************************************************************************************/;
 
 %include "read_naaccr_xml_macro.sas";
