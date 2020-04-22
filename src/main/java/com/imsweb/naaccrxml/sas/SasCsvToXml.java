@@ -68,7 +68,7 @@ public class SasCsvToXml {
                 if (xmlPath.equalsIgnoreCase(csvPath))
                     xmlPath = csvPath + ".xml";
                 _xmlFile = new File(xmlPath);
-                if (!_xmlFile.getParentFile().exists())
+                if (!new File(_xmlFile.getAbsolutePath()).getParentFile().exists())
                     System.err.println("!!! Parent directory for target XML path doesn't exist: " + _xmlFile.getParentFile().getAbsolutePath());
                 else
                     System.out.println(" > target XML: " + _xmlFile.getAbsolutePath());

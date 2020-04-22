@@ -29,13 +29,13 @@ public class SasXmlReader {
         _TO_ESCAPE.put("&apos;", "'");
     }
 
-    private File _xmlFile;
+    private final File _xmlFile;
 
     private BufferedReader _reader;
 
     private boolean _inPatient, _inTumor, _inCdata;
 
-    private Map<String, String> _naaccrDataValues = new HashMap<>(), _patientValues = new HashMap<>(), _tumorValues = new HashMap<>();
+    private final Map<String, String> _naaccrDataValues = new HashMap<>(), _patientValues = new HashMap<>(), _tumorValues = new HashMap<>();
 
     public SasXmlReader(String xmlPath) {
         _xmlFile = new File(xmlPath);
