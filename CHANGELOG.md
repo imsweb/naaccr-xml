@@ -2,6 +2,7 @@
 
 **Version 6.7**
 
+- Fixed an infinite loop in Java code called by the SAS macros; tweaked the macros a bit.
 - Updated conflict resolution for duplicate items in multiple user-defined dictionaries.
 - Updated embedded JRE to Java 11.0.7 (this only affects the standalone program).
 

@@ -1,0 +1,12 @@
+NAACCR XML ID,NAACCR Number,Name,Start Column,Length,Record Types,Parent XML Element,Data Type
+dateEpathMessage,10010,"Date EPath Message",,14,"A,M,C,I",Tumor,text
+recordDocumentId,10000,"Record Document ID",,20,"A,M,C,I",Tumor,text
+textPathClinicalHistory,10001,"Text Path Clinical History",,1000,"A,M,C,I",Tumor,text
+textPathComments,10002,"Text Path Comments",,1000,"A,M,C,I",Tumor,text
+textPathFormalDx,10003,"Text Path Formal DX",,1000,"A,M,C,I",Tumor,text
+textPathFullText,10004,"Text Path Full Text",,1000,"A,M,C,I",Tumor,text
+textPathGrossPathology,10005,"Text Path Gross Pathology",,1000,"A,M,C,I",Tumor,text
+textPathMicroscopicDesc,10006,"Text Path Microscopic Desc",,1000,"A,M,C,I",Tumor,text
+textPathNatureOfSpecimens,10008,"Text Path Nature of Specimens",,1000,"A,M,C,I",Tumor,text
+textPathSuppReportsAddenda,10007,"Text Path Supp Reports Addenda",,1000,"A,M,C,I",Tumor,text
+textStagingParams,10009,"Text Path Staging Params",,1000,"A,M,C,I",Tumor,text

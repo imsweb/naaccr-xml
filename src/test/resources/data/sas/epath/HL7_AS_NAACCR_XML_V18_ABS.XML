@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" userDictionaryUri="https://my.org/naaccrxml/path-text-dictionary.xml" recordType="A" timeGenerated="2020-04-22T07:49:12.923268-04:00" specificationVersion="1.4" xmlns="http://naaccr.org/naaccrxml">
+    <Item naaccrId="registryId">0000001234</Item>
+    <Patient>
+        <Tumor>
+            <Item naaccrId="recordDocumentId">REC-1234</Item>
+            <Item naaccrId="pathDateSpecCollect1">20200101</Item>
+            <Item naaccrId="textPathClinicalHistory">Clinical Hist</Item>
+            <Item naaccrId="textPathComments">Comments</Item>
+            <Item naaccrId="textPathFormalDx">Final DX</Item>
+            <Item naaccrId="textPathFullText">Full Text</Item>
+            <Item naaccrId="textPathGrossPathology">Gross Path</Item>
+            <Item naaccrId="textPathMicroscopicDesc">Micro Desc</Item>
+            <Item naaccrId="textPathSuppReportsAddenda">Supp Rpt Add</Item>
+            <Item naaccrId="textPathNatureOfSpecimens">Nature of Spec</Item>
+            <Item naaccrId="textStagingParams">Staging</Item>
+        </Tumor>
+    </Patient>
+</NaaccrData>

@@ -11,7 +11,8 @@
 	- recordtype should be "A", "M", "C" or "I" (defaults to "I")
     - dataset should be the name of the dataset into which the data should be loaded (defaults to alldata)
     - items is an optional CSV list of fields to read (any other fields will be ignored);
-    - dictfile is an optional user-defined dictionary in CSV format (see GUI tool to save an XML dictionary to CSV)
+    - dictfile is the path to an optional user-defined dictionary in CSV format (see GUI tool to save an XML
+        dictionary to CSV); use spaces to provide multiple paths
 
     Note that the macro creates a tmp CSV file in the same folder as the input file; that file will be 
     automatically deleted by the macro when it's done executing.
@@ -21,6 +22,7 @@
     06/10/2018 - Fabian Depry - Initial version.
     06/18/2018 - Fabian Depry - Added "replace" to CSV import proc.
     07/31/2018 - Fabian Depry - Added new optional parameter for user-defined dictionary.
+    04/22/2020 - Fabian Depry - Improved comments, no change to the actual code.
  ************************************************************************************************************/;
 
 /*

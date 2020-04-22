@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" userDictionaryUri="https://my.org/naaccrxml/path-text-dictionary.xml" recordType="A" timeGenerated="2020-04-22T07:49:12.923268-04:00" specificationVersion="1.4" xmlns="http://naaccr.org/naaccrxml">
+    <Item naaccrId="registryId">0000001234</Item>
+    <Patient>
+        <Tumor>
+            <Item naaccrId="recordDocumentId">REC-1234</Item>
+            <Item naaccrId="textPathComments">
+                Comments on multiple lines, which is permitted in XML...
+            </Item>
+        </Tumor>
+    </Patient>
+</NaaccrData>

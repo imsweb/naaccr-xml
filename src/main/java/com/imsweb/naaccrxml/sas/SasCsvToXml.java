@@ -39,38 +39,77 @@ public class SasCsvToXml {
         _TO_ESCAPE.put("::", "\n");
     }
 
-    private File _csvFile, _xmlFile, _dictFile;
+    private File _csvFile, _xmlFile;
+
+    private List<File> _dictionaryFiles;
 
     private String _naaccrVersion, _recordType;
+
+    private String _dictionaryUris;
 
     public SasCsvToXml(String xmlPath, String naaccrVersion, String recordType) {
         this(xmlPath.replace(".xml", ".csv"), xmlPath, naaccrVersion, recordType);
     }
 
     public SasCsvToXml(String csvPath, String xmlPath, String naaccrVersion, String recordType) {
-        _xmlFile = new File(xmlPath);
-        System.out.println(" > target XML: " + _xmlFile.getAbsolutePath());
+        if (csvPath == null || csvPath.trim().isEmpty())
+            System.err.println("!!! No source CSV path was provided");
+        else {
+            _csvFile = new File(csvPath);
+            if (!_csvFile.exists())
+                System.err.println("!!! Invalid source CSV file: " + csvPath);
+            else
+                System.out.println(" > source CSV: " + _csvFile.getAbsolutePath());
 
-        if (csvPath.endsWith(".gz"))
-            csvPath = csvPath.replace(".gz", "");
-        _csvFile = new File(csvPath);
-        if (!_csvFile.exists())
-            System.err.println("!!! Invalid CSV file: " + csvPath);
-        else
-            System.out.println(" > temp CSV: " + _csvFile.getAbsolutePath());
+            if (xmlPath == null || xmlPath.trim().isEmpty())
+                System.err.println("!!! No target XML path was provided");
+            else {
+                // never EVER return the same path for the XML than the CSV!
+                if (xmlPath.equalsIgnoreCase(csvPath))
+                    xmlPath = csvPath + ".xml";
+                _xmlFile = new File(xmlPath);
+                if (!_xmlFile.getParentFile().exists())
+                    System.err.println("!!! Parent directory for target XML path doesn't exist: " + _xmlFile.getParentFile().getAbsolutePath());
+                else
+                    System.out.println(" > target XML: " + _xmlFile.getAbsolutePath());
+            }
+        }
+
+        _dictionaryFiles = new ArrayList<>();
 
         _naaccrVersion = naaccrVersion;
+        if (_naaccrVersion == null || _naaccrVersion.trim().isEmpty())
+            System.err.println("!!! NAACCR version needs to be provided");
+        if (!"140".equals(naaccrVersion) && !"150".equals(naaccrVersion) && !"160".equals(naaccrVersion) && !"180".equals(naaccrVersion))
+            System.err.println("!!! NAACCR version must be 140, 150, 160 or 180; got " + _naaccrVersion);
+
         _recordType = recordType;
+        if (_recordType == null || _recordType.trim().isEmpty())
+            System.err.println("!!! Record type needs to be provided");
+        if (!"A".equals(_recordType) && !"M".equals(_recordType) && !"C".equals(_recordType) && !"I".equals(_recordType))
+            System.err.println("!!! Record type must be A, M, C or I; got " + _recordType);
     }
 
-    public void setDictionary(String dictPath) {
-        if (dictPath != null && !dictPath.trim().isEmpty()) {
-            _dictFile = new File(dictPath);
-            if (!_dictFile.exists())
-                System.err.println("!!! Invalid CSV dictionary " + dictPath);
-            else
-                System.out.println(" > dictionary: " + _dictFile.getAbsolutePath());
+    public void setDictionary(String dictionaryPath, String dictionaryUri) {
+        if (dictionaryPath != null && !dictionaryPath.trim().isEmpty()) {
+            for (String path : dictionaryPath.split(" ")) {
+                File dictionaryFile = new File(dictionaryPath);
+                if (!dictionaryFile.exists())
+                    System.err.println("!!! Invalid CSV dictionary path " + dictionaryPath);
+                else {
+                    try {
+                        SasUtils.validateCsvDictionary(dictionaryFile);
+                        _dictionaryFiles.add(dictionaryFile);
+                        System.out.println(" > dictionary: " + dictionaryFile.getAbsolutePath());
+                    }
+                    catch (IOException e) {
+                        System.err.println("!!! Invalid CSV dictionary: " + e.getMessage());
+                    }
+                }
+            }
         }
+
+        _dictionaryUris = dictionaryUri;
     }
 
     public String getCsvPath() {
@@ -90,7 +129,7 @@ public class SasCsvToXml {
     }
 
     public List<SasFieldInfo> getFields() {
-        return SasUtils.getFields(_naaccrVersion, _recordType, _dictFile);
+        return SasUtils.getFields(_naaccrVersion, _recordType, _dictionaryFiles);
     }
 
     public void convert() throws IOException {
@@ -98,6 +137,10 @@ public class SasCsvToXml {
     }
 
     public void convert(String fields) throws IOException {
+        convert(fields, getFields());
+    }
+
+    public void convert(String fields, List<SasFieldInfo> availableFields) throws IOException {
         System.out.println("Starting converting CSV to XML...");
         try {
             Set<String> requestedFields = null;
@@ -108,7 +151,7 @@ public class SasCsvToXml {
             }
 
             Map<String, String> rootFields = new HashMap<>(), patientFields = new HashMap<>(), tumorFields = new HashMap<>();
-            for (SasFieldInfo field : getFields()) {
+            for (SasFieldInfo field : availableFields) {
                 if (requestedFields == null || requestedFields.contains(field.getNaaccrId())) {
                     if ("NaaccrData".equals(field.getParentTag()))
                         rootFields.put(field.getTruncatedNaaccrId(), field.getNaaccrId());
@@ -156,6 +199,8 @@ public class SasCsvToXml {
                         writer.write("\n");
                         writer.write("<NaaccrData");
                         writer.write(" baseDictionaryUri=\"http://naaccr.org/naaccrxml/naaccr-dictionary-" + _naaccrVersion + ".xml\"");
+                        if (!_dictionaryFiles.isEmpty() && _dictionaryUris != null && !_dictionaryUris.trim().isEmpty())
+                            writer.write(" userDictionaryUri=\"" + _dictionaryUris + "\"");
                         writer.write(" recordType=\"" + _recordType + "\"");
                         writer.write(" specificationVersion=\"1.3\"");
                         writer.write(" xmlns=\"http://naaccr.org/naaccrxml\"");

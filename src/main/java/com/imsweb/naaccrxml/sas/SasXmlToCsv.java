@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,37 +26,70 @@ import java.util.regex.Pattern;
 @SuppressWarnings("ALL")
 public class SasXmlToCsv {
 
-    private File _xmlFile, _csvFile, _dictFile;
+    private File _xmlFile, _csvFile;
+
+    private List<File> _dictionaryFiles;
 
     private String _naaccrVersion, _recordType;
 
     public SasXmlToCsv(String xmlPath, String naaccrVersion, String recordType) {
-        this(xmlPath, xmlPath.replace(".xml", ".csv"), naaccrVersion, recordType);
+        this(xmlPath, null, naaccrVersion, recordType);
     }
 
     public SasXmlToCsv(String xmlPath, String csvPath, String naaccrVersion, String recordType) {
-        _xmlFile = new File(xmlPath);
-        if (!_xmlFile.exists())
-            System.err.println("!!! Invalid XML file: " + xmlPath);
-        else
-            System.out.println(" > input XML: " + _xmlFile.getAbsolutePath());
+        if (xmlPath == null || xmlPath.trim().isEmpty())
+            System.err.println("!!! No source XML path was provided");
+        else {
+            _xmlFile = new File(xmlPath);
+            if (!_xmlFile.exists())
+                System.err.println("!!! Invalid source XML file: " + xmlPath);
+            else
+                System.out.println(" > input XML: " + _xmlFile.getAbsolutePath());
 
-        if (csvPath.endsWith(".gz"))
-            csvPath = csvPath.replace(".gz", "");
-        _csvFile = new File(csvPath);
-        System.out.println(" > temp CSV: " + _csvFile.getAbsolutePath());
+            if (csvPath == null || csvPath.trim().isEmpty())
+                csvPath = SasUtils.computeCsvPathFromXmlPath(xmlPath);
+            // never EVER return the same path for the CSV than the XML!
+            if (csvPath.equalsIgnoreCase(xmlPath))
+                csvPath = xmlPath + ".csv";
+            _csvFile = new File(csvPath);
+            if (!_csvFile.getParentFile().exists())
+                System.err.println("!!! Parent directory for CSV path doesn't exist: " + _csvFile.getParentFile().getAbsolutePath());
+            else
+                System.out.println(" > temp CSV: " + _csvFile.getAbsolutePath());
+        }
+
+        _dictionaryFiles = new ArrayList<>();
 
         _naaccrVersion = naaccrVersion;
+        if (_naaccrVersion == null || _naaccrVersion.trim().isEmpty())
+            System.err.println("!!! NAACCR version needs to be provided");
+        if (!"140".equals(naaccrVersion) && !"150".equals(naaccrVersion) && !"160".equals(naaccrVersion) && !"180".equals(naaccrVersion))
+            System.err.println("!!! NAACCR version must be 140, 150, 160 or 180; got " + _naaccrVersion);
+
         _recordType = recordType;
+        if (_recordType == null || _recordType.trim().isEmpty())
+            System.err.println("!!! Record type needs to be provided");
+        if (!"A".equals(_recordType) && !"M".equals(_recordType) && !"C".equals(_recordType) && !"I".equals(_recordType))
+            System.err.println("!!! Record type must be A, M, C or I; got " + _recordType);
     }
 
-    public void setDictionary(String dictPath) {
-        if (dictPath != null && !dictPath.trim().isEmpty()) {
-            _dictFile = new File(dictPath);
-            if (!_dictFile.exists())
-                System.err.println("!!! Invalid CSV dictionary " + dictPath);
-            else
-                System.out.println(" > dictionary: " + _dictFile.getAbsolutePath());
+    public void setDictionary(String dictionaryPath) {
+        if (dictionaryPath != null && !dictionaryPath.trim().isEmpty()) {
+            for (String path : dictionaryPath.split(" ")) {
+                File dictionaryFile = new File(dictionaryPath);
+                if (!dictionaryFile.exists())
+                    System.err.println("!!! Invalid CSV dictionary path " + dictionaryPath);
+                else {
+                    try {
+                        SasUtils.validateCsvDictionary(dictionaryFile);
+                        _dictionaryFiles.add(dictionaryFile);
+                        System.out.println(" > dictionary: " + dictionaryFile.getAbsolutePath());
+                    }
+                    catch (IOException e) {
+                        System.err.println("!!! Invalid CSV dictionary: " + e.getMessage());
+                    }
+                }
+            }
         }
     }
 
@@ -68,7 +102,13 @@ public class SasXmlToCsv {
     }
 
     public String getDictionaryPath() {
-        return _dictFile.getAbsolutePath();
+        StringBuilder buf = new StringBuilder();
+        for (File dictionaryFile : _dictionaryFiles) {
+            if (buf.length() > 0)
+                buf.append(" ");
+            buf.append(dictionaryFile.getAbsolutePath());
+        }
+        return buf.toString();
     }
 
     public String getNaaccrVersion() {
@@ -80,7 +120,7 @@ public class SasXmlToCsv {
     }
 
     public List<SasFieldInfo> getFields() {
-        return SasUtils.getFields(_naaccrVersion, _recordType, _dictFile);
+        return SasUtils.getFields(_naaccrVersion, _recordType, _dictionaryFiles);
     }
 
     public void convert() throws IOException {
@@ -92,6 +132,10 @@ public class SasXmlToCsv {
     }
 
     public void convert(String fields, boolean addExtraCharFields) throws IOException {
+        convert(fields, addExtraCharFields, getFields());
+    }
+
+    public void convert(String fields, boolean addExtraCharFields, List<SasFieldInfo> availableFields) throws IOException {
         try {
             Set<String> requestedFields = null;
             if (fields != null && !fields.trim().isEmpty()) {
@@ -101,7 +145,7 @@ public class SasXmlToCsv {
             }
 
             Map<String, Integer> allFields = new LinkedHashMap<>();
-            for (SasFieldInfo field : getFields()) {
+            for (SasFieldInfo field : availableFields) {
                 if (requestedFields == null || requestedFields.contains(field.getNaaccrId())) {
                     allFields.put(field.getTruncatedNaaccrId(), field.getLength());
                     if (!field.getNaaccrId().equals(field.getTruncatedNaaccrId()))

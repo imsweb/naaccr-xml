@@ -7,19 +7,37 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.imsweb.naaccrxml.NaaccrFormat;
+import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
 import com.imsweb.naaccrxml.TestingUtils;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Tumor;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 
 public class SasTest {
+
+    @Test
+    public void testNaaccrVersions() {
+        Set<String> formats = new HashSet<>(NaaccrFormat.getSupportedVersions());
+        formats.remove("140");
+        formats.remove("150");
+        formats.remove("160");
+        formats.remove("180");
+        if (!formats.isEmpty())
+            Assert.fail("Looks like a new format was added, please handle it in the SasXmlToCsv and SasCsvToXml constructors, and adjust this test: " + formats);
+    }
 
     @Test
     public void testGetFields() throws IOException {
@@ -31,16 +49,18 @@ public class SasTest {
         Assert.assertFalse(fields.containsKey("nameLast"));
 
         fields.clear();
-        File csvDictionary = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/user-dictionary.csv");
-        for (SasFieldInfo field : SasUtils.getFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-180.csv"), csvDictionary))
+        List<File> csvDictionaries = Collections.singletonList(TestingUtils.getDataFile("sas/user-dictionary.csv"));
+        for (SasFieldInfo field : SasUtils.getFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-180.csv"), csvDictionaries))
             fields.put(field.getNaaccrId(), field.getParentTag());
         Assert.assertTrue(fields.containsKey("myVariable"));
         Assert.assertEquals("Tumor", fields.get("myVariable"));
+
+        // TODO FD multiple dictionaries?
     }
 
     @Test
     public void testConvert() throws IOException {
-        File xmlFile = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/test.xml");
+        File xmlFile = TestingUtils.getDataFile("sas/test.xml");
         File csvFile = new File(TestingUtils.getBuildDirectory(), "test.csv");
         File xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-copy.xml");
 
@@ -71,8 +91,8 @@ public class SasTest {
         csvToXml.convert("patientIdNumber,primarySite");
         assertXmlData(xmlCopyFile, true);
 
-        // another (more comlex) file
-        xmlFile = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/test2.xml");
+        // another (more complex) file
+        xmlFile = TestingUtils.getDataFile("sas/test2.xml");
         csvFile = new File(TestingUtils.getBuildDirectory(), "test2.csv");
         xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test2-copy.xml");
         createXmlToCsvConverter(xmlFile, csvFile, "180", "A").convert(null, false);
@@ -84,7 +104,7 @@ public class SasTest {
 
     @Test
     public void testConvertCdata() throws IOException {
-        File xmlFile = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/test-cdata.xml");
+        File xmlFile = TestingUtils.getDataFile("sas/test-cdata.xml");
         File csvFile = new File(TestingUtils.getBuildDirectory(), "test-cdata.csv");
         File xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-cdata-copy.xml");
         createXmlToCsvConverter(xmlFile, csvFile, "180", "I").convert(null, false);
@@ -92,7 +112,7 @@ public class SasTest {
         Tumor tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(0).getTumors().get(0);
         Assert.assertEquals("C123", tumor.getItemValue("primarySite"));
 
-        xmlFile = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/test-cdata2.xml");
+        xmlFile = TestingUtils.getDataFile("sas/test-cdata2.xml");
         csvFile = new File(TestingUtils.getBuildDirectory(), "test-cdata2.csv");
         xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-cdata2-copy.xml");
         createXmlToCsvConverter(xmlFile, csvFile, "180", "A").convert(null, false);
@@ -106,7 +126,7 @@ public class SasTest {
 
     @Test
     public void testConvertMultiLine() throws IOException {
-        File xmlFile = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/test-multi-line.xml");
+        File xmlFile = TestingUtils.getDataFile("sas/test-multi-line.xml");
         File csvFile = new File(TestingUtils.getBuildDirectory(), "test-multi-line.csv");
         File xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-multi-line-copy.xml");
         createXmlToCsvConverter(xmlFile, csvFile, "180", "A").convert(null, false);
@@ -115,7 +135,7 @@ public class SasTest {
         Assert.assertEquals("Some\ntext", tumor.getItemValue("textRemarks"));
 
         // same test but this file uses a CDATA section
-        xmlFile = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/test-multi-line-cdata.xml");
+        xmlFile = TestingUtils.getDataFile("sas/test-multi-line-cdata.xml");
         csvFile = new File(TestingUtils.getBuildDirectory(), "test-multi-line-cdata.csv");
         xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-multi-line-cdata-copy.xml");
         createXmlToCsvConverter(xmlFile, csvFile, "180", "A").convert(null, false);
@@ -124,13 +144,77 @@ public class SasTest {
         Assert.assertEquals("Some\ntext", tumor.getItemValue("textRemarks"));
     }
 
+    @Test
+    public void testConvertEpath() throws IOException {
+        List<File> csvDictionaries = Collections.singletonList(TestingUtils.getDataFile("sas/epath/path-text-dictionary.csv"));
+        List<NaaccrDictionary> xmlDictionaries = Collections.singletonList(NaaccrXmlDictionaryUtils.readDictionary(TestingUtils.getDataFile("sas/epath/path-text-dictionary.xml")));
+
+        // normal case using the user-defined dictionary
+        Tumor tumor = convertForEpath("160", "A", "HL7_AS_NAACCR_XML_V16_ABS.XML", csvDictionaries, xmlDictionaries);
+        Assert.assertEquals("20200101", tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
+        Assert.assertEquals("REC-1234", tumor.getItemValue("recordDocumentId")); // non-standard tumor field
+
+        // not providing the dictionaries means the non-standard items will be ignored
+        tumor = convertForEpath("160", "A", "HL7_AS_NAACCR_XML_V16_ABS.XML", null, null);
+        Assert.assertEquals("20200101", tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
+        Assert.assertNull(tumor.getItemValue("recordDocumentId")); // non-standard tumor field
+
+        // providing a different version shouldn't really matter (in this case)
+        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V16_ABS.XML", csvDictionaries, xmlDictionaries);
+        Assert.assertEquals("20200101", tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
+        Assert.assertEquals("REC-1234", tumor.getItemValue("recordDocumentId")); // non-standard tumor field
+
+        // proving a different record type means some items are going ot be dropped because they apply only to the full abstract
+        tumor = convertForEpath("160", "I", "HL7_AS_NAACCR_XML_V16_ABS.XML", csvDictionaries, xmlDictionaries);
+        Assert.assertNull(tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
+        Assert.assertEquals("REC-1234", tumor.getItemValue("recordDocumentId")); // non-standard tumor field
+
+        // testing a normal v18 file
+        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V18_ABS.XML", csvDictionaries, xmlDictionaries);
+        Assert.assertEquals("20200101", tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
+        Assert.assertEquals("REC-1234", tumor.getItemValue("recordDocumentId")); // non-standard tumor field
+
+        // testing a different record type
+        tumor = convertForEpath("180", "I", "HL7_AS_NAACCR_XML_V18_INC.XML", csvDictionaries, xmlDictionaries);
+        Assert.assertNull(tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
+        Assert.assertEquals("REC-1234", tumor.getItemValue("recordDocumentId")); // non-standard tumor field
+
+        // testing the root provided on multi lines
+        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_ROOT.XML", csvDictionaries, xmlDictionaries);
+        Assert.assertEquals("20200101", tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
+        Assert.assertEquals("REC-1234", tumor.getItemValue("recordDocumentId")); // non-standard tumor field
+
+        // testing the data on multiple lines
+        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_DATA_1.XML", csvDictionaries, xmlDictionaries);
+        Assert.assertEquals("Comments on\n multiple lines, which\n is permitted in XML...", tumor.getItemValue("textPathComments"));
+        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_DATA_2.XML", csvDictionaries, xmlDictionaries);
+        Assert.assertEquals("\nComments on multiple lines, which is permitted in XML...\n            ", tumor.getItemValue("textPathComments"));
+        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_DATA_3.XML", csvDictionaries, xmlDictionaries);
+        Assert.assertEquals("\n                Comments on multiple lines, which is permitted in XML...\n            ", tumor.getItemValue("textPathComments"));
+        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_DATA_4.XML", csvDictionaries, xmlDictionaries);
+        Assert.assertEquals("\nComments on multiple lines,\n which is permitted in XML...\n            ", tumor.getItemValue("textPathComments"));
+    }
+
+    private Tumor convertForEpath(String naaccrVersion, String recordType, String input, List<File> csvDictionaryFiles, List<NaaccrDictionary> xmlDictionaries) throws IOException {
+        File xmlFile = TestingUtils.copyFile(TestingUtils.getDataFile("sas/epath/" + input), TestingUtils.getBuildDirectory());
+        File csvFile = new File(TestingUtils.getBuildDirectory(), xmlFile.getName().replace(".XML", ".csv"));
+        File xmlCopyFile = new File(TestingUtils.getBuildDirectory(), xmlFile.getName().replace(".XML", "-COPY.XML"));
+        createXmlToCsvConverter(xmlFile, csvFile, naaccrVersion, recordType, csvDictionaryFiles).convert(null, false);
+        createCsvToXmlConverter(csvFile, xmlCopyFile, naaccrVersion, recordType, csvDictionaryFiles, xmlDictionaries).convert(null);
+        return NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, xmlDictionaries, null).getPatients().get(0).getTumors().get(0);
+    }
+
     @SuppressWarnings("SameParameterValue")
     private SasXmlToCsv createXmlToCsvConverter(File xmlFile, File csvFile, String naaccrVersion, String recordType) {
+        return createXmlToCsvConverter(xmlFile, csvFile, naaccrVersion, recordType, null);
+    }
+
+    private SasXmlToCsv createXmlToCsvConverter(File xmlFile, File csvFile, String naaccrVersion, String recordType, List<File> csvDictionaryFiles) {
         return new SasXmlToCsv(xmlFile.getPath(), csvFile.getPath(), naaccrVersion, recordType) {
             @Override
             public List<SasFieldInfo> getFields() {
                 try {
-                    return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"), null);
+                    return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"), csvDictionaryFiles);
                 }
                 catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
@@ -141,17 +225,30 @@ public class SasTest {
 
     @SuppressWarnings("SameParameterValue")
     private SasCsvToXml createCsvToXmlConverter(File csvFile, File xmlFile, String naaccrVersion, String recordType) {
-        return new SasCsvToXml(csvFile.getPath(), xmlFile.getPath(), naaccrVersion, recordType) {
+        return createCsvToXmlConverter(csvFile, xmlFile, naaccrVersion, recordType, null, null);
+    }
+
+    private SasCsvToXml createCsvToXmlConverter(File csvFile, File xmlFile, String naaccrVersion, String recordType, List<File> csvDictionaryFiles, List<NaaccrDictionary> xmlDictionaries) {
+        SasCsvToXml converter = new SasCsvToXml(csvFile.getPath(), xmlFile.getPath(), naaccrVersion, recordType) {
             @Override
             public List<SasFieldInfo> getFields() {
                 try {
-                    return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"), null);
+                    return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"), csvDictionaryFiles);
                 }
                 catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
             }
+
         };
+
+        if (csvDictionaryFiles != null && xmlDictionaries != null) {
+            converter.setDictionary(
+                    csvDictionaryFiles.stream().map(File::getPath).collect(Collectors.joining(" ")),
+                    xmlDictionaries.stream().map(NaaccrDictionary::getDictionaryUri).collect(Collectors.joining(" ")));
+        }
+
+        return converter;
     }
 
     private void assertXmlData(File xmlFile, boolean ignoreFields) throws IOException {

@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -29,6 +30,21 @@ import java.util.zip.GZIPOutputStream;
  * THIS CLASS IS IMPLEMENTED TO BE COMPATIBLE WITH JAVA 7; BE CAREFUL WHEN MODIFYING IT.
  */
 public class SasUtils {
+
+    /**
+     * Convert the given XML path to a CSV path.
+     */
+    public static String computeCsvPathFromXmlPath(String xmlPath) {
+        if (xmlPath == null || xmlPath.trim().isEmpty())
+            return null;
+
+        String csvPath = Pattern.compile("(\\.xml|\\.gz|\\.xml\\.gz)$", Pattern.CASE_INSENSITIVE).matcher(xmlPath).replaceAll(".csv");
+
+        if (csvPath.equalsIgnoreCase(xmlPath))
+            csvPath = xmlPath + ".csv";
+
+        return csvPath;
+    }
 
     /**
      * Creates a reader from the given file. Support GZIP compressed files.
@@ -58,11 +74,14 @@ public class SasUtils {
      * Returns the fields information for the given parameters.
      * @param version NAACCR version
      * @param recordType record type
-     * @param dictionary user-defined dictionary in CSV format (see standard ones in docs folder)
+     * @param dictionaries user-defined dictionaries in CSV format (see standard ones in docs folder)
      * @return fields information
      */
-    public static List<SasFieldInfo> getFields(String version, String recordType, File dictionary) {
-        return getFields(recordType, Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-xml-items-" + version + ".csv"), dictionary);
+    public static List<SasFieldInfo> getFields(String version, String recordType, List<File> dictionaries) {
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-xml-items-" + version + ".csv");
+        if (is == null)
+            throw new RuntimeException("Unable to get standard CSV dictionary for version " + version);
+        return getFields(recordType, is, dictionaries);
     }
 
     /**
@@ -72,36 +91,60 @@ public class SasUtils {
      * add a numeric suffix to ensure unicity.
      * @param recordType record type
      * @param is input stream to the standard dictionary in CSV format
-     * @param dictionary user-defined dictionary in CSV format (see standard ones in docs folder)
+     * @param dictionaries user-defined dictionarues in CSV format (see standard ones in docs folder)
      * @return fields information
      */
     @SuppressWarnings("TryFinallyCanBeTryWithResources")
-    public static List<SasFieldInfo> getFields(String recordType, InputStream is, File dictionary) {
+    public static List<SasFieldInfo> getFields(String recordType, InputStream is, List<File> dictionaries) {
         Map<String, AtomicInteger> counters = new HashMap<>();
 
         List<SasFieldInfo> result = readCsvDictionary(recordType, is, counters);
-        if (dictionary != null) {
-            InputStream dictIs = null;
-            try {
-                dictIs = new FileInputStream(dictionary);
-                result.addAll(readCsvDictionary(recordType, dictIs, counters));
-            }
-            catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            finally {
-                if (dictIs != null) {
-                    try {
-                        dictIs.close();
-                    }
-                    catch (IOException e) {
-                        // ignored
+        if (dictionaries != null) {
+            for (File dictionary : dictionaries) {
+                InputStream dictIs = null;
+                try {
+                    dictIs = new FileInputStream(dictionary);
+                    result.addAll(readCsvDictionary(recordType, dictIs, counters));
+                }
+                catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                finally {
+                    if (dictIs != null) {
+                        try {
+                            dictIs.close();
+                        }
+                        catch (IOException e) {
+                            // ignored
+                        }
                     }
                 }
             }
         }
 
         return result;
+    }
+
+    @SuppressWarnings("TryFinallyCanBeTryWithResources")
+    public static void validateCsvDictionary(File file) throws IOException {
+        LineNumberReader reader = null;
+        try {
+            reader = new LineNumberReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.US_ASCII));
+            String line = reader.readLine();
+            while (line != null)
+                line = reader.readLine();
+        }
+        finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                }
+                catch (IOException e) {
+                    // ignored
+                }
+            }
+        }
+
     }
 
     @SuppressWarnings("TryFinallyCanBeTryWithResources")

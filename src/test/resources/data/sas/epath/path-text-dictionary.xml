@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<NaaccrDictionary dictionaryUri="https://my.org/naaccrxml/path-text-dictionary.xml" specificationVersion="1.4" xmlns="http://naaccr.org/naaccrxml">
+    <ItemDefs>
+        <ItemDef naaccrId="recordDocumentId" naaccrNum="10000" naaccrName="Record Document ID" length="20" parentXmlElement="Tumor"/>
+        <ItemDef naaccrId="textPathClinicalHistory" naaccrNum="10001" naaccrName="Text Path Clinical History" length="1000" allowUnlimitedText="true" parentXmlElement="Tumor"/>
+        <ItemDef naaccrId="textPathComments" naaccrNum="10002" naaccrName="Text Path Comments" length="1000" allowUnlimitedText="true" parentXmlElement="Tumor"/>
+        <ItemDef naaccrId="textPathFormalDx" naaccrNum="10003" naaccrName="Text Path Formal DX" length="1000" allowUnlimitedText="true" parentXmlElement="Tumor"/>
+        <ItemDef naaccrId="textPathFullText" naaccrNum="10004" naaccrName="Text Path Full Text" length="1000" allowUnlimitedText="true" parentXmlElement="Tumor"/>
+        <ItemDef naaccrId="textPathGrossPathology" naaccrNum="10005" naaccrName="Text Path Gross Pathology" length="1000" allowUnlimitedText="true" parentXmlElement="Tumor"/>
+        <ItemDef naaccrId="textPathMicroscopicDesc" naaccrNum="10006" naaccrName="Text Path Microscopic Desc" length="1000" allowUnlimitedText="true" parentXmlElement="Tumor"/>
+        <ItemDef naaccrId="textPathSuppReportsAddenda" naaccrNum="10007" naaccrName="Text Path Supp Reports Addenda" length="1000" allowUnlimitedText="true" parentXmlElement="Tumor"/>
+        <ItemDef naaccrId="textPathNatureOfSpecimens" naaccrNum="10008" naaccrName="Text Path Nature of Specimens" length="1000" allowUnlimitedText="true" parentXmlElement="Tumor"/>
+        <ItemDef naaccrId="textStagingParams" naaccrNum="10009" naaccrName="Text Path Staging Params" length="1000" allowUnlimitedText="true" parentXmlElement="Tumor"/>
+        <ItemDef naaccrId="dateEpathMessage" naaccrNum="10010" naaccrName="Date EPath Message" length="14" parentXmlElement="Tumor"/>
+    </ItemDefs>
+</NaaccrDictionary>

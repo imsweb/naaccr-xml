@@ -10,6 +10,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
@@ -167,5 +168,21 @@ public class TestingUtils {
             IOUtils.copy(reader, writer);
             return writer.toString();
         }
+    }
+
+    /**
+     * Copies the given file to the given directory.
+     */
+    public static File copyFile(File source, File targetDir) throws IOException {
+        File target = new File(targetDir, source.getName());
+        FileUtils.copyFile(source, target);
+        return target;
+    }
+
+    /**
+     * Deletes the given file, operation might fail and that's OK.
+     */
+    public static void deleteFile(File file) {
+        FileUtils.deleteQuietly(file);
     }
 }
