@@ -5,16 +5,16 @@
 
     Paramaters:
 	- libpath needs to point to the Java SAS library (path can be relative or absolute)
-	- sourcefile needs to point to the XML to import;
+	- sourcefile needs to point to the XML to import (path can be relative or absolute);
 	    -- if the path ends with ".gz" it will be processed as a GZIP compressed file
 	    -- if it ends with ".zip", every file inside the zip file will be processed (into the same SAS data set)
-	    -- otherwise it will be processed as an uncompressed file (path can be relative or absolute)
+	    -- otherwise it will be processed as an uncompressed file
 	- naaccrversion should be "140", "150", "160" or "180" (defaults to "180")
 	- recordtype should be "A", "M", "C" or "I" (defaults to "I")
     - dataset should be the name of the dataset into which the data should be loaded (defaults to alldata)
     - items is an optional CSV list of fields to read (any other fields will be ignored);
     - dictfile is the path to an optional user-defined dictionary in CSV format (see GUI tool to save an XML
-        dictionary to CSV); use spaces to provide multiple paths
+        dictionary to CSV); use spaces to separate multiple paths
 
     Note that the macro creates a tmp CSV file in the same folder as the input file; that file will be 
     automatically deleted by the macro when it's done executing.

@@ -54,8 +54,6 @@ public class SasTest {
             fields.put(field.getNaaccrId(), field.getParentTag());
         Assert.assertTrue(fields.containsKey("myVariable"));
         Assert.assertEquals("Tumor", fields.get("myVariable"));
-
-        // TODO FD multiple dictionaries?
     }
 
     @Test

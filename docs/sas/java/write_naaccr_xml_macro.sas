@@ -1,20 +1,22 @@
-%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="180", recordtype="I", dataset=alldata, items="", dictfile="");
+%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="180", recordtype="I", dataset=alldata, items="", dictfile="", dictUri="");
 
 /************************************************************************************************************;
     This macro writes a given data fileset into a NAACCR XML data file.
 
     Paramaters:
 	- libpath needs to point to the Java SAS library (path can be relative or absolute)
-	- targetfile needs to point to the XML to export; if path ends with ".gz" it will be processed as a GZIP 
+	- targetfile needs to point to the XML to export  (path can be relative or absolute);
 	  compressed file, otherwise it will be processed as an uncompressed file (path can be relative or absolute)
+	    -- if the path ends with ".gz" it will be processed as a GZIP compressed file
+	    -- otherwise it will be processed as an uncompressed file
 	- naaccrversion should be "140", "150", "160" or "180" (defaults to "180")
 	- recordtype should be "A", "M", "C" or "I" (defaults to "I")
     - dataset should be the name of the dataset from which the data should be taken (defaults to alldata)
     - items is an optional CSV list of fields to write (any other fields will be ignored);
     - dictfile is the path to an optional user-defined dictionary in CSV format (see GUI tool to save an XML
-        dictionary to CSV); use spaces to provide multiple paths
+        dictionary to CSV); use spaces to separate multiple paths
     - dictUri is an optional user-defined dictionary URI to reference in the created XML file (if a CSV dictionary
-        is provided, then this one should be provided as well); use spaces to provide multiple URIs
+        is provided, then this one should be provided as well); use spaces to separate multiple URIs
 
     Note that the macro creates a tmp CSV file in the same folder as the target file; that file will be 
     automatically deleted by the macro when it's done executing.
