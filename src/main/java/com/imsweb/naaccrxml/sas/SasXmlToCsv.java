@@ -3,10 +3,13 @@
  */
 package com.imsweb.naaccrxml.sas;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -17,6 +20,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 /**
  * Use this class to convert a given NAACCR XML file into a CSV file.
@@ -155,14 +161,12 @@ public class SasXmlToCsv {
 
             System.out.println("Starting converting XML to CSV...");
 
-            SasXmlReader reader = null;
             BufferedWriter writer = null;
             try {
-                reader = new SasXmlReader(_xmlFile.getPath());
                 writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_csvFile), StandardCharsets.UTF_8));
-                StringBuilder buf = new StringBuilder();
 
                 // write the headers
+                StringBuilder buf = new StringBuilder();
                 for (String field : allFields.keySet())
                     buf.append(field).append(",");
                 buf.setLength(buf.length() - 1);
@@ -183,25 +187,38 @@ public class SasXmlToCsv {
                     buf.setLength(0);
                 }
 
-                Pattern quotePattern = Pattern.compile("\"", Pattern.LITERAL);
-                while (reader.nextRecord() > 0) {
-                    for (String field : allFields.keySet()) {
-                        String val = reader.getValue(field);
-                        if (val != null && val.contains(","))
-                            val = "\"" + quotePattern.matcher(val).replaceAll("\"\"") + "\"";
-                        buf.append(val == null ? "" : val).append(",");
+                if (_xmlFile.getName().toLowerCase().endsWith(".zip")) {
+                    ZipFile zipFile = new ZipFile(_xmlFile);
+                    ZipInputStream zipIs = null;
+                    try {
+                        zipIs = new ZipInputStream(new FileInputStream(_xmlFile));
+                        ZipEntry entry = zipIs.getNextEntry();
+                        while (entry != null) {
+                            SasXmlReader reader = new SasXmlReader(new BufferedReader(new InputStreamReader(zipFile.getInputStream(entry), StandardCharsets.UTF_8)));
+                            convertSingleFile(reader, writer, addExtraCharFields, allFields);
+                            entry = zipIs.getNextEntry();
+                        }
                     }
-                    buf.setLength(buf.length() - 1);
-                    writer.write(buf.toString());
-                    writer.write("\n");
-                    buf.setLength(0);
+                    finally {
+                        if (zipIs != null)
+                            zipIs.close();
+                    }
+                }
+                else {
+                    SasXmlReader reader = null;
+                    try {
+                        reader = new SasXmlReader(SasUtils.createReader(_xmlFile));
+                        convertSingleFile(reader, writer, addExtraCharFields, allFields);
+                    }
+                    finally {
+                        if (reader != null)
+                            reader.close();
+                    }
                 }
             }
             finally {
                 if (writer != null)
                     writer.close();
-                if (reader != null)
-                    reader.close();
             }
         }
         catch (IOException e) {
@@ -214,6 +231,23 @@ public class SasXmlToCsv {
         }
 
         System.out.println("Successfully created " + _csvFile.getAbsolutePath());
+    }
+
+    private void convertSingleFile(SasXmlReader reader, BufferedWriter writer, boolean addExtraCharFields, Map<String, Integer> allFields) throws IOException {
+        Pattern quotePattern = Pattern.compile("\"", Pattern.LITERAL);
+        StringBuilder buf = new StringBuilder();
+        while (reader.nextRecord() > 0) {
+            for (String field : allFields.keySet()) {
+                String val = reader.getValue(field);
+                if (val != null && val.contains(","))
+                    val = "\"" + quotePattern.matcher(val).replaceAll("\"\"") + "\"";
+                buf.append(val == null ? "" : val).append(",");
+            }
+            buf.setLength(buf.length() - 1);
+            writer.write(buf.toString());
+            writer.write("\n");
+            buf.setLength(0);
+        }
     }
 
     public void cleanup() {

@@ -150,58 +150,66 @@ public class SasTest {
         List<NaaccrDictionary> xmlDictionaries = Collections.singletonList(NaaccrXmlDictionaryUtils.readDictionary(TestingUtils.getDataFile("sas/epath/path-text-dictionary.xml")));
 
         // normal case using the user-defined dictionary
-        Tumor tumor = convertForEpath("160", "A", "HL7_AS_NAACCR_XML_V16_ABS.XML", csvDictionaries, xmlDictionaries);
+        Tumor tumor = convertForEpathSingleTumor("160", "A", "HL7_AS_NAACCR_XML_V16_ABS.XML", csvDictionaries, xmlDictionaries);
         Assert.assertEquals("20200101", tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
         Assert.assertEquals("REC-1234", tumor.getItemValue("recordDocumentId")); // non-standard tumor field
 
         // not providing the dictionaries means the non-standard items will be ignored
-        tumor = convertForEpath("160", "A", "HL7_AS_NAACCR_XML_V16_ABS.XML", null, null);
+        tumor = convertForEpathSingleTumor("160", "A", "HL7_AS_NAACCR_XML_V16_ABS.XML", null, null);
         Assert.assertEquals("20200101", tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
         Assert.assertNull(tumor.getItemValue("recordDocumentId")); // non-standard tumor field
 
         // providing a different version shouldn't really matter (in this case)
-        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V16_ABS.XML", csvDictionaries, xmlDictionaries);
+        tumor = convertForEpathSingleTumor("180", "A", "HL7_AS_NAACCR_XML_V16_ABS.XML", csvDictionaries, xmlDictionaries);
         Assert.assertEquals("20200101", tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
         Assert.assertEquals("REC-1234", tumor.getItemValue("recordDocumentId")); // non-standard tumor field
 
         // proving a different record type means some items are going ot be dropped because they apply only to the full abstract
-        tumor = convertForEpath("160", "I", "HL7_AS_NAACCR_XML_V16_ABS.XML", csvDictionaries, xmlDictionaries);
+        tumor = convertForEpathSingleTumor("160", "I", "HL7_AS_NAACCR_XML_V16_ABS.XML", csvDictionaries, xmlDictionaries);
         Assert.assertNull(tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
         Assert.assertEquals("REC-1234", tumor.getItemValue("recordDocumentId")); // non-standard tumor field
 
         // testing a normal v18 file
-        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V18_ABS.XML", csvDictionaries, xmlDictionaries);
+        tumor = convertForEpathSingleTumor("180", "A", "HL7_AS_NAACCR_XML_V18_ABS.XML", csvDictionaries, xmlDictionaries);
         Assert.assertEquals("20200101", tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
         Assert.assertEquals("REC-1234", tumor.getItemValue("recordDocumentId")); // non-standard tumor field
 
         // testing a different record type
-        tumor = convertForEpath("180", "I", "HL7_AS_NAACCR_XML_V18_INC.XML", csvDictionaries, xmlDictionaries);
+        tumor = convertForEpathSingleTumor("180", "I", "HL7_AS_NAACCR_XML_V18_INC.XML", csvDictionaries, xmlDictionaries);
         Assert.assertNull(tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
         Assert.assertEquals("REC-1234", tumor.getItemValue("recordDocumentId")); // non-standard tumor field
 
         // testing the root provided on multi lines
-        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_ROOT.XML", csvDictionaries, xmlDictionaries);
+        tumor = convertForEpathSingleTumor("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_ROOT.XML", csvDictionaries, xmlDictionaries);
         Assert.assertEquals("20200101", tumor.getItemValue("pathDateSpecCollect1")); // standard tumor field
         Assert.assertEquals("REC-1234", tumor.getItemValue("recordDocumentId")); // non-standard tumor field
 
         // testing the data on multiple lines
-        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_DATA_1.XML", csvDictionaries, xmlDictionaries);
+        tumor = convertForEpathSingleTumor("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_DATA_1.XML", csvDictionaries, xmlDictionaries);
         Assert.assertEquals("Comments on\n multiple lines, which\n is permitted in XML...", tumor.getItemValue("textPathComments"));
-        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_DATA_2.XML", csvDictionaries, xmlDictionaries);
+        tumor = convertForEpathSingleTumor("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_DATA_2.XML", csvDictionaries, xmlDictionaries);
         Assert.assertEquals("\nComments on multiple lines, which is permitted in XML...\n            ", tumor.getItemValue("textPathComments"));
-        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_DATA_3.XML", csvDictionaries, xmlDictionaries);
+        tumor = convertForEpathSingleTumor("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_DATA_3.XML", csvDictionaries, xmlDictionaries);
         Assert.assertEquals("\n                Comments on multiple lines, which is permitted in XML...\n            ", tumor.getItemValue("textPathComments"));
-        tumor = convertForEpath("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_DATA_4.XML", csvDictionaries, xmlDictionaries);
+        tumor = convertForEpathSingleTumor("180", "A", "HL7_AS_NAACCR_XML_V18_ABS_MULTI_LINES_DATA_4.XML", csvDictionaries, xmlDictionaries);
         Assert.assertEquals("\nComments on multiple lines,\n which is permitted in XML...\n            ", tumor.getItemValue("textPathComments"));
+
+        // test a ZIP file (all internal files should be added to one CSV file)
+        NaaccrData data = convertForEpath("160", "A", "HL7_AS_NAACCR_XML_V18_ABS.zip", csvDictionaries, xmlDictionaries);
+        Assert.assertEquals(4, data.getPatients().size());
     }
 
-    private Tumor convertForEpath(String naaccrVersion, String recordType, String input, List<File> csvDictionaryFiles, List<NaaccrDictionary> xmlDictionaries) throws IOException {
+    private Tumor convertForEpathSingleTumor(String naaccrVersion, String recordType, String input, List<File> csvDictionaryFiles, List<NaaccrDictionary> xmlDictionaries) throws IOException {
+        return convertForEpath(naaccrVersion, recordType, input, csvDictionaryFiles, xmlDictionaries).getPatients().get(0).getTumors().get(0);
+    }
+
+    private NaaccrData convertForEpath(String naaccrVersion, String recordType, String input, List<File> csvDictionaryFiles, List<NaaccrDictionary> xmlDictionaries) throws IOException {
         File xmlFile = TestingUtils.copyFile(TestingUtils.getDataFile("sas/epath/" + input), TestingUtils.getBuildDirectory());
-        File csvFile = new File(TestingUtils.getBuildDirectory(), xmlFile.getName().replace(".XML", ".csv"));
-        File xmlCopyFile = new File(TestingUtils.getBuildDirectory(), xmlFile.getName().replace(".XML", "-COPY.XML"));
+        File csvFile = new File(TestingUtils.getBuildDirectory(), xmlFile.getName().replace(".XML", ".csv").replace(".zip", ".csv"));
+        File xmlCopyFile = new File(TestingUtils.getBuildDirectory(), xmlFile.getName().replace(".XML", "-COPY.XML").replace(".zip", "-COPY.XML"));
         createXmlToCsvConverter(xmlFile, csvFile, naaccrVersion, recordType, csvDictionaryFiles).convert(null, false);
         createCsvToXmlConverter(csvFile, xmlCopyFile, naaccrVersion, recordType, csvDictionaryFiles, xmlDictionaries).convert(null);
-        return NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, xmlDictionaries, null).getPatients().get(0).getTumors().get(0);
+        return NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, xmlDictionaries, null);
     }
 
     @SuppressWarnings("SameParameterValue")

@@ -27,18 +27,6 @@ import java.util.Set;
 @SuppressWarnings("ALL")
 public class SasCsvToXml {
 
-    private static final Map<String, String> _TO_ESCAPE = new HashMap<>();
-
-    static {
-        _TO_ESCAPE.put("&", "&amp;");
-        _TO_ESCAPE.put("<", "&lt;");
-        _TO_ESCAPE.put(">", "&gt;");
-        _TO_ESCAPE.put("\"", "&quot;");
-        _TO_ESCAPE.put("'", "&apos;'");
-        // not really a special character, but behaves like one (to handle new lines)
-        _TO_ESCAPE.put("::", "\n");
-    }
-
     private File _csvFile, _xmlFile;
 
     private List<File> _dictionaryFiles;
@@ -174,12 +162,10 @@ public class SasCsvToXml {
                     throw new IOException("Was expecting to find column headers, didn't find them!");
                 headers.addAll(Arrays.asList(line.split(",", -1)));
 
-                int patNumIdx = headers.indexOf("patientIdNumber");
-                if (patNumIdx == -1)
-                    throw new IOException("Unable to find 'patientIdNumber' in the headers");
-
                 String currentPatNum = null;
                 line = reader.readLine();
+                boolean wroteRoot = false;
+                int numPatientWritten = 0;
                 while (line != null) {
                     List<String> valList = SasUtils.parseCsvLine(reader.getLineNumber(), line);
                     if (headers.size() != valList.size())
@@ -190,11 +176,11 @@ public class SasCsvToXml {
                         values.put(headers.get(i), valList.get(i));
 
                     String patNum = values.get("patientIdNumber");
-                    if (patNum == null)
-                        throw new IOException("Line " + reader.getLineNumber() + ": patient ID Number is required to write XML files");
+                    if (patNum != null && patNum.trim().isEmpty())
+                        patNum = null;
 
                     // do we have to write the root?
-                    if (currentPatNum == null) {
+                    if (!wroteRoot) {
                         writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
                         writer.write("\n");
                         writer.write("<NaaccrData");
@@ -208,19 +194,21 @@ public class SasCsvToXml {
                         for (Entry<String, String> entry : rootFields.entrySet()) {
                             String val = values.get(entry.getKey());
                             if (val != null && !val.trim().isEmpty())
-                                writer.write("    <Item naaccrId=\"" + entry.getValue() + "\">" + cleanUpValue(val) + "</Item>\n");
+                                writer.write("    <Item naaccrId=\"" + entry.getValue() + "\">" + SasUtils.cleanUpValueToWriteAsXml(val) + "</Item>\n");
                         }
+                        wroteRoot = true;
                     }
 
                     // do we have to write the patient?
                     if (currentPatNum == null || !currentPatNum.equals(patNum)) {
-                        if (currentPatNum != null)
+                        if (numPatientWritten > 0)
                             writer.write("    </Patient>\n");
+                        numPatientWritten++;
                         writer.write("    <Patient>\n");
                         for (Entry<String, String> entry : patientFields.entrySet()) {
                             String val = values.get(entry.getKey());
                             if (val != null && !val.trim().isEmpty())
-                                writer.write("        <Item naaccrId=\"" + entry.getValue() + "\">" + cleanUpValue(val) + "</Item>\n");
+                                writer.write("        <Item naaccrId=\"" + entry.getValue() + "\">" + SasUtils.cleanUpValueToWriteAsXml(val) + "</Item>\n");
                         }
                     }
 
@@ -229,7 +217,7 @@ public class SasCsvToXml {
                     for (Entry<String, String> entry : tumorFields.entrySet()) {
                         String val = values.get(entry.getKey());
                         if (val != null && !val.trim().isEmpty())
-                            writer.write("            <Item naaccrId=\"" + entry.getValue() + "\">" + cleanUpValue(val) + "</Item>\n");
+                            writer.write("            <Item naaccrId=\"" + entry.getValue() + "\">" + SasUtils.cleanUpValueToWriteAsXml(val) + "</Item>\n");
                     }
                     writer.write("        </Tumor>\n");
 
@@ -262,17 +250,5 @@ public class SasCsvToXml {
     public void cleanup() {
         if (!_csvFile.delete())
             System.err.println("!!! Unable to cleanup tmp CSV file.");
-    }
-
-    private String cleanUpValue(String value) {
-        StringBuilder buf = new StringBuilder(value);
-        for (Map.Entry<String, String> entry : _TO_ESCAPE.entrySet()) {
-            int idx = buf.indexOf(entry.getKey());
-            while (idx != -1) {
-                buf.replace(idx, idx + entry.getKey().length(), entry.getValue());
-                idx = buf.indexOf(entry.getKey(), idx + 1);
-            }
-        }
-        return buf.toString();
     }
 }

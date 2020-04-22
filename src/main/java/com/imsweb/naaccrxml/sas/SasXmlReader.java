@@ -4,7 +4,6 @@
 package com.imsweb.naaccrxml.sas;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,22 +28,17 @@ public class SasXmlReader {
         _TO_ESCAPE.put("&apos;", "'");
     }
 
-    private final File _xmlFile;
-
-    private BufferedReader _reader;
+    private final BufferedReader _reader;
 
     private boolean _inPatient, _inTumor, _inCdata;
 
     private final Map<String, String> _naaccrDataValues = new HashMap<>(), _patientValues = new HashMap<>(), _tumorValues = new HashMap<>();
 
-    public SasXmlReader(String xmlPath) {
-        _xmlFile = new File(xmlPath);
+    public SasXmlReader(BufferedReader reader) {
+        _reader = reader;
     }
 
     public int nextRecord() throws IOException {
-        if (_reader == null)
-            _reader = SasUtils.createReader(_xmlFile);
-
         _tumorValues.clear();
 
         String currentKey = null;

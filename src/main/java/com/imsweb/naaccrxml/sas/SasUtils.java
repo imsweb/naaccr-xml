@@ -17,6 +17,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,6 +32,18 @@ import java.util.zip.GZIPOutputStream;
  */
 public class SasUtils {
 
+    private static final Map<String, String> _TO_ESCAPE = new LinkedHashMap<>();
+
+    static {
+        _TO_ESCAPE.put("&", "&amp;");
+        _TO_ESCAPE.put("<", "&lt;");
+        _TO_ESCAPE.put(">", "&gt;");
+        _TO_ESCAPE.put("\"", "&quot;");
+        _TO_ESCAPE.put("'", "&apos;");
+        // not really a special character, but behaves like one (to handle new lines)
+        _TO_ESCAPE.put("::", "\n");
+    }
+
     /**
      * Convert the given XML path to a CSV path.
      */
@@ -38,7 +51,7 @@ public class SasUtils {
         if (xmlPath == null || xmlPath.trim().isEmpty())
             return null;
 
-        String csvPath = Pattern.compile("(\\.xml|\\.gz|\\.xml\\.gz)$", Pattern.CASE_INSENSITIVE).matcher(xmlPath).replaceAll(".csv");
+        String csvPath = Pattern.compile("(\\.xml|\\.xml\\.gz|\\.gz|.zip)$", Pattern.CASE_INSENSITIVE).matcher(xmlPath).replaceAll(".csv");
 
         if (csvPath.equalsIgnoreCase(xmlPath))
             csvPath = xmlPath + ".csv";
@@ -293,5 +306,12 @@ public class SasUtils {
             index++;
 
         return index;
+    }
+
+    public static String cleanUpValueToWriteAsXml(String value) {
+        for (Map.Entry<String, String> entry : _TO_ESCAPE.entrySet())
+            value = value.replace(entry.getKey(), entry.getValue());
+
+        return value;
     }
 }

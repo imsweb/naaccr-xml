@@ -5,8 +5,10 @@
 
     Paramaters:
 	- libpath needs to point to the Java SAS library (path can be relative or absolute)
-	- sourcefile needs to point to the XML to import; if path ends with ".gz" it will be processed as a GZIP 
-	    compressed file, otherwise it will be processed as an uncompressed file (path can be relative or absolute)
+	- sourcefile needs to point to the XML to import;
+	    -- if the path ends with ".gz" it will be processed as a GZIP compressed file
+	    -- if it ends with ".zip", every file inside the zip file will be processed (into the same SAS data set)
+	    -- otherwise it will be processed as an uncompressed file (path can be relative or absolute)
 	- naaccrversion should be "140", "150", "160" or "180" (defaults to "180")
 	- recordtype should be "A", "M", "C" or "I" (defaults to "I")
     - dataset should be the name of the dataset into which the data should be loaded (defaults to alldata)

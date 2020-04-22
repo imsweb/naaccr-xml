@@ -24,12 +24,14 @@ public class SasUtilsTest {
         Assert.assertEquals("test.something.csv", SasUtils.computeCsvPathFromXmlPath("test.something.gz"));
         Assert.assertEquals("test.something.csv", SasUtils.computeCsvPathFromXmlPath("test.something"));
         Assert.assertEquals("test.xml.test.csv", SasUtils.computeCsvPathFromXmlPath("test.xml.test.xml"));
+        Assert.assertEquals("test.zip", SasUtils.computeCsvPathFromXmlPath("test.xml"));
 
         Assert.assertEquals("TEST.csv", SasUtils.computeCsvPathFromXmlPath("TEST.XML"));
         Assert.assertEquals("TEST.csv", SasUtils.computeCsvPathFromXmlPath("TEST.XML.GZ"));
         Assert.assertEquals("TEST.SOMETHING.csv", SasUtils.computeCsvPathFromXmlPath("TEST.SOMETHING.GZ"));
         Assert.assertEquals("TEST.SOMETHING.csv", SasUtils.computeCsvPathFromXmlPath("TEST.SOMETHING"));
         Assert.assertEquals("TEST.XML.TEST.csv", SasUtils.computeCsvPathFromXmlPath("TEST.XML.TEST.XML"));
+        Assert.assertEquals("TEST.ZIP", SasUtils.computeCsvPathFromXmlPath("TEST.XML"));
     }
 
     @Test
@@ -42,4 +44,12 @@ public class SasUtilsTest {
         SasUtils.validateCsvDictionary(new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/sas/epath/path-text-dictionary.csv"));
     }
 
+    @Test
+    public void testCleanUpValueToWriteAsXml() {
+        Assert.assertEquals("Evaluate", SasUtils.cleanUpValueToWriteAsXml("Evaluate"));
+        Assert.assertEquals("Evaluate for non-Hodgkin&apos;s lymphoma", SasUtils.cleanUpValueToWriteAsXml("Evaluate for non-Hodgkin's lymphoma"));
+        Assert.assertEquals("&apos;Evaluate for non-Hodgkin&apos;s lymphoma&apos;", SasUtils.cleanUpValueToWriteAsXml("'Evaluate for non-Hodgkin's lymphoma'"));
+        Assert.assertEquals("Evaluate for non-Hodgkin&apos;s lymphoma &amp; something", SasUtils.cleanUpValueToWriteAsXml("Evaluate for non-Hodgkin's lymphoma & something"));
+
+    }
 }
