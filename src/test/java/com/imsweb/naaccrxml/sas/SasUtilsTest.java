@@ -24,14 +24,14 @@ public class SasUtilsTest {
         Assert.assertEquals("test.something.csv", SasUtils.computeCsvPathFromXmlPath("test.something.gz"));
         Assert.assertEquals("test.something.csv", SasUtils.computeCsvPathFromXmlPath("test.something"));
         Assert.assertEquals("test.xml.test.csv", SasUtils.computeCsvPathFromXmlPath("test.xml.test.xml"));
-        Assert.assertEquals("test.zip", SasUtils.computeCsvPathFromXmlPath("test.xml"));
+        Assert.assertEquals("test.csv", SasUtils.computeCsvPathFromXmlPath("test.zip"));
 
         Assert.assertEquals("TEST.csv", SasUtils.computeCsvPathFromXmlPath("TEST.XML"));
         Assert.assertEquals("TEST.csv", SasUtils.computeCsvPathFromXmlPath("TEST.XML.GZ"));
         Assert.assertEquals("TEST.SOMETHING.csv", SasUtils.computeCsvPathFromXmlPath("TEST.SOMETHING.GZ"));
         Assert.assertEquals("TEST.SOMETHING.csv", SasUtils.computeCsvPathFromXmlPath("TEST.SOMETHING"));
         Assert.assertEquals("TEST.XML.TEST.csv", SasUtils.computeCsvPathFromXmlPath("TEST.XML.TEST.XML"));
-        Assert.assertEquals("TEST.ZIP", SasUtils.computeCsvPathFromXmlPath("TEST.XML"));
+        Assert.assertEquals("TEST.csv", SasUtils.computeCsvPathFromXmlPath("TEST.ZIP"));
     }
 
     @Test
