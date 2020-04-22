@@ -188,9 +188,10 @@ public class SasXmlToCsv {
                 }
 
                 if (_xmlFile.getName().toLowerCase().endsWith(".zip")) {
-                    ZipFile zipFile = new ZipFile(_xmlFile);
+                    ZipFile zipFile = null;
                     ZipInputStream zipIs = null;
                     try {
+                        zipFile = new ZipFile(_xmlFile);
                         zipIs = new ZipInputStream(new FileInputStream(_xmlFile));
                         ZipEntry entry = zipIs.getNextEntry();
                         while (entry != null) {
@@ -202,6 +203,8 @@ public class SasXmlToCsv {
                     finally {
                         if (zipIs != null)
                             zipIs.close();
+                        if (zipFile != null)
+                            zipFile.close();
                     }
                 }
                 else {

@@ -13,10 +13,13 @@
 	- recordtype should be "A", "M", "C" or "I" (defaults to "I")
     - dataset should be the name of the dataset from which the data should be taken (defaults to alldata)
     - items is an optional CSV list of fields to write (any other fields will be ignored);
-    - dictfile is the path to an optional user-defined dictionary in CSV format (see GUI tool to save an XML
-        dictionary to CSV); use spaces to separate multiple paths
+    - dictfile is the path to an optional user-defined dictionary in CSV format (the NAACCR XML Tool that
+        is distributed with the macros has an option to load an XML dictionary and save it as CSV);
+        use spaces to separate multiple paths
     - dictUri is an optional user-defined dictionary URI to reference in the created XML file (if a CSV dictionary
-        is provided, then this one should be provided as well); use spaces to separate multiple URIs
+        is provided, then this one should be provided as well); the URI can be found as a root attribute of the
+        XML dictionary (it usually looks like an internet address, but it's rarely a legit address);
+        use spaces to separate multiple URIs
 
     Note that the macro creates a tmp CSV file in the same folder as the target file; that file will be 
     automatically deleted by the macro when it's done executing.
