@@ -9,10 +9,16 @@
 	    -- if the path ends with ".gz" it will be processed as a GZIP compressed file
 	    -- if it ends with ".zip", every file inside the zip file will be processed (into the same SAS data set)
 	    -- otherwise it will be processed as an uncompressed file
-	- naaccrversion should be "140", "150", "160" or "180" (defaults to "180")
-	- recordtype should be "A", "M", "C" or "I" (defaults to "I")
+	- naaccrversion should be "140", "150", "160" or "180" (defaults to "180"); make sure to provide the proper
+	    version or some items might be dropped during the reading process
+	- recordtype should be "A", "M", "C" or "I" (defaults to "I"); make sure to provide the proper type or
+	    some items might be dropped during the reading process
     - dataset should be the name of the dataset into which the data should be loaded (defaults to alldata)
-    - items is an optional CSV list of fields to read (any other fields will be ignored);
+    - items is an optional CSV list of fields to read (any other fields will be ignored); if not provided,
+        the data set will contain all standard items plus any non-standard items provided via the extra dictionary;
+        be aware that creating a data set containing all items will be MUCH slower than creating one for just a few items,
+        and so if you only need a handful of items to do your analysis, it is strongly recommended to provide those items
+        (you can check the official NAACCR documentation to find the NAACCR XML IDs to use in that list)
     - dictfile is the path to an optional user-defined dictionary in CSV format (the NAACCR XML Tool that
         is distributed with the macros has an option to load an XML dictionary and save it as CSV);
         use spaces to separate multiple paths

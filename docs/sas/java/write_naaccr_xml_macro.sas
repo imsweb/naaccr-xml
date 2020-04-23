@@ -6,11 +6,12 @@
     Paramaters:
 	- libpath needs to point to the Java SAS library (path can be relative or absolute)
 	- targetfile needs to point to the XML to export  (path can be relative or absolute);
-	  compressed file, otherwise it will be processed as an uncompressed file (path can be relative or absolute)
 	    -- if the path ends with ".gz" it will be processed as a GZIP compressed file
 	    -- otherwise it will be processed as an uncompressed file
-	- naaccrversion should be "140", "150", "160" or "180" (defaults to "180")
-	- recordtype should be "A", "M", "C" or "I" (defaults to "I")
+	- naaccrversion should be "140", "150", "160" or "180" (defaults to "180"); make sure to provide the proper
+         version or some items might be dropped during the writing process
+	- recordtype should be "A", "M", "C" or "I" (defaults to "I"); make sure to provide the proper
+         type or some items might be dropped during the writing process
     - dataset should be the name of the dataset from which the data should be taken (defaults to alldata)
     - items is an optional CSV list of fields to write (any other fields will be ignored);
     - dictfile is the path to an optional user-defined dictionary in CSV format (the NAACCR XML Tool that

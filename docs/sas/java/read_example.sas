@@ -6,7 +6,7 @@
     Make sure that the naaccrVersion and recordType are correct or some data items won't be correctly populated.
 
     This example includes two items, meaning that only those two items will be included in the resulting
-    date set. That parameter is optional and if not provided, the the data set will contain all standard
+    date set. That parameter is optional and if not provided, the data set will contain all standard
     items plus any non-standard items provided via the extra dictionary. Be aware that creating a data set
     containing all items will be MUCH slower than creating one for just a few items, and so if you only need
     a handful of items to do your analysis, it is strongly recommended to provide those items (you can
