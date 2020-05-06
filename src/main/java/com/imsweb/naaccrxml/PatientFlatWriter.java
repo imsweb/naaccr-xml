@@ -133,6 +133,9 @@ public class PatientFlatWriter implements PatientWriter {
             _dictionary = new RuntimeNaaccrDictionary(data.getRecordType(), baseDictionary, userDictionaries);
         }
 
+        if (_dictionary.getLineLength() == null || _dictionary.getLineLength() == -1)
+            throw new NaaccrIOException("version " + _dictionary.getNaaccrVersion() + " does not support start columns and cannot be used with this flat writer");
+
         // let's cache the record type and naaccr version items; we are going to use them a lot...
         for (RuntimeNaaccrDictionaryItem item : _dictionary.getItems()) {
             if (item.getNaaccrId().equals(NaaccrXmlUtils.FLAT_FILE_FORMAT_ITEM_REC_TYPE))
