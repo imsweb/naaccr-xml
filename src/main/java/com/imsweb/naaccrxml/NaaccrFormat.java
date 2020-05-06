@@ -149,7 +149,7 @@ public final class NaaccrFormat {
 
         // version 18 had a different line length than 16/15/14; post version 18 doesn't support length anymore...
         boolean isVersion18 = NAACCR_VERSION_180.equals(_naaccrVersion);
-        boolean isPreVersion18 = NAACCR_VERSION_160.equals(_naaccrVersion) | NAACCR_VERSION_150.equals(_naaccrVersion) || NAACCR_VERSION_140.equals(_naaccrVersion);
+        boolean isPreVersion18 = NAACCR_VERSION_160.equals(_naaccrVersion) || NAACCR_VERSION_150.equals(_naaccrVersion) || NAACCR_VERSION_140.equals(_naaccrVersion);
 
         switch (parts[2]) {
             case "abstract":
