@@ -26,6 +26,7 @@ public final class NaaccrFormat {
     private static final List<String> _SUPPORTED_VERSIONS = new ArrayList<>();
 
     static {
+        _SUPPORTED_VERSIONS.add(NAACCR_VERSION_210);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_180);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_160);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_150);
