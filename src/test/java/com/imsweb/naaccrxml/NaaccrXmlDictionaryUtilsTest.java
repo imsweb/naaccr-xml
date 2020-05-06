@@ -53,10 +53,12 @@ public class NaaccrXmlDictionaryUtilsTest {
             }
 
             // make sure the combination of fields doesn't leave any gaps
-            items.sort(Comparator.comparing(NaaccrDictionaryItem::getStartColumn));
-            for (int i = 0; i < items.size() - 1; i++)
-                if (items.get(i).getStartColumn() + items.get(i).getLength() != items.get(i + 1).getStartColumn())
-                    fail("Found a gap after item " + items.get(i).getNaaccrId());
+            if (Integer.parseInt(version) <= 180) {
+                items.sort(Comparator.comparing(NaaccrDictionaryItem::getStartColumn));
+                for (int i = 0; i < items.size() - 1; i++)
+                    if (items.get(i).getStartColumn() + items.get(i).getLength() != items.get(i + 1).getStartColumn())
+                        fail("Found a gap after item " + items.get(i).getNaaccrId());
+            }
 
             // make sure IDs are no longer than 50 characters (this will be enforced by the standard in a future version)
             for (NaaccrDictionaryItem item : items)

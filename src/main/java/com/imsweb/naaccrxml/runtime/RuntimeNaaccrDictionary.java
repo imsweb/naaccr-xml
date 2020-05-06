@@ -5,6 +5,7 @@ package com.imsweb.naaccrxml.runtime;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -79,14 +80,8 @@ public class RuntimeNaaccrDictionary {
             }
         }
 
-        // sort the fields by starting columns (no start columns go to the end)
-        _items.sort((o1, o2) -> {
-            if (o1.getStartColumn() == null)
-                return 1;
-            if (o2.getStartColumn() == null)
-                return -1;
-            return o1.getStartColumn().compareTo(o2.getStartColumn());
-        });
+        // sort the fields by ID
+        _items.sort(Comparator.comparing(RuntimeNaaccrDictionaryItem::getNaaccrId));
     }
 
     public String getId() {

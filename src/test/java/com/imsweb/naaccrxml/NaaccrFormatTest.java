@@ -6,18 +6,38 @@ package com.imsweb.naaccrxml;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_REC_TYPE_ABSTRACT;
+import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_REC_TYPE_CONFIDENTIAL;
+import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_REC_TYPE_INCIDENCE;
+import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_REC_TYPE_MODIFIED;
+import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_VERSION_160;
+import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_VERSION_180;
+import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_VERSION_210;
+
 public class NaaccrFormatTest {
 
     @Test
     public void testFormats() {
-        Assert.assertEquals(24194, NaaccrFormat.getInstance("180", "A").getLineLength());
-        Assert.assertEquals(24194, NaaccrFormat.getInstance("180", "M").getLineLength());
-        Assert.assertEquals(6154, NaaccrFormat.getInstance("180", "C").getLineLength());
-        Assert.assertEquals(4048, NaaccrFormat.getInstance("180", "I").getLineLength());
+        Assert.assertFalse(NaaccrFormat.getSupportedFormats().isEmpty());
+        Assert.assertFalse(NaaccrFormat.getSupportedVersions().isEmpty());
+        Assert.assertFalse(NaaccrFormat.getSupportedRecordTypes().isEmpty());
+    }
 
-        Assert.assertEquals(22824, NaaccrFormat.getInstance("160", "A").getLineLength());
-        Assert.assertEquals(22824, NaaccrFormat.getInstance("160", "M").getLineLength());
-        Assert.assertEquals(5564, NaaccrFormat.getInstance("160", "C").getLineLength());
-        Assert.assertEquals(3339, NaaccrFormat.getInstance("160", "I").getLineLength());
+    @Test
+    public void testLineLength() {
+        Assert.assertEquals(-1, NaaccrFormat.getInstance(NAACCR_VERSION_210, NAACCR_REC_TYPE_ABSTRACT).getLineLength());
+        Assert.assertEquals(-1, NaaccrFormat.getInstance(NAACCR_VERSION_210, NAACCR_REC_TYPE_MODIFIED).getLineLength());
+        Assert.assertEquals(-1, NaaccrFormat.getInstance(NAACCR_VERSION_210, NAACCR_REC_TYPE_CONFIDENTIAL).getLineLength());
+        Assert.assertEquals(-1, NaaccrFormat.getInstance(NAACCR_VERSION_210, NAACCR_REC_TYPE_INCIDENCE).getLineLength());
+
+        Assert.assertEquals(24194, NaaccrFormat.getInstance(NAACCR_VERSION_180, NAACCR_REC_TYPE_ABSTRACT).getLineLength());
+        Assert.assertEquals(24194, NaaccrFormat.getInstance(NAACCR_VERSION_180, NAACCR_REC_TYPE_MODIFIED).getLineLength());
+        Assert.assertEquals(6154, NaaccrFormat.getInstance(NAACCR_VERSION_180, NAACCR_REC_TYPE_CONFIDENTIAL).getLineLength());
+        Assert.assertEquals(4048, NaaccrFormat.getInstance(NAACCR_VERSION_180, NAACCR_REC_TYPE_INCIDENCE).getLineLength());
+
+        Assert.assertEquals(22824, NaaccrFormat.getInstance(NAACCR_VERSION_160, NAACCR_REC_TYPE_ABSTRACT).getLineLength());
+        Assert.assertEquals(22824, NaaccrFormat.getInstance(NAACCR_VERSION_160, NAACCR_REC_TYPE_MODIFIED).getLineLength());
+        Assert.assertEquals(5564, NaaccrFormat.getInstance(NAACCR_VERSION_160, NAACCR_REC_TYPE_CONFIDENTIAL).getLineLength());
+        Assert.assertEquals(3339, NaaccrFormat.getInstance(NAACCR_VERSION_160, NAACCR_REC_TYPE_INCIDENCE).getLineLength());
     }
 }

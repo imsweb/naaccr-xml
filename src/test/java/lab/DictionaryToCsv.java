@@ -3,8 +3,6 @@
  */
 package lab;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.SortedSet;
@@ -23,7 +21,6 @@ public class DictionaryToCsv {
         for (String version : NaaccrFormat.getSupportedVersions())
             NaaccrXmlDictionaryUtils.writeDictionaryToCsv(NaaccrXmlDictionaryUtils.getMergedDictionaries(version), Paths.get("docs/naaccr-xml-items-" + version + ".csv").toFile());
 
-        //incidenceOnly();
         //csv16to18diff();
     }
 
@@ -48,34 +45,4 @@ public class DictionaryToCsv {
             System.out.println(id + "," + num + "," + n16start + "," + n16Length + "," + n18start + "," + n18Length);
         }
     }
-
-    private static void incidenceOnly() throws IOException {
-        for (String version : NaaccrFormat.getSupportedVersions()) {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(Paths.get("docs/naaccr-xml-incidence-" + version + ".csv").toFile()))) {
-                writer.newLine();
-                NaaccrXmlDictionaryUtils.getMergedDictionaries(version).getItems().stream()
-                        .sorted((o1, o2) -> {
-                            if (o1.getStartColumn() == null && o2.getStartColumn() == null)
-                                return o1.getNaaccrId().compareTo(o2.getNaaccrId());
-                            if (o1.getStartColumn() == null)
-                                return 1;
-                            if (o2.getStartColumn() == null)
-                                return -1;
-                            return o1.getStartColumn().compareTo(o2.getStartColumn());
-                        })
-                        .forEach(item -> {
-                            if (item.getRecordTypes().contains("I")) {
-                                try {
-                                    writer.write(item.getNaaccrId() + ",\"" + item.getNaaccrNum());
-                                    writer.newLine();
-                                }
-                                catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                        });
-            }
-        }
-    }
-
 }

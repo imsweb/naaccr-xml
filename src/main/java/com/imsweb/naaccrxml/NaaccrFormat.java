@@ -11,11 +11,12 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * A format encapsulates a NAACCR version and a record type. It also makes the flat-file line length available based on those two fields.
+ * A format encapsulates a NAACCR version and a record type. It also makes the flat-file line length available based on those two fields, for versions that support it.
  */
 public final class NaaccrFormat {
 
     // version constants
+    public static final String NAACCR_VERSION_210 = "210";
     public static final String NAACCR_VERSION_180 = "180";
     public static final String NAACCR_VERSION_160 = "160";
     public static final String NAACCR_VERSION_150 = "150";
@@ -40,6 +41,10 @@ public final class NaaccrFormat {
     }
 
     // format constants
+    public static final String NAACCR_FORMAT_21_ABSTRACT = "naaccr-210-abstract";
+    public static final String NAACCR_FORMAT_21_MODIFIED = "naaccr-210-modified";
+    public static final String NAACCR_FORMAT_21_CONFIDENTIAL = "naaccr-210-confidential";
+    public static final String NAACCR_FORMAT_21_INCIDENCE = "naaccr-210-incidence";
     public static final String NAACCR_FORMAT_18_ABSTRACT = "naaccr-180-abstract";
     public static final String NAACCR_FORMAT_18_MODIFIED = "naaccr-180-modified";
     public static final String NAACCR_FORMAT_18_CONFIDENTIAL = "naaccr-180-confidential";
@@ -61,6 +66,10 @@ public final class NaaccrFormat {
     private static final List<String> _SUPPORTED_FORMATS = new ArrayList<>();
 
     static {
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_21_ABSTRACT);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_21_MODIFIED);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_21_CONFIDENTIAL);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_21_INCIDENCE);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_18_ABSTRACT);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_18_MODIFIED);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_18_CONFIDENTIAL);
@@ -122,11 +131,11 @@ public final class NaaccrFormat {
         return new NaaccrFormat(getFormatFromVersionAndType(naaccrVersion, recordType));
     }
 
-    private String _naaccrVersion;
+    private final String _naaccrVersion;
 
-    private String _recordType;
+    private final String _recordType;
 
-    private int _lineLength;
+    private final int _lineLength;
 
     private NaaccrFormat(String format) {
         if (!isFormatSupported(format))
@@ -137,22 +146,26 @@ public final class NaaccrFormat {
             throw new RuntimeException("Unsupported version: " + parts[1]);
         _naaccrVersion = parts[1];
 
+        // version 18 had a different line length than 16/15/14; post version 18 doesn't support length anymore...
+        boolean isVersion18 = NAACCR_VERSION_180.equals(_naaccrVersion);
+        boolean isPreVersion18 = NAACCR_VERSION_160.equals(_naaccrVersion) | NAACCR_VERSION_150.equals(_naaccrVersion) || NAACCR_VERSION_140.equals(_naaccrVersion);
+
         switch (parts[2]) {
             case "abstract":
                 _recordType = "A";
-                _lineLength = _naaccrVersion.equals("180") ? 24194 : 22824;
+                _lineLength = isPreVersion18 ? 22824 : isVersion18 ? 24194 : -1;
                 break;
             case "modified":
                 _recordType = "M";
-                _lineLength = _naaccrVersion.equals("180") ? 24194 : 22824;
+                _lineLength = isPreVersion18 ? 22824 : isVersion18 ? 24194 : -1;
                 break;
             case "confidential":
                 _recordType = "C";
-                _lineLength = _naaccrVersion.equals("180") ? 6154 : 5564;
+                _lineLength = isPreVersion18 ? 5564 : isVersion18 ? 6154 : -1;
                 break;
             case "incidence":
                 _recordType = "I";
-                _lineLength = _naaccrVersion.equals("180") ? 4048 : 3339;
+                _lineLength = isPreVersion18 ? 3339 : isVersion18 ? 4048 : -1;
                 break;
             default:
                 throw new RuntimeException("Unsupported format: " + parts[2]);

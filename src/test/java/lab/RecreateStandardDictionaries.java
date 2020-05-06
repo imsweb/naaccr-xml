@@ -15,7 +15,7 @@ public class RecreateStandardDictionaries {
 
     public static void main(String[] args) throws IOException {
         for (String version : NaaccrFormat.getSupportedVersions()) {
-            if (!"180".equals(version))
+            if (!"210".equals(version))
                 continue;
             Path path = Paths.get("src/main/resources/naaccr-dictionary-" + version + ".xml");
             NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(path.toFile());
@@ -32,14 +32,16 @@ public class RecreateStandardDictionaries {
     private static void applyFix(NaaccrDictionary dictionary, boolean isBase) {
         // default is to do nothing
 
-//        if (isBase) {
-//
-//            for (Entry<String, String> entry : NaaccrXmlDictionaryUtils.getRenamedLongNaaccr18Ids().entrySet()) {
-//                NaaccrDictionaryItem item = dictionary.getItemByNaaccrId(entry.getKey());
-//                if (item == null)
-//                    throw new RuntimeException("Unknown item: " + entry.getKey());
-//                item.setNaaccrId(entry.getValue());
-//            }
-//        }
+        //        if (isBase) {
+        //
+        //            for (Entry<String, String> entry : NaaccrXmlDictionaryUtils.getRenamedLongNaaccr18Ids().entrySet()) {
+        //                NaaccrDictionaryItem item = dictionary.getItemByNaaccrId(entry.getKey());
+        //                if (item == null)
+        //                    throw new RuntimeException("Unknown item: " + entry.getKey());
+        //                item.setNaaccrId(entry.getValue());
+        //            }
+        //        }
+
+        dictionary.getItems().forEach(i -> i.setStartColumn(null));
     }
 }
