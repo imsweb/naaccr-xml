@@ -43,5 +43,6 @@ public class RecreateStandardDictionaries {
         //        }
 
         dictionary.getItems().forEach(i -> i.setStartColumn(null));
+        dictionary.getGroupedItems().forEach(i -> i.setStartColumn(null));
     }
 }

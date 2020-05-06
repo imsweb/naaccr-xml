@@ -290,6 +290,7 @@ public class PatientFlatWriter implements PatientWriter {
         return value;
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected void reportError(AbstractEntity entity, RuntimeNaaccrDictionaryItem def, String value, String code, Object... msgValues) {
         NaaccrValidationError error = new NaaccrValidationError(code, msgValues);
         if (def != null) {

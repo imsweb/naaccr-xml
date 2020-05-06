@@ -66,11 +66,13 @@ public class NaaccrXmlDictionaryUtilsTest {
                     fail("Found item with ID too long: " + item.getNaaccrId());
 
             // check record type
-            for (NaaccrDictionaryItem item : items) {
-                if (item.getStartColumn() > NaaccrFormat.getInstance(version, NAACCR_REC_TYPE_INCIDENCE).getLineLength())
-                    Assert.assertFalse("Item " + item.getNaaccrId() + " has an invalid type definition: " + item.getRecordTypes(), item.getRecordTypes().contains(NAACCR_REC_TYPE_INCIDENCE));
-                if (item.getStartColumn() > NaaccrFormat.getInstance(version, NAACCR_REC_TYPE_CONFIDENTIAL).getLineLength())
-                    Assert.assertFalse("Item " + item.getNaaccrId() + " has an invalid type definition: " + item.getRecordTypes(), item.getRecordTypes().contains(NAACCR_REC_TYPE_CONFIDENTIAL));
+            if (Integer.parseInt(version) <= 180) {
+                for (NaaccrDictionaryItem item : items) {
+                    if (item.getStartColumn() > NaaccrFormat.getInstance(version, NAACCR_REC_TYPE_INCIDENCE).getLineLength())
+                        Assert.assertFalse("Item " + item.getNaaccrId() + " has an invalid type definition: " + item.getRecordTypes(), item.getRecordTypes().contains(NAACCR_REC_TYPE_INCIDENCE));
+                    if (item.getStartColumn() > NaaccrFormat.getInstance(version, NAACCR_REC_TYPE_CONFIDENTIAL).getLineLength())
+                        Assert.assertFalse("Item " + item.getNaaccrId() + " has an invalid type definition: " + item.getRecordTypes(), item.getRecordTypes().contains(NAACCR_REC_TYPE_CONFIDENTIAL));
+                }
             }
         }
 

@@ -80,8 +80,18 @@ public class RuntimeNaaccrDictionary {
             }
         }
 
-        // sort the fields by ID
-        _items.sort(Comparator.comparing(RuntimeNaaccrDictionaryItem::getNaaccrId));
+        // sort the fields by starting columns (no start columns go to the end) for older version, by ID for new ones
+        if (Integer.parseInt(_format.getNaaccrVersion()) <= 180) {
+            _items.sort((o1, o2) -> {
+                if (o1.getStartColumn() == null)
+                    return 1;
+                if (o2.getStartColumn() == null)
+                    return -1;
+                return o1.getStartColumn().compareTo(o2.getStartColumn());
+            });
+        }
+        else
+            _items.sort(Comparator.comparing(RuntimeNaaccrDictionaryItem::getNaaccrId));
     }
 
     public String getId() {

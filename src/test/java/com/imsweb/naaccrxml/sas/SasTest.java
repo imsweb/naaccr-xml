@@ -30,11 +30,15 @@ public class SasTest {
 
     @Test
     public void testNaaccrVersions() {
+
+        // the SAS java code needs to validate the version, but it can't call the normal code, so I have to hard-code the supported versions...
+
         Set<String> formats = new HashSet<>(NaaccrFormat.getSupportedVersions());
         formats.remove("140");
         formats.remove("150");
         formats.remove("160");
         formats.remove("180");
+        formats.remove("210");
         if (!formats.isEmpty())
             Assert.fail("Looks like a new format was added, please handle it in the SasXmlToCsv and SasCsvToXml constructors, and adjust this test: " + formats);
     }

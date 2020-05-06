@@ -68,8 +68,8 @@ public class SasCsvToXml {
         _naaccrVersion = naaccrVersion;
         if (_naaccrVersion == null || _naaccrVersion.trim().isEmpty())
             System.err.println("!!! NAACCR version needs to be provided");
-        if (!"140".equals(naaccrVersion) && !"150".equals(naaccrVersion) && !"160".equals(naaccrVersion) && !"180".equals(naaccrVersion))
-            System.err.println("!!! NAACCR version must be 140, 150, 160 or 180; got " + _naaccrVersion);
+        if (!"140".equals(naaccrVersion) && !"150".equals(naaccrVersion) && !"160".equals(naaccrVersion) && !"180".equals(naaccrVersion) && !"210".equals(naaccrVersion))
+            System.err.println("!!! NAACCR version must be 140, 150, 160, 180 or 210; got " + _naaccrVersion);
 
         _recordType = recordType;
         if (_recordType == null || _recordType.trim().isEmpty())
