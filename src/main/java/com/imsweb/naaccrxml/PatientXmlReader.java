@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -184,6 +185,12 @@ public class PatientXmlReader implements PatientReader {
                 List<String> dataUserDictionaries = Arrays.asList(StringUtils.split(_reader.getAttribute(NAACCR_XML_ROOT_ATT_USER_DICT), ' '));
                 if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_2) < 0 && dataUserDictionaries.size() > 1)
                     throw new NaaccrIOException("multiple user dictionaries can only be provided under specification 1.2+", conf.getParser().getLineNumber());
+                if (options.getDictionaryIdsToTranslate() != null) {
+                    List<String> translatedUris = new ArrayList<>(dataUserDictionaries.size());
+                    for (String uri : dataUserDictionaries)
+                        translatedUris.add(options.getDictionaryIdsToTranslate().getOrDefault(uri, uri));
+                    dataUserDictionaries = translatedUris;
+                }
                 _rootData.setUserDictionaryUri(dataUserDictionaries);
             }
             // let's use only the dictionaries that are referenced in the data file (more can be provided to library, that's OK; it's also OK if some are missing in the library)

@@ -97,9 +97,15 @@ public class NaaccrOptions {
     private Boolean _translateRenamedStandardItemIds;
 
     /**
-     * When reading XML data, the provided IDs will be automatically translated (before any validation happens). Default is a null map, which means no translation.
+     * When reading XML data, the provided item IDs will be automatically translated (before any validation happens). Default is a null map, which means no translation.
      */
     private Map<String, String> _itemIdsToTranslate;
+
+
+    /**
+     * When reading XML data, the provided dictionary IDs will be automatically translated (before any validation happens). Default is a null map, which means no translation.
+     */
+    private Map<String, String> _dictionaryIdsToTranslate;
 
     /**
      * Convenience method to make the code look nicer, but it really just calls the default constructor!
@@ -126,6 +132,7 @@ public class NaaccrOptions {
         _ignoreExtensions = false;
         _translateRenamedStandardItemIds = false;
         _itemIdsToTranslate = null;
+        _dictionaryIdsToTranslate = null;
         _newLine = NEW_LINE_OS;
     }
 
@@ -247,6 +254,14 @@ public class NaaccrOptions {
 
     public void setItemIdsToTranslate(Map<String, String> itemIdsToTranslate) {
         _itemIdsToTranslate = itemIdsToTranslate;
+    }
+
+    public Map<String, String> getDictionaryIdsToTranslate() {
+        return _dictionaryIdsToTranslate;
+    }
+
+    public void setDictionaryIdsToTranslate(Map<String, String> dictionaryIdsToTranslate) {
+        _dictionaryIdsToTranslate = dictionaryIdsToTranslate;
     }
 
     /**

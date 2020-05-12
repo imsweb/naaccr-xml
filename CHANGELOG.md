@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 6.8**
+
+- Added a new option to allow a user-defined dictionary URI to be translated when read from an XML data file.
+
 **Version 6.7**
 
 - Fixed an infinite loop in Java code called by the SAS macros; tweaked the macros a bit.
