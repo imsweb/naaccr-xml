@@ -345,12 +345,28 @@ public class PatientXmlReaderTest {
             Assert.assertTrue(patient.getAllValidationErrors().isEmpty());
         }
 
+        options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_IGNORE);
+
         // data file defines two user dictionaries, but specs are only 1.1 so multiple dictionaries is not supported
-        try (@SuppressWarnings("unused") PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-mult-2.xml")), null, dictionaries)) {
+        try (PatientXmlReader ignored = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-mult-2.xml")), null, dictionaries)) {
             Assert.fail("Was expecting an exception here");
         }
         catch (NaaccrIOException e) {
             // expected
+        }
+
+        NaaccrXmlDictionaryUtils.clearCachedDictionaries();
+
+        // test translating a URI
+        dict.setDictionaryUri("something-else");
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-1.xml")), options, dict, null)) {
+            Patient patient = reader.readPatient();
+            Assert.assertNull(patient.getTumor(0).getItemValue("myVariable")); // item should not be recognized
+        }
+        options.setDictionaryIdsToTranslate(Collections.singletonMap("http://test.org/naaccrxml/test.xml", "something-else"));
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-1.xml")), options, dict, null)) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("01", patient.getTumor(0).getItemValue("myVariable"));
         }
     }
 
