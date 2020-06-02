@@ -21,4 +21,5 @@
             parentXmlElement="Tumor"
             trim="none"/>
     </ItemDefs>
+    <GroupedItemDefs/>
 </NaaccrDictionary>
