@@ -15,8 +15,6 @@ public class RecreateStandardDictionaries {
 
     public static void main(String[] args) throws IOException {
         for (String version : NaaccrFormat.getSupportedVersions()) {
-            if (!"210".equals(version))
-                continue;
             Path path = Paths.get("src/main/resources/naaccr-dictionary-" + version + ".xml");
             NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(path.toFile());
             applyFix(dictionary, true);
@@ -41,8 +39,5 @@ public class RecreateStandardDictionaries {
         //                item.setNaaccrId(entry.getValue());
         //            }
         //        }
-
-        dictionary.getItems().forEach(i -> i.setStartColumn(null));
-        dictionary.getGroupedItems().forEach(i -> i.setStartColumn(null));
     }
 }
