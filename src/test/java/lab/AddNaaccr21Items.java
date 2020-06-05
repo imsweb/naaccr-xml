@@ -15,6 +15,7 @@ import com.opencsv.CSVReader;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
+import com.imsweb.naaccrxml.TestingUtils;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryGroupedItem;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
@@ -30,7 +31,7 @@ public class AddNaaccr21Items {
             NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(path.toFile());
             dictionary.getItemByNaaccrId("force-caching");
 
-            try (CSVReader reader = new CSVReader(new FileReader(new File("C:\\dev\\Vol2 v21 New and Revised select fields DRAFT.csv")))) {
+            try (CSVReader reader = new CSVReader(new FileReader(new File(TestingUtils.getWorkingDirectory() + "/docs/naaccr-21/Vol2 v21 New and Revised select fields DRAFT.csv")))) {
                 String[] line = reader.readNext();
 
                 line = reader.readNext();
@@ -41,7 +42,7 @@ public class AddNaaccr21Items {
                     String name = line[2];
                     String id = line[3];
                     String level = line[4];
-                    boolean isNew = "New".equals(line[6]);
+                    boolean isNew = "New".equals(line[7]);
 
                     if (isNew) {
                         NaaccrDictionaryItem item = new NaaccrDictionaryItem();
@@ -71,7 +72,7 @@ public class AddNaaccr21Items {
             dictionary.setItems(dictionary.getItems().stream().sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId)).collect(Collectors.toList()));
             dictionary.setGroupedItems(dictionary.getGroupedItems().stream().sorted(Comparator.comparing(NaaccrDictionaryGroupedItem::getNaaccrId)).collect(Collectors.toList()));
 
-            //NaaccrXmlDictionaryUtils.writeDictionary(dictionary, path.toFile());
+            NaaccrXmlDictionaryUtils.writeDictionary(dictionary, path.toFile());
         }
     }
 }
