@@ -5,7 +5,6 @@ package lab;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
@@ -22,7 +21,7 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 public class AddNaaccr21Items {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         for (String version : NaaccrFormat.getSupportedVersions()) {
             if (!"210".equals(version))
                 continue;
@@ -32,7 +31,7 @@ public class AddNaaccr21Items {
             dictionary.getItemByNaaccrId("force-caching");
 
             try (CSVReader reader = new CSVReader(new FileReader(new File(TestingUtils.getWorkingDirectory() + "/docs/naaccr-21/Vol2 v21 New and Revised select fields DRAFT.csv")))) {
-                String[] line = reader.readNext();
+                String[] line = reader.readNext(); // ignore headers
 
                 line = reader.readNext();
                 while (line != null) {

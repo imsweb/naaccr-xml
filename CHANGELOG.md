@@ -1,8 +1,11 @@
 ## NAACCR XML Version History
 
-**Version 6.8**
+**Version 7.0**
 
 - Added support for NAACCR 21; that version is not final yet and it's possible it will change in a future release.
+
+**Version 6.8**
+
 - Added a new option to allow a user-defined dictionary URI to be translated when read from an XML data file.
 
 **Version 6.7**
