@@ -26,6 +26,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.13'
     testImplementation 'com.imsweb:data-generator:1.12'
+    testImplementation 'com.opencsv:opencsv:5.0'
 }
 
 // enforce UTF-8, display the compilation warnings
