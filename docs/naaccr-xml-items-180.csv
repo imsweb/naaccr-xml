@@ -69,9 +69,9 @@ censusBlockGroup2020,361,"Census Block Group 2020",204,1,"A,M,C,I",Tumor,digits
 censusBlockGrp197090,368,"Census Block Grp 1970/80/90",164,1,"A,M,C,I",Tumor,digits
 censusCodSys19708090,120,"Census Cod Sys 1970/80/90",165,1,"A,M,C,I",Tumor,digits
 censusIndCode19702000,280,"Census Ind Code 1970-2000",242,3,"A,M,C,I",Tumor,digits
-censusIndCode2010,272,"Census Ind Code 2010 CDC",483,4,"A,M,C,I",Tumor,text
+censusIndCode2010,272,"Census Ind Code 2010 CDC",483,4,"A,M,C,I",Tumor,digits
 censusOccCode19702000,270,"Census Occ Code 1970-2000",239,3,"A,M,C,I",Tumor,digits
-censusOccCode2010,282,"Census Occ Code 2010 CDC",487,4,"A,M,C,I",Tumor,text
+censusOccCode2010,282,"Census Occ Code 2010 CDC",487,4,"A,M,C,I",Tumor,digits
 censusOccIndSys7000,330,"Census Occ/Ind Sys 70-00",447,1,"A,M,C,I",Tumor,digits
 censusTrCert19708090,364,"Census Tr Cert 1970/80/90",166,1,"A,M,C,I",Tumor,digits
 censusTrCertainty2000,365,"Census Tr Certainty 2000",179,1,"A,M,C,I",Tumor,digits

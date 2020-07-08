@@ -45,12 +45,12 @@ ajccTnmPostTherapyClinNSuffix,1065,"AJCC TNM Post Therapy Clin (yc) N Suffix",,4
 ajccTnmPostTherapyClinStageGrp,1067,"AJCC TNM Post Therapy Clin (yc) Stage Group",,15,"A,M,C,I",Tumor,text
 ajccTnmPostTherapyClinT,1062,"AJCC TNM Post Therapy Clin (yc) T",,15,"A,M,C,I",Tumor,text
 ajccTnmPostTherapyClinTSuffix,1063,"AJCC TNM Post Therapy Clin (yc) T Suffix",,4,"A,M,C,I",Tumor,text
-ajccTnmPostTherapyM,1023,"AJCC TNM Post Therapy M",,15,"A,M,C,I",Tumor,text
-ajccTnmPostTherapyN,1022,"AJCC TNM Post Therapy N",,15,"A,M,C,I",Tumor,text
-ajccTnmPostTherapyNSuffix,1036,"AJCC TNM Post Therapy N Suffix",,4,"A,M,C,I",Tumor,text
-ajccTnmPostTherapyStageGroup,1024,"AJCC TNM Post Therapy Stage Group",,15,"A,M,C,I",Tumor,text
-ajccTnmPostTherapyT,1021,"AJCC TNM Post Therapy T",,15,"A,M,C,I",Tumor,text
-ajccTnmPostTherapyTSuffix,1033,"AJCC TNM Post Therapy T Suffix",,4,"A,M,C,I",Tumor,text
+ajccTnmPostTherapyM,1023,"AJCC TNM Post Therapy Path (yp) M",,15,"A,M,C,I",Tumor,text
+ajccTnmPostTherapyN,1022,"AJCC TNM Post Therapy Path (yp) N",,15,"A,M,C,I",Tumor,text
+ajccTnmPostTherapyNSuffix,1036,"AJCC TNM Post Therapy Path (yp) N Suffix",,4,"A,M,C,I",Tumor,text
+ajccTnmPostTherapyStageGroup,1024,"AJCC TNM Post Therapy Path (yp) Stage Group",,15,"A,M,C,I",Tumor,text
+ajccTnmPostTherapyT,1021,"AJCC TNM Post Therapy Path (yp) T",,15,"A,M,C,I",Tumor,text
+ajccTnmPostTherapyTSuffix,1033,"AJCC TNM Post Therapy Path (yp) T Suffix",,4,"A,M,C,I",Tumor,text
 alkRearrangement,3938,"ALK Rearrangement",,1,"A,M,C,I",Tumor,text
 ambiguousTerminologyDx,442,"Ambiguous Terminology DX",,1,"A,M,C,I",Tumor,digits
 anemia,3811,"Anemia",,1,"A,M,C,I",Tumor,digits
@@ -82,9 +82,9 @@ censusBlockGroup2020,361,"Census Block Group 2020",,1,"A,M,C,I",Tumor,digits
 censusBlockGrp197090,368,"Census Block Grp 1970/80/90",,1,"A,M,C,I",Tumor,digits
 censusCodSys19708090,120,"Census Cod Sys 1970/80/90",,1,"A,M,C,I",Tumor,digits
 censusIndCode19702000,280,"Census Ind Code 1970-2000",,3,"A,M,C,I",Tumor,digits
-censusIndCode2010,272,"Census Ind Code 2010 CDC",,4,"A,M,C,I",Tumor,text
+censusIndCode2010,272,"Census Ind Code 2010 CDC",,4,"A,M,C,I",Tumor,digits
 censusOccCode19702000,270,"Census Occ Code 1970-2000",,3,"A,M,C,I",Tumor,digits
-censusOccCode2010,282,"Census Occ Code 2010 CDC",,4,"A,M,C,I",Tumor,text
+censusOccCode2010,282,"Census Occ Code 2010 CDC",,4,"A,M,C,I",Tumor,digits
 censusOccIndSys7000,330,"Census Occ/Ind Sys 70-00",,1,"A,M,C,I",Tumor,digits
 censusTrCert19708090,364,"Census Tr Cert 1970/80/90",,1,"A,M,C,I",Tumor,digits
 censusTrCertainty2000,365,"Census Tr Certainty 2000",,1,"A,M,C,I",Tumor,digits
@@ -272,7 +272,7 @@ extranodalExtensionHeadNeckPath,3832,"Extranodal Extension Head and Neck Patholo
 extranodalExtensionPath,3833,"Extranodal Extension Path (non-Head and Neck)",,1,"A,M,C,I",Tumor,digits
 extravascularMatrixPatterns,3834,"Extravascular Matrix Patterns",,1,"A,M,C,I",Tumor,digits
 fibrosisScore,3835,"Fibrosis Score",,1,"A,M,C,I",Tumor,digits
-figoStage,3836,"FIGO Stage",,2,"A,M,C,I",Tumor,digits
+figoStage,3836,"FIGO Stage",,5,"A,M,C,I",Tumor,digits
 followUpContactCity,1842,"Follow-Up Contact--City",,50,"A,M,C,I",Tumor,text
 followUpContactName,2394,"Follow-Up Contact--Name",,60,"A,M,C",Tumor,text
 followUpContactNost,2392,"Follow-Up Contact--No&St",,60,"A,M,C",Tumor,text
@@ -296,7 +296,7 @@ gradeIcdO1,1973,"Grade (73-91) ICD-O-1",,1,"A,M,C,I",Tumor,digits
 gradePathSystem,449,"Grade Path System",,1,"A,M,C,I",Tumor,digits
 gradePathValue,441,"Grade Path Value",,1,"A,M,C,I",Tumor,digits
 gradePathological,3844,"Grade Pathological",,1,"A,M,C,I",Tumor,text
-gradePostTherapy,3845,"Grade Post Therapy",,1,"A,M,C,I",Tumor,text
+gradePostTherapy,3845,"Grade Post Therapy Path (yp)",,1,"A,M,C,I",Tumor,text
 gradePostTherapyClin,1068,"Grade Post Therapy Clin (yc)",,1,"A,M,C,I",Tumor,text
 hcgPostOrchiectomyLabValue,3846,"hCG Post-Orchiectomy Lab Value",,7,"A,M,C,I",Tumor,text
 hcgPostOrchiectomyRange,3847,"hCG Post-Orchiectomy Range",,1,"A,M,C,I",Tumor,digits
@@ -335,8 +335,8 @@ laterality,410,"Laterality",,1,"A,M,C,I",Tumor,digits
 latitude,2352,"Latitude",,10,"A,M,C",Tumor,text
 ldhPostOrchiectomyRange,3867,"LDH Post-Orchiectomy Range",,1,"A,M,C,I",Tumor,digits
 ldhPreOrchiectomyRange,3868,"LDH Pre-Orchiectomy Range",,1,"A,M,C,I",Tumor,digits
-ldhPretreatmentLabValue,3932,"LDH Pretreatment Lab Value",,7,"A,M,C,I",Tumor,text
-ldhPretreatmentLevel,3869,"LDH Pretreatment Level",,1,"A,M,C,I",Tumor,digits
+ldhPretreatmentLabValue,3932,"LDH Lab Value",,7,"A,M,C,I",Tumor,text
+ldhPretreatmentLevel,3869,"LDH Level",,1,"A,M,C,I",Tumor,digits
 ldhUpperLimitsOfNormal,3870,"LDH Upper Limits of Normal",,3,"A,M,C,I",Tumor,text
 lnAssessMethodFemoralInguinal,3871,"LN Assessment Method Femoral-Inguinal",,1,"A,M,C,I",Tumor,digits
 lnAssessMethodParaaortic,3872,"LN Assessment Method Para-Aortic",,1,"A,M,C,I",Tumor,digits
@@ -547,7 +547,7 @@ profoundImmuneSuppression,3918,"Profound Immune Suppression",,1,"A,M,C,I",Tumor,
 progesteroneRecepPrcntPosOrRange,3914,"Progesterone Receptor Percent Positive or Range",,3,"A,M,C,I",Tumor,text
 progesteroneRecepSummary,3915,"Progesterone Receptor Summary",,1,"A,M,C,I",Tumor,digits
 progesteroneRecepTotalAllredScor,3916,"Progesterone Receptor Total Allred Score",,2,"A,M,C,I",Tumor,text
-prostatePathologicalExtension,3919,"Prostate Pathological Extension",,3,"A,M,C,I",Tumor,text
+prostatePathologicalExtension,3919,"EOD Prostate Pathological Extension",,3,"A,M,C,I",Tumor,text
 psaLabValue,3920,"PSA (Prostatic Specific Antigen) Lab Value",,5,"A,M,C,I",Tumor,text
 qualityOfSurvival,1780,"Quality of Survival",,1,"A,M,C,I",Tumor,digits
 race1,160,"Race 1",,2,"A,M,C,I",Patient,digits

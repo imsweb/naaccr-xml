@@ -529,7 +529,8 @@
             length="2"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="digits"
+            padding="leftZero"/>
         <ItemDef naaccrId="ruca2000"
             naaccrNum="339"
             naaccrName="RUCA 2000"
@@ -625,6 +626,7 @@
             length="4"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
+            dataType="digits"
             padding="leftZero"/>
         <ItemDef naaccrId="censusOccCode2010"
             naaccrNum="282"
@@ -632,7 +634,9 @@
             startColumn="487"
             length="4"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"/>
+            parentXmlElement="Tumor"
+            dataType="digits"
+            padding="leftZero"/>
         <ItemDef naaccrId="censusTrPovertyIndictr"
             naaccrNum="145"
             naaccrName="Census Tr Poverty Indictr"

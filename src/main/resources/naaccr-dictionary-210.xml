@@ -554,6 +554,7 @@
             length="4"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
+            dataType="digits"
             padding="leftZero"/>
         <ItemDef naaccrId="censusOccCode19702000"
             naaccrNum="270"
@@ -568,7 +569,9 @@
             naaccrName="Census Occ Code 2010 CDC"
             length="4"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"/>
+            parentXmlElement="Tumor"
+            dataType="digits"
+            padding="leftZero"/>
         <ItemDef naaccrId="censusOccIndSys7000"
             naaccrNum="330"
             naaccrName="Census Occ/Ind Sys 70-00"
@@ -4064,7 +4067,8 @@
             length="2"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="digits"
+            padding="leftZero"/>
         <ItemDef naaccrId="rxCodingSystemCurrent"
             naaccrNum="1460"
             naaccrName="RX Coding System--Current"
