@@ -21,6 +21,7 @@ public class NaaccrFormatTest {
         Assert.assertFalse(NaaccrFormat.getSupportedFormats().isEmpty());
         Assert.assertFalse(NaaccrFormat.getSupportedVersions().isEmpty());
         Assert.assertFalse(NaaccrFormat.getSupportedRecordTypes().isEmpty());
+        Assert.assertEquals(NAACCR_VERSION_180, NaaccrFormat.NAACCR_VERSION_LATEST);
     }
 
     @Test
