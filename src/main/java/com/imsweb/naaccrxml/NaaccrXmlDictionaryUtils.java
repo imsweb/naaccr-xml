@@ -960,10 +960,10 @@ public final class NaaccrXmlDictionaryUtils {
                 writer.write(System.lineSeparator());
                 writer.write(System.lineSeparator());
 
-                if (BASE_DICTIONARY_URI_PATTERN.matcher(dictionary.getDictionaryUri()).matches()) {
+                if (BASE_DICTIONARY_URI_PATTERN.matcher(dictionary.getDictionaryUri()).matches() || DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(dictionary.getDictionaryUri()).matches()) {
                     writer.write("<!-- This dictionary is maintained and provided by the NAACCR organization; it should not be modified.");
                     writer.write(System.lineSeparator());
-                    writer.write("     If you need to define non-standard data items, please create your own user-defined dictionary.");
+                    writer.write("     If you need to define additional data items, please create your own user-defined dictionary.");
                     writer.write(System.lineSeparator());
                     writer.write("     Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->");
                     writer.write(System.lineSeparator());

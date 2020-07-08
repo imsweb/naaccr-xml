@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!-- This dictionary is maintained and provided by the NAACCR organization; it should not be modified.
-     If you need to define non-standard data items, please create your own user-defined dictionary.
+     If you need to define additional data items, please create your own user-defined dictionary.
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-150.xml"
