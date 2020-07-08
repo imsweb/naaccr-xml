@@ -20,10 +20,10 @@ public class RecreateStandardDictionaries {
             applyFix(dictionary, true);
             NaaccrXmlDictionaryUtils.writeDictionary(dictionary, path.toFile());
 
-            path = Paths.get("src/main/resources/user-defined-naaccr-dictionary-" + version + ".xml");
-            dictionary = NaaccrXmlDictionaryUtils.readDictionary(path.toFile());
-            applyFix(dictionary, false);
-            NaaccrXmlDictionaryUtils.writeDictionary(dictionary, path.toFile());
+//            path = Paths.get("src/main/resources/user-defined-naaccr-dictionary-" + version + ".xml");
+//            dictionary = NaaccrXmlDictionaryUtils.readDictionary(path.toFile());
+//            applyFix(dictionary, false);
+//            NaaccrXmlDictionaryUtils.writeDictionary(dictionary, path.toFile());
         }
     }
 

@@ -3,6 +3,7 @@
 **Version 7.0**
 
 - Added support for NAACCR 21; that version is not final yet and it's possible it will change in a future release.
+- Added diclaimer to base dictionaries mentioning those should not be modified.
 - Fixed wrong padding for ruralurbanContinuum2013 and censusOccCode2010 in NAACCR 18 dictionary.
 - Updated XStream dependency from version 1.4.11.1 to version 1.4.12.
 - Updated commons-io dependency from version 2.6 to version 2.7.
