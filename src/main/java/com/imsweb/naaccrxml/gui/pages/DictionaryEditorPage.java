@@ -584,6 +584,9 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         if (cellEditor != null)
             cellEditor.stopCellEditing();
 
+        int idx = _dictionaryUriFld.getText().lastIndexOf('/');
+        if (idx > -1)
+            _outputFileChooser.setSelectedFile(new File(_outputFileChooser.getCurrentDirectory(), _dictionaryUriFld.getText().substring(idx + 1)));
         if (_outputFileChooser.showDialog(DictionaryEditorPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
             try {
                 File file = _outputFileChooser.getSelectedFile();
