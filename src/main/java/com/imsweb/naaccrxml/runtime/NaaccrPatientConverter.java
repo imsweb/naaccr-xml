@@ -329,7 +329,7 @@ public class NaaccrPatientConverter implements Converter {
                 if (item.getValue().length() > def.getLength() && (!Boolean.TRUE.equals(def.getAllowUnlimitedText())))
                     reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_LONG, def.getLength(), item.getValue().length());
                 if (_context.getOptions().getValidateReadValues()) {
-                    if (NaaccrXmlDictionaryUtils.isFullLengthRequiredForType(def.getDataType()) && item.getValue().length() != def.getLength())
+                    if (NaaccrXmlDictionaryUtils.isFullLengthRequiredForType(def.getDataType()) && item.getValue().length() < def.getLength())
                         reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_SHORT, def.getLength(), item.getValue().length());
                     else if (def.getDataType() != null && !NaaccrXmlDictionaryUtils.getDataTypePattern(def.getDataType()).matcher(item.getValue()).matches())
                         reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
@@ -355,8 +355,10 @@ public class NaaccrPatientConverter implements Converter {
 
         if (obj instanceof AbstractEntity)
             ((AbstractEntity)obj).addValidationError(error);
-        else if (obj instanceof Item)
-            ((Item)obj).setValidationError(error);
+        else if (obj instanceof Item) {
+            if (((Item)obj).getValidationError() == null)
+                ((Item)obj).setValidationError(error);
+        }
         else
             throw new RuntimeException("Unsupported type: " + obj.getClass().getName());
     }
