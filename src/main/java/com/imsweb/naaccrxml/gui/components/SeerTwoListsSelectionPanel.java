@@ -34,62 +34,22 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 
-@SuppressWarnings({"unchecked", "unused"})
 public class SeerTwoListsSelectionPanel<E> extends JPanel implements ActionListener {
 
-    private List<JButton> _orderedButtons;
-    private SeerList<E> _leftList, _rightList;
-    private JScrollPane _leftPane, _rightPane;
-    private JButton _moveLeftBtn, _moveRightBtn, _moveAllLeftBtn, _moveAllRightBtn, _moveUpBtn, _moveDownBtn, _moveFirstBtn, _moveLastBtn;
-    private JPanel _centerPnl, _leftPnl, _rightPnl;
+    private final List<JButton> _orderedButtons;
+    private final SeerList<E> _leftList, _rightList;
+    private final JScrollPane _leftPane, _rightPane;
+    private final JButton _moveLeftBtn, _moveRightBtn, _moveAllLeftBtn, _moveAllRightBtn;
+    private JButton _moveUpBtn, _moveDownBtn, _moveFirstBtn, _moveLastBtn;
+    private final JPanel _centerPnl, _leftPnl, _rightPnl;
     private JTextField _leftFilterFld, _rightFilterFld;
 
     public static final int DEFAULT_FILTER = SeerList.FILTERING_MODE_CONTAINED;
-
-    private static final Color COLOR_COMP_FOCUS_OUT = Color.GRAY;
-    private static final Color COLOR_COMP_FOCUS_IN = Color.BLACK;
 
     private static final Border BORDER_FOCUS_IN = BorderFactory.createLineBorder(Color.BLACK);
     private static final Border BORDER_FOCUS_OUT = BorderFactory.createLineBorder(Color.GRAY);
     private static final Border BORDER_TEXT_FIELD_IN = BorderFactory.createCompoundBorder(BORDER_FOCUS_IN, BorderFactory.createEmptyBorder(2, 2, 2, 2));
     private static final Border BORDER_TEXT_FIELD_OUT = BorderFactory.createCompoundBorder(BORDER_FOCUS_OUT, BorderFactory.createEmptyBorder(2, 2, 2, 2));
-
-    /**
-     * Constructor.
-     * <p/>
-     * Created on Dec 31, 2010 by depryf
-     * @param leftItems list of items to add to the LEFT list, can be empty but not null
-     * @param rightItems list of items to add to the RIGHT list, can be empty but not null
-     */
-    public SeerTwoListsSelectionPanel(List<E> leftItems, List<E> rightItems) {
-        this(leftItems, rightItems, null, null, null, null);
-    }
-
-    /**
-     * Constructor.
-     * <p/>
-     * Created on Dec 31, 2010 by depryf
-     * @param leftItems list of items to add to the LEFT list, can be empty but not null
-     * @param rightItems list of items to add to the RIGHT list, can be empty but not null
-     * @param leftText text for the left header
-     * @param rightText text for the right header
-     */
-    public SeerTwoListsSelectionPanel(List<E> leftItems, List<E> rightItems, String leftText, String rightText) {
-        this(leftItems, rightItems, leftText == null ? null : new JLabel(leftText), rightText == null ? null : new JLabel(rightText));
-    }
-
-    /**
-     * Constructor.
-     * <p/>
-     * Created on Dec 31, 2010 by depryf
-     * @param leftItems list of items to add to the LEFT list, can be empty but not null
-     * @param rightItems list of items to add to the RIGHT list, can be empty but not null
-     * @param leftLbl label for the left header (optional)
-     * @param rightLbl label for the right header (optional)
-     */
-    public SeerTwoListsSelectionPanel(List<E> leftItems, List<E> rightItems, JLabel leftLbl, JLabel rightLbl) {
-        this(leftItems, rightItems, leftLbl, rightLbl, null, null);
-    }
 
     /**
      * Constructor.
@@ -104,24 +64,6 @@ public class SeerTwoListsSelectionPanel<E> extends JPanel implements ActionListe
      */
     public SeerTwoListsSelectionPanel(List<E> leftItems, List<E> rightItems, JLabel leftLbl, JLabel rightLbl, Comparator<E> leftComp, Comparator<E> rightComp) {
         this(new SeerListModel<>(leftItems, DEFAULT_FILTER, leftComp), new SeerListModel<>(rightItems, DEFAULT_FILTER, rightComp), leftLbl, rightLbl, true, true);
-    }
-
-    /**
-     * Constructor.
-     * <p/>
-     * Created on Dec 31, 2010 by depryf
-     * @param leftItems list of items to add to the LEFT list, can be empty but not null
-     * @param rightItems list of items to add to the RIGHT list, can be empty but not null
-     * @param leftLbl label for the left header (optional)
-     * @param rightLbl label for the right header (optional)
-     * @param leftComp comparator for the left list (optional)
-     * @param rightComp comparator for the right list (optional)
-     * @param showFilter if true, a filter will be shown under both lists
-     * @param addFocusBorder if true, the lists and filters will have a black border when they receive focus
-     */
-
-    public SeerTwoListsSelectionPanel(List<E> leftItems, List<E> rightItems, JLabel leftLbl, JLabel rightLbl, Comparator<E> leftComp, Comparator<E> rightComp, boolean showFilter, boolean addFocusBorder) {
-        this(new SeerListModel<>(leftItems, DEFAULT_FILTER, leftComp), new SeerListModel<>(rightItems, DEFAULT_FILTER, rightComp), leftLbl, rightLbl, showFilter, addFocusBorder);
     }
 
     /**
@@ -145,7 +87,7 @@ public class SeerTwoListsSelectionPanel<E> extends JPanel implements ActionListe
         _leftPnl.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         if (leftLbl != null)
             _leftPnl.add(leftLbl, BorderLayout.NORTH);
-        _leftList = new SeerList(leftModel, SeerList.DISPLAY_MODE_NONE, false);
+        _leftList = new SeerList<>(leftModel, SeerList.DISPLAY_MODE_NONE, false);
         _leftList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         _leftList.getSelectionModel().addListSelectionListener(e -> enableButtons());
         _leftList.addFocusListener(new FocusListener() {
@@ -259,7 +201,7 @@ public class SeerTwoListsSelectionPanel<E> extends JPanel implements ActionListe
         _rightPnl.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         if (rightLbl != null)
             _rightPnl.add(rightLbl, BorderLayout.NORTH);
-        _rightList = new SeerList(rightModel, SeerList.DISPLAY_MODE_NONE, false);
+        _rightList = new SeerList<>(rightModel, SeerList.DISPLAY_MODE_NONE, false);
         _rightList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         _rightList.getSelectionModel().addListSelectionListener(e -> enableButtons());
         _rightList.addFocusListener(new FocusListener() {
@@ -403,65 +345,33 @@ public class SeerTwoListsSelectionPanel<E> extends JPanel implements ActionListe
         }
     }
 
-    public void updateItemsFromModels() {
-
-        SeerListModel leftModel = (SeerListModel)_leftList.getModel();
-        SeerListModel rightModel = (SeerListModel)_rightList.getModel();
-
-        _leftList.resetData(new ArrayList<>());
-        for (int i = 0; i < leftModel.getSize(); i++)
-            ((SeerListModel)(_leftList.getModel())).addElement(leftModel.getElementAt(i));
-        _rightList.resetData(new ArrayList<>());
-        for (int i = 0; i < rightModel.getSize(); i++)
-            ((SeerListModel)(_rightList.getModel())).addElement(rightModel.getElementAt(i));
-    }
-
-    public SeerList<E> getLeftList() {
-        return _leftList;
-    }
-
-    public List<E> getLeftListContent() {
-        return getLeftListContent(false);
-    }
-
-    public List<E> getLeftListContent(boolean filtered) {
-        if (filtered)
-            return ((SeerListModel)_leftList.getModel()).getFilteredData();
-        else
-            return ((SeerListModel)_leftList.getModel()).getOriginalData();
-    }
-
-    public SeerList<E> getRightList() {
-        return _rightList;
-    }
-
     public List<E> getRightListContent() {
         return getRightListContent(false);
     }
 
     public List<E> getRightListContent(boolean filtered) {
         if (filtered)
-            return ((SeerListModel)_rightList.getModel()).getFilteredData();
+            return ((SeerListModel<E>)_rightList.getModel()).getFilteredData();
         else
-            return ((SeerListModel)_rightList.getModel()).getOriginalData();
+            return ((SeerListModel<E>)_rightList.getModel()).getOriginalData();
     }
 
     public void performMoveLeft() {
         // make sure there is no filter on since it could hide the values that are about to be added, which would be really weird for the user
         performResetLeftFilter();
 
-        SeerListModel leftModel = (SeerListModel)_leftList.getModel();
-        SeerListModel rightModel = (SeerListModel)_rightList.getModel();
+        SeerListModel<E> leftModel = (SeerListModel<E>)_leftList.getModel();
+        SeerListModel<E> rightModel = (SeerListModel<E>)_rightList.getModel();
 
-        Object firstMoved = null;
-        for (Object obj : _rightList.getSelectedValuesList()) {
+        E firstMoved = null;
+        for (E obj : _rightList.getSelectedValuesList()) {
             if (firstMoved == null)
                 firstMoved = obj;
             rightModel.removeElement(obj);
             leftModel.addElement(obj);
         }
 
-        // make sure the first value moved is visiable to the user
+        // make sure the first value moved is visible to the user
         _leftList.ensureIndexIsVisible(leftModel.indexOf(firstMoved));
 
         enableButtons();
@@ -471,23 +381,23 @@ public class SeerTwoListsSelectionPanel<E> extends JPanel implements ActionListe
         // make sure there is no filter on since it could hide the values that are about to be added, which would be really weird for the user
         performResetLeftFilter();
 
-        SeerListModel leftModel = (SeerListModel)_leftList.getModel();
-        SeerListModel rightModel = (SeerListModel)_rightList.getModel();
+        SeerListModel<E> leftModel = (SeerListModel<E>)_leftList.getModel();
+        SeerListModel<E> rightModel = (SeerListModel<E>)_rightList.getModel();
 
-        Object firstMoved = null;
-        List<Object> itemsToMove = new ArrayList<>();
+        E firstMoved = null;
+        List<E> itemsToMove = new ArrayList<>();
         for (int i = 0; i < rightModel.getSize(); i++) {
-            Object obj = rightModel.getElementAt(i);
+            E obj = rightModel.getElementAt(i);
             if (firstMoved == null)
                 firstMoved = obj;
             itemsToMove.add(obj);
         }
-        for (Object o : itemsToMove) {
+        for (E o : itemsToMove) {
             rightModel.removeElement(o);
             leftModel.addElement(o);
         }
 
-        // make sure the first value moved is visiable to the user
+        // make sure the first value moved is visible to the user
         _leftList.ensureIndexIsVisible(leftModel.indexOf(firstMoved));
 
         enableButtons();
@@ -497,11 +407,11 @@ public class SeerTwoListsSelectionPanel<E> extends JPanel implements ActionListe
         // make sure there is no filter on since it could hide the values that are about to be added, which would be really weird for the user
         performResetRightFilter();
 
-        SeerListModel leftModel = (SeerListModel)_leftList.getModel();
-        SeerListModel rightModel = (SeerListModel)_rightList.getModel();
+        SeerListModel<E> leftModel = (SeerListModel<E>)_leftList.getModel();
+        SeerListModel<E> rightModel = (SeerListModel<E>)_rightList.getModel();
 
-        Object firstMoved = null;
-        for (Object obj : _leftList.getSelectedValuesList()) {
+        E firstMoved = null;
+        for (E obj : _leftList.getSelectedValuesList()) {
             if (firstMoved == null)
                 firstMoved = obj;
             leftModel.removeElement(obj);
@@ -518,18 +428,18 @@ public class SeerTwoListsSelectionPanel<E> extends JPanel implements ActionListe
         // make sure there is no filter on since it could hide the values that are about to be added, which would be really weird for the user
         performResetRightFilter();
 
-        SeerListModel leftModel = (SeerListModel)_leftList.getModel();
-        SeerListModel rightModel = (SeerListModel)_rightList.getModel();
+        SeerListModel<E> leftModel = (SeerListModel<E>)_leftList.getModel();
+        SeerListModel<E> rightModel = (SeerListModel<E>)_rightList.getModel();
 
-        Object firstMoved = null;
-        List<Object> itemsToMove = new ArrayList<>();
+        E firstMoved = null;
+        List<E> itemsToMove = new ArrayList<>();
         for (int i = 0; i < leftModel.getSize(); i++) {
-            Object obj = leftModel.getElementAt(i);
+            E obj = leftModel.getElementAt(i);
             if (firstMoved == null)
                 firstMoved = obj;
             itemsToMove.add(obj);
         }
-        for (Object o : itemsToMove) {
+        for (E o : itemsToMove) {
             leftModel.removeElement(o);
             rightModel.addElement(o);
         }
@@ -541,12 +451,12 @@ public class SeerTwoListsSelectionPanel<E> extends JPanel implements ActionListe
     }
 
     public void performMoveUp() {
-        SeerListModel selMod = (SeerListModel)_rightList.getModel();
+        SeerListModel<E> selMod = (SeerListModel<E>)_rightList.getModel();
 
         int[] indices = _rightList.getSelectedIndices();
         int counter = 0;
         for (int i : indices) {
-            Object obj = selMod.getElementAt(i);
+            E obj = selMod.getElementAt(i);
             selMod.removeElement(obj);
             selMod.addElement(i - 1, obj);
             indices[counter] = i - 1;
@@ -557,13 +467,13 @@ public class SeerTwoListsSelectionPanel<E> extends JPanel implements ActionListe
     }
 
     public void performMoveFirst() {
-        SeerListModel selMod = (SeerListModel)_rightList.getModel();
+        SeerListModel<E> selMod = (SeerListModel<E>)_rightList.getModel();
 
         int[] indices = _rightList.getSelectedIndices();
         int index1 = indices[0];
         int counter = 0;
         for (int i : indices) {
-            Object obj = selMod.getElementAt(i);
+            E obj = selMod.getElementAt(i);
             selMod.removeElement(obj);
             selMod.addElement(i - index1, obj);
             indices[counter] = i - index1;
@@ -574,12 +484,12 @@ public class SeerTwoListsSelectionPanel<E> extends JPanel implements ActionListe
     }
 
     public void performMoveDown() {
-        SeerListModel selMod = (SeerListModel)_rightList.getModel();
+        SeerListModel<E> selMod = (SeerListModel<E>)_rightList.getModel();
 
         int[] indices = _rightList.getSelectedIndices();
         int counter = indices.length - 1;
         for (int i = indices.length - 1; i >= 0; i--) {
-            Object obj = selMod.getElementAt(indices[i]);
+            E obj = selMod.getElementAt(indices[i]);
             selMod.removeElement(obj);
             selMod.addElement(indices[i] + 1, obj);
             indices[counter] = indices[i] + 1;
@@ -590,13 +500,13 @@ public class SeerTwoListsSelectionPanel<E> extends JPanel implements ActionListe
     }
 
     public void performMoveLast() {
-        SeerListModel selMod = (SeerListModel)_rightList.getModel();
+        SeerListModel<E> selMod = (SeerListModel<E>)_rightList.getModel();
 
         int[] indices = _rightList.getSelectedIndices();
         int counter = indices.length - 1;
         int indexLast = indices[indices.length - 1];
         for (int i = indices.length - 1; i >= 0; i--) {
-            Object obj = selMod.getElementAt(indices[i]);
+            E obj = selMod.getElementAt(indices[i]);
             selMod.removeElement(obj);
             selMod.addElement(indices[i] + (selMod.getSize() - indexLast), obj);
             indices[counter] = indices[i] + ((selMod.getSize() - 1) - indexLast);

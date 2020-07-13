@@ -8,7 +8,6 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
@@ -19,7 +18,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
-public class SeerList<E> extends JList {
+public class SeerList<E> extends JList<E> {
 
     /**
      * Available filtering mode (contains vs starts with)
@@ -53,7 +52,7 @@ public class SeerList<E> extends JList {
     /**
      * Private model
      */
-    private SeerListModel _model;
+    private final SeerListModel<E> _model;
 
     /**
      * Constructor.
@@ -132,11 +131,6 @@ public class SeerList<E> extends JList {
                 }
             });
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    public void resetData(List<E> data) {
-        _model.resetData(data);
     }
 
     public void filter(String filter) {

@@ -51,12 +51,12 @@ import com.imsweb.naaccrxml.gui.Standalone;
 public class DictionariesPage extends AbstractPage {
 
     // global GUI components
-    private JLabel _dictionaryUriFld, _versionFld, _descFld;
-    private JTextArea _xmlArea;
-    private JTextField _filterFld;
-    private JTable _itemsTbl;
-    private DefaultTableModel _itemsModel;
-    private TableRowSorter<TableModel> _itemsSorter;
+    private final JLabel _dictionaryUriFld, _versionFld, _descFld;
+    private final JTextArea _xmlArea;
+    private final JTextField _filterFld;
+    private final JTable _itemsTbl;
+    private final DefaultTableModel _itemsModel;
+    private final TableRowSorter<TableModel> _itemsSorter;
 
     @SuppressWarnings("ConstantConditions")
     public DictionariesPage() {
@@ -78,7 +78,7 @@ public class DictionariesPage extends AbstractPage {
         controlsPnl.setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY), new EmptyBorder(5, 10, 5, 0)));
         controlsPnl.add(Standalone.createBoldLabel("Dictionary:"));
         controlsPnl.add(Box.createHorizontalStrut(10));
-        final JComboBox selectionBox = new JComboBox<>(standardDictionaries);
+        final JComboBox<NaaccrDictionaryWrapper> selectionBox = new JComboBox<>(standardDictionaries);
         controlsPnl.add(selectionBox);
         controlsPnl.add(Box.createHorizontalStrut(25));
         JButton extractBtn = new JButton("Extract to CSV...");
@@ -266,9 +266,9 @@ public class DictionariesPage extends AbstractPage {
 
     private static class NaaccrDictionaryWrapper {
 
-        private NaaccrDictionary _dictionary;
+        private final NaaccrDictionary _dictionary;
 
-        private boolean _isBase;
+        private final boolean _isBase;
 
         public NaaccrDictionaryWrapper(NaaccrDictionary dictionary, boolean isBase) {
             _dictionary = dictionary;

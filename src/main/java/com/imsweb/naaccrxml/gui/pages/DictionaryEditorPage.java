@@ -76,11 +76,11 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     // global GUI components
     private JLabel _currentFileLbl, _currentFilePreLbl, _currentFileMiddleLbl, _currentFilePostLbl;
     private SeerClickableLabel _openCurrentFileLbl, _openParentFolderLbl;
-    private JTextField _dictionaryUriFld, _descFld;
-    private JComboBox<String> _versionBox;
-    private JTable _itemsTbl;
-    private DefaultTableModel _itemsModel;
-    private JFileChooser _dictionaryFileChooser, _outputFileChooser;
+    private final JTextField _dictionaryUriFld, _descFld;
+    private final JComboBox<String> _versionBox;
+    private final JTable _itemsTbl;
+    private final DefaultTableModel _itemsModel;
+    private final JFileChooser _dictionaryFileChooser, _outputFileChooser;
 
     private File _currentFile;
 
@@ -535,6 +535,8 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     }
 
     private void performLoad() {
+        forceStopCellEditing();
+
         if (_dictionaryFileChooser.showDialog(DictionaryEditorPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
             try {
                 populateGuiFromDictionary(NaaccrXmlDictionaryUtils.readDictionary(_dictionaryFileChooser.getSelectedFile()));
@@ -555,9 +557,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
             return;
         }
 
-        TableCellEditor cellEditor = _itemsTbl.getCellEditor();
-        if (cellEditor != null)
-            cellEditor.stopCellEditing();
+        forceStopCellEditing();
 
         NaaccrDictionary dictionary = performValidate(false);
         if (dictionary == null)
@@ -576,13 +576,11 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     }
 
     private void performSaveAs() {
+        forceStopCellEditing();
+
         NaaccrDictionary dictionary = performValidate(false);
         if (dictionary == null)
             return;
-
-        TableCellEditor cellEditor = _itemsTbl.getCellEditor();
-        if (cellEditor != null)
-            cellEditor.stopCellEditing();
 
         int idx = _dictionaryUriFld.getText().lastIndexOf('/');
         if (idx > -1)
@@ -612,6 +610,8 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     }
 
     private NaaccrDictionary performValidate(boolean showSuccessDlg) {
+        forceStopCellEditing();
+
         NaaccrDictionary dictionary = createDictionaryFromGui();
 
         String naaccrVersion = (String)_versionBox.getSelectedItem();
@@ -634,6 +634,8 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     }
 
     private void performExtractToCsv() {
+        forceStopCellEditing();
+
         NaaccrDictionary dictionary = performValidate(false);
         if (dictionary != null)
             performExtractToCsv(dictionary, dictionary.getNaaccrVersion() == null ? "my-naaccr-dictionary.csv" : ("my-naaccr-" + dictionary.getNaaccrVersion() + "-dictionary.csv"));
@@ -642,6 +644,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     }
 
     private void performAddRow(boolean relativeToSelected, boolean insertBefore) {
+        forceStopCellEditing();
 
         Vector<Object> row = new Vector<>();
         row.add(null);
@@ -687,6 +690,8 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     }
 
     private void performRemoveRow(boolean removeAllRows, boolean keepSelected) {
+        forceStopCellEditing();
+
         int selected = _itemsTbl.getSelectedRow();
 
         if (removeAllRows) {
@@ -700,9 +705,17 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     }
 
     private void performGenerateIdFromName() {
+        forceStopCellEditing();
+
         String name = (String)_itemsTbl.getValueAt(_itemsTbl.getSelectedRow(), 2);
         if (name != null)
             _itemsTbl.setValueAt(NaaccrXmlDictionaryUtils.createNaaccrIdFromItemName(name), _itemsTbl.getSelectedRow(), 0);
+    }
+
+    private void forceStopCellEditing() {
+        TableCellEditor cellEditor = _itemsTbl.getCellEditor();
+        if (cellEditor != null)
+            cellEditor.stopCellEditing();
     }
 
     @Override

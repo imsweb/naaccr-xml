@@ -73,10 +73,10 @@ public class Standalone extends JFrame implements ActionListener {
     // would be nice to read this from the Manifest file in the JAR...
     public static final String VERSION = getVersion();
 
-    private CardLayout _layout;
-    private JPanel _centerPnl;
-    private JLabel _currentPageIdLbl, _currentPageDescLbl;
-    private List<JButton> _buttons = new ArrayList<>();
+    private final CardLayout _layout;
+    private final JPanel _centerPnl;
+    private final JLabel _currentPageIdLbl, _currentPageDescLbl;
+    private final List<JButton> _buttons = new ArrayList<>();
 
     public Standalone() {
         this.setTitle("NAACCR XML Utility " + VERSION);

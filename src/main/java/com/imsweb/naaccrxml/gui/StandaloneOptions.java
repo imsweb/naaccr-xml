@@ -32,7 +32,7 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 public class StandaloneOptions extends JPanel {
 
     // available "modes"
-    private boolean _readFlat, _writeFlat, _readXml, _writeXml;
+    private final boolean _readFlat, _writeFlat, _readXml, _writeXml;
 
     // global GUI components
     private JCheckBox _groupTumorBox, _reportMismatchBox, _validateValuesBox, _ignoreUnkItemsBox, _writeNumBox, _applyPaddingBox, _reportValTooLongBox, _strictNameSpacesBox, _autoTranslateIdsBox;

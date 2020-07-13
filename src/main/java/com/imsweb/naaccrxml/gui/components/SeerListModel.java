@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.swing.AbstractListModel;
 
-public class SeerListModel<E> extends AbstractListModel {
+public class SeerListModel<E> extends AbstractListModel<E> {
 
     protected List<E> _originalData;
 
@@ -53,14 +53,6 @@ public class SeerListModel<E> extends AbstractListModel {
     public void addElement(int idx, E elem) {
         _originalData.add(idx, elem);
         filter(_currentFilter);
-    }
-
-    public void resetData(List<E> data) {
-        int size = _filteredData.size();
-        _filteredData.clear();
-        fireIntervalRemoved(this, 0, size);
-        _originalData = data;
-        filter(null);
     }
 
     public void filter(String filter) {
