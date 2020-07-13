@@ -27,16 +27,13 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -53,14 +50,9 @@ import javax.swing.WindowConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
-import javax.swing.filechooser.FileFilter;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 
-import com.imsweb.naaccrxml.NaaccrFormat;
-import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
-import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.gui.pages.DictionariesPage;
 import com.imsweb.naaccrxml.gui.pages.DictionaryEditorPage;
 import com.imsweb.naaccrxml.gui.pages.FlatToXmlPage;
@@ -99,36 +91,6 @@ public class Standalone extends JFrame implements ActionListener {
         exitItem.setActionCommand("menu-exit");
         exitItem.addActionListener(this);
         fileMenu.add(exitItem);
-
-        // tools
-        JMenu toolsMenu = new JMenu(" Tools ");
-        toolsMenu.setMnemonic(KeyEvent.VK_T);
-        bar.add(toolsMenu);
-        JMenu sasMenu = new JMenu("Create SAS XMLMapper Definition File");
-        toolsMenu.add(sasMenu);
-        List<String> versions = NaaccrFormat.getSupportedVersions().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
-        for (int i = 0; i < versions.size(); i++) {
-            String version = versions.get(i);
-            JMenuItem sasAbsItem = new JMenuItem("NAACCR " + version + " Abstract");
-            sasAbsItem.setActionCommand("menu-sas-" + version + "-A");
-            sasAbsItem.addActionListener(this);
-            sasMenu.add(sasAbsItem);
-            JMenuItem sasConfItem = new JMenuItem("NAACCR " + version + " Confidential");
-            sasConfItem.setActionCommand("menu-sas-" + version + "-C");
-            sasConfItem.addActionListener(this);
-            sasMenu.add(sasConfItem);
-            JMenuItem sasIncItem = new JMenuItem("NAACCR " + version + " Incidence");
-            sasIncItem.setActionCommand("menu-sas-" + version + "-I");
-            sasIncItem.addActionListener(this);
-            sasMenu.add(sasIncItem);
-            if (i != versions.size() - 1)
-                sasMenu.addSeparator();
-        }
-        toolsMenu.addSeparator();
-        JMenuItem dictionaryToCsvItem = new JMenuItem("Save Dictionary as CSV File");
-        dictionaryToCsvItem.setActionCommand("menu-dictionary-to-csv");
-        dictionaryToCsvItem.addActionListener(this);
-        toolsMenu.add(dictionaryToCsvItem);
 
         // help
         JMenu helpMenu = new JMenu(" Help ");
@@ -263,87 +225,6 @@ public class Standalone extends JFrame implements ActionListener {
         String cmd = e.getActionCommand();
         if ("menu-exit".equals(cmd))
             System.exit(0);
-        else if (cmd.startsWith("menu-sas-")) {
-            String[] parts = StringUtils.split(cmd, '-');
-            String naaccrVersion = parts[2], recordType = parts[3];
-
-            String prefix = "naaccr-xml-sas-def-";
-            String suffix = "A".equals(recordType) ? "-abstract.map" : "C".equals(recordType) ? "-confidential.map" : "I".equals(recordType) ? "-incidence.map" : ".map";
-
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            fileChooser.setDialogTitle("Select Target File");
-            fileChooser.setApproveButtonToolTipText("Create File");
-            fileChooser.setMultiSelectionEnabled(false);
-            fileChooser.setSelectedFile(new File(fileChooser.getCurrentDirectory(), prefix + naaccrVersion + suffix));
-            if (fileChooser.showDialog(this, "Select") == JFileChooser.APPROVE_OPTION) {
-                File targetFile = fileChooser.getSelectedFile();
-                if (targetFile.exists()) {
-                    int result = JOptionPane.showConfirmDialog(this, "Target file already exists, are you sure you want to replace it?", "Confirmation",
-                            JOptionPane.YES_NO_OPTION);
-                    if (result != JOptionPane.YES_OPTION)
-                        return;
-                }
-                SasDefinitionDialog dlg = new SasDefinitionDialog(this, naaccrVersion, recordType, targetFile);
-                dlg.pack();
-                Point center = new Point(this.getLocationOnScreen().x + this.getWidth() / 2, this.getLocationOnScreen().y + this.getHeight() / 2);
-                dlg.setLocation(center.x - dlg.getWidth() / 2, center.y - dlg.getHeight() / 2);
-                SwingUtilities.invokeLater(() -> dlg.setVisible(true));
-            }
-        }
-        else if ("menu-dictionary-to-csv".equals(cmd)) {
-            JFileChooser inFileChooser = new JFileChooser();
-            inFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            inFileChooser.setDialogTitle("Select Source Dictionary");
-            inFileChooser.setApproveButtonToolTipText("Select");
-            inFileChooser.setMultiSelectionEnabled(false);
-            inFileChooser.addChoosableFileFilter(new FileFilter() {
-                @Override
-                public String getDescription() {
-                    return "XML files (*.xml)";
-                }
-
-                @Override
-                public boolean accept(File f) {
-                    return f != null && (f.isDirectory() || f.getName().toLowerCase().endsWith(".xml"));
-                }
-            });
-            if (inFileChooser.showDialog(this, "Select") == JFileChooser.APPROVE_OPTION) {
-
-                try {
-                    NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(inFileChooser.getSelectedFile());
-
-                    JFileChooser outFileChooser = new JFileChooser();
-                    outFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    outFileChooser.setDialogTitle("Select Target File");
-                    outFileChooser.setApproveButtonToolTipText("Create");
-                    outFileChooser.setMultiSelectionEnabled(false);
-                    outFileChooser.setSelectedFile(new File(inFileChooser.getSelectedFile().getPath().replace(".xml", ".csv")));
-                    if (outFileChooser.showDialog(this, "Select") == JFileChooser.APPROVE_OPTION) {
-                        File targetFile = outFileChooser.getSelectedFile();
-                        if (targetFile.exists()) {
-                            int result = JOptionPane.showConfirmDialog(this, "Target file already exists, are you sure you want to replace it?", "Confirmation",
-                                    JOptionPane.YES_NO_OPTION);
-                            if (result != JOptionPane.YES_OPTION)
-                                return;
-                        }
-                        try {
-                            NaaccrXmlDictionaryUtils.writeDictionaryToCsv(dictionary, targetFile);
-                            JOptionPane.showMessageDialog(Standalone.this, "CSF file successfully created!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                        catch (IOException ex2) {
-                            String msg = "Unable to write CSV file\n\n" + ex2.getMessage();
-                            JOptionPane.showMessageDialog(Standalone.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                }
-                catch (IOException ex) {
-                    String msg = "Unable to read dictionary\n\n" + ex.getMessage();
-                    JOptionPane.showMessageDialog(Standalone.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-
-        }
         else if ("menu-help".equals(cmd)) {
             try {
                 File targetFile = File.createTempFile("naaccr-xml-help", ".html");
