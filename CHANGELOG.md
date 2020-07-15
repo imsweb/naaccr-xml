@@ -3,6 +3,7 @@
 **Version 7.0**
 
 - Added support for NAACCR 21; that version is not final yet and it's possible it will change in a future release.
+- Fixed the name of a few data item in NAACCR 18 dictionary.
 - Added a NaaccrFormat.NAACCR_VERSION_LATEST constant, it is set to version 18 in this release.
 - Added a disclaimer to base dictionaries mentioning those should not be modified.
 - Fixed wrong padding for ruralurbanContinuum2013 and censusOccCode2010 in NAACCR 18 dictionary.

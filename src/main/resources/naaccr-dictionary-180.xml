@@ -1151,7 +1151,7 @@
             dataType="digits"/>
         <ItemDef naaccrId="metsAtDxDistantLn"
             naaccrNum="1114"
-            naaccrName="Mets at DX-Distant LN"
+            naaccrName="Mets at Dx-Distant LN"
             startColumn="872"
             length="1"
             recordTypes="A,M,C,I"
@@ -1446,7 +1446,7 @@
             dataType="date"/>
         <ItemDef naaccrId="dateSentinelLymphNodeBiopsyFlag"
             naaccrNum="833"
-            naaccrName="Date Sentinel Lymph Node Biopsy Flag"
+            naaccrName="Date of Sentinel Lymph Node Biopsy Flag"
             startColumn="1024"
             length="2"
             recordTypes="A,M,C,I"
@@ -1759,7 +1759,7 @@
             dataType="digits"/>
         <ItemDef naaccrId="lymphVascularInvasion"
             naaccrNum="1182"
-            naaccrName="Lymph-vascular Invasion"
+            naaccrName="Lymphovascular Invasion"
             startColumn="1297"
             length="1"
             recordTypes="A,M,C,I"
@@ -3616,7 +3616,7 @@
             dataType="digits"/>
         <ItemDef naaccrId="lnDistantMediastinalScalene"
             naaccrNum="3875"
-            naaccrName="LN Distant: Mediastinal Scalene"
+            naaccrName="LN Distant: Mediastinal, Scalene"
             startColumn="1990"
             length="1"
             recordTypes="A,M,C,I"
@@ -5419,7 +5419,7 @@
             dataType="date"/>
         <ItemDef naaccrId="dateOfDeathCanadaFlag"
             naaccrNum="1756"
-            naaccrName="Date of Death--Canada Flag"
+            naaccrName="Date of Death--CanadaFlag"
             startColumn="2961"
             length="2"
             recordTypes="A,M,C,I"

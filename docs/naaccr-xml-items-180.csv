@@ -171,7 +171,7 @@ dateOf1stContactFlag,581,"Date of 1st Contact Flag",767,2,"A,M,C,I",Tumor,digits
 dateOfBirth,240,"Date of Birth",226,8,"A,M,C,I",Patient,date
 dateOfBirthFlag,241,"Date of Birth Flag",234,2,"A,M,C,I",Patient,digits
 dateOfDeathCanada,1755,"Date of Death--Canada",2953,8,"A,M,C,I",Patient,date
-dateOfDeathCanadaFlag,1756,"Date of Death--Canada Flag",2961,2,"A,M,C,I",Patient,digits
+dateOfDeathCanadaFlag,1756,"Date of Death--CanadaFlag",2961,2,"A,M,C,I",Patient,digits
 dateOfDiagnosis,390,"Date of Diagnosis",544,8,"A,M,C,I",Tumor,date
 dateOfDiagnosisFlag,391,"Date of Diagnosis Flag",552,2,"A,M,C,I",Tumor,digits
 dateOfInptAdm,590,"Date of Inpt Adm",769,8,"A,M,C,I",Tumor,date
@@ -187,7 +187,7 @@ dateOfMultTumorsFlag,439,"Date of Mult Tumors Flag",601,2,"A,M,C,I",Tumor,digits
 dateRegionalLNDissection,682,"Date Regional Lymph Node Dissection",1002,8,"A,M,C,I",Tumor,date
 dateRegionalLNDissectionFlag,683,"Date Regional Lymph Node Dissection Flag",1010,2,"A,M,C,I",Tumor,digits
 dateSentinelLymphNodeBiopsy,832,"Date of Sentinel Lymph Node Biopsy",1016,8,"A,M,C,I",Tumor,date
-dateSentinelLymphNodeBiopsyFlag,833,"Date Sentinel Lymph Node Biopsy Flag",1024,2,"A,M,C,I",Tumor,digits
+dateSentinelLymphNodeBiopsyFlag,833,"Date of Sentinel Lymph Node Biopsy Flag",1024,2,"A,M,C,I",Tumor,digits
 dateTumorRecordAvailbl,2113,"Date Tumor Record Availbl",2696,8,"A,M,C,I",Tumor,date
 dcStateFileNumber,2380,"DC State File Number",4598,6,"A,M,C",Patient,text
 derivedAjcc6M,2980,"Derived AJCC-6 M",1397,2,"A,M,C,I",Tumor,digits
@@ -327,7 +327,7 @@ lnAssessMethodFemoralInguinal,3871,"LN Assessment Method Femoral-Inguinal",1992,
 lnAssessMethodParaaortic,3872,"LN Assessment Method Para-Aortic",1987,1,"A,M,C,I",Tumor,digits
 lnAssessMethodPelvic,3873,"LN Assessment Method Pelvic",1988,1,"A,M,C,I",Tumor,digits
 lnDistantAssessMethod,3874,"LN Distant Assessment Method",1989,1,"A,M,C,I",Tumor,digits
-lnDistantMediastinalScalene,3875,"LN Distant: Mediastinal Scalene",1990,1,"A,M,C,I",Tumor,digits
+lnDistantMediastinalScalene,3875,"LN Distant: Mediastinal, Scalene",1990,1,"A,M,C,I",Tumor,digits
 lnHeadAndNeckLevels1To3,3876,"LN Head and Neck Levels I-III",1822,1,"A,M,C,I",Tumor,digits
 lnHeadAndNeckLevels4To5,3877,"LN Head and Neck Levels IV-V",1823,1,"A,M,C,I",Tumor,digits
 lnHeadAndNeckLevels6To7,3878,"LN Head and Neck Levels VI-VII",1824,1,"A,M,C,I",Tumor,digits
@@ -338,7 +338,7 @@ lnPositiveAxillaryLevel1To2,3882,"LN Positive Axillary Level I-II",1745,2,"A,M,C
 lnSize,3883,"LN Size",1826,4,"A,M,C,I",Tumor,text
 lnStatusFemorInguinParaaortPelv,3884,"LN Status Femoral-Inguinal, Para-Aortic, Pelvic",1991,1,"A,M,C,I",Tumor,digits
 longitude,2354,"Longitude",4794,11,"A,M,C",Tumor,text
-lymphVascularInvasion,1182,"Lymph-vascular Invasion",1297,1,"A,M,C,I",Tumor,digits
+lymphVascularInvasion,1182,"Lymphovascular Invasion",1297,1,"A,M,C,I",Tumor,digits
 lymphocytosis,3885,"Lymphocytosis",1912,1,"A,M,C,I",Tumor,digits
 majorVeinInvolvement,3886,"Major Vein Involvement",1835,1,"A,M,C,I",Tumor,digits
 maritalStatusAtDx,150,"Marital Status at DX",206,1,"A,M,C,I",Tumor,digits
@@ -349,7 +349,7 @@ medicareBeneficiaryIdentifier,2315,"Medicare Beneficiary Identifier",4337,11,"A,
 methylationOfO6MGMT,3889,"Methylation of O6-Methylguanine-Methyltransferase",1742,1,"A,M,C,I",Tumor,digits
 metsAtDxBone,1112,"Mets at DX-Bone",870,1,"A,M,C,I",Tumor,digits
 metsAtDxBrain,1113,"Mets at DX-Brain",871,1,"A,M,C,I",Tumor,digits
-metsAtDxDistantLn,1114,"Mets at DX-Distant LN",872,1,"A,M,C,I",Tumor,digits
+metsAtDxDistantLn,1114,"Mets at Dx-Distant LN",872,1,"A,M,C,I",Tumor,digits
 metsAtDxLiver,1115,"Mets at DX-Liver",873,1,"A,M,C,I",Tumor,digits
 metsAtDxLung,1116,"Mets at DX-Lung",874,1,"A,M,C,I",Tumor,digits
 metsAtDxOther,1117,"Mets at DX-Other",875,1,"A,M,C,I",Tumor,digits
