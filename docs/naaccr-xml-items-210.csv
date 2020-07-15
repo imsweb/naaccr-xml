@@ -184,7 +184,7 @@ dateOf1stContactFlag,581,"Date of 1st Contact Flag",,2,"A,M,C,I",Tumor,digits
 dateOfBirth,240,"Date of Birth",,8,"A,M,C,I",Patient,date
 dateOfBirthFlag,241,"Date of Birth Flag",,2,"A,M,C,I",Patient,digits
 dateOfDeathCanada,1755,"Date of Death--Canada",,8,"A,M,C,I",Patient,date
-dateOfDeathCanadaFlag,1756,"Date of Death--Canada Flag",,2,"A,M,C,I",Patient,digits
+dateOfDeathCanadaFlag,1756,"Date of Death--CanadaFlag",,2,"A,M,C,I",Patient,digits
 dateOfDiagnosis,390,"Date of Diagnosis",,8,"A,M,C,I",Tumor,date
 dateOfDiagnosisFlag,391,"Date of Diagnosis Flag",,2,"A,M,C,I",Tumor,digits
 dateOfInptAdm,590,"Date of Inpt Adm",,8,"A,M,C,I",Tumor,date
@@ -200,7 +200,7 @@ dateOfMultTumorsFlag,439,"Date of Mult Tumors Flag",,2,"A,M,C,I",Tumor,digits
 dateRegionalLNDissection,682,"Date Regional Lymph Node Dissection",,8,"A,M,C,I",Tumor,date
 dateRegionalLNDissectionFlag,683,"Date Regional Lymph Node Dissection Flag",,2,"A,M,C,I",Tumor,digits
 dateSentinelLymphNodeBiopsy,832,"Date of Sentinel Lymph Node Biopsy",,8,"A,M,C,I",Tumor,date
-dateSentinelLymphNodeBiopsyFlag,833,"Date Sentinel Lymph Node Biopsy Flag",,2,"A,M,C,I",Tumor,digits
+dateSentinelLymphNodeBiopsyFlag,833,"Date of Sentinel Lymph Node Biopsy Flag",,2,"A,M,C,I",Tumor,digits
 dateTumorRecordAvailbl,2113,"Date Tumor Record Availbl",,8,"A,M,C,I",Tumor,date
 dcStateFileNumber,2380,"DC State File Number",,6,"A,M,C",Patient,text
 derivedAjcc6M,2980,"Derived AJCC-6 M",,2,"A,M,C,I",Tumor,digits
@@ -342,7 +342,7 @@ lnAssessMethodFemoralInguinal,3871,"LN Assessment Method Femoral-Inguinal",,1,"A
 lnAssessMethodParaaortic,3872,"LN Assessment Method Para-Aortic",,1,"A,M,C,I",Tumor,digits
 lnAssessMethodPelvic,3873,"LN Assessment Method Pelvic",,1,"A,M,C,I",Tumor,digits
 lnDistantAssessMethod,3874,"LN Distant Assessment Method",,1,"A,M,C,I",Tumor,digits
-lnDistantMediastinalScalene,3875,"LN Distant: Mediastinal Scalene",,1,"A,M,C,I",Tumor,digits
+lnDistantMediastinalScalene,3875,"LN Distant: Mediastinal, Scalene",,1,"A,M,C,I",Tumor,digits
 lnHeadAndNeckLevels1To3,3876,"LN Head and Neck Levels I-III",,1,"A,M,C,I",Tumor,digits
 lnHeadAndNeckLevels4To5,3877,"LN Head and Neck Levels IV-V",,1,"A,M,C,I",Tumor,digits
 lnHeadAndNeckLevels6To7,3878,"LN Head and Neck Levels VI-VII",,1,"A,M,C,I",Tumor,digits
@@ -353,18 +353,18 @@ lnPositiveAxillaryLevel1To2,3882,"LN Positive Axillary Level I-II",,2,"A,M,C,I",
 lnSize,3883,"LN Size",,4,"A,M,C,I",Tumor,text
 lnStatusFemorInguinParaaortPelv,3884,"LN Status Femoral-Inguinal, Para-Aortic, Pelvic",,1,"A,M,C,I",Tumor,digits
 longitude,2354,"Longitude",,11,"A,M,C",Tumor,text
-lymphVascularInvasion,1182,"Lymph-vascular Invasion",,1,"A,M,C,I",Tumor,digits
+lymphVascularInvasion,1182,"Lymphovascular Invasion",,1,"A,M,C,I",Tumor,digits
 lymphocytosis,3885,"Lymphocytosis",,1,"A,M,C,I",Tumor,digits
 majorVeinInvolvement,3886,"Major Vein Involvement",,1,"A,M,C,I",Tumor,digits
 maritalStatusAtDx,150,"Marital Status at DX",,1,"A,M,C,I",Tumor,digits
 measuredBasalDiameter,3887,"Measured Basal Diameter",,4,"A,M,C,I",Tumor,text
 measuredThickness,3888,"Measured Thickness",,4,"A,M,C,I",Tumor,text
-medicalRecordNumber,2300,"Medical Record Number",,11,"A,M,C",Tumor,text
+medicalRecordNumber,2300,"Medical Record Number",,15,"A,M,C",Tumor,text
 medicareBeneficiaryIdentifier,2315,"Medicare Beneficiary Identifier",,11,"A,M,C",Patient,text
 methylationOfO6MGMT,3889,"Methylation of O6-Methylguanine-Methyltransferase",,1,"A,M,C,I",Tumor,digits
 metsAtDxBone,1112,"Mets at DX-Bone",,1,"A,M,C,I",Tumor,digits
 metsAtDxBrain,1113,"Mets at DX-Brain",,1,"A,M,C,I",Tumor,digits
-metsAtDxDistantLn,1114,"Mets at DX-Distant LN",,1,"A,M,C,I",Tumor,digits
+metsAtDxDistantLn,1114,"Mets at Dx-Distant LN",,1,"A,M,C,I",Tumor,digits
 metsAtDxLiver,1115,"Mets at DX-Liver",,1,"A,M,C,I",Tumor,digits
 metsAtDxLung,1116,"Mets at DX-Lung",,1,"A,M,C,I",Tumor,digits
 metsAtDxOther,1117,"Mets at DX-Other",,1,"A,M,C,I",Tumor,digits
@@ -390,6 +390,10 @@ namePrefix,2260,"Name--Prefix",,3,"A,M,C",Patient,text
 nameSpouseParent,2290,"Name--Spouse/Parent",,60,"A,M,C",Tumor,text
 nameSuffix,2270,"Name--Suffix",,3,"A,M,C",Patient,text
 nccnInternationalPrognosticIndex,3896,"NCCN International Prognostic Index (IPI)",,2,"A,M,C,I",Tumor,text
+ncdbCovid19TxImpact,3946,"NCDB--COVID19--Tx Impact",,1,"A,M,C,I",Tumor,digits
+ncdbSarsCov2Pos,3944,"NCDB--SARSCoV2--Pos",,1,"A,M,C,I",Tumor,digits
+ncdbSarsCov2PosDate,3945,"NCDB--SARSCoV2--Pos Date",,8,"A,M,C,I",Tumor,date
+ncdbSarsCov2Test,3943,"NCDB--SARSCoV2--Test",,1,"A,M,C,I",Tumor,digits
 neoadjuvTherapyClinicalResponse,1633,"Neoadjuvant Therapy-Clinical Response",,1,"A,M,C,I",Tumor,text
 neoadjuvTherapyTreatmentEffect,1634,"Neoadjuvant Therapy-Treatment Effect",,1,"A,M,C,I",Tumor,text
 neoadjuvantTherapy,1632,"Neoadjuvant Therapy",,1,"A,M,C,I",Tumor,text
@@ -547,7 +551,7 @@ profoundImmuneSuppression,3918,"Profound Immune Suppression",,1,"A,M,C,I",Tumor,
 progesteroneRecepPrcntPosOrRange,3914,"Progesterone Receptor Percent Positive or Range",,3,"A,M,C,I",Tumor,text
 progesteroneRecepSummary,3915,"Progesterone Receptor Summary",,1,"A,M,C,I",Tumor,digits
 progesteroneRecepTotalAllredScor,3916,"Progesterone Receptor Total Allred Score",,2,"A,M,C,I",Tumor,text
-prostatePathologicalExtension,3919,"EOD Prostate Pathological Extension",,3,"A,M,C,I",Tumor,text
+prostatePathologicalExtension,3919,"EOD Prostate Pathologic Extension",,3,"A,M,C,I",Tumor,text
 psaLabValue,3920,"PSA (Prostatic Specific Antigen) Lab Value",,5,"A,M,C,I",Tumor,text
 qualityOfSurvival,1780,"Quality of Survival",,1,"A,M,C,I",Tumor,digits
 race1,160,"Race 1",,2,"A,M,C,I",Patient,digits
