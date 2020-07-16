@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 7.1**
+
+- Updated embedded JRE to Java 11.0.8 (this only affects the standalone program).
+
 **Version 7.0**
 
 - Added support for NAACCR 21; that version is not final yet and it's possible it will change in a future release.
