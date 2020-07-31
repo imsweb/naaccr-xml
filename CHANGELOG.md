@@ -2,6 +2,7 @@
 
 **Version 7.1**
 
+- Changed data level from Tumor to Patient for 3 COVID data items.
 - Updated embedded JRE to Java 11.0.8 (this only affects the standalone program).
 
 **Version 7.0**

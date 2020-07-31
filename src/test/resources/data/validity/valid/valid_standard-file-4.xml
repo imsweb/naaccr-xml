@@ -2,6 +2,6 @@
 
 <!-- valid file defining no patient -->
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" recordType="I" specificationVersion="1.4" xmlns="http://naaccr.org/naaccrxml">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-210.xml" recordType="I" specificationVersion="1.4" xmlns="http://naaccr.org/naaccrxml">
     <Item naaccrId="registryId">0000000001</Item>
 </NaaccrData>
