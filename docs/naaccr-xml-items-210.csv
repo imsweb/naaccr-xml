@@ -391,9 +391,9 @@ nameSpouseParent,2290,"Name--Spouse/Parent",,60,"A,M,C",Tumor,text
 nameSuffix,2270,"Name--Suffix",,3,"A,M,C",Patient,text
 nccnInternationalPrognosticIndex,3896,"NCCN International Prognostic Index (IPI)",,2,"A,M,C,I",Tumor,text
 ncdbCovid19TxImpact,3946,"NCDB--COVID19--Tx Impact",,1,"A,M,C,I",Tumor,digits
-ncdbSarsCov2Pos,3944,"NCDB--SARSCoV2--Pos",,1,"A,M,C,I",Tumor,digits
-ncdbSarsCov2PosDate,3945,"NCDB--SARSCoV2--Pos Date",,8,"A,M,C,I",Tumor,date
-ncdbSarsCov2Test,3943,"NCDB--SARSCoV2--Test",,1,"A,M,C,I",Tumor,digits
+ncdbSarsCov2Pos,3944,"NCDB--SARSCoV2--Pos",,1,"A,M,C,I",Patient,digits
+ncdbSarsCov2PosDate,3945,"NCDB--SARSCoV2--Pos Date",,8,"A,M,C,I",Patient,date
+ncdbSarsCov2Test,3943,"NCDB--SARSCoV2--Test",,1,"A,M,C,I",Patient,digits
 neoadjuvTherapyClinicalResponse,1633,"Neoadjuvant Therapy-Clinical Response",,1,"A,M,C,I",Tumor,text
 neoadjuvTherapyTreatmentEffect,1634,"Neoadjuvant Therapy-Treatment Effect",,1,"A,M,C,I",Tumor,text
 neoadjuvantTherapy,1632,"Neoadjuvant Therapy",,1,"A,M,C,I",Tumor,text
