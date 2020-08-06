@@ -1917,8 +1917,7 @@
             naaccrName="FIGO Stage"
             length="5"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"
-            dataType="digits"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="followUpContactCity"
             naaccrNum="1842"
             naaccrName="Follow-Up Contact--City"

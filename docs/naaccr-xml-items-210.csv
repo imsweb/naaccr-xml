@@ -272,7 +272,7 @@ extranodalExtensionHeadNeckPath,3832,"Extranodal Extension Head and Neck Patholo
 extranodalExtensionPath,3833,"Extranodal Extension Path (non-Head and Neck)",,1,"A,M,C,I",Tumor,digits
 extravascularMatrixPatterns,3834,"Extravascular Matrix Patterns",,1,"A,M,C,I",Tumor,digits
 fibrosisScore,3835,"Fibrosis Score",,1,"A,M,C,I",Tumor,digits
-figoStage,3836,"FIGO Stage",,5,"A,M,C,I",Tumor,digits
+figoStage,3836,"FIGO Stage",,5,"A,M,C,I",Tumor,text
 followUpContactCity,1842,"Follow-Up Contact--City",,50,"A,M,C,I",Tumor,text
 followUpContactName,2394,"Follow-Up Contact--Name",,60,"A,M,C",Tumor,text
 followUpContactNost,2392,"Follow-Up Contact--No&St",,60,"A,M,C",Tumor,text

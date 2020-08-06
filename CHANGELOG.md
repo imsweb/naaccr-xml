@@ -2,7 +2,8 @@
 
 **Version 7.1**
 
-- Changed data level from Tumor to Patient for 3 COVID data items.
+- Changed type of figoStage to be text in N21 base dictionary.
+- Changed data level from Tumor to Patient for 3 COVID data items in N21 base dictionary.
 - Updated embedded JRE to Java 11.0.8 (this only affects the standalone program).
 
 **Version 7.0**
