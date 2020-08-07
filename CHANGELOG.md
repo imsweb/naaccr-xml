@@ -5,15 +5,16 @@
 - Changed type of morphCodingSysCurrent/Original to be mixed in N21 and N18 dictionary.
 - Changed type of figoStage to be text in N21 base dictionary.
 - Changed data level from Tumor to Patient for 3 COVID data items in N21 base dictionary.
+- Now handling blank values instead of missing attribute for optional attributes.
 - Updated embedded JRE to Java 11.0.8 (this only affects the standalone program).
 
 **Version 7.0**
 
 - Added support for NAACCR 21; that version is not final yet and it's possible it will change in a future release.
-- Fixed the name of a few data items in NAACCR 18 dictionary.
+- Fixed the name of a few data items in NAACCR N18 dictionary.
 - Added a NaaccrFormat.NAACCR_VERSION_LATEST constant, it is set to version 18 in this release.
 - Added a disclaimer to base dictionaries mentioning those should not be modified.
-- Fixed wrong padding for ruralurbanContinuum2013 and censusOccCode2010 in NAACCR 18 dictionary.
+- Fixed wrong padding for ruralurbanContinuum2013 and censusOccCode2010 in N18 dictionary.
 - Updated XStream dependency from version 1.4.11.1 to version 1.4.12.
 - Updated commons-io dependency from version 2.6 to version 2.7.
 - Updated commons-lang3 dependency from version 3.9 to version 3.10.

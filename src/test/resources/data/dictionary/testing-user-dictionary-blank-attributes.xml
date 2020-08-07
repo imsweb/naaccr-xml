@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<NaaccrDictionary dictionaryUri="http://mycompany.org/my-very-own-naaccr-dictionary.xml" specificationVersion="1.4" xmlns="http://naaccr.org/naaccrxml">
+    <ItemDefs>
+        <ItemDef naaccrId="myVariable1" naaccrNum="10001" naaccrName="My Variable 1" length="1" recordTypes="A,M,C,I" parentXmlElement="Tumor" dataType="" padding="" trim=""/>
+    </ItemDefs>
+</NaaccrDictionary>

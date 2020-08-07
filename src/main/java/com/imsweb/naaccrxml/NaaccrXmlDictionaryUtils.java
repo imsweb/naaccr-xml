@@ -327,16 +327,16 @@ public final class NaaccrXmlDictionaryUtils {
             if (dictionary.getItems() != null) {
                 for (NaaccrDictionaryItem item : dictionary.getItems()) {
                     // record types (defaults to all types)
-                    if (item.getRecordTypes() == null)
+                    if (StringUtils.isBlank(item.getRecordTypes()))
                         item.setRecordTypes(NaaccrFormat.ALL_RECORD_TYPES);
                     // data type (defaults to text)
-                    if (item.getDataType() == null)
+                    if (StringUtils.isBlank(item.getDataType()))
                         item.setDataType(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
                     // padding (defaults to right-blank)
-                    if (item.getPadding() == null)
+                    if (StringUtils.isBlank(item.getPadding()))
                         item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
                     // trimming (defaults to all)
-                    if (item.getTrim() == null)
+                    if (StringUtils.isBlank(item.getTrim()))
                         item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL);
                 }
             }

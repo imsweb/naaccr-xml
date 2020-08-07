@@ -104,7 +104,7 @@ public class NaaccrPatientConverter implements Converter {
             while (reader.hasMoreChildren()) {
                 reader.moveDown();
 
-                // handel patient items
+                // handle patient items
                 if (NaaccrXmlUtils.NAACCR_XML_TAG_ITEM.equals(_context.extractTag(reader.getNodeName()))) {
                     if (tumorCount > 0 || seenPatientExtension)
                         reportSyntaxError("unexpected tag: " + _context.extractTag(reader.getNodeName()));
@@ -262,7 +262,7 @@ public class NaaccrPatientConverter implements Converter {
         item.setStartLineNumber(lineNumber);
 
         // the NAACCR ID is required
-        if (rawId == null)
+        if (StringUtils.isBlank(rawId))
             reportSyntaxError("attribute '" + NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID + "' is required");
         else
             rawId = rawId.trim();
@@ -277,6 +277,7 @@ public class NaaccrPatientConverter implements Converter {
 
         if (!_context.getOptions().processItem(rawId))
             return;
+
         RuntimeNaaccrDictionaryItem def = _context.getDictionary().getItemByNaaccrId(rawId);
         if (def != null) {
             item.setNaaccrId(def.getNaaccrId());
@@ -300,20 +301,18 @@ public class NaaccrPatientConverter implements Converter {
         }
 
         // validate the NAACCR Number if provided
-        if (rawNum != null) {
+        if (!StringUtils.isBlank(rawNum)) {
             rawNum = rawNum.trim();
-            if (!rawNum.isEmpty()) {
-                try {
-                    if (def != null) {
-                        if (!Integer.valueOf(rawNum).equals(def.getNaaccrNum()))
-                            reportError(item, lineNumber, currentPath, null, null, NaaccrErrorUtils.CODE_BAD_NAACCR_NUM, rawNum, def.getNaaccrId());
-                    }
-                    else
-                        item.setNaaccrNum(Integer.valueOf(rawNum));
+            try {
+                if (def != null) {
+                    if (!Integer.valueOf(rawNum).equals(def.getNaaccrNum()))
+                        reportError(item, lineNumber, currentPath, null, null, NaaccrErrorUtils.CODE_BAD_NAACCR_NUM, rawNum, def.getNaaccrId());
                 }
-                catch (NumberFormatException e) {
-                    reportSyntaxError("invalid '" + NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM + "' attribute value: " + rawNum);
-                }
+                else
+                    item.setNaaccrNum(Integer.valueOf(rawNum));
+            }
+            catch (NumberFormatException e) {
+                reportSyntaxError("invalid '" + NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM + "' attribute value: " + rawNum);
             }
         }
 

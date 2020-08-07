@@ -104,11 +104,20 @@ public class NaaccrXmlDictionaryUtilsTest {
         for (String oldId : NaaccrXmlDictionaryUtils.getRenamedLongNaaccr18Ids().keySet())
             Assert.assertNull(NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(NaaccrFormat.NAACCR_VERSION_180).getItemByNaaccrId(oldId));
 
+        // optional attributes are provided as empty string
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-blank-attributes.xml"))) {
+            NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(reader);
+            Assert.assertEquals(1, dictionary.getItems().size());
+            Assert.assertEquals(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT, dictionary.getItems().get(0).getDataType());
+            Assert.assertEquals(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK, dictionary.getItems().get(0).getPadding());
+            Assert.assertEquals(NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL, dictionary.getItems().get(0).getTrim());
+        }
+
         // read a provided user dictionary
         try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140.xml"))) {
-            NaaccrDictionary defaultUserDictionary = NaaccrXmlDictionaryUtils.readDictionary(reader);
-            Assert.assertEquals(SpecificationVersion.SPEC_1_0, defaultUserDictionary.getSpecificationVersion());
-            Assert.assertEquals(4, defaultUserDictionary.getItems().size());
+            NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(reader);
+            Assert.assertEquals(SpecificationVersion.SPEC_1_0, dictionary.getSpecificationVersion());
+            Assert.assertEquals(4, dictionary.getItems().size());
         }
 
         // try to read a user dictionary with an error (bad start column)
@@ -131,17 +140,9 @@ public class NaaccrXmlDictionaryUtilsTest {
         }
         Assert.assertTrue(exceptionAppend);
 
-        // this one defines an item in a bad location, but it doesn't define a NAACCR version, so no exception, but if a NAACCR version is provided, the validation should fail
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140-bad3.xml"))) {
-            NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
-            Assert.assertTrue(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
-            Assert.assertFalse(NaaccrXmlDictionaryUtils.validateUserDictionary(dict, "140").isEmpty());
-            Assert.assertFalse(NaaccrXmlDictionaryUtils.validateUserDictionary(dict, "160").isEmpty());
-        }
-
         // try to read a user dictionary with another error (missing dictionaryUri attribute)
         exceptionAppend = false;
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140-bad4.xml"))) {
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140-bad3.xml"))) {
             NaaccrXmlDictionaryUtils.readDictionary(reader);
         }
         catch (IOException e) {

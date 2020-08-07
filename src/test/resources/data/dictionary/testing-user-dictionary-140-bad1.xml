@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
+<!-- bad start column -->
+
 <NaaccrDictionary dictionaryUri="http://mycompany.org/my-very-own-naaccr-dictionary.xml" naaccrVersion="140">
     <ItemDefs>
         <ItemDef naaccrId="myVariable" naaccrNum="10001" naaccrName="My Variable" startColumn="1" length="1" parentXmlElement="Tumor"/>
