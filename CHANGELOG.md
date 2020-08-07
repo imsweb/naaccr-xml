@@ -2,6 +2,7 @@
 
 **Version 7.1**
 
+- Changed type of morphCodingSysCurrent/Original to be mixed in N21 and N18 dictionary.
 - Changed type of figoStage to be text in N21 base dictionary.
 - Changed data level from Tumor to Patient for 3 COVID data items in N21 base dictionary.
 - Updated embedded JRE to Java 11.0.8 (this only affects the standalone program).

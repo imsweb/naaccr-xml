@@ -358,8 +358,8 @@ microvascularDensity,3891,"Microvascular Density",1885,2,"A,M,C,I",Tumor,text
 militaryRecordNoSuffix,2310,"Military Record No Suffix",4326,2,"A,M,C",Tumor,digits
 mitoticCountUvealMelanoma,3892,"Mitotic Count Uveal Melanoma",1887,4,"A,M,C,I",Tumor,text
 mitoticRateMelanoma,3893,"Mitotic Rate Melanoma",1872,2,"A,M,C,I",Tumor,text
-morphCodingSysCurrent,470,"Morph Coding Sys--Current",574,1,"A,M,C,I",Tumor,digits
-morphCodingSysOriginl,480,"Morph Coding Sys--Originl",575,1,"A,M,C,I",Tumor,digits
+morphCodingSysCurrent,470,"Morph Coding Sys--Current",574,1,"A,M,C,I",Tumor,mixed
+morphCodingSysOriginl,480,"Morph Coding Sys--Originl",575,1,"A,M,C,I",Tumor,mixed
 multTumRptAsOnePrim,444,"Mult Tum Rpt as One Prim",591,2,"A,M,C,I",Tumor,digits
 multigeneSignatureMethod,3894,"Multigene Signature Method",1747,1,"A,M,C,I",Tumor,digits
 multigeneSignatureResults,3895,"Multigene Signature Results",1748,2,"A,M,C,I",Tumor,text

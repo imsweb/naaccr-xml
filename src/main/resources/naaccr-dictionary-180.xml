@@ -768,7 +768,7 @@
             length="1"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="morphCodingSysOriginl"
             naaccrNum="480"
             naaccrName="Morph Coding Sys--Originl"
@@ -776,7 +776,7 @@
             length="1"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="mixed"/>
         <ItemDef naaccrId="diagnosticConfirmation"
             naaccrNum="490"
             naaccrName="Diagnostic Confirmation"
