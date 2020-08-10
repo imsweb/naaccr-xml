@@ -1487,9 +1487,7 @@
             startColumn="1046"
             length="2"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"
-            dataType="digits"
-            padding="leftZero"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="tnmPathT"
             naaccrNum="880"
             naaccrName="TNM Path T"
@@ -2788,9 +2786,7 @@
             startColumn="1771"
             length="5"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"
-            dataType="digits"
-            padding="leftBlank"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="oncotypeDxRecurrenceScoreDcis"
             naaccrNum="3903"
             naaccrName="Oncotype Dx Recurrence Score-DCIS"

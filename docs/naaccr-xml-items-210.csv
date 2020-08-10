@@ -328,7 +328,7 @@ institutionReferredTo,2420,"Institution Referred To",,10,"A,M,C",Tumor,text
 invasionBeyondCapsule,3864,"Invasion Beyond Capsule",,1,"A,M,C,I",Tumor,digits
 ipsilateralAdrenalGlandInvolve,3861,"Ipsilateral Adrenal Gland Involvement",,1,"A,M,C,I",Tumor,digits
 jak2,3862,"JAK2",,1,"A,M,C,I",Tumor,digits
-ki67,3863,"Ki-67",,5,"A,M,C,I",Tumor,digits
+ki67,3863,"Ki-67",,5,"A,M,C,I",Tumor,text
 kitGeneImmunohistochemistry,3865,"KIT Gene Immunohistochemistry",,1,"A,M,C,I",Tumor,digits
 kras,3866,"KRAS",,1,"A,M,C,I",Tumor,digits
 laterality,410,"Laterality",,1,"A,M,C,I",Tumor,digits
@@ -773,7 +773,7 @@ tnmClinN,950,"TNM Clin N",,4,"A,M,C,I",Tumor,text
 tnmClinStageGroup,970,"TNM Clin Stage Group",,4,"A,M,C,I",Tumor,text
 tnmClinStagedBy,990,"TNM Clin Staged By",,2,"A,M,C,I",Tumor,digits
 tnmClinT,940,"TNM Clin T",,4,"A,M,C,I",Tumor,text
-tnmEditionNumber,1060,"TNM Edition Number",,2,"A,M,C,I",Tumor,digits
+tnmEditionNumber,1060,"TNM Edition Number",,2,"A,M,C,I",Tumor,text
 tnmPathDescriptor,920,"TNM Path Descriptor",,1,"A,M,C,I",Tumor,digits
 tnmPathM,900,"TNM Path M",,4,"A,M,C,I",Tumor,text
 tnmPathN,890,"TNM Path N",,4,"A,M,C,I",Tumor,text

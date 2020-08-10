@@ -2294,9 +2294,7 @@
             naaccrName="Ki-67"
             length="5"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"
-            dataType="digits"
-            padding="leftBlank"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="kitGeneImmunohistochemistry"
             naaccrNum="3865"
             naaccrName="KIT Gene Immunohistochemistry"
@@ -5370,9 +5368,7 @@
             naaccrName="TNM Edition Number"
             length="2"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"
-            dataType="digits"
-            padding="leftZero"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="tnmPathDescriptor"
             naaccrNum="920"
             naaccrName="TNM Path Descriptor"

@@ -2,7 +2,9 @@
 
 **Version 7.1**
 
-- Changed type of morphCodingSysCurrent/Original to be mixed in N21 and N18 dictionary.
+- Changed type of ki67 to be text in N21 and N18 base dictionary.
+- Changed type of tnmEditionNumber to be text in N21 and N18 base dictionary.
+- Changed type of morphCodingSysCurrent/Original to be mixed in N21 and N18 base dictionary.
 - Changed type of figoStage to be text in N21 base dictionary.
 - Changed data level from Tumor to Patient for 3 COVID data items in N21 base dictionary.
 - Now handling blank values instead of missing attribute for optional attributes.
