@@ -2,6 +2,7 @@
 
 **Version 7.2**
 
+- Added changelog in comment block on top if N18 and N21 dictionaries.
 - Changed padding of ki67 to be leftBlank instead of rightBlank in N21 and N18 base dictionary; it was changed by mistake.
 
 **Version 7.1**
