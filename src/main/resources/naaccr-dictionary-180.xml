@@ -1487,7 +1487,8 @@
             startColumn="1046"
             length="2"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"/>
+            parentXmlElement="Tumor"
+            padding="leftZero"/>
         <ItemDef naaccrId="tnmPathT"
             naaccrNum="880"
             naaccrName="TNM Path T"

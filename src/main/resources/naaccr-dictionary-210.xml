@@ -5369,7 +5369,8 @@
             naaccrName="TNM Edition Number"
             length="2"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"/>
+            parentXmlElement="Tumor"
+            padding="leftZero"/>
         <ItemDef naaccrId="tnmPathDescriptor"
             naaccrNum="920"
             naaccrName="TNM Path Descriptor"
