@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
 <Match>
-  <Bug code="EI,EI2,Dm"/>/>
+  <Bug code="EI,EI2,Dm,RCN"/>/>
 </Match>
 <Match>
   <Class name="~.*\.*Test"/>
 </Match>
 <Match>
   <Package name="lab"/>
-</Match>
-<Match>
-  <Class name="com.imsweb.naaccrxml.gui.Standalone"/>
-  <Bug code="RCN"/>/>
 </Match>
 </FindBugsFilter>
