@@ -4,6 +4,18 @@
      If you need to define additional data items, please create your own user-defined dictionary.
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
+<!-- Changelog
+ - 08/25/2020: Changed padding of ki67 and tnmEditionNumber; was changed by mistake.
+ - 08/10/2020: Changed type of ki67 and tnmEditionNumber from digits to text.
+ - 08/07/2020: Changed type for morphCodingSysCurrent/Original from digits to mixed.
+ - 08/06/2020: Changed type of figoStage from digits to text.
+ - 07/15/2020: Fixed the name of a few items to align with online documentation.
+ - 07/08/2020: Added a formal disclaimer to the top of the file.
+ - 03/29/2019: Renamed several NAACCR IDs to enforce new 32-characters restriction.
+ - 11/08/2018: Changed type of RUCA/URIC from digits to mixed.
+ - 03/07/2018: Initial version.
+-->
+
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml"
             naaccrVersion="180"
             specificationVersion="1.4"

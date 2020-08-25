@@ -3,11 +3,13 @@
  */
 package com.imsweb.naaccrxml;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
@@ -287,6 +289,24 @@ public final class NaaccrXmlDictionaryUtils {
     }
 
     /**
+     * Returns true if the provided dictionary is a base dictionary, false otherwise (this is based on its URI).
+     * @param dictionary dictionary, cannot be null
+     * @return true if the dictionary is a base one, false otherwise
+     */
+    public static boolean isBaseDictionary(NaaccrDictionary dictionary) {
+        return BASE_DICTIONARY_URI_PATTERN.matcher(dictionary.getDictionaryUri()).matches();
+    }
+
+    /**
+     * Returns true if the provided dictionary is a default user dictionary, false otherwise (this is based on its URI).
+     * @param dictionary dictionary, cannot be null
+     * @return true if the dictionary is a default user one, false otherwise
+     */
+    public static boolean isDefaultUserDictionary(NaaccrDictionary dictionary) {
+        return DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(dictionary.getDictionaryUri()).matches();
+    }
+
+    /**
      * Clears the cached internal dictionaries.
      */
     public static void clearCachedDictionaries() {
@@ -365,8 +385,19 @@ public final class NaaccrXmlDictionaryUtils {
      * @throws IOException if the dictionary could not be written
      */
     public static void writeDictionary(NaaccrDictionary dictionary, File file) throws IOException {
+        writeDictionary(dictionary, file, null);
+    }
+
+    /**
+     * Writes the given dictionary to the provided file.
+     * @param dictionary dictionary to write, cannot be null
+     * @param file file, cannot be null
+     * @param comment an optional comment; if provided, every line of that comment will be included in a comment block on the top of the written file
+     * @throws IOException if the dictionary could not be written
+     */
+    public static void writeDictionary(NaaccrDictionary dictionary, File file, List<String> comment) throws IOException {
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
-            writeDictionary(dictionary, writer);
+            writeDictionary(dictionary, writer, comment);
         }
     }
 
@@ -377,8 +408,41 @@ public final class NaaccrXmlDictionaryUtils {
      * @throws IOException if the dictionary could not be written
      */
     public static void writeDictionary(NaaccrDictionary dictionary, Writer writer) throws IOException {
+        writeDictionary(dictionary, writer, null);
+    }
+
+    /**
+     * Writes the given dictionary to the provided writer.
+     * @param dictionary dictionary to write, cannot be null
+     * @param writer writer, cannot be null
+     * @param comment an optional comment; if provided, every line of that comment will be included in a comment block on the top of the written file
+     * @throws IOException if the dictionary could not be written
+     */
+    public static void writeDictionary(NaaccrDictionary dictionary, Writer writer, List<String> comment) throws IOException {
+        if (dictionary == null)
+            throw new RuntimeException("Provided dictionary cannot be null");
+
+        // get the changelog if we are writing a base dictionary
+        if (isBaseDictionary(dictionary)) {
+            if (comment != null)
+                throw new RuntimeException("Comment cannot be provided when writing a base dictionary!");
+            try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("changelog/changelog-naaccr-dictionary-" + dictionary.getNaaccrVersion() + ".txt")) {
+                if (is != null) {
+                    comment = new ArrayList<>();
+                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+                        String line = reader.readLine();
+                        while (line != null) {
+                            comment.add(line);
+                            line = reader.readLine();
+                        }
+                    }
+                }
+            }
+        }
+
+        // write the given dictionary
         try {
-            instanciateXStream().marshal(dictionary, new NaaccrPrettyPrintWriter(dictionary, writer));
+            instanciateXStream().marshal(dictionary, new NaaccrPrettyPrintWriter(dictionary, writer, comment));
         }
         catch (XStreamException ex) {
             throw new IOException("Unable to write dictionary", ex);
@@ -949,7 +1013,7 @@ public final class NaaccrXmlDictionaryUtils {
         private String _currentItemId;
         private boolean _namespaceWritten;
 
-        public NaaccrPrettyPrintWriter(NaaccrDictionary dictionary, Writer writer) {
+        public NaaccrPrettyPrintWriter(NaaccrDictionary dictionary, Writer writer, List<String> comment) {
             super(writer, new char[] {' ', ' ', ' ', ' '});
             _dictionary = dictionary;
             _currentItemId = null;
@@ -960,13 +1024,23 @@ public final class NaaccrXmlDictionaryUtils {
                 writer.write(System.lineSeparator());
                 writer.write(System.lineSeparator());
 
-                if (BASE_DICTIONARY_URI_PATTERN.matcher(dictionary.getDictionaryUri()).matches() || DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(dictionary.getDictionaryUri()).matches()) {
+                // write a disclaimer if we have to
+                if (isBaseDictionary(dictionary) || isDefaultUserDictionary(dictionary)) {
                     writer.write("<!-- This dictionary is maintained and provided by the NAACCR organization; it should not be modified.");
                     writer.write(System.lineSeparator());
                     writer.write("     If you need to define additional data items, please create your own user-defined dictionary.");
                     writer.write(System.lineSeparator());
                     writer.write("     Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->");
                     writer.write(System.lineSeparator());
+                    writer.write(System.lineSeparator());
+                }
+
+                // write a comment if we have to
+                if (isBaseDictionary(dictionary) && comment != null && !comment.isEmpty()) {
+                    for (String line : comment) {
+                        writer.write(line);
+                        writer.write(System.lineSeparator());
+                    }
                     writer.write(System.lineSeparator());
                 }
 
