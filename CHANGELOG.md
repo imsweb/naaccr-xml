@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 7.2**
+
+- Changed padding of ki67 to be leftBlank instead of rightBlank in N21 and N18 base dictionary; it was changed by mistake.
+
 **Version 7.1**
 
 - Changed type of ki67 to be text in N21 and N18 base dictionary.

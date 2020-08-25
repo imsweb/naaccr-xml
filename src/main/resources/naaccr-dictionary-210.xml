@@ -2294,7 +2294,8 @@
             naaccrName="Ki-67"
             length="5"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"/>
+            parentXmlElement="Tumor"
+            padding="leftBlank"/>
         <ItemDef naaccrId="kitGeneImmunohistochemistry"
             naaccrNum="3865"
             naaccrName="KIT Gene Immunohistochemistry"
