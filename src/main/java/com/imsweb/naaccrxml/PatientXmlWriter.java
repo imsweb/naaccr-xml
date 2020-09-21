@@ -58,7 +58,7 @@ public class PatientXmlWriter implements PatientWriter {
      * @throws NaaccrIOException if anything goes wrong
      */
     public PatientXmlWriter(Writer writer, NaaccrData rootData) throws NaaccrIOException {
-        this(writer, rootData, null, (NaaccrDictionary) null, null);
+        this(writer, rootData, null, (NaaccrDictionary)null, null);
     }
 
     /**
@@ -69,7 +69,7 @@ public class PatientXmlWriter implements PatientWriter {
      * @throws NaaccrIOException if anything goes wrong
      */
     public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options) throws NaaccrIOException {
-        this(writer, rootData, options, (NaaccrDictionary) null, null);
+        this(writer, rootData, options, (NaaccrDictionary)null, null);
     }
 
     /**
@@ -156,7 +156,8 @@ public class PatientXmlWriter implements PatientWriter {
             // would be better to use a "header writer", I think XStream has one actually; that would be better...
             try {
                 writer.write("<?xml version=\"1.0\"?>" + _newLine + _newLine);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 throw new NaaccrIOException(e.getMessage());
             }
 
@@ -211,9 +212,11 @@ public class PatientXmlWriter implements PatientWriter {
             if (!Boolean.TRUE.equals(options.getIgnoreExtensions()) && rootData.getExtensions() != null)
                 for (Object extension : rootData.getExtensions())
                     _xstream.marshal(extension, _writer);
-        } catch (ConversionException ex) {
+        }
+        catch (ConversionException ex) {
             throw convertSyntaxException(ex);
-        } catch (RuntimeException ex) {
+        }
+        catch (RuntimeException ex) {
             throw new NaaccrIOException("unable to write XML", ex);
         }
     }
@@ -222,9 +225,11 @@ public class PatientXmlWriter implements PatientWriter {
     public void writePatient(Patient patient) throws NaaccrIOException {
         try {
             _xstream.marshal(patient, _writer);
-        } catch (ConversionException ex) {
+        }
+        catch (ConversionException ex) {
             throw convertSyntaxException(ex);
-        } catch (RuntimeException ex) {
+        }
+        catch (RuntimeException ex) {
             throw new NaaccrIOException("unable to write XML", ex);
         }
     }
