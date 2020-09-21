@@ -21,13 +21,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
 import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.internal.NaaccrXmLPrettyPrintWriter;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamContext;
 import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
@@ -44,7 +43,7 @@ public class PatientXmlWriter implements PatientWriter {
     protected XStream _xstream;
 
     // the underlined writer
-    protected HierarchicalStreamWriter _writer;
+    protected NaaccrXmLPrettyPrintWriter _writer;
 
     // cached value for new line character(s)
     protected String _newLine;
@@ -59,7 +58,7 @@ public class PatientXmlWriter implements PatientWriter {
      * @throws NaaccrIOException if anything goes wrong
      */
     public PatientXmlWriter(Writer writer, NaaccrData rootData) throws NaaccrIOException {
-        this(writer, rootData, null, (NaaccrDictionary)null, null);
+        this(writer, rootData, null, (NaaccrDictionary) null, null);
     }
 
     /**
@@ -70,7 +69,7 @@ public class PatientXmlWriter implements PatientWriter {
      * @throws NaaccrIOException if anything goes wrong
      */
     public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options) throws NaaccrIOException {
-        this(writer, rootData, options, (NaaccrDictionary)null, null);
+        this(writer, rootData, options, (NaaccrDictionary) null, null);
     }
 
     /**
@@ -152,18 +151,12 @@ public class PatientXmlWriter implements PatientWriter {
                         dictionaries.put(userDictionary.getDictionaryUri(), userDictionary);
 
             // create the writer
-            _writer = new PrettyPrintWriter(writer, new char[] {' ', ' ', ' ', ' '}) {
-                @Override
-                protected String getNewLine() {
-                    return _newLine;
-                }
-            };
+            _writer = new NaaccrXmLPrettyPrintWriter(writer, _newLine);
 
             // would be better to use a "header writer", I think XStream has one actually; that would be better...
             try {
                 writer.write("<?xml version=\"1.0\"?>" + _newLine + _newLine);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 throw new NaaccrIOException(e.getMessage());
             }
 
@@ -171,19 +164,19 @@ public class PatientXmlWriter implements PatientWriter {
             _writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ROOT);
             if (rootData.getBaseDictionaryUri() == null)
                 throw new NaaccrIOException("base dictionary URI is required");
-            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT, rootData.getBaseDictionaryUri());
+            _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT, rootData.getBaseDictionaryUri());
             if (!dictionaries.isEmpty()) {
                 if (rootData.getUserDictionaryUri() != null && !rootData.getUserDictionaryUri().isEmpty() && !new HashSet<>(rootData.getUserDictionaryUri()).equals(dictionaries.keySet()))
                     throw new NaaccrIOException("Provided dictionaries are not the ones referenced in the rootData");
-                _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT, StringUtils.join(new TreeSet<>(dictionaries.keySet()), ' '));
+                _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT, StringUtils.join(new TreeSet<>(dictionaries.keySet()), ' '));
             }
             if (rootData.getRecordType() == null)
                 throw new NaaccrIOException("record type is required");
-            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE, rootData.getRecordType());
+            _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE, rootData.getRecordType());
             ZonedDateTime generationTime = rootData.getTimeGenerated() != null ? ZonedDateTime.ofInstant(rootData.getTimeGenerated().toInstant(), ZoneId.systemDefault()) : ZonedDateTime.now();
-            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, generationTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, generationTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
             // always use the current specs; doesn't matter the value on the root object...
-            _writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION, NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
+            _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION, NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
 
             // write non-standard attributes
             Set<String> standardAttributes = new HashSet<>();
@@ -194,13 +187,13 @@ public class PatientXmlWriter implements PatientWriter {
             standardAttributes.add(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION);
             for (Entry<String, String> entry : rootData.getExtraRootParameters().entrySet())
                 if (!standardAttributes.contains(entry.getKey()) && !entry.getKey().startsWith("xmlns"))
-                    _writer.addAttribute(entry.getKey(), entry.getValue());
-
-            // add the default namespace, always use the library value...
-            _writer.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
+                    _writer.addAttributeWithNewLine(entry.getKey(), entry.getValue());
 
             // add any user-defined namespaces
             conf.getRegisterNamespaces().forEach((key, value) -> _writer.addAttribute("xmlns:" + key, value));
+
+            // add the default namespace, always use the library value...
+            _writer.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
 
             // create or get the runtime dictionary
             if (conf.getCachedDictionary() == null || !conf.getCachedDictionary().getId().equals(RuntimeNaaccrDictionary.computeId(rootData.getRecordType(), baseDictionary, dictionaries.values())))
@@ -218,11 +211,9 @@ public class PatientXmlWriter implements PatientWriter {
             if (!Boolean.TRUE.equals(options.getIgnoreExtensions()) && rootData.getExtensions() != null)
                 for (Object extension : rootData.getExtensions())
                     _xstream.marshal(extension, _writer);
-        }
-        catch (ConversionException ex) {
+        } catch (ConversionException ex) {
             throw convertSyntaxException(ex);
-        }
-        catch (RuntimeException ex) {
+        } catch (RuntimeException ex) {
             throw new NaaccrIOException("unable to write XML", ex);
         }
     }
@@ -231,11 +222,9 @@ public class PatientXmlWriter implements PatientWriter {
     public void writePatient(Patient patient) throws NaaccrIOException {
         try {
             _xstream.marshal(patient, _writer);
-        }
-        catch (ConversionException ex) {
+        } catch (ConversionException ex) {
             throw convertSyntaxException(ex);
-        }
-        catch (RuntimeException ex) {
+        } catch (RuntimeException ex) {
             throw new NaaccrIOException("unable to write XML", ex);
         }
     }
