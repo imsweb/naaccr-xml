@@ -1020,28 +1020,22 @@ public final class NaaccrXmlDictionaryUtils {
             _namespaceWritten = false;
 
             try {
-                writer.write("<?xml version=\"1.0\"?>");
-                writer.write(System.lineSeparator());
-                writer.write(System.lineSeparator());
+                writer.write("<?xml version=\"1.0\"?>\n\n");
 
                 // write a disclaimer if we have to
                 if (isBaseDictionary(dictionary) || isDefaultUserDictionary(dictionary)) {
-                    writer.write("<!-- This dictionary is maintained and provided by the NAACCR organization; it should not be modified.");
-                    writer.write(System.lineSeparator());
-                    writer.write("     If you need to define additional data items, please create your own user-defined dictionary.");
-                    writer.write(System.lineSeparator());
-                    writer.write("     Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->");
-                    writer.write(System.lineSeparator());
-                    writer.write(System.lineSeparator());
+                    writer.write("<!-- This dictionary is maintained and provided by the NAACCR organization; it should not be modified.\n");
+                    writer.write("     If you need to define additional data items, please create your own user-defined dictionary.\n");
+                    writer.write("     Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->\n\n");
                 }
 
                 // write a comment if we have to
                 if (isBaseDictionary(dictionary) && comment != null && !comment.isEmpty()) {
                     for (String line : comment) {
                         writer.write(line);
-                        writer.write(System.lineSeparator());
+                        writer.write("\n");
                     }
-                    writer.write(System.lineSeparator());
+                    writer.write("\n");
                 }
 
             }
@@ -1075,7 +1069,7 @@ public final class NaaccrXmlDictionaryUtils {
             if ("naaccrId".equals(key))
                 _currentItemId = value;
             if (!isLastAttribute(key))
-                _internalWriter.write(System.lineSeparator() + "           ");
+                _internalWriter.write("\n           ");
 
             if (!_namespaceWritten) {
                 boolean hasDesc = !StringUtils.isBlank(_dictionary.getDescription());
