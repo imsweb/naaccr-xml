@@ -1,5 +1,11 @@
 ## NAACCR XML Version History
 
+**Version 7.3**
+
+- Updated XStream dependency from version 1.4.12 to version 1.4.13.
+- Updated commons-io dependency from version 2.7 to version 2.8.0.
+- Updated commons-lang3 dependency from version 3.10 to version 3.11.
+
 **Version 7.2**
 
 - Added changelog in comment block on top if N18 and N21 dictionaries.
