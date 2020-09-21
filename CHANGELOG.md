@@ -2,6 +2,7 @@
 
 **Version 7.3**
 
+- Now writing each root attribute on its own line.
 - Updated XStream dependency from version 1.4.12 to version 1.4.13.
 - Updated commons-lang3 dependency from version 3.10 to version 3.11.
 
