@@ -22,7 +22,7 @@
 
 %include "read_naaccr_xml_macro.sas";
 %readNaaccrXml(
-  libpath="naaccr-xml-7.2-sas.jar",
+  libpath="naaccr-xml-7.3-sas.jar",
   sourcefile="synthetic-data_naaccr-180-incidence_10-tumors.xml",
   naaccrversion="180", 
   recordtype="I",

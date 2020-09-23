@@ -21,7 +21,7 @@
         (you can check the official NAACCR documentation to find the NAACCR XML IDs to use in that list)
     - dictfile is the path to an optional user-defined dictionary in CSV format (the NAACCR XML Tool that
         is distributed with the macros has an option to load an XML dictionary and save it as CSV);
-        use spaces to separate multiple paths
+        File*Pro can also generate those files); use spaces to separate multiple paths
 
     Note that the macro creates a tmp CSV file in the same folder as the input file; that file will be 
     automatically deleted by the macro when it's done executing.
