@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<NaaccrDictionary dictionaryUri="https://my.organization.org/my-dictionary.xml"
+            specificationVersion="1.4"
+            description="Testing Dictionary"
+            xmlns="http://naaccr.org/naaccrxml">
+    <ItemDefs>
+        <ItemDef naaccrId="myVariable"
+            naaccrNum="10000"
+            naaccrName="My Variable"
+            length="1"
+            recordTypes="A,M,C,I"
+            parentXmlElement="Tumor"/>
+    </ItemDefs>
+</NaaccrDictionary>

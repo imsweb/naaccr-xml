@@ -31,6 +31,7 @@
     07/31/2018 - Fabian Depry - Added new optional parameter for user-defined dictionary.
     12/08/2019 - Fabian Depry - Fixed a mistake in this comment, no change to the behavior of the macro.
     04/22/2020 - Fabian Depry - Added new dictUri parameter needed to properly re-create XML data files.
+    09/29/2020 - Fabian Depry - Renamed dictUri to dicturi; fixed the macro crashing when the param is not provided.
  ************************************************************************************************************/;
 
 /*
@@ -63,7 +64,7 @@ run;
 */
 data _null_;
     declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasCsvToXml', &targetfile, &naaccrversion, &recordtype);
-    j1.callVoidMethod('setDictionary', &dictfile &dictUri);
+    j1.callVoidMethod('setDictionary', &dictfile, &dicturi);
     j1.callVoidMethod('convert', &items);
     j1.callVoidMethod('cleanup');
     j1.delete();

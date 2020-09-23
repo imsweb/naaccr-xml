@@ -186,10 +186,10 @@ public class SasCsvToXml {
                         writer.write("<NaaccrData");
                         writer.write(" baseDictionaryUri=\"http://naaccr.org/naaccrxml/naaccr-dictionary-" + _naaccrVersion + ".xml\"");
                         if (!_dictionaryFiles.isEmpty() && _dictionaryUris != null && !_dictionaryUris.trim().isEmpty())
-                            writer.write(" userDictionaryUri=\"" + _dictionaryUris + "\"");
-                        writer.write(" recordType=\"" + _recordType + "\"");
-                        writer.write(" specificationVersion=\"1.3\"");
-                        writer.write(" xmlns=\"http://naaccr.org/naaccrxml\"");
+                            writer.write("\n            userDictionaryUri=\"" + _dictionaryUris + "\"");
+                        writer.write("\n            recordType=\"" + _recordType + "\"");
+                        writer.write("\n            specificationVersion=\"1.4\"");
+                        writer.write("\n            xmlns=\"http://naaccr.org/naaccrxml\"");
                         writer.write(">\n");
                         for (Entry<String, String> entry : rootFields.entrySet()) {
                             String val = values.get(entry.getKey());
