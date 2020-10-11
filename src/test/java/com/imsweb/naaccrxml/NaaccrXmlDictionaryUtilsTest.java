@@ -249,6 +249,20 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
         item.setNaaccrId("myVariable");
         Assert.assertTrue(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
+
+        // this one defines the allowUnlimitedText with a non text data type
+        item = new NaaccrDictionaryItem();
+        item.setNaaccrId("myVariable");
+        item.setNaaccrName("My Variable");
+        item.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+        item.setNaaccrNum(10000);
+        item.setLength(1);
+        item.setDataType(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS);
+        item.setAllowUnlimitedText(true);
+        dict.setItems(Collections.singletonList(item));
+        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+        item.setAllowUnlimitedText(false);
+        Assert.assertTrue(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
     }
 
     @Test

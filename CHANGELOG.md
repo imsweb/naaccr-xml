@@ -3,6 +3,7 @@
 **Version 7.4**
 
 - Added support for unlimited text fields in dictionary editor (this only affects the standalone program).
+- Improved dictionary validation: unlimited text attribute can only be used with text items.  
 
 **Version 7.3**
 

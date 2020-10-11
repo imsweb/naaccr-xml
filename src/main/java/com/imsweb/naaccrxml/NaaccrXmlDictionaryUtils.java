@@ -564,6 +564,10 @@ public final class NaaccrXmlDictionaryUtils {
                     && !NAACCR_DATA_TYPE_TEXT.equals(type) && !NAACCR_DATA_TYPE_DATE.equals(type))
                 errors.add("invalid value for 'dataType' attribute: " + item.getDataType());
 
+            // validate unlimited text
+            if (Boolean.TRUE.equals(item.getAllowUnlimitedText()) && !NAACCR_DATA_TYPE_TEXT.equals(type))
+                errors.add("allowUnlimitedText attribute can only be used with text data type");
+
             // validate padding
             if (item.getPadding() != null && (!NAACCR_PADDING_LEFT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_LEFT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_RIGHT_BLANK.equals(
                     item.getPadding()) && !NAACCR_PADDING_RIGHT_ZERO.equals(item.getPadding())))
