@@ -73,6 +73,8 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
     private static final String _BLANK_VERSION = "<Any>";
     private static final String _NO_FILE_TEXT = "< no current file, use the load button to load an existing dictionary, or the save-as button to save the current dictionary >";
 
+    private static final String _UNLIMITED_TEXT_TYPE = "unlimited text";
+
     // global GUI components
     private JLabel _currentFileLbl, _currentFilePreLbl, _currentFileMiddleLbl, _currentFilePostLbl;
     private SeerClickableLabel _openCurrentFileLbl, _openParentFolderLbl;
@@ -256,6 +258,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
 
         JComboBox<String> dataTypeBox = new JComboBox<>();
         dataTypeBox.addItem(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
+        dataTypeBox.addItem(_UNLIMITED_TEXT_TYPE);
         dataTypeBox.addItem(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS);
         dataTypeBox.addItem(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_ALPHA);
         dataTypeBox.addItem(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_MIXED);
@@ -276,7 +279,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         _itemsTbl.getColumnModel().getColumn(9).setCellEditor(new DefaultCellEditor(trimmingBox));
 
         _itemsTbl.getSelectionModel().setSelectionInterval(0, 0);
-        SwingUtilities.invokeLater(() -> _itemsTbl.requestFocusInWindow());
+        SwingUtilities.invokeLater(_itemsTbl::requestFocusInWindow);
 
         JScrollPane tableScrollPane = new JScrollPane(_itemsTbl);
         tableScrollPane.setBorder(null);
@@ -464,12 +467,12 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
 
         Vector<String> columns = new Vector<>();
         columns.add("ID");
-        columns.add("Num");
+        columns.add("Number");
         columns.add("Name");
         columns.add("Start Col");
         columns.add("Length");
         columns.add("Record Types");
-        columns.add("Parent XML Element");
+        columns.add("Data Level");
         columns.add("Data Type");
         columns.add("Padding");
         columns.add("Trimming");
@@ -499,7 +502,12 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
                 row.add(item.getLength());
                 row.add(item.getRecordTypes());
                 row.add(item.getParentXmlElement());
-                row.add(item.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : item.getDataType());
+                String type = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT;
+                if (item.getDataType() != null)
+                    type = item.getDataType();
+                if (NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT.equals(type) && Boolean.TRUE.equals(item.getAllowUnlimitedText()))
+                    type = _UNLIMITED_TEXT_TYPE;
+                row.add(type);
                 row.add(item.getPadding() == null ? NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK : item.getPadding());
                 row.add(item.getTrim() == null ? NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL : item.getTrim());
                 rows.add(row);
@@ -525,7 +533,12 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
             item.setLength((Integer)_itemsModel.getValueAt(i, 4));
             item.setRecordTypes((String)_itemsModel.getValueAt(i, 5));
             item.setParentXmlElement((String)_itemsModel.getValueAt(i, 6));
-            item.setDataType((String)_itemsModel.getValueAt(i, 7));
+            String type = (String)_itemsModel.getValueAt(i, 7);
+            if (_UNLIMITED_TEXT_TYPE.equals(type)) {
+                type = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT;
+                item.setAllowUnlimitedText(Boolean.TRUE);
+            }
+            item.setDataType(type);
             item.setPadding((String)_itemsModel.getValueAt(i, 8));
             item.setTrim((String)_itemsModel.getValueAt(i, 9));
             dictionary.addItem(item);
@@ -547,7 +560,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
                 JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Unable to load dictionary.\r\n\r\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
 
-            SwingUtilities.invokeLater(() -> _itemsTbl.requestFocusInWindow());
+            SwingUtilities.invokeLater(_itemsTbl::requestFocusInWindow);
         }
     }
 
@@ -572,7 +585,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
             JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Unable to save dictionary.\r\n\r\nError:\r\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        SwingUtilities.invokeLater(() -> _itemsTbl.requestFocusInWindow());
+        SwingUtilities.invokeLater(_itemsTbl::requestFocusInWindow);
     }
 
     private void performSaveAs() {
@@ -605,7 +618,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
                 JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Unable to save dictionary.\r\n\r\nError:\r\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
 
-            SwingUtilities.invokeLater(() -> _itemsTbl.requestFocusInWindow());
+            SwingUtilities.invokeLater(_itemsTbl::requestFocusInWindow);
         }
     }
 

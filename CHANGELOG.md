@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 7.4**
+
+- Added support for unlimited text fields in dictionary editor (this only affects the standalone program).
+
 **Version 7.3**
 
 - Fixed an error in the write SAS macro that prevented it from correctly running.
