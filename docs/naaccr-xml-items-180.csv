@@ -178,8 +178,8 @@ dateOfInptAdm,590,"Date of Inpt Adm",769,8,"A,M,C,I",Tumor,date
 dateOfInptAdmFlag,591,"Date of Inpt Adm Flag",777,2,"A,M,C,I",Tumor,digits
 dateOfInptDisch,600,"Date of Inpt Disch",779,8,"A,M,C,I",Tumor,date
 dateOfInptDischFlag,601,"Date of Inpt Disch Flag",787,2,"A,M,C,I",Tumor,digits
-dateOfLastCancerStatus,1772,"Date of Last Cancer (tumor) Status",2788,8,"A,M,C,I",Patient,date
-dateOfLastCancerStatusFlag,1773,"Date of Last Cancer (tumor) Status Flag",2796,2,"A,M,C,I",Patient,digits
+dateOfLastCancerStatus,1772,"Date of Last Cancer (tumor) Status",2788,8,"A,M,C,I",Tumor,date
+dateOfLastCancerStatusFlag,1773,"Date of Last Cancer (tumor) Status Flag",2796,2,"A,M,C,I",Tumor,digits
 dateOfLastContact,1750,"Date of Last Contact",2775,8,"A,M,C,I",Patient,date
 dateOfLastContactFlag,1751,"Date of Last Contact Flag",2783,2,"A,M,C,I",Patient,digits
 dateOfMultTumors,445,"Date of Mult Tumors",593,8,"A,M,C,I",Tumor,date

@@ -2,6 +2,7 @@
 
 **Version 7.4**
 
+- Changed data level of dateOfLastCancerStatus and dateOfLastCancerStatusFlag from Patient to Tumor in N18 and N21 dictionaries.
 - Added support for unlimited text fields in dictionary editor (this only affects the standalone program).
 - Improved dictionary validation: unlimited text attribute can only be used with text items.  
 

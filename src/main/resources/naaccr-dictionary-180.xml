@@ -5,6 +5,7 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
+ - 10/16/2020: Changed data level of dateOfLastCancerStatus and dateOfLastCancerStatusFlag from Patient to Tumor.
  - 08/25/2020: Changed padding of ki67 and tnmEditionNumber; was changed by mistake.
  - 08/10/2020: Changed type of ki67 and tnmEditionNumber from digits to text.
  - 08/07/2020: Changed type for morphCodingSysCurrent/Original from digits to mixed.
@@ -5243,7 +5244,7 @@
             startColumn="2788"
             length="8"
             recordTypes="A,M,C,I"
-            parentXmlElement="Patient"
+            parentXmlElement="Tumor"
             dataType="date"/>
         <ItemDef naaccrId="dateOfLastCancerStatusFlag"
             naaccrNum="1773"
@@ -5251,7 +5252,7 @@
             startColumn="2796"
             length="2"
             recordTypes="A,M,C,I"
-            parentXmlElement="Patient"
+            parentXmlElement="Tumor"
             dataType="digits"/>
         <ItemDef naaccrId="recordNumberRecode"
             naaccrNum="1775"
