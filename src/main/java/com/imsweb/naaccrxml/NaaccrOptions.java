@@ -92,7 +92,7 @@ public class NaaccrOptions {
     private Boolean _ignoreExtensions;
 
     /**
-     * When reading XML data, should the renamed standard IDs be automatically translated. Defaults to false.
+     * When reading XML data, should the renamed standard IDs be automatically translated (this also includes items that changed level). Defaults to false.
      */
     private Boolean _translateRenamedStandardItemIds;
 

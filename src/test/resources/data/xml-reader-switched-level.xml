@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-210.xml" recordType="I" specificationVersion="1.4" xmlns="http://naaccr.org/naaccrxml">
+    <Item naaccrId="registryId">0000000001</Item>
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000001</Item>
+        <Item naaccrId="dateOfLastCancerStatus">20200101</Item>
+        <Tumor>
+            <Item naaccrId="primarySite">C123</Item>
+        </Tumor>
+    </Patient>
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000002</Item>
+        <Item naaccrId="dateOfLastCancerStatusFlag">10</Item>
+        <Tumor>
+            <Item naaccrId="primarySite">C123</Item>
+        </Tumor>
+        <Tumor>
+            <Item naaccrId="primarySite">C456</Item>
+        </Tumor>
+    </Patient>
+</NaaccrData>

@@ -16,6 +16,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -150,6 +151,9 @@ public final class NaaccrXmlDictionaryUtils {
         _RENAMED_LONG_NAACCR_18_IDS.put("dateOfSentinelLymphNodeBiopsy", "dateSentinelLymphNodeBiopsy");
     }
 
+    // a couple of items got moved from Patient to Tumor level in N18 and N21
+    private static List<String> _PAT_TO_TUM_CHANGED_18_21_IDS = Arrays.asList("dateOfLastCancerStatus", "dateOfLastCancerStatusFlag");
+
     /**
      * Private constructor, no instanciation...
      */
@@ -161,6 +165,13 @@ public final class NaaccrXmlDictionaryUtils {
      */
     public static Map<String, String> getRenamedLongNaaccr18Ids() {
         return Collections.unmodifiableMap(_RENAMED_LONG_NAACCR_18_IDS);
+    }
+
+    /**
+     * Returns the N18 and N21 items that got changed from Patient level to Tumor level.
+     */
+    public static List<String> getPatToTumorChangedNaaccr18And21Ids() {
+        return Collections.unmodifiableList(_PAT_TO_TUM_CHANGED_18_21_IDS);
     }
 
     /**

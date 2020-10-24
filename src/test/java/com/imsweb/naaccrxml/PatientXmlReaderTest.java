@@ -144,6 +144,18 @@ public class PatientXmlReaderTest {
             Assert.assertEquals("& < > \" '", tumor.getItemValue("rxTextChemo"));
 
         }
+
+        // test a data item that changed level (dateOfLastCancerStatus went from Patient to Tumor in N18 and N21)
+        options.setTranslateRenamedStandardItemIds(true);
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-switched-level.xml")), options)) {
+            Patient patient = reader.readPatient();
+            Assert.assertTrue(patient.getAllValidationErrors().isEmpty());
+            Assert.assertEquals("20200101", patient.getTumor(0).getItemValue("dateOfLastCancerStatus"));
+            patient = reader.readPatient();
+            Assert.assertTrue(patient.getAllValidationErrors().isEmpty());
+            Assert.assertEquals("10", patient.getTumor(0).getItemValue("dateOfLastCancerStatusFlag"));
+            Assert.assertEquals("10", patient.getTumor(1).getItemValue("dateOfLastCancerStatusFlag"));
+        }
     }
 
     @Test
