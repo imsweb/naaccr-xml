@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 7.6**
+
+- Updated embedded JRE to Java 11.0.9 (this only affects the standalone program).
+
 **Version 7.5**
 
 - Added logic to automatically move dateOfLastCancerStatus and dateOfLastCancerStatusFlag to each tumor when reading them at the Patient level.
