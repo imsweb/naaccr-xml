@@ -5,6 +5,7 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
+ - 12/03/2020: Changed data type of physicianPrimarySurg from digits to text.
  - 10/16/2020: Changed data level of dateOfLastCancerStatus and dateOfLastCancerStatusFlag from Patient to Tumor.
  - 08/25/2020: Changed padding of ki67 and tnmEditionNumber; got modified by mistake.
  - 08/10/2020: Changed type of ki67 and tnmEditionNumber from digits to text.
@@ -3735,8 +3736,7 @@
             naaccrName="Physician--Primary Surg"
             length="8"
             recordTypes="A,M,C"
-            parentXmlElement="Tumor"
-            dataType="digits"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="placeOfDeath"
             naaccrNum="1940"
             naaccrName="Place of Death"

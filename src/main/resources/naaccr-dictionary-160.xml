@@ -4164,8 +4164,7 @@
             startColumn="4441"
             length="8"
             recordTypes="A,M,C"
-            parentXmlElement="Tumor"
-            dataType="digits"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="npiPhysician3"
             naaccrNum="2495"
             naaccrName="NPI--Physician 3"

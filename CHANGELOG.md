@@ -2,6 +2,7 @@
 
 **Version 7.6**
 
+- Changed data type for item physicianPrimarySurg from digits to text in all base dictionaries.
 - Added new option for the reader to throw an exception for missing user-defined dictionaries; default is to not throw the exception.
 - Updated embedded JRE to Java 11.0.9 (this only affects the standalone program).
 - Updated XStream dependency from version 1.4.13 to version 1.4.14.

@@ -324,7 +324,7 @@ physician3,2490,"Physician 3",4459,8,"A,M,C",Tumor,text
 physician4,2500,"Physician 4",4477,8,"A,M,C",Tumor,text
 physicianFollowUp,2470,"Physician--Follow-Up",4423,8,"A,M,C",Tumor,text
 physicianManaging,2460,"Physician--Managing",4405,8,"A,M,C",Tumor,text
-physicianPrimarySurg,2480,"Physician--Primary Surg",4441,8,"A,M,C",Tumor,digits
+physicianPrimarySurg,2480,"Physician--Primary Surg",4441,8,"A,M,C",Tumor,text
 placeOfDeath,1940,"Place of Death",2275,3,"A,M,C,I",Patient,text
 placeOfDeathCountry,1944,"Place of Death--Country",452,3,"A,M,C,I",Patient,alpha
 placeOfDeathState,1942,"Place of Death--State",450,2,"A,M,C,I",Patient,alpha
