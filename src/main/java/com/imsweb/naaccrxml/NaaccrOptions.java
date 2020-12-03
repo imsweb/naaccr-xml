@@ -108,6 +108,11 @@ public class NaaccrOptions {
     private Map<String, String> _dictionaryIdsToTranslate;
 
     /**
+     * When reading XML data, whether a missing user-defined dictionary should trigger an exception from the reader. Defaults to false.
+     */
+    private Boolean _allowMissingDictionary;
+
+    /**
      * Convenience method to make the code look nicer, but it really just calls the default constructor!
      * @return an instance of the options with all default values.
      */
@@ -134,6 +139,7 @@ public class NaaccrOptions {
         _itemIdsToTranslate = null;
         _dictionaryIdsToTranslate = null;
         _newLine = NEW_LINE_OS;
+        _allowMissingDictionary = true;
     }
 
     public Boolean getValidateReadValues() {
@@ -262,6 +268,14 @@ public class NaaccrOptions {
 
     public void setDictionaryIdsToTranslate(Map<String, String> dictionaryIdsToTranslate) {
         _dictionaryIdsToTranslate = dictionaryIdsToTranslate;
+    }
+
+    public Boolean getAllowMissingDictionary() {
+        return _allowMissingDictionary;
+    }
+
+    public void setAllowMissingDictionary(Boolean allowMissingDictionary) {
+        _allowMissingDictionary = allowMissingDictionary;
     }
 
     /**

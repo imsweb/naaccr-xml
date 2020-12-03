@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -193,10 +194,18 @@ public class PatientXmlReader implements PatientReader {
                 }
                 _rootData.setUserDictionaryUri(dataUserDictionaries);
             }
-            // let's use only the dictionaries that are referenced in the data file (more can be provided to library, that's OK; it's also OK if some are missing in the library)
+            // let's use only the dictionaries that are referenced in the data file (more can be provided to library, that's OK)
             for (String uri : new HashSet<>(dictionaries.keySet()))
                 if (!_rootData.getUserDictionaryUri().contains(uri))
                     dictionaries.remove(uri);
+            // let's report an error for missing dictionaries (if we have to)
+            if (Boolean.FALSE.equals(options.getAllowMissingDictionary())) {
+                List<String> missingDictionaries = _rootData.getUserDictionaryUri().stream().filter(uri -> !dictionaries.containsKey(uri)).collect(Collectors.toList());
+                if (missingDictionaries.size() > 1)
+                    throw new NaaccrIOException("missing user dictionaries: " + String.join(" ", missingDictionaries));
+                else if (missingDictionaries.size() == 1)
+                    throw new NaaccrIOException("missing user dictionary: " + missingDictionaries.get(0));
+            }
 
             // read the standard attribute: record type            
             _rootData.setRecordType(_reader.getAttribute(NAACCR_XML_ROOT_ATT_REC_TYPE));

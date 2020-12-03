@@ -261,6 +261,16 @@ public class PatientXmlReaderTest {
             Assert.assertNull(tumor.getItemValue("dateSentinelLymphNodeBiopsy")); // new ID
             Assert.assertFalse(tumor.getValidationErrors().isEmpty());
         }
+
+        // test option to throw an exception for missing dictionary
+        options.setAllowMissingDictionary(false);
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-1.xml")), options)) {
+            reader.readPatient();
+            Assert.fail("Should have been an exception here");
+        }
+        catch (NaaccrIOException e) {
+            // expected
+        }
     }
 
     @Test

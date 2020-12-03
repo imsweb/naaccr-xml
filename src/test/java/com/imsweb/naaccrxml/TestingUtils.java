@@ -78,7 +78,7 @@ public class TestingUtils {
     public static File getDataFile(String name) {
         File file = new File(getWorkingDirectory() + "/src/test/resources/data/" + name);
         if (!file.exists())
-            throw new RuntimeException("Unable to find testing data file '" + name + "'");
+            throw new RuntimeException("Unable to find testing data file " + file.getPath());
         return file;
     }
 
@@ -177,12 +177,5 @@ public class TestingUtils {
         File target = new File(targetDir, source.getName());
         FileUtils.copyFile(source, target);
         return target;
-    }
-
-    /**
-     * Deletes the given file, operation might fail and that's OK.
-     */
-    public static void deleteFile(File file) {
-        FileUtils.deleteQuietly(file);
     }
 }

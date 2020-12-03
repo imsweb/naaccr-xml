@@ -2,6 +2,7 @@
 
 **Version 7.6**
 
+- Added new option for the reader to throw an exception for missing user-defined dictionaries; default is to not throw the exception.
 - Updated embedded JRE to Java 11.0.9 (this only affects the standalone program).
 
 **Version 7.5**
