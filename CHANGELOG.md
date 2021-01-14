@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 7.7**
+
+- Updated XStream dependency from version 1.4.14 to version 1.4.15.
+
 **Version 7.6**
 
 - Changed data type for item physicianPrimarySurg from digits to text in all base dictionaries.
