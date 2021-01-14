@@ -2,6 +2,7 @@
 
 **Version 7.7**
 
+- Changed "latest" format (which represents the default format for the library) to 210.
 - Updated XStream dependency from version 1.4.14 to version 1.4.15.
 
 **Version 7.6**
