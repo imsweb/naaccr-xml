@@ -34,10 +34,12 @@ public class PatientXmlWriterTest {
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
             Patient patient = new Patient();
             patient.addItem(new Item("patientIdNumber", "00000001"));
+            patient.addItem(new Item("nameLast", "Smith < Wilson"));
             writer.writePatient(patient);
         }
         Patient patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().get(0);
         Assert.assertEquals("00000001", patient.getItemValue("patientIdNumber"));
+        Assert.assertEquals("Smith < Wilson", patient.getItemValue("nameLast"));
         String xmlAsString = TestingUtils.readFileAsOneString(file);
         Assert.assertTrue(xmlAsString.contains("specificationVersion=\"" + NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION + "\""));
         Assert.assertTrue(xmlAsString.contains("timeGenerated="));
