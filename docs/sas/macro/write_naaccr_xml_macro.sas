@@ -8,8 +8,8 @@
 	- targetfile needs to point to the XML to export  (path can be relative or absolute);
 	    -- if the path ends with ".gz" it will be processed as a GZIP compressed file
 	    -- otherwise it will be processed as an uncompressed file
-	- naaccrversion should be "140", "150", "160" or "180" (defaults to "180"); make sure to provide the proper
-         version or some items might be dropped during the writing process
+	- naaccrversion should be "140", "150", "160", "180" or "210" (required, not default);
+	     make sure to provide the proper version or some items might be dropped during the writing process
 	- recordtype should be "A", "M", "C" or "I" (defaults to "I"); make sure to provide the proper
          type or some items might be dropped during the writing process
     - dataset should be the name of the dataset from which the data should be taken (defaults to alldata)
@@ -32,6 +32,7 @@
     12/08/2019 - Fabian Depry - Fixed a mistake in this comment, no change to the behavior of the macro.
     04/22/2020 - Fabian Depry - Added new dictUri parameter needed to properly re-create XML data files.
     09/29/2020 - Fabian Depry - Renamed dictUri to dicturi; fixed the macro crashing when the param is not provided.
+    02/16/2021 - Fabian Depry - Fixed documentation missing version 210, no change to the actual code.
  ************************************************************************************************************/;
 
 /*

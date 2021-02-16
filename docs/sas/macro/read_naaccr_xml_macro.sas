@@ -9,8 +9,8 @@
 	    -- if the path ends with ".gz" it will be processed as a GZIP compressed file
 	    -- if it ends with ".zip", every file inside the zip file will be processed (into the same SAS data set)
 	    -- otherwise it will be processed as an uncompressed file
-	- naaccrversion should be "140", "150", "160" or "180" (defaults to "180"); make sure to provide the proper
-	    version or some items might be dropped during the reading process
+	- naaccrversion should be "140", "150", "160", "180" or "210" (required, no default);
+	    make sure to provide the proper version or some items might be dropped during the reading process
 	- recordtype should be "A", "M", "C" or "I" (defaults to "I"); make sure to provide the proper type or
 	    some items might be dropped during the reading process
     - dataset should be the name of the dataset into which the data should be loaded (defaults to alldata)
@@ -32,6 +32,7 @@
     06/18/2018 - Fabian Depry - Added "replace" to CSV import proc.
     07/31/2018 - Fabian Depry - Added new optional parameter for user-defined dictionary.
     04/22/2020 - Fabian Depry - Improved comments, no change to the actual code.
+    02/16/2021 - Fabian Depry - Fixed documentation missing version 210, no change to the actual code.
  ************************************************************************************************************/;
 
 /*
