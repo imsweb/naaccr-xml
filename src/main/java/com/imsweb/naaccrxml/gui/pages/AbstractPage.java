@@ -48,8 +48,10 @@ public abstract class AbstractPage extends JPanel {
         return new File(file.getParentFile(), result.toString()).getAbsolutePath();
     }
 
-    protected void performExtractToCsv(NaaccrDictionary dictionary, String filename) {
+    protected void performExtractToCsv(NaaccrDictionary dictionary, File dir, String filename) {
         JFileChooser fileChooser = new JFileChooser();
+        if (dir != null)
+            fileChooser.setCurrentDirectory(dir);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogTitle("Select Target File");
         fileChooser.setApproveButtonToolTipText("Create CSV");

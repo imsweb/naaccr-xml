@@ -85,8 +85,8 @@ public class DictionariesPage extends AbstractPage {
         extractBtn.setOpaque(false);
         extractBtn.addActionListener(e -> {
             NaaccrDictionaryWrapper wrapper = (NaaccrDictionaryWrapper)selectionBox.getSelectedItem();
-            String targetFilename = (wrapper.isBase() ? "naaccr-dictionary-" : "user-defined-naaccr-dictionary-") + wrapper.getDictionary().getNaaccrVersion() + ".csv";
-            performExtractToCsv(wrapper.getDictionary(), targetFilename);
+            String targetFilename = (wrapper.isBase() ? "base-naaccr-dictionary-" : "base-user-defined-naaccr-dictionary-") + wrapper.getDictionary().getNaaccrVersion() + ".csv";
+            performExtractToCsv(wrapper.getDictionary(), null, targetFilename);
         });
         controlsPnl.add(extractBtn);
         controlsPnl.add(Box.createHorizontalStrut(25));

@@ -650,8 +650,18 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
         forceStopCellEditing();
 
         NaaccrDictionary dictionary = performValidate(false);
-        if (dictionary != null)
-            performExtractToCsv(dictionary, dictionary.getNaaccrVersion() == null ? "my-naaccr-dictionary.csv" : ("my-naaccr-" + dictionary.getNaaccrVersion() + "-dictionary.csv"));
+        if (dictionary != null) {
+            String filename;
+            int idx = dictionary.getDictionaryUri().lastIndexOf('/');
+            if (idx > -1)
+                filename = dictionary.getDictionaryUri().substring(idx + 1).replace(".xml", "").replace(".XML", "") + ".csv";
+            else if (dictionary.getNaaccrVersion() != null)
+                filename = "my-naaccr-" + dictionary.getNaaccrVersion() + "-dictionary.csv";
+            else
+                filename = "my-naaccr-dictionary.csv";
+            File dir = _currentFile != null ? _currentFile.getParentFile() : null;
+            performExtractToCsv(dictionary, dir, filename);
+        }
         else
             JOptionPane.showMessageDialog(DictionaryEditorPage.this, "Only a valid dictionary can be extracted.", "Error", JOptionPane.ERROR_MESSAGE);
     }
