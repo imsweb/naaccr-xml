@@ -104,7 +104,7 @@ public class SasUtils {
      * add a numeric suffix to ensure unicity.
      * @param recordType record type
      * @param is input stream to the standard dictionary in CSV format
-     * @param dictionaries user-defined dictionarues in CSV format (see standard ones in docs folder)
+     * @param dictionaries user-defined dictionaries in CSV format (see standard ones in docs folder)
      * @return fields information
      */
     @SuppressWarnings("TryFinallyCanBeTryWithResources")
@@ -144,8 +144,12 @@ public class SasUtils {
         try {
             reader = new LineNumberReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.US_ASCII));
             String line = reader.readLine();
-            while (line != null)
+            while (line != null) {
+                List<String> values = parseCsvLine(reader.getLineNumber(), line);
+                if (values.size() < 7)
+                    throw new IOException("Expected CSV dictionary file to have at least 7 columns, got " + values.size() + " at line " + reader.getLineNumber() + " in " + file.getName());
                 line = reader.readLine();
+            }
         }
         finally {
             if (reader != null) {

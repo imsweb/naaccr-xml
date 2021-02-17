@@ -2,7 +2,8 @@
 
 **Version 7.8**
 
-- Fixed default filename when creating exporting a dictionary to a CSV file.
+- Improved error message in SAS macros when referencing an invalid CSV dictionary.
+- Fixed default filename when creating exporting a dictionary to a CSV file in standalone program.
 - Updated embedded JRE to Java 11.0.10 (this only affects the standalone program).
 
 **Version 7.7**
