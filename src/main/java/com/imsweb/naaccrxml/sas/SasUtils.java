@@ -140,6 +140,9 @@ public class SasUtils {
 
     @SuppressWarnings("TryFinallyCanBeTryWithResources")
     public static void validateCsvDictionary(File file) throws IOException {
+        if (!file.getName().toLowerCase().endsWith(".csv"))
+            throw new IOException("CSV dictionaries should end with a '.csv' file extension");
+
         LineNumberReader reader = null;
         try {
             reader = new LineNumberReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.US_ASCII));
