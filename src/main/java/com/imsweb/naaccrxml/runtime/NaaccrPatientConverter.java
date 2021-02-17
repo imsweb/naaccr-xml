@@ -347,7 +347,7 @@ public class NaaccrPatientConverter implements Converter {
                         if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(parentTag) && NaaccrXmlDictionaryUtils.getPatToTumorChangedNaaccr18And21Ids().contains(rawId))
                             return item;
 
-                reportSyntaxError("invalid parent XML tag; was expecting '" + def.getParentXmlElement() + "' but got '" + parentTag + "'");
+                reportSyntaxError("invalid parent XML tag for '" + def.getNaaccrId() + "'; was expecting '" + def.getParentXmlElement() + "' but got '" + parentTag + "'");
             }
         }
 
