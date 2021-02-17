@@ -141,7 +141,7 @@ public class SasUtils {
     @SuppressWarnings("TryFinallyCanBeTryWithResources")
     public static void validateCsvDictionary(File file) throws IOException {
         if (!file.getName().toLowerCase().endsWith(".csv"))
-            throw new IOException("CSV dictionaries should end with a '.csv' file extension");
+            throw new IOException(file.getName() + "is supposed to be a CSV dictionary but doesn't end with a '.csv' file extension");
 
         LineNumberReader reader = null;
         try {
