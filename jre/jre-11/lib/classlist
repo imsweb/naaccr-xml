@@ -195,7 +195,6 @@ java/io/FilterOutputStream
 java/io/BufferedOutputStream
 java/io/OutputStreamWriter
 java/io/Writer
-sun/nio/cs/StreamEncoder
 java/nio/charset/Charset
 sun/nio/cs/StandardCharsets
 java/nio/charset/spi/CharsetProvider
@@ -229,6 +228,7 @@ jdk/internal/reflect/Reflection
 java/util/HashMap$Node
 jdk/internal/reflect/NativeConstructorAccessorImpl
 jdk/internal/reflect/DelegatingConstructorAccessorImpl
+sun/nio/cs/StreamEncoder
 sun/nio/cs/SingleByte$Encoder
 sun/nio/cs/ArrayEncoder
 java/nio/charset/CharsetEncoder
@@ -1009,6 +1009,10 @@ sun/util/calendar/ZoneInfoFile
 sun/util/calendar/ZoneInfoFile$1
 java/io/DataInputStream
 sun/util/calendar/ZoneInfoFile$ZoneOffsetTransitionRule
+sun/util/calendar/ZoneInfoFile$Checksum
+java/util/zip/CRC32
+java/util/zip/Checksum
+java/util/zip/Checksum$1
 sun/util/spi/CalendarProvider
 sun/util/locale/provider/CalendarProviderImpl
 java/util/Calendar$Builder
@@ -1120,8 +1124,19 @@ java/util/logging/ErrorManager
 java/util/logging/Handler$1
 java/util/logging/StreamHandler$1
 java/util/logging/LogManager$CloseOnReset
+java/time/zone/ZoneRulesProvider
+java/time/zone/ZoneRulesProvider$1
+java/time/zone/TzdbZoneRulesProvider
+java/time/zone/Ser
+java/io/Externalizable
+java/time/Month
+java/time/DayOfWeek
+java/time/zone/ZoneOffsetTransitionRule$TimeDefinition
+java/time/zone/ZoneOffsetTransition
 java/time/ZonedDateTime
 java/time/chrono/ChronoZonedDateTime
+java/time/temporal/TemporalAdjusters
+java/time/zone/ZoneOffsetTransitionRule$1
 java/util/logging/LogRecord$CallerFinder
 java/lang/StackWalker$Option
 java/lang/StackStreamFactory

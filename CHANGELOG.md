@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+**Version 7.8**
+
+- Fixed default filename when creating exporting a dictionary to a CSV file.
+- Updated embedded JRE to Java 11.0.10 (this only affects the standalone program).
+
 **Version 7.7**
 
 - Changed "latest" format (which represents the default format for the library) to 210.
