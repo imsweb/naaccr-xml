@@ -280,5 +280,7 @@ public class SasTest {
         Assert.assertEquals(2, data.getPatients().get(1).getTumors().size());
         Assert.assertEquals("C456", data.getPatients().get(1).getTumors().get(0).getItemValue("primarySite"));
         Assert.assertEquals("C789", data.getPatients().get(1).getTumors().get(1).getItemValue("primarySite"));
+        if (!ignoreFields)
+            Assert.assertEquals("  2.0", data.getPatients().get(1).getTumors().get(1).getItemValue("ki67"));
     }
 }

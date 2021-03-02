@@ -16,6 +16,7 @@
         </Tumor>
         <Tumor>
             <Item naaccrId="primarySite">C789</Item>
+            <Item naaccrId="ki67">  2.0</Item>
         </Tumor>
     </Patient>
 </NaaccrData>
