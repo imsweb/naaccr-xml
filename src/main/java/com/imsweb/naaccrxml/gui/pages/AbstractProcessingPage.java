@@ -191,6 +191,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
 
         pnl.add(buildTextPnl("The following NAACCR versions are supported:"));
+        pnl.add(buildTextPnl("             NAACCR 21"));
         pnl.add(buildTextPnl("             NAACCR 18"));
         pnl.add(buildTextPnl("             NAACCR 16"));
         pnl.add(buildTextPnl("             NAACCR 15"));
@@ -199,7 +200,6 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         pnl.add(Box.createVerticalStrut(25));
         pnl.add(buildTextPnl("The following compressions are supported:"));
         pnl.add(buildTextPnl("             GZip (\".gz\" extension)"));
-        pnl.add(buildTextPnl("             XZ (\".xz\" extension; this compression will usually produce smaller files than GZip but will take longer to process)"));
         pnl.add(buildTextPnl("             Uncompressed (anything not ending in .gz or .xz will be treated as uncompressed)"));
         pnl.add(Box.createVerticalStrut(25));
         pnl.add(buildTextPnl("Note that this utility is not a data conversion tool, it simply translates one format into another."));
