@@ -2,6 +2,7 @@
 
 **Version 7.9**
 
+- Added new parameter to write SAS macro to write NAACCR numbers; optional, defaults to not writing them.
 - Changed padding of ca199PretxLabValue to be leftBlank in base N21 dictionary.
 - Changed padding of sentinelLymphNodesExamined, sentinelLymphNodesPositive and phase1DosePerFraction to be leftZero in base N18 and N21 dictionaries.
 

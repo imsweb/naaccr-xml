@@ -1,4 +1,4 @@
-%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", dictUri="");
+%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", dictUri="", writenum="no");
 
 /************************************************************************************************************;
     This macro writes a given data fileset into a NAACCR XML data file.
@@ -71,7 +71,7 @@ run;
 data _null_;
     declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasCsvToXml', &targetfile, &naaccrversion, &recordtype);
     j1.callVoidMethod('setDictionary', &dictfile, &dicturi);
-    j1.callVoidMethod('setWriteNumbers' &writenum);
+    j1.callVoidMethod('setWriteNumbers', &writenum);
     j1.callVoidMethod('convert', &items);
     j1.callVoidMethod('cleanup');
     j1.delete();
