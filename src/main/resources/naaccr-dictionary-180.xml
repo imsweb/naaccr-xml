@@ -5,6 +5,7 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
+ - 03/12/2021: Changed padding of sentinelLymphNodesExamined, sentinelLymphNodesPositive and phase1DosePerFraction to be leftZero.
  - 12/03/2020: Changed data type of physicianPrimarySurg from digits to text.
  - 10/16/2020: Changed data level of dateOfLastCancerStatus and dateOfLastCancerStatusFlag from Patient to Tumor.
  - 08/25/2020: Changed padding of ki67 and tnmEditionNumber; was changed by mistake.
@@ -1441,7 +1442,8 @@
             length="2"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="digits"
+            padding="leftZero"/>
         <ItemDef naaccrId="sentinelLymphNodesExamined"
             naaccrNum="834"
             naaccrName="Sentinel Lymph Nodes Examined"
@@ -1449,7 +1451,8 @@
             length="2"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="digits"
+            padding="leftZero"/>
         <ItemDef naaccrId="dateSentinelLymphNodeBiopsy"
             naaccrNum="832"
             naaccrName="Date of Sentinel Lymph Node Biopsy"
@@ -4200,7 +4203,8 @@
             length="5"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="digits"
+            padding="leftZero"/>
         <ItemDef naaccrId="phase1NumberOfFractions"
             naaccrNum="1503"
             naaccrName="Phase I Number of Fractions"

@@ -1,4 +1,5 @@
 <!-- Changelog
+ - 03/12/2021: Changed padding of sentinelLymphNodesExamined, sentinelLymphNodesPositive and phase1DosePerFraction to be leftZero.
  - 12/03/2020: Changed data type of physicianPrimarySurg from digits to text.
  - 10/16/2020: Changed data level of dateOfLastCancerStatus and dateOfLastCancerStatusFlag from Patient to Tumor.
  - 08/25/2020: Changed padding of ki67 and tnmEditionNumber; was changed by mistake.
