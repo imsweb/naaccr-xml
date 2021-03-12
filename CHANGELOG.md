@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+**Version 7.9**
+
+- Changed padding of ca199PretxLabValue to be leftBlank in base N21 dictionary.
+- Changed padding of sentinelLymphNodesExamined, sentinelLymphNodesPositive and phase1DosePerFraction to be leftZero in base N18 and N21 dictionaries.
+
 **Version 7.8**
 
 - Improved error message in SAS macros when referencing an invalid CSV dictionary.
