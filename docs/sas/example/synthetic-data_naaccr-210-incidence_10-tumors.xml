@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" recordType="I" timeGenerated="2018-05-24T10:26:06.116-04:00" specificationVersion="1.3" xmlns="http://naaccr.org/naaccrxml">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-210.xml" recordType="I" timeGenerated="2018-05-24T10:26:06.116-04:00" specificationVersion="1.3" xmlns="http://naaccr.org/naaccrxml">
     <Item naaccrId="recordType">I</Item>
-    <Item naaccrId="naaccrRecordVersion">180</Item>
+    <Item naaccrId="naaccrRecordVersion">210</Item>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
         <Item naaccrId="race1">01</Item>

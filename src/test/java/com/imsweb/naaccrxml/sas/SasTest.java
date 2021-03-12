@@ -23,6 +23,7 @@ import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
 import com.imsweb.naaccrxml.TestingUtils;
 import com.imsweb.naaccrxml.entity.NaaccrData;
+import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 
@@ -41,6 +42,10 @@ public class SasTest {
         formats.remove("210");
         if (!formats.isEmpty())
             Assert.fail("Looks like a new format was added, please handle it in the SasXmlToCsv and SasCsvToXml constructors, and adjust this test: " + formats);
+
+        //noinspection ConstantConditions
+        if (!"1.4".equals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION))
+            Assert.fail("Current implementation changed, please adjust it in the SasCsvToXml code!");
     }
 
     @Test
@@ -99,9 +104,11 @@ public class SasTest {
         xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test2-copy.xml");
         createXmlToCsvConverter(xmlFile, csvFile, "180", "A").convert(null, false);
         createCsvToXmlConverter(csvFile, xmlCopyFile, "180", "A").convert(null);
-        List<Tumor> tumors = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(1).getTumors();
-        Assert.assertEquals("9-9/9-9-16 HOSPITAL, DR DOCTOR: XXX BRAIN (9999 CGY), 99 FX’S, XXXX & 9MV tumor #1", tumors.get(0).getItemValue("rxTextRadiation"));
-        Assert.assertEquals("9-9/9-9-16 HOSPITAL, DR DOCTOR: XXX BRAIN (9999 CGY), 99 FX’S, XXXX & 9MV tumor #2", tumors.get(1).getItemValue("rxTextRadiation"));
+        Patient secondPatient = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(1);
+        Assert.assertEquals("00000002", secondPatient.getItemValue("patientIdNumber"));
+        Assert.assertEquals(2, secondPatient.getTumors().size());
+        Assert.assertEquals("9-9/9-9-16 HOSPITAL, DR DOCTOR: XXX BRAIN (9999 CGY), 99 FX’S, XXXX & 9MV tumor #1", secondPatient.getTumors().get(0).getItemValue("rxTextRadiation"));
+        Assert.assertEquals("9-9/9-9-16 HOSPITAL, DR DOCTOR: XXX BRAIN (9999 CGY), 99 FX’S, XXXX & 9MV tumor #2", secondPatient.getTumors().get(1).getItemValue("rxTextRadiation"));
     }
 
     @Test
@@ -257,6 +264,8 @@ public class SasTest {
                     csvDictionaryFiles.stream().map(File::getPath).collect(Collectors.joining(" ")),
                     xmlDictionaries.stream().map(NaaccrDictionary::getDictionaryUri).collect(Collectors.joining(" ")));
         }
+
+        converter.setWriteNumbers("true");
 
         return converter;
     }

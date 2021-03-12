@@ -48,11 +48,16 @@ public class SasXmlReader {
         while (line != null) {
             int itemIdx = line.indexOf("<Item");
             if (itemIdx > -1) {
-                int naaccrIdStart = line.indexOf('\"', itemIdx + 1);
-                if (naaccrIdStart == -1)
-                    naaccrIdStart = line.indexOf('\'', itemIdx + 1);
-                if (naaccrIdStart == -1)
-                    throw new IOException("Unable to find start of NAACCR ID attribute for: " + line);
+                int naaccrIdStart = line.indexOf("naaccrId=\"", itemIdx + 1);
+                if (naaccrIdStart > -1)
+                    naaccrIdStart = naaccrIdStart + 9;
+                else {
+                    naaccrIdStart = line.indexOf("naaccrId='", itemIdx + 1);
+                    if (naaccrIdStart > -1)
+                        naaccrIdStart = naaccrIdStart + 9;
+                    else
+                        throw new IOException("Unable to find start of NAACCR ID attribute for: " + line);
+                }
                 int naaccrIdEnd = line.indexOf('\"', naaccrIdStart + 1);
                 if (naaccrIdEnd == -1)
                     naaccrIdEnd = line.indexOf('\'', naaccrIdStart + 1);

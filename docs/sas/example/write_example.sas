@@ -20,9 +20,9 @@
 
 %include "read_naaccr_xml_macro.sas";
 %readNaaccrXml(
-  libpath="naaccr-xml-7.3-sas.jar",
-  sourcefile="synthetic-data_naaccr-180-incidence_10-tumors.xml",
-  naaccrversion="180", 
+  libpath="naaccr-xml-7.9-sas.jar",
+  sourcefile="synthetic-data_naaccr-210-incidence_10-tumors.xml",
+  naaccrversion="210",
   recordtype="I",
   dataset=fromxml,
   dictfile="my-dictionary.csv"
@@ -35,9 +35,9 @@ run;
 
 %include "write_naaccr_xml_macro.sas";
 %writeNaaccrXml(
-  libpath="naaccr-xml-7.3-sas.jar",
+  libpath="naaccr-xml-7.9-sas.jar",
   targetfile="recreated-from-sas.xml",
-  naaccrversion="180", 
+  naaccrversion="210",
   recordtype="I",
   dataset=fromxml
 );

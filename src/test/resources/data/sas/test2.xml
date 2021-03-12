@@ -13,7 +13,7 @@
         </Tumor>
     </Patient>
     <Patient>
-        <Item naaccrId="patientIdNumber" naaccrNum="20">00000002</Item>
+        <Item naaccrNum="20" naaccrId="patientIdNumber">00000002</Item>
         <Tumor>
             <Item naaccrId="primarySite">C456</Item>
             <Item naaccrId="textStaging">N/A tumor #1</Item>

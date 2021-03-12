@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml"
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-210.xml"
             userDictionaryUri="https://my.organization.org/my-dictionary.xml"
             recordType="I"
             specificationVersion="1.4"

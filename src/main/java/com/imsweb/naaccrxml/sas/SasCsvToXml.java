@@ -35,6 +35,8 @@ public class SasCsvToXml {
 
     private String _dictionaryUris;
 
+    private boolean _writeNumbers;
+
     public SasCsvToXml(String xmlPath, String naaccrVersion, String recordType) {
         this(xmlPath.replace(".xml", ".csv"), xmlPath, naaccrVersion, recordType);
     }
@@ -76,6 +78,8 @@ public class SasCsvToXml {
             System.err.println("!!! Record type needs to be provided");
         if (!"A".equals(_recordType) && !"M".equals(_recordType) && !"C".equals(_recordType) && !"I".equals(_recordType))
             System.err.println("!!! Record type must be A, M, C or I; got " + _recordType);
+
+        _writeNumbers = false;
     }
 
     public void setDictionary(String dictionaryPath, String dictionaryUri) {
@@ -116,6 +120,14 @@ public class SasCsvToXml {
         return _recordType;
     }
 
+    public void setWriteNumbers(String value) {
+        _writeNumbers = value != null && ("true".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value));
+    }
+
+    public String getWriteNumbers() {
+        return _writeNumbers ? "Yes" : "No";
+    }
+
     public List<SasFieldInfo> getFields() {
         return SasUtils.getFields(_naaccrVersion, _recordType, _dictionaryFiles);
     }
@@ -137,6 +149,10 @@ public class SasCsvToXml {
                 for (String s : fields.split(",", -1))
                     requestedFields.add(s.trim());
             }
+
+            Map<String, String> itemNumbers = new HashMap<>();
+            for (SasFieldInfo info : availableFields)
+                itemNumbers.put(info.getNaaccrId(), info.getNum().toString());
 
             Map<String, String> rootFields = new HashMap<>(), patientFields = new HashMap<>(), tumorFields = new HashMap<>();
             for (SasFieldInfo field : availableFields) {
@@ -194,7 +210,7 @@ public class SasCsvToXml {
                         for (Entry<String, String> entry : rootFields.entrySet()) {
                             String val = values.get(entry.getKey());
                             if (val != null && !val.trim().isEmpty())
-                                writer.write("    <Item naaccrId=\"" + entry.getValue() + "\">" + SasUtils.cleanUpValueToWriteAsXml(val) + "</Item>\n");
+                                writer.write(createItemLine("    ", entry.getKey(), itemNumbers.get(entry.getKey()), val));
                         }
                         wroteRoot = true;
                     }
@@ -208,7 +224,7 @@ public class SasCsvToXml {
                         for (Entry<String, String> entry : patientFields.entrySet()) {
                             String val = values.get(entry.getKey());
                             if (val != null && !val.trim().isEmpty())
-                                writer.write("        <Item naaccrId=\"" + entry.getValue() + "\">" + SasUtils.cleanUpValueToWriteAsXml(val) + "</Item>\n");
+                                writer.write(createItemLine("        ", entry.getKey(), itemNumbers.get(entry.getKey()), val));
                         }
                     }
 
@@ -217,7 +233,7 @@ public class SasCsvToXml {
                     for (Entry<String, String> entry : tumorFields.entrySet()) {
                         String val = values.get(entry.getKey());
                         if (val != null && !val.trim().isEmpty())
-                            writer.write("            <Item naaccrId=\"" + entry.getValue() + "\">" + SasUtils.cleanUpValueToWriteAsXml(val) + "</Item>\n");
+                            writer.write(createItemLine("            ", entry.getKey(), itemNumbers.get(entry.getKey()), val));
                     }
                     writer.write("        </Tumor>\n");
 
@@ -245,6 +261,15 @@ public class SasCsvToXml {
         }
 
         System.out.println("Successfully created " + _xmlFile.getAbsolutePath());
+    }
+
+    private String createItemLine(String indentation, String itemId, String itemNumber, String value) {
+        StringBuilder buf = new StringBuilder(indentation);
+        buf.append("<Item naaccrId=\"").append(itemId).append("\"");
+        if (itemNumber != null && _writeNumbers)
+            buf.append(" naaccrNum=\"").append(itemNumber).append("\"");
+        buf.append(">").append(SasUtils.cleanUpValueToWriteAsXml(value)).append("</Item>\n");
+        return buf.toString();
     }
 
     public void cleanup() {

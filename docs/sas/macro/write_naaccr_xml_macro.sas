@@ -1,4 +1,4 @@
-%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="180", recordtype="I", dataset=alldata, items="", dictfile="", dictUri="");
+%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", dictUri="");
 
 /************************************************************************************************************;
     This macro writes a given data fileset into a NAACCR XML data file.
@@ -8,9 +8,10 @@
 	- targetfile needs to point to the XML to export  (path can be relative or absolute);
 	    -- if the path ends with ".gz" it will be processed as a GZIP compressed file
 	    -- otherwise it will be processed as an uncompressed file
-	- naaccrversion should be "140", "150", "160", "180" or "210" (required, not default);
-	     make sure to provide the proper version or some items might be dropped during the writing process
-	- recordtype should be "A", "M", "C" or "I" (defaults to "I"); make sure to provide the proper
+	- naaccrversion should be one of the supported NAACCR versions provided as three digits:
+	    "140", "150", "160", etc... (this parameter is required, no default);
+	    make sure to provide the proper version or some items might be dropped during the reading process
+	- recordtype should be "A", "M", "C" or "I" (required, no default); make sure to provide the proper
          type or some items might be dropped during the writing process
     - dataset should be the name of the dataset from which the data should be taken (defaults to alldata)
     - items is an optional CSV list of fields to write (any other fields will be ignored);
@@ -21,6 +22,7 @@
         is provided, then this one should be provided as well); the URI can be found as a root attribute of the
         XML dictionary (it usually looks like an internet address, but it's rarely a legit address);
         use spaces to separate multiple URIs
+    - writenum should be "yes" or "no" (defaults to "no"); if "yes" then the NAACCR numbers will be written.
 
     Note that the macro creates a tmp CSV file in the same folder as the target file; that file will be 
     automatically deleted by the macro when it's done executing.
@@ -33,6 +35,9 @@
     04/22/2020 - Fabian Depry - Added new dictUri parameter needed to properly re-create XML data files.
     09/29/2020 - Fabian Depry - Renamed dictUri to dicturi; fixed the macro crashing when the param is not provided.
     02/16/2021 - Fabian Depry - Fixed documentation missing version 210, no change to the actual code.
+    03/12/2021 - Fabian Depry - Removed default value for version which was incorrectly set to 180.
+    03/12/2021 - Fabian Depry - Removed default value for record type instead of assuming "I" for incidence.
+    03/12/2021 - Fabian Depry - Added new writenum parameter to allow NAACCR numbers to be written.
  ************************************************************************************************************/;
 
 /*
@@ -66,6 +71,7 @@ run;
 data _null_;
     declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasCsvToXml', &targetfile, &naaccrversion, &recordtype);
     j1.callVoidMethod('setDictionary', &dictfile, &dicturi);
+    j1.callVoidMethod('setWriteNumbers' &writenum);
     j1.callVoidMethod('convert', &items);
     j1.callVoidMethod('cleanup');
     j1.delete();

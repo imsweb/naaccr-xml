@@ -1,4 +1,4 @@
-%MACRO readNaaccrXml(libpath, sourcefile, naaccrversion="180", recordtype="I", dataset=alldata, items="", dictfile="");
+%MACRO readNaaccrXml(libpath, sourcefile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="");
 
 /************************************************************************************************************;
     This macro reads a given NAACCR XML data file and loads the data into a dataset.
@@ -9,9 +9,10 @@
 	    -- if the path ends with ".gz" it will be processed as a GZIP compressed file
 	    -- if it ends with ".zip", every file inside the zip file will be processed (into the same SAS data set)
 	    -- otherwise it will be processed as an uncompressed file
-	- naaccrversion should be "140", "150", "160", "180" or "210" (required, no default);
+	- naaccrversion should be one of the supported NAACCR versions provided as three digits:
+	    "140", "150", "160", etc... (this parameter is required, no default);
 	    make sure to provide the proper version or some items might be dropped during the reading process
-	- recordtype should be "A", "M", "C" or "I" (defaults to "I"); make sure to provide the proper type or
+	- recordtype should be "A", "M", "C" or "I" (required, no default); make sure to provide the proper type or
 	    some items might be dropped during the reading process
     - dataset should be the name of the dataset into which the data should be loaded (defaults to alldata)
     - items is an optional CSV list of fields to read (any other fields will be ignored); if not provided,
@@ -33,6 +34,8 @@
     07/31/2018 - Fabian Depry - Added new optional parameter for user-defined dictionary.
     04/22/2020 - Fabian Depry - Improved comments, no change to the actual code.
     02/16/2021 - Fabian Depry - Fixed documentation missing version 210, no change to the actual code.
+    03/12/2021 - Fabian Depry - Removed default value for version which was incorrectly set to 180.
+    03/12/2021 - Fabian Depry - Removed default value for record type instead of assuming "I" for incidence.
  ************************************************************************************************************/;
 
 /*
