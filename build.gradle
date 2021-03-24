@@ -19,14 +19,14 @@ repositories {
 }
 
 dependencies {
-    api 'com.thoughtworks.xstream:xstream:1.4.15'
+    api 'com.thoughtworks.xstream:xstream:1.4.16'
 
     implementation 'commons-io:commons-io:2.7'
     implementation 'org.apache.commons:commons-lang3:3.11'
 
     testImplementation 'junit:junit:4.13'
-    testImplementation 'com.imsweb:data-generator:1.17'
-    testImplementation 'com.opencsv:opencsv:5.3'
+    testImplementation 'com.imsweb:data-generator:1.19'
+    testImplementation 'com.opencsv:opencsv:5.4'
 }
 
 // enforce UTF-8, display the compilation warnings

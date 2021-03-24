@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 7.10**
+
+- Updated XStream dependency from version 1.4.15 to version 1.4.16.
+
 **Version 7.9**
 
 - Added new parameter to write SAS macro to write NAACCR numbers; optional, defaults to not writing them.
