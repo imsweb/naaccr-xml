@@ -5,6 +5,7 @@ package com.imsweb.naaccrxml.sas;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -50,6 +51,42 @@ public class SasUtilsTest {
         Assert.assertEquals("Evaluate for non-Hodgkin&apos;s lymphoma", SasUtils.cleanUpValueToWriteAsXml("Evaluate for non-Hodgkin's lymphoma"));
         Assert.assertEquals("&apos;Evaluate for non-Hodgkin&apos;s lymphoma&apos;", SasUtils.cleanUpValueToWriteAsXml("'Evaluate for non-Hodgkin's lymphoma'"));
         Assert.assertEquals("Evaluate for non-Hodgkin&apos;s lymphoma &amp; something", SasUtils.cleanUpValueToWriteAsXml("Evaluate for non-Hodgkin's lymphoma & something"));
+    }
 
+    @Test
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public void testExtractRequestedFields() throws IOException {
+        File file = new File(TestingUtils.getBuildDirectory(), "included-items.csv");
+
+        try {
+            TestingUtils.writeFile(file, "HEADER\nfield1\nfield2");
+            Set<String> result = SasUtils.extractRequestedFields(file.getPath());
+            Assert.assertEquals(2, result.size());
+            Assert.assertTrue(result.contains("field1"));
+            Assert.assertTrue(result.contains("field2"));
+
+            TestingUtils.writeFile(file, "\"HEADER\"\n\"field1\"\n\"field2\"");
+            result = SasUtils.extractRequestedFields(file.getPath());
+            Assert.assertEquals(2, result.size());
+            Assert.assertTrue(result.contains("field1"));
+            Assert.assertTrue(result.contains("field2"));
+
+            result = SasUtils.extractRequestedFields("field1,field2");
+            Assert.assertEquals(2, result.size());
+            Assert.assertTrue(result.contains("field1"));
+            Assert.assertTrue(result.contains("field2"));
+
+            result = SasUtils.extractRequestedFields("field1, field2");
+            Assert.assertEquals(2, result.size());
+            Assert.assertTrue(result.contains("field1"));
+            Assert.assertTrue(result.contains("field2"));
+
+            result = SasUtils.extractRequestedFields("field1");
+            Assert.assertEquals(1, result.size());
+            Assert.assertTrue(result.contains("field1"));
+        }
+        finally {
+            file.delete();
+        }
     }
 }

@@ -17,9 +17,11 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -30,6 +32,7 @@ import java.util.zip.GZIPOutputStream;
  * <br/><br/>
  * THIS CLASS IS IMPLEMENTED TO BE COMPATIBLE WITH JAVA 7; BE CAREFUL WHEN MODIFYING IT.
  */
+@SuppressWarnings("ALL")
 public class SasUtils {
 
     private static final Map<String, String> _TO_ESCAPE = new LinkedHashMap<>();
@@ -107,7 +110,6 @@ public class SasUtils {
      * @param dictionaries user-defined dictionaries in CSV format (see standard ones in docs folder)
      * @return fields information
      */
-    @SuppressWarnings("TryFinallyCanBeTryWithResources")
     public static List<SasFieldInfo> getFields(String recordType, InputStream is, List<File> dictionaries) {
         Map<String, AtomicInteger> counters = new HashMap<>();
 
@@ -138,7 +140,6 @@ public class SasUtils {
         return result;
     }
 
-    @SuppressWarnings("TryFinallyCanBeTryWithResources")
     public static void validateCsvDictionary(File file) throws IOException {
         if (!file.getName().toLowerCase().endsWith(".csv"))
             throw new IOException(file.getName() + "is supposed to be a CSV dictionary but doesn't end with a '.csv' file extension");
@@ -320,5 +321,59 @@ public class SasUtils {
             value = value.replace(entry.getKey(), entry.getValue());
 
         return value;
+    }
+
+    public static Set<String> extractRequestedFields(String fields) {
+        if (fields == null || fields.trim().isEmpty())
+            return null;
+
+        Set<String> requestedFields = new HashSet<>();
+
+        if (fields.contains(".")) {
+            File file = new File(fields);
+            if (!file.exists()) {
+                System.err.println("!!! Invalid file for included items: " + fields);
+                return null;
+            }
+
+            if (!file.getName().toLowerCase().endsWith(".csv")) {
+                System.err.println("!!! Invalid file for included items, file must have the '.csv' extension: " + fields);
+                return null;
+            }
+
+            LineNumberReader reader = null;
+            try {
+                reader = new LineNumberReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.US_ASCII));
+                reader.readLine(); // ignore headers
+                String line = reader.readLine();
+                while (line != null) {
+                    List<String> values = parseCsvLine(reader.getLineNumber(), line);
+
+                    if (!values.isEmpty())
+                        requestedFields.add(values.get(0).trim());
+
+                    line = reader.readLine();
+                }
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    }
+                    catch (IOException e) {
+                        // ignored
+                    }
+                }
+            }
+        }
+        else {
+            for (String s : fields.replace(" ", "").split(",", -1))
+                requestedFields.add(s);
+        }
+
+        return requestedFields;
     }
 }

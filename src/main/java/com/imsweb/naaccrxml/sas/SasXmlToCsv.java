@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,12 +142,7 @@ public class SasXmlToCsv {
 
     public void convert(String fields, boolean addExtraCharFields, List<SasFieldInfo> availableFields) throws IOException {
         try {
-            Set<String> requestedFields = null;
-            if (fields != null && !fields.trim().isEmpty()) {
-                requestedFields = new HashSet<>();
-                for (String s : fields.replace(" ", "").split(",", -1))
-                    requestedFields.add(s);
-            }
+            Set<String> requestedFields = SasUtils.extractRequestedFields(fields);
 
             Map<String, Integer> allFields = new LinkedHashMap<>();
             for (SasFieldInfo field : availableFields) {

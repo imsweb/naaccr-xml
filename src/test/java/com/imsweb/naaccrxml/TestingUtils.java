@@ -171,6 +171,15 @@ public class TestingUtils {
     }
 
     /**
+     * Writes the given content to the given file.
+     */
+    public static void writeFile(File file, String content) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(content);
+        }
+    }
+
+    /**
      * Copies the given file to the given directory.
      */
     public static File copyFile(File source, File targetDir) throws IOException {
