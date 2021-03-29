@@ -913,8 +913,31 @@ public final class NaaccrXmlDictionaryUtils {
      */
     public static void writeDictionaryToCsv(NaaccrDictionary dictionary, File file) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.US_ASCII))) {
+            writeDictionaryToCsv(dictionary, writer);
+        }
+    }
+
+    /**
+     * Write the given dictionary to the give target writer using the CSV format.
+     * <br/><br/>
+     * Columns:
+     * <ol>
+     * <li>NAACCR ID</li>
+     * <li>NAACCR number</li>
+     * <li>Name</li>
+     * <li>Start Column</li>
+     * <li>Length</li>
+     * <li>Record Types</li>
+     * <li>Parent XML Element</li>
+     * <li>Data Type</li>
+     * </ol>
+     * @param dictionary dictionary to write
+     * @param writer target writer
+     */
+    public static void writeDictionaryToCsv(NaaccrDictionary dictionary, Writer writer) throws IOException {
+        try {
             writer.write("NAACCR XML ID,NAACCR Number,Name,Start Column,Length,Record Types,Parent XML Element,Data Type");
-            writer.newLine();
+            writer.write(System.lineSeparator());
             dictionary.getItems().stream()
                     .sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId))
                     .forEach(item -> {
@@ -934,7 +957,7 @@ public final class NaaccrXmlDictionaryUtils {
                             writer.write(item.getParentXmlElement() == null ? "" : item.getParentXmlElement());
                             writer.write(",");
                             writer.write(item.getDataType() == null ? "" : item.getDataType());
-                            writer.newLine();
+                            writer.write(System.lineSeparator());
                         }
                         catch (IOException | RuntimeException ex1) {
                             throw new RuntimeException(ex1); // doing that to make sure the loop is broken...

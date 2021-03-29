@@ -4,6 +4,7 @@
 package com.imsweb.naaccrxml;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,6 +20,9 @@ import java.util.regex.Pattern;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
 
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
@@ -450,6 +454,20 @@ public class NaaccrXmlDictionaryUtilsTest {
     @Test
     public void testGetMergedDictionaries() {
         Assert.assertNotNull(NaaccrXmlDictionaryUtils.getMergedDictionaries(NaaccrFormat.NAACCR_VERSION_160));
+    }
+
+    @Test
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public void testWriteDictionaryToCsv() throws IOException, CsvException {
+        NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(NaaccrFormat.NAACCR_VERSION_LATEST);
+        File file = new File(TestingUtils.getBuildDirectory(), "dictionary.csv");
+        NaaccrXmlDictionaryUtils.writeDictionaryToCsv(dictionary, file);
+        try (FileReader reader = new FileReader(file)) {
+            Assert.assertTrue(new CSVReader(reader).readAll().size() > 0);
+        }
+        finally {
+            file.delete();
+        }
     }
 
     @Test

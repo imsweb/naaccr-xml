@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 7.11**
+
+- Added new method utility method to stream a given dictionary to a given reader.
+
 **Version 7.10**
 
 - Updated XStream dependency from version 1.4.15 to version 1.4.16.
