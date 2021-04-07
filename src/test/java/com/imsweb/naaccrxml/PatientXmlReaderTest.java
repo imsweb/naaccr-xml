@@ -47,6 +47,7 @@ public class PatientXmlReaderTest {
         // one patient with one tumor
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-one-patient-one-tumor.xml")), options)) {
             Patient patient = reader.readPatient();
+            Assert.assertTrue(patient.getAllValidationErrors().isEmpty());
             Assert.assertEquals(2, patient.getStartLineNumber().intValue());
             Assert.assertEquals(7, patient.getEndLineNumber().intValue());
             Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
