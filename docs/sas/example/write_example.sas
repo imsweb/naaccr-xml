@@ -35,7 +35,7 @@ run;
 
 %include "write_naaccr_xml_macro.sas";
 %writeNaaccrXml(
-  libpath="naaccr-xml-7.9-sas.jar",
+  libpath="naaccr-xml-7.12-sas.jar",
   targetfile="recreated-from-sas.xml",
   naaccrversion="210",
   recordtype="I",
