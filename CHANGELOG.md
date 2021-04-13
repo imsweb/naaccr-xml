@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 7.12**
+
+- Fixed validation of text values containing new lines.
+
 **Version 7.11**
 
 - Added new method utility method to stream a given dictionary to a given reader.
