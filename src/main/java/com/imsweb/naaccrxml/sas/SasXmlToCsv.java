@@ -3,13 +3,11 @@
  */
 package com.imsweb.naaccrxml.sas;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -189,7 +187,7 @@ public class SasXmlToCsv {
                         zipIs = new ZipInputStream(new FileInputStream(_xmlFile));
                         ZipEntry entry = zipIs.getNextEntry();
                         while (entry != null) {
-                            SasXmlReader reader = new SasXmlReader(new BufferedReader(new InputStreamReader(zipFile.getInputStream(entry), StandardCharsets.UTF_8)));
+                            SasXmlReader reader = new SasXmlReader(SasUtils.createReader(zipFile.getInputStream(entry), entry.getName()));
                             convertSingleFile(reader, writer, addExtraCharFields, allFields);
                             entry = zipIs.getNextEntry();
                         }

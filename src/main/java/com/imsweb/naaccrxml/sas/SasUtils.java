@@ -75,6 +75,17 @@ public class SasUtils {
     }
 
     /**
+     * Creates a reader from the given file. Support GZIP compressed files.
+     * @param file file to read
+     * @return reader
+     */
+    public static BufferedReader createReader(InputStream is, String name) throws IOException {
+        if (name.toLowerCase().endsWith(".gz"))
+            is = new GZIPInputStream(is);
+        return new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+    }
+
+    /**
      * Creates a writer from the given file. Supports GZIP compressed files.
      * @param file file to write
      * @return writer
