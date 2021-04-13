@@ -410,18 +410,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertFalse(pattern.matcher("1.").matches());
 
         // "text": no checking on this value
-        pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
-        Assert.assertTrue(pattern.matcher("A").matches());
-        Assert.assertTrue(pattern.matcher("AVALUE").matches());
-        Assert.assertTrue(pattern.matcher("A VALUE").matches());
-        Assert.assertTrue(pattern.matcher(" A").matches());
-        Assert.assertTrue(pattern.matcher("A ").matches());
-        Assert.assertTrue(pattern.matcher("a").matches());
-        Assert.assertTrue(pattern.matcher("a value").matches());
-        Assert.assertTrue(pattern.matcher("123").matches());
-        Assert.assertTrue(pattern.matcher("A123").matches());
-        Assert.assertTrue(pattern.matcher("123A").matches());
-        Assert.assertTrue(pattern.matcher("A!").matches());
+        Assert.assertNull(NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT));
 
         // "date": digits, YYYY or YYYYMM or YYYYMMDD
         pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DATE);
