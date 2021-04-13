@@ -85,7 +85,6 @@ public final class NaaccrXmlDictionaryUtils {
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DIGITS, Pattern.compile("^[0-9]+$"));
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_MIXED, Pattern.compile("^[A-Z0-9]+$"));
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_NUMERIC, Pattern.compile("^[0-9]+(\\.[0-9]+)?$"));
-        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_TEXT, Pattern.compile("^.+$"));
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)[0-9][0-9]((0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])?)?$"));
     }
 
@@ -152,7 +151,7 @@ public final class NaaccrXmlDictionaryUtils {
     }
 
     // a couple of items got moved from Patient to Tumor level in N18 and N21
-    private static List<String> _PAT_TO_TUM_CHANGED_18_21_IDS = Arrays.asList("dateOfLastCancerStatus", "dateOfLastCancerStatusFlag");
+    private static final List<String> _PAT_TO_TUM_CHANGED_18_21_IDS = Arrays.asList("dateOfLastCancerStatus", "dateOfLastCancerStatusFlag");
 
     /**
      * Private constructor, no instanciation...

@@ -49,11 +49,11 @@ public class PatientXmlReaderTest {
             Patient patient = reader.readPatient();
             Assert.assertTrue(patient.getAllValidationErrors().isEmpty());
             Assert.assertEquals(2, patient.getStartLineNumber().intValue());
-            Assert.assertEquals(7, patient.getEndLineNumber().intValue());
+            Assert.assertEquals(10, patient.getEndLineNumber().intValue());
             Assert.assertEquals("00000001", patient.getItem("patientIdNumber").getValue());
             Assert.assertEquals(1, patient.getTumors().size());
             Assert.assertEquals(4, patient.getTumor(0).getStartLineNumber().intValue());
-            Assert.assertEquals(6, patient.getTumor(0).getEndLineNumber().intValue());
+            Assert.assertEquals(9, patient.getTumor(0).getEndLineNumber().intValue());
             Assert.assertEquals("C123", patient.getTumor(0).getItem("primarySite").getValue());
             Assert.assertNull(reader.readPatient());
         }
@@ -280,7 +280,7 @@ public class PatientXmlReaderTest {
         NaaccrOptions options = new NaaccrOptions();
         options.setUseStrictNamespaces(false);
 
-        NaaccrDictionary dict = TestingUtils.createUserDictionary(SpecificationVersion.SPEC_1_1); // has to be this version since one of the test uses a regex
+        NaaccrDictionary dict = TestingUtils.createUserDictionary(SpecificationVersion.SPEC_1_1);
         Assert.assertNotNull(dict.getItemByNaaccrId("myVariable"));
         Assert.assertNotNull(dict.getItemByNaaccrNum(10000));
 
@@ -294,15 +294,6 @@ public class PatientXmlReaderTest {
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-2.xml")), options, dict, null)) {
             Patient patient = reader.readPatient();
             Assert.assertEquals("1", patient.getTumor(0).getItemValue("myVariable"));
-        }
-
-        // value is not correct according to the provided regex (error should be reported on the item itself)
-        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-user-dict-3.xml")), options, dict, null)) {
-            Patient patient = reader.readPatient();
-            Assert.assertEquals("09", patient.getTumor(0).getItemValue("myVariable"));
-            Assert.assertNotNull(patient.getTumor(0).getItem("myVariable").getValidationError());
-            Assert.assertFalse(patient.getTumor(0).getAllValidationErrors().isEmpty());
-            Assert.assertTrue(patient.getTumor(0).getValidationErrors().isEmpty());
         }
 
         // create a list with two user dictionaries

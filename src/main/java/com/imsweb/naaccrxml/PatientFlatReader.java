@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import com.imsweb.naaccrxml.entity.AbstractEntity;
 import com.imsweb.naaccrxml.entity.Item;
@@ -318,10 +319,11 @@ public class PatientFlatReader implements PatientReader {
                     if (_options.getValidateReadValues()) {
                         if (NaaccrXmlDictionaryUtils.isFullLengthRequiredForType(def.getDataType()) && item.getValue().length() < def.getLength())
                             reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_SHORT, def.getLength(), item.getValue().length());
-                        else if (def.getDataType() != null && !NaaccrXmlDictionaryUtils.getDataTypePattern(def.getDataType()).matcher(item.getValue()).matches())
-                            reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
-                        else if (def.getRegexValidation() != null && !def.getRegexValidation().matcher(item.getValue()).matches())
-                            reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_REGEX, def.getRegexValidation());
+                        else if (def.getDataType() != null) {
+                            Pattern pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(def.getDataType());
+                            if (pattern != null && !pattern.matcher(item.getValue()).matches())
+                                reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
+                        }
                     }
                 }
             }

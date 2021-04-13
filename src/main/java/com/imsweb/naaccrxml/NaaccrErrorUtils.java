@@ -19,7 +19,8 @@ public class NaaccrErrorUtils {
     public static final String CODE_VAL_TOO_LONG = "Value too long";
     public static final String CODE_VAL_TOO_SHORT = "Value too short";
     public static final String CODE_VAL_DATA_TYPE = "Value invalid for data type";
-    public static final String CODE_VAL_REGEX = "Value invalid for regular expression";
+    public static final String CODE_VAL_START_SPACE = "Value starts with a space";
+    public static final String CODE_VAL_END_SPACE = "Value ends with a space";
     public static final String CODE_VAL_PAT_VS_TUM = "Patient value not consistent among tumors";
     public static final String CODE_VAL_ROOT_VS_TUM = "NaaccrData value not consistent among tumors";
     public static final String CODE_BAD_TIME_GENERATED = "Invalid Time Generated";
@@ -34,7 +35,8 @@ public class NaaccrErrorUtils {
         _MESSAGES.put(CODE_VAL_TOO_LONG, "value too long, expected at most ${0} character(s) but got ${1}");
         _MESSAGES.put(CODE_VAL_TOO_SHORT, "value too short, expected exactly ${0} character(s) but got ${1}");
         _MESSAGES.put(CODE_VAL_DATA_TYPE, "invalid value according to data type '${0}'");
-        _MESSAGES.put(CODE_VAL_REGEX, "invalid value according to regular expression '${0}'");
+        _MESSAGES.put(CODE_VAL_START_SPACE, "value starts with one ore several spaces");
+        _MESSAGES.put(CODE_VAL_END_SPACE, "value ends with one ore several spaces");
         _MESSAGES.put(CODE_VAL_PAT_VS_TUM, "item '${0}' is a patient-level and should have the same value for all the records of the patient");
         _MESSAGES.put(CODE_VAL_ROOT_VS_TUM, "item '${0}' is a root-level item and should have the same value for all the records of the transmitted data");
         _MESSAGES.put(CODE_BAD_TIME_GENERATED, "invalid value for 'timeGenerated' attribute: {0}");

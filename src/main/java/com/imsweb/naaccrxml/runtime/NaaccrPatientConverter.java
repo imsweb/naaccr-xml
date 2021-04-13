@@ -331,10 +331,16 @@ public class NaaccrPatientConverter implements Converter {
                 if (_context.getOptions().getValidateReadValues()) {
                     if (NaaccrXmlDictionaryUtils.isFullLengthRequiredForType(def.getDataType()) && item.getValue().length() < def.getLength())
                         reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_SHORT, def.getLength(), item.getValue().length());
-                    else if (def.getDataType() != null && !NaaccrXmlDictionaryUtils.getDataTypePattern(def.getDataType()).matcher(item.getValue()).matches())
-                        reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
-                    else if (def.getRegexValidation() != null && !def.getRegexValidation().matcher(item.getValue()).matches())
-                        reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_REGEX, def.getRegexValidation());
+                    else if (def.getDataType() != null) {
+                        Pattern pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(def.getDataType());
+                        if (pattern != null && !pattern.matcher(item.getValue()).matches())
+                            reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_DATA_TYPE, def.getDataType());
+                    }
+
+                    if (item.getValue().startsWith(" "))
+                        reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_START_SPACE);
+                    if (item.getValue().endsWith(" "))
+                        reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_END_SPACE);
                 }
             }
 
