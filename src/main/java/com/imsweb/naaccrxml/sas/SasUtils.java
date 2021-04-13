@@ -334,12 +334,17 @@ public class SasUtils {
         return value;
     }
 
-    public static Set<String> extractRequestedFields(String fields) {
+    public static Set<String> extractRequestedFields(String fields, List<SasFieldInfo> allFields) {
         if (fields == null || fields.trim().isEmpty())
             return null;
 
+        Set<String> allowedIds = new HashSet<>();
+        for (SasFieldInfo info : allFields)
+            allowedIds.add(info.getNaaccrId());
+
         Set<String> requestedFields = new HashSet<>();
 
+        // if the fields string contains a period, handle it as a CSV file
         if (fields.contains(".")) {
             File file = new File(fields);
             if (!file.exists()) {
@@ -360,8 +365,13 @@ public class SasUtils {
                 while (line != null) {
                     List<String> values = parseCsvLine(reader.getLineNumber(), line);
 
-                    if (!values.isEmpty())
-                        requestedFields.add(values.get(0).trim());
+                    if (!values.isEmpty()) {
+                        String xmlId = values.get(0).trim();
+                        if (allowedIds.contains(xmlId))
+                            requestedFields.add(xmlId);
+                        else
+                            System.err.println("!!! Invalid NAACCR XML ID requested: " + xmlId);
+                    }
 
                     line = reader.readLine();
                 }
@@ -381,8 +391,12 @@ public class SasUtils {
             }
         }
         else {
-            for (String s : fields.replace(" ", "").split(",", -1))
-                requestedFields.add(s);
+            for (String xmlId : fields.replace(" ", "").split(",", -1)) {
+                if (allowedIds.contains(xmlId))
+                    requestedFields.add(xmlId);
+                else
+                    System.err.println("!!! Invalid NAACCR XML ID requested: " + xmlId);
+            }
         }
 
         return requestedFields;

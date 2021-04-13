@@ -140,7 +140,7 @@ public class SasXmlToCsv {
 
     public void convert(String fields, boolean addExtraCharFields, List<SasFieldInfo> availableFields) throws IOException {
         try {
-            Set<String> requestedFields = SasUtils.extractRequestedFields(fields);
+            Set<String> requestedFields = SasUtils.extractRequestedFields(fields, availableFields);
 
             Map<String, Integer> allFields = new LinkedHashMap<>();
             for (SasFieldInfo field : availableFields) {

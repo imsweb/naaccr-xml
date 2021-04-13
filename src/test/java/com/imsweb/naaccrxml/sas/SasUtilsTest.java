@@ -5,6 +5,8 @@ package com.imsweb.naaccrxml.sas;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -58,30 +60,38 @@ public class SasUtilsTest {
     public void testExtractRequestedFields() throws IOException {
         File file = new File(TestingUtils.getBuildDirectory(), "included-items.csv");
 
+        List<SasFieldInfo> availableFields = new ArrayList<>();
+        availableFields.add(new SasFieldInfo("field1", "field1", "Tumor", 1, 1, "Field 1", null));
+        availableFields.add(new SasFieldInfo("field2", "field2", "Tumor", 1, 1, "Field 2", null));
+
         try {
             TestingUtils.writeFile(file, "HEADER\nfield1\nfield2");
-            Set<String> result = SasUtils.extractRequestedFields(file.getPath());
+            Set<String> result = SasUtils.extractRequestedFields(file.getPath(), availableFields);
             Assert.assertEquals(2, result.size());
             Assert.assertTrue(result.contains("field1"));
             Assert.assertTrue(result.contains("field2"));
 
             TestingUtils.writeFile(file, "\"HEADER\"\n\"field1\"\n\"field2\"");
-            result = SasUtils.extractRequestedFields(file.getPath());
+            result = SasUtils.extractRequestedFields(file.getPath(), availableFields);
             Assert.assertEquals(2, result.size());
             Assert.assertTrue(result.contains("field1"));
             Assert.assertTrue(result.contains("field2"));
 
-            result = SasUtils.extractRequestedFields("field1,field2");
+            result = SasUtils.extractRequestedFields("field1,field2", availableFields);
             Assert.assertEquals(2, result.size());
             Assert.assertTrue(result.contains("field1"));
             Assert.assertTrue(result.contains("field2"));
 
-            result = SasUtils.extractRequestedFields("field1, field2");
+            result = SasUtils.extractRequestedFields("field1, field2", availableFields);
             Assert.assertEquals(2, result.size());
             Assert.assertTrue(result.contains("field1"));
             Assert.assertTrue(result.contains("field2"));
 
-            result = SasUtils.extractRequestedFields("field1");
+            result = SasUtils.extractRequestedFields("field1", availableFields);
+            Assert.assertEquals(1, result.size());
+            Assert.assertTrue(result.contains("field1"));
+
+            result = SasUtils.extractRequestedFields("field1,unknown", availableFields);
             Assert.assertEquals(1, result.size());
             Assert.assertTrue(result.contains("field1"));
         }

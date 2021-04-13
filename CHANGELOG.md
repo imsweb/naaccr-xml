@@ -3,6 +3,8 @@
 **Version 7.12**
 
 - Fixed validation of text values containing new lines.
+- Improved SAS macros, added ability to provide items to include as a CSV file.
+- Improved read SAS macro, added ability to process compressed files inside a source ZIP file.
 
 **Version 7.11**
 

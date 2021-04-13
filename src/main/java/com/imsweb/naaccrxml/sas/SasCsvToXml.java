@@ -142,7 +142,7 @@ public class SasCsvToXml {
     public void convert(String fields, List<SasFieldInfo> availableFields) throws IOException {
         System.out.println("Starting converting CSV to XML...");
         try {
-            Set<String> requestedFields = SasUtils.extractRequestedFields(fields);
+            Set<String> requestedFields = SasUtils.extractRequestedFields(fields, availableFields);
 
             Map<String, String> itemNumbers = new HashMap<>();
             for (SasFieldInfo info : availableFields)

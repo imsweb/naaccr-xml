@@ -7,22 +7,37 @@
 	- libpath needs to point to the Java SAS library (path can be relative or absolute)
 	- sourcefile needs to point to the XML to import (path can be relative or absolute);
 	    -- if the path ends with ".gz" it will be processed as a GZIP compressed file
-	    -- if it ends with ".zip", every file inside the zip file will be processed (into the same SAS data set)
+	    -- if it ends with ".zip", every file inside the zip file will be processed (into the same SAS data set);
+	       the inner files can be compressed (".gz") or uncompressed.
 	    -- otherwise it will be processed as an uncompressed file
 	- naaccrversion should be one of the supported NAACCR versions provided as three digits:
 	    "140", "150", "160", etc... (this parameter is required, no default);
 	    make sure to provide the proper version or some items might be dropped during the reading process
-	- recordtype should be "A", "M", "C" or "I" (required, no default); make sure to provide the proper type or
-	    some items might be dropped during the reading process
+	- recordtype should be "A", "M", "C" or "I" (required, no default);
+	    make sure to provide the proper type or some items might be dropped during the reading process
     - dataset should be the name of the dataset into which the data should be loaded (defaults to alldata)
-    - items is an optional CSV list of fields to read (any other fields will be ignored); if not provided,
-        the data set will contain all standard items plus any non-standard items provided via the extra dictionary;
-        be aware that creating a data set containing all items will be MUCH slower than creating one for just a few items,
-        and so if you only need a handful of items to do your analysis, it is strongly recommended to provide those items
-        (you can check the official NAACCR documentation to find the NAACCR XML IDs to use in that list)
+    - items is an optional list of items to read (any items not in the list will be ignored);
+        if not provided, the data set will contain all standard items plus any non-standard items provided
+        via the extra user-defined dictionary (if it was provided).
+        There are two ways to provide the list:
+            1. Hard code the XML IDs in the SAS code, separate them with a comma:
+                   items="patientIdNumber,tumorRecordNumber,primarySite"
+            2. Provide the path (relative or absolute) to a CSV file:
+                   items="included-items.csv"
+               The first line of the file must be headers; the XML IDs to include are expected to be found
+               in the first column (the file can contain other columns); a simple file would look like this:
+                   NAACCR_XML_ID
+                   patientIdNumber
+                   tumorRecordNumber
+                   primarySite
+        Be aware that creating a data set containing all items will be MUCH slower than creating one for
+        just a few items, and so if you only need a handful of items to do your analysis, it is strongly
+        recommended to provide those items.
+        The NAACCR XML IDs for the standard items can be found on the NAACCR website.
     - dictfile is the path to an optional user-defined dictionary in CSV format (the NAACCR XML Tool that
         is distributed with the macros has an option to load an XML dictionary and save it as CSV);
-        File*Pro can also generate those files); use spaces to separate multiple paths
+        File*Pro can also generate those files); use spaces to separate multiple paths if you need to
+        provide more than one dictionary
 
     Note that the macro creates a tmp CSV file in the same folder as the input file; that file will be 
     automatically deleted by the macro when it's done executing.
@@ -36,6 +51,7 @@
     02/16/2021 - Fabian Depry - Fixed documentation missing version 210, no change to the actual code.
     03/12/2021 - Fabian Depry - Removed default value for version which was incorrectly set to 180.
     03/12/2021 - Fabian Depry - Removed default value for record type instead of assuming "I" for incidence.
+    04/13/2021 - Fabian Depry - Added documentation for providing included items as a CSV file.
  ************************************************************************************************************/;
 
 /*

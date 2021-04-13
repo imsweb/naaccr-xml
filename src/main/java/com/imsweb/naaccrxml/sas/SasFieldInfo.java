@@ -12,13 +12,13 @@ package com.imsweb.naaccrxml.sas;
  */
 public class SasFieldInfo {
 
-    private String _naaccrId;
-    private String _truncatedNaaccrId;
-    private String _parentTag;
-    private Integer _length;
-    private Integer _num;
-    private String _name;
-    private Integer _start;
+    private final String _naaccrId;
+    private final String _truncatedNaaccrId;
+    private final String _parentTag;
+    private final Integer _length;
+    private final Integer _num;
+    private final String _name;
+    private final Integer _start;
 
     public SasFieldInfo(String naaccrId, String truncatedNaaccrId, String parentTag, Integer length, Integer num, String name, Integer start) {
         _naaccrId = naaccrId;
