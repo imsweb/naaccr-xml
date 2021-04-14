@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-210.xml"
+        recordType="A"
+        timeGenerated="2021-04-12T9:12:41.322-04:00"
+        specificationVersion="1.4"
+        xmlns="http://naaccr.org/naaccrxml">
+    <Patient>
+        <Item naaccrId="patientIdNumber">00000001</Item>
+        <Item naaccrId="sex">2</Item>
+        <Item naaccrId="race1">01</Item>
+        <Item naaccrId="race2">88</Item>
+        <Item naaccrId="race3">88</Item>
+        <Item naaccrId="race4">88</Item>
+        <Item naaccrId="race5">88</Item>
+        <Item naaccrId="spanishHispanicOrigin">1</Item>
+        <Item naaccrId="socialSecurityNumber">273828707</Item>
+        <Item naaccrId="nameLast">Garcia</Item>
+        <Item naaccrId="nameMiddle">Bethany</Item>
+        <Item naaccrId="nameFirst">Alaina</Item>
+        <Item naaccrId="vitalStatus">1</Item>
+        <Item naaccrId="causeOfDeath">0000</Item>
+        <Item naaccrId="icdRevisionNumber">0</Item>
+        <Item naaccrId="birthplaceState">NC</Item>
+        <Item naaccrId="birthplaceCountry">USA</Item>
+        <Item naaccrId="computedEthnicity">6</Item>
+        <Item naaccrId="computedEthnicitySource">2</Item>
+        <Item naaccrId="nhiaDerivedHispOrigin">1</Item>
+        <Item naaccrId="raceNapiia">01</Item>
+        <Item naaccrId="dateOfBirth">19691216</Item>
+        <Item naaccrId="dateOfLastContact">20200705</Item>
+        <Tumor>
+            <Item naaccrId="tumorRecordNumber">01</Item>
+            <Item naaccrId="seerRecordNumber">01</Item>
+            <Item naaccrId="sequenceNumberCentral">00</Item>
+            <Item naaccrId="primarySite">C541</Item>
+            <Item naaccrId="histologicTypeIcdO3">8140</Item>
+            <Item naaccrId="behaviorCodeIcdO3">3</Item>
+            <Item naaccrId="grade">9</Item>
+            <Item naaccrId="laterality">9</Item>
+            <Item naaccrId="ageAtDiagnosis">050</Item>
+            <Item naaccrId="maritalStatusAtDx">2</Item>
+            <Item naaccrId="diagnosticConfirmation">1</Item>
+            <Item naaccrId="typeOfReportingSource">1</Item>
+            <Item naaccrId="censusTract2000">999999</Item>
+            <Item naaccrId="censusTract2010">999999</Item>
+            <Item naaccrId="censusTrCertainty2000">9</Item>
+            <Item naaccrId="censusTrCertainty2010">9</Item>
+            <Item naaccrId="censusTrPovertyIndictr">9</Item>
+            <Item naaccrId="rxSummTreatmentStatus">9</Item>
+            <Item naaccrId="rxSummSurgPrimSite">99</Item>
+            <Item naaccrId="rxSummScopeRegLnSur">9</Item>
+            <Item naaccrId="rxSummSurgOthRegDis">9</Item>
+            <Item naaccrId="rxSummSurgicalMargins">9</Item>
+            <Item naaccrId="rxSummDxStgProc">09</Item>
+            <Item naaccrId="rxSummPalliativeProc">9</Item>
+            <Item naaccrId="rxSummRadiation">9</Item>
+            <Item naaccrId="rxSummRadToCns">9</Item>
+            <Item naaccrId="rxSummSurgRadSeq">9</Item>
+            <Item naaccrId="rxSummTransplntEndocr">99</Item>
+            <Item naaccrId="rxSummChemo">99</Item>
+            <Item naaccrId="rxSummHormone">99</Item>
+            <Item naaccrId="rxSummBrm">99</Item>
+            <Item naaccrId="rxSummOther">9</Item>
+            <Item naaccrId="rxSummSystemicSurSeq">9</Item>
+            <Item naaccrId="reasonForNoSurgery">8</Item>
+            <Item naaccrId="seerTypeOfFollowUp">2</Item>
+            <Item naaccrId="primaryPayerAtDx">99</Item>
+            <Item naaccrId="seerCodingSysCurrent">H</Item>
+            <Item naaccrId="multiplicityCounter">99</Item>
+            <Item naaccrId="dateOfDiagnosis">20200705</Item>
+            <Item naaccrId="dateInitialRxSeer">20200705</Item>
+            <Item naaccrId="dateOfMultTumors">20200705</Item>
+            <Item naaccrId="dateConclusiveDx">20200705</Item>
+        </Tumor>
+    </Patient>
+</NaaccrData>

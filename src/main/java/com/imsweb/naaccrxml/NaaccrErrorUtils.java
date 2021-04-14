@@ -39,7 +39,7 @@ public class NaaccrErrorUtils {
         _MESSAGES.put(CODE_VAL_END_SPACE, "value ends with one ore several spaces");
         _MESSAGES.put(CODE_VAL_PAT_VS_TUM, "item '${0}' is a patient-level and should have the same value for all the records of the patient");
         _MESSAGES.put(CODE_VAL_ROOT_VS_TUM, "item '${0}' is a root-level item and should have the same value for all the records of the transmitted data");
-        _MESSAGES.put(CODE_BAD_TIME_GENERATED, "invalid value for 'timeGenerated' attribute: {0}");
+        _MESSAGES.put(CODE_BAD_TIME_GENERATED, "invalid value for 'timeGenerated' attribute: ${0}");
     }
 
     /**

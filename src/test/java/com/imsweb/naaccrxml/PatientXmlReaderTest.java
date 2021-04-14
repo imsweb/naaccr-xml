@@ -157,6 +157,11 @@ public class PatientXmlReaderTest {
             Assert.assertEquals("10", patient.getTumor(0).getItemValue("dateOfLastCancerStatusFlag"));
             Assert.assertEquals("10", patient.getTumor(1).getItemValue("dateOfLastCancerStatusFlag"));
         }
+
+        // bad time generated
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-bad-time-generated.xml")), options)) {
+            Assert.assertFalse(reader.getRootData().getValidationErrors().get(0).getMessage().contains("{0}"));
+        }
     }
 
     @Test
