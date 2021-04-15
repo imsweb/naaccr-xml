@@ -35,8 +35,8 @@ public class NaaccrErrorUtils {
         _MESSAGES.put(CODE_VAL_TOO_LONG, "value too long, expected at most ${0} character(s) but got ${1}");
         _MESSAGES.put(CODE_VAL_TOO_SHORT, "value too short, expected exactly ${0} character(s) but got ${1}");
         _MESSAGES.put(CODE_VAL_DATA_TYPE, "invalid value according to data type '${0}'");
-        _MESSAGES.put(CODE_VAL_START_SPACE, "value starts with one ore several spaces");
-        _MESSAGES.put(CODE_VAL_END_SPACE, "value ends with one ore several spaces");
+        _MESSAGES.put(CODE_VAL_START_SPACE, "value starts with one or several spaces");
+        _MESSAGES.put(CODE_VAL_END_SPACE, "value ends with one or several spaces");
         _MESSAGES.put(CODE_VAL_PAT_VS_TUM, "item '${0}' is a patient-level and should have the same value for all the records of the patient");
         _MESSAGES.put(CODE_VAL_ROOT_VS_TUM, "item '${0}' is a root-level item and should have the same value for all the records of the transmitted data");
         _MESSAGES.put(CODE_BAD_TIME_GENERATED, "invalid value for 'timeGenerated' attribute: ${0}");
