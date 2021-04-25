@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 7.13**
+
+- Updated embedded JRE to Java 11.0.11 (this only affects the standalone program)
+
 **Version 7.12**
 
 - Fixed validation of text values containing new lines.
