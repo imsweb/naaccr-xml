@@ -37,30 +37,27 @@ public class SasCsvToXml {
     private boolean _writeNumbers;
 
     public SasCsvToXml(String xmlPath, String naaccrVersion, String recordType) {
-        this(xmlPath.replace(".xml", ".csv"), xmlPath, naaccrVersion, recordType);
+        this(SasUtils.computeCsvPathFromXmlPath(xmlPath), xmlPath, naaccrVersion, recordType);
     }
 
     public SasCsvToXml(String csvPath, String xmlPath, String naaccrVersion, String recordType) {
         if (csvPath == null || csvPath.trim().isEmpty())
-            System.err.println("!!! No source CSV path was provided");
+            SasUtils.logError("No source CSV path was provided");
         else {
             _csvFile = new File(csvPath);
-            if (!_csvFile.exists())
-                System.err.println("!!! Invalid source CSV file: " + csvPath);
-            else
-                System.out.println(" > source CSV: " + _csvFile.getAbsolutePath());
+            SasUtils.logInfo("Source CSV: " + _csvFile.getAbsolutePath());
 
             if (xmlPath == null || xmlPath.trim().isEmpty())
-                System.err.println("!!! No target XML path was provided");
+                SasUtils.logError("No target XML path was provided");
             else {
                 // never EVER return the same path for the XML than the CSV!
                 if (xmlPath.equalsIgnoreCase(csvPath))
                     xmlPath = csvPath + ".xml";
                 _xmlFile = new File(xmlPath);
                 if (!new File(_xmlFile.getAbsolutePath()).getParentFile().exists())
-                    System.err.println("!!! Parent directory for target XML path doesn't exist: " + _xmlFile.getParentFile().getAbsolutePath());
+                    SasUtils.logError("Parent directory for target XML path doesn't exist: " + _xmlFile.getParentFile().getAbsolutePath());
                 else
-                    System.out.println(" > target XML: " + _xmlFile.getAbsolutePath());
+                    SasUtils.logInfo("Target XML: " + _xmlFile.getAbsolutePath());
             }
         }
 
@@ -68,15 +65,15 @@ public class SasCsvToXml {
 
         _naaccrVersion = naaccrVersion;
         if (_naaccrVersion == null || _naaccrVersion.trim().isEmpty())
-            System.err.println("!!! NAACCR version needs to be provided");
+            SasUtils.logError("NAACCR version needs to be provided");
         if (!"140".equals(naaccrVersion) && !"150".equals(naaccrVersion) && !"160".equals(naaccrVersion) && !"180".equals(naaccrVersion) && !"210".equals(naaccrVersion))
-            System.err.println("!!! NAACCR version must be 140, 150, 160, 180 or 210; got " + _naaccrVersion);
+            SasUtils.logError("NAACCR version must be 140, 150, 160, 180 or 210; got " + _naaccrVersion);
 
         _recordType = recordType;
         if (_recordType == null || _recordType.trim().isEmpty())
-            System.err.println("!!! Record type needs to be provided");
+            SasUtils.logError("Record type needs to be provided");
         if (!"A".equals(_recordType) && !"M".equals(_recordType) && !"C".equals(_recordType) && !"I".equals(_recordType))
-            System.err.println("!!! Record type must be A, M, C or I; got " + _recordType);
+            SasUtils.logError("Record type must be A, M, C or I; got " + _recordType);
 
         _writeNumbers = false;
     }
@@ -86,15 +83,15 @@ public class SasCsvToXml {
             for (String path : dictionaryPath.split(" ")) {
                 File dictionaryFile = new File(dictionaryPath);
                 if (!dictionaryFile.exists())
-                    System.err.println("!!! Invalid CSV dictionary path " + dictionaryPath);
+                    SasUtils.logError("Invalid CSV dictionary path: " + dictionaryPath);
                 else {
                     try {
                         SasUtils.validateCsvDictionary(dictionaryFile);
                         _dictionaryFiles.add(dictionaryFile);
-                        System.out.println(" > dictionary: " + dictionaryFile.getAbsolutePath());
+                        SasUtils.logInfo("Dictionary: " + dictionaryFile.getAbsolutePath());
                     }
                     catch (IOException e) {
-                        System.err.println("!!! Invalid CSV dictionary: " + e.getMessage());
+                        SasUtils.logError("Invalid CSV dictionary: " + e.getMessage());
                     }
                 }
             }
@@ -140,7 +137,7 @@ public class SasCsvToXml {
     }
 
     public void convert(String fields, List<SasFieldInfo> availableFields) throws IOException {
-        System.out.println("Starting converting CSV to XML...");
+        SasUtils.logInfo("Starting converting CSV to XML...");
         try {
             Set<String> requestedFields = SasUtils.extractRequestedFields(fields, availableFields);
 
@@ -254,7 +251,7 @@ public class SasCsvToXml {
             throw new IOException(e);
         }
 
-        System.out.println("Successfully created " + _xmlFile.getAbsolutePath());
+        SasUtils.logInfo("Successfully created " + _xmlFile.getAbsolutePath());
     }
 
     private String createItemLine(String indentation, String itemId, String itemNumber, String value) {
@@ -268,6 +265,6 @@ public class SasCsvToXml {
 
     public void cleanup() {
         if (!_csvFile.delete())
-            System.err.println("!!! Unable to cleanup tmp CSV file.");
+            SasUtils.logError("Unable to cleanup tmp CSV file, it will have to be manually deleted...");
     }
 }

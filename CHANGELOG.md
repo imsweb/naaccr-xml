@@ -1,8 +1,9 @@
 ## NAACCR XML Version History
 
-**Version 7.13**
+**Version 7.13 (not released yet)**
 
 - Updated embedded JRE to Java 11.0.11 (this only affects the standalone program)
+- Improved output of the SAS library in SAS logs. 
 
 **Version 7.12**
 

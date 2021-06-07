@@ -48,6 +48,20 @@ public class SasUtils {
     }
 
     /**
+     * Prints the given message to the standard output.
+     */
+    public static void logInfo(String msg) {
+        System.out.println("[JAVA SAS LIBRARY] " + msg);
+    }
+
+    /**
+     * Prints the given message to the standard error output.
+     */
+    public static void logError(String msg) {
+        System.err.println("[JAVA SAS LIBRARY] - ERROR - " + msg);
+    }
+
+    /**
      * Convert the given XML path to a CSV path.
      */
     public static String computeCsvPathFromXmlPath(String xmlPath) {
@@ -348,12 +362,12 @@ public class SasUtils {
         if (fields.contains(".")) {
             File file = new File(fields);
             if (!file.exists()) {
-                System.err.println("!!! Invalid file for included items: " + fields);
+                logError("Invalid file for included items: " + fields);
                 return null;
             }
 
             if (!file.getName().toLowerCase().endsWith(".csv")) {
-                System.err.println("!!! Invalid file for included items, file must have the '.csv' extension: " + fields);
+                logError("Invalid file for included items, file must have the '.csv' extension: " + fields);
                 return null;
             }
 
@@ -370,7 +384,7 @@ public class SasUtils {
                         if (allowedIds.contains(xmlId))
                             requestedFields.add(xmlId);
                         else
-                            System.err.println("!!! Invalid NAACCR XML ID requested: " + xmlId);
+                            logError("Invalid NAACCR XML ID requested: " + xmlId);
                     }
 
                     line = reader.readLine();
@@ -395,7 +409,7 @@ public class SasUtils {
                 if (allowedIds.contains(xmlId))
                     requestedFields.add(xmlId);
                 else
-                    System.err.println("!!! Invalid NAACCR XML ID requested: " + xmlId);
+                    logError("Invalid NAACCR XML ID requested: " + xmlId);
             }
         }
 
