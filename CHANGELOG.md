@@ -2,7 +2,8 @@
 
 **Version 7.13 (not released yet)**
 
-- Updated embedded JRE to Java 11.0.11 (this only affects the standalone program)
+- Updated embedded JRE to Java 11.0.11 (this only affects the standalone program).
+- Updated XStream dependency from version 1.4.16 to version 1.4.17.
 - Improved output of the SAS library in SAS logs. 
 
 **Version 7.12**
