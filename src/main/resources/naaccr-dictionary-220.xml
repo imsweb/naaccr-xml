@@ -1799,7 +1799,8 @@
             naaccrName="EDP MDE Link Date"
             length="8"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"/>
+            parentXmlElement="Tumor"
+            dataType="date"/>
         <ItemDef naaccrId="egfrMutationalAnalysis"
             naaccrNum="3939"
             naaccrName="EGFR Mutational Analysis"

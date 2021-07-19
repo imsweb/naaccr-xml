@@ -252,7 +252,7 @@ derivedSummaryStage2018,762,"Derived Summary Stage 2018",,1,"A,M,C,I",Tumor,digi
 diagnosticConfirmation,490,"Diagnostic Confirmation",,1,"A,M,C,I",Tumor,digits
 diagnosticProc7387,2200,"Diagnostic Proc 73-87",,2,"A,M,C,I",Tumor,text
 edpMdeLink,531,"EDP MDE Link",,1,"A,M,C,I",Tumor,text
-edpMdeLinkDate,530,"EDP MDE Link Date",,8,"A,M,C,I",Tumor,text
+edpMdeLinkDate,530,"EDP MDE Link Date",,8,"A,M,C,I",Tumor,date
 egfrMutationalAnalysis,3939,"EGFR Mutational Analysis",,1,"A,M,C,I",Tumor,text
 ehrReporting,2508,"EHR Reporting",,1000,"A,M,C",Tumor,text
 eodExtension,790,"EOD--Extension",,2,"A,M,C,I",Tumor,digits
