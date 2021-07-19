@@ -324,7 +324,7 @@ icdO3ConversionFlag,2116,"ICD-O-3 Conversion Flag",,1,"A,M,C,I",Tumor,digits
 icdRevisionComorbid,3165,"ICD Revision Comorbid",,1,"A,M,C,I",Tumor,digits
 icdRevisionNumber,1920,"ICD Revision Number",,1,"A,M,C,I",Patient,digits
 ihsLink,192,"IHS Link",,1,"A,M,C,I",Patient,digits
-ihsPurchRefCareDeliveryArea,194,"IHS PRCDA",,1,"A,M,C,I",Tumor,text
+ihsPurchRefCareDeliveryArea,194,"IHS Purchased/Referred Care Delivery Area",,1,"A,M,C,I",Tumor,text
 industrySource,300,"Industry Source",,1,"A,M,C,I",Tumor,digits
 inpatientStatus,605,"Inpatient Status",,1,"A,M,C,I",Tumor,digits
 institutionReferredFrom,2410,"Institution Referred From",,10,"A,M,C",Tumor,text
@@ -787,7 +787,7 @@ tnmPathN,890,"TNM Path N",,4,"A,M,C,I",Tumor,text
 tnmPathStageGroup,910,"TNM Path Stage Group",,4,"A,M,C,I",Tumor,text
 tnmPathStagedBy,930,"TNM Path Staged By",,2,"A,M,C,I",Tumor,digits
 tnmPathT,880,"TNM Path T",,4,"A,M,C,I",Tumor,text
-tobaccoUseSmokingStatus,344,"Tobacco Use Smoking Status",,1,"A,M,C,I",Patient,text
+tobaccoUseSmokingStatus,344,"Tobacco Use Smoking Status",,1,"A,M,C,I",Tumor,text
 totalDose,1533,"Total Dose",,6,"A,M,C,I",Tumor,digits
 tumorDeposits,3934,"Tumor Deposits",,2,"A,M,C,I",Tumor,text
 tumorGrowthPattern,3935,"Tumor Growth Pattern",,1,"A,M,C,I",Tumor,digits

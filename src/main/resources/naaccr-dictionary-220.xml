@@ -2276,7 +2276,7 @@
             dataType="digits"/>
         <ItemDef naaccrId="ihsPurchRefCareDeliveryArea"
             naaccrNum="194"
-            naaccrName="IHS PRCDA"
+            naaccrName="IHS Purchased/Referred Care Delivery Area"
             length="1"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
@@ -5486,7 +5486,7 @@
             naaccrName="Tobacco Use Smoking Status"
             length="1"
             recordTypes="A,M,C,I"
-            parentXmlElement="Patient"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="totalDose"
             naaccrNum="1533"
             naaccrName="Total Dose"
