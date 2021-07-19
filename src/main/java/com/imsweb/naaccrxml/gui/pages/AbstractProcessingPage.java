@@ -191,6 +191,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
 
         pnl.add(buildTextPnl("The following NAACCR versions are supported:"));
+        pnl.add(buildTextPnl("             NAACCR 22"));
         pnl.add(buildTextPnl("             NAACCR 21"));
         pnl.add(buildTextPnl("             NAACCR 18"));
         pnl.add(buildTextPnl("             NAACCR 16"));

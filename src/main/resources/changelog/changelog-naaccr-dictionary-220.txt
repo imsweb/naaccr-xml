@@ -1,0 +1,13 @@
+<!-- Changelog
+ - 07/19/2021: Added new NAACCR 22 items.
+ - 03/12/2021: Changed padding of ca199PretxLabValue to be leftBlank.
+ - 03/12/2021: Changed padding of sentinelLymphNodesExamined, sentinelLymphNodesPositive and phase1DosePerFraction to be leftZero.
+ - 12/03/2020: Changed data type of physicianPrimarySurg from digits to text.
+ - 10/16/2020: Changed data level of dateOfLastCancerStatus and dateOfLastCancerStatusFlag from Patient to Tumor.
+ - 08/25/2020: Changed padding of ki67 and tnmEditionNumber; got modified by mistake.
+ - 08/10/2020: Changed type of ki67 and tnmEditionNumber from digits to text.
+ - 08/07/2020: Changed type for morphCodingSysCurrent/Original from digits to mixed.
+ - 08/06/2020: Changed type of figoStage from digits to text.
+ - 07/31/2020: Changed level of 3 new COVID items from Tumor to Patient.
+ - 07/15/2020: Initial version.
+-->

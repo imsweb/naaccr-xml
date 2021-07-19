@@ -274,7 +274,7 @@ public final class NaaccrXmlDictionaryUtils {
     }
 
     /**
-     * Returns the default user dictionary for the requested NAACCR version.
+     * Returns the default user dictionary for the requested NAACCR version, null if that version doesn't support a default user dictionary.
      * @param naaccrVersion NAACCR version, required (see constants in NaaccrFormat)
      * @return the corresponding default user dictionary, throws a runtime exception if not found
      */
@@ -284,6 +284,11 @@ public final class NaaccrXmlDictionaryUtils {
             throw new RuntimeException("Version is required for getting the default user dictionary.");
         if (!NaaccrFormat.isVersionSupported(naaccrVersion))
             throw new RuntimeException("Unsupported default user dictionary version: " + naaccrVersion);
+
+        // no more default user dictionary for version 22 and later!
+        if (Integer.parseInt(naaccrVersion) >= 220)
+            return null;
+
         NaaccrDictionary result = _INTERNAL_DICTIONARIES.get("user_" + naaccrVersion);
         if (result == null) {
             String resName = "user-defined-naaccr-dictionary-" + naaccrVersion + ".xml";
@@ -850,7 +855,10 @@ public final class NaaccrXmlDictionaryUtils {
      * @return a new merged dictionary containing the items of the requested dictionaries
      */
     public static NaaccrDictionary getMergedDictionaries(String naaccrVersion) {
-        return mergeDictionaries(getBaseDictionaryByVersion(naaccrVersion), getDefaultUserDictionaryByVersion(naaccrVersion));
+        // this method makes sense for NAACCR versions that support a default user dictionary, but not so much for the more recent ones that don't;
+        // to stay consistent this method still merges a base dictionary even if there is nothing to merge it with...
+        NaaccrDictionary userDictionary = getDefaultUserDictionaryByVersion(naaccrVersion);
+        return userDictionary == null ? mergeDictionaries(getBaseDictionaryByVersion(naaccrVersion)) : mergeDictionaries(getBaseDictionaryByVersion(naaccrVersion), userDictionary);
     }
 
     /**

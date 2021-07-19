@@ -49,11 +49,13 @@ public class NaaccrXmlDictionaryUtilsTest {
             }
 
             // make sure internal default user dictionaries are valid
-            try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("user-defined-naaccr-dictionary-" + version + ".xml"))) {
-                NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
-                Assert.assertTrue(version, NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
-                Assert.assertTrue(version, NaaccrXmlDictionaryUtils.DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(dict.getDictionaryUri()).matches());
-                items.addAll(dict.getItems());
+            if (Integer.parseInt(version) < 220) {
+                try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("user-defined-naaccr-dictionary-" + version + ".xml"))) {
+                    NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
+                    Assert.assertTrue(version, NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
+                    Assert.assertTrue(version, NaaccrXmlDictionaryUtils.DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(dict.getDictionaryUri()).matches());
+                    items.addAll(dict.getItems());
+                }
             }
 
             // make sure the combination of fields doesn't leave any gaps
@@ -469,10 +471,12 @@ public class NaaccrXmlDictionaryUtilsTest {
                 Assert.fail("Dictionary for version " + version + " needs to be re-created, it contains differences from what would be created by the library!");
 
             path1 = Paths.get(TestingUtils.getWorkingDirectory() + "/src/main/resources/user-defined-naaccr-dictionary-" + version + ".xml");
-            path2 = Paths.get("build/tmp-dictionary-" + version + ".xml");
-            NaaccrXmlDictionaryUtils.writeDictionary(NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(version), path2.toFile());
-            if (!TestingUtils.readFileAsOneString(path1.toFile()).replace("\r", "").equals(TestingUtils.readFileAsOneString(path2.toFile()).replace("\r", "")))
-                Assert.fail("User dictionary for version " + version + " needs to be re-created, it contains differences from what would be created by the library!");
+            if (path1.toFile().exists()) {
+                path2 = Paths.get("build/tmp-dictionary-" + version + ".xml");
+                NaaccrXmlDictionaryUtils.writeDictionary(NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(version), path2.toFile());
+                if (!TestingUtils.readFileAsOneString(path1.toFile()).replace("\r", "").equals(TestingUtils.readFileAsOneString(path2.toFile()).replace("\r", "")))
+                    Assert.fail("User dictionary for version " + version + " needs to be re-created, it contains differences from what would be created by the library!");
+            }
         }
     }
 }

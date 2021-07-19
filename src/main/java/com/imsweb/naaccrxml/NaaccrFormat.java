@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 public final class NaaccrFormat {
 
     // version constants
+    public static final String NAACCR_VERSION_220 = "220";
     public static final String NAACCR_VERSION_210 = "210";
     public static final String NAACCR_VERSION_180 = "180";
     public static final String NAACCR_VERSION_160 = "160";
@@ -26,6 +27,7 @@ public final class NaaccrFormat {
     private static final List<String> _SUPPORTED_VERSIONS = new ArrayList<>();
 
     static {
+        _SUPPORTED_VERSIONS.add(NAACCR_VERSION_220);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_210);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_180);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_160);
@@ -34,7 +36,7 @@ public final class NaaccrFormat {
     }
 
     // "latest" version
-    public static final String NAACCR_VERSION_LATEST = NAACCR_VERSION_210;
+    public static final String NAACCR_VERSION_LATEST = NAACCR_VERSION_220;
 
     public static boolean isVersionSupported(String version) {
         return _SUPPORTED_VERSIONS.contains(version);
@@ -45,6 +47,10 @@ public final class NaaccrFormat {
     }
 
     // format constants
+    public static final String NAACCR_FORMAT_22_ABSTRACT = "naaccr-220-abstract";
+    public static final String NAACCR_FORMAT_22_MODIFIED = "naaccr-220-modified";
+    public static final String NAACCR_FORMAT_22_CONFIDENTIAL = "naaccr-220-confidential";
+    public static final String NAACCR_FORMAT_22_INCIDENCE = "naaccr-220-incidence";
     public static final String NAACCR_FORMAT_21_ABSTRACT = "naaccr-210-abstract";
     public static final String NAACCR_FORMAT_21_MODIFIED = "naaccr-210-modified";
     public static final String NAACCR_FORMAT_21_CONFIDENTIAL = "naaccr-210-confidential";
@@ -70,6 +76,10 @@ public final class NaaccrFormat {
     private static final List<String> _SUPPORTED_FORMATS = new ArrayList<>();
 
     static {
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_22_ABSTRACT);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_22_MODIFIED);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_22_CONFIDENTIAL);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_22_INCIDENCE);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_21_ABSTRACT);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_21_MODIFIED);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_21_CONFIDENTIAL);
