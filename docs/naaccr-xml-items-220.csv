@@ -24,8 +24,8 @@ afpPretreatmentLabValue,3810,"AFP Pretreatment Lab Value",,6,"A,M,C,I",Tumor,tex
 ageAtDiagnosis,230,"Age at Diagnosis",,3,"A,M,C,I",Tumor,digits
 ajccApiVersionCurrent,2156,"AJCC API Version Current",,8,"A,M,C,I",Tumor,text
 ajccApiVersionOriginal,2157,"AJCC API Version Original",,8,"A,M,C,I",Tumor,text
-ajccCancerSurvApiVersionCurrent,2158,"AJCC Cancer Surveillance API Version Current",,13,"A,M,C,I",Tumor,text
-ajccCancerSurvApiVersionOriginal,2159,"AJCC Cancer Surveillance API Version Original",,13,"A,M,C,I",Tumor,text
+ajccCancerSurvApiVersionCurrent,2158,"AJCC Cancer Surveillance DLL Version Current",,13,"A,M,C,I",Tumor,text
+ajccCancerSurvApiVersionOriginal,2159,"AJCC Cancer Surveillance DLL Version Original",,13,"A,M,C,I",Tumor,text
 ajccId,995,"AJCC ID",,4,"A,M,C,I",Tumor,text
 ajccTnmClinM,1003,"AJCC TNM Clin M",,15,"A,M,C,I",Tumor,text
 ajccTnmClinN,1002,"AJCC TNM Clin N",,15,"A,M,C,I",Tumor,text

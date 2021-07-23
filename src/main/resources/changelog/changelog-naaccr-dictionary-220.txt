@@ -1,3 +1,4 @@
 <!-- Changelog
+ - 07/23/2021: replaced API by DLL in data item name of AJCC Cancer Surveillance API Version Current/Original items.
  - 07/19/2021: Initial version.
 -->

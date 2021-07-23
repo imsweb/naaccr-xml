@@ -5,6 +5,7 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
+ - 07/23/2021: replaced API by DLL in data item name of AJCC Cancer Surveillance API Version Current/Original items.
  - 07/19/2021: Initial version.
 -->
 
@@ -181,13 +182,13 @@
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="ajccCancerSurvApiVersionCurrent"
             naaccrNum="2158"
-            naaccrName="AJCC Cancer Surveillance API Version Current"
+            naaccrName="AJCC Cancer Surveillance DLL Version Current"
             length="13"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="ajccCancerSurvApiVersionOriginal"
             naaccrNum="2159"
-            naaccrName="AJCC Cancer Surveillance API Version Original"
+            naaccrName="AJCC Cancer Surveillance DLL Version Original"
             length="13"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
