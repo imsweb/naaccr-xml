@@ -39,7 +39,6 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
 import com.thoughtworks.xstream.converters.basic.BooleanConverter;
 import com.thoughtworks.xstream.converters.basic.ByteConverter;
-import com.thoughtworks.xstream.converters.basic.DateConverter;
 import com.thoughtworks.xstream.converters.basic.DoubleConverter;
 import com.thoughtworks.xstream.converters.basic.FloatConverter;
 import com.thoughtworks.xstream.converters.basic.IntConverter;
@@ -58,6 +57,7 @@ import com.thoughtworks.xstream.security.WildcardTypePermission;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryGroupedItem;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
+import com.imsweb.naaccrxml.runtime.Iso8601DateConverter;
 
 /**
  * This utility class can be used to read/write dictionaries, whether they are internal to the library, or provided by the user...
@@ -503,10 +503,10 @@ public final class NaaccrXmlDictionaryUtils {
     private static List<String> validateDictionary(NaaccrDictionary dictionary, boolean isBaseDictionary, String naaccrVersion) {
         List<String> errors = new ArrayList<>();
 
-        // some of the validation is based on the specification version; assume 1.0 if it's not available
+        // some of the validation is based on the specification version; assume 1.0 if it's not available (it's required as of 1.5)
         String specVersion = dictionary.getSpecificationVersion() == null ? SpecificationVersion.SPEC_1_0 : dictionary.getSpecificationVersion();
         if (!SpecificationVersion.isSpecificationSupported(specVersion))
-            errors.add("'specificationVersion' attribute is not valid: " + specVersion);
+            errors.add("'specificationVersion' attribute is not supported: " + specVersion);
 
         if (dictionary.getDictionaryUri() == null || dictionary.getDictionaryUri().trim().isEmpty())
             errors.add("'dictionaryUri' attribute is required");
@@ -642,68 +642,71 @@ public final class NaaccrXmlDictionaryUtils {
 
         // user dictionary specific validation (only if we know the version)
         if (!isBaseDictionary && naaccrVersionToUse != null) {
-            NaaccrDictionary baseDictionary = getBaseDictionaryByVersion(naaccrVersionToUse);
             NaaccrDictionary defaultUserDictionary = getDefaultUserDictionaryByVersion(naaccrVersionToUse);
+            if (defaultUserDictionary != null) {
+                NaaccrDictionary baseDictionary = getBaseDictionaryByVersion(naaccrVersionToUse);
 
-            // we need the NAACCR numbers from the base dictionary...
-            List<Integer> baseNumbers = baseDictionary.getItems().stream().map(NaaccrDictionaryItem::getNaaccrNum).collect(Collectors.toList());
+                // we need the NAACCR numbers from the base dictionary...
+                List<Integer> baseNumbers = baseDictionary.getItems().stream().map(NaaccrDictionaryItem::getNaaccrNum).collect(Collectors.toList());
 
-            for (NaaccrDictionaryItem item : dictionary.getItems()) {
+                for (NaaccrDictionaryItem item : dictionary.getItems()) {
 
-                // can't use an internal base ID, ever
-                if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
-                    errors.add("invalid value for 'naaccrId' attribute: " + item.getNaaccrId() + "; this ID is used in the standard dictionary");
+                    // can't use an internal base ID, ever
+                    if (baseDictionary.getItemByNaaccrId(item.getNaaccrId()) != null)
+                        errors.add("invalid value for 'naaccrId' attribute: " + item.getNaaccrId() + "; this ID is used in the standard dictionary");
 
-                // if an internal default user dictionary ID is used, then there are a bunch of attributes it can't re-defined.
-                NaaccrDictionaryItem defaultUserItem = defaultUserDictionary.getItemByNaaccrId(item.getNaaccrId());
-                if (defaultUserItem != null) {
-                    if (!Objects.equals(defaultUserItem.getNaaccrNum(), item.getNaaccrNum()))
-                        errors.add("invalid value for 'naaccrNum' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getNaaccrNum());
-                    if (!Objects.equals(defaultUserItem.getNaaccrName(), item.getNaaccrName()))
-                        errors.add("invalid value for 'naaccrName' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getNaaccrName());
-                    if (item.getStartColumn() != null && defaultUserItem.getStartColumn() != null && !Objects.equals(defaultUserItem.getStartColumn(), item.getStartColumn()))
-                        errors.add("invalid value for 'startColumn' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getStartColumn());
-                    if (!Objects.equals(defaultUserItem.getLength(), item.getLength()))
-                        errors.add("invalid value for 'length' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getLength());
-                    if (!Objects.equals(defaultUserItem.getRecordTypes(), item.getRecordTypes()))
-                        errors.add("invalid value for 'recordTypes' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getRecordTypes());
-                    if (!Objects.equals(defaultUserItem.getParentXmlElement(), item.getParentXmlElement()))
-                        errors.add("invalid value for 'parentXmlElement' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getParentXmlElement());
-                    // I really hate that the defaults are not loaded right away in the Java bean; I think that was a mistake!
-                    String defaultUserItemType = defaultUserItem.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : defaultUserItem.getDataType();
-                    String itemType = item.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : item.getDataType();
-                    if (!Objects.equals(defaultUserItemType, itemType))
-                        errors.add("invalid value for 'dataType' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItemType);
-                }
-                else {
+                    // if an internal default user dictionary ID is used, then there are a bunch of attributes it can't re-defined.
+                    NaaccrDictionaryItem defaultUserItem = defaultUserDictionary.getItemByNaaccrId(item.getNaaccrId());
+                    if (defaultUserItem != null) {
+                        if (!Objects.equals(defaultUserItem.getNaaccrNum(), item.getNaaccrNum()))
+                            errors.add("invalid value for 'naaccrNum' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getNaaccrNum());
+                        if (!Objects.equals(defaultUserItem.getNaaccrName(), item.getNaaccrName()))
+                            errors.add("invalid value for 'naaccrName' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getNaaccrName());
+                        if (item.getStartColumn() != null && defaultUserItem.getStartColumn() != null && !Objects.equals(defaultUserItem.getStartColumn(), item.getStartColumn()))
+                            errors.add("invalid value for 'startColumn' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getStartColumn());
+                        if (!Objects.equals(defaultUserItem.getLength(), item.getLength()))
+                            errors.add("invalid value for 'length' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getLength());
+                        if (!Objects.equals(defaultUserItem.getRecordTypes(), item.getRecordTypes()))
+                            errors.add("invalid value for 'recordTypes' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getRecordTypes());
+                        if (!Objects.equals(defaultUserItem.getParentXmlElement(), item.getParentXmlElement()))
+                            errors.add("invalid value for 'parentXmlElement' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItem.getParentXmlElement());
+                        // I really hate that the defaults are not loaded right away in the Java bean; I think that was a mistake!
+                        String defaultUserItemType = defaultUserItem.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : defaultUserItem.getDataType();
+                        String itemType = item.getDataType() == null ? NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT : item.getDataType();
+                        if (!Objects.equals(defaultUserItemType, itemType))
+                            errors.add("invalid value for 'dataType' attribute of item '" + item.getNaaccrId() + "'; should be set to " + defaultUserItemType);
+                    }
+                    else {
 
-                    // number cannot be one of the numbers from the base dictionary
-                    if (baseNumbers.contains(item.getNaaccrNum()))
-                        errors.add("invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; number is already defined in corresponding base dictionary");
+                        // number cannot be one of the numbers from the base dictionary
+                        if (baseNumbers.contains(item.getNaaccrNum()))
+                            errors.add("invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; number is already defined in corresponding base dictionary");
 
-                    // range must be very specific for a user dictionary (deprecated)
-                    if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_3) < 0)
-                        if (item.getNaaccrNum() < 9500 || item.getNaaccrNum() > 99999)
-                            errors.add("invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999");
+                        // range must be very specific for a user dictionary (deprecated)
+                        if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_3) < 0)
+                            if (item.getNaaccrNum() < 9500 || item.getNaaccrNum() > 99999)
+                                errors.add("invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999");
 
-                    // this is tricky, but an item must fall into the columns of one of the items defined in the corresponding items defined in the default user dictionary
-                    boolean preVersion21 = NumberUtils.isDigits(naaccrVersionToUse) && Integer.parseInt(naaccrVersionToUse) < 210;
-                    if (preVersion21 && item.getStartColumn() != null) {
-                        boolean fallInAllowedRange = false;
-                        for (NaaccrDictionaryItem defaultItem : defaultUserDictionary.getItems()) {
-                            if (item.getStartColumn() >= defaultItem.getStartColumn() && item.getStartColumn() + item.getLength() <= defaultItem.getStartColumn() + defaultItem.getLength()) {
-                                fallInAllowedRange = true;
-                                break;
+                        // this is tricky, but an item must fall into the columns of one of the items defined in the corresponding items defined in the default user dictionary
+                        boolean preVersion21 = NumberUtils.isDigits(naaccrVersionToUse) && Integer.parseInt(naaccrVersionToUse) < 210;
+                        if (preVersion21 && item.getStartColumn() != null) {
+                            boolean fallInAllowedRange = false;
+                            for (NaaccrDictionaryItem defaultItem : defaultUserDictionary.getItems()) {
+                                if (item.getStartColumn() >= defaultItem.getStartColumn() && item.getStartColumn() + item.getLength() <= defaultItem.getStartColumn() + defaultItem.getLength()) {
+                                    fallInAllowedRange = true;
+                                    break;
+                                }
                             }
+                            if (!fallInAllowedRange)
+                                errors.add("invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps");
                         }
-                        if (!fallInAllowedRange)
-                            errors.add("invalid value for 'startColumn' and/or 'length' attributes; user-defined items can only override state requestor item, NPCR item, or reserved gaps");
                     }
                 }
-            }
 
-            if (!dictionary.getGroupedItems().isEmpty())
-                errors.add("user-defined dictionaries cannot defined grouped items");
+                if (!dictionary.getGroupedItems().isEmpty())
+                    errors.add("user-defined dictionaries cannot defined grouped items");
+
+            }
         }
 
         return errors;
@@ -993,7 +996,7 @@ public final class NaaccrXmlDictionaryUtils {
                 registerConverter(new BooleanConverter(), PRIORITY_NORMAL);
                 registerConverter(new ByteConverter(), PRIORITY_NORMAL);
                 registerConverter(new StringConverter(), PRIORITY_NORMAL);
-                registerConverter(new DateConverter(), PRIORITY_NORMAL);
+                registerConverter(new Iso8601DateConverter(), PRIORITY_NORMAL); // replaced normal date converter by custom ISO 8601 one...
                 registerConverter(new CollectionConverter(getMapper()), PRIORITY_NORMAL);
                 registerConverter(new ReflectionConverter(getMapper(), getReflectionProvider()), PRIORITY_VERY_LOW);
             }
@@ -1007,6 +1010,7 @@ public final class NaaccrXmlDictionaryUtils {
         xstream.aliasAttribute(NaaccrDictionary.class, "_dictionaryUri", "dictionaryUri");
         xstream.aliasAttribute(NaaccrDictionary.class, "_naaccrVersion", "naaccrVersion");
         xstream.aliasAttribute(NaaccrDictionary.class, "_specificationVersion", "specificationVersion");
+        xstream.aliasAttribute(NaaccrDictionary.class, "_dateLastModified", "dateLastModified");
         xstream.aliasAttribute(NaaccrDictionary.class, "_description", "description");
         xstream.aliasAttribute(NaaccrDictionary.class, "_items", "ItemDefs");
         xstream.aliasAttribute(NaaccrDictionary.class, "_groupedItems", "GroupedItemDefs");

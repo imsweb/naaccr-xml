@@ -155,6 +155,13 @@ public class NaaccrXmlDictionaryUtilsTest {
             exceptionAppend = true;
         }
         Assert.assertTrue(exceptionAppend);
+
+        // NAACCR 22 specs 1.5 dictionary with new dateLastModified attribute
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-220.xml"))) {
+            NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(reader);
+            Assert.assertEquals(SpecificationVersion.SPEC_1_5, dictionary.getSpecificationVersion());
+            Assert.assertNotNull(dictionary.getDateLastModified());
+        }
     }
 
     @Test

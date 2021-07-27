@@ -13,6 +13,9 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -212,11 +215,11 @@ public class NaaccrXmlUtilsTest {
     public void testGetFormatFromFlatFile() {
 
         // regular file
-        File file = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/fake-naaccr14inc-1-rec.txt");
+        File file = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/fake-naaccr14inc-1-rec.txt");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_14_INCIDENCE, NaaccrXmlUtils.getFormatFromFlatFile(file));
 
         // not a valid file
-        file = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/standard-file.xml");
+        file = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/standard-file.xml");
         Assert.assertNull(NaaccrXmlUtils.getFormatFromFlatFile(file));
     }
 
@@ -224,14 +227,14 @@ public class NaaccrXmlUtilsTest {
     public void testGetFormatFromXmlFile() throws IOException {
 
         // regular file
-        File file1 = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/standard-file.xml");
+        File file1 = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/standard-file.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_16_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file1));
 
         // this one contains extensions
-        File file2 = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/standard-file-extension.xml");
+        File file2 = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/standard-file-extension.xml");
         Assert.assertEquals(NaaccrFormat.NAACCR_FORMAT_16_INCIDENCE, NaaccrXmlUtils.getFormatFromXmlFile(file2));
 
-        Files.newDirectoryStream(Paths.get(TestingUtils.getWorkingDirectory() , "src", "test", "resources", "data", "validity", "valid")).forEach(path ->
+        Files.newDirectoryStream(Paths.get(TestingUtils.getWorkingDirectory(), "src", "test", "resources", "data", "validity", "valid")).forEach(path ->
                 Assert.assertNotNull(path.toString(), NaaccrXmlUtils.getFormatFromXmlFile(path.toFile())));
 
     }
@@ -240,7 +243,7 @@ public class NaaccrXmlUtilsTest {
     public void testGetAttributesFromXmlFile() {
 
         // a regular file which includes an extra attribute
-        File file = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/read-attributes-1.xml");
+        File file = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/read-attributes-1.xml");
         Map<String, String> attr = NaaccrXmlUtils.getAttributesFromXmlFile(file);
         Assert.assertEquals("http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
         Assert.assertNull(attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_USER_DICT));
@@ -249,21 +252,22 @@ public class NaaccrXmlUtilsTest {
         Assert.assertEquals("whatever", attr.get("myOwnExtraAttribute"));
 
         // another good file with less attributes
-        file = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/read-attributes-2.xml");
+        file = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/read-attributes-2.xml");
         attr = NaaccrXmlUtils.getAttributesFromXmlFile(file);
         Assert.assertEquals("http://naaccr.org/naaccrxml/naaccr-dictionary-160.xml", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_BASE_DICT));
         Assert.assertEquals("I", attr.get(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE));
 
         // a bad file (missing required attributes)
-        file = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/read-attributes-3.xml");
+        file = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/read-attributes-3.xml");
         Assert.assertTrue(NaaccrXmlUtils.getAttributesFromXmlFile(file).isEmpty());
 
         // a complete garbage file
-        file = new File(TestingUtils.getWorkingDirectory()  + "/src/test/resources/data/read-attributes-4.xml");
+        file = new File(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/read-attributes-4.xml");
         Assert.assertTrue(NaaccrXmlUtils.getAttributesFromXmlFile(file).isEmpty());
     }
 
     @Test
+    @SuppressWarnings("ConstantConditions")
     public void testGetAttributesFromXmlReader() throws IOException {
         NaaccrOptions options = new NaaccrOptions();
         options.setUseStrictNamespaces(false);
@@ -282,7 +286,7 @@ public class NaaccrXmlUtilsTest {
         // peek at the attributes using a reader that doesn't support marking
         try (Reader reader2 = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/read-attributes-1.xml"), StandardCharsets.UTF_8)) {
             Assert.assertFalse(NaaccrXmlUtils.getAttributesFromXmlReader(reader2).isEmpty());
-            // at this point, we should't be able to consume the data anymore
+            // at this point, we shouldn't be able to consume the data anymore
             try {
                 new PatientXmlReader(reader2, options);
                 Assert.fail("There should have been an exception!");
@@ -291,5 +295,53 @@ public class NaaccrXmlUtilsTest {
                 // ignored, expected
             }
         }
+    }
+
+    @Test
+    public void testParseIso8601Date() {
+        // following examples are from http://books.xmlschemata.org/relaxng/ch19-77049.html
+
+        assertValidDateValue("2001-10-26T21:32:52");
+        assertValidDateValue("2001-10-26T21:32:52+02:00");
+        assertValidDateValue("2001-10-26T19:32:52Z");
+        assertValidDateValue("2001-10-26T19:32:52+00:00");
+        assertValidDateValue("-2001-10-26T21:32:52");
+        assertValidDateValue("2001-10-26T21:32:52.12679");
+
+        assertInvalidDateValue("2001-10-26");
+        assertInvalidDateValue("2001-10-26T21:32");
+        assertInvalidDateValue("2001-10-26T25:32:52+02:00");
+        assertInvalidDateValue("01-10-26T21:32");
+        assertInvalidDateValue("2001-10-26T21:32:52+2:00");
+    }
+
+    private void assertValidDateValue(String dateValue) {
+        try {
+            ZonedDateTime.parse(dateValue, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        }
+        catch (RuntimeException e1) {
+            try {
+                LocalDateTime.parse(dateValue, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            }
+            catch (RuntimeException e2) {
+                Assert.fail("Value should be valid, but isn't: " + dateValue);
+            }
+        }
+    }
+
+    private void assertInvalidDateValue(String dateValue) {
+        try {
+            ZonedDateTime.parse(dateValue, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            LocalDateTime.parse(dateValue, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        }
+        catch (RuntimeException e) {
+            return;
+        }
+        Assert.fail("Value should be invalid, but isn't: " + dateValue);
+    }
+
+    @Test
+    public void testWriteIso8601Date() {
+        Assert.assertNotNull(NaaccrXmlUtils.formatIso8601Date(new Date()));
     }
 }

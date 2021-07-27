@@ -17,12 +17,20 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 
@@ -522,5 +530,41 @@ public class NaaccrXmlUtils {
             }
             throw new NaaccrIOException(e.getMessage());
         }
+    }
+
+    /**
+     * Reads the provided ISO 8601 value into a Date object.
+     * @param value value to parse
+     * @return the parsed value as a Date, null if the incoming value is null or empty
+     * @throws IOException if the value has a value that cannot be parsed
+     */
+    public static Date parseIso8601Date(String value) throws IOException {
+        if (StringUtils.isBlank(value))
+            return null;
+
+        // looks like ISO 8601 allows with and without a time zone (offset) and Java doesn't have a single formatter to handle both (sucks!)
+        try {
+            return Date.from(ZonedDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant());
+        }
+        catch (RuntimeException e1) {
+            try {
+                return Date.from(LocalDateTime.parse(value, DateTimeFormatter.ISO_LOCAL_DATE_TIME).toInstant(ZoneOffset.UTC));
+            }
+            catch (RuntimeException e2) {
+                throw new IOException("Unable to parse value as ISO 8601 date: " + value);
+            }
+        }
+    }
+
+    /**
+     * Format the provided date into an ISO 8601 String value.
+     * @param date the date to format, cannot be null
+     * @return the formatted date using the ISO 8601 format
+     */
+    public static String formatIso8601Date(Date date) {
+        if (date == null)
+            throw new NullPointerException("Date to write cannot be null!");
+
+        return ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 }

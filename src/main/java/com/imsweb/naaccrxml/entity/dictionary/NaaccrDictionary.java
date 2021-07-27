@@ -5,27 +5,37 @@ package com.imsweb.naaccrxml.entity.dictionary;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class NaaccrDictionary {
 
+    // the dictionary identifier (might look like an internet address but most of the time it's not)
     private String _dictionaryUri;
 
+    // the NAACCR version for this dictionary
     private String _naaccrVersion;
 
+    // specification version implemented by this dictionary
     private String _specificationVersion;
 
+    // the last time this dictionary was updated/modified
+    private Date _dateLastModified;
+
+    // a description for this dictionary
     private String _description;
 
+    // the items contained in this dictionary
     private List<NaaccrDictionaryItem> _items;
 
+    // the grouped items contained in this dictionary
     private List<NaaccrDictionaryGroupedItem> _groupedItems;
 
     // caches to improve lookup performances
-    private Map<String, NaaccrDictionaryItem> _cachedById;
-    private Map<Integer, NaaccrDictionaryItem> _cachedByNumber;
+    private final Map<String, NaaccrDictionaryItem> _cachedById;
+    private final Map<Integer, NaaccrDictionaryItem> _cachedByNumber;
 
     // cache access needs to be synchronized!
     private static final Object _CACHED_LOCK = new Object();
@@ -59,6 +69,14 @@ public class NaaccrDictionary {
 
     public void setSpecificationVersion(String specificationVersion) {
         _specificationVersion = specificationVersion;
+    }
+
+    public Date getDateLastModified() {
+        return _dateLastModified;
+    }
+
+    public void setDateLastModified(Date dateLastModified) {
+        _dateLastModified = dateLastModified;
     }
 
     public String getDescription() {

@@ -5,9 +5,7 @@ package com.imsweb.naaccrxml;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -174,8 +172,8 @@ public class PatientXmlWriter implements PatientWriter {
             if (rootData.getRecordType() == null)
                 throw new NaaccrIOException("record type is required");
             _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE, rootData.getRecordType());
-            ZonedDateTime generationTime = rootData.getTimeGenerated() != null ? ZonedDateTime.ofInstant(rootData.getTimeGenerated().toInstant(), ZoneId.systemDefault()) : ZonedDateTime.now();
-            _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, generationTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, NaaccrXmlUtils.formatIso8601Date(
+                    rootData.getTimeGenerated() != null ? rootData.getTimeGenerated() : Calendar.getInstance().getTime()));
             // always use the current specs; doesn't matter the value on the root object...
             _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION, NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
 

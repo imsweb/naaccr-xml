@@ -34,10 +34,10 @@ public class NaaccrData extends AbstractEntity {
     private String _specificationVersion;
 
     // any extra (non-standard) root attributes
-    private Map<String, String> _extraRootParameters;
+    private final Map<String, String> _extraRootParameters;
 
     // the list of patients
-    private List<Patient> _patients;
+    private final List<Patient> _patients;
 
     /**
      * Constructor.

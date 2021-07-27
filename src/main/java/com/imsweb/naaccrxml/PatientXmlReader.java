@@ -3,15 +3,11 @@
  */
 package com.imsweb.naaccrxml;
 
+import java.io.IOException;
 import java.io.Reader;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -216,18 +212,12 @@ public class PatientXmlReader implements PatientReader {
 
             // read the standard attribute: time generated
             String generatedTime = _reader.getAttribute(NAACCR_XML_ROOT_ATT_TIME_GENERATED);
-            if (generatedTime != null) {
-                // it sucks that ISO 8601 allows with and without a time zone (offset) and it sucks even more that Java doesn't have a single formatter to handle both!
+            if (!StringUtils.isBlank(generatedTime)) {
                 try {
-                    _rootData.setTimeGenerated(Date.from(ZonedDateTime.parse(generatedTime, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant()));
+                    _rootData.setTimeGenerated(NaaccrXmlUtils.parseIso8601Date(_reader.getAttribute(NAACCR_XML_ROOT_ATT_TIME_GENERATED)));
                 }
-                catch (RuntimeException e1) {
-                    try {
-                        _rootData.setTimeGenerated(Date.from(LocalDateTime.parse(generatedTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME).toInstant(ZoneOffset.UTC)));
-                    }
-                    catch (RuntimeException e2) {
-                        _rootData.addValidationError(new NaaccrValidationError(NaaccrErrorUtils.CODE_BAD_TIME_GENERATED, generatedTime));
-                    }
+                catch (IOException e) {
+                    _rootData.addValidationError(new NaaccrValidationError(NaaccrErrorUtils.CODE_BAD_TIME_GENERATED, generatedTime));
                 }
             }
 
