@@ -37,18 +37,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
-import com.thoughtworks.xstream.converters.basic.BooleanConverter;
-import com.thoughtworks.xstream.converters.basic.ByteConverter;
-import com.thoughtworks.xstream.converters.basic.DoubleConverter;
-import com.thoughtworks.xstream.converters.basic.FloatConverter;
-import com.thoughtworks.xstream.converters.basic.IntConverter;
-import com.thoughtworks.xstream.converters.basic.LongConverter;
-import com.thoughtworks.xstream.converters.basic.NullConverter;
-import com.thoughtworks.xstream.converters.basic.ShortConverter;
-import com.thoughtworks.xstream.converters.basic.StringConverter;
-import com.thoughtworks.xstream.converters.collections.CollectionConverter;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
-import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
 import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.security.NoTypePermission;
@@ -57,7 +46,7 @@ import com.thoughtworks.xstream.security.WildcardTypePermission;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryGroupedItem;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
-import com.imsweb.naaccrxml.runtime.Iso8601DateConverter;
+import com.imsweb.naaccrxml.runtime.NaaccrDictionaryConverter;
 
 /**
  * This utility class can be used to read/write dictionaries, whether they are internal to the library, or provided by the user...
@@ -987,18 +976,7 @@ public final class NaaccrXmlDictionaryUtils {
         XStream xstream = new XStream(new PureJavaReflectionProvider()) {
             @Override
             protected void setupConverters() {
-                registerConverter(new NullConverter(), PRIORITY_VERY_HIGH);
-                registerConverter(new IntConverter(), PRIORITY_NORMAL);
-                registerConverter(new FloatConverter(), PRIORITY_NORMAL);
-                registerConverter(new DoubleConverter(), PRIORITY_NORMAL);
-                registerConverter(new LongConverter(), PRIORITY_NORMAL);
-                registerConverter(new ShortConverter(), PRIORITY_NORMAL);
-                registerConverter(new BooleanConverter(), PRIORITY_NORMAL);
-                registerConverter(new ByteConverter(), PRIORITY_NORMAL);
-                registerConverter(new StringConverter(), PRIORITY_NORMAL);
-                registerConverter(new Iso8601DateConverter(), PRIORITY_NORMAL); // replaced normal date converter by custom ISO 8601 one...
-                registerConverter(new CollectionConverter(getMapper()), PRIORITY_NORMAL);
-                registerConverter(new ReflectionConverter(getMapper(), getReflectionProvider()), PRIORITY_VERY_LOW);
+                registerConverter(new NaaccrDictionaryConverter());
             }
         };
 
@@ -1006,47 +984,8 @@ public final class NaaccrXmlDictionaryUtils {
         xstream.addPermission(NoTypePermission.NONE);
         xstream.addPermission(new WildcardTypePermission(new String[] {"com.imsweb.naaccrxml.**"}));
 
+        // setup entry point for reading full dictionary document
         xstream.alias("NaaccrDictionary", NaaccrDictionary.class);
-        xstream.aliasAttribute(NaaccrDictionary.class, "_dictionaryUri", "dictionaryUri");
-        xstream.aliasAttribute(NaaccrDictionary.class, "_naaccrVersion", "naaccrVersion");
-        xstream.aliasAttribute(NaaccrDictionary.class, "_specificationVersion", "specificationVersion");
-        xstream.aliasAttribute(NaaccrDictionary.class, "_dateLastModified", "dateLastModified");
-        xstream.aliasAttribute(NaaccrDictionary.class, "_description", "description");
-        xstream.aliasAttribute(NaaccrDictionary.class, "_items", "ItemDefs");
-        xstream.aliasAttribute(NaaccrDictionary.class, "_groupedItems", "GroupedItemDefs");
-        xstream.omitField(NaaccrDictionary.class, "_cachedById");
-        xstream.omitField(NaaccrDictionary.class, "_cachedByNumber");
-
-        xstream.alias("ItemDef", NaaccrDictionaryItem.class);
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_naaccrId", "naaccrId");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_naaccrNum", "naaccrNum");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_naaccrName", "naaccrName");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_startColumn", "startColumn");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_length", "length");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_recordTypes", "recordTypes");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_sourceOfStandard", "sourceOfStandard");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_parentXmlElement", "parentXmlElement");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_dataType", "dataType");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_regexValidation", "regexValidation");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_padding", "padding");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_trim", "trim");
-        xstream.aliasAttribute(NaaccrDictionaryItem.class, "_allowUnlimitedText", "allowUnlimitedText");
-
-        xstream.alias("GroupedItemDef", NaaccrDictionaryGroupedItem.class);
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_naaccrId", "naaccrId");
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_naaccrNum", "naaccrNum");
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_naaccrName", "naaccrName");
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_startColumn", "startColumn");
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_length", "length");
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_recordTypes", "recordTypes");
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_sourceOfStandard", "sourceOfStandard");
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_parentXmlElement", "parentXmlElement");
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_dataType", "dataType");
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_regexValidation", "regexValidation");
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_padding", "padding");
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_trim", "trim");
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_allowUnlimitedText", "allowUnlimitedText");
-        xstream.aliasAttribute(NaaccrDictionaryGroupedItem.class, "_contains", "contains");
 
         return xstream;
     }
