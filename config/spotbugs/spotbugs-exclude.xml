@@ -9,4 +9,8 @@
 <Match>
   <Package name="lab"/>
 </Match>
+<Match>
+  <Bug code="NP"/>/>
+  <Class name=" com.imsweb.naaccrxml.runtime.NaaccrDictionaryConverter"/>
+</Match>
 </FindBugsFilter>
