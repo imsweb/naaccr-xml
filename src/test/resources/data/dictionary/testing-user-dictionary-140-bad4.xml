@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!-- missing URI -->
+<!-- bad "rim" attribute name -->
 
-<NaaccrDictionary naaccrVersion="140">
+<NaaccrDictionary dictionaryUri="http://mycompany.org/my-very-own-naaccr-dictionary.xml" naaccrVersion="140" other="whatever">
     <ItemDefs>
         <ItemDef naaccrId="myVariable1" naaccrNum="10001" naaccrName="My Variable 1" startColumn="2340" length="1" recordTypes="A,M,C,I" parentXmlElement="Tumor"/>
         <ItemDef naaccrId="myVariable2" naaccrNum="10002" naaccrName="My Variable 2" startColumn="2341" length="1" recordTypes="A,M,C,I" parentXmlElement="Patient"/>

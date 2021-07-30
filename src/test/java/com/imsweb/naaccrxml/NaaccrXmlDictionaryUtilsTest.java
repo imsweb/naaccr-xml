@@ -127,34 +127,44 @@ public class NaaccrXmlDictionaryUtilsTest {
         }
 
         // try to read a user dictionary with an error (bad start column)
-        boolean exceptionAppend = false;
+        boolean exception = false;
         try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140-bad1.xml"))) {
             NaaccrXmlDictionaryUtils.readDictionary(reader);
         }
         catch (IOException e) {
-            exceptionAppend = true;
+            exception = true;
         }
-        Assert.assertTrue(exceptionAppend);
+        Assert.assertTrue(exception);
 
         // try to read a user dictionary with another error (NPCR item definition redefines the NAACCR number)
-        exceptionAppend = false;
+        exception = false;
         try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140-bad2.xml"))) {
             NaaccrXmlDictionaryUtils.readDictionary(reader);
         }
         catch (IOException e) {
-            exceptionAppend = true;
+            exception = true;
         }
-        Assert.assertTrue(exceptionAppend);
+        Assert.assertTrue(exception);
 
         // try to read a user dictionary with another error (missing dictionaryUri attribute)
-        exceptionAppend = false;
+        exception = false;
         try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140-bad3.xml"))) {
             NaaccrXmlDictionaryUtils.readDictionary(reader);
         }
         catch (IOException e) {
-            exceptionAppend = true;
+            exception = true;
         }
-        Assert.assertTrue(exceptionAppend);
+        Assert.assertTrue(exception);
+
+        // try to read a user dictionary with another error (bad attribute name)
+        exception = false;
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-140-bad4.xml"))) {
+            NaaccrXmlDictionaryUtils.readDictionary(reader);
+        }
+        catch (IOException e) {
+            exception = true;
+        }
+        Assert.assertTrue(exception);
 
         // NAACCR 22 specs 1.5 dictionary with new dateLastModified attribute
         try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-220.xml"))) {

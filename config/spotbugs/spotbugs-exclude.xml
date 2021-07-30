@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Bugs definitions: https://spotbugs.readthedocs.io/en/stable/bugDescriptions.html -->
+
 <FindBugsFilter>
-<Match>
-  <Bug code="EI,EI2,Dm,RCN"/>/>
-</Match>
-<Match>
-  <Class name="~.*\.*Test"/>
-</Match>
-<Match>
-  <Package name="lab"/>
-</Match>
+    <!-- don't bother with test classes -->
+    <Match>
+        <Class name="~.*\.*Test"/>
+    </Match>
+    <!-- don't bother with lab classes -->
+    <Match>
+        <Package name="lab"/>
+    </Match>
+    <!-- too many false positives for these (or not worth the time to fix):
+             EI: May expose internal representation by returning reference to mutable object
+             EI2: May expose internal representation by incorporating reference to mutable object
+             Dm: Monitor wait() called on Condition
+             RCN: Redundant null check of value known to be null
+     -->
+    <Match>
+        <Bug code="EI,EI2,Dm,RCN"/>
+    </Match>
+    <!-- don't agree with this one:
+             NP: Method relaxes nullness annotation on return value -->
+    <Match>
+        <Bug code="NP"/>
+        <Class name="com.imsweb.naaccrxml.runtime.NaaccrDictionaryConverter"/>
+    </Match>
 </FindBugsFilter>
