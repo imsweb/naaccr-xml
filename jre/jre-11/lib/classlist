@@ -114,6 +114,7 @@ java/lang/Byte
 java/lang/Short
 java/lang/Integer
 java/lang/Long
+java/util/Iterator
 java/lang/NullPointerException
 java/lang/ArithmeticException
 java/io/ObjectStreamField
@@ -156,8 +157,8 @@ java/lang/ref/Reference$1
 jdk/internal/misc/JavaLangRefAccess
 jdk/internal/misc/SharedSecrets
 java/lang/ref/Finalizer$FinalizerThread
-java/lang/StringLatin1
 jdk/internal/misc/VM
+java/lang/StringLatin1
 java/util/Properties$EntrySet
 java/util/concurrent/ConcurrentHashMap$EntrySetView
 java/util/concurrent/ConcurrentHashMap$CollectionView
@@ -172,7 +173,6 @@ java/util/Collections$SynchronizedSet
 java/util/Collections$SynchronizedCollection
 java/lang/reflect/Array
 java/util/concurrent/ConcurrentHashMap$EntryIterator
-java/util/Iterator
 java/util/concurrent/ConcurrentHashMap$BaseIterator
 java/util/concurrent/ConcurrentHashMap$Traverser
 java/util/concurrent/ConcurrentHashMap$MapEntry
@@ -1009,6 +1009,10 @@ sun/util/calendar/ZoneInfoFile
 sun/util/calendar/ZoneInfoFile$1
 java/io/DataInputStream
 sun/util/calendar/ZoneInfoFile$ZoneOffsetTransitionRule
+sun/util/calendar/ZoneInfoFile$Checksum
+java/util/zip/CRC32
+java/util/zip/Checksum
+java/util/zip/Checksum$1
 sun/util/spi/CalendarProvider
 sun/util/locale/provider/CalendarProviderImpl
 java/util/Calendar$Builder
@@ -1120,6 +1124,12 @@ java/util/logging/ErrorManager
 java/util/logging/Handler$1
 java/util/logging/StreamHandler$1
 java/util/logging/LogManager$CloseOnReset
+java/time/zone/ZoneRulesProvider
+java/time/zone/ZoneRulesProvider$1
+java/time/zone/TzdbZoneRulesProvider
+java/time/zone/Ser
+java/io/Externalizable
+java/time/zone/ZoneOffsetTransition
 java/time/ZonedDateTime
 java/time/chrono/ChronoZonedDateTime
 java/util/logging/LogRecord$CallerFinder
