@@ -2,7 +2,7 @@
 
 **Version 8.0**
 
-- Added support for NAACCR 22; that version is not final yet and it's possible it will change in a future release.
+- Added support for NAACCR 22.
 - Added support for new specifications version 1.5 (base dictionaries were NOT upgraded to that version yet).
 - Fixed dictionary validation not reporting unknown/invalid XML attributes.
 - Updated embedded JRE to Java 11.0.12 (this only affects the standalone program).
