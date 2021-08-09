@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import com.imsweb.naaccrxml.entity.NaaccrData;
@@ -398,6 +399,7 @@ public class PatientXmlReaderTest {
         conf.registerNamespace("other", "http://whatever.org");
         conf.registerTag("other", "MyOuterTag", OuterTag.class);
         conf.registerTag("other", "MyEmbeddedEntity", EmbeddedEntity.class);
+        conf.registerAttribute("other", "someAttribute", OuterTag.class, "_someAttribute", String.class);
 
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("standard-file-extension.xml")), null, (NaaccrDictionary)null, conf)) {
             // there should be no error, 1 item and 2 extensions for the root
@@ -405,6 +407,7 @@ public class PatientXmlReaderTest {
             Assert.assertEquals(1, reader.getRootData().getItems().size());
             Assert.assertEquals(2, reader.getRootData().getExtensions().size());
             OuterTag tag1 = ((OuterTag)reader.getRootData().getExtensions().get(0));
+            Assert.assertEquals("XXX", tag1.getSomeAttribute());
             Assert.assertEquals("root-extension-1", tag1.getInnerTag());
             Assert.assertEquals(5, tag1.getStartLineNumber().intValue());
             Assert.assertNotNull(tag1.getEntity());
@@ -454,6 +457,9 @@ public class PatientXmlReaderTest {
         @XStreamAlias("other:MyEmbeddedEntity")
         private EmbeddedEntity _entity;
 
+        @XStreamAsAttribute
+        private String _someAttribute;
+
         @Override
         public Integer getStartLineNumber() {
             return _startLineNumber;
@@ -478,6 +484,14 @@ public class PatientXmlReaderTest {
 
         public void setEntity(EmbeddedEntity entity) {
             _entity = entity;
+        }
+
+        public String getSomeAttribute() {
+            return _someAttribute;
+        }
+
+        public void setSomeAttribute(String someAttribute) {
+            this._someAttribute = someAttribute;
         }
     }
 
