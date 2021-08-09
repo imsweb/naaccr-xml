@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 8.2**
+
+- Fixed non-standard root attributes not written on their own line.
+
 **Version 8.1**
 
 - Fixed error that prevented the standalone program from loading. That error also affected other parts of the library.

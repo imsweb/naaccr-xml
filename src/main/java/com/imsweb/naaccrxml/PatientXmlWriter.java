@@ -189,7 +189,7 @@ public class PatientXmlWriter implements PatientWriter {
                     _writer.addAttributeWithNewLine(entry.getKey(), entry.getValue());
 
             // add any user-defined namespaces
-            conf.getRegisterNamespaces().forEach((key, value) -> _writer.addAttribute("xmlns:" + key, value));
+            conf.getRegisterNamespaces().forEach((key, value) -> _writer.addAttributeWithNewLine("xmlns:" + key, value));
 
             // add the default namespace, always use the library value...
             _writer.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
