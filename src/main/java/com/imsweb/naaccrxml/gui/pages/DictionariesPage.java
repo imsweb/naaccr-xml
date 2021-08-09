@@ -68,7 +68,9 @@ public class DictionariesPage extends AbstractPage {
         Vector<NaaccrDictionaryWrapper> standardDictionaries = new Vector<>();
         for (String version : NaaccrFormat.getSupportedVersions()) {
             standardDictionaries.add(new NaaccrDictionaryWrapper(NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(version), true));
-            standardDictionaries.add(new NaaccrDictionaryWrapper(NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(version), false));
+            NaaccrDictionary defaultUserDictionary = NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(version);
+            if (defaultUserDictionary != null)
+                standardDictionaries.add(new NaaccrDictionaryWrapper(defaultUserDictionary, false));
         }
         standardDictionaries.sort((o1, o2) -> o2.getDictionary().getNaaccrVersion().compareTo(o1.getDictionary().getNaaccrVersion()));
 

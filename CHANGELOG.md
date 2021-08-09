@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 8.1**
+
+- Fixed error that prevented the standalone program from loading. That error also affected other parts of the library.
+
 **Version 8.0**
 
 - Added support for NAACCR 22.

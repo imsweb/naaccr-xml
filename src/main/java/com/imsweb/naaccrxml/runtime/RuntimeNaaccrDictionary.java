@@ -62,8 +62,11 @@ public class RuntimeNaaccrDictionary {
             throw new NaaccrIOException(StringUtils.capitalize(errors.get(0)));
 
         // use the default user dictionary if one is not provided...
-        if (dictionaries.isEmpty())
-            dictionaries.add(NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(baseDictionary.getNaaccrVersion()));
+        if (dictionaries.isEmpty()) {
+            NaaccrDictionary defaultUserDictionary = NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(baseDictionary.getNaaccrVersion());
+            if (defaultUserDictionary != null)
+                dictionaries.add(defaultUserDictionary);
+        }
 
         _format = NaaccrFormat.getInstance(baseDictionary.getNaaccrVersion(), recordType);
         _items = new ArrayList<>();
