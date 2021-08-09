@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
+<!-- missing default namespace -->
+
 <NaaccrDictionary dictionaryUri="http://mycompany.org/my-very-own-naaccr-dictionary.xml"
             naaccrVersion="220"
             specificationVersion="1.5"
-            dateLastModified="2001-10-26T21:32:52"
-            xmlns="http://naaccr.org/naaccrxml">
+            dateLastModified="2001-10-26T21:32:52">
     <ItemDefs>
         <ItemDef naaccrId="myVariable1" naaccrNum="10001" naaccrName="My Variable 1" length="1" recordTypes="A,M,C,I" parentXmlElement="NaaccrData"/>
         <ItemDef naaccrId="myVariable2" naaccrNum="10002" naaccrName="My Variable 2" length="1" recordTypes="A,M,C,I" parentXmlElement="Patient"/>

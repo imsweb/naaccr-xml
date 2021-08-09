@@ -2,6 +2,7 @@
 
 **Version 8.2**
 
+- Dictionary validation will now fail if the expected default namespace is not provided.
 - Fixed non-standard root attributes not written on their own line.
 
 **Version 8.1**

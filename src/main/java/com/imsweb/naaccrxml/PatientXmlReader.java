@@ -246,6 +246,7 @@ public class PatientXmlReader implements PatientReader {
                         if (!NAACCR_XML_NAMESPACE.equals(_reader.getAttribute(i)))
                             throw new NaaccrIOException("default namespace can only be set to " + NAACCR_XML_NAMESPACE);
                         namespaces.put("", _reader.getAttribute(i));
+
                     }
                 }
                 else

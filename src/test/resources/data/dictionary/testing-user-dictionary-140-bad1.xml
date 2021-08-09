@@ -2,7 +2,9 @@
 
 <!-- bad start column -->
 
-<NaaccrDictionary dictionaryUri="http://mycompany.org/my-very-own-naaccr-dictionary.xml" naaccrVersion="140">
+<NaaccrDictionary dictionaryUri="http://mycompany.org/my-very-own-naaccr-dictionary.xml"
+            naaccrVersion="140"
+            xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>
         <ItemDef naaccrId="myVariable" naaccrNum="10001" naaccrName="My Variable" startColumn="1" length="1" parentXmlElement="Tumor"/>
     </ItemDefs>

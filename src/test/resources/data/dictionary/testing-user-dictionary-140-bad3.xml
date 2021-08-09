@@ -2,7 +2,7 @@
 
 <!-- missing URI -->
 
-<NaaccrDictionary naaccrVersion="140">
+<NaaccrDictionary naaccrVersion="140" xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>
         <ItemDef naaccrId="myVariable1" naaccrNum="10001" naaccrName="My Variable 1" startColumn="2340" length="1" recordTypes="A,M,C,I" parentXmlElement="Tumor"/>
         <ItemDef naaccrId="myVariable2" naaccrNum="10002" naaccrName="My Variable 2" startColumn="2341" length="1" recordTypes="A,M,C,I" parentXmlElement="Patient"/>
