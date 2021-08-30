@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
@@ -446,10 +445,7 @@ public class PatientXmlReaderTest {
 
     @SuppressWarnings("unused")
     @XStreamAlias("MyOuterTag")
-    private static class OuterTag implements NaaccrXmlExtension {
-
-        @XStreamOmitField
-        private Integer _startLineNumber;
+    private static class OuterTag extends AbstractNaaccrXmlExtension {
 
         @XStreamAlias("other:MyInnerTag")
         private String _innerTag;
@@ -459,16 +455,6 @@ public class PatientXmlReaderTest {
 
         @XStreamAsAttribute
         private String _someAttribute;
-
-        @Override
-        public Integer getStartLineNumber() {
-            return _startLineNumber;
-        }
-
-        @Override
-        public void setStartLineNumber(Integer startLineNumber) {
-            _startLineNumber = startLineNumber;
-        }
 
         public String getInnerTag() {
             return _innerTag;
@@ -497,23 +483,10 @@ public class PatientXmlReaderTest {
 
     @SuppressWarnings("unused")
     @XStreamAlias("MyEmbeddedEntity")
-    private static class EmbeddedEntity implements NaaccrXmlExtension {
-
-        @XStreamOmitField
-        private Integer _startLineNumber;
+    private static class EmbeddedEntity extends AbstractNaaccrXmlExtension {
 
         @XStreamAlias("other:MyEntityTag")
         private String _entityTag;
-
-        @Override
-        public Integer getStartLineNumber() {
-            return _startLineNumber;
-        }
-
-        @Override
-        public void setStartLineNumber(Integer startLineNumber) {
-            _startLineNumber = startLineNumber;
-        }
 
         public String getEntityTag() {
             return _entityTag;
