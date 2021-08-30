@@ -2,6 +2,7 @@ package com.imsweb.naaccrxml;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -12,6 +13,10 @@ import java.util.zip.ZipOutputStream;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.NaaccrData;
@@ -406,6 +411,78 @@ public class PatientXmlWriterTest {
                         writer.closeAndKeepAlive();
                 }
             }
+        }
+    }
+
+    @Test
+    public void testExtensions() throws IOException {
+
+        NaaccrData data = new NaaccrData(NaaccrFormat.NAACCR_FORMAT_22_INCIDENCE);
+        data.addExtraRootParameters("other:myAttribute", "XXX");
+        Patient patient = new Patient();
+        patient.addItem(new Item("patientIdNumber", "00000001"));
+        OuterTag tag = new OuterTag();
+        tag.setInnerTag("INNER");
+        tag.setSomeAttribute("XXX");
+        patient.setExtensions(Collections.singletonList(tag));
+        data.addPatient(patient);
+
+        // to properly process extensions, we have to register them to the framework; this is done through a configuration object
+        NaaccrStreamConfiguration conf = new NaaccrStreamConfiguration();
+        conf.getXstream().autodetectAnnotations(true); // required only because we want to use annotation on the extension classes (it's more convenient)
+        conf.registerNamespace("other", "http://whatever.org");
+        conf.registerTag("other", "MyOuterTag", OuterTag.class);
+        conf.registerAttribute("other", "someAttribute", OuterTag.class, "_someAttribute", String.class);
+
+        File file = TestingUtils.createFile("standard-file-extension.xml");
+
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, null, (NaaccrDictionary)null, conf)) {
+            writer.writePatient(patient);
+        }
+
+        try (PatientXmlReader reader = new PatientXmlReader(new FileReader(file), null, (NaaccrDictionary)null, conf)) {
+            Patient p = reader.readPatient();
+            Assert.assertNotNull(p.getExtensions());
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @XStreamAlias("other:MyOuterTag")
+    private static class OuterTag implements NaaccrXmlExtension {
+
+        @XStreamOmitField
+        private Integer _startLineNumber;
+
+        @XStreamAlias("other:MyInnerTag")
+        private String _innerTag;
+
+        @XStreamAsAttribute
+        private String _someAttribute;
+
+        @Override
+        public Integer getStartLineNumber() {
+            return _startLineNumber;
+        }
+
+        @Override
+        public void setStartLineNumber(Integer startLineNumber) {
+            _startLineNumber = startLineNumber;
+        }
+
+        public String getInnerTag() {
+            return _innerTag;
+        }
+
+        public void setInnerTag(String innerTag) {
+            _innerTag = innerTag;
+        }
+
+        public String getSomeAttribute() {
+            return _someAttribute;
+        }
+
+        public void setSomeAttribute(String someAttribute) {
+            this._someAttribute = someAttribute;
         }
     }
 }

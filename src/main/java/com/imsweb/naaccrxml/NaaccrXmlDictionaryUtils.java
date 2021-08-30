@@ -1061,13 +1061,15 @@ public final class NaaccrXmlDictionaryUtils {
 
             if (!_namespaceWritten) {
                 boolean hasDesc = !StringUtils.isBlank(_dictionary.getDescription());
+                boolean hasLastMod = _dictionary.getDateLastModified() != null;
                 boolean hasSpec = !StringUtils.isBlank(_dictionary.getSpecificationVersion());
                 boolean hasVer = !StringUtils.isBlank(_dictionary.getNaaccrVersion());
                 // URI is required, so we know it will be there
                 if ((hasDesc && "description".equals(key))
-                        || (!hasDesc && hasSpec && "specificationVersions".equals(key))
-                        || (!hasDesc && !hasSpec && hasVer && "naaccrVersion".equals(key))
-                        || (!hasDesc && !hasSpec && !hasVer && "dictionaryUri".equals(key))) {
+                        || (!hasDesc && hasLastMod && "dateLastModified".equals(key))
+                        || (!hasDesc && !hasLastMod &&hasSpec && "specificationVersions".equals(key))
+                        || (!hasDesc && !hasLastMod && !hasSpec && hasVer && "naaccrVersion".equals(key))
+                        || (!hasDesc && !hasLastMod && !hasSpec && !hasVer && "dictionaryUri".equals(key))) {
                     super.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
                     _namespaceWritten = true;
                 }
