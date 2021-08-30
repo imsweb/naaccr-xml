@@ -1,15 +1,12 @@
 ## NAACCR XML Version History
 
-**Version 8.3**
-
-- Updated XStream dependency from version 1.4.17 to version 1.4.18.
-- Updated commons-lang3 dependency from version 3.11 to version 3.12.0.
-- Updated commons-io dependency from version 2.7 to version 2.11.0.
-
 **Version 8.2**
 
 - Dictionary validation will now fail if the expected default namespace is not provided.
 - Fixed non-standard root attributes not written on their own line.
+- Updated XStream dependency from version 1.4.17 to version 1.4.18.
+- Updated commons-lang3 dependency from version 3.11 to version 3.12.0.
+- Updated commons-io dependency from version 2.7 to version 2.11.0.
 
 **Version 8.1**
 
