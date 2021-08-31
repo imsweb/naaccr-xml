@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 8.3**
+
+- Fixed default namespace not always written for dictionaries.
+
 **Version 8.2**
 
 - Dictionary validation will now fail if the expected default namespace is not provided.

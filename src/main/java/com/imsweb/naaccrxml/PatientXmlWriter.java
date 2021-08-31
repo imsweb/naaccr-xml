@@ -24,7 +24,7 @@ import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
-import com.imsweb.naaccrxml.internal.NaaccrXmLPrettyPrintWriter;
+import com.imsweb.naaccrxml.internal.NaaccrXmlPrettyPrintWriter;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamContext;
 import com.imsweb.naaccrxml.runtime.RuntimeNaaccrDictionary;
@@ -41,7 +41,7 @@ public class PatientXmlWriter implements PatientWriter {
     protected XStream _xstream;
 
     // the underlined writer
-    protected NaaccrXmLPrettyPrintWriter _writer;
+    protected NaaccrXmlPrettyPrintWriter _writer;
 
     // cached value for new line character(s)
     protected String _newLine;
@@ -149,7 +149,7 @@ public class PatientXmlWriter implements PatientWriter {
                         dictionaries.put(userDictionary.getDictionaryUri(), userDictionary);
 
             // create the writer
-            _writer = new NaaccrXmLPrettyPrintWriter(writer, _newLine);
+            _writer = new NaaccrXmlPrettyPrintWriter(writer, _newLine);
 
             // would be better to use a "header writer", I think XStream has one actually; that would be better...
             try {

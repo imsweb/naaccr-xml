@@ -221,6 +221,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         try (Writer writer = new FileWriter(file)) {
             NaaccrXmlDictionaryUtils.writeDictionary(dict, writer);
         }
+
         NaaccrDictionary newDict = NaaccrXmlDictionaryUtils.readDictionary(file);
         Assert.assertEquals("140", newDict.getNaaccrVersion());
         Assert.assertEquals("whatever", newDict.getDictionaryUri());
@@ -238,6 +239,15 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertEquals(1, newDict.getItems().size());
         Assert.assertNotNull(newDict.getItemByNaaccrId("myVariable"));
         Assert.assertNotNull(newDict.getItemByNaaccrNum(10000));
+
+        dict.setNaaccrVersion(null);
+        dict.setSpecificationVersion("1.2");
+        dict.setDescription(null);
+        item.setRegexValidation(null);
+        try (Writer writer = new FileWriter(file)) {
+            NaaccrXmlDictionaryUtils.writeDictionary(dict, writer);
+        }
+        Assert.assertNotNull(NaaccrXmlDictionaryUtils.readDictionary(file).getDictionaryUri());
     }
 
     @Test

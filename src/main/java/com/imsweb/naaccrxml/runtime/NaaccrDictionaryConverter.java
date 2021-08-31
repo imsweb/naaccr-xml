@@ -42,6 +42,8 @@ public class NaaccrDictionaryConverter implements Converter {
         if (!StringUtils.isBlank(dictionary.getDescription()))
             writer.addAttribute("description", dictionary.getDescription());
 
+        writer.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
+
         writer.startNode("ItemDefs");
 
         for (NaaccrDictionaryItem item : dictionary.getItems()) {

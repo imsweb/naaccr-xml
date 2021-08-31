@@ -999,13 +999,11 @@ public final class NaaccrXmlDictionaryUtils {
         private final NaaccrDictionary _dictionary;
         private QuickWriter _internalWriter;
         private String _currentItemId;
-        private boolean _namespaceWritten;
 
         public NaaccrPrettyPrintWriter(NaaccrDictionary dictionary, Writer writer, List<String> comment) {
             super(writer, new char[] {' ', ' ', ' ', ' '});
             _dictionary = dictionary;
             _currentItemId = null;
-            _namespaceWritten = false;
 
             try {
                 writer.write("<?xml version=\"1.0\"?>\n\n");
@@ -1058,23 +1056,6 @@ public final class NaaccrXmlDictionaryUtils {
                 _currentItemId = value;
             if (!isLastAttribute(key))
                 _internalWriter.write("\n           ");
-
-            if (!_namespaceWritten) {
-                boolean hasDesc = !StringUtils.isBlank(_dictionary.getDescription());
-                boolean hasLastMod = _dictionary.getDateLastModified() != null;
-                boolean hasSpec = !StringUtils.isBlank(_dictionary.getSpecificationVersion());
-                boolean hasVer = !StringUtils.isBlank(_dictionary.getNaaccrVersion());
-                // URI is required, so we know it will be there
-                if ((hasDesc && "description".equals(key))
-                        || (!hasDesc && hasLastMod && "dateLastModified".equals(key))
-                        || (!hasDesc && !hasLastMod &&hasSpec && "specificationVersions".equals(key))
-                        || (!hasDesc && !hasLastMod && !hasSpec && hasVer && "naaccrVersion".equals(key))
-                        || (!hasDesc && !hasLastMod && !hasSpec && !hasVer && "dictionaryUri".equals(key))) {
-                    super.addAttribute("xmlns", NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
-                    _namespaceWritten = true;
-                }
-
-            }
         }
 
         /**
@@ -1083,14 +1064,22 @@ public final class NaaccrXmlDictionaryUtils {
          * @return true if the provided attribute is the last one on the line, false otherwise.
          */
         private boolean isLastAttribute(String attribute) {
+
+            // for the root items, the converter always write the default namespace last
+            if ("xmlns".equals(attribute))
+                return true;
+
             NaaccrDictionaryItem item = _dictionary.getItemByNaaccrId(_currentItemId);
             if (item == null)
                 item = _dictionary.getGroupedItemByNaaccrId(_currentItemId);
             if (item == null)
                 return false;
 
+            // for grouped items, the converter always write the "contains" last:
             if (item instanceof NaaccrDictionaryGroupedItem)
                 return "contains".equals(attribute);
+
+            // for items, the order is defined by the converter: we go in reverse order, we only have to check up to parentXmlElement which is required (so we know it's going to be there)
             if (item.getTrim() != null && !NAACCR_TRIM_ALL.equals(item.getTrim()))
                 return "trim".equals(attribute);
             if (item.getPadding() != null && !NAACCR_PADDING_RIGHT_BLANK.equals(item.getPadding()))

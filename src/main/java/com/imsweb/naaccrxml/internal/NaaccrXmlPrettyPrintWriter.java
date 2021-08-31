@@ -8,13 +8,13 @@ import java.io.Writer;
 import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
-public class NaaccrXmLPrettyPrintWriter extends PrettyPrintWriter {
+public class NaaccrXmlPrettyPrintWriter extends PrettyPrintWriter {
 
     private QuickWriter _internalWriter;
 
     private final String _newLine;
 
-    public NaaccrXmLPrettyPrintWriter(Writer writer, String newLine) {
+    public NaaccrXmlPrettyPrintWriter(Writer writer, String newLine) {
         super(writer, new char[]{' ', ' ', ' ', ' '});
         _newLine = newLine;
     }
