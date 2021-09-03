@@ -7,7 +7,7 @@
 <!-- Changelog
  - 09/03/2021: Changed length of dcStateFileNumber from 6 to 12 characters.
  - 09/03/2021: Removed zero-left padding from item reportingFacility.
- - 07/23/2021: replaced API by DLL in data item name of AJCC Cancer Surveillance API Version Current/Original items.
+ - 07/23/2021: Replaced API by DLL in data item name of AJCC Cancer Surveillance API Version Current/Original items.
  - 07/19/2021: Initial version.
 -->
 
