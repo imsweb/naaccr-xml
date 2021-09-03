@@ -202,7 +202,7 @@ dateRegionalLNDissectionFlag,683,"Date Regional Lymph Node Dissection Flag",,2,"
 dateSentinelLymphNodeBiopsy,832,"Date of Sentinel Lymph Node Biopsy",,8,"A,M,C,I",Tumor,date
 dateSentinelLymphNodeBiopsyFlag,833,"Date of Sentinel Lymph Node Biopsy Flag",,2,"A,M,C,I",Tumor,digits
 dateTumorRecordAvailbl,2113,"Date Tumor Record Availbl",,8,"A,M,C,I",Tumor,date
-dcStateFileNumber,2380,"DC State File Number",,6,"A,M,C",Patient,text
+dcStateFileNumber,2380,"DC State File Number",,12,"A,M,C",Patient,text
 derivedAjcc6M,2980,"Derived AJCC-6 M",,2,"A,M,C,I",Tumor,digits
 derivedAjcc6MDescript,2990,"Derived AJCC-6 M Descript",,1,"A,M,C,I",Tumor,text
 derivedAjcc6N,2960,"Derived AJCC-6 N",,2,"A,M,C,I",Tumor,digits

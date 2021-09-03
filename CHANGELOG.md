@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+**Version 8.4**
+
+- Removed left-zero-padded attributes for reportingFacility in all base dictionaries.
+- Changed length of dcStateFileNumber in NAACCR 22 base dictionary.
+
 **Version 8.3**
 
 - Fixed default namespace not always written for dictionaries.

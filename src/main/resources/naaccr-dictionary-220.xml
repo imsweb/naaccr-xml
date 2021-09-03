@@ -5,6 +5,8 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
+ - 09/03/2021: Changed length of dcStateFileNumber from 6 to 12 characters.
+ - 09/03/2021: Removed zero-left padding from item reportingFacility.
  - 07/23/2021: replaced API by DLL in data item name of AJCC Cancer Surveillance API Version Current/Original items.
  - 07/19/2021: Initial version.
 -->
@@ -1449,7 +1451,7 @@
         <ItemDef naaccrId="dcStateFileNumber"
             naaccrNum="2380"
             naaccrName="DC State File Number"
-            length="6"
+            length="12"
             recordTypes="A,M,C"
             parentXmlElement="Patient"/>
         <ItemDef naaccrId="derivedAjcc6M"
@@ -4099,8 +4101,7 @@
             naaccrName="Reporting Facility"
             length="10"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"
-            padding="leftZero"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="residualTumVolPostCytoreduction"
             naaccrNum="3921"
             naaccrName="Residual Tumor Volume Post Cytoreduction"

@@ -4,6 +4,10 @@
      If you need to define additional data items, please create your own user-defined dictionary.
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
+<!-- Changelog
+ - 09/03/2021: Removed zero-left padding from item reportingFacility.
+-->
+
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml"
             naaccrVersion="140"
             specificationVersion="1.4"
@@ -720,8 +724,7 @@
             startColumn="701"
             length="10"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"
-            padding="leftZero"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="npiArchiveFin"
             naaccrNum="3105"
             naaccrName="NPI--Archive FIN"

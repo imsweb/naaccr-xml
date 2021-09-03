@@ -5,6 +5,7 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
+ - 09/03/2021: Removed zero-left padding from item reportingFacility.
  - 03/12/2021: Changed padding of ca199PretxLabValue to be leftBlank.
  - 03/12/2021: Changed padding of sentinelLymphNodesExamined, sentinelLymphNodesPositive and phase1DosePerFraction to be leftZero.
  - 12/03/2020: Changed data type of physicianPrimarySurg from digits to text.
@@ -4052,8 +4053,7 @@
             naaccrName="Reporting Facility"
             length="10"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"
-            padding="leftZero"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="residualTumVolPostCytoreduction"
             naaccrNum="3921"
             naaccrName="Residual Tumor Volume Post Cytoreduction"
