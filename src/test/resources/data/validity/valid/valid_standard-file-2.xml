@@ -2,7 +2,7 @@
 
 <!-- regular file valid for current specifications, defines all standard root attributes -->
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-210.xml" userDictionaryUri="whatever" recordType="A" specificationVersion="1.4" timeGenerated="2015-03-13T12:09:19.0Z" xmlns="http://naaccr.org/naaccrxml">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-220.xml" userDictionaryUri="whatever" recordType="A" specificationVersion="1.5" timeGenerated="2015-03-13T12:09:19.0Z" xmlns="http://naaccr.org/naaccrxml">
     <Item naaccrId="registryId">0000000001</Item>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>

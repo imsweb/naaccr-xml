@@ -2,7 +2,7 @@
 
 <!-- valid file defining no tumor for the unique patient -->
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-210.xml" recordType="I" specificationVersion="1.4" xmlns="http://naaccr.org/naaccrxml">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-220.xml" recordType="I" specificationVersion="1.5" xmlns="http://naaccr.org/naaccrxml">
     <Patient>
         <Item naaccrId="patientIdNumber" naaccrNum="20">00000001</Item>
     </Patient>

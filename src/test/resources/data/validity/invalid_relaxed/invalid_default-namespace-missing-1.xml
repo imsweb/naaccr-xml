@@ -2,7 +2,7 @@
 
 <!-- invalid because default NAACCR namespace not specified -->
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-210.xml" recordType="I" specificationVersion="1.4">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-220.xml" recordType="I" specificationVersion="1.5">
     <Item naaccrId="registryId">0000000001</Item>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>

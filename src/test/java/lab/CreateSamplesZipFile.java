@@ -22,7 +22,7 @@ import com.imsweb.layout.LayoutFactory;
 public class CreateSamplesZipFile {
 
     public static void main(String[] args) throws IOException {
-        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(Paths.get("docs/samples/naaccr-xml-samples-v210.zip").toFile()))) {
+        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(Paths.get("docs/samples/naaccr-xml-samples-v220.zip").toFile()))) {
             Path dir = Paths.get("src/test/resources/data/validity");
             Files.newDirectoryStream(dir.resolve("valid")).forEach(path -> addToZip(path.toFile(), zos));
             Files.newDirectoryStream(dir.resolve("invalid")).forEach(path -> addToZip(path.toFile(), zos));
