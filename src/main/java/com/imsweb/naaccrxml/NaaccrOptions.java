@@ -108,7 +108,7 @@ public class NaaccrOptions {
     private Map<String, String> _dictionaryIdsToTranslate;
 
     /**
-     * When reading XML data, whether a missing user-defined dictionary should trigger an exception from the reader. Defaults to false.
+     * When reading XML data, whether a missing user-defined dictionary should trigger an exception from the reader. Defaults to true (meaning by default missing dictionaries don't trigger an exception in the reader).
      */
     private Boolean _allowMissingDictionary;
 
