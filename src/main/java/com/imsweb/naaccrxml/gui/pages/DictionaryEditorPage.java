@@ -555,7 +555,7 @@ public class DictionaryEditorPage extends AbstractPage implements ActionListener
                 NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(_dictionaryFileChooser.getSelectedFile());
                 if (!NaaccrXmlUtils.NAACCR_XML_NAMESPACE.equals(dictionary.getDefaultXmlNamespace())) {
                     String msg = "The dictionary is valid but is missing a default XML namespace.\n\n"
-                            + "NAACCR XML specifications require the default namespace to always be " + NaaccrXmlUtils.NAACCR_XML_NAMESPACE + "\n\n"
+                            + "NAACCR XML specifications require the default namespace to always be \"" + NaaccrXmlUtils.NAACCR_XML_NAMESPACE + "\".\n\n"
                             + "You can save the dictionary (without making any changes) and the proper namespace will be added.";
                     JOptionPane.showMessageDialog(DictionaryEditorPage.this, msg, "Error", JOptionPane.WARNING_MESSAGE);
                 }
