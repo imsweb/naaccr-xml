@@ -702,7 +702,7 @@ public final class NaaccrXmlDictionaryUtils {
     }
 
     /**
-     * Validates the given base dictionary and user-defined dictionaries; this method validate every dictionaries individually but also runs some inter-dictionary validation.
+     * Validates the given base dictionary and user-defined dictionaries; this method validate every dictionary individually but also runs some inter-dictionary validation.
      * @param baseDictionary base dictionary (required)
      * @param userDictionaries user-defined dictionaries, can be empty but not null
      * @return null if the combination of dictionaries is valid, the error message otherwise

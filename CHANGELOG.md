@@ -4,6 +4,7 @@
 
 - Removed left-zero-padded attributes for reportingFacility in all base dictionaries.
 - Changed length of dcStateFileNumber in NAACCR 22 base dictionary.
+- Tweak code that loads dictionaries to not always report a missing default namespace as an error.
 
 **Version 8.3**
 

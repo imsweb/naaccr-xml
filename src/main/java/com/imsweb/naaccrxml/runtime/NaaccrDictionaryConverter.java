@@ -109,7 +109,6 @@ public class NaaccrDictionaryConverter implements Converter {
         NaaccrDictionary dictionary = new NaaccrDictionary();
 
         Iterator iter = reader.getAttributeNames();
-        boolean sawDefaultNameSpace = false;
         while (iter.hasNext()) {
             String name = (String)iter.next();
             String value = reader.getAttribute(name);
@@ -135,16 +134,12 @@ public class NaaccrDictionaryConverter implements Converter {
                     dictionary.setDescription(stringToString(value));
                     break;
                 case "xmlns":
-                    if (!NaaccrXmlUtils.NAACCR_XML_NAMESPACE.equals(value))
-                        throw new RuntimeException("Default namespace must be set to " + NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
-                    sawDefaultNameSpace = true;
+                    dictionary.setDefaultXmlNamespace(stringToString(value));
                     break;
                 default:
                     throw new RuntimeException("Invalid root attribute: " + name);
             }
         }
-        if (!sawDefaultNameSpace)
-            throw new RuntimeException("Default namespace must be provided and set to " + NaaccrXmlUtils.NAACCR_XML_NAMESPACE);
 
         reader.moveDown();
 

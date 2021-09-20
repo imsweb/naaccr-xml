@@ -173,19 +173,9 @@ public class NaaccrXmlDictionaryUtilsTest {
             Assert.assertNotNull(dictionary.getDateLastModified());
         }
 
-        // try to read a user dictionary with another error (missing default namespace)
-        exception = false;
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-220-bad1.xml"))) {
-            NaaccrXmlDictionaryUtils.readDictionary(reader);
-        }
-        catch (IOException e) {
-            exception = true;
-        }
-        Assert.assertTrue(exception);
-
         // try to read a user dictionary with another error (bad root attribute)
         exception = false;
-        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-220-bad2.xml"))) {
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-220-bad1.xml"))) {
             NaaccrXmlDictionaryUtils.readDictionary(reader);
         }
         catch (IOException e) {

@@ -27,6 +27,9 @@ public class NaaccrDictionary {
     // a description for this dictionary
     private String _description;
 
+    // the default XML namespace
+    private String _defaultXmlNamespace;
+
     // the items contained in this dictionary
     private List<NaaccrDictionaryItem> _items;
 
@@ -85,6 +88,14 @@ public class NaaccrDictionary {
 
     public void setDescription(String description) {
         _description = description;
+    }
+
+    public String getDefaultXmlNamespace() {
+        return _defaultXmlNamespace;
+    }
+
+    public void setDefaultXmlNamespace(String defaultXmlNamespace) {
+        _defaultXmlNamespace = defaultXmlNamespace;
     }
 
     public List<NaaccrDictionaryItem> getItems() {
