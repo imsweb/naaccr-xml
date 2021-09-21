@@ -2,8 +2,12 @@ plugins {
     id 'java-library'
     id 'checkstyle'
     id 'com.github.spotbugs' version '4.5.1'
-    id 'com.bmuschko.nexus' version '2.3.1'
-    id 'io.codearte.nexus-staging' version '0.21.2'
+    id 'maven-publish'
+    id 'signing'
+    id "io.codearte.nexus-staging" version '0.30.0'
+    id 'org.sonatype.gradle.plugins.scan' version '2.0.9'
+    id 'com.adarshr.test-logger' version '3.0.0'
+    id "com.github.ben-manes.versions" version '0.38.0'
 }
 
 group = 'com.imsweb'
@@ -40,6 +44,12 @@ tasks.withType(Javadoc) {
     options.addStringOption('Xdoclint:none', '-quiet')
 }
 
+// generate javadoc and sources (required by Nexus)
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 // customize the manifest
 jar {
     manifest {
@@ -60,6 +70,22 @@ jar {
     }
 }
 
+// Nexus vulnerability scan (https://github.com/sonatype-nexus-community/scan-gradle-plugin)
+ossIndexAudit {
+    dependencyGraph = true
+    printBanner = false
+
+    // only set proxy if running outside of Github Actions
+    if (!System.getenv().GITHUB_ACTIONS) {
+        proxyConfiguration {
+            protocol = 'http'
+            host = 'webproxy-btp.imsweb.com'
+            port = 8080
+        }
+    }
+}
+check.dependsOn 'ossIndexAudit'
+
 // checkstyle plugin settings
 checkstyle {
     ignoreFailures = true
@@ -79,36 +105,73 @@ nexusStaging {
     delayBetweenRetriesInMillis = 5000
 }
 
+
 // needed to deploy to Maven Central
-modifyPom {
-    project {
-        name 'NAACCR XML'
-        description 'This library provides support for the NAACCR XML format.'
-        url 'https://github.com/imsweb/naaccr-xml'
-        inceptionYear '2015'
-
-        scm {
-            url 'https://github.com/imsweb/naaccr-xml'
-            connection 'scm:https://github.com/imsweb/naaccr-xml.git'
-            developerConnection 'scm:git@github.com:imsweb/naaccr-xml.git'
-        }
-
-        licenses {
-            license {
-                name 'A modified BSD License (BSD)'
-                url 'https://github.com/imsweb/naaccr-xml/blob/master/LICENSE'
-                distribution 'repo'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'naaccr-xml'
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
             }
-        }
+            pom {
+                name = 'NAACCR XML'
+                description = 'This library provides support for the NAACCR XML format.'
+                url = 'https://github.com/imsweb/naaccr-xml'
+                inceptionYear = '2015'
 
-        developers {
-            developer {
-                id 'depryf'
-                name 'Fabian Depry'
-                email 'depryf@imsweb.com'
+                licenses {
+                    license {
+                        name = 'A modified BSD License (BSD)'
+                        url = 'https://github.com/imsweb/naaccr-xml/blob/master/LICENSE'
+                        distribution = 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'depryf'
+                        name = 'Fabian Depry'
+                        email = 'depryf@imsweb.com'
+                    }
+                }
+
+                scm {
+                    url = 'https://github.com/imsweb/naaccr-xml'
+                    connection = 'scm:https://github.com/imsweb/naaccr-xml.git'
+                    developerConnection = 'scm:git@github.com:imsweb/naaccr-xml.git'
+                }
             }
         }
     }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            credentials {
+                username = project.findProperty('nexusUsername') ?: ''
+                password = project.findProperty('nexusPassword') ?: ''
+            }
+        }
+    }
+}
+
+// setup JAR signing
+signing {
+    def signingKey = project.findProperty('signing.armored.key') ?: ''
+    def signingPassword = project.findProperty('signing.armored.password') ?: ''
+
+    useInMemoryPgpKeys(signingKey, signingPassword)
+
+    sign publishing.publications.mavenJava
 }
 
 // don't try to release a snapshot to a non-snapshot repository, that won't work anyway
@@ -117,7 +180,7 @@ if (version.endsWith('-SNAPSHOT'))
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '6.7'
+    gradleVersion = '7.1.1'
     distributionType = Wrapper.DistributionType.ALL
 }
 
