@@ -53,23 +53,13 @@
     <div id="versions"><h2>Supported NAACCR versions</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
 </div>
 <div class="indent1">
-    The following NAACCR versions are currently supported:
-    <ul>
-        <li>NAACCR 18</li>
-        <li>NAACCR 16</li>
-        <li>NAACCR 15</li>
-        <li>NAACCR 14</li>
-    </ul>
-    The Abstract, Modified, Confidential and Incidence flavors are supported for those versions.
+    The supported NAACCR versions and record types are listed on the first page of the tool.
 </div>
 
 <div id="compressions"><h2>Supported compression algorithms</h2> &nbsp;&nbsp;&nbsp;(<a href="#toc">Back to TOC</a>)</div>
 <div class="indent1">
-    The following compression algorithms are supported:
-    <ul>
-        <li><a href="http://www.gzip.org/#intro">GZip</a> (.gz)</li>
-        <li><a href="http://tukaani.org/xz/">XZ</a> (.xz)</li>
-    </ul>
+    Data files can be compressed using the GZip (.gz) compression.
+    <br/><br/>
     Several software can be found online to compress/uncompress a given file.
     For example, <a href="http://www.7-zip.org/">7-Zip</a> is a free standalone program that will handle the two compression methods.
     <br/><br/>
@@ -176,8 +166,7 @@
                 </li>
                 <li><b>Num</b>: a number that also uniquely identifies the data item.</li>
                 <li><b>Name</b>: the data item name.</li>
-                <li><b>Start Col</b>: an optional start column for the data item in the corresponding flat file format; leaving this property blank means you don't intend to use it with flat files.
-                </li>
+                <li><b>Start Col</b>: this is only applicable for old (pre-NAACCR-21) dictionaries, but the column is still displayed for all dictionaries.</li>
                 <li><b>Length</b>: the data item length.</li>
                 <li><b>Record Types</b>: to which record type(s) this data item applies.</li>
                 <li><b>Parent XML Element</b>: the parent XML tag of the data item in the NAACCR XML structure.</li>
@@ -201,7 +190,6 @@
     This software uses binary code from the following projects:
     <ul>
         <li><a href="https://commons.apache.org">Apache Commons</a> - Released under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0 License</a></li>
-        <li><a href="http://tukaani.org/xz/java.html">XZ for Java</a> - Released to Public Domain</li>
         <li><a href="http://www.xmlpull.org">XML Pull</a> - Released to Public Domain</li>
         <li>Thoughtworks XStream (https://github.com/codehaus/xstream) - License:
             <ul>
