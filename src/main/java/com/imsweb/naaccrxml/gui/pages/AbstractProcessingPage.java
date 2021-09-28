@@ -190,8 +190,11 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         pnl.setBorder(new EmptyBorder(10, 10, 0, 0));
         pnl.setLayout(new BoxLayout(pnl, BoxLayout.Y_AXIS));
 
+        boolean conversionPage = (this instanceof FlatToXmlPage) || (this instanceof XmlToFlatPage);
+
         pnl.add(buildTextPnl("The following NAACCR versions are supported:"));
-        pnl.add(buildTextPnl("             NAACCR 22"));
+        if (!conversionPage)
+            pnl.add(buildTextPnl("             NAACCR 22"));
         pnl.add(buildTextPnl("             NAACCR 21"));
         pnl.add(buildTextPnl("             NAACCR 18"));
         pnl.add(buildTextPnl("             NAACCR 16"));
@@ -202,9 +205,11 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         pnl.add(buildTextPnl("The following compressions are supported:"));
         pnl.add(buildTextPnl("             GZip (\".gz\" extension)"));
         pnl.add(buildTextPnl("             Uncompressed (anything not ending in .gz or .xz will be treated as uncompressed)"));
-        pnl.add(Box.createVerticalStrut(25));
-        pnl.add(buildTextPnl("Note that this utility is not a data conversion tool, it simply translates one format into another."));
-        pnl.add(buildTextPnl("That means the created file (Flat or XML) will always have the same NAACCR version (and same data) as its source."));
+        if (conversionPage) {
+            pnl.add(Box.createVerticalStrut(25));
+            pnl.add(buildTextPnl("Note that this utility is not a data conversion tool, it simply translates one format into another."));
+            pnl.add(buildTextPnl("That means the created file (Flat or XML) will always have the same NAACCR version (and same data) as its source."));
+        }
 
         JPanel wrapperPnl = new JPanel(new BorderLayout());
         wrapperPnl.add(pnl, BorderLayout.NORTH);

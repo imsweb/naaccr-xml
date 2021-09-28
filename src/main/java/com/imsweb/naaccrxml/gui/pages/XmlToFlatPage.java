@@ -65,7 +65,14 @@ public class XmlToFlatPage extends AbstractProcessingPage {
         }
 
         try {
-            return NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromXmlFile(file));
+            NaaccrFormat format = NaaccrFormat.getInstance(NaaccrXmlUtils.getFormatFromXmlFile(file));
+
+            if (NaaccrFormat.NAACCR_VERSION_210.compareTo(format.getNaaccrVersion()) <= 0) {
+                reportAnalysisError(new Exception("NAACCR version " + format.getNaaccrVersion() + " does not support the flat file format!"));
+                return null;
+            }
+
+            return format;
         }
         catch (RuntimeException e) {
             reportAnalysisError(new Exception("unable to identify file format"));
