@@ -5,6 +5,7 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
+ - 10/01/2021: Added dateLastModified attribute and set specificationVersion to 1.5.
  - 09/03/2021: Removed zero-left padding from item reportingFacility.
  - 03/12/2021: Changed padding of sentinelLymphNodesExamined, sentinelLymphNodesPositive and phase1DosePerFraction to be leftZero.
  - 12/03/2020: Changed data type of physicianPrimarySurg from digits to text.
@@ -22,7 +23,8 @@
 
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml"
             naaccrVersion="180"
-            specificationVersion="1.4"
+            specificationVersion="1.5"
+            dateLastModified="2021-10-01T12:00:00-04:00"
             description="NAACCR 18 base dictionary"
             xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>

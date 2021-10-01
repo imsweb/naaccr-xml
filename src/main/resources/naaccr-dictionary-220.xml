@@ -5,6 +5,7 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
+ - 10/01/2021: Added dateLastModified attribute and set specificationVersion to 1.5.
  - 09/03/2021: Changed length of dcStateFileNumber from 6 to 12 characters.
  - 09/03/2021: Removed zero-left padding from item reportingFacility.
  - 07/23/2021: Replaced API by DLL in data item name of AJCC Cancer Surveillance API Version Current/Original items.
@@ -13,7 +14,8 @@
 
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-220.xml"
             naaccrVersion="220"
-            specificationVersion="1.4"
+            specificationVersion="1.5"
+            dateLastModified="2021-10-01T12:00:00-04:00"
             description="NAACCR 22 base dictionary"
             xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>

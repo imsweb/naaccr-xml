@@ -5,12 +5,14 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
+ - 10/01/2021: Added dateLastModified attribute and set specificationVersion to 1.5.
  - 09/03/2021: Removed zero-left padding from item reportingFacility.
 -->
 
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml"
             naaccrVersion="140"
-            specificationVersion="1.4"
+            specificationVersion="1.5"
+            dateLastModified="2021-10-01T12:00:00-04:00"
             description="NAACCR 14 base dictionary"
             xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>

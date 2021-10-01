@@ -5,6 +5,7 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
+ - 10/01/2021: Added dateLastModified attribute and set specificationVersion to 1.5.
  - 09/03/2021: Removed zero-left padding from item reportingFacility.
  - 03/12/2021: Changed padding of ca199PretxLabValue to be leftBlank.
  - 03/12/2021: Changed padding of sentinelLymphNodesExamined, sentinelLymphNodesPositive and phase1DosePerFraction to be leftZero.
@@ -20,7 +21,8 @@
 
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-210.xml"
             naaccrVersion="210"
-            specificationVersion="1.4"
+            specificationVersion="1.5"
+            dateLastModified="2021-10-01T12:00:00-04:00"
             description="NAACCR 21 base dictionary"
             xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>

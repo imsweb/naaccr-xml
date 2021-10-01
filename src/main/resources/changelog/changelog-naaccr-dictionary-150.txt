@@ -1,3 +1,4 @@
 <!-- Changelog
+ - 10/01/2021: Added dateLastModified attribute and set specificationVersion to 1.5.
  - 09/03/2021: Removed zero-left padding from item reportingFacility.
 -->

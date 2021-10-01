@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -307,7 +308,8 @@ public final class NaaccrXmlDictionaryUtils {
      * @return true if the dictionary is a default user one, false otherwise
      */
     public static boolean isDefaultUserDictionary(NaaccrDictionary dictionary) {
-        return DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(dictionary.getDictionaryUri()).matches();
+        String version = dictionary.getNaaccrVersion();
+        return DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(dictionary.getDictionaryUri()).matches() && (version == null || version.compareTo(NaaccrFormat.NAACCR_VERSION_210) <= 0);
     }
 
     /**
@@ -442,6 +444,10 @@ public final class NaaccrXmlDictionaryUtils {
                     }
                 }
             }
+        }
+        else if (!isDefaultUserDictionary(dictionary)) {
+            // update the date last modified
+            dictionary.setDateLastModified(new Date());
         }
 
         // write the given dictionary
