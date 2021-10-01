@@ -196,7 +196,7 @@ public class SasCsvToXml {
                         if (!_dictionaryFiles.isEmpty() && _dictionaryUris != null && !_dictionaryUris.trim().isEmpty())
                             writer.write("\n            userDictionaryUri=\"" + _dictionaryUris + "\"");
                         writer.write("\n            recordType=\"" + _recordType + "\"");
-                        writer.write("\n            specificationVersion=\"1.4\"");
+                        writer.write("\n            specificationVersion=\"1.5\"");
                         writer.write("\n            xmlns=\"http://naaccr.org/naaccrxml\"");
                         writer.write(">\n");
                         for (Entry<String, String> entry : rootFields.entrySet()) {

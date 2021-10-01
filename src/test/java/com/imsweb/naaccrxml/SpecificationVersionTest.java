@@ -3,6 +3,9 @@
  */
 package com.imsweb.naaccrxml;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,7 +28,7 @@ public class SpecificationVersionTest {
         Assert.assertFalse(SpecificationVersion.isSpecificationSupported(" "));
         Assert.assertFalse(SpecificationVersion.isSpecificationSupported("hum?"));
     }
-    
+
     @Test
     public void testCompareVersions() {
         Assert.assertEquals(0, SpecificationVersion.compareSpecifications("1.0", "1.0"));
@@ -38,5 +41,12 @@ public class SpecificationVersionTest {
         Assert.assertEquals(1, SpecificationVersion.compareSpecifications("2.1", "1.0"));
         Assert.assertEquals(-1, SpecificationVersion.compareSpecifications("1.2", "2.1"));
         Assert.assertEquals(1, SpecificationVersion.compareSpecifications("2.1", "1.2"));
+    }
+
+    @Test
+    public void testReadmeFile() throws IOException {
+        String content = TestingUtils.readFileAsOneString(new File(TestingUtils.getWorkingDirectory(), "README.md"));
+        if (!content.contains("It implements version " + NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION))
+            Assert.fail("README.md references on old specification!");
     }
 }
