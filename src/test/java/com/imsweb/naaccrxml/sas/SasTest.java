@@ -45,8 +45,8 @@ public class SasTest {
             Assert.fail("Looks like a new format was added, please handle it in the SasXmlToCsv and SasCsvToXml constructors, and adjust this test: " + formats);
 
         //noinspection ConstantConditions
-        if (!"1.4".equals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION))
-            Assert.fail("Current implementation changed, please adjust it in the SasCsvToXml code!");
+        if (!"1.5".equals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION))
+            Assert.fail("Current implementation changed, please adjust it in the SasCsvToXml code, then change this test!");
     }
 
     @Test
