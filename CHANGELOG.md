@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 8.5**
+
+- Upgraded all base dictionaries to specifications v1.5; added new dateLastModified attribute. 
+
 **Version 8.4**
 
 - Removed left-zero-padded attributes for reportingFacility in all base dictionaries.
