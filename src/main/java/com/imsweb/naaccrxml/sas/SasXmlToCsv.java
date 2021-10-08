@@ -227,7 +227,7 @@ public class SasXmlToCsv {
             throw new IOException(e);
         }
 
-        SasUtils.logInfo("Successfully created " + _csvFile.getAbsolutePath() + " with " + numCsvFields + " columns");
+        SasUtils.logInfo("Successfully created target CSV with " + numCsvFields + " column" + (numCsvFields > 1 ? "s" : ""));
     }
 
     private void convertSingleFile(SasXmlReader reader, BufferedWriter writer, boolean addExtraCharFields, Map<String, Integer> allFields) throws IOException {
