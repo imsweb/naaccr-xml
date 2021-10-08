@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 8.6**
+
+- Improved help and feedback of SAS macros.
+
 **Version 8.5**
 
 - Upgraded all base dictionaries to specifications v1.5; added new dateLastModified attribute. 

@@ -140,6 +140,8 @@ public class SasXmlToCsv {
     }
 
     public void convert(String fields, boolean addExtraCharFields, List<SasFieldInfo> availableFields) throws IOException {
+        SasUtils.logInfo("Starting converting XML to CSV...");
+        int numCsvFields = -1;
         try {
             Set<String> requestedFields = SasUtils.extractRequestedFields(fields, availableFields);
 
@@ -151,8 +153,7 @@ public class SasXmlToCsv {
                         SasUtils.logInfo("Truncated '" + field.getNaaccrId() + "' into '" + field.getTruncatedNaaccrId() + "'...");
                 }
             }
-
-            SasUtils.logInfo("Starting converting XML to CSV...");
+            numCsvFields = allFields.size();
 
             BufferedWriter writer = null;
             try {
@@ -226,7 +227,7 @@ public class SasXmlToCsv {
             throw new IOException(e);
         }
 
-        SasUtils.logInfo("Successfully created " + _csvFile.getAbsolutePath());
+        SasUtils.logInfo("Successfully created " + _csvFile.getAbsolutePath() + " with " + numCsvFields + " columns");
     }
 
     private void convertSingleFile(SasXmlReader reader, BufferedWriter writer, boolean addExtraCharFields, Map<String, Integer> allFields) throws IOException {
@@ -247,7 +248,13 @@ public class SasXmlToCsv {
     }
 
     public void cleanup() {
-        if (!_csvFile.delete())
+        cleanup("yes");
+    }
+
+    public void cleanup(String option) {
+        if ("no".equalsIgnoreCase(option))
+            SasUtils.logInfo("Skipping CSV file cleanup...");
+        else if (!_csvFile.delete())
             SasUtils.logError("Unable to cleanup tmp CSV file, it will have to be manually deleted...");
     }
 }

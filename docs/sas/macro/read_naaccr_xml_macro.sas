@@ -1,4 +1,4 @@
-%MACRO readNaaccrXml(libpath, sourcefile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="");
+%MACRO readNaaccrXml(libpath, sourcefile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", cleanupcsv="yes");
 
 /************************************************************************************************************;
     This macro reads a given NAACCR XML data file and loads the data into a dataset.
@@ -38,9 +38,11 @@
         is distributed with the macros has an option to load an XML dictionary and save it as CSV);
         File*Pro can also generate those files); use spaces to separate multiple paths if you need to
         provide more than one dictionary
+    - cleanupcsv should be "yes" or "no" (defaults to "yes"); if "no" then the tmp CSV file won't be
+        automatically deleted; use this parameter to QC the CSV file or use it to investigate problems.
 
-    Note that the macro creates a tmp CSV file in the same folder as the input file; that file will be 
-    automatically deleted by the macro when it's done executing.
+    Note that the macro creates a tmp CSV file in the same folder as the target file; that file will be
+    automatically deleted by the macro when it's done executing (unless the 'cleanupcsv' parameter is set to 'no').
 
     Changelog
     *********
@@ -52,6 +54,7 @@
     03/12/2021 - Fabian Depry - Removed default value for version which was incorrectly set to 180.
     03/12/2021 - Fabian Depry - Removed default value for record type instead of assuming "I" for incidence.
     04/13/2021 - Fabian Depry - Added documentation for providing included items as a CSV file.
+    10/08/2021 - Fabian Depry - Added new optional cleanupcsv parameter to allow better QC and problem investigation.
  ************************************************************************************************************/;
 
 /*
@@ -95,7 +98,7 @@ run;
 */
 data _null_;    
     declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToCsv', &sourcefile, &naaccrversion, &recordtype);
-    j1.callVoidMethod('cleanup');
+    j1.callVoidMethod('cleanup', &cleanupcsv);
     j1.delete();
 run;
 

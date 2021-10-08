@@ -1,4 +1,4 @@
-%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", dictUri="", writenum="no");
+%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", dictUri="", writenum="no", cleanupcsv="yes");
 
 /************************************************************************************************************;
     This macro writes a given data fileset into a NAACCR XML data file.
@@ -34,12 +34,24 @@
         provide more than one dictionary
     - dictUri is an optional user-defined dictionary URI to reference in the created XML file (if a CSV dictionary
         is provided, then this one should be provided as well); the URI can be found as a root attribute of the
-        XML dictionary (it usually looks like an internet address, but it's rarely a legit address);
-        use spaces to separate multiple URIs.
+        XML dictionary (it usually looks like an internet address, but it's rarely a legit address; and the macros
+        do not try to connect to that address in any way). Use spaces to separate multiple URIs.
     - writenum should be "yes" or "no" (defaults to "no"); if "yes" then the NAACCR numbers will be written.
+    - cleanupcsv should be "yes" or "no" (defaults to "yes"); if "no" then the tmp CSV file won't be
+        automatically deleted; use this parameter to QC the CSV file or use it to investigate problems.
 
     Note that the macro creates a tmp CSV file in the same folder as the target file; that file will be 
-    automatically deleted by the macro when it's done executing.
+    automatically deleted by the macro when it's done executing (unless the 'cleanupcsv' parameter is set to 'no').
+
+    A typical use-case for the write macro is to read an XML file (using the read macro), do something to the data
+    and write it back. But an another common use-case is to start from an existing data set. In that case, there are
+    a few caveats to keep in mind:
+     - Variable names must be the NAACCR XML IDs (any other variable will be ignored).
+     - Every observation (which represent Tumors) that belong to the same Patient need to have the same value for
+       the "patientIdNumber" variable (otherwise every Tumor will end up in its own Patient and there won’t be
+       any Tumor grouping done).
+     - The Patient values are taken from the first observation (the first Tumor) of that Patient.
+     - The NaaccrData values (the items appearing only once per file) are taken from the first observation.
 
     Changelog
     *********
@@ -53,6 +65,7 @@
     03/12/2021 - Fabian Depry - Removed default value for record type instead of assuming "I" for incidence.
     03/12/2021 - Fabian Depry - Added new writenum parameter to allow NAACCR numbers to be written.
     04/13/2021 - Fabian Depry - Added documentation for providing included items as a CSV file.
+    10/08/2021 - Fabian Depry - Added new optional cleanupcsv parameter to allow better QC and problem investigation.
  ************************************************************************************************************/;
 
 /*
@@ -88,7 +101,7 @@ data _null_;
     j1.callVoidMethod('setDictionary', &dictfile, &dicturi);
     j1.callVoidMethod('setWriteNumbers', &writenum);
     j1.callVoidMethod('convert', &items);
-    j1.callVoidMethod('cleanup');
+    j1.callVoidMethod('cleanup', &cleanupcsv);
     j1.delete();
 run;
 

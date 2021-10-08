@@ -139,6 +139,8 @@ public class SasCsvToXml {
 
     public void convert(String fields, List<SasFieldInfo> availableFields) throws IOException {
         SasUtils.logInfo("Starting converting CSV to XML...");
+        int numXmlFields = -1, numCsvFields = -1;
+        List<String> unusedCsvField = null;
         try {
             Set<String> requestedFields = SasUtils.extractRequestedFields(fields, availableFields);
 
@@ -157,6 +159,7 @@ public class SasCsvToXml {
                         tumorFields.put(field.getTruncatedNaaccrId(), field.getNaaccrId());
                 }
             }
+            numXmlFields = rootFields.size() + patientFields.size() + tumorFields.size();
 
             LineNumberReader reader = null;
             BufferedWriter writer = null;
@@ -169,6 +172,12 @@ public class SasCsvToXml {
                 if (line == null)
                     throw new IOException("Was expecting to find column headers, didn't find them!");
                 headers.addAll(Arrays.asList(line.split(",", -1)));
+                numCsvFields = headers.size();
+
+                unusedCsvField = new ArrayList<>();
+                for (String header : headers)
+                    if (!rootFields.containsKey(header) && !patientFields.containsKey(header) && !tumorFields.containsKey(header))
+                        unusedCsvField.add(header);
 
                 String currentPatNum = null;
                 line = reader.readLine();
@@ -252,7 +261,22 @@ public class SasCsvToXml {
             throw new IOException(e);
         }
 
-        SasUtils.logInfo("Successfully created " + _xmlFile.getAbsolutePath());
+        SasUtils.logInfo("Successfully created " + _xmlFile.getAbsolutePath() + " with " + numXmlFields + " fields defined in the dictionaries (blank values won't appear in the XML file)");
+        if (unusedCsvField != null) {
+            String prefix = "CSV file crated from data set contained " + numCsvFields + " fields";
+            if (unusedCsvField.isEmpty())
+                SasUtils.logInfo(prefix + "; all of them were used as NAACCR XML fields");
+            else {
+                SasUtils.logInfo("; " + (numCsvFields - unusedCsvField.size()) + " fields were used as NAACCR XML fields and " + unusedCsvField.size() + " fields were ignored.");
+                StringBuilder buf = new StringBuilder("Ignored fields: ");
+                for (int i = 0; i < unusedCsvField.size() && i < 5; i++)
+                    buf.append(unusedCsvField.get(i)).append(", ");
+                buf.setLength(buf.length() - 2);
+                if (unusedCsvField.size() > 5)
+                    buf.append("...");
+                SasUtils.logInfo(buf.toString());
+            }
+        }
     }
 
     private String createItemLine(String indentation, String itemId, String itemNumber, String value) {
@@ -265,7 +289,13 @@ public class SasCsvToXml {
     }
 
     public void cleanup() {
-        if (!_csvFile.delete())
+        cleanup("yes");
+    }
+
+    public void cleanup(String option) {
+        if ("no".equalsIgnoreCase(option))
+            SasUtils.logInfo("Skipping CSV file cleanup...");
+        else if (!_csvFile.delete())
             SasUtils.logError("Unable to cleanup tmp CSV file, it will have to be manually deleted...");
     }
 }
