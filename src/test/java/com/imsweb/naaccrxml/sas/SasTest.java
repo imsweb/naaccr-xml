@@ -91,9 +91,9 @@ public class SasTest {
 
         // test cleaning up the CSV file
         Assert.assertTrue(csvFile.exists());
-        xmlToCsv.cleanup("yes");
-        Assert.assertTrue(csvFile.exists());
         xmlToCsv.cleanup("no");
+        Assert.assertTrue(csvFile.exists());
+        xmlToCsv.cleanup("yes");
         Assert.assertFalse(csvFile.exists());
 
         // redo a double-conversion but ignore some fields
