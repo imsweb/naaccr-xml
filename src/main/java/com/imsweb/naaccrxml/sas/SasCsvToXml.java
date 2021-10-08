@@ -261,15 +261,15 @@ public class SasCsvToXml {
             throw new IOException(e);
         }
 
-        SasUtils.logInfo("Successfully created target XML with " + numXmlFields + " field " + (numXmlFields > 1 ? "s" : "") + " defined in the dictionaries");
+        SasUtils.logInfo("Successfully created target XML with " + numXmlFields + " field" + (numXmlFields > 1 ? "s" : "") + " defined in the dictionaries");
         if (unusedCsvField != null) {
             String prefix = "CSV file created from data set contained " + numCsvFields + " field" + (numCsvFields > 1 ? "s" : "");
             if (unusedCsvField.isEmpty())
                 SasUtils.logInfo(prefix + "; all of them were used as NAACCR XML fields");
             else {
                 int usedCsvFields = numCsvFields - unusedCsvField.size();
-                String usedText = usedCsvFields > 1 ? " of them was used as NAACCR XML field and " : " of them were used as NAACCR XML fields and ";
-                String unusedText = unusedCsvField.size() > 1 ? "were ignored" : "was ignored";
+                String usedText = usedCsvFields > 1 ? " of them were used as NAACCR XML fields and " : " of them was used as NAACCR XML field and ";
+                String unusedText = unusedCsvField.size() > 1 ? " were ignored" : " was ignored";
                 SasUtils.logInfo(prefix + "; " + usedCsvFields + usedText + unusedCsvField.size() + unusedText);
                 StringBuilder buf = new StringBuilder("Ignored field" + (unusedCsvField.size() > 1 ? "s" : "") + ": ");
                 for (int i = 0; i < unusedCsvField.size() && i < 5; i++)
