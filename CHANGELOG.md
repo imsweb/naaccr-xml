@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 8.7**
+
+- Fixed an error in SAS macros preventing them from using multiple user-defined dictionaries.
+
 **Version 8.6**
 
 - Improved help and feedback of SAS macros.

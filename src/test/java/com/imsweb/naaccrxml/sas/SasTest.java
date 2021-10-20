@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -294,5 +295,23 @@ public class SasTest {
         Assert.assertEquals("C789", data.getPatients().get(1).getTumors().get(1).getItemValue("primarySite"));
         if (!ignoreFields)
             Assert.assertEquals("  2.0", data.getPatients().get(1).getTumors().get(1).getItemValue("ki67"));
+    }
+
+    @Test
+    public void testSetDictionary() {
+        File xmlFile = TestingUtils.getDataFile("sas/test.xml");
+        File csvFile = new File(TestingUtils.getBuildDirectory(), "test.csv");
+
+        List<File> csvDictionaryFiles = new ArrayList<>();
+        csvDictionaryFiles.add(TestingUtils.getDataFile("sas/user-dictionary-1.csv"));
+        csvDictionaryFiles.add(TestingUtils.getDataFile("sas/user-dictionary-2.csv"));
+
+        SasCsvToXml csvConverter = new SasCsvToXml(csvFile.getPath(), xmlFile.getPath(), "210", "I");
+        csvConverter.setDictionary(csvDictionaryFiles.stream().map(File::getPath).collect(Collectors.joining(" ")), "test1 test2");
+        Assert.assertEquals(2, csvConverter.getUserDictionaryFiles().size());
+
+        SasXmlToCsv xmlConverter = new SasXmlToCsv(csvFile.getPath(), xmlFile.getPath(), "210", "I");
+        xmlConverter.setDictionary(csvDictionaryFiles.stream().map(File::getPath).collect(Collectors.joining(" ")));
+        Assert.assertEquals(2, xmlConverter.getUserDictionaryFiles().size());
     }
 }

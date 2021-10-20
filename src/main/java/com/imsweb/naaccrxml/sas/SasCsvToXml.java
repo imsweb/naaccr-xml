@@ -82,9 +82,9 @@ public class SasCsvToXml {
     public void setDictionary(String dictionaryPath, String dictionaryUri) {
         if (dictionaryPath != null && !dictionaryPath.trim().isEmpty()) {
             for (String path : dictionaryPath.split(" ")) {
-                File dictionaryFile = new File(dictionaryPath);
+                File dictionaryFile = new File(path);
                 if (!dictionaryFile.exists())
-                    SasUtils.logError("Invalid CSV dictionary path: " + dictionaryPath);
+                    SasUtils.logError("Invalid CSV dictionary path: " + path);
                 else {
                     try {
                         SasUtils.validateCsvDictionary(dictionaryFile);
@@ -300,5 +300,9 @@ public class SasCsvToXml {
             SasUtils.logInfo("Skipping CSV file cleanup...");
         else if (!_csvFile.delete())
             SasUtils.logError("Unable to cleanup tmp CSV file, it will have to be manually deleted...");
+    }
+
+    List<File> getUserDictionaryFiles() {
+        return _dictionaryFiles;
     }
 }
