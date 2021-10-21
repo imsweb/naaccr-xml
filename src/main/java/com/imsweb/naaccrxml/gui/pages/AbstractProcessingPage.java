@@ -347,7 +347,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                     NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(_dictionaryFileChooser.getSelectedFile());
                     _userDictionaries.put(dictionary.getDictionaryUri(), dictionary);
                     List<String> neededDictionaries = new ArrayList<>(getRequiredUserDefinedDictionaries(new File(_sourceFld.getText())));
-                    neededDictionaries.remove(dictionary.getDictionaryUri());
+                    neededDictionaries.removeAll(_userDictionaries.keySet());
                     if (neededDictionaries.isEmpty()) {
                         _dictionaryDisclaimerLbl.setText(_TXT_DICT_PROVIDED);
                         _dictionaryDisclaimerLbl.setForeground(Color.BLACK);
