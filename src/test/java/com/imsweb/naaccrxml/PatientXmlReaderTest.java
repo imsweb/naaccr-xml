@@ -3,8 +3,11 @@
  */
 package com.imsweb.naaccrxml;
 
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -161,6 +164,80 @@ public class PatientXmlReaderTest {
         // bad time generated
         try (PatientXmlReader reader = new PatientXmlReader(new FileReader(TestingUtils.getDataFile("xml-reader-bad-time-generated.xml")), options)) {
             Assert.assertFalse(reader.getRootData().getValidationErrors().get(0).getMessage().contains("{0}"));
+        }
+    }
+
+    @Test
+    public void testReaderWithDifferentEncoding() throws IOException {
+
+        // ASCII read as ASCII (OK)
+        try (PatientXmlReader reader = new PatientXmlReader(new InputStreamReader(new FileInputStream(TestingUtils.getDataFile("encoding/test_ASCII.xml")), StandardCharsets.US_ASCII))) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("This is a sentence with only regular ASCII characters...", patient.getTumor(0).getItemValue("textHistologyTitle"));
+        }
+
+        // ASCII read as UTF-8 (OK)
+        try (PatientXmlReader reader = new PatientXmlReader(new InputStreamReader(new FileInputStream(TestingUtils.getDataFile("encoding/test_ASCII.xml")), StandardCharsets.UTF_8))) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("This is a sentence with only regular ASCII characters...", patient.getTumor(0).getItemValue("textHistologyTitle"));
+        }
+
+        // ASCII with control read as ASCII (OK but results in non-printable characters)
+        try (PatientXmlReader reader = new PatientXmlReader(
+                new InputStreamReader(new FileInputStream(TestingUtils.getDataFile("encoding/test_ASCII_with_control_chars.xml")), StandardCharsets.US_ASCII))) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("This is a sentence with a special \u0007 character (7 = bell)", patient.getTumor(0).getItemValue("textHistologyTitle"));
+        }
+
+        // ASCII with control read as UTF-8 (OK but results in non-printable characters)
+        try (PatientXmlReader reader = new PatientXmlReader(
+                new InputStreamReader(new FileInputStream(TestingUtils.getDataFile("encoding/test_ASCII_with_control_chars.xml")), StandardCharsets.UTF_8))) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("This is a sentence with a special \u0007 character (7 = bell)", patient.getTumor(0).getItemValue("textHistologyTitle"));
+        }
+
+        // UTF-8 read as UTF-8 (OK)
+        try (PatientXmlReader reader = new PatientXmlReader(new InputStreamReader(new FileInputStream(TestingUtils.getDataFile("encoding/test_UTF-8.xml")), StandardCharsets.UTF_8))) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("The quote ’ is a UTF-8 character; here is another: µ...", patient.getTumor(0).getItemValue("textHistologyTitle"));
+        }
+
+        // UTF-8 read as ASCII (OK but results in non-printable characters)
+        try (PatientXmlReader reader = new PatientXmlReader(new InputStreamReader(new FileInputStream(TestingUtils.getDataFile("encoding/test_UTF-8.xml")), StandardCharsets.US_ASCII))) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("The quote ��� is a UTF-8 character; here is another: ��...", patient.getTumor(0).getItemValue("textHistologyTitle"));
+        }
+
+        // UTF-8-with-BOM read as UTF-8 (OK)
+        try (PatientXmlReader reader = new PatientXmlReader(new InputStreamReader(new FileInputStream(TestingUtils.getDataFile("encoding/test_UTF-8_with_bom.xml")), StandardCharsets.UTF_8))) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("The quote ’ is a UTF-8 character; here is another: µ...", patient.getTumor(0).getItemValue("textHistologyTitle"));
+        }
+
+        // UTF-8-with-BOM read as ASCII (NOT OK, parser chokes)
+        try (PatientXmlReader reader = new PatientXmlReader(new InputStreamReader(new FileInputStream(TestingUtils.getDataFile("encoding/test_UTF-8_with_bom.xml")), StandardCharsets.US_ASCII))) {
+            reader.readPatient();
+        }
+        catch (NaaccrIOException e) {
+            // expected
+        }
+
+        // CP-1252 read as CP-1252 (OK)
+        try (PatientXmlReader reader = new PatientXmlReader(new InputStreamReader(new FileInputStream(TestingUtils.getDataFile("encoding/test_Cp1252.xml")), "WINDOWS-1252"))) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("This is a “sentence” taken from – Word…", patient.getTumor(0).getItemValue("textHistologyTitle"));
+        }
+
+        // CP-1252 read as ASCII (OK but results in non-printable characters)
+        try (PatientXmlReader reader = new PatientXmlReader(new InputStreamReader(new FileInputStream(TestingUtils.getDataFile("encoding/test_Cp1252.xml")), StandardCharsets.US_ASCII))) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("This is a �sentence� taken from � Word�", patient.getTumor(0).getItemValue("textHistologyTitle"));
+        }
+
+        // CP-1252 read as UTF-8 (OK but results in non-printable characters)
+        try (PatientXmlReader reader = new PatientXmlReader(new InputStreamReader(new FileInputStream(TestingUtils.getDataFile("encoding/test_Cp1252.xml")), StandardCharsets.UTF_8))) {
+            Patient patient = reader.readPatient();
+            Assert.assertEquals("This is a �sentence� taken from � Word�", patient.getTumor(0).getItemValue("textHistologyTitle"));
         }
     }
 

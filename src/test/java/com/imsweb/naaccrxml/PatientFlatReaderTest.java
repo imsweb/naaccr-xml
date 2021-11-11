@@ -215,6 +215,7 @@ public class PatientFlatReaderTest {
         reader.close();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void testUserDefinedDictionary() throws IOException {
 

@@ -1,11 +1,11 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-210.xml" recordType="A" specificationVersion="1.5" timeGenerated="2015-03-13T12:09:19.0Z" xmlns="http://naaccr.org/naaccrxml">
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
         <Tumor>
             <Item naaccrId="primarySite">C123</Item>
-			<Item naaccrId="textHistologyTitle">The quote ’ is a UTF-8 character; here is another: µ...</Item>
+			<Item naaccrId="textHistologyTitle">This is a sentence with a special  character (7 = bell)</Item>
         </Tumor>
     </Patient>
 </NaaccrData>
