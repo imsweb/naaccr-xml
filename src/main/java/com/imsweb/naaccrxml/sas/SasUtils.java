@@ -90,7 +90,8 @@ public class SasUtils {
 
     /**
      * Creates a reader from the given file. Support GZIP compressed files.
-     * @param file file to read
+     * @param is input stream to read
+     * @param name name of the resource to red
      * @return reader
      */
     public static BufferedReader createReader(InputStream is, String name) throws IOException {
