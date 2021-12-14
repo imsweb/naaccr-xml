@@ -3,7 +3,8 @@
 **Version 8.8**
 
 - Fixed an error in standalone program preventing it from using multiple user-defined dictionaries.
-- Updated embedded JRE to Java17.0.1 (this only affects the standalone program).
+- Updated embedded JRE to Java 17.0.1 (this only affects the standalone program).
+- Added new optional parameter to the write SAS macro to allow disabling tumor grouping. 
 
 **Version 8.7**
 

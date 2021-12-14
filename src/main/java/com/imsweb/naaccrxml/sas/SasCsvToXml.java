@@ -36,6 +36,8 @@ public class SasCsvToXml {
 
     private boolean _writeNumbers;
 
+    private boolean _groupTumors;
+
     public SasCsvToXml(String xmlPath, String naaccrVersion, String recordType) {
         this(SasUtils.computeCsvPathFromXmlPath(xmlPath), xmlPath, naaccrVersion, recordType);
     }
@@ -77,6 +79,7 @@ public class SasCsvToXml {
             SasUtils.logError("Record type must be A, M, C or I; got " + _recordType);
 
         _writeNumbers = false;
+        _groupTumors = true;
     }
 
     public void setDictionary(String dictionaryPath, String dictionaryUri) {
@@ -123,6 +126,14 @@ public class SasCsvToXml {
 
     public String getWriteNumbers() {
         return _writeNumbers ? "Yes" : "No";
+    }
+
+    public void setGroupTumors(String value) {
+        _groupTumors = value == null || !("false".equalsIgnoreCase(value) && "no".equalsIgnoreCase(value));
+    }
+
+    public String getGroupTumors() {
+        return _groupTumors ? "Yes" : "No";
     }
 
     public List<SasFieldInfo> getFields() {
@@ -217,7 +228,7 @@ public class SasCsvToXml {
                     }
 
                     // do we have to write the patient?
-                    if (currentPatNum == null || !currentPatNum.equals(patNum)) {
+                    if (!_groupTumors || patNum == null || currentPatNum == null || !currentPatNum.equals(patNum)) {
                         if (numPatientWritten > 0)
                             writer.write("    </Patient>\n");
                         numPatientWritten++;

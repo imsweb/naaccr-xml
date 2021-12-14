@@ -1,4 +1,4 @@
-%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", dictUri="", writenum="no", cleanupcsv="yes");
+%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", dictUri="", writenum="no", cleanupcsv="yes", grouptumors="yes");
 
 /************************************************************************************************************;
     This macro writes a given data fileset into a NAACCR XML data file.
@@ -39,6 +39,10 @@
     - writenum should be "yes" or "no" (defaults to "no"); if "yes" then the NAACCR numbers will be written.
     - cleanupcsv should be "yes" or "no" (defaults to "yes"); if "no" then the tmp CSV file won't be
         automatically deleted; use this parameter to QC the CSV file or use it to investigate problems.
+    - grouptumors should be "yes" or "no" (defaults to "yes"); if "yes" then the tumors that have the same
+        patient ID number (and appearing together in the observations) will be grouped under one Patient tag;
+        if "no", each tumor will appear under its own Patient tag (and every Patient will contain exactly one Tumor).
+
 
     Note that the macro creates a tmp CSV file in the same folder as the target file; that file will be 
     automatically deleted by the macro when it's done executing (unless the 'cleanupcsv' parameter is set to 'no').
@@ -66,6 +70,7 @@
     03/12/2021 - Fabian Depry - Added new writenum parameter to allow NAACCR numbers to be written.
     04/13/2021 - Fabian Depry - Added documentation for providing included items as a CSV file.
     10/08/2021 - Fabian Depry - Added new optional cleanupcsv parameter to allow better QC and problem investigation.
+    12/14/2021 - Fabian Depry - Added new optional grouptumors parameter to allow not grouping the tumors.
  ************************************************************************************************************/;
 
 /*
@@ -100,6 +105,7 @@ data _null_;
     declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasCsvToXml', &targetfile, &naaccrversion, &recordtype);
     j1.callVoidMethod('setDictionary', &dictfile, &dicturi);
     j1.callVoidMethod('setWriteNumbers', &writenum);
+    j1.callVoidMethod('setGroupTumors', &grouptumors);
     j1.callVoidMethod('convert', &items);
     j1.callVoidMethod('cleanup', &cleanupcsv);
     j1.delete();
