@@ -29,8 +29,8 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'com.imsweb:data-generator:1.23'
-    testImplementation 'com.opencsv:opencsv:5.5.1'
+    testImplementation 'com.imsweb:data-generator:1.25'
+    testImplementation 'com.opencsv:opencsv:5.5.2'
 }
 
 // enforce UTF-8, display the compilation warnings

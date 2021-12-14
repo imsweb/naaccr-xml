@@ -1,6 +1,6 @@
 Creating runtime image (first navigate into the "jre" folder)
 
-C:\jdk\jdk-11.0.12\bin\jlink --module-path C:\Users\Fabian\dev\jdk\jdk-11.0.12\jmods --add-modules java.desktop,java.sql,java.xml,jdk.unsupported,jdk.accessibility --output jre-11 --no-header-files --no-man-pages --strip-debug --compress=2
+C:\jdk\jdk-17.0.1\bin\jlink --module-path C:\jdk\jdk-17.0.1\jmods --add-modules java.desktop,java.sql,java.xml,jdk.unsupported,jdk.accessibility --output jre-17 --no-header-files --no-man-pages --strip-debug --compress=2
 
 The "--no-header-files" and "no-man-pages" are very safe to use.
 The "--strip-debug" option is safe, but keep in mind that it might prevent debugging via the IDE.

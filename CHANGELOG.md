@@ -1,8 +1,9 @@
 ## NAACCR XML Version History
 
-**Version 8.8 (not released yet)**
+**Version 8.8**
 
 - Fixed an error in standalone program preventing it from using multiple user-defined dictionaries.
+- Updated embedded JRE to Java17.0.1 (this only affects the standalone program).
 
 **Version 8.7**
 
