@@ -149,7 +149,7 @@ public class SasCsvToXml {
     }
 
     public void convert(String fields, List<SasFieldInfo> availableFields) throws IOException {
-        SasUtils.logInfo("Starting converting CSV to XML...");
+        SasUtils.logInfo("Starting converting CSV to XML" + (!_groupTumors ? " (tumor grouping disabled) " : "") + "...");
         int numXmlFields = -1, numCsvFields = -1;
         List<String> unusedCsvField = null;
         try {
