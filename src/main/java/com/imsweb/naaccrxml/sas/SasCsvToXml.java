@@ -129,8 +129,7 @@ public class SasCsvToXml {
     }
 
     public void setGroupTumors(String value) {
-        _groupTumors = value == null || !("false".equalsIgnoreCase(value) && "no".equalsIgnoreCase(value));
-        SasUtils.logInfo("Just set grouping: " + value + " - " + _groupTumors);
+        _groupTumors = value == null || !("false".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value));
     }
 
     public String getGroupTumors() {

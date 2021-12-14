@@ -314,4 +314,52 @@ public class SasTest {
         xmlConverter.setDictionary(csvDictionaryFiles.stream().map(File::getPath).collect(Collectors.joining(" ")));
         Assert.assertEquals(2, xmlConverter.getUserDictionaryFiles().size());
     }
+
+    @Test
+    public void testSetWriteNumbers() {
+        File xmlFile = TestingUtils.getDataFile("sas/test.xml");
+        File csvFile = new File(TestingUtils.getBuildDirectory(), "test.csv");
+
+        SasCsvToXml csvConverter = new SasCsvToXml(csvFile.getPath(), xmlFile.getPath(), "210", "I");
+        Assert.assertEquals("No", csvConverter.getWriteNumbers());
+
+        csvConverter.setWriteNumbers("yes");
+        Assert.assertEquals("Yes", csvConverter.getWriteNumbers());
+
+        csvConverter.setWriteNumbers("True");
+        Assert.assertEquals("Yes", csvConverter.getWriteNumbers());
+
+        csvConverter.setWriteNumbers("no");
+        Assert.assertEquals("No", csvConverter.getWriteNumbers());
+
+        csvConverter.setWriteNumbers("False");
+        Assert.assertEquals("No", csvConverter.getWriteNumbers());
+
+        csvConverter.setWriteNumbers("XXX");
+        Assert.assertEquals("No", csvConverter.getWriteNumbers());
+    }
+
+    @Test
+    public void testSetGroupTumors() {
+        File xmlFile = TestingUtils.getDataFile("sas/test.xml");
+        File csvFile = new File(TestingUtils.getBuildDirectory(), "test.csv");
+
+        SasCsvToXml csvConverter = new SasCsvToXml(csvFile.getPath(), xmlFile.getPath(), "210", "I");
+        Assert.assertEquals("Yes", csvConverter.getGroupTumors());
+
+        csvConverter.setGroupTumors("yes");
+        Assert.assertEquals("Yes", csvConverter.getGroupTumors());
+
+        csvConverter.setGroupTumors("True");
+        Assert.assertEquals("Yes", csvConverter.getGroupTumors());
+
+        csvConverter.setGroupTumors("no");
+        Assert.assertEquals("No", csvConverter.getGroupTumors());
+
+        csvConverter.setGroupTumors("False");
+        Assert.assertEquals("No", csvConverter.getGroupTumors());
+
+        csvConverter.setGroupTumors("XXX");
+        Assert.assertEquals("Yes", csvConverter.getGroupTumors());
+    }
 }
