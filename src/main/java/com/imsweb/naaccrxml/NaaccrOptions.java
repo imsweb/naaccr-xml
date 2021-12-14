@@ -283,11 +283,11 @@ public class NaaccrOptions {
      * @param naaccrId NAACCR ID
      * @return true if the corresponding item needs to be processed.
      */
-    public boolean processItem(String naaccrId) {
-        if (_itemsToInclude != null)
-            return _itemsToInclude.contains(naaccrId);
-        else if (_itemsToExclude != null)
-            return !_itemsToExclude.contains(naaccrId);
+    public static boolean processItem(NaaccrOptions options, String naaccrId) {
+        if (options.getItemsToInclude() != null)
+            return options.getItemsToInclude().contains(naaccrId);
+        else if (options.getItemsToExclude() != null)
+            return !options.getItemsToExclude().contains(naaccrId);
         return true;
     }
 }

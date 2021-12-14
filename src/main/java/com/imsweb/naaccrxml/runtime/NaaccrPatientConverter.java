@@ -197,7 +197,7 @@ public class NaaccrPatientConverter implements Converter {
         // get the item definition
         if (item.getNaaccrId() == null)
             reportSyntaxError("NAACCR ID is required when writing an item");
-        if (!_context.getOptions().processItem(item.getNaaccrId()))
+        if (!NaaccrOptions.processItem(_context.getOptions(), item.getNaaccrId()))
             return;
         RuntimeNaaccrDictionaryItem itemDef = _context.getDictionary().getItemByNaaccrId(item.getNaaccrId());
         if (itemDef == null) {
@@ -280,7 +280,7 @@ public class NaaccrPatientConverter implements Converter {
                 rawId = NaaccrXmlDictionaryUtils.getRenamedLongNaaccr18Ids().getOrDefault(rawId, rawId);
         if (_context.getOptions().getItemIdsToTranslate() != null)
             rawId = _context.getOptions().getItemIdsToTranslate().getOrDefault(rawId, rawId);
-        if (!_context.getOptions().processItem(rawId))
+        if (!NaaccrOptions.processItem(_context.getOptions(), rawId))
             return null;
 
         RuntimeNaaccrDictionaryItem def = _context.getDictionary().getItemByNaaccrId(rawId);

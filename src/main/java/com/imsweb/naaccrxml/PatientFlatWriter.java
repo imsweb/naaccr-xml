@@ -200,7 +200,7 @@ public class PatientFlatWriter implements PatientWriter {
             int currentIndex = 1;
             StringBuilder line = new StringBuilder();
             for (RuntimeNaaccrDictionaryItem itemDef : _dictionary.getItems()) {
-                if (!_options.processItem(itemDef.getNaaccrId()))
+                if (!NaaccrOptions.processItem(_options, itemDef.getNaaccrId()))
                     continue;
                 // as of spec 1.1, the start column is optional for user-defined items, so let's ignore those
                 if (itemDef.getStartColumn() == null)

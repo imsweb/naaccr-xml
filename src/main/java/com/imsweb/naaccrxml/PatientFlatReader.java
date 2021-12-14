@@ -290,7 +290,7 @@ public class PatientFlatReader implements PatientReader {
             return;
 
         Item item = createItemFromLine(entity, line, lineNumber, def);
-        if (item != null && _options.processItem(def.getNaaccrId()))
+        if (item != null && NaaccrOptions.processItem(_options, def.getNaaccrId()))
             entity.addItem(item);
     }
 
