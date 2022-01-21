@@ -698,6 +698,19 @@ public final class NaaccrXmlDictionaryUtils {
                     }
                 }
 
+                if (versionSupportsStartColumns) {
+                    List<NaaccrDictionaryItem> sortedItems = dictionary.getItems().stream()
+                            .filter(i -> i.getStartColumn() != null)
+                            .sorted(Comparator.comparing(NaaccrDictionaryItem::getStartColumn))
+                            .collect(Collectors.toList());
+                    for (int i = 0; i < sortedItems.size() - 1; i++) {
+                        NaaccrDictionaryItem item1 = sortedItems.get(i);
+                        NaaccrDictionaryItem item2 = sortedItems.get(i + 1);
+                        if (item1.getStartColumn() + item1.getLength() - 1 >= item2.getStartColumn())
+                            errors.add("Item " + item1.getNaaccrId() + " and " + item2.getNaaccrId() + " are overlapping");
+                    }
+                }
+
                 if (!dictionary.getGroupedItems().isEmpty())
                     errors.add("user-defined dictionaries cannot defined grouped items");
 

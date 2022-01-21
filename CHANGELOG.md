@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+**Version 8.9**
+
+- Re-added support for providing a user-defined dictionary when processing a flat file (Standalone program only).
+- Improve validation of start columns for N18 dictionaries and prior.
+
 **Version 8.8**
 
 - Fixed an error in standalone program preventing it from using multiple user-defined dictionaries.

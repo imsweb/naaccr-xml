@@ -77,6 +77,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
     protected static final String _NORTH_PROCESSING_PANEL_ID_INTERRUPTED = "processing-interrupted";
     protected static final String _NORTH_PROCESSING_PANEL_ID_ERROR = "processing-error";
 
+    private static final String _TXT_DICT_FIXED_COLUMNS = "You can select one or several dictionaries to process the fixed-column data file.";
     private static final String _TXT_DICT_NOT_NEEDED = "The data file does not reference user-defined dictionaries.";
     private static final String _TXT_DICT_NEEDED = "The following user-defined dictionaries need to be provided (use the Browse button to select them):";
     private static final String _TXT_DICT_PROVIDED = "All the user-defined dictionaries have been provided";
@@ -144,7 +145,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         browseBtn.addActionListener(e -> {
             if (_fileChooser.showDialog(AbstractProcessingPage.this, "Select") == JFileChooser.APPROVE_OPTION) {
                 _sourceFld.setText(_fileChooser.getSelectedFile().getAbsolutePath());
-                performPreAnalysis();
+                performPreAnalysis(isSourceXml);
             }
         });
         sourceFilePnl.add(browseBtn);
@@ -163,7 +164,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         _centerLayout = new CardLayout();
         _centerPnl.setLayout(_centerLayout);
         _centerPnl.add(_CENTER_PANEL_ID_HELP, buildHelpPanel());
-        _centerPnl.add(_CENTER_PANEL_ID_OPTIONS, buildOptionsPanel());
+        _centerPnl.add(_CENTER_PANEL_ID_OPTIONS, buildOptionsPanel(isSourceXml));
         _centerPnl.add(_CENTER_PANEL_ID_PROCESSING, buildProcessingPanel());
         this.add(_centerPnl, BorderLayout.CENTER);
     }
@@ -268,7 +269,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         return pnl;
     }
 
-    private JPanel buildOptionsPanel() {
+    private JPanel buildOptionsPanel(boolean isSourceXml) {
         JPanel pnl = new JPanel(new BorderLayout());
 
         JPanel headerPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -322,7 +323,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
 
         JPanel dictionaryDisclaimerPnl = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
         dictionaryDisclaimerPnl.setBorder(new EmptyBorder(15, 0, 0, 0));
-        _dictionaryDisclaimerLbl = Standalone.createBoldLabel(_TXT_DICT_NOT_NEEDED);
+        _dictionaryDisclaimerLbl = Standalone.createBoldLabel(isSourceXml ? _TXT_DICT_NOT_NEEDED : _TXT_DICT_FIXED_COLUMNS);
         dictionaryDisclaimerPnl.add(_dictionaryDisclaimerLbl);
         allOptionsPnl.add(dictionaryDisclaimerPnl);
 
@@ -346,16 +347,20 @@ public abstract class AbstractProcessingPage extends AbstractPage {
                 try {
                     NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(_dictionaryFileChooser.getSelectedFile());
                     _userDictionaries.put(dictionary.getDictionaryUri(), dictionary);
-                    List<String> neededDictionaries = new ArrayList<>(getRequiredUserDefinedDictionaries(new File(_sourceFld.getText())));
-                    neededDictionaries.removeAll(_userDictionaries.keySet());
-                    if (neededDictionaries.isEmpty()) {
-                        _dictionaryDisclaimerLbl.setText(_TXT_DICT_PROVIDED);
-                        _dictionaryDisclaimerLbl.setForeground(Color.BLACK);
-                        _dictionaryLbl.setText("");
-                        _dictionaryPnl.setVisible(false);
+                    if (isSourceXml) {
+                        List<String> neededDictionaries = new ArrayList<>(getRequiredUserDefinedDictionaries(new File(_sourceFld.getText())));
+                        neededDictionaries.removeAll(_userDictionaries.keySet());
+                        if (neededDictionaries.isEmpty()) {
+                            _dictionaryDisclaimerLbl.setText(_TXT_DICT_PROVIDED);
+                            _dictionaryDisclaimerLbl.setForeground(Color.BLACK);
+                            _dictionaryLbl.setText("");
+                            _dictionaryPnl.setVisible(false);
+                        }
+                        else
+                            _dictionaryLbl.setText(String.join("     ", neededDictionaries));
                     }
                     else
-                        _dictionaryLbl.setText(String.join("     ", neededDictionaries));
+                        _dictionaryLbl.setText(String.join("     ", _userDictionaries.keySet()));
                 }
                 catch (IOException ex) {
                     String msg = "Unexpected error reading dictionary\n\n" + ex.getMessage();
@@ -555,7 +560,7 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         return pnl;
     }
 
-    private void performPreAnalysis() {
+    private void performPreAnalysis(boolean isSourceXml) {
         _centerPnl.setVisible(false);
         File file = new File(_sourceFld.getText());
         NaaccrFormat format = getFormatForInputFile(file);
@@ -573,18 +578,26 @@ public abstract class AbstractProcessingPage extends AbstractPage {
             _northLayout.show(_northPnl, _NORTH_PANEL_ID_ANALYSIS_RESULTS);
             _centerPnl.setVisible(true);
             _userDictionaries.clear();
-            List<String> requiredDictionaries = getRequiredUserDefinedDictionaries(file);
-            if (!requiredDictionaries.isEmpty()) {
-                _dictionaryDisclaimerLbl.setText(_TXT_DICT_NEEDED);
-                _dictionaryDisclaimerLbl.setForeground(new Color(150, 0, 0));
-                _dictionaryLbl.setText(String.join("     ", requiredDictionaries));
-                _dictionaryPnl.setVisible(true);
+            if (isSourceXml) {
+                List<String> requiredDictionaries = getRequiredUserDefinedDictionaries(file);
+                if (!requiredDictionaries.isEmpty()) {
+                    _dictionaryDisclaimerLbl.setText(_TXT_DICT_NEEDED);
+                    _dictionaryDisclaimerLbl.setForeground(new Color(150, 0, 0));
+                    _dictionaryLbl.setText(String.join("     ", requiredDictionaries));
+                    _dictionaryPnl.setVisible(true);
+                }
+                else {
+                    _dictionaryDisclaimerLbl.setText(_TXT_DICT_NOT_NEEDED);
+                    _dictionaryDisclaimerLbl.setForeground(Color.BLACK);
+                    _dictionaryLbl.setText("");
+                    _dictionaryPnl.setVisible(false);
+                }
             }
             else {
-                _dictionaryDisclaimerLbl.setText(_TXT_DICT_NOT_NEEDED);
+                _dictionaryDisclaimerLbl.setText(_TXT_DICT_FIXED_COLUMNS);
                 _dictionaryDisclaimerLbl.setForeground(Color.BLACK);
-                _dictionaryLbl.setText("");
-                _dictionaryPnl.setVisible(false);
+                _dictionaryLbl.setText("              < no dictionary selected >  ");
+                _dictionaryPnl.setVisible(true);
             }
             _centerLayout.show(_centerPnl, _CENTER_PANEL_ID_OPTIONS);
             if (_targetFld != null) {
