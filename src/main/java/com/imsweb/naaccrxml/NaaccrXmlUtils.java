@@ -75,6 +75,43 @@ public class NaaccrXmlUtils {
     public static final String NAACCR_XML_NAMESPACE = "http://naaccr.org/naaccrxml";
 
     /**
+     * Writes all the patients from the source file into the target file after applying a given "processing" to each of them.
+     * @param xmlSource source XML data file, must exists
+     * @param xmlTarget target XML data file, parent file must exists
+     * @param processor defines the logic to apply to each patient, cannot be null
+     * @param options optional validating options
+     * @param userDictionaries optional user-defined dictionaries (will be merged with the base dictionary)
+     * @param observer an optional observer, useful to keep track of the progress
+     * @throws NaaccrIOException if there is problem reading/writing the file
+     */
+    public static void xmlToXml(File xmlSource, File xmlTarget, NaaccrPatientProcessor processor, NaaccrOptions options, List<NaaccrDictionary> userDictionaries, NaaccrObserver observer) throws NaaccrIOException {
+        if (xmlSource == null)
+            throw new NaaccrIOException("Source XML file is required");
+        if (!xmlSource.exists())
+            throw new NaaccrIOException("Source XML file must exist");
+        if (!xmlTarget.getParentFile().exists())
+            throw new NaaccrIOException("Target folder must exist");
+        if (processor == null)
+            throw new NaaccrIOException("A processor must be provided");
+
+        // create the reader and writer and let them do all the work!
+        try (PatientXmlReader reader = new PatientXmlReader(createReader(xmlSource), options, userDictionaries)) {
+            try (PatientXmlWriter writer = new PatientXmlWriter(createWriter(xmlTarget), reader.getRootData(), options, userDictionaries)) {
+                Patient patient = reader.readPatient();
+                while (patient != null && !Thread.currentThread().isInterrupted()) {
+                    if (observer != null)
+                        observer.patientRead(patient);
+                    processor.processPatient(patient);
+                    writer.writePatient(patient);
+                    if (observer != null)
+                        observer.patientWritten(patient);
+                    patient = reader.readPatient();
+                }
+            }
+        }
+    }
+
+    /**
      * Translates a flat data file into an XML data file.
      * @param flatFile source flat data file, must exists
      * @param xmlFile target XML data file, parent file must exists

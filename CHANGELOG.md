@@ -2,6 +2,7 @@
 
 **Version 8.9**
 
+- Added new utility method "xmlToXml" in NaaccrXmlUtils class to allow a file to be re-created while applying some logic to each patient it contains.
 - Re-added support for providing a user-defined dictionary when processing a flat file (Standalone program only).
 - Improve validation of start columns for N18 dictionaries and prior.
 

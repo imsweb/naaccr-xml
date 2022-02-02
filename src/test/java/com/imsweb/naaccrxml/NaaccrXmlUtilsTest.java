@@ -34,6 +34,30 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 public class NaaccrXmlUtilsTest {
 
     @Test
+    public void testXmlToXml() throws IOException {
+        File sourceXml = TestingUtils.getDataFile("standard-file.xml");
+        File targetXml = new File(TestingUtils.getWorkingDirectory() + "/build/test.xml");
+
+        // create a "processor" that sets the ICD revision number to 0
+        NaaccrPatientProcessor processor = patient -> patient.addItem(new Item("icdRevisionNumber", "0"));
+
+        // make sure the ICD revision number is not 0 before processing the file
+        List<Patient> patients = NaaccrXmlUtils.readXmlFile(sourceXml, null, null, null).getPatients();
+        Assert.assertEquals(2, patients.size());
+        Assert.assertNotEquals("0", patients.get(0).getItemValue("icdRevisionNumber"));
+        Assert.assertNotEquals("0", patients.get(1).getItemValue("icdRevisionNumber"));
+
+        // process the file
+        NaaccrXmlUtils.xmlToXml(sourceXml, targetXml, processor, null, null, null);
+
+        // make sure the ICD revision number is 0 after processing the file
+        patients = NaaccrXmlUtils.readXmlFile(targetXml, null, null, null).getPatients();
+        Assert.assertEquals(2, patients.size());
+        Assert.assertEquals("0", patients.get(0).getItemValue("icdRevisionNumber"));
+        Assert.assertEquals("0", patients.get(1).getItemValue("icdRevisionNumber"));
+    }
+
+    @Test
     public void testFlatToXml() throws IOException {
         File xmlFile = new File(TestingUtils.getWorkingDirectory() + "/build/test.xml");
 
