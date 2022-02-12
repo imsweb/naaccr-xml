@@ -25,6 +25,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryGroupedItem;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_REC_TYPE_CONFIDENTIAL;
@@ -305,6 +306,19 @@ public class NaaccrXmlDictionaryUtilsTest {
         dict.setItems(Collections.singletonList(item));
         Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
         item.setAllowUnlimitedText(false);
+        Assert.assertTrue(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
+
+        // this one defines a grouped item
+        NaaccrDictionaryGroupedItem groupedItem = new NaaccrDictionaryGroupedItem();
+        groupedItem.setNaaccrId("myGroupedVariable");
+        groupedItem.setNaaccrName("My Grouped Variable");
+        groupedItem.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+        groupedItem.setNaaccrNum(15000);
+        groupedItem.setLength(1);
+        groupedItem.setContains("myVariable");
+        dict.setGroupedItems(Collections.singletonList(groupedItem));
+        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
+        dict.setGroupedItems(null);
         Assert.assertTrue(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
     }
 

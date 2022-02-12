@@ -634,6 +634,8 @@ public final class NaaccrXmlDictionaryUtils {
                 }
             }
         }
+        else if (!dictionary.getGroupedItems().isEmpty())
+            errors.add("user-defined dictionaries cannot defined grouped items");
 
         // user dictionary specific validation (only if we know the version)
         if (!isBaseDictionary && naaccrVersionToUse != null) {
@@ -710,10 +712,6 @@ public final class NaaccrXmlDictionaryUtils {
                             errors.add("Item " + item1.getNaaccrId() + " and " + item2.getNaaccrId() + " are overlapping");
                     }
                 }
-
-                if (!dictionary.getGroupedItems().isEmpty())
-                    errors.add("user-defined dictionaries cannot defined grouped items");
-
             }
         }
 
