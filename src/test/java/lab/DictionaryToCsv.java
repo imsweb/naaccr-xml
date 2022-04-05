@@ -3,8 +3,14 @@
  */
 package lab;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -18,8 +24,40 @@ public class DictionaryToCsv {
     public static void main(String[] args) throws IOException {
 
         // re-create the csv standard dictionaries in the docs folder...
-        for (String version : NaaccrFormat.getSupportedVersions())
-            NaaccrXmlDictionaryUtils.writeDictionaryToCsv(NaaccrXmlDictionaryUtils.getMergedDictionaries(version), Paths.get("docs/naaccr-xml-items-" + version + ".csv").toFile());
+        for (String version : NaaccrFormat.getSupportedVersions()) {
+            NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getMergedDictionaries(version);
+            NaaccrXmlDictionaryUtils.writeDictionaryToCsv(dictionary, Paths.get("docs/naaccr-xml-items-" + version + ".csv").toFile());
+
+            File file = new File("docs/grouped-items/naaccr-xml-grouped-items-" + version + ".csv");
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.US_ASCII))) {
+                writer.write("NAACCR XML ID,NAACCR Number,Name,Length,Record Types,Parent XML Element,Contained Items");
+                writer.write(System.lineSeparator());
+                dictionary.getGroupedItems().stream()
+                        .sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId))
+                        .forEach(item -> {
+                            try {
+                                writer.write(item.getNaaccrId());
+                                writer.write(",");
+                                writer.write(item.getNaaccrNum() == null ? "" : item.getNaaccrNum().toString());
+                                writer.write(",\"");
+                                writer.write(item.getNaaccrName() == null ? "" : item.getNaaccrName());
+                                writer.write("\",");
+                                writer.write(item.getLength().toString());
+                                writer.write(",\"");
+                                writer.write(item.getRecordTypes() == null ? "" : item.getRecordTypes());
+                                writer.write("\",");
+                                writer.write(item.getParentXmlElement());
+                                writer.write(",\"");
+                                writer.write(item.getContains());
+                                writer.write("\"");
+                                writer.write(System.lineSeparator());
+                            }
+                            catch (IOException | RuntimeException ex1) {
+                                throw new RuntimeException(ex1); // doing that to make sure the loop is broken...
+                            }
+                        });
+            }
+        }
 
         //csv16to18diff();
     }

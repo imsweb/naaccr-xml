@@ -166,6 +166,24 @@ public class SasUtils {
         return result;
     }
 
+
+    /**
+     * Returns the grouped fields information for the given parameters.
+     * @param version NAACCR version
+     * @param recordType record type
+     * @return fields information
+     */
+    public static List<SasFieldInfo> getGroupedFields(String version, String recordType) {
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-xml-grouped-items-" + version + ".csv");
+        if (is == null)
+            throw new RuntimeException("Unable to get grouped items CSV file for version " + version);
+        return getGroupedFields(recordType, is);
+    }
+
+    public static List<SasFieldInfo> getGroupedFields(String recordType, InputStream is) {
+        return readCsvGroupedItems(recordType, is);
+    }
+
     public static void validateCsvDictionary(File file) throws IOException {
         if (!file.getName().toLowerCase().endsWith(".csv"))
             throw new IOException(file.getName() + "is supposed to be a CSV dictionary but doesn't end with a '.csv' file extension");
@@ -227,6 +245,49 @@ public class SasUtils {
 
                 if (recTypes.contains(recordType))
                     result.add(new SasFieldInfo(id, truncatedId, parentTag, length, num, name, start));
+
+                line = reader.readLine();
+            }
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                }
+                catch (IOException e) {
+                    // ignored
+                }
+            }
+        }
+
+        return result;
+    }
+
+    @SuppressWarnings("TryFinallyCanBeTryWithResources")
+    private static List<SasFieldInfo> readCsvGroupedItems(String recordType, InputStream is) {
+        List<SasFieldInfo> result = new ArrayList<>();
+
+        LineNumberReader reader = null;
+        try {
+            reader = new LineNumberReader(new InputStreamReader(is, StandardCharsets.US_ASCII));
+            reader.readLine(); // ignore headers
+            String line = reader.readLine();
+            while (line != null) {
+                List<String> values = parseCsvLine(reader.getLineNumber(), line);
+
+                String id = values.get(0);
+                Integer num = Integer.valueOf(values.get(1));
+                String name = values.get(2);
+                Integer length = Integer.valueOf(values.get(3));
+                String recTypes = values.get(4);
+                String parentTag = values.get(5);
+                String contains = values.get(6);
+
+                if (recTypes.contains(recordType))
+                    result.add(new SasFieldInfo(id, num, name, parentTag, length, contains));
 
                 line = reader.readLine();
             }

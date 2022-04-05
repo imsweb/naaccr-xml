@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 8.10**
+
+- Added new optional parameter to the read SAS macro to allow creating the grouped items in the target SAS data set.
+
 **Version 8.9**
 
 - Added new utility method "xmlToXml" in NaaccrXmlUtils class to allow a file to be re-created while applying some logic to each patient it contains.

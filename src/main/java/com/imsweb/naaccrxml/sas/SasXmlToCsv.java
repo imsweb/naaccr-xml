@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,8 @@ public class SasXmlToCsv {
     private List<File> _dictionaryFiles;
 
     private String _naaccrVersion, _recordType;
+
+    private boolean _includeGroupedItems;
 
     public SasXmlToCsv(String xmlPath, String naaccrVersion, String recordType) {
         this(xmlPath, null, naaccrVersion, recordType);
@@ -75,6 +78,8 @@ public class SasXmlToCsv {
             SasUtils.logError("Record type needs to be provided");
         if (!"A".equals(_recordType) && !"M".equals(_recordType) && !"C".equals(_recordType) && !"I".equals(_recordType))
             SasUtils.logError("Record type must be A, M, C or I; got " + _recordType);
+
+        _includeGroupedItems = false;
     }
 
     public void setDictionary(String dictionaryPath) {
@@ -127,6 +132,10 @@ public class SasXmlToCsv {
         return SasUtils.getFields(_naaccrVersion, _recordType, _dictionaryFiles);
     }
 
+    public List<SasFieldInfo> getGroupedFields() {
+        return SasUtils.getGroupedFields(_naaccrVersion, _recordType);
+    }
+
     public void convert() throws IOException {
         convert(null);
     }
@@ -143,17 +152,28 @@ public class SasXmlToCsv {
         SasUtils.logInfo("Starting converting XML to CSV...");
         int numCsvFields = -1;
         try {
-            Set<String> requestedFields = SasUtils.extractRequestedFields(fields, availableFields);
+            Set<String> requestedFieldIds = SasUtils.extractRequestedFields(fields, availableFields);
 
-            Map<String, Integer> allFields = new LinkedHashMap<>();
+            Map<String, SasFieldInfo> fieldsToWrite = new LinkedHashMap<>();
             for (SasFieldInfo field : availableFields) {
-                if (requestedFields == null || requestedFields.contains(field.getNaaccrId())) {
-                    allFields.put(field.getTruncatedNaaccrId(), field.getLength());
+                if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId())) {
+                    fieldsToWrite.put(field.getTruncatedNaaccrId(), field);
                     if (!field.getNaaccrId().equals(field.getTruncatedNaaccrId()))
                         SasUtils.logInfo("Truncated '" + field.getNaaccrId() + "' into '" + field.getTruncatedNaaccrId() + "'...");
                 }
             }
-            numCsvFields = allFields.size();
+
+            Map<String, SasFieldInfo> allFields = null;
+            if (_includeGroupedItems) {
+                for (SasFieldInfo groupedField : getGroupedFields())
+                    fieldsToWrite.put(groupedField.getNaaccrId(), groupedField);
+
+                allFields = new HashMap<>();
+                for (SasFieldInfo field : availableFields)
+                    allFields.put(field.getNaaccrId(), field);
+            }
+
+            numCsvFields = fieldsToWrite.size();
 
             BufferedWriter writer = null;
             try {
@@ -161,17 +181,17 @@ public class SasXmlToCsv {
 
                 // write the headers
                 StringBuilder buf = new StringBuilder();
-                for (String field : allFields.keySet())
+                for (String field : fieldsToWrite.keySet())
                     buf.append(field).append(",");
                 buf.setLength(buf.length() - 1);
                 writer.write(buf.toString());
                 writer.write("\n");
                 buf.setLength(0);
 
-                // hack alert - force SAS to recognize all variables as characters...  Sigh...
+                // force SAS to recognize all variables as characters...  Sigh...
                 if (addExtraCharFields) {
-                    for (Entry<String, Integer> field : allFields.entrySet()) {
-                        for (int i = 0; i < field.getValue(); i++)
+                    for (Entry<String, SasFieldInfo> entry : fieldsToWrite.entrySet()) {
+                        for (int i = 0; i < entry.getValue().getLength(); i++)
                             buf.append("-");
                         buf.append(",");
                     }
@@ -190,7 +210,7 @@ public class SasXmlToCsv {
                         ZipEntry entry = zipIs.getNextEntry();
                         while (entry != null) {
                             SasXmlReader reader = new SasXmlReader(SasUtils.createReader(zipFile.getInputStream(entry), entry.getName()));
-                            convertSingleFile(reader, writer, addExtraCharFields, allFields);
+                            convertSingleFile(reader, writer, addExtraCharFields, fieldsToWrite, allFields);
                             entry = zipIs.getNextEntry();
                         }
                     }
@@ -205,7 +225,7 @@ public class SasXmlToCsv {
                     SasXmlReader reader = null;
                     try {
                         reader = new SasXmlReader(SasUtils.createReader(_xmlFile));
-                        convertSingleFile(reader, writer, addExtraCharFields, allFields);
+                        convertSingleFile(reader, writer, addExtraCharFields, fieldsToWrite, allFields);
                     }
                     finally {
                         if (reader != null)
@@ -230,12 +250,29 @@ public class SasXmlToCsv {
         SasUtils.logInfo("Successfully created target CSV with " + numCsvFields + " column" + (numCsvFields > 1 ? "s" : ""));
     }
 
-    private void convertSingleFile(SasXmlReader reader, BufferedWriter writer, boolean addExtraCharFields, Map<String, Integer> allFields) throws IOException {
+    private void convertSingleFile(SasXmlReader reader, BufferedWriter writer, boolean addExtraCharFields, Map<String, SasFieldInfo> fieldsToWrite, Map<String, SasFieldInfo> allFields) throws IOException {
         Pattern quotePattern = Pattern.compile("\"", Pattern.LITERAL);
         StringBuilder buf = new StringBuilder();
         while (reader.nextRecord() > 0) {
-            for (String field : allFields.keySet()) {
-                String val = reader.getValue(field);
+            for (Entry<String, SasFieldInfo> entry : fieldsToWrite.entrySet()) {
+                String val = null;
+                if (entry.getValue().getContains() == null)
+                    val = reader.getValue(entry.getKey());
+                else {
+                    StringBuilder childrenValue = new StringBuilder();
+                    for (String child : entry.getValue().getContains()) {
+                        SasFieldInfo childField = allFields.get(child);
+                        if (childField == null)
+                            throw new IOException("Unable to find field definition for '" + child + "'");
+                        String childValue = reader.getValue(child);
+                        if (childValue == null)
+                            childValue = "";
+                        childrenValue.append(childValue);
+                        for (int i = 0; i < childField.getLength() - childValue.length(); i++)
+                            childrenValue.append(" ");
+                    }
+                    val = childrenValue.toString();
+                }
                 if (val != null && val.contains(","))
                     val = "\"" + quotePattern.matcher(val).replaceAll("\"\"") + "\"";
                 buf.append(val == null ? "" : val).append(",");
@@ -260,5 +297,12 @@ public class SasXmlToCsv {
 
     List<File> getUserDictionaryFiles() {
         return _dictionaryFiles;
+    }
+
+    public void setIncludeGroupedItems(String option) {
+        if ("yes".equalsIgnoreCase(option))
+            _includeGroupedItems = true;
+        else if (!"no".equalsIgnoreCase(option))
+            SasUtils.logError("Invalid includeGroupItems option: " + option);
     }
 }

@@ -153,7 +153,7 @@ public class SasCsvToXml {
         int numXmlFields = -1, numCsvFields = -1;
         List<String> unusedCsvField = null;
         try {
-            Set<String> requestedFields = SasUtils.extractRequestedFields(fields, availableFields);
+            Set<String> requestedFieldIds = SasUtils.extractRequestedFields(fields, availableFields);
 
             Map<String, String> itemNumbers = new HashMap<>();
             for (SasFieldInfo info : availableFields)
@@ -161,7 +161,7 @@ public class SasCsvToXml {
 
             Map<String, String> rootFields = new HashMap<>(), patientFields = new HashMap<>(), tumorFields = new HashMap<>();
             for (SasFieldInfo field : availableFields) {
-                if (requestedFields == null || requestedFields.contains(field.getNaaccrId())) {
+                if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId())) {
                     if ("NaaccrData".equals(field.getParentTag()))
                         rootFields.put(field.getTruncatedNaaccrId(), field.getNaaccrId());
                     else if ("Patient".equals(field.getParentTag()))

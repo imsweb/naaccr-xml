@@ -10,6 +10,11 @@ sourceSets {
             srcDir "docs/"
             include "naaccr-xml-items-*.csv"
         }
+
+        resources {
+            srcDir "docs/grouped-items"
+            include "naaccr-xml-grouped-items-*.csv"
+        }
     }
 }
 

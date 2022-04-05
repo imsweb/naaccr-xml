@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -67,6 +70,16 @@ public class SasTest {
         Assert.assertEquals("Tumor", fields.get("myVariable"));
     }
 
+
+    @Test
+    public void testGetGroupedFields() throws IOException {
+        Map<String, List<String>> fields = new HashMap<>();
+        for (SasFieldInfo field : SasUtils.getFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/grouped-items/naaccr-xml-grouped-items-180.csv"), null))
+            fields.put(field.getNaaccrId(), field.getContains());
+        Assert.assertTrue(fields.containsKey("morphTypebehavIcdO3"));
+        Assert.assertEquals(Arrays.asList("histologicTypeIcdO3", "behaviorCodeIcdO3"), fields.get("morphTypebehavIcdO3"));
+    }
+
     @Test
     public void testConvert() throws IOException {
         File xmlFile = TestingUtils.getDataFile("sas/test.xml");
@@ -101,6 +114,12 @@ public class SasTest {
         xmlToCsv.convert("patientIdNumber,primarySite", false);
         csvToXml.convert("patientIdNumber,primarySite");
         assertXmlData(xmlCopyFile, true);
+
+        // test grouped items
+        xmlToCsv.setIncludeGroupedItems("yes");
+        xmlToCsv.convert(null, false);
+        Assert.assertTrue(csvFile.exists());
+        Assert.assertTrue(FileUtils.readLines(csvFile, StandardCharsets.US_ASCII).get(0).contains("morphTypebehavIcdO3"));
 
         // another (more complex) file
         xmlFile = TestingUtils.getDataFile("sas/test2.xml");
@@ -236,6 +255,16 @@ public class SasTest {
             public List<SasFieldInfo> getFields() {
                 try {
                     return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"), csvDictionaryFiles);
+                }
+                catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public List<SasFieldInfo> getGroupedFields() {
+                try {
+                    return SasUtils.getGroupedFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/grouped-items/naaccr-xml-grouped-items-" + naaccrVersion + ".csv"));
                 }
                 catch (FileNotFoundException e) {
                     throw new RuntimeException(e);

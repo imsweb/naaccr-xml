@@ -1,0 +1,12 @@
+NAACCR XML ID,NAACCR Number,Name,Length,Record Types,Parent XML Element,Contained Items
+extentOfDisease10Dig,779,"Extent of Disease 10-Dig",12,"A,M,C,I",Tumor,"eodTumorSize,eodExtension,eodExtensionProstPath,eodLymphNodeInvolv,regionalNodesPositive,regionalNodesExamined"
+geolocationid19708090,351,"GeoLocationID - 1970/80/90",12,"A,M,C,I",Tumor,"stateAtDxGeocode19708090,countyAtDxGeocode1990,censusTract19708090,censusBlockGrp197090"
+geolocationid2000,352,"GeoLocationID - 2000",12,"A,M,C,I",Tumor,"stateAtDxGeocode2000,countyAtDxGeocode2000,censusTract2000,censusBlockGroup2000"
+geolocationid2010,353,"GeoLocationID - 2010",12,"A,M,C,I",Tumor,"stateAtDxGeocode2010,countyAtDxGeocode2010,censusTract2010,censusBlockGroup2010"
+geolocationid2020,354,"GeoLocationID - 2020",12,"A,M,C,I",Tumor,"stateAtDxGeocode2020,countyAtDxGeocode2020,censusTract2020,censusBlockGroup2020"
+morphIcdO1,1970,"Morph (73-91) ICD-O-1",6,"A,M,C,I",Tumor,"histologyIcdO1,behaviorIcdO1,gradeIcdO1"
+morphTypebehavIcdO2,419,"Morph--Type&Behav ICD-O-2",5,"A,M,C,I",Tumor,"histologyIcdO2,behaviorIcdO2"
+morphTypebehavIcdO3,521,"Morph--Type&Behav ICD-O-3",5,"A,M,C,I",Tumor,"histologicTypeIcdO3,behaviorCodeIcdO3"
+subsqRx2ndCourseCodes,1670,"Subsq RX 2nd Course Codes",11,"A,M,C,I",Tumor,"subsqRx2ndCourseSurg,subsqRx2ndScopeLnSu,subsqRx2ndSurgOth,subsqRx2ndRegLnRem,subsqRx2ndCourseRad,subsqRx2ndCourseChemo,subsqRx2ndCourseHorm,subsqRx2ndCourseBrm,subsqRx2ndCourseOth"
+subsqRx3rdCourseCodes,1690,"Subsq RX 3rd Course Codes",11,"A,M,C,I",Tumor,"subsqRx3rdCourseSurg,subsqRx3rdScopeLnSu,subsqRx3rdSurgOth,subsqRx3rdRegLnRem,subsqRx3rdCourseRad,subsqRx3rdCourseChemo,subsqRx3rdCourseHorm,subsqRx3rdCourseBrm,subsqRx3rdCourseOth"
+subsqRx4thCourseCodes,1710,"Subsq RX 4th Course Codes",11,"A,M,C,I",Tumor,"subsqRx4thCourseSurg,subsqRx4thScopeLnSu,subsqRx4thSurgOth,subsqRx4thRegLnRem,subsqRx4thCourseRad,subsqRx4thCourseChemo,subsqRx4thCourseHorm,subsqRx4thCourseBrm,subsqRx4thCourseOth"
