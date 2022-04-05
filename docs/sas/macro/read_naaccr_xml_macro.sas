@@ -75,9 +75,9 @@ data _null_;
     attrib csvpath length = $200;
     declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToCsv', &sourcefile, &naaccrversion, &recordtype);
     j1.callVoidMethod('setDictionary', &dictfile);
-    j1.callVoidMethod('setIncludeGroupedItems', &groupeditems)
+    j1.callVoidMethod('setIncludeGroupedItems', &groupeditems);
     j1.callStringMethod('getCsvPath', csvpath);
-    call symput('csvfile', csvpath);;
+    call symput('csvfile', csvpath);
     j1.callVoidMethod('convert', &items);
     j1.delete();
 run;
