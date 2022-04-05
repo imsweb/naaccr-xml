@@ -1,4 +1,4 @@
-%MACRO readNaaccrXml(libpath, sourcefile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", cleanupcsv="yes", includeGroupedItems="no");
+%MACRO readNaaccrXml(libpath, sourcefile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", cleanupcsv="yes", groupeditems="no");
 
 /************************************************************************************************************;
     This macro reads a given NAACCR XML data file and loads the data into a dataset.
@@ -40,7 +40,7 @@
         provide more than one dictionary
     - cleanupcsv should be "yes" or "no" (defaults to "yes"); if "no" then the tmp CSV file won't be
         automatically deleted; use this parameter to QC the CSV file or use it to investigate problems.
-    - includeGroupedItems should be "yes" or "no" (defaults to "no"); if "yes" then the grouped items will
+    - groupeditems should be "yes" or "no" (defaults to "no"); if "yes" then the grouped items will
         added to the created data set. Note that the "items" parameter has not impact on this one, either
         all the grouped items are included, or none are.
 
@@ -58,7 +58,7 @@
     03/12/2021 - Fabian Depry - Removed default value for record type instead of assuming "I" for incidence.
     04/13/2021 - Fabian Depry - Added documentation for providing included items as a CSV file.
     10/08/2021 - Fabian Depry - Added new optional cleanupcsv parameter to allow better QC and problem investigation.
-    04/04/2022 - Fabian Depry - Added new option includeGroupedItems parameter to allow grouped items to be added to the data set.
+    04/04/2022 - Fabian Depry - Added new option groupeditems parameter to allow grouped items to be added to the data set.
  ************************************************************************************************************/;
 
 /*
@@ -75,7 +75,7 @@ data _null_;
     attrib csvpath length = $200;
     declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToCsv', &sourcefile, &naaccrversion, &recordtype);
     j1.callVoidMethod('setDictionary', &dictfile);
-    j1.callVoidMethod('setIncludeGroupedItems', &includeGroupedItems)
+    j1.callVoidMethod('setIncludeGroupedItems', &groupeditems)
     j1.callStringMethod('getCsvPath', csvpath);
     call symput('csvfile', csvpath);;
     j1.callVoidMethod('convert', &items);
