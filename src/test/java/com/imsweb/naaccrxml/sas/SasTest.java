@@ -74,7 +74,7 @@ public class SasTest {
     @Test
     public void testGetGroupedFields() throws IOException {
         Map<String, List<String>> fields = new HashMap<>();
-        for (SasFieldInfo field : SasUtils.getFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/grouped-items/naaccr-xml-grouped-items-180.csv"), null))
+        for (SasFieldInfo field : SasUtils.getGroupedFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/grouped-items/naaccr-xml-grouped-items-180.csv")))
             fields.put(field.getNaaccrId(), field.getContains());
         Assert.assertTrue(fields.containsKey("morphTypebehavIcdO3"));
         Assert.assertEquals(Arrays.asList("histologicTypeIcdO3", "behaviorCodeIcdO3"), fields.get("morphTypebehavIcdO3"));
