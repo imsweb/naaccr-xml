@@ -3,6 +3,7 @@
 **Version 8.10**
 
 - Added new optional parameter to the read SAS macro to allow creating the grouped items in the target SAS data set.
+- Updated XStream dependency from version 1.4.18 to version 1.4.19.
 
 **Version 8.9**
 
