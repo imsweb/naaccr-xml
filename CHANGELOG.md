@@ -4,6 +4,7 @@
 
 - Added new optional parameter to the read SAS macro to allow creating the grouped items in the target SAS data set.
 - Updated XStream dependency from version 1.4.18 to version 1.4.19.
+- Updated embedded JRE to Java 17.0.3 (this only affects the standalone program).
 
 **Version 8.9**
 
