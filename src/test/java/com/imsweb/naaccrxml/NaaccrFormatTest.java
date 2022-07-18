@@ -20,6 +20,7 @@ import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_VERSION_160;
 import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_VERSION_180;
 import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_VERSION_210;
 import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_VERSION_220;
+import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_VERSION_230;
 
 public class NaaccrFormatTest {
 
@@ -58,6 +59,7 @@ public class NaaccrFormatTest {
         expectedVersions.add(NAACCR_VERSION_180);
         expectedVersions.add(NAACCR_VERSION_210);
         expectedVersions.add(NAACCR_VERSION_220);
+        expectedVersions.add(NAACCR_VERSION_230);
         if (!Objects.equals(expectedVersions, NaaccrFormat.getSupportedVersions()))
             Assert.fail("A new version was added, please make sure to add it to list of versions in AbstractProcessingPage!");
     }

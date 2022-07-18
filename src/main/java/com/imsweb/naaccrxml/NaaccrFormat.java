@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 public final class NaaccrFormat {
 
     // version constants
+    public static final String NAACCR_VERSION_230 = "230";
     public static final String NAACCR_VERSION_220 = "220";
     public static final String NAACCR_VERSION_210 = "210";
     public static final String NAACCR_VERSION_180 = "180";
@@ -27,6 +28,7 @@ public final class NaaccrFormat {
     private static final List<String> _SUPPORTED_VERSIONS = new ArrayList<>();
 
     static {
+        _SUPPORTED_VERSIONS.add(NAACCR_VERSION_230);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_220);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_210);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_180);
@@ -47,6 +49,10 @@ public final class NaaccrFormat {
     }
 
     // format constants
+    public static final String NAACCR_FORMAT_23_ABSTRACT = "naaccr-230-abstract";
+    public static final String NAACCR_FORMAT_23_MODIFIED = "naaccr-230-modified";
+    public static final String NAACCR_FORMAT_23_CONFIDENTIAL = "naaccr-230-confidential";
+    public static final String NAACCR_FORMAT_23_INCIDENCE = "naaccr-230-incidence";
     public static final String NAACCR_FORMAT_22_ABSTRACT = "naaccr-220-abstract";
     public static final String NAACCR_FORMAT_22_MODIFIED = "naaccr-220-modified";
     public static final String NAACCR_FORMAT_22_CONFIDENTIAL = "naaccr-220-confidential";
@@ -76,6 +82,10 @@ public final class NaaccrFormat {
     private static final List<String> _SUPPORTED_FORMATS = new ArrayList<>();
 
     static {
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_23_ABSTRACT);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_23_MODIFIED);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_23_CONFIDENTIAL);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_23_INCIDENCE);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_22_ABSTRACT);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_22_MODIFIED);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_22_CONFIDENTIAL);
@@ -151,13 +161,14 @@ public final class NaaccrFormat {
 
     private final int _lineLength;
 
+    @SuppressWarnings("java:S3358")
     private NaaccrFormat(String format) {
         if (!isFormatSupported(format))
-            throw new RuntimeException("Unsupported format: " + format);
+            throw new IllegalStateException("Unsupported format: " + format);
 
         String[] parts = StringUtils.split(format, '-');
         if (!isVersionSupported(parts[1]))
-            throw new RuntimeException("Unsupported version: " + parts[1]);
+            throw new IllegalStateException("Unsupported version: " + parts[1]);
         _naaccrVersion = parts[1];
 
         // version 18 had a different line length than 16/15/14; post version 18 doesn't support length anymore...
@@ -182,24 +193,25 @@ public final class NaaccrFormat {
                 _lineLength = isPreVersion18 ? 3339 : isVersion18 ? 4048 : -1;
                 break;
             default:
-                throw new RuntimeException("Unsupported format: " + parts[2]);
+                throw new IllegalStateException("Unsupported format: " + parts[2]);
         }
     }
 
     private static String getFormatFromVersionAndType(String version, String type) {
         String format;
+        String prefix = "naaccr-" + version;
         switch (type) {
             case "A":
-                format = "naaccr-" + version + "-abstract";
+                format = prefix + "-abstract";
                 break;
             case "M":
-                format = "naaccr-" + version + "-modified";
+                format = prefix + "-modified";
                 break;
             case "C":
-                format = "naaccr-" + version + "-confidential";
+                format = prefix + "-confidential";
                 break;
             case "I":
-                format = "naaccr-" + version + "-incidence";
+                format = prefix + "-incidence";
                 break;
             default:
                 format = null;

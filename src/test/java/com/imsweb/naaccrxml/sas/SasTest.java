@@ -45,6 +45,7 @@ public class SasTest {
         formats.remove("180");
         formats.remove("210");
         formats.remove("220");
+        formats.remove("230");
         if (!formats.isEmpty())
             Assert.fail("Looks like a new format was added, please handle it in the SasXmlToCsv and SasCsvToXml constructors, and adjust this test: " + formats);
 

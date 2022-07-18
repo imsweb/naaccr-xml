@@ -69,8 +69,8 @@ public class SasCsvToXml {
         if (_naaccrVersion == null || _naaccrVersion.trim().isEmpty())
             SasUtils.logError("NAACCR version needs to be provided");
         if (!"140".equals(naaccrVersion) && !"150".equals(naaccrVersion) && !"160".equals(naaccrVersion) && !"180".equals(naaccrVersion) && !"210".equals(naaccrVersion) && !"220".equals(
-                naaccrVersion))
-            SasUtils.logError("NAACCR version must be 140, 150, 160, 180, 210 or 220; got " + _naaccrVersion);
+                naaccrVersion) && !"230".equals(naaccrVersion))
+            SasUtils.logError("NAACCR version must be 140, 150, 160, 180, 210, 220 or 230; got " + _naaccrVersion);
 
         _recordType = recordType;
         if (_recordType == null || _recordType.trim().isEmpty())

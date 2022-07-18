@@ -194,8 +194,10 @@ public abstract class AbstractProcessingPage extends AbstractPage {
         boolean conversionPage = (this instanceof FlatToXmlPage) || (this instanceof XmlToFlatPage);
 
         pnl.add(buildTextPnl("The following NAACCR versions are supported:"));
-        if (!conversionPage)
+        if (!conversionPage) {
+            pnl.add(buildTextPnl("             NAACCR 23"));
             pnl.add(buildTextPnl("             NAACCR 22"));
+        }
         pnl.add(buildTextPnl("             NAACCR 21"));
         pnl.add(buildTextPnl("             NAACCR 18"));
         pnl.add(buildTextPnl("             NAACCR 16"));
