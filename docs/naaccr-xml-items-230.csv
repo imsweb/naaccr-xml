@@ -101,6 +101,7 @@ chromosome3Status,3821,"Chromosome 3 Status",,1,"A,M,C,I",Tumor,digits
 chromosome8qStatus,3822,"Chromosome 8q Status",,1,"A,M,C,I",Tumor,text
 circumferentialResectionMargin,3823,"Circumferential Resection Margin (CRM)",,4,"A,M,C,I",Tumor,text
 classOfCase,610,"Class of Case",,2,"A,M,C,I",Tumor,digits
+clinicalMarginWidth,3961,"Clinical Margin Width",,4,"A,M,C,I",Tumor,text
 cocAccreditedFlag,2152,"CoC Accredited Flag",,1,"A,M,C,I",Tumor,digits
 cocCodingSysCurrent,2140,"CoC Coding Sys--Current",,2,"A,M,C,I",Tumor,digits
 cocCodingSysOriginal,2150,"CoC Coding Sys--Original",,2,"A,M,C,I",Tumor,digits
@@ -314,6 +315,7 @@ her2OverallSummary,3855,"HER2 Overall Summary",,1,"A,M,C,I",Tumor,digits
 heritableTrait,3856,"Heritable Trait",,1,"A,M,C,I",Tumor,digits
 highRiskCytogenetics,3857,"High Risk Cytogenetics",,1,"A,M,C,I",Tumor,text
 highRiskHistologicFeatures,3858,"High Risk Histologic Features",,1,"A,M,C,I",Tumor,digits
+histologicSubtype,3960,"Histologic Subtype",,1,"A,M,C,I",Tumor,digits
 histologicTypeIcdO3,522,"Histologic Type ICD-O-3",,4,"A,M,C,I",Tumor,digits
 histologyIcdO1,1971,"Histology (73-91) ICD-O-1",,4,"A,M,C,I",Tumor,digits
 histologyIcdO2,420,"Histology (92-00) ICD-O-2",,4,"A,M,C,I",Tumor,digits
@@ -407,6 +409,7 @@ neoadjuvTherapyTreatmentEffect,1634,"Neoadjuvant Therapy-Treatment Effect",,1,"A
 neoadjuvantTherapy,1632,"Neoadjuvant Therapy",,1,"A,M,C,I",Tumor,text
 nextFollowUpSource,1800,"Next Follow-Up Source",,1,"A,M,C,I",Tumor,digits
 nhiaDerivedHispOrigin,191,"NHIA Derived Hisp Origin",,1,"A,M,C,I",Patient,digits
+noPatientContactFlag,1854,"No Patient Contact Flag",,1,"A,M,C,I",Patient,digits
 npcrDerivedAjcc8TnmClinStgGrp,3645,"NPCR Derived AJCC 8 TNM Clin Stg Grp",,15,"A,M,C,I",Tumor,text
 npcrDerivedAjcc8TnmPathStgGrp,3646,"NPCR Derived AJCC 8 TNM Path Stg Grp",,15,"A,M,C,I",Tumor,text
 npcrDerivedAjcc8TnmPostStgGrp,3647,"NPCR Derived AJCC 8 TNM Post Therapy Stg Grp",,15,"A,M,C,I",Tumor,text
@@ -591,6 +594,7 @@ regionalNodesPositive,820,"Regional Nodes Positive",,2,"A,M,C,I",Tumor,digits
 registryId,40,"Registry ID",,10,"A,M,C,I",NaaccrData,digits
 registryType,30,"Registry Type",,1,"A,M,C,I",NaaccrData,digits
 reportingFacility,540,"Reporting Facility",,10,"A,M,C,I",Tumor,text
+reportingFacilityRestrictionFlag,1856,"Reporting Facility Restriction Flag",,2,"A,M,C,I",Tumor,digits
 residualTumVolPostCytoreduction,3921,"Residual Tumor Volume Post Cytoreduction",,2,"A,M,C,I",Tumor,digits
 responseToNeoadjuvantTherapy,3922,"Response to Neoadjuvant Therapy",,1,"A,M,C,I",Tumor,digits
 rqrsNcdbSubmissionFlag,2155,"RQRS NCDB Submission Flag",,1,"A,M,C,I",Tumor,digits
@@ -636,6 +640,7 @@ rxHospSurgApp2010,668,"RX Hosp--Surg App 2010",,1,"A,M,C,I",Tumor,digits
 rxHospSurgOth9802,748,"RX Hosp--Surg Oth 98-02",,1,"A,M,C,I",Tumor,digits
 rxHospSurgOthRegDis,674,"RX Hosp--Surg Oth Reg/Dis",,1,"A,M,C,I",Tumor,digits
 rxHospSurgPrimSite,670,"RX Hosp--Surg Prim Site",,2,"A,M,C,I",Tumor,digits
+rxHospSurgPrimSite2023,671,"RX Hosp--Surg Prim Site 2023",,4,"A,M,C,I",Tumor,text
 rxHospSurgSite9802,746,"RX Hosp--Surg Site 98-02",,2,"A,M,C,I",Tumor,digits
 rxSummBrm,1410,"RX Summ--BRM",,2,"A,M,C,I",Tumor,digits
 rxSummChemo,1390,"RX Summ--Chemo",,2,"A,M,C,I",Tumor,digits
@@ -652,6 +657,7 @@ rxSummScopeRegLnSur,1292,"RX Summ--Scope Reg LN Sur",,1,"A,M,C,I",Tumor,digits
 rxSummSurgOth9802,1648,"RX Summ--Surg Oth 98-02",,1,"A,M,C,I",Tumor,digits
 rxSummSurgOthRegDis,1294,"RX Summ--Surg Oth Reg/Dis",,1,"A,M,C,I",Tumor,digits
 rxSummSurgPrimSite,1290,"RX Summ--Surg Prim Site",,2,"A,M,C,I",Tumor,digits
+rxSummSurgPrimSite2023,1291,"RX Summ--Surg Prim Site 2023",,4,"A,M,C,I",Tumor,text
 rxSummSurgRadSeq,1380,"RX Summ--Surg/Rad Seq",,1,"A,M,C,I",Tumor,digits
 rxSummSurgSite9802,1646,"RX Summ--Surg Site 98-02",,2,"A,M,C,I",Tumor,digits
 rxSummSurgeryType,1640,"RX Summ--Surgery Type",,2,"A,M,C,I",Tumor,digits

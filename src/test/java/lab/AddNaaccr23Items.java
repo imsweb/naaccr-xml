@@ -34,31 +34,36 @@ public class AddNaaccr23Items {
 
                 line = reader.readNext();
                 while (line != null) {
+                    if (!line[0].isEmpty()) {
 
-                    Integer length = Integer.parseInt(line[0]);
-                    Integer num = Integer.parseInt(line[1]);
-                    String name = line[2];
-                    String id = line[3];
-                    String level = line[6];
-                    String type = line[7];
-                    boolean isNew = "New".equals(line[8]);
+                        Integer length = Integer.parseInt(line[3]);
+                        Integer num = Integer.parseInt(line[1]);
+                        String name = line[2];
+                        String id = line[0];
+                        String level = line[4];
+                        boolean isNew = "New".equals(line[8]);
 
-                    if (isNew) {
-                        NaaccrDictionaryItem item = new NaaccrDictionaryItem();
-                        item.setNaaccrId(id);
-                        item.setNaaccrName(name);
-                        item.setParentXmlElement(level);
-                        item.setNaaccrNum(num);
-                        item.setRecordTypes("A,M,C,I");
-                        item.setLength(length);
-                        if ("Digit".equalsIgnoreCase(type))
-                            item.setDataType(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS);
-                        dictionary.addItem(item);
-                    }
-                    else {
-                        NaaccrDictionaryItem item = dictionary.getItemByNaaccrId(id);
-                        if (item == null)
-                            System.out.println("!!! Unable to find " + id);
+                        if (isNew) {
+
+                            String type = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT;
+                            if (id.equals("noPatientContactFlag") || id.equals("reportingFacilityRestrictionFlag") || id.equals("histologicSubtype"))
+                                type = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS;
+
+                            NaaccrDictionaryItem item = new NaaccrDictionaryItem();
+                            item.setNaaccrId(id);
+                            item.setNaaccrName(name);
+                            item.setParentXmlElement(level);
+                            item.setNaaccrNum(num);
+                            item.setRecordTypes("A,M,C,I");
+                            item.setLength(length);
+                            item.setDataType(type);
+                            dictionary.addItem(item);
+                        }
+                        else {
+                            NaaccrDictionaryItem item = dictionary.getItemByNaaccrId(id);
+                            if (item == null)
+                                System.out.println("!!! Unable to find " + id);
+                        }
                     }
 
                     line = reader.readNext();
