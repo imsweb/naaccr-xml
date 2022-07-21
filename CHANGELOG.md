@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+**Version 9.0**
+
+- Added support for NAACCR 23.
+- Added support for new specifications version 1.6 and update all base dictionaries to that version (removed allowUnlimitedText and groupedItems).
+
 **Version 8.10**
 
 - Added new optional parameter to the read SAS macro to allow creating the grouped items in the target SAS data set.

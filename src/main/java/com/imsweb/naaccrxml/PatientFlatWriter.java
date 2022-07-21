@@ -275,8 +275,8 @@ public class PatientFlatWriter implements PatientWriter {
                 if (applyZeroPadding)
                     value = StringUtils.rightPad(value, itemDef.getLength(), '0');
             }
-            else
-                throw new RuntimeException("Unknown padding option: " + itemDef.getPadding());
+            else if (!NaaccrXmlDictionaryUtils.NAACCR_PADDING_NONE.equals(itemDef.getPadding()))
+                throw new IllegalStateException("Unknown padding option: " + itemDef.getPadding());
         }
 
         // handle new lines (can't have that in flat files)
@@ -285,7 +285,7 @@ public class PatientFlatWriter implements PatientWriter {
 
         // for flat-file values, we always have to truncate, so the "allowUnlimitedText" is used only to know if we have to report an error
         if (value != null && value.length() > itemDef.getLength()) {
-            if (!Boolean.TRUE.equals(itemDef.getAllowUnlimitedText()) && _options.getReportValuesTooLong())
+            if (!Boolean.TRUE.equals(itemDef.getAllowUnlimitedText()) && Boolean.TRUE.equals(_options.getReportValuesTooLong()))
                 reportError(entityToUse, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());
             value = value.substring(0, itemDef.getLength());
         }

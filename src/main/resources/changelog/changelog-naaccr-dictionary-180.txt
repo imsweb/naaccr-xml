@@ -1,4 +1,5 @@
 <!-- Changelog
+ - 07/21/2022: removed allowUnlimitedText and groupedItems, set specificationVersion to 1.6.
  - 10/01/2021: Added dateLastModified attribute and set specificationVersion to 1.5.
  - 09/03/2021: Removed zero-left padding from item reportingFacility.
  - 03/12/2021: Changed padding of sentinelLymphNodesExamined, sentinelLymphNodesPositive and phase1DosePerFraction to be leftZero.

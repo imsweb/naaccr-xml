@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class SpecificationVersion {
 
+    public static final String SPEC_1_6 = "1.6";
     public static final String SPEC_1_5 = "1.5";
     public static final String SPEC_1_4 = "1.4";
     public static final String SPEC_1_3 = "1.3";
@@ -15,10 +16,17 @@ public class SpecificationVersion {
     public static final String SPEC_1_0 = "1.0";
 
     /**
+     * Constructor.
+     */
+    private SpecificationVersion() {
+        // no creation of objects for this class...
+    }
+
+    /**
      * Returns true if the provided spec is supported by this library, false otherwise.
      */
     public static boolean isSpecificationSupported(String spec) {
-        return SPEC_1_0.equals(spec) || SPEC_1_1.equals(spec) || SPEC_1_2.equals(spec) || SPEC_1_3.equals(spec) || SPEC_1_4.equals(spec) || SPEC_1_5.equals(spec);
+        return SPEC_1_0.equals(spec) || SPEC_1_1.equals(spec) || SPEC_1_2.equals(spec) || SPEC_1_3.equals(spec) || SPEC_1_4.equals(spec) || SPEC_1_5.equals(spec) || SPEC_1_6.equals(spec);
     }
 
     /**

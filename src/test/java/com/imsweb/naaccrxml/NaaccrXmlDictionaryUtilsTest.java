@@ -25,7 +25,6 @@ import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
-import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryGroupedItem;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_REC_TYPE_CONFIDENTIAL;
@@ -183,6 +182,16 @@ public class NaaccrXmlDictionaryUtilsTest {
             exception = true;
         }
         Assert.assertTrue(exception);
+
+        // try to read a user dictionary with another error (allowUnlimitedText for specs 1.6)
+        exception = false;
+        try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-220-bad2.xml"))) {
+            NaaccrXmlDictionaryUtils.readDictionary(reader);
+        }
+        catch (IOException e) {
+            exception = true;
+        }
+        Assert.assertTrue(exception);
     }
 
     @Test
@@ -295,6 +304,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertTrue(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
 
         // this one defines the allowUnlimitedText with a non text data type
+        dict.setSpecificationVersion(SpecificationVersion.SPEC_1_5); // 1.6 and later don't support that attribute anymore
         item = new NaaccrDictionaryItem();
         item.setNaaccrId("myVariable");
         item.setNaaccrName("My Variable");
@@ -306,19 +316,6 @@ public class NaaccrXmlDictionaryUtilsTest {
         dict.setItems(Collections.singletonList(item));
         Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
         item.setAllowUnlimitedText(false);
-        Assert.assertTrue(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
-
-        // this one defines a grouped item
-        NaaccrDictionaryGroupedItem groupedItem = new NaaccrDictionaryGroupedItem();
-        groupedItem.setNaaccrId("myGroupedVariable");
-        groupedItem.setNaaccrName("My Grouped Variable");
-        groupedItem.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
-        groupedItem.setNaaccrNum(15000);
-        groupedItem.setLength(1);
-        groupedItem.setContains("myVariable");
-        dict.setGroupedItems(Collections.singletonList(groupedItem));
-        Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
-        dict.setGroupedItems(null);
         Assert.assertTrue(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
     }
 

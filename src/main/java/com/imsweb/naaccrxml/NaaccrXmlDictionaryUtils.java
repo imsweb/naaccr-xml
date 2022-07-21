@@ -72,10 +72,10 @@ public final class NaaccrXmlDictionaryUtils {
 
     static {
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_ALPHA, Pattern.compile("^[A-Z]+$"));
-        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DIGITS, Pattern.compile("^[0-9]+$"));
-        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_MIXED, Pattern.compile("^[A-Z0-9]+$"));
-        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_NUMERIC, Pattern.compile("^[0-9]+(\\.[0-9]+)?$"));
-        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)[0-9][0-9]((0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])?)?$"));
+        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DIGITS, Pattern.compile("^\\d+$"));
+        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_MIXED, Pattern.compile("^[A-Z\\d]+$"));
+        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_NUMERIC, Pattern.compile("^\\d+(\\.\\d+)?$"));
+        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)\\d\\d((0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])?)?$"));
     }
 
     // trimming rules (default is all)
@@ -87,6 +87,7 @@ public final class NaaccrXmlDictionaryUtils {
     public static final String NAACCR_PADDING_LEFT_BLANK = "leftBlank";
     public static final String NAACCR_PADDING_RIGHT_ZERO = "rightZero";
     public static final String NAACCR_PADDING_LEFT_ZERO = "leftZero";
+    public static final String NAACCR_PADDING_NONE = "none";
 
     // the Patterns for the internal dictionaries URI
     public static final Pattern BASE_DICTIONARY_URI_PATTERN = Pattern.compile("http://naaccr\\.org/naaccrxml/naaccr-dictionary-(.+?)\\.xml");
@@ -223,7 +224,7 @@ public final class NaaccrXmlDictionaryUtils {
      */
     public static NaaccrDictionary getBaseDictionaryByUri(String uri) {
         if (uri == null)
-            throw new RuntimeException("URI is required for getting the base dictionary.");
+            throw new IllegalStateException("URI is required for getting the base dictionary.");
         return getBaseDictionaryByVersion(extractVersionFromUri(uri));
     }
 
@@ -235,9 +236,9 @@ public final class NaaccrXmlDictionaryUtils {
     @SuppressWarnings("ConstantConditions")
     public static NaaccrDictionary getBaseDictionaryByVersion(String naaccrVersion) {
         if (naaccrVersion == null)
-            throw new RuntimeException("Version is required for getting the base dictionary.");
+            throw new IllegalStateException("Version is required for getting the base dictionary.");
         if (!NaaccrFormat.isVersionSupported(naaccrVersion))
-            throw new RuntimeException("Unsupported base dictionary version: " + naaccrVersion);
+            throw new IllegalStateException("Unsupported base dictionary version: " + naaccrVersion);
         NaaccrDictionary result = _INTERNAL_DICTIONARIES.get("base_" + naaccrVersion);
         if (result == null) {
             String resName = "naaccr-dictionary-" + naaccrVersion + ".xml";
@@ -246,7 +247,7 @@ public final class NaaccrXmlDictionaryUtils {
                 _INTERNAL_DICTIONARIES.put("base_" + naaccrVersion, result);
             }
             catch (IOException e) {
-                throw new RuntimeException("Unable to load base dictionary for version " + naaccrVersion, e);
+                throw new IllegalStateException("Unable to load base dictionary for version " + naaccrVersion, e);
             }
         }
         return result;
@@ -259,7 +260,7 @@ public final class NaaccrXmlDictionaryUtils {
      */
     public static NaaccrDictionary getDefaultUserDictionaryByUri(String uri) {
         if (uri == null)
-            throw new RuntimeException("URI is required for getting the default user dictionary.");
+            throw new IllegalStateException("URI is required for getting the default user dictionary.");
         return getDefaultUserDictionaryByVersion(extractVersionFromUri(uri));
     }
 
@@ -271,9 +272,9 @@ public final class NaaccrXmlDictionaryUtils {
     @SuppressWarnings("ConstantConditions")
     public static NaaccrDictionary getDefaultUserDictionaryByVersion(String naaccrVersion) {
         if (naaccrVersion == null)
-            throw new RuntimeException("Version is required for getting the default user dictionary.");
+            throw new IllegalStateException("Version is required for getting the default user dictionary.");
         if (!NaaccrFormat.isVersionSupported(naaccrVersion))
-            throw new RuntimeException("Unsupported default user dictionary version: " + naaccrVersion);
+            throw new IllegalStateException("Unsupported default user dictionary version: " + naaccrVersion);
 
         // no more default user dictionary for version 22 and later!
         if (Integer.parseInt(naaccrVersion) >= 220)
@@ -287,7 +288,7 @@ public final class NaaccrXmlDictionaryUtils {
                 _INTERNAL_DICTIONARIES.put("user_" + naaccrVersion, result);
             }
             catch (IOException e) {
-                throw new RuntimeException("Unable to get base dictionary for version " + naaccrVersion, e);
+                throw new IllegalStateException("Unable to get base dictionary for version " + naaccrVersion, e);
             }
         }
         return result;
@@ -426,12 +427,12 @@ public final class NaaccrXmlDictionaryUtils {
      */
     public static void writeDictionary(NaaccrDictionary dictionary, Writer writer, List<String> comment) throws IOException {
         if (dictionary == null)
-            throw new RuntimeException("Provided dictionary cannot be null");
+            throw new IllegalStateException("Provided dictionary cannot be null");
 
         // get the changelog if we are writing a base dictionary
         if (isBaseDictionary(dictionary)) {
             if (comment != null)
-                throw new RuntimeException("Comment cannot be provided when writing a base dictionary!");
+                throw new IllegalStateException("Comment cannot be provided when writing a base dictionary!");
             try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("changelog/changelog-naaccr-dictionary-" + dictionary.getNaaccrVersion() + ".txt")) {
                 if (is != null) {
                     comment = new ArrayList<>();
@@ -575,12 +576,14 @@ public final class NaaccrXmlDictionaryUtils {
                 errors.add("invalid value for 'dataType' attribute: " + item.getDataType());
 
             // validate unlimited text
-            if (Boolean.TRUE.equals(item.getAllowUnlimitedText()) && !NAACCR_DATA_TYPE_TEXT.equals(type))
+            if (item.getAllowUnlimitedText() != null && SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_6) >= 0)
+                errors.add("invalid attribute 'allowUnlimitedText'");
+            else if (Boolean.TRUE.equals(item.getAllowUnlimitedText()) && !NAACCR_DATA_TYPE_TEXT.equals(type))
                 errors.add("allowUnlimitedText attribute can only be used with text data type");
 
             // validate padding
             if (item.getPadding() != null && (!NAACCR_PADDING_LEFT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_LEFT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_RIGHT_BLANK.equals(
-                    item.getPadding()) && !NAACCR_PADDING_RIGHT_ZERO.equals(item.getPadding())))
+                    item.getPadding()) && !NAACCR_PADDING_RIGHT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_NONE.equals(item.getPadding())))
                 errors.add("invalid value for 'padding' attribute: " + item.getPadding());
 
             // validate trimming
@@ -602,40 +605,6 @@ public final class NaaccrXmlDictionaryUtils {
                 }
             }
         }
-
-        // validate grouped items; since those can only appear in base dictionaries, the validation is going to be minimal
-        if (isBaseDictionary) {
-            for (NaaccrDictionaryGroupedItem groupedItem : dictionary.getGroupedItems()) {
-                // validate ID
-                if (groupedItem.getNaaccrId() == null || groupedItem.getNaaccrId().trim().isEmpty())
-                    errors.add("'naaccrId' attribute is required");
-                else if (!idPattern.matcher(groupedItem.getNaaccrId()).matches())
-                    errors.add("'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + groupedItem.getNaaccrId());
-                else if (naaccrIds.contains(groupedItem.getNaaccrId()))
-                    errors.add("'naaccrId' attribute for grouped item " + groupedItem.getNaaccrId() + " is not unique");
-                naaccrIds.add(groupedItem.getNaaccrId());
-
-                // validate number
-                if (groupedItem.getNaaccrNum() == null)
-                    errors.add("'naaccrNum' attribute for grouped item " + groupedItem.getNaaccrId() + " is missing");
-                else if (naaccrNums.contains(groupedItem.getNaaccrNum()))
-                    errors.add("'naaccrNum' attribute for grouped item " + groupedItem.getNaaccrId() + " must be unique, already saw " + groupedItem.getNaaccrNum());
-                naaccrNums.add(groupedItem.getNaaccrNum());
-
-                // validate start column
-                if (groupedItem.getStartColumn() != null) {
-                    for (int idx = 0; idx < groupedItem.getContainedItemId().size(); idx++) {
-                        NaaccrDictionaryItem containedItem = dictionary.getItemByNaaccrId(groupedItem.getContainedItemId().get(idx));
-                        if (containedItem == null)
-                            errors.add("grouped item " + groupedItem.getNaaccrId() + " references unknown item " + groupedItem.getContainedItemId().get(idx));
-                        else if (idx == 0 && !groupedItem.getStartColumn().equals(containedItem.getStartColumn()))
-                            errors.add("'startColumn' attribute for grouped item " + groupedItem.getNaaccrId() + " is not consistent with first contained item");
-                    }
-                }
-            }
-        }
-        else if (!dictionary.getGroupedItems().isEmpty())
-            errors.add("user-defined dictionaries cannot defined grouped items");
 
         // user dictionary specific validation (only if we know the version)
         if (!isBaseDictionary && naaccrVersionToUse != null) {
@@ -880,7 +849,7 @@ public final class NaaccrXmlDictionaryUtils {
      */
     public static NaaccrDictionary mergeDictionaries(NaaccrDictionary baseDictionary, NaaccrDictionary... userDictionaries) {
         if (baseDictionary == null)
-            throw new RuntimeException("Base dictionary is required");
+            throw new IllegalStateException("Base dictionary is required");
 
         NaaccrDictionary result = new NaaccrDictionary();
         result.setNaaccrVersion(baseDictionary.getNaaccrVersion());
@@ -900,12 +869,6 @@ public final class NaaccrXmlDictionaryUtils {
         }
         items.sort(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId));
         result.setItems(items);
-
-        List<NaaccrDictionaryGroupedItem> groupedItems = new ArrayList<>(baseDictionary.getGroupedItems());
-        for (NaaccrDictionary userDictionary : userDictionaries)
-            groupedItems.addAll(userDictionary.getGroupedItems());
-        groupedItems.sort(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId));
-        result.setGroupedItems(groupedItems);
 
         return result;
     }
@@ -976,7 +939,7 @@ public final class NaaccrXmlDictionaryUtils {
                             writer.write(System.lineSeparator());
                         }
                         catch (IOException | RuntimeException ex1) {
-                            throw new RuntimeException(ex1); // doing that to make sure the loop is broken...
+                            throw new IllegalStateException(ex1); // doing that to make sure the loop is broken...
                         }
                     });
         }
@@ -1064,7 +1027,7 @@ public final class NaaccrXmlDictionaryUtils {
         public void addAttribute(String key, String value) {
             if ("dataType".equals(key) && NAACCR_DATA_TYPE_TEXT.equals(value))
                 return;
-            if ("padding".equals(key) && NAACCR_PADDING_RIGHT_BLANK.equals(value))
+            if ("padding".equals(key) && (NAACCR_PADDING_RIGHT_BLANK.equals(value) || NAACCR_PADDING_NONE.equals(value)))
                 return;
             if ("trim".equals(key) && NAACCR_TRIM_ALL.equals(value))
                 return;
@@ -1088,8 +1051,6 @@ public final class NaaccrXmlDictionaryUtils {
 
             NaaccrDictionaryItem item = _dictionary.getItemByNaaccrId(_currentItemId);
             if (item == null)
-                item = _dictionary.getGroupedItemByNaaccrId(_currentItemId);
-            if (item == null)
                 return false;
 
             // for grouped items, the converter always write the "contains" last:
@@ -1099,7 +1060,7 @@ public final class NaaccrXmlDictionaryUtils {
             // for items, the order is defined by the converter: we go in reverse order, we only have to check up to parentXmlElement which is required (so we know it's going to be there)
             if (item.getTrim() != null && !NAACCR_TRIM_ALL.equals(item.getTrim()))
                 return "trim".equals(attribute);
-            if (item.getPadding() != null && !NAACCR_PADDING_RIGHT_BLANK.equals(item.getPadding()))
+            if (item.getPadding() != null && !NAACCR_PADDING_RIGHT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_NONE.equals(item.getPadding()))
                 return "padding".equals(attribute);
             if (item.getRegexValidation() != null)
                 return "regexValidation".equals(attribute);

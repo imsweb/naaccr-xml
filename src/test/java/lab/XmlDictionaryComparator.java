@@ -35,8 +35,9 @@ public class XmlDictionaryComparator {
         NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(version);
 
         List<NaaccrDictionaryItem> allItems = new ArrayList<>(baseDictionary.getItems());
-        allItems.addAll(baseDictionary.getGroupedItems());
-        allItems.addAll(NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(version).getItems());
+        NaaccrDictionary userDefinedDictionary = NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(version);
+        if (userDefinedDictionary != null)
+            allItems.addAll(userDefinedDictionary.getItems());
 
         return allItems;
     }
@@ -45,7 +46,7 @@ public class XmlDictionaryComparator {
      * Compares dictionary items between two versions - finds items added, items removed, items whose name changed, and items whose name AND Id changed
      * @param oldVersion older dictionary version
      * @param newVersion newer dictionary version
-     * @throws IOException
+     * @throws IOException if error loading dictionaries
      */
     private static void compareDictionaryVersions(String oldVersion, String newVersion) throws IOException {
         List<NaaccrDictionaryItem> removedItems = new ArrayList<>();    //List of items that have been removed
@@ -63,9 +64,7 @@ public class XmlDictionaryComparator {
             //Check if the new dictionary (base or default user) still contains the old dictionary item using NAACCR Number (Number will never change between versions)
             int naaccrNum = oldItem.getNaaccrNum();
             NaaccrDictionaryItem newItem = newDictionary.getItemByNaaccrNum(naaccrNum);
-            if (newItem == null)
-                newItem = newDictionary.getGroupedItemByNaaccrNum(naaccrNum);
-            if (newItem == null)
+            if (newItem == null && newUserDictionary != null)
                 newItem = newUserDictionary.getItemByNaaccrNum(naaccrNum);
 
             if (newItem == null)

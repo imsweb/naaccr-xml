@@ -174,6 +174,9 @@ public class SasUtils {
      * @return fields information
      */
     public static List<SasFieldInfo> getGroupedFields(String version, String recordType) {
+        // grouped items are not supported anymore...
+        if (version.compareTo("230") >= 0)
+            return new ArrayList<>();
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-xml-grouped-items-" + version + ".csv");
         if (is == null)
             throw new RuntimeException("Unable to get grouped items CSV file for version " + version);

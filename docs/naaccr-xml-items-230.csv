@@ -255,7 +255,7 @@ diagnosticProc7387,2200,"Diagnostic Proc 73-87",,2,"A,M,C,I",Tumor,text
 edpMdeLink,531,"EDP MDE Link",,1,"A,M,C,I",Tumor,text
 edpMdeLinkDate,530,"EDP MDE Link Date",,8,"A,M,C,I",Tumor,date
 egfrMutationalAnalysis,3939,"EGFR Mutational Analysis",,1,"A,M,C,I",Tumor,text
-ehrReporting,2508,"EHR Reporting",,1000,"A,M,C",Tumor,text
+ehrReporting,2508,"EHR Reporting",,4000,"A,M,C",Tumor,text
 eodExtension,790,"EOD--Extension",,2,"A,M,C,I",Tumor,digits
 eodExtensionProstPath,800,"EOD--Extension Prost Path",,2,"A,M,C,I",Tumor,digits
 eodLymphNodeInvolv,810,"EOD--Lymph Node Involv",,1,"A,M,C,I",Tumor,text
@@ -639,7 +639,7 @@ rxHospScopeRegLnSur,672,"RX Hosp--Scope Reg LN Sur",,1,"A,M,C,I",Tumor,digits
 rxHospSurgApp2010,668,"RX Hosp--Surg App 2010",,1,"A,M,C,I",Tumor,digits
 rxHospSurgOth9802,748,"RX Hosp--Surg Oth 98-02",,1,"A,M,C,I",Tumor,digits
 rxHospSurgOthRegDis,674,"RX Hosp--Surg Oth Reg/Dis",,1,"A,M,C,I",Tumor,digits
-rxHospSurgPrimSite,670,"RX Hosp--Surg Prim Site",,2,"A,M,C,I",Tumor,digits
+rxHospSurgPrimSite,670,"RX Hosp--Surg Prim Site 03-2022",,2,"A,M,C,I",Tumor,digits
 rxHospSurgPrimSite2023,671,"RX Hosp--Surg Prim Site 2023",,4,"A,M,C,I",Tumor,text
 rxHospSurgSite9802,746,"RX Hosp--Surg Site 98-02",,2,"A,M,C,I",Tumor,digits
 rxSummBrm,1410,"RX Summ--BRM",,2,"A,M,C,I",Tumor,digits
@@ -656,7 +656,7 @@ rxSummScopeReg9802,1647,"RX Summ--Scope Reg 98-02",,1,"A,M,C,I",Tumor,digits
 rxSummScopeRegLnSur,1292,"RX Summ--Scope Reg LN Sur",,1,"A,M,C,I",Tumor,digits
 rxSummSurgOth9802,1648,"RX Summ--Surg Oth 98-02",,1,"A,M,C,I",Tumor,digits
 rxSummSurgOthRegDis,1294,"RX Summ--Surg Oth Reg/Dis",,1,"A,M,C,I",Tumor,digits
-rxSummSurgPrimSite,1290,"RX Summ--Surg Prim Site",,2,"A,M,C,I",Tumor,digits
+rxSummSurgPrimSite,1290,"RX Summ--Surg Prim Site 03-2022",,2,"A,M,C,I",Tumor,digits
 rxSummSurgPrimSite2023,1291,"RX Summ--Surg Prim Site 2023",,4,"A,M,C,I",Tumor,text
 rxSummSurgRadSeq,1380,"RX Summ--Surg/Rad Seq",,1,"A,M,C,I",Tumor,digits
 rxSummSurgSite9802,1646,"RX Summ--Surg Site 98-02",,2,"A,M,C,I",Tumor,digits
@@ -666,13 +666,13 @@ rxSummSurgicalMargins,1320,"RX Summ--Surgical Margins",,1,"A,M,C,I",Tumor,digits
 rxSummSystemicSurSeq,1639,"RX Summ--Systemic/Sur Seq",,1,"A,M,C,I",Tumor,digits
 rxSummTransplntEndocr,3250,"RX Summ--Transplnt/Endocr",,2,"A,M,C,I",Tumor,digits
 rxSummTreatmentStatus,1285,"RX Summ--Treatment Status",,1,"A,M,C,I",Tumor,digits
-rxTextBrm,2660,"RX Text--BRM",,1000,"A,M",Tumor,text
-rxTextChemo,2640,"RX Text--Chemo",,1000,"A,M",Tumor,text
-rxTextHormone,2650,"RX Text--Hormone",,1000,"A,M",Tumor,text
-rxTextOther,2670,"RX Text--Other",,1000,"A,M",Tumor,text
-rxTextRadiation,2620,"RX Text--Radiation (Beam)",,1000,"A,M",Tumor,text
-rxTextRadiationOther,2630,"RX Text--Radiation Other",,1000,"A,M",Tumor,text
-rxTextSurgery,2610,"RX Text--Surgery",,1000,"A,M",Tumor,text
+rxTextBrm,2660,"RX Text--BRM",,4000,"A,M",Tumor,text
+rxTextChemo,2640,"RX Text--Chemo",,4000,"A,M",Tumor,text
+rxTextHormone,2650,"RX Text--Hormone",,4000,"A,M",Tumor,text
+rxTextOther,2670,"RX Text--Other",,4000,"A,M",Tumor,text
+rxTextRadiation,2620,"RX Text--Radiation (Beam)",,4000,"A,M",Tumor,text
+rxTextRadiationOther,2630,"RX Text--Radiation Other",,4000,"A,M",Tumor,text
+rxTextSurgery,2610,"RX Text--Surgery",,4000,"A,M",Tumor,text
 sCategoryClinical,3923,"S Category Clinical",,1,"A,M,C,I",Tumor,digits
 sCategoryPathological,3924,"S Category Pathological",,1,"A,M,C,I",Tumor,digits
 sarcomatoidFeatures,3925,"Sarcomatoid Features",,3,"A,M,C,I",Tumor,text
@@ -766,17 +766,17 @@ survFlagPresumedAlive,1786,"Surv-Flag Presumed Alive",,1,"A,M,C,I",Tumor,digits
 survMosActiveFollowup,1784,"Surv-Mos Active Followup",,4,"A,M,C,I",Tumor,digits
 survMosPresumedAlive,1787,"Surv-Mos Presumed Alive",,4,"A,M,C,I",Tumor,digits
 telephone,2360,"Telephone",,10,"A,M,C",Patient,digits
-textDxProcLabTests,2550,"Text--DX Proc--Lab Tests",,1000,"A,M",Tumor,text
-textDxProcOp,2560,"Text--DX Proc--Op",,1000,"A,M",Tumor,text
-textDxProcPath,2570,"Text--DX Proc--Path",,1000,"A,M",Tumor,text
-textDxProcPe,2520,"Text--DX Proc--PE",,1000,"A,M",Tumor,text
-textDxProcScopes,2540,"Text--DX Proc--Scopes",,1000,"A,M",Tumor,text
-textDxProcXRayScan,2530,"Text--DX Proc--X-ray/Scan",,1000,"A,M",Tumor,text
+textDxProcLabTests,2550,"Text--DX Proc--Lab Tests",,4000,"A,M",Tumor,text
+textDxProcOp,2560,"Text--DX Proc--Op",,4000,"A,M",Tumor,text
+textDxProcPath,2570,"Text--DX Proc--Path",,4000,"A,M",Tumor,text
+textDxProcPe,2520,"Text--DX Proc--PE",,4000,"A,M",Tumor,text
+textDxProcScopes,2540,"Text--DX Proc--Scopes",,4000,"A,M",Tumor,text
+textDxProcXRayScan,2530,"Text--DX Proc--X-ray/Scan",,4000,"A,M",Tumor,text
 textHistologyTitle,2590,"Text--Histology Title",,100,"A,M",Tumor,text
 textPlaceOfDiagnosis,2690,"Text--Place of Diagnosis",,60,"A,M",Tumor,text
 textPrimarySiteTitle,2580,"Text--Primary Site Title",,100,"A,M",Tumor,text
-textRemarks,2680,"Text--Remarks",,1000,"A,M",Tumor,text
-textStaging,2600,"Text--Staging",,1000,"A,M",Tumor,text
+textRemarks,2680,"Text--Remarks",,4000,"A,M",Tumor,text
+textStaging,2600,"Text--Staging",,4000,"A,M",Tumor,text
 textUsualIndustry,320,"Text--Usual Industry",,100,"A,M,C,I",Tumor,text
 textUsualOccupation,310,"Text--Usual Occupation",,100,"A,M,C,I",Tumor,text
 thrombocytopenia,3933,"Thrombocytopenia",,1,"A,M,C,I",Tumor,digits

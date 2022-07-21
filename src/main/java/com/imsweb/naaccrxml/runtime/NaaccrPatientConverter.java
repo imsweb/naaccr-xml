@@ -206,7 +206,7 @@ public class NaaccrPatientConverter implements Converter {
             else if (NaaccrOptions.ITEM_HANDLING_IGNORE.equals(_context.getOptions().getUnknownItemHandling()))
                 return;
             else if (!NaaccrOptions.ITEM_HANDLING_PROCESS.equals(_context.getOptions().getUnknownItemHandling()))
-                throw new RuntimeException("Unknown option: " + _context.getOptions().getUnknownItemHandling());
+                throw new IllegalStateException("Unknown option: " + _context.getOptions().getUnknownItemHandling());
         }
 
         if (itemDef != null && item.getNaaccrNum() != null && !item.getNaaccrNum().equals(itemDef.getNaaccrNum()))
@@ -241,8 +241,9 @@ public class NaaccrPatientConverter implements Converter {
                 if (applyZeroPadding)
                     value = StringUtils.rightPad(value, itemDef.getLength(), '0');
             }
-            else if (!NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(itemDef.getPadding()) && !NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(itemDef.getPadding()))
-                throw new RuntimeException("Unknown padding option: " + itemDef.getPadding());
+            else if (!NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(itemDef.getPadding()) && !NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(itemDef.getPadding())
+                    && !NaaccrXmlDictionaryUtils.NAACCR_PADDING_NONE.equals(itemDef.getPadding()))
+                throw new IllegalStateException("Unknown padding option: " + itemDef.getPadding());
         }
 
         // do we need to truncate the value?
@@ -302,7 +303,7 @@ public class NaaccrPatientConverter implements Converter {
             else if (NaaccrOptions.ITEM_HANDLING_IGNORE.equals(_context.getOptions().getUnknownItemHandling()))
                 return null;
             else
-                throw new RuntimeException("Unknown option: " + _context.getOptions().getUnknownItemHandling());
+                throw new IllegalStateException("Unknown option: " + _context.getOptions().getUnknownItemHandling());
         }
 
         // validate the NAACCR Number if provided
@@ -380,7 +381,7 @@ public class NaaccrPatientConverter implements Converter {
                 ((Item)obj).setValidationError(error);
         }
         else
-            throw new RuntimeException("Unsupported type: " + obj.getClass().getName());
+            throw new IllegalStateException("Unsupported type: " + obj.getClass().getName());
     }
 
     protected void reportSyntaxError(String message) throws ConversionException {

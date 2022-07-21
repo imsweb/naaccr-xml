@@ -45,7 +45,7 @@ import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 public class NaaccrXmlUtils {
 
     // specification version that this library implements (will be used when writing XML files)
-    public static final String CURRENT_SPECIFICATION_VERSION = SpecificationVersion.SPEC_1_5;
+    public static final String CURRENT_SPECIFICATION_VERSION = SpecificationVersion.SPEC_1_6;
 
     // structure tags in the XML
     public static final String NAACCR_XML_TAG_ROOT = "NaaccrData";
@@ -73,6 +73,13 @@ public class NaaccrXmlUtils {
 
     // target namespace
     public static final String NAACCR_XML_NAMESPACE = "http://naaccr.org/naaccrxml";
+
+    /**
+     * Constructor.
+     */
+    private NaaccrXmlUtils() {
+        // utility class...
+    }
 
     /**
      * Writes all the patients from the source file into the target file after applying a given "processing" to each of them.

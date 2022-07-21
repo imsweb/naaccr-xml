@@ -15,7 +15,6 @@ import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.TestingUtils;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
-import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryGroupedItem;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 public class AddNaaccr22Items {
@@ -66,7 +65,6 @@ public class AddNaaccr22Items {
             }
 
             dictionary.setItems(dictionary.getItems().stream().sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId)).collect(Collectors.toList()));
-            dictionary.setGroupedItems(dictionary.getGroupedItems().stream().sorted(Comparator.comparing(NaaccrDictionaryGroupedItem::getNaaccrId)).collect(Collectors.toList()));
 
             NaaccrXmlDictionaryUtils.writeDictionary(dictionary, path.toFile());
         }

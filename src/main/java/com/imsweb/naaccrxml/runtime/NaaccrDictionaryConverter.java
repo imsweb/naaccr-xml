@@ -53,18 +53,6 @@ public class NaaccrDictionaryConverter implements Converter {
         }
 
         writer.endNode();
-
-        if (!dictionary.getGroupedItems().isEmpty()) {
-            writer.startNode("GroupedItemDefs");
-
-            for (NaaccrDictionaryGroupedItem groupedItem : dictionary.getGroupedItems()) {
-                writer.startNode("GroupedItemDef");
-                writeItem(writer, groupedItem);
-                writer.endNode();
-            }
-
-            writer.endNode();
-        }
     }
 
     private void writeItem(HierarchicalStreamWriter writer, NaaccrDictionaryItem item) {
@@ -104,7 +92,7 @@ public class NaaccrDictionaryConverter implements Converter {
     @SuppressWarnings("rawtypes")
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         if (!"NaaccrDictionary".equals(reader.getNodeName()))
-            throw new RuntimeException("Expected 'NaaccrDictionary' element, got " + reader.getNodeName());
+            throw new IllegalStateException("Expected 'NaaccrDictionary' element, got " + reader.getNodeName());
 
         NaaccrDictionary dictionary = new NaaccrDictionary();
 
@@ -127,7 +115,7 @@ public class NaaccrDictionaryConverter implements Converter {
                         dictionary.setDateLastModified(NaaccrXmlUtils.parseIso8601Date(reader.getAttribute("dateLastModified")));
                     }
                     catch (IOException e) {
-                        throw new RuntimeException("Invalid ISO 8601 date: " + reader.getAttribute("dateLastModified"));
+                        throw new IllegalStateException("Invalid ISO 8601 date: " + reader.getAttribute("dateLastModified"));
                     }
                     break;
                 case "description":
@@ -137,20 +125,20 @@ public class NaaccrDictionaryConverter implements Converter {
                     dictionary.setDefaultXmlNamespace(stringToString(value));
                     break;
                 default:
-                    throw new RuntimeException("Invalid root attribute: " + name);
+                    throw new IllegalStateException("Invalid root attribute: " + name);
             }
         }
 
         reader.moveDown();
 
         if (!"ItemDefs".equals(reader.getNodeName()))
-            throw new RuntimeException("Expected 'ItemDefs' element, got " + reader.getNodeName());
+            throw new IllegalStateException("Expected 'ItemDefs' element, got " + reader.getNodeName());
 
         while (reader.hasMoreChildren()) {
             reader.moveDown();
 
             if (!"ItemDef".equals(reader.getNodeName()))
-                throw new RuntimeException("Expected 'ItemDef' element, got " + reader.getNodeName());
+                throw new IllegalStateException("Expected 'ItemDef' element, got " + reader.getNodeName());
 
             NaaccrDictionaryItem item = new NaaccrDictionaryItem();
             readItem(reader, item);
@@ -161,27 +149,8 @@ public class NaaccrDictionaryConverter implements Converter {
 
         reader.moveUp();
 
-        if (reader.hasMoreChildren()) {
-            reader.moveDown();
-            if ("GroupedItemDefs".equals(reader.getNodeName())) {
-                while (reader.hasMoreChildren()) {
-                    reader.moveDown();
-
-                    if (!"GroupedItemDef".equals(reader.getNodeName()))
-                        throw new RuntimeException("Expected 'GroupedItemDef' element, got " + reader.getNodeName());
-
-                    NaaccrDictionaryGroupedItem item = new NaaccrDictionaryGroupedItem();
-                    readItem(reader, item);
-                    dictionary.addGroupedItem(item);
-
-                    reader.moveUp();
-                }
-            }
-            reader.moveUp();
-        }
-
         if (!"NaaccrDictionary".equals(reader.getNodeName()))
-            throw new RuntimeException("Expected 'NaaccrDictionary' end element, got " + reader.getNodeName());
+            throw new IllegalStateException("Expected 'NaaccrDictionary' end element, got " + reader.getNodeName());
 
         return dictionary;
     }
@@ -236,10 +205,10 @@ public class NaaccrDictionaryConverter implements Converter {
                     if (item instanceof NaaccrDictionaryGroupedItem)
                         ((NaaccrDictionaryGroupedItem)item).setContains(stringToString(value));
                     else
-                        throw new RuntimeException("Invalid attribute for 'ItemDef': " + name);
+                        throw new IllegalStateException("Invalid attribute for 'ItemDef': " + name);
                     break;
                 default:
-                    throw new RuntimeException("Invalid attribute for 'ItemDef': " + name);
+                    throw new IllegalStateException("Invalid attribute for 'ItemDef': " + name);
             }
         }
     }
@@ -253,7 +222,7 @@ public class NaaccrDictionaryConverter implements Converter {
             return Integer.valueOf(value);
 
         if (!StringUtils.isBlank(value))
-            throw new RuntimeException("Invalid value for '" + attribute + "': " + value);
+            throw new IllegalStateException("Invalid value for '" + attribute + "': " + value);
 
         return null;
     }
@@ -263,7 +232,7 @@ public class NaaccrDictionaryConverter implements Converter {
             return Boolean.valueOf(value);
 
         if (!StringUtils.isBlank(value))
-            throw new RuntimeException("Invalid value for '" + attribute + "': " + value);
+            throw new IllegalStateException("Invalid value for '" + attribute + "': " + value);
 
         return null;
     }

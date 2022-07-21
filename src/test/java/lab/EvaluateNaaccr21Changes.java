@@ -25,27 +25,23 @@ public class EvaluateNaaccr21Changes {
 
             line = reader.readNext();
             while (line != null) {
-                //if ("New".equalsIgnoreCase(line[6])) {
                 String id = line[3];
                 String num = line[0];
-                //System.out.println(id + " (length " + line[1] + ") - " + line[2]);
 
                 // error in the spreadsheet...
                 if ("phase1RadiationToDrainingLymphNodes".equals(id))
                     id = "phase1RadiationToDrainingLN";
 
-                if (dictionary.getGroupedItemByNaaccrId(id) == null) {
-                    NaaccrDictionaryItem item = dictionary.getItemByNaaccrId(id);
-                    if (item == null)
-                        System.out.println("!!! " + id);
-                    else if (!Objects.equals(line[0], item.getNaaccrNum().toString()))
-                        System.out.println("bad num for " + num + ": " + line[0]);
-                    else if (!Objects.equals(line[1], item.getLength().toString()))
-                        System.out.println("bad length for " + num + ": " + line[1]);
-                    else if (!Objects.equals(line[2], item.getNaaccrName()))
-                        System.out.println("bad name for " + num + ": " + line[2]);
-                }
-                //}
+                NaaccrDictionaryItem item = dictionary.getItemByNaaccrId(id);
+                if (item == null)
+                    System.out.println("!!! " + id);
+                else if (!Objects.equals(line[0], item.getNaaccrNum().toString()))
+                    System.out.println("bad num for " + num + ": " + line[0]);
+                else if (!Objects.equals(line[1], item.getLength().toString()))
+                    System.out.println("bad length for " + num + ": " + line[1]);
+                else if (!Objects.equals(line[2], item.getNaaccrName()))
+                    System.out.println("bad name for " + num + ": " + line[2]);
+
                 line = reader.readNext();
             }
         }

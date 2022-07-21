@@ -33,9 +33,6 @@ public class NaaccrDictionary {
     // the items contained in this dictionary
     private List<NaaccrDictionaryItem> _items;
 
-    // the grouped items contained in this dictionary
-    private List<NaaccrDictionaryGroupedItem> _groupedItems;
-
     // caches to improve lookup performances
     private final Map<String, NaaccrDictionaryItem> _cachedById;
     private final Map<Integer, NaaccrDictionaryItem> _cachedByNumber;
@@ -140,39 +137,5 @@ public class NaaccrDictionary {
                     _cachedByNumber.put(item.getNaaccrNum(), item);
             return _cachedByNumber.get(number);
         }
-    }
-
-    public List<NaaccrDictionaryGroupedItem> getGroupedItems() {
-        if (_groupedItems == null)
-            return Collections.emptyList();
-        return Collections.unmodifiableList(_groupedItems);
-    }
-
-    public void setGroupedItems(List<NaaccrDictionaryGroupedItem> items) {
-        _groupedItems = items;
-    }
-
-    public void addGroupedItem(NaaccrDictionaryGroupedItem item) {
-        if (_groupedItems == null)
-            _groupedItems = new ArrayList<>();
-        _groupedItems.add(item);
-    }
-
-    public NaaccrDictionaryGroupedItem getGroupedItemByNaaccrId(String id) {
-        if (_groupedItems == null)
-            return null;
-        for (NaaccrDictionaryGroupedItem groupedItem : _groupedItems)
-            if (groupedItem.getNaaccrId().equals(id))
-                return groupedItem;
-        return null;
-    }
-
-    public NaaccrDictionaryGroupedItem getGroupedItemByNaaccrNum(Integer number) {
-        if (_groupedItems == null)
-            return null;
-        for (NaaccrDictionaryGroupedItem groupedItem : _groupedItems)
-            if (groupedItem.getNaaccrNum().equals(number))
-                return groupedItem;
-        return null;
     }
 }
