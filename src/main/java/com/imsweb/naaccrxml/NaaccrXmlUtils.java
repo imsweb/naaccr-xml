@@ -42,7 +42,7 @@ import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 /**
  * This utility class provides static methods for reading, writing and translating to/from XML and flat file NAACCR files.
  */
-public class NaaccrXmlUtils {
+public final class NaaccrXmlUtils {
 
     // specification version that this library implements (will be used when writing XML files)
     public static final String CURRENT_SPECIFICATION_VERSION = SpecificationVersion.SPEC_1_6;

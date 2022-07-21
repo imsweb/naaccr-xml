@@ -5,7 +5,7 @@ package com.imsweb.naaccrxml;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class SpecificationVersion {
+public final class SpecificationVersion {
 
     public static final String SPEC_1_6 = "1.6";
     public static final String SPEC_1_5 = "1.5";
