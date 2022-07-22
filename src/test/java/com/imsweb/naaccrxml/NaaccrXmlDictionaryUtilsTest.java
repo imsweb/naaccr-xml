@@ -96,7 +96,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertEquals(baseDictionary1.getNaaccrVersion(), baseDictionary2.getNaaccrVersion());
         Assert.assertEquals(baseDictionary1.getSpecificationVersion(), baseDictionary2.getSpecificationVersion());
         Assert.assertEquals(baseDictionary1.getItems().size(), baseDictionary2.getItems().size());
-        Assert.assertEquals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION, baseDictionary1.getSpecificationVersion());
+        Assert.assertEquals(SpecificationVersion.SPEC_1_5, baseDictionary1.getSpecificationVersion());
 
         // get a default user dictionary
         NaaccrDictionary defaultUserDictionary1 = NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(NaaccrFormat.NAACCR_VERSION_140);
@@ -104,7 +104,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertEquals(defaultUserDictionary1.getDictionaryUri(), defaultUserDictionary2.getDictionaryUri());
         Assert.assertEquals(defaultUserDictionary1.getNaaccrVersion(), defaultUserDictionary2.getNaaccrVersion());
         Assert.assertEquals(defaultUserDictionary1.getItems().size(), defaultUserDictionary2.getItems().size());
-        Assert.assertEquals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION, defaultUserDictionary1.getSpecificationVersion());
+        Assert.assertEquals(SpecificationVersion.SPEC_1_5, defaultUserDictionary1.getSpecificationVersion());
 
         // make sure N18 dictionary doesn't have any references to the long IDs
         for (String oldId : NaaccrXmlDictionaryUtils.getRenamedLongNaaccr18Ids().keySet())

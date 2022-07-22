@@ -5,15 +5,14 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
- - 07/21/2022: removed allowUnlimitedText and groupedItems, set specificationVersion to 1.6.
  - 10/01/2021: Added dateLastModified attribute and set specificationVersion to 1.5.
  - 09/03/2021: Removed zero-left padding from item reportingFacility.
 -->
 
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-140.xml"
             naaccrVersion="140"
-            specificationVersion="1.6"
-            dateLastModified="2022-07-21T12:00:00-04:00"
+            specificationVersion="1.5"
+            dateLastModified="2021-10-01T12:00:00-04:00"
             description="NAACCR 14 base dictionary"
             xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>
@@ -4008,6 +4007,7 @@
             naaccrName="Text--DX Proc--PE"
             startColumn="5565"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textDxProcXRayScan"
@@ -4015,6 +4015,7 @@
             naaccrName="Text--DX Proc--X-ray/Scan"
             startColumn="6565"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textDxProcScopes"
@@ -4022,6 +4023,7 @@
             naaccrName="Text--DX Proc--Scopes"
             startColumn="7565"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textDxProcLabTests"
@@ -4029,6 +4031,7 @@
             naaccrName="Text--DX Proc--Lab Tests"
             startColumn="8565"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textDxProcOp"
@@ -4036,6 +4039,7 @@
             naaccrName="Text--DX Proc--Op"
             startColumn="9565"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textDxProcPath"
@@ -4043,6 +4047,7 @@
             naaccrName="Text--DX Proc--Path"
             startColumn="10565"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textPrimarySiteTitle"
@@ -4064,6 +4069,7 @@
             naaccrName="Text--Staging"
             startColumn="11765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextSurgery"
@@ -4071,6 +4077,7 @@
             naaccrName="RX Text--Surgery"
             startColumn="12765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextRadiation"
@@ -4078,6 +4085,7 @@
             naaccrName="RX Text--Radiation (Beam)"
             startColumn="13765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextRadiationOther"
@@ -4085,6 +4093,7 @@
             naaccrName="RX Text--Radiation Other"
             startColumn="14765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextChemo"
@@ -4092,6 +4101,7 @@
             naaccrName="RX Text--Chemo"
             startColumn="15765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextHormone"
@@ -4099,6 +4109,7 @@
             naaccrName="RX Text--Hormone"
             startColumn="16765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextBrm"
@@ -4106,6 +4117,7 @@
             naaccrName="RX Text--BRM"
             startColumn="17765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="rxTextOther"
@@ -4113,6 +4125,7 @@
             naaccrName="RX Text--Other"
             startColumn="18765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textRemarks"
@@ -4120,6 +4133,7 @@
             naaccrName="Text--Remarks"
             startColumn="19765"
             length="1000"
+            allowUnlimitedText="true"
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="textPlaceOfDiagnosis"
@@ -4130,4 +4144,69 @@
             recordTypes="A,M"
             parentXmlElement="Tumor"/>
     </ItemDefs>
+    <GroupedItemDefs>
+        <GroupedItemDef naaccrId="morphTypebehavIcdO2"
+            naaccrNum="419"
+            naaccrName="Morph--Type&amp;Behav ICD-O-2"
+            startColumn="545"
+            length="5"
+            recordTypes="A,M,C,I"
+            parentXmlElement="Tumor"
+            dataType="digits"
+            contains="histologyIcdO2,behaviorIcdO2"/>
+        <GroupedItemDef naaccrId="morphTypebehavIcdO3"
+            naaccrNum="521"
+            naaccrName="Morph--Type&amp;Behav ICD-O-3"
+            startColumn="550"
+            length="5"
+            recordTypes="A,M,C,I"
+            parentXmlElement="Tumor"
+            dataType="digits"
+            contains="histologicTypeIcdO3,behaviorCodeIcdO3"/>
+        <GroupedItemDef naaccrId="extentOfDisease10Dig"
+            naaccrNum="779"
+            naaccrName="Extent of Disease 10-Dig"
+            startColumn="906"
+            length="12"
+            recordTypes="A,M,C,I"
+            parentXmlElement="Tumor"
+            dataType="digits"
+            contains="eodTumorSize,eodExtension,eodExtensionProstPath,eodLymphNodeInvolv,regionalNodesPositive,regionalNodesExamined"/>
+        <GroupedItemDef naaccrId="subsqRx2ndCourseCodes"
+            naaccrNum="1670"
+            naaccrName="Subsq RX 2nd Course Codes"
+            startColumn="1734"
+            length="11"
+            recordTypes="A,M,C,I"
+            parentXmlElement="Tumor"
+            dataType="digits"
+            contains="subsqRx2ndCourseSurg,subsqRx2ndScopeLnSu,subsqRx2ndSurgOth,subsqRx2ndRegLnRem,subsqRx2ndCourseRad,subsqRx2ndCourseChemo,subsqRx2ndCourseHorm,subsqRx2ndCourseBrm,subsqRx2ndCourseOth"/>
+        <GroupedItemDef naaccrId="subsqRx3rdCourseCodes"
+            naaccrNum="1690"
+            naaccrName="Subsq RX 3rd Course Codes"
+            startColumn="1755"
+            length="11"
+            recordTypes="A,M,C,I"
+            parentXmlElement="Tumor"
+            dataType="digits"
+            contains="subsqRx3rdCourseSurg,subsqRx3rdScopeLnSu,subsqRx3rdSurgOth,subsqRx3rdRegLnRem,subsqRx3rdCourseRad,subsqRx3rdCourseChemo,subsqRx3rdCourseHorm,subsqRx3rdCourseBrm,subsqRx3rdCourseOth"/>
+        <GroupedItemDef naaccrId="subsqRx4thCourseCodes"
+            naaccrNum="1710"
+            naaccrName="Subsq RX 4th Course Codes"
+            startColumn="1776"
+            length="11"
+            recordTypes="A,M,C,I"
+            parentXmlElement="Tumor"
+            dataType="digits"
+            contains="subsqRx4thCourseSurg,subsqRx4thScopeLnSu,subsqRx4thSurgOth,subsqRx4thRegLnRem,subsqRx4thCourseRad,subsqRx4thCourseChemo,subsqRx4thCourseHorm,subsqRx4thCourseBrm,subsqRx4thCourseOth"/>
+        <GroupedItemDef naaccrId="morphIcdO1"
+            naaccrNum="1970"
+            naaccrName="Morph (73-91) ICD-O-1"
+            startColumn="1913"
+            length="6"
+            recordTypes="A,M,C,I"
+            parentXmlElement="Tumor"
+            dataType="digits"
+            contains="histologyIcdO1,behaviorIcdO1,gradeIcdO1"/>
+    </GroupedItemDefs>
 </NaaccrDictionary>

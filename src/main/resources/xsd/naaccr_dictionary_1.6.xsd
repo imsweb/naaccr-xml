@@ -68,7 +68,6 @@
 		<xsd:attribute name="trim" use="optional" default="all" type="tns:trimType" />
 		<xsd:attribute name="startColumn" use="optional" type="xsd:integer" />
 		<xsd:attribute name="length" use="required" type="xsd:integer" />
-        <xsd:attribute name="allowUnlimitedText" use="optional" type="xsd:boolean" />
 		<xsd:attribute name="sourceOfStandard" use="optional" type="xsd:string" />
 		<xsd:attribute name="recordTypes" use="optional" type="xsd:string" />
 	</xsd:complexType>

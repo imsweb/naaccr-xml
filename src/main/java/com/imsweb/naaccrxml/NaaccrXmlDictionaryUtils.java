@@ -606,6 +606,44 @@ public final class NaaccrXmlDictionaryUtils {
             }
         }
 
+        // validate grouped items; since those can only appear in base dictionaries, the validation is going to be minimal
+        if (isBaseDictionary) {
+            if (!dictionary.getGroupedItems().isEmpty() && SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_6) >= 0)
+                errors.add("grouped items are not supported anymore");
+            else {
+                for (NaaccrDictionaryGroupedItem groupedItem : dictionary.getGroupedItems()) {
+                    // validate ID
+                    if (groupedItem.getNaaccrId() == null || groupedItem.getNaaccrId().trim().isEmpty())
+                        errors.add("'naaccrId' attribute is required");
+                    else if (!idPattern.matcher(groupedItem.getNaaccrId()).matches())
+                        errors.add("'naaccrId' attribute has a bad format (needs to start with a lower case letter, followed by letters and digits): " + groupedItem.getNaaccrId());
+                    else if (naaccrIds.contains(groupedItem.getNaaccrId()))
+                        errors.add("'naaccrId' attribute for grouped item " + groupedItem.getNaaccrId() + " is not unique");
+                    naaccrIds.add(groupedItem.getNaaccrId());
+
+                    // validate number
+                    if (groupedItem.getNaaccrNum() == null)
+                        errors.add("'naaccrNum' attribute for grouped item " + groupedItem.getNaaccrId() + " is missing");
+                    else if (naaccrNums.contains(groupedItem.getNaaccrNum()))
+                        errors.add("'naaccrNum' attribute for grouped item " + groupedItem.getNaaccrId() + " must be unique, already saw " + groupedItem.getNaaccrNum());
+                    naaccrNums.add(groupedItem.getNaaccrNum());
+
+                    // validate start column
+                    if (groupedItem.getStartColumn() != null) {
+                        for (int idx = 0; idx < groupedItem.getContainedItemId().size(); idx++) {
+                            NaaccrDictionaryItem containedItem = dictionary.getItemByNaaccrId(groupedItem.getContainedItemId().get(idx));
+                            if (containedItem == null)
+                                errors.add("grouped item " + groupedItem.getNaaccrId() + " references unknown item " + groupedItem.getContainedItemId().get(idx));
+                            else if (idx == 0 && !groupedItem.getStartColumn().equals(containedItem.getStartColumn()))
+                                errors.add("'startColumn' attribute for grouped item " + groupedItem.getNaaccrId() + " is not consistent with first contained item");
+                        }
+                    }
+                }
+            }
+        }
+        else if (!dictionary.getGroupedItems().isEmpty())
+            errors.add("user-defined dictionaries cannot defined grouped items");
+
         // user dictionary specific validation (only if we know the version)
         if (!isBaseDictionary && naaccrVersionToUse != null) {
             NaaccrDictionary defaultUserDictionary = getDefaultUserDictionaryByVersion(naaccrVersionToUse);
@@ -870,6 +908,12 @@ public final class NaaccrXmlDictionaryUtils {
         items.sort(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId));
         result.setItems(items);
 
+        List<NaaccrDictionaryGroupedItem> groupedItems = new ArrayList<>(baseDictionary.getGroupedItems());
+        for (NaaccrDictionary userDictionary : userDictionaries)
+            groupedItems.addAll(userDictionary.getGroupedItems());
+        groupedItems.sort(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId));
+        result.setGroupedItems(groupedItems);
+
         return result;
     }
 
@@ -1050,6 +1094,8 @@ public final class NaaccrXmlDictionaryUtils {
                 return true;
 
             NaaccrDictionaryItem item = _dictionary.getItemByNaaccrId(_currentItemId);
+            if (item == null)
+                item = _dictionary.getGroupedItemByNaaccrId(_currentItemId);
             if (item == null)
                 return false;
 

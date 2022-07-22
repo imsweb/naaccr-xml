@@ -53,6 +53,18 @@ public class NaaccrDictionaryConverter implements Converter {
         }
 
         writer.endNode();
+
+        if (!dictionary.getGroupedItems().isEmpty()) {
+            writer.startNode("GroupedItemDefs");
+
+            for (NaaccrDictionaryGroupedItem groupedItem : dictionary.getGroupedItems()) {
+                writer.startNode("GroupedItemDef");
+                writeItem(writer, groupedItem);
+                writer.endNode();
+            }
+
+            writer.endNode();
+        }
     }
 
     private void writeItem(HierarchicalStreamWriter writer, NaaccrDictionaryItem item) {
@@ -148,6 +160,25 @@ public class NaaccrDictionaryConverter implements Converter {
         }
 
         reader.moveUp();
+
+        if (reader.hasMoreChildren()) {
+            reader.moveDown();
+            if ("GroupedItemDefs".equals(reader.getNodeName())) {
+                while (reader.hasMoreChildren()) {
+                    reader.moveDown();
+
+                    if (!"GroupedItemDef".equals(reader.getNodeName()))
+                        throw new RuntimeException("Expected 'GroupedItemDef' element, got " + reader.getNodeName());
+
+                    NaaccrDictionaryGroupedItem item = new NaaccrDictionaryGroupedItem();
+                    readItem(reader, item);
+                    dictionary.addGroupedItem(item);
+
+                    reader.moveUp();
+                }
+            }
+            reader.moveUp();
+        }
 
         if (!"NaaccrDictionary".equals(reader.getNodeName()))
             throw new IllegalStateException("Expected 'NaaccrDictionary' end element, got " + reader.getNodeName());
