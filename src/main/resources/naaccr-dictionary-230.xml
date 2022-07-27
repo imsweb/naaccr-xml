@@ -12,7 +12,7 @@
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-230.xml"
             naaccrVersion="230"
             specificationVersion="1.6"
-            dateLastModified="2022-07-18T12:00:00-04:00"
+            dateLastModified="2022-07-27T12:00:00-04:00"
             description="NAACCR 23 base dictionary"
             xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>
