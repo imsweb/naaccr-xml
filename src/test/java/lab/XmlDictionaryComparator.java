@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Objects;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.TestingUtils;
@@ -23,23 +23,7 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 public class XmlDictionaryComparator {
 
     public static void main(String[] args) throws IOException {
-        compareDictionaryVersions("160", "180");
-    }
-
-    /**
-     * helper method - gets all items and grouped items from the base and default user dictionary, based on the dictionary version
-     * @param version dictionary version
-     * @return List of all items
-     */
-    private static List<NaaccrDictionaryItem> getAllDictionaryItems(String version) {
-        NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(version);
-
-        List<NaaccrDictionaryItem> allItems = new ArrayList<>(baseDictionary.getItems());
-        NaaccrDictionary userDefinedDictionary = NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(version);
-        if (userDefinedDictionary != null)
-            allItems.addAll(userDefinedDictionary.getItems());
-
-        return allItems;
+        compareDictionaryVersions("220", "230");
     }
 
     /**
@@ -49,70 +33,130 @@ public class XmlDictionaryComparator {
      * @throws IOException if error loading dictionaries
      */
     private static void compareDictionaryVersions(String oldVersion, String newVersion) throws IOException {
-        List<NaaccrDictionaryItem> removedItems = new ArrayList<>();    //List of items that have been removed
-        List<NaaccrDictionaryItem> addedItems = new ArrayList<>();      //List of items that have been added
-        Map<NaaccrDictionaryItem, NaaccrDictionaryItem> newNameNewId = new HashMap<>(); //Map of Old Item, New Item
-        Map<NaaccrDictionaryItem, NaaccrDictionaryItem> newNameSameId = new HashMap<>(); //Map of Old Item, New Item
+        List<NaaccrDictionaryItem> removedItems = new ArrayList<>();
+        List<NaaccrDictionaryItem> addedItems = new ArrayList<>();
+        List<Pair<NaaccrDictionaryItem, NaaccrDictionaryItem>> modifiedItemsId = new ArrayList<>();
+        List<Pair<NaaccrDictionaryItem, NaaccrDictionaryItem>> modifiedItemsName = new ArrayList<>();
+        List<Pair<NaaccrDictionaryItem, NaaccrDictionaryItem>> modifiedItemsLength = new ArrayList<>();
+        List<Pair<NaaccrDictionaryItem, NaaccrDictionaryItem>> modifiedItemsLevel = new ArrayList<>();
+        List<Pair<NaaccrDictionaryItem, NaaccrDictionaryItem>> modifiedItemsType = new ArrayList<>();
+        List<Pair<NaaccrDictionaryItem, NaaccrDictionaryItem>> modifiedItemsPadding = new ArrayList<>();
+        List<Pair<NaaccrDictionaryItem, NaaccrDictionaryItem>> modifiedItemsTrimming = new ArrayList<>();
+        List<Pair<NaaccrDictionaryItem, NaaccrDictionaryItem>> modifiedItemsUnlimitedText = new ArrayList<>();
 
+        NaaccrDictionary oldDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(oldVersion);
         NaaccrDictionary newDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(newVersion);
-        NaaccrDictionary newUserDictionary = NaaccrXmlDictionaryUtils.getDefaultUserDictionaryByVersion(newVersion);
 
-        List<NaaccrDictionaryItem> newDictionaryItems = getAllDictionaryItems(newVersion);
-        List<NaaccrDictionaryItem> oldDictionaryItems = getAllDictionaryItems(oldVersion);
-
-        for (NaaccrDictionaryItem oldItem : oldDictionaryItems) {
-            //Check if the new dictionary (base or default user) still contains the old dictionary item using NAACCR Number (Number will never change between versions)
-            int naaccrNum = oldItem.getNaaccrNum();
-            NaaccrDictionaryItem newItem = newDictionary.getItemByNaaccrNum(naaccrNum);
-            if (newItem == null && newUserDictionary != null)
-                newItem = newUserDictionary.getItemByNaaccrNum(naaccrNum);
-
-            if (newItem == null)
-                removedItems.add(oldItem);
+        for (NaaccrDictionaryItem newItem : newDictionary.getItems()) {
+            NaaccrDictionaryItem oldItem = oldDictionary.getItemByNaaccrNum(newItem.getNaaccrNum());
+            if (oldItem == null)
+                addedItems.add(newItem);
             else {
-                if (!newItem.getNaaccrName().equals(
-                        oldItem.getNaaccrName()))   //If new dictionary still contains the item, check if the name changed - if not, assume no other changes occurred
-                    if (newItem.getNaaccrId().equals(oldItem.getNaaccrId()))    //If the names don't match, check to see if the ID changed as well (would happen to reflect name change)
-                        newNameSameId.put(oldItem, newItem);
-                    else
-                        newNameNewId.put(oldItem, newItem);
-
-                newDictionaryItems.remove(newItem);
+                if (!Objects.equals(oldItem.getNaaccrId(), newItem.getNaaccrId()))
+                    modifiedItemsId.add(Pair.of(oldItem, newItem));
+                if (!Objects.equals(oldItem.getNaaccrName(), newItem.getNaaccrName()))
+                    modifiedItemsName.add(Pair.of(oldItem, newItem));
+                if (!Objects.equals(oldItem.getLength(), newItem.getLength()))
+                    modifiedItemsLength.add(Pair.of(oldItem, newItem));
+                if (!Objects.equals(oldItem.getParentXmlElement(), newItem.getParentXmlElement()))
+                    modifiedItemsLevel.add(Pair.of(oldItem, newItem));
+                if (!Objects.equals(oldItem.getDataType(), newItem.getDataType()))
+                    modifiedItemsType.add(Pair.of(oldItem, newItem));
+                if (!Objects.equals(oldItem.getPadding(), newItem.getPadding()))
+                    modifiedItemsPadding.add(Pair.of(oldItem, newItem));
+                if (!Objects.equals(oldItem.getTrim(), newItem.getTrim()))
+                    modifiedItemsTrimming.add(Pair.of(oldItem, newItem));
+                if (!Objects.equals(oldItem.getAllowUnlimitedText(), newItem.getAllowUnlimitedText()))
+                    modifiedItemsUnlimitedText.add(Pair.of(oldItem, newItem));
             }
         }
-        //Any items left in newDictionaryItems weren't found in the old dictionary - they are newly added items
-        addedItems.addAll(newDictionaryItems);
+        for (NaaccrDictionaryItem oldItem : oldDictionary.getItems())
+            if (newDictionary.getItemByNaaccrNum(oldItem.getNaaccrNum()) == null)
+                removedItems.add(oldItem);
 
         //Write differences to a file in build/test-tmp
-        File outputFile = TestingUtils.createFile("dictionary-differences-v" + oldVersion + "-and-v" + newVersion, false);
+        File outputFile = TestingUtils.createFile("dictionary-differences-v" + oldVersion + "-and-v" + newVersion + ".txt", false);
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), StandardCharsets.UTF_8))) {
-            writer.write("New Items ADDED in version " + newVersion + "\n");
-            writer.write("Item information is displayed as: NAAACCR Number,NAACCR ID,NAACCR Name\n");
-            for (NaaccrDictionaryItem item : addedItems)
-                writer.write(item.getNaaccrNum() + "," + item.getNaaccrId() + "," + item.getNaaccrName() + "\n");
+            writer.write("Comparison summary of base " + oldVersion + " and " + newVersion + " dictionaries.\n");
 
-            writer.write("\nItems in version " + oldVersion + " that have been REMOVED in version " + newVersion + "\n");
-            writer.write("Item information is displayed as: NAAACCR Number,NAACCR ID,NAACCR Name\n");
-            for (NaaccrDictionaryItem item : removedItems)
-                writer.write(item.getNaaccrNum() + "," + item.getNaaccrId() + "," + item.getNaaccrName() + "\n");
-
-            writer.write("\nItems that appear in both versions (using the same NAACCR Number AND the same NAACCR ID), but the NAACCR Name has changed" + "\n");
-            writer.write("Item information is displayed as: NAAACCR Number,NAACCR ID,OLD NAACCR Name,NEW NAACCR Name\n");
-            //Key = old Value = new
-            for (Entry<NaaccrDictionaryItem, NaaccrDictionaryItem> entry : newNameSameId.entrySet()) {
-                NaaccrDictionaryItem oldItem = entry.getKey();
-                NaaccrDictionaryItem newItem = entry.getValue();
-                writer.write(newItem.getNaaccrNum() + "," + newItem.getNaaccrId() + "," + oldItem.getNaaccrName() + "," + newItem.getNaaccrName() + "\n");
+            // added
+            if (!addedItems.isEmpty()) {
+                writer.write("\nFollowing item(s) were added to version v" + newVersion + ":\n");
+                for (NaaccrDictionaryItem item : addedItems)
+                    writer.write(" - " + item.getNaaccrId() + " (#" + item.getNaaccrNum() + ") - " + item.getNaaccrName() + "\n");
             }
 
-            writer.write("\nItems that appear in both versions (using the same NAACCR Number), but the NAACCR Name AND the NAACCR ID have changed" + "\n");
-            writer.write("Item information is displayed as: NAAACCR Number,OLD NAACCR ID,OLD NAACCR Name,NEW NAACCR ID,NEW NAACCR Name\n");
-            //Key = old Value = new
-            for (Entry<NaaccrDictionaryItem, NaaccrDictionaryItem> entry : newNameNewId.entrySet()) {
-                NaaccrDictionaryItem oldItem = entry.getKey();
-                NaaccrDictionaryItem newItem = entry.getValue();
-                writer.write(newItem.getNaaccrNum() + "," + oldItem.getNaaccrId() + "," + oldItem.getNaaccrName() + "," + newItem.getNaaccrId() + "," + newItem.getNaaccrName() + "\n");
+            // removed
+            if (!removedItems.isEmpty()) {
+                writer.write("\nFollowing item(s) were removed from  v" + newVersion + "\n:");
+                for (NaaccrDictionaryItem item : removedItems)
+                    writer.write(" - " + item.getNaaccrId() + " (#" + item.getNaaccrNum() + ") - " + item.getNaaccrName() + "\n");
+            }
+
+            // ID change
+            if (!modifiedItemsId.isEmpty()) {
+                writer.write("\nFollowing item(s) got their ID changed in v" + newVersion + ":\n");
+                for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsId)
+                    writer.write(" - " + pair.getLeft().getNaaccrName() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getNaaccrId()
+                            + "\" to \"" + pair.getRight().getNaaccrId() + "\"\n");
+            }
+
+            // name change
+            if (!modifiedItemsName.isEmpty()) {
+                writer.write("\nFollowing item(s) got their name changed in v" + newVersion + ":\n");
+                for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsName)
+                    writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getNaaccrName()
+                            + "\" to \"" + pair.getRight().getNaaccrName() + "\"\n");
+            }
+
+            // length change
+            if (!modifiedItemsLength.isEmpty()) {
+                writer.write("\nFollowing item(s) got their length changed in v" + newVersion + ":\n");
+                for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsLength)
+                    writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getLength()
+                            + "\" to \"" + pair.getRight().getLength() + "\"\n");
+            }
+
+            // level change
+            if (!modifiedItemsLevel.isEmpty()) {
+                writer.write("\nFollowing item(s) got their data level changed in v" + newVersion + ":\n");
+                for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsLevel)
+                    writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getParentXmlElement()
+                            + "\" to \"" + pair.getRight().getParentXmlElement() + "\"\n");
+            }
+
+            // type change
+            if (!modifiedItemsType.isEmpty()) {
+                writer.write("\nFollowing item(s) got their data type changed in v" + newVersion + ":\n");
+                for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsType)
+                    writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getDataType()
+                            + "\" to \"" + pair.getRight().getDataType() + "\"\n");
+            }
+
+            // padding change
+            if (!modifiedItemsPadding.isEmpty()) {
+                writer.write("\nFollowing item(s) got their padding changed in v" + newVersion + ":\n");
+                for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsPadding)
+                    writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getPadding()
+                            + "\" to \"" + pair.getRight().getPadding() + "\"\n");
+            }
+
+            // trimming change
+            if (!modifiedItemsTrimming.isEmpty()) {
+                writer.write("\nFollowing item(s) got their trimming changed in v" + newVersion + ":\n");
+                for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsTrimming)
+                    writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getTrim()
+                            + "\" to \"" + pair.getRight().getTrim() + "\"\n");
+            }
+
+            // unlimited text change
+            if (!modifiedItemsUnlimitedText.isEmpty()) {
+                writer.write("\nFollowing item(s) got their allow-unlimited attribute changed in v" + newVersion + ":\n");
+                for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsUnlimitedText)
+                    writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getAllowUnlimitedText()
+                            + "\" to " + (pair.getRight().getAllowUnlimitedText() == null ? "<not specified>" : ("\"" + pair.getRight().getAllowUnlimitedText() + "\"")) + "\n");
             }
         }
+        System.out.println("Crested " + outputFile.getPath());
     }
 }
