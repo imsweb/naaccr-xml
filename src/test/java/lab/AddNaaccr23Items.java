@@ -6,7 +6,10 @@ package lab;
 import java.io.FileReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.opencsv.CSVReader;
@@ -55,6 +58,9 @@ public class AddNaaccr23Items {
             NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(path.toFile());
             dictionary.getItemByNaaccrId("force-caching");
 
+            Set<String> itemIds = dictionary.getItems().stream().map(NaaccrDictionaryItem::getNaaccrId).collect(Collectors.toSet());
+
+            List<NaaccrDictionaryItem> newItems = new ArrayList<>();
             try (CSVReader reader = new CSVReader(new FileReader(TestingUtils.getWorkingDirectory() + "/docs/naaccr-23/N23 Copy of XML Group report.csv"))) {
                 String[] line = reader.readNext(); // ignore headers
 
@@ -105,13 +111,20 @@ public class AddNaaccr23Items {
                             if (!item.getParentXmlElement().equals(level))
                                 System.out.println("  !!! wrong level for " + item.getNaaccrId() + "; expected " + item.getParentXmlElement() + " but got " + level);
                         }
+
+                        newItems.add(item);
+                        itemIds.remove(item.getNaaccrId());
                     }
 
                     line = reader.readNext();
                 }
             }
 
-            dictionary.setItems(dictionary.getItems().stream().sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId)).collect(Collectors.toList()));
+            for (String id : itemIds)
+                System.out.println("  > removed item " + id);
+
+
+            dictionary.setItems(newItems.stream().sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId)).collect(Collectors.toList()));
 
             NaaccrXmlDictionaryUtils.writeDictionary(dictionary, path.toFile());
         }

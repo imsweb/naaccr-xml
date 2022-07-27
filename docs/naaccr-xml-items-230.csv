@@ -168,7 +168,6 @@ csVersionDerived,2936,"CS Version Derived",,6,"A,M,C,I",Tumor,text
 csVersionInputCurrent,2937,"CS Version Input Current",,6,"A,M,C,I",Tumor,digits
 csVersionInputOriginal,2935,"CS Version Input Original",,6,"A,M,C,I",Tumor,digits
 date1stCrsRxCoc,1270,"Date 1st Crs RX CoC",,8,"A,M,C,I",Tumor,date
-date1stCrsRxCocFlag,1271,"Date 1st Crs RX CoC Flag",,2,"A,M,C,I",Tumor,digits
 dateCaseCompleted,2090,"Date Case Completed",,8,"A,M,C,I",Tumor,date
 dateCaseCompletedCoc,2092,"Date Case Completed--CoC",,8,"A,M,C,I",Tumor,date
 dateCaseInitiated,2085,"Date Case Initiated",,8,"A,M,C,I",Tumor,date
@@ -177,31 +176,18 @@ dateCaseReportExported,2110,"Date Case Report Exported",,8,"A,M,C,I",Tumor,date
 dateCaseReportLoaded,2112,"Date Case Report Loaded",,8,"A,M,C,I",Tumor,date
 dateCaseReportReceived,2111,"Date Case Report Received",,8,"A,M,C,I",Tumor,date
 dateConclusiveDx,443,"Date Conclusive DX",,8,"A,M,C,I",Tumor,date
-dateConclusiveDxFlag,448,"Date Conclusive DX Flag",,2,"A,M,C,I",Tumor,digits
 dateInitialRxSeer,1260,"Date Initial RX SEER",,8,"A,M,C,I",Tumor,date
-dateInitialRxSeerFlag,1261,"Date Initial RX SEER Flag",,2,"A,M,C,I",Tumor,digits
 dateOf1stContact,580,"Date of 1st Contact",,8,"A,M,C,I",Tumor,date
-dateOf1stContactFlag,581,"Date of 1st Contact Flag",,2,"A,M,C,I",Tumor,digits
 dateOfBirth,240,"Date of Birth",,8,"A,M,C,I",Patient,date
-dateOfBirthFlag,241,"Date of Birth Flag",,2,"A,M,C,I",Patient,digits
 dateOfDeathCanada,1755,"Date of Death--Canada",,8,"A,M,C,I",Patient,date
-dateOfDeathCanadaFlag,1756,"Date of Death--CanadaFlag",,2,"A,M,C,I",Patient,digits
 dateOfDiagnosis,390,"Date of Diagnosis",,8,"A,M,C,I",Tumor,date
-dateOfDiagnosisFlag,391,"Date of Diagnosis Flag",,2,"A,M,C,I",Tumor,digits
 dateOfInptAdm,590,"Date of Inpt Adm",,8,"A,M,C,I",Tumor,date
-dateOfInptAdmFlag,591,"Date of Inpt Adm Flag",,2,"A,M,C,I",Tumor,digits
 dateOfInptDisch,600,"Date of Inpt Disch",,8,"A,M,C,I",Tumor,date
-dateOfInptDischFlag,601,"Date of Inpt Disch Flag",,2,"A,M,C,I",Tumor,digits
 dateOfLastCancerStatus,1772,"Date of Last Cancer (tumor) Status",,8,"A,M,C,I",Tumor,date
-dateOfLastCancerStatusFlag,1773,"Date of Last Cancer (tumor) Status Flag",,2,"A,M,C,I",Tumor,digits
 dateOfLastContact,1750,"Date of Last Contact",,8,"A,M,C,I",Patient,date
-dateOfLastContactFlag,1751,"Date of Last Contact Flag",,2,"A,M,C,I",Patient,digits
 dateOfMultTumors,445,"Date of Mult Tumors",,8,"A,M,C,I",Tumor,date
-dateOfMultTumorsFlag,439,"Date of Mult Tumors Flag",,2,"A,M,C,I",Tumor,digits
 dateRegionalLNDissection,682,"Date Regional Lymph Node Dissection",,8,"A,M,C,I",Tumor,date
-dateRegionalLNDissectionFlag,683,"Date Regional Lymph Node Dissection Flag",,2,"A,M,C,I",Tumor,digits
 dateSentinelLymphNodeBiopsy,832,"Date of Sentinel Lymph Node Biopsy",,8,"A,M,C,I",Tumor,date
-dateSentinelLymphNodeBiopsyFlag,833,"Date of Sentinel Lymph Node Biopsy Flag",,2,"A,M,C,I",Tumor,digits
 dateTumorRecordAvailbl,2113,"Date Tumor Record Availbl",,8,"A,M,C,I",Tumor,date
 dcStateFileNumber,2380,"DC State File Number",,12,"A,M,C",Patient,text
 derivedAjcc6M,2980,"Derived AJCC-6 M",,2,"A,M,C,I",Tumor,digits
@@ -321,7 +307,6 @@ histologyIcdO1,1971,"Histology (73-91) ICD-O-1",,4,"A,M,C,I",Tumor,digits
 histologyIcdO2,420,"Histology (92-00) ICD-O-2",,4,"A,M,C,I",Tumor,digits
 hivStatus,3859,"HIV Status",,1,"A,M,C,I",Tumor,digits
 iNRProthrombinTime,3860,"International Normalized Ratio Prothrombin Time",,3,"A,M,C,I",Tumor,text
-icdO2ConversionFlag,1980,"ICD-O-2 Conversion Flag",,1,"A,M,C,I",Tumor,digits
 icdO3ConversionFlag,2116,"ICD-O-3 Conversion Flag",,1,"A,M,C,I",Tumor,digits
 icdRevisionComorbid,3165,"ICD Revision Comorbid",,1,"A,M,C,I",Tumor,digits
 icdRevisionNumber,1920,"ICD Revision Number",,1,"A,M,C,I",Patient,digits
@@ -587,7 +572,6 @@ reasonForNoSurgery,1340,"Reason for No Surgery",,1,"A,M,C,I",Tumor,digits
 recordNumberRecode,1775,"Record Number Recode",,2,"A,M,C,I",Tumor,digits
 recordType,10,"Record Type",,1,"A,M,C,I",NaaccrData,text
 recurrenceDate1st,1860,"Recurrence Date--1st",,8,"A,M,C,I",Tumor,date
-recurrenceDate1stFlag,1861,"Recurrence Date--1st Flag",,2,"A,M,C,I",Tumor,digits
 recurrenceType1st,1880,"Recurrence Type--1st",,2,"A,M,C,I",Tumor,digits
 regionalNodesExamined,830,"Regional Nodes Examined",,2,"A,M,C,I",Tumor,digits
 regionalNodesPositive,820,"Regional Nodes Positive",,2,"A,M,C,I",Tumor,digits
@@ -605,27 +589,16 @@ ruralurbanContinuum2003,3310,"RuralUrban Continuum 2003",,2,"A,M,C,I",Tumor,digi
 ruralurbanContinuum2013,3312,"RuralUrban Continuum 2013",,2,"A,M,C,I",Tumor,digits
 rxCodingSystemCurrent,1460,"RX Coding System--Current",,2,"A,M,C,I",Tumor,digits
 rxDateBrm,1240,"RX Date BRM",,8,"A,M,C,I",Tumor,date
-rxDateBrmFlag,1241,"RX Date BRM Flag",,2,"A,M,C,I",Tumor,digits
 rxDateChemo,1220,"RX Date Chemo",,8,"A,M,C,I",Tumor,date
-rxDateChemoFlag,1221,"RX Date Chemo Flag",,2,"A,M,C,I",Tumor,digits
 rxDateDxStgProc,1280,"RX Date DX/Stg Proc",,8,"A,M,C,I",Tumor,date
-rxDateDxStgProcFlag,1281,"RX Date DX/Stg Proc Flag",,2,"A,M,C,I",Tumor,digits
 rxDateHormone,1230,"RX Date Hormone",,8,"A,M,C,I",Tumor,date
-rxDateHormoneFlag,1231,"RX Date Hormone Flag",,2,"A,M,C,I",Tumor,digits
 rxDateMostDefinSurg,3170,"RX Date Mst Defn Srg",,8,"A,M,C,I",Tumor,date
-rxDateMostDefinSurgFlag,3171,"RX Date Mst Defn Srg Flag",,2,"A,M,C,I",Tumor,digits
 rxDateOther,1250,"RX Date Other",,8,"A,M,C,I",Tumor,date
-rxDateOtherFlag,1251,"RX Date Other Flag",,2,"A,M,C,I",Tumor,digits
 rxDateRadiation,1210,"RX Date Radiation",,8,"A,M,C,I",Tumor,date
 rxDateRadiationEnded,3220,"RX Date Rad Ended",,8,"A,M,C,I",Tumor,date
-rxDateRadiationEndedFlag,3221,"RX Date Rad Ended Flag",,2,"A,M,C,I",Tumor,digits
-rxDateRadiationFlag,1211,"RX Date Radiation Flag",,2,"A,M,C,I",Tumor,digits
 rxDateSurgery,1200,"RX Date Surgery",,8,"A,M,C,I",Tumor,date
-rxDateSurgeryFlag,1201,"RX Date Surgery Flag",,2,"A,M,C,I",Tumor,digits
 rxDateSurgicalDisch,3180,"RX Date Surg Disch",,8,"A,M,C,I",Tumor,date
-rxDateSurgicalDischFlag,3181,"RX Date Surg Disch Flag",,2,"A,M,C,I",Tumor,digits
 rxDateSystemic,3230,"RX Date Systemic",,8,"A,M,C,I",Tumor,date
-rxDateSystemicFlag,3231,"RX Date Systemic Flag",,2,"A,M,C,I",Tumor,digits
 rxHospBrm,720,"RX Hosp--BRM",,2,"A,M,C,I",Tumor,digits
 rxHospChemo,700,"RX Hosp--Chemo",,2,"A,M,C,I",Tumor,digits
 rxHospDxStgProc,740,"RX Hosp--DX/Stg Proc",,2,"A,M,C,I",Tumor,digits
@@ -693,10 +666,7 @@ secondaryDiagnosis7,3792,"Secondary Diagnosis 7",,7,"A,M,C,I",Tumor,text
 secondaryDiagnosis8,3794,"Secondary Diagnosis 8",,7,"A,M,C,I",Tumor,text
 secondaryDiagnosis9,3796,"Secondary Diagnosis 9",,7,"A,M,C,I",Tumor,text
 seerCauseSpecificCod,1914,"SEER Cause Specific COD",,1,"A,M,C,I",Tumor,digits
-seerCodingSysCurrent,2120,"SEER Coding Sys--Current",,1,"A,M,C,I",Tumor,mixed
-seerCodingSysOriginal,2130,"SEER Coding Sys--Original",,1,"A,M,C,I",Tumor,mixed
 seerOtherCod,1915,"SEER Other COD",,1,"A,M,C,I",Tumor,digits
-seerRecordNumber,2190,"SEER Record Number",,2,"A,M,C,I",Tumor,digits
 seerSiteSpecificFact1,3700,"SEER Site-Specific Fact 1",,1,"A,M,C,I",Tumor,digits
 seerSiteSpecificFact2,3702,"SEER Site-Specific Fact 2",,1,"A,M,C,I",Tumor,digits
 seerSiteSpecificFact3,3704,"SEER Site-Specific Fact 3",,1,"A,M,C,I",Tumor,digits
@@ -705,7 +675,6 @@ seerSiteSpecificFact5,3708,"SEER Site-Specific Fact 5",,1,"A,M,C,I",Tumor,digits
 seerSiteSpecificFact6,3710,"SEER Site-Specific Fact 6",,1,"A,M,C,I",Tumor,digits
 seerSummaryStage1977,760,"SEER Summary Stage 1977",,1,"A,M,C,I",Tumor,digits
 seerSummaryStage2000,759,"SEER Summary Stage 2000",,1,"A,M,C,I",Tumor,digits
-seerTypeOfFollowUp,2180,"SEER Type of Follow-Up",,1,"A,M,C,I",Tumor,digits
 sentinelLymphNodesExamined,834,"Sentinel Lymph Nodes Examined",,2,"A,M,C,I",Tumor,digits
 sentinelLymphNodesPositive,835,"Sentinel Lymph Nodes Positive",,2,"A,M,C,I",Tumor,digits
 separateTumorNodules,3929,"Separate Tumor Nodules",,1,"A,M,C,I",Tumor,digits
@@ -733,7 +702,6 @@ subsqRx2ndCourseSurg,1671,"Subsq RX 2nd Course Surg",,2,"A,M,C,I",Tumor,digits
 subsqRx2ndRegLnRem,1679,"Subsq RX 2nd--Reg LN Rem",,2,"A,M,C,I",Tumor,digits
 subsqRx2ndScopeLnSu,1677,"Subsq RX 2nd--Scope LN SU",,1,"A,M,C,I",Tumor,digits
 subsqRx2ndSurgOth,1678,"Subsq RX 2nd--Surg Oth",,1,"A,M,C,I",Tumor,digits
-subsqRx2ndcrsDateFlag,1661,"Subsq RX 2ndCrs Date Flag",,2,"A,M,C,I",Tumor,digits
 subsqRx3rdCourseBrm,1695,"Subsq RX 3rd Course BRM",,1,"A,M,C,I",Tumor,digits
 subsqRx3rdCourseChemo,1693,"Subsq RX 3rd Course Chemo",,1,"A,M,C,I",Tumor,digits
 subsqRx3rdCourseDate,1680,"Subsq RX 3rd Course Date",,8,"A,M,C,I",Tumor,date
@@ -744,7 +712,6 @@ subsqRx3rdCourseSurg,1691,"Subsq RX 3rd Course Surg",,2,"A,M,C,I",Tumor,digits
 subsqRx3rdRegLnRem,1699,"Subsq RX 3rd--Reg LN Rem",,2,"A,M,C,I",Tumor,digits
 subsqRx3rdScopeLnSu,1697,"Subsq RX 3rd--Scope LN Su",,1,"A,M,C,I",Tumor,digits
 subsqRx3rdSurgOth,1698,"Subsq RX 3rd--Surg Oth",,1,"A,M,C,I",Tumor,digits
-subsqRx3rdcrsDateFlag,1681,"Subsq RX 3rdCrs Date Flag",,2,"A,M,C,I",Tumor,digits
 subsqRx4thCourseBrm,1715,"Subsq RX 4th Course BRM",,1,"A,M,C,I",Tumor,digits
 subsqRx4thCourseChemo,1713,"Subsq RX 4th Course Chemo",,1,"A,M,C,I",Tumor,digits
 subsqRx4thCourseDate,1700,"Subsq RX 4th Course Date",,8,"A,M,C,I",Tumor,date
@@ -755,7 +722,6 @@ subsqRx4thCourseSurg,1711,"Subsq RX 4th Course Surg",,2,"A,M,C,I",Tumor,digits
 subsqRx4thRegLnRem,1719,"Subsq RX 4th--Reg LN Rem",,2,"A,M,C,I",Tumor,digits
 subsqRx4thScopeLnSu,1717,"Subsq RX 4th--Scope LN Su",,1,"A,M,C,I",Tumor,digits
 subsqRx4thSurgOth,1718,"Subsq RX 4th--Surg Oth",,1,"A,M,C,I",Tumor,digits
-subsqRx4thcrsDateFlag,1701,"Subsq RX 4thCrs Date Flag",,2,"A,M,C,I",Tumor,digits
 subsqRxReconstructDel,1741,"Subsq RX--Reconstruct Del",,1,"A,M,C,I",Tumor,digits
 summaryStage2018,764,"Summary Stage 2018",,1,"A,M,C,I",Tumor,digits
 survDateActiveFollowup,1782,"Surv-Date Active Followup",,8,"A,M,C,I",Tumor,date

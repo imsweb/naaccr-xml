@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -88,7 +89,7 @@ public class XmlDictionaryComparator {
 
             // removed
             if (!removedItems.isEmpty()) {
-                writer.write("\nFollowing item(s) were removed from  v" + newVersion + "\n:");
+                writer.write("\nFollowing item(s) were removed from v" + newVersion + ":\n");
                 for (NaaccrDictionaryItem item : removedItems)
                     writer.write(" - " + item.getNaaccrId() + " (#" + item.getNaaccrNum() + ") - " + item.getNaaccrName() + "\n");
             }
@@ -157,6 +158,8 @@ public class XmlDictionaryComparator {
                             + "\" to " + (pair.getRight().getAllowUnlimitedText() == null ? "<not specified>" : ("\"" + pair.getRight().getAllowUnlimitedText() + "\"")) + "\n");
             }
         }
-        System.out.println("Crested " + outputFile.getPath());
+        System.out.println("Created " + outputFile.getPath());
+        System.out.println("\n");
+        Files.readAllLines(outputFile.toPath()).forEach(System.out::println);
     }
 }
