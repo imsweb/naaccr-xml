@@ -82,6 +82,8 @@ public class AddNaaccr23Items {
                                 String type = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT;
                                 if (id.equals("noPatientContactFlag") || id.equals("reportingFacilityRestrictionFlag") || id.equals("histologicSubtype"))
                                     type = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DIGITS;
+                                else if (id.equals("rxHospSurgPrimSite2023") || id.equals("rxSummSurgPrimSite2023"))
+                                    type = NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_MIXED;
 
                                 item = new NaaccrDictionaryItem();
                                 item.setNaaccrId(id);
@@ -91,6 +93,8 @@ public class AddNaaccr23Items {
                                 item.setRecordTypes("A,M,C,I");
                                 item.setLength(length);
                                 item.setDataType(type);
+                                if (id.equals("clinicalMarginWidth"))
+                                    item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK);
                                 dictionary.addItem(item);
                                 System.out.println(" > added new item: " + item.getNaaccrId());
                             }

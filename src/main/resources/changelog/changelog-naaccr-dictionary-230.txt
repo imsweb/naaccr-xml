@@ -1,4 +1,5 @@
 <!-- Changelog
+ - 08/01/2022: Changed type of rxHospSurgPrimSite2023 and rxSummSurgPrimSite2023 to mixed, set clinicalMarginWidth to leftBlank padding.
  - 07/27/2022: Removed N23 retired items (all date flags plus a few other items).
  - 07/18/2022: Initial version.
 -->

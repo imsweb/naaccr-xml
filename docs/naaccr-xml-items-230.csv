@@ -613,7 +613,7 @@ rxHospSurgApp2010,668,"RX Hosp--Surg App 2010",,1,"A,M,C,I",Tumor,digits
 rxHospSurgOth9802,748,"RX Hosp--Surg Oth 98-02",,1,"A,M,C,I",Tumor,digits
 rxHospSurgOthRegDis,674,"RX Hosp--Surg Oth Reg/Dis",,1,"A,M,C,I",Tumor,digits
 rxHospSurgPrimSite,670,"RX Hosp--Surg Prim Site 03-2022",,2,"A,M,C,I",Tumor,digits
-rxHospSurgPrimSite2023,671,"RX Hosp--Surg Prim Site 2023",,4,"A,M,C,I",Tumor,text
+rxHospSurgPrimSite2023,671,"RX Hosp--Surg Prim Site 2023",,4,"A,M,C,I",Tumor,mixed
 rxHospSurgSite9802,746,"RX Hosp--Surg Site 98-02",,2,"A,M,C,I",Tumor,digits
 rxSummBrm,1410,"RX Summ--BRM",,2,"A,M,C,I",Tumor,digits
 rxSummChemo,1390,"RX Summ--Chemo",,2,"A,M,C,I",Tumor,digits
@@ -630,7 +630,7 @@ rxSummScopeRegLnSur,1292,"RX Summ--Scope Reg LN Sur",,1,"A,M,C,I",Tumor,digits
 rxSummSurgOth9802,1648,"RX Summ--Surg Oth 98-02",,1,"A,M,C,I",Tumor,digits
 rxSummSurgOthRegDis,1294,"RX Summ--Surg Oth Reg/Dis",,1,"A,M,C,I",Tumor,digits
 rxSummSurgPrimSite,1290,"RX Summ--Surg Prim Site 03-2022",,2,"A,M,C,I",Tumor,digits
-rxSummSurgPrimSite2023,1291,"RX Summ--Surg Prim Site 2023",,4,"A,M,C,I",Tumor,text
+rxSummSurgPrimSite2023,1291,"RX Summ--Surg Prim Site 2023",,4,"A,M,C,I",Tumor,mixed
 rxSummSurgRadSeq,1380,"RX Summ--Surg/Rad Seq",,1,"A,M,C,I",Tumor,digits
 rxSummSurgSite9802,1646,"RX Summ--Surg Site 98-02",,2,"A,M,C,I",Tumor,digits
 rxSummSurgeryType,1640,"RX Summ--Surgery Type",,2,"A,M,C,I",Tumor,digits

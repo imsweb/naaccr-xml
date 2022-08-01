@@ -5,6 +5,7 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
+ - 08/01/2022: Changed type of rxHospSurgPrimSite2023 and rxSummSurgPrimSite2023 to mixed, set clinicalMarginWidth to leftBlank padding.
  - 07/27/2022: Removed N23 retired items (all date flags plus a few other items).
  - 07/18/2022: Initial version.
 -->
@@ -704,7 +705,8 @@
             naaccrName="Clinical Margin Width"
             length="4"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"/>
+            parentXmlElement="Tumor"
+            padding="leftBlank"/>
         <ItemDef naaccrId="cocAccreditedFlag"
             naaccrNum="2152"
             naaccrName="CoC Accredited Flag"
@@ -4269,7 +4271,8 @@
             naaccrName="RX Hosp--Surg Prim Site 2023"
             length="4"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"/>
+            parentXmlElement="Tumor"
+            dataType="mixed"/>
         <ItemDef naaccrId="rxHospSurgSite9802"
             naaccrNum="746"
             naaccrName="RX Hosp--Surg Site 98-02"
@@ -4394,7 +4397,8 @@
             naaccrName="RX Summ--Surg Prim Site 2023"
             length="4"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"/>
+            parentXmlElement="Tumor"
+            dataType="mixed"/>
         <ItemDef naaccrId="rxSummSurgRadSeq"
             naaccrNum="1380"
             naaccrName="RX Summ--Surg/Rad Seq"
