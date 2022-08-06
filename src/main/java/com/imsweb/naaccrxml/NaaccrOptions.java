@@ -113,6 +113,11 @@ public class NaaccrOptions {
     private Boolean _allowMissingDictionary;
 
     /**
+     * The specification version to use when writing XML data. Defaults to the "current" specification version defined in NaaccrXmlUtils.
+     */
+    private String _specificationVersionWritten;
+
+    /**
      * Convenience method to make the code look nicer, but it really just calls the default constructor!
      * @return an instance of the options with all default values.
      */
@@ -140,6 +145,7 @@ public class NaaccrOptions {
         _dictionaryIdsToTranslate = null;
         _newLine = NEW_LINE_OS;
         _allowMissingDictionary = true;
+        _specificationVersionWritten = NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION;
     }
 
     public Boolean getValidateReadValues() {
@@ -276,6 +282,14 @@ public class NaaccrOptions {
 
     public void setAllowMissingDictionary(Boolean allowMissingDictionary) {
         _allowMissingDictionary = allowMissingDictionary;
+    }
+
+    public String getSpecificationVersionWritten() {
+        return _specificationVersionWritten;
+    }
+
+    public void setSpecificationVersionWritten(String specificationVersionWritten) {
+        _specificationVersionWritten = specificationVersionWritten;
     }
 
     /**

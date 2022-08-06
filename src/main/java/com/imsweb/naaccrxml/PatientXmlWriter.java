@@ -174,8 +174,10 @@ public class PatientXmlWriter implements PatientWriter {
             _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_REC_TYPE, rootData.getRecordType());
             _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, NaaccrXmlUtils.formatIso8601Date(
                     rootData.getTimeGenerated() != null ? rootData.getTimeGenerated() : Calendar.getInstance().getTime()));
-            // always use the current specs; doesn't matter the value on the root object...
-            _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION, NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
+            String specVersion = options.getSpecificationVersionWritten();
+            if (specVersion == null || !NaaccrFormat.getSupportedVersions().contains(specVersion))
+                specVersion = NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION;
+            _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION, specVersion);
 
             // write non-standard attributes
             Set<String> standardAttributes = new HashSet<>();
