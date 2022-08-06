@@ -273,6 +273,15 @@ public class PatientXmlWriterTest {
         Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"medicalRecordNumber\">3</Item>")); // spaces are not taken into account!
         Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"primarySite\">4</Item>")); // spaces are not taken into account!
 
+        // only numeric values should be padded
+        tumor.getItem("comorbidComplication1").setValue("X");
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {
+            writer.writePatient(patient);
+        }
+        writtenContent = TestingUtils.readFileAsOneString(file);
+        Assert.assertTrue(writtenContent.contains("<Item naaccrId=\"comorbidComplication1\">X</Item>"));
+        tumor.getItem("comorbidComplication1").setValue("2");
+
         // same test, but option is set to NOT pad the values
         options.setApplyZeroPaddingRules(false);
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options, dict)) {

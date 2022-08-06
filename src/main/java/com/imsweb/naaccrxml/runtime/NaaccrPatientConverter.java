@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
@@ -231,7 +232,7 @@ public class NaaccrPatientConverter implements Converter {
         }
 
         // handle the padding - only 0-padding is taken into account when writing XML; blank padding (left or right) is completely ignored
-        boolean applyZeroPadding = Boolean.TRUE.equals(_context.getOptions().getApplyZeroPaddingRules());
+        boolean applyZeroPadding = Boolean.TRUE.equals(_context.getOptions().getApplyZeroPaddingRules()) && NumberUtils.isDigits(value);
         if (itemDef != null && itemDef.getLength() != null && itemDef.getPadding() != null && value.length() < itemDef.getLength()) {
             if (NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_ZERO.equals(itemDef.getPadding())) {
                 if (applyZeroPadding)
