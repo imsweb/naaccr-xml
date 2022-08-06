@@ -337,11 +337,11 @@ public class SasTest {
         csvDictionaryFiles.add(TestingUtils.getDataFile("sas/user-dictionary-2.csv"));
 
         SasCsvToXml csvConverter = new SasCsvToXml(csvFile.getPath(), xmlFile.getPath(), "210", "I");
-        csvConverter.setDictionary(csvDictionaryFiles.stream().map(File::getPath).collect(Collectors.joining(" ")), "test1 test2");
+        csvConverter.setDictionary(csvDictionaryFiles.stream().map(File::getPath).collect(Collectors.joining(";")), "test1;test2");
         Assert.assertEquals(2, csvConverter.getUserDictionaryFiles().size());
 
         SasXmlToCsv xmlConverter = new SasXmlToCsv(csvFile.getPath(), xmlFile.getPath(), "210", "I");
-        xmlConverter.setDictionary(csvDictionaryFiles.stream().map(File::getPath).collect(Collectors.joining(" ")));
+        xmlConverter.setDictionary(csvDictionaryFiles.stream().map(File::getPath).collect(Collectors.joining(";")));
         Assert.assertEquals(2, xmlConverter.getUserDictionaryFiles().size());
     }
 
