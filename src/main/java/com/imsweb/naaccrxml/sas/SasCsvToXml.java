@@ -84,8 +84,8 @@ public class SasCsvToXml {
 
     public void setDictionary(String dictionaryPath, String dictionaryUri) {
         if (dictionaryPath != null && !dictionaryPath.trim().isEmpty()) {
-            for (String path : dictionaryPath.split(" ")) {
-                File dictionaryFile = new File(path);
+            for (String path : dictionaryPath.split(";")) {
+                File dictionaryFile = new File(path.trim());
                 if (!dictionaryFile.exists())
                     SasUtils.logError("Invalid CSV dictionary path: " + path);
                 else {
@@ -101,7 +101,15 @@ public class SasCsvToXml {
             }
         }
 
-        _dictionaryUris = dictionaryUri;
+        if (dictionaryUri != null) {
+            StringBuilder buf = new StringBuilder();
+            for (String uri : dictionaryUri.split(";")) {
+                if (buf.length() > 0)
+                    buf.append(" ");
+                buf.append(uri.trim());
+            }
+            _dictionaryUris = buf.toString();
+        }
     }
 
     public String getCsvPath() {

@@ -30,12 +30,14 @@
        The NAACCR XML IDs for the standard items can be found on the NAACCR website.
     - dictfile is the path to an optional user-defined dictionary in CSV format (the NAACCR XML Tool that
         is distributed with the macros has an option to load an XML dictionary and save it as CSV);
-        File*Pro can also generate those files); use spaces to separate multiple paths if you need to
-        provide more than one dictionary
+        File*Pro can also generate those files). Path can be relative or absolute; if relative, it will be
+        computed from the directory containing the macro (in other words, the dictionary CSV file can be
+        copied in the same directory as the macro and referenced by its filename only). Use semicolon to
+        separate multiple paths if you need to provide more than one dictionary.
     - dictUri is an optional user-defined dictionary URI to reference in the created XML file (if a CSV dictionary
         is provided, then this one should be provided as well); the URI can be found as a root attribute of the
         XML dictionary (it usually looks like an internet address, but it's rarely a legit address; and the macros
-        do not try to connect to that address in any way). Use spaces to separate multiple URIs.
+        do not try to connect to that address in any way). Use semicolons to separate multiple URIs.
     - writenum should be "yes" or "no" (defaults to "no"); if "yes" then the NAACCR numbers will be written.
     - cleanupcsv should be "yes" or "no" (defaults to "yes"); if "no" then the tmp CSV file won't be
         automatically deleted; use this parameter to QC the CSV file or use it to investigate problems.

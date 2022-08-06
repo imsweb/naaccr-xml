@@ -36,8 +36,10 @@
         The NAACCR XML IDs for the standard items can be found on the NAACCR website.
     - dictfile is the path to an optional user-defined dictionary in CSV format (the NAACCR XML Tool that
         is distributed with the macros has an option to load an XML dictionary and save it as CSV);
-        File*Pro can also generate those files); use spaces to separate multiple paths if you need to
-        provide more than one dictionary
+        File*Pro can also generate those files). Path can be relative or absolute; if relative, it will be
+        computed from the directory containing the macro (in other words, the dictionary CSV file can be
+        copied in the same directory as the macro and referenced by its filename only). Use semicolon to
+        separate multiple paths if you need to provide more than one dictionary.
     - cleanupcsv should be "yes" or "no" (defaults to "yes"); if "no" then the tmp CSV file won't be
         automatically deleted; use this parameter to QC the CSV file or use it to investigate problems.
     - groupeditems should be "yes" or "no" (defaults to "no"); if "yes" then the grouped items will

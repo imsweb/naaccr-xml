@@ -84,8 +84,8 @@ public class SasXmlToCsv {
 
     public void setDictionary(String dictionaryPath) {
         if (dictionaryPath != null && !dictionaryPath.trim().isEmpty()) {
-            for (String path : dictionaryPath.split(" ")) {
-                File dictionaryFile = new File(path);
+            for (String path : dictionaryPath.split(";")) {
+                File dictionaryFile = new File(path.trim());
                 if (!dictionaryFile.exists())
                     SasUtils.logError("Invalid CSV dictionary path: " + path);
                 else {
