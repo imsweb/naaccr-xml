@@ -5,6 +5,7 @@
 - Added support for NAACCR 23.
 - Added support for new specification version 1.6 (removed allowUnlimitedText and groupedItems); only NAACCR 23 dictionary will use that version for now.
 - Fixed an issue with the SAS macro where path to CSV dictionary would not work properly if it contained spaces. 
+- Updated embedded JRE to Java 17.0.4 (this only affects the standalone program).
 
 **Version 8.10**
 
