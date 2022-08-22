@@ -5,7 +5,6 @@ package lab;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -33,6 +32,7 @@ public class XmlDictionaryComparator {
      * @param newVersion newer dictionary version
      * @throws IOException if error loading dictionaries
      */
+    @SuppressWarnings("SameParameterValue")
     private static void compareDictionaryVersions(String oldVersion, String newVersion) throws IOException {
         List<NaaccrDictionaryItem> removedItems = new ArrayList<>();
         List<NaaccrDictionaryItem> addedItems = new ArrayList<>();
@@ -77,26 +77,26 @@ public class XmlDictionaryComparator {
 
         //Write differences to a file in build/test-tmp
         File outputFile = TestingUtils.createFile("dictionary-differences-v" + oldVersion + "-and-v" + newVersion + ".txt", false);
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), StandardCharsets.UTF_8))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(outputFile.toPath()), StandardCharsets.UTF_8))) {
             writer.write("Comparison summary of base " + oldVersion + " and " + newVersion + " dictionaries.\n");
 
             // added
             if (!addedItems.isEmpty()) {
-                writer.write("\nFollowing item(s) were added to version v" + newVersion + ":\n");
+                writer.write("\nThe following item(s) were added to version version " + newVersion + ":\n");
                 for (NaaccrDictionaryItem item : addedItems)
                     writer.write(" - " + item.getNaaccrId() + " (#" + item.getNaaccrNum() + ") - " + item.getNaaccrName() + "\n");
             }
 
             // removed
             if (!removedItems.isEmpty()) {
-                writer.write("\nFollowing item(s) were removed from v" + newVersion + ":\n");
+                writer.write("\nThe following item(s) were removed from version " + newVersion + ":\n");
                 for (NaaccrDictionaryItem item : removedItems)
                     writer.write(" - " + item.getNaaccrId() + " (#" + item.getNaaccrNum() + ") - " + item.getNaaccrName() + "\n");
             }
 
             // ID change
             if (!modifiedItemsId.isEmpty()) {
-                writer.write("\nFollowing item(s) got their ID changed in v" + newVersion + ":\n");
+                writer.write("\nThe following item(s) got their ID changed in version " + newVersion + ":\n");
                 for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsId)
                     writer.write(" - " + pair.getLeft().getNaaccrName() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getNaaccrId()
                             + "\" to \"" + pair.getRight().getNaaccrId() + "\"\n");
@@ -104,7 +104,7 @@ public class XmlDictionaryComparator {
 
             // name change
             if (!modifiedItemsName.isEmpty()) {
-                writer.write("\nFollowing item(s) got their name changed in v" + newVersion + ":\n");
+                writer.write("\nThe following item(s) got their name changed in version " + newVersion + ":\n");
                 for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsName)
                     writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getNaaccrName()
                             + "\" to \"" + pair.getRight().getNaaccrName() + "\"\n");
@@ -112,7 +112,7 @@ public class XmlDictionaryComparator {
 
             // length change
             if (!modifiedItemsLength.isEmpty()) {
-                writer.write("\nFollowing item(s) got their length changed in v" + newVersion + ":\n");
+                writer.write("\nThe following item(s) got their length changed in version " + newVersion + ":\n");
                 for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsLength)
                     writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getLength()
                             + "\" to \"" + pair.getRight().getLength() + "\"\n");
@@ -128,7 +128,7 @@ public class XmlDictionaryComparator {
 
             // type change
             if (!modifiedItemsType.isEmpty()) {
-                writer.write("\nFollowing item(s) got their data type changed in v" + newVersion + ":\n");
+                writer.write("\nThe following item(s) got their data type changed in version " + newVersion + ":\n");
                 for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsType)
                     writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getDataType()
                             + "\" to \"" + pair.getRight().getDataType() + "\"\n");
@@ -136,7 +136,7 @@ public class XmlDictionaryComparator {
 
             // padding change
             if (!modifiedItemsPadding.isEmpty()) {
-                writer.write("\nFollowing item(s) got their padding changed in v" + newVersion + ":\n");
+                writer.write("\nThe following item(s) got their padding changed in version " + newVersion + ":\n");
                 for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsPadding)
                     writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getPadding()
                             + "\" to \"" + pair.getRight().getPadding() + "\"\n");
@@ -144,18 +144,17 @@ public class XmlDictionaryComparator {
 
             // trimming change
             if (!modifiedItemsTrimming.isEmpty()) {
-                writer.write("\nFollowing item(s) got their trimming changed in v" + newVersion + ":\n");
+                writer.write("\nThe following item(s) got their trimming changed in version " + newVersion + ":\n");
                 for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsTrimming)
                     writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getTrim()
                             + "\" to \"" + pair.getRight().getTrim() + "\"\n");
             }
 
-            // unlimited text change
+            // unlimited text change (deprecated, so can only be removed)
             if (!modifiedItemsUnlimitedText.isEmpty()) {
-                writer.write("\nFollowing item(s) got their allow-unlimited attribute changed in v" + newVersion + ":\n");
+                writer.write("\nThe following item(s) got their allow-unlimited attribute removed in version " + newVersion + ":\n");
                 for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsUnlimitedText)
-                    writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getAllowUnlimitedText()
-                            + "\" to " + (pair.getRight().getAllowUnlimitedText() == null ? "<not specified>" : ("\"" + pair.getRight().getAllowUnlimitedText() + "\"")) + "\n");
+                    writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ")\n");
             }
         }
         System.out.println("Created " + outputFile.getPath());
