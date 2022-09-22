@@ -1,12 +1,10 @@
 plugins {
     id 'java-library'
     id 'checkstyle'
-    id 'com.github.spotbugs' version '5.0.6'
+    id 'com.github.spotbugs' version '5.0.7'
     id 'maven-publish'
     id 'signing'
     id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
-    id 'org.sonatype.gradle.plugins.scan' version '2.2.3'
-    id "com.github.ben-manes.versions" version '0.42.0'
 }
 
 group = 'com.imsweb'
@@ -68,24 +66,6 @@ jar {
         rename 'LICENSE', 'NAACCR-XML-LICENSE'
     }
 }
-
-// Nexus vulnerability scan (https://github.com/sonatype-nexus-community/scan-gradle-plugin)
-ossIndexAudit {
-    dependencyGraph = true
-    printBanner = false
-
-    // only set proxy if running outside of Github Actions
-    if (!System.getenv().GITHUB_ACTIONS) {
-        proxyConfiguration {
-            protocol = 'http'
-            host = 'webproxy-btp.imsweb.com'
-            port = 8080
-        }
-    }
-
-    excludeCoordinates = ['com.thoughtworks.xstream:xstream:1.4.19']
-}
-check.dependsOn 'ossIndexAudit'
 
 // checkstyle plugin settings
 checkstyle {
