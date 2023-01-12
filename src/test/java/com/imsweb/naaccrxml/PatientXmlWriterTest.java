@@ -1,11 +1,11 @@
 package com.imsweb.naaccrxml;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.zip.ZipEntry;
@@ -233,7 +233,7 @@ public class PatientXmlWriterTest {
         Assert.assertFalse(TestingUtils.readFileAsOneString(file).contains("XX"));
         Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("X"));
         Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
-        Assert.assertEquals(patient.getAllValidationErrors().get(0).getCode(), NaaccrErrorUtils.CODE_VAL_TOO_LONG);
+        Assert.assertEquals(NaaccrErrorUtils.CODE_VAL_TOO_LONG, patient.getAllValidationErrors().get(0).getCode());
         patient.getAllValidationErrors().clear();
 
         // value is too long, options says to ignore the error (it should still be truncated)
@@ -357,6 +357,24 @@ public class PatientXmlWriterTest {
         }
         writtenContent = TestingUtils.readFileAsOneString(file);
         Assert.assertTrue(writtenContent.contains("\r\n"));
+
+        // force new lines to CRLF
+        options.setNewLine(NaaccrOptions.NEW_LINE_CRLF);
+        try (PatientFlatWriter writer = new PatientFlatWriter(new FileWriter(file), data, options)) {
+            writer.writePatient(patient);
+            Assert.assertEquals("\r\n", writer.getNewLine());
+        }
+        writtenContent = TestingUtils.readFileAsOneString(file);
+        Assert.assertTrue(writtenContent.contains("\r\n"));
+        Assert.assertEquals(2, writtenContent.split("\r\n").length);
+
+        // test providing a specifications version
+        options.setSpecificationVersionWritten("ZYZ");
+        NaaccrXmlUtils.writeXmlFile(data, file, options, null, null);
+        Assert.assertEquals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION, NaaccrXmlUtils.readXmlFile(file, null, null, null).getSpecificationVersion());
+        options.setSpecificationVersionWritten("1.5");
+        NaaccrXmlUtils.writeXmlFile(data, file, options, null, null);
+        Assert.assertEquals("1.5", NaaccrXmlUtils.readXmlFile(file, null, null, null).getSpecificationVersion());
     }
 
     @Test
@@ -403,7 +421,7 @@ public class PatientXmlWriterTest {
     public void testZipFile() throws IOException {
 
         File file = TestingUtils.createFile("test-xml-writer.zip");
-        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(file))) {
+        try (ZipOutputStream zos = new ZipOutputStream(Files.newOutputStream(file.toPath()))) {
             for (int i = 1; i <= 5; i++) {
                 zos.putNextEntry(new ZipEntry("test-file-" + i + ".xml"));
 

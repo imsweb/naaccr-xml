@@ -1,6 +1,7 @@
 ## NAACCR XML Version History
 
 **Version 9.1**
+- Fixed specification version not correctly used when provided in the options.
 - Updated XStream dependency from version 1.4.19 to version 1.4.20.
 
 **Version 9.0**

@@ -175,7 +175,7 @@ public class PatientXmlWriter implements PatientWriter {
             _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_TIME_GENERATED, NaaccrXmlUtils.formatIso8601Date(
                     rootData.getTimeGenerated() != null ? rootData.getTimeGenerated() : Calendar.getInstance().getTime()));
             String specVersion = options.getSpecificationVersionWritten();
-            if (specVersion == null || !NaaccrFormat.getSupportedVersions().contains(specVersion))
+            if (specVersion == null || !SpecificationVersion.isSpecificationSupported(specVersion))
                 specVersion = NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION;
             _writer.addAttributeWithNewLine(NaaccrXmlUtils.NAACCR_XML_ROOT_ATT_SPEC_VERSION, specVersion);
 
