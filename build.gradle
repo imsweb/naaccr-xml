@@ -1,10 +1,12 @@
+import java.time.Duration
+
 plugins {
     id 'java-library'
     id 'checkstyle'
-    id 'com.github.spotbugs' version '5.0.7'
+    id 'com.github.spotbugs' version '5.0.12'
     id 'maven-publish'
     id 'signing'
-    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0' // publish to Maven Central
 }
 
 group = 'com.imsweb'
@@ -148,12 +150,12 @@ nexusPublishing {
         }
     }
 
-    clientTimeout = java.time.Duration.ofSeconds(300)
-    connectTimeout = java.time.Duration.ofSeconds(60)
+    clientTimeout = Duration.ofSeconds(300)
+    connectTimeout = Duration.ofSeconds(60)
 
     transitionCheckOptions {
         maxRetries.set(50)
-        delayBetween.set(java.time.Duration.ofMillis(5000))
+        delayBetween.set(Duration.ofMillis(5000))
     }
 }
 
@@ -165,7 +167,7 @@ if (version.endsWith('-SNAPSHOT')) {
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '7.3.3'
+    gradleVersion = '7.5.1'
     distributionType = Wrapper.DistributionType.ALL
 }
 
