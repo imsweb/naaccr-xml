@@ -26,6 +26,15 @@ public class XmlDictionaryComparator {
         compareDictionaryVersions("220", "230");
     }
 
+    //    public static void main(String[] args) {
+    //        int count = 0;
+    //        for (NaaccrDictionaryItem item : NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("230").getItems().stream().sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId)).collect(
+    //                Collectors.toList())) {
+    //            count += item.getLength();
+    //            System.out.println(item.getNaaccrId() + ": " + count);
+    //        }
+    //    }
+
     /**
      * Compares dictionary items between two versions - finds items added, items removed, items whose name changed, and items whose name AND Id changed
      * @param oldVersion older dictionary version

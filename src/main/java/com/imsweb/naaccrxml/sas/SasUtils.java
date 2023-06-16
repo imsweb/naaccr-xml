@@ -470,6 +470,7 @@ public class SasUtils {
             }
         }
         else {
+            // TODO FD also repalce tabs by nothing...
             for (String xmlId : fields.replace(" ", "").split(",", -1)) {
                 if (allowedIds.contains(xmlId))
                     requestedFields.add(xmlId);
