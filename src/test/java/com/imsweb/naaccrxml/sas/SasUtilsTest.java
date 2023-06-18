@@ -99,4 +99,10 @@ public class SasUtilsTest {
             file.delete();
         }
     }
+
+    @Test
+    public void testRightPadWithSpaces() {
+        Assert.assertEquals("X  ", SasUtils.rightPadWithSpaces("X", 3));
+        Assert.assertEquals("X", SasUtils.rightPadWithSpaces("XYZ", 1));
+    }
 }

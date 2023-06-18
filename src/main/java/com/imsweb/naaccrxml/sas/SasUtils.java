@@ -65,15 +65,34 @@ public class SasUtils {
      * Convert the given XML path to a CSV path.
      */
     public static String computeCsvPathFromXmlPath(String xmlPath) {
+        return computePathFromXmlPath(xmlPath, ".csv");
+    }
+
+    /**
+     * Convert the given XML path to a temp fixed-column path.
+     */
+    public static String computeFlatPathFromXmlPath(String xmlPath) {
+        return computePathFromXmlPath(xmlPath, ".tmp.txt");
+    }
+
+    public static String computeInputPathFromXmlPath(String xmlPath) {
+        return computePathFromXmlPath(xmlPath, ".tmp.input.sas");
+    }
+
+    public static String computeOutputPathFromXmlPath(String xmlPath) {
+        return computePathFromXmlPath(xmlPath, ".tmp.output.sas");
+    }
+
+    static String computePathFromXmlPath(String xmlPath, String newExtension) {
         if (xmlPath == null || xmlPath.trim().isEmpty())
             return null;
 
-        String csvPath = Pattern.compile("(\\.xml|\\.xml\\.gz|\\.gz|.zip)$", Pattern.CASE_INSENSITIVE).matcher(xmlPath).replaceAll(".csv");
+        String tempPath = Pattern.compile("(\\.xml|\\.xml\\.gz|\\.gz|.zip)$", Pattern.CASE_INSENSITIVE).matcher(xmlPath).replaceAll(newExtension);
 
-        if (csvPath.equalsIgnoreCase(xmlPath))
-            csvPath = xmlPath + ".csv";
+        if (tempPath.equalsIgnoreCase(xmlPath))
+            tempPath = xmlPath + newExtension;
 
-        return csvPath;
+        return tempPath;
     }
 
     /**
@@ -165,7 +184,6 @@ public class SasUtils {
 
         return result;
     }
-
 
     /**
      * Returns the grouped fields information for the given parameters.
@@ -480,5 +498,19 @@ public class SasUtils {
         }
 
         return requestedFields;
+    }
+
+    public static String rightPadWithSpaces(String value, int length) {
+        if (value == null || value.length() == length)
+            return value;
+
+        if (value.length() > length)
+            return value.substring(0, length);
+
+        StringBuilder buf = new StringBuilder(value);
+        for (int i = value.length(); i < length; i++)
+            buf.append(" ");
+
+        return buf.toString();
     }
 }
