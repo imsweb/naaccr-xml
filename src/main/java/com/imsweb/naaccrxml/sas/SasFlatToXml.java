@@ -13,6 +13,7 @@ import java.io.LineNumberReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,39 +21,55 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 /**
- * Use this class to convert a given CSV file into a NAACCR XML file.
+ * Use this class to convert a given (temp) NAACCR fixed-column file into a NAACCR XML file.
  * <br/><br/>
  * THIS CLASS IS IMPLEMENTED TO BE COMPATIBLE WITH JAVA 7; BE CAREFUL WHEN MODIFYING IT.
  */
 @SuppressWarnings("ALL")
 public class SasFlatToXml {
 
+    // the (temp) flat file to read
     private File _flatFile;
 
+    // the target XML file to create
     private File _xmlFile;
 
+    // the (temp) format file SAS needs to create teh temp flat file
     private File _formatFile;
 
-    private List<File> _dictionaryFiles;
-
+    // the (required) NAACCR version
     private String _naaccrVersion;
 
+    // the (required) record type
     private String _recordType;
 
+    // the user-provided dictionary URIs
     private String _dictionaryUris;
 
+    // the user-provided dictionaries files
+    private List<File> _dictionaryFiles;
+
+    // whether the NAACCR numbers should be written (defaults to false)
     private boolean _writeNumbers;
 
+    // whether the tumors should be grouped (defaults to true)
     private boolean _groupTumors;
 
-    // TODO FD lots to clean up here, review all logs messages
+    // the CSV list of fields contained in the data set
+    private String _dataSetFields;
 
+    /**
+     * Constructor.
+     */
     public SasFlatToXml(String xmlPath) {
         initFiles(xmlPath, false);
     }
 
-    public SasFlatToXml(String xmlPath, String naaccrVersion, String recordType) {
-        initFiles(xmlPath, true);
+    /**
+     * Constructor.
+     */
+    public SasFlatToXml(String xmlPath, String naaccrVersion, String recordType, String logOption) {
+        initFiles(xmlPath, "yes".equalsIgnoreCase(logOption));
 
         _dictionaryFiles = new ArrayList<>();
 
@@ -93,6 +110,9 @@ public class SasFlatToXml {
         }
     }
 
+    /**
+     * Sets the user-defined dictionaries.
+     */
     public void setDictionary(String dictionaryPath, String dictionaryUri) {
         if (dictionaryPath != null && !dictionaryPath.trim().isEmpty()) {
             for (String path : dictionaryPath.split(";")) {
@@ -123,54 +143,107 @@ public class SasFlatToXml {
         }
     }
 
+    /**
+     * Returns the user-defined dictionaries.
+     */
+    List<File> getUserDictionaryFiles() {
+        return _dictionaryFiles;
+    }
+
+    /**
+     * Sets the CSV list of fields contained in the data set.
+     */
+    public void setDataSetFields(String dataSetFields) {
+        _dataSetFields = dataSetFields;
+    }
+
+    /**
+     * Returns the path of the (temp) flat file.
+     */
     public String getFlatPath() {
         return _flatFile.getAbsolutePath();
     }
 
+    /**
+     * Returns the path of the target XML file.
+     */
     public String getXmlPath() {
         return _xmlFile.getAbsolutePath();
     }
 
+    /**
+     * Returns the path of the (temp) format file.
+     */
     public String getFormatPath() {
         return _formatFile.getAbsolutePath();
     }
 
+    /**
+     * Returns the NAACCR version.
+     */
     public String getNaaccrVersion() {
         return _naaccrVersion;
     }
 
+    /**
+     * Returns the record type.
+     */
     public String getRecordType() {
         return _recordType;
     }
 
+    /**
+     * Sets the write-numbers option.
+     */
     public void setWriteNumbers(String value) {
         _writeNumbers = value != null && ("true".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value));
     }
 
+    /**
+     * Returns the write-numbers option.
+     */
     public String getWriteNumbers() {
         return _writeNumbers ? "Yes" : "No";
     }
 
+    /**
+     * Sets the group-tumors option.
+     */
     public void setGroupTumors(String value) {
         _groupTumors = value == null || !("false".equalsIgnoreCase(value) || "no".equalsIgnoreCase(value));
     }
 
+    /**
+     * Returns the group-tumors option.
+     */
     public String getGroupTumors() {
         return _groupTumors ? "Yes" : "No";
     }
 
+    /**
+     * Returns the list of fields for the parameters set on the object.
+     */
     public List<SasFieldInfo> getFields() {
         return SasUtils.getFields(_naaccrVersion, _recordType, _dictionaryFiles);
     }
 
+    /**
+     * Creates the (temp) format file based on the parmaters set on the object.
+     */
     public void createOutputFormat() throws IOException {
         createOutputFormat(null);
     }
 
+    /**
+     * Creates the (temp) format file based on the parmaters set on the object.
+     */
     public void createOutputFormat(String fields) throws IOException {
         createOutputFormat(fields, getFields());
     }
 
+    /**
+     * Creates the (temp) format file based on the parmaters set on the object.
+     */
     public void createOutputFormat(String fields, List<SasFieldInfo> availableFields) throws IOException {
         try {
             Set<String> requestedFieldIds = SasUtils.extractRequestedFields(fields, availableFields);
@@ -198,11 +271,30 @@ public class SasFlatToXml {
                     counter += entry.getValue().getLength();
                 }
                 writer.write(";");
-                SasUtils.logInfo("Successfully created output format file with " + fieldsToWrite.size() + " fields (variables); expected line length is " + expectedLineLength);
+                SasUtils.logInfo("Successfully created output format file with " + fieldsToWrite.size() + " fields (variables) with total line length of " + expectedLineLength);
             }
             finally {
                 if (writer != null)
                     writer.close();
+            }
+
+            if (_dataSetFields != null) {
+                List<String> dataSetFields = Arrays.asList(_dataSetFields.trim().split(","));
+                List<String> extraFields = new ArrayList<>(dataSetFields);
+                extraFields.removeAll(fieldsToWrite.keySet());
+                if (!extraFields.isEmpty()) {
+                    StringBuilder buf = new StringBuilder();
+                    for (int i = 0; i < 5; i++) {
+                        if (i > 0)
+                            buf.append(", ");
+                        buf.append(extraFields.get(i));
+                    }
+                    if (extraFields.size() > 5)
+                        buf.append(", ...");
+                    SasUtils.logInfo("The following " + extraFields.size() + " variable(s) from the data set won't be written: " + buf);
+                }
+                else
+                    SasUtils.logInfo("All variables from the data set will be written...");
             }
         }
         catch (IOException e) {
@@ -215,17 +307,24 @@ public class SasFlatToXml {
         }
     }
 
+    /**
+     * Creates the target XML file from the temp flat file based on the parmaters set on the object.
+     */
     public void convert() throws IOException {
         convert(null);
     }
 
+    /**
+     * Creates the target XML file from the temp flat file based on the parmaters set on the object.
+     */
     public void convert(String fields) throws IOException {
         convert(fields, getFields());
     }
 
+    /**
+     * Creates the target XML file from the temp flat file based on the parmaters set on the object.
+     */
     public void convert(String fields, List<SasFieldInfo> availableFields) throws IOException {
-        int numPat = 0;
-        int numTum = 0;
         try {
             Set<String> requestedFieldIds = SasUtils.extractRequestedFields(fields, availableFields);
 
@@ -259,6 +358,8 @@ public class SasFlatToXml {
                 reader = new LineNumberReader(new InputStreamReader(new FileInputStream(_flatFile), StandardCharsets.UTF_8));
                 writer = SasUtils.createWriter(_xmlFile);
 
+                int numPat = 0;
+                int numTum = 0;
                 String currentPatNum = null;
                 String line = reader.readLine();
                 boolean wroteRoot = false;
@@ -336,6 +437,8 @@ public class SasFlatToXml {
 
                 writer.write("    </Patient>\n");
                 writer.write("</NaaccrData>");
+
+                SasUtils.logInfo("Successfully created target XML with " + numPat + " Patient" + (numPat > 1 ? "s" : "") + " and " + numTum + " Tumor" + (numTum > 1 ? "?" : ""));
             }
             finally {
                 if (writer != null)
@@ -352,8 +455,6 @@ public class SasFlatToXml {
             e.printStackTrace();
             throw new IOException(e);
         }
-
-        SasUtils.logInfo("Successfully created target XML with " + numPat + " Patient" + (numPat > 1 ? "s" : "") + " and " + numTum + " Tumor" + (numTum > 1 ? "?" : ""));
     }
 
     private String createItemLine(String indentation, String itemId, String itemNumber, String value) {
@@ -365,10 +466,16 @@ public class SasFlatToXml {
         return buf.toString();
     }
 
+    /**
+     * Cleans up temp files.
+     */
     public void cleanup() {
         cleanup("yes");
     }
 
+    /**
+     * Cleans up temp files.
+     */
     public void cleanup(String option) {
         if ("no".equalsIgnoreCase(option))
             SasUtils.logInfo("Skipping temp files cleanup...");
@@ -376,9 +483,5 @@ public class SasFlatToXml {
             SasUtils.logError("Unable to cleanup temp files, they will have to be manually deleted...");
         else
             SasUtils.logInfo("Successfully deleted temp files...");
-    }
-
-    List<File> getUserDictionaryFiles() {
-        return _dictionaryFiles;
     }
 }

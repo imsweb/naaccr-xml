@@ -22,32 +22,43 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 /**
- * Use this class to convert a given NAACCR XML file into a CSV file.
+ * Use this class to convert a given NAACCR XML file into a (temp) fixed-columns file that SAS can easily import.
  * <br/><br/>
  * THIS CLASS IS IMPLEMENTED TO BE COMPATIBLE WITH JAVA 7; BE CAREFUL WHEN MODIFYING IT.
  */
 @SuppressWarnings("ALL")
 public class SasXmlToFlat {
 
+    // the source XML file
     private File _xmlFile;
 
+    // the target (temp) flat file
     private File _flatFile;
 
+    // the target (temp) format file SAS needs to read the flat file
     private File _formatFile;
 
+    // the (optional) user-provided dictionaries
     private List<File> _dictionaryFiles;
 
+    // the (required) NAACCR version
     private String _naaccrVersion;
 
+    // the (required) record type
     private String _recordType;
 
+    // whether grouped items should be included (only applicable pre-N23)
     private boolean _includeGroupedItems;
 
     /**
-     * This constructor is used to do the full conversion.
-     * @param xmlPath path to the XML file to convert
-     * @param naaccrVersion NAACCR version
-     * @param recordType record type
+     * Constructor.
+     */
+    public SasXmlToFlat(String xmlPath) {
+        initFiles(xmlPath, false);
+    }
+
+    /**
+     * Constructor.
      */
     public SasXmlToFlat(String xmlPath, String naaccrVersion, String recordType) {
         initFiles(xmlPath, true);
@@ -68,14 +79,6 @@ public class SasXmlToFlat {
             SasUtils.logError("Record type must be A, M, C or I; got " + _recordType);
 
         _includeGroupedItems = false;
-    }
-
-    /**
-     * This constructor is used to cleanup the temp file.
-     * @param xmlPath path to the XML file that was converted
-     */
-    public SasXmlToFlat(String xmlPath) {
-        initFiles(xmlPath, false);
     }
 
     private void initFiles(String xmlPath, boolean logInfo) {
@@ -100,6 +103,9 @@ public class SasXmlToFlat {
         }
     }
 
+    /**
+     * Sets the user-defined dictionaries.
+     */
     public void setDictionary(String dictionaryPath) {
         if (dictionaryPath != null && !dictionaryPath.trim().isEmpty()) {
             for (String path : dictionaryPath.split(";")) {
@@ -120,52 +126,102 @@ public class SasXmlToFlat {
         }
     }
 
+    /**
+     * Returns the path of the source XML file.
+     */
     public String getXmlPath() {
         return _xmlFile.getAbsolutePath();
     }
 
+    /**
+     * Returns the path of the (temp) target flat file.
+     */
     public String getFlatPath() {
         return _flatFile.getAbsolutePath();
     }
 
+    /**
+     * Returns the path of the (temp) format file.
+     */
     public String getFormatPath() {
         return _formatFile.getAbsolutePath();
     }
 
+    /**
+     * Retruns the path of each user-defined dictionary, separated by a semi-colon.
+     */
     public String getDictionaryPath() {
         StringBuilder buf = new StringBuilder();
         for (File dictionaryFile : _dictionaryFiles) {
             if (buf.length() > 0)
-                buf.append(" ");
+                buf.append(";");
             buf.append(dictionaryFile.getAbsolutePath());
         }
         return buf.toString();
     }
 
+    /**
+     * Returns the user-defined dictionaries.
+     */
+    List<File> getUserDictionaryFiles() {
+        return _dictionaryFiles;
+    }
+
+    /**
+     * Returns the NAACCR vesrion.
+     */
     public String getNaaccrVersion() {
         return _naaccrVersion;
     }
 
+    /**
+     * Returns the record type.
+     */
     public String getRecordType() {
         return _recordType;
     }
 
+    /**
+     * Returns the list of fields for the parameters set on the object.
+     */
     public List<SasFieldInfo> getFields() {
         return SasUtils.getFields(_naaccrVersion, _recordType, _dictionaryFiles);
     }
 
+    /**
+     * Sets the include-grouped-items option.
+     */
+    public void setIncludeGroupedItems(String option) {
+        if ("yes".equalsIgnoreCase(option))
+            _includeGroupedItems = true;
+        else if (!"no".equalsIgnoreCase(option))
+            SasUtils.logError("Invalid includeGroupItems option: " + option);
+    }
+
+    /**
+     * Returns the list of grouped fields for the parameters set on the object.
+     */
     public List<SasFieldInfo> getGroupedFields() {
         return SasUtils.getGroupedFields(_naaccrVersion, _recordType);
     }
 
+    /**
+     * Creates the target temp flat file from the source XML file based on the parmaters set on the object.
+     */
     public void convert() throws IOException {
         convert(null);
     }
 
+    /**
+     * Creates the target temp flat file from the source XML file based on the parmaters set on the object.
+     */
     public void convert(String fields) throws IOException {
         convert(fields, getFields());
     }
 
+    /**
+     * Creates the target temp flat file from the source XML file based on the parmaters set on the object.
+     */
     public void convert(String fields, List<SasFieldInfo> availableFields) throws IOException {
         try {
             Set<String> requestedFieldIds = SasUtils.extractRequestedFields(fields, availableFields);
@@ -297,10 +353,16 @@ public class SasXmlToFlat {
         return count;
     }
 
+    /**
+     * Cleans up temp files.
+     */
     public void cleanup() {
         cleanup("yes");
     }
 
+    /**
+     * Cleans up temp files.
+     */
     public void cleanup(String option) {
         if ("no".equalsIgnoreCase(option))
             SasUtils.logInfo("Skipping temp files cleanup...");
@@ -308,16 +370,5 @@ public class SasXmlToFlat {
             SasUtils.logError("Unable to cleanup temp files, they will have to be manually deleted...");
         else
             SasUtils.logInfo("Successfully deleted temp files...");
-    }
-
-    List<File> getUserDictionaryFiles() {
-        return _dictionaryFiles;
-    }
-
-    public void setIncludeGroupedItems(String option) {
-        if ("yes".equalsIgnoreCase(option))
-            _includeGroupedItems = true;
-        else if (!"no".equalsIgnoreCase(option))
-            SasUtils.logError("Invalid includeGroupItems option: " + option);
     }
 }
