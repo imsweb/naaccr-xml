@@ -1,4 +1,4 @@
-%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", dictUri="", writenum="no", cleanupcsv="yes", grouptumors="yes");
+%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", dictUri="", writenum="no", cleanuptempfiles="yes", grouptumors="yes");
 
 /************************************************************************************************************;
     This macro writes a given data fileset into a NAACCR XML data file.
@@ -39,15 +39,16 @@
         XML dictionary (it usually looks like an internet address, but it's rarely a legit address; and the macros
         do not try to connect to that address in any way). Use semicolons to separate multiple URIs.
     - writenum should be "yes" or "no" (defaults to "no"); if "yes" then the NAACCR numbers will be written.
-    - cleanupcsv should be "yes" or "no" (defaults to "yes"); if "no" then the tmp CSV file won't be
-        automatically deleted; use this parameter to QC the CSV file or use it to investigate problems.
+    - cleanuptempfiles should be "yes" or "no" (defaults to "yes"); if "no" then the tmp flat and format files
+        won't be automatically deleted; use this parameter to QC those files when investigating issues.
     - grouptumors should be "yes" or "no" (defaults to "yes"); if "yes" then the tumors that have the same
         patient ID number (and appearing together in the observations) will be grouped under one Patient tag;
         if "no", each tumor will appear under its own Patient tag (and every Patient will contain exactly one Tumor).
 
 
-    Note that the macro creates a tmp CSV file in the same folder as the target file; that file will be 
-    automatically deleted by the macro when it's done executing (unless the 'cleanupcsv' parameter is set to 'no').
+    Note that the macro creates a temp fixed-column and input SAS format file in the same folder as the target file;
+    those files will be automatically deleted by the macro when its done executing (unless the 'cleanuptempfiles'
+    parameter is set to 'no').
 
     A typical use-case for the write macro is to read an XML file (using the read macro), do something to the data
     and write it back. But an another common use-case is to start from an existing data set. In that case, there are
@@ -73,6 +74,8 @@
     04/13/2021 - Fabian Depry - Added documentation for providing included items as a CSV file.
     10/08/2021 - Fabian Depry - Added new optional cleanupcsv parameter to allow better QC and problem investigation.
     12/14/2021 - Fabian Depry - Added new optional grouptumors parameter to allow not grouping the tumors.
+    06/04/2023 - Fabian Depry - Re-wrote the macro to use a temp fixed-column file instead of a temp CSV file.
+    06/22/2023 - Fabian Depry - Renamed cleanupcsv parameter to cleanuptempfiles
  ************************************************************************************************************/;
 
 /*
@@ -81,35 +84,51 @@
 options set=CLASSPATH &libpath;
 
 /*
-   Call the Java library to known the name and location of the CSV file it will expect.
+   Call the Java library to known the name and location of the temp fixed-column file it will expect.
 */
 data _null_;
-    attrib csvpath length = $200;
-    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasCsvToXml', &targetfile, &naaccrversion, &recordtype);
-    j1.callStringMethod('getCsvPath', csvpath);
-    call symput('csvfile', csvpath);
+    attrib varname length = $32;
+    attrib varlist length = $32767;
+    meta = open("&dataset");
+    vars = attrn(meta, "NVARS");
+    do i = 1 to vars;
+        varname = compress(varname(meta, i));
+        varlist = catx(',', varlist, varname);
+    end;
+    rc = close(meta);
+
+    attrib flatpath length = $200;
+    attrib formatpath length = $200;
+    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasFlatToXml', &targetfile, &naaccrversion, &recordtype, 'no');
+    j1.callStringMethod('getFlatPath', flatpath);
+    call symput('flatfile', flatpath);
+	j1.callStringMethod('getFormatPath', formatpath);
+	call symput('formatfile', formatpath);
+    j1.callVoidMethod('setDictionary', &dictfile, &dicturi);
+	j1.callVoidMethod('setDataSetFields', varlist);
+    j1.callVoidMethod('createOutputFormat', &items);
     j1.delete();
 run;
 
 /*
-   Export the dataset into a CSV file.
+   Export the dataset into a temp fixed-column file.
 */
-proc export data=&dataset
-   outfile="&csvfile"
-   dbms=csv
-   replace;
+data _null_;
+    set &dataset;
+    file "&flatfile" lrecl=100000 termstr=lf;
+	%include "&formatfile";
 run;
 
 /*
-   Call the Java library to convert the CSV file into an XML file; delete the CSV file once we are done.
+   Call the Java library to convert the fixed-column file into an XML file; delete the temp files once we are done.
 */
 data _null_;
-    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasCsvToXml', &targetfile, &naaccrversion, &recordtype);
+    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasFlatToXml', &targetfile, &naaccrversion, &recordtype, 'yes');
     j1.callVoidMethod('setDictionary', &dictfile, &dicturi);
     j1.callVoidMethod('setWriteNumbers', &writenum);
     j1.callVoidMethod('setGroupTumors', &grouptumors);
     j1.callVoidMethod('convert', &items);
-    j1.callVoidMethod('cleanup', &cleanupcsv);
+    j1.callVoidMethod('cleanup', &cleanuptempfiles);
     j1.delete();
 run;
 

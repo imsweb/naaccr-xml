@@ -1,4 +1,4 @@
-%MACRO readNaaccrXml(libpath, sourcefile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", cleanupcsv="yes", groupeditems="no");
+%MACRO readNaaccrXml(libpath, sourcefile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", cleanuptempfiles="yes", groupeditems="no");
 
 /************************************************************************************************************;
     This macro reads a given NAACCR XML data file and loads the data into a dataset.
@@ -40,14 +40,15 @@
         computed from the directory containing the macro (in other words, the dictionary CSV file can be
         copied in the same directory as the macro and referenced by its filename only). Use semicolon to
         separate multiple paths if you need to provide more than one dictionary.
-    - cleanupcsv should be "yes" or "no" (defaults to "yes"); if "no" then the tmp CSV file won't be
-        automatically deleted; use this parameter to QC the CSV file or use it to investigate problems.
+    - cleanuptempfiles should be "yes" or "no" (defaults to "yes"); if "no" then the tmp flat and format files
+        won't be automatically deleted; use this parameter to QC those files when investigating issues.
     - groupeditems should be "yes" or "no" (defaults to "no"); if "yes" then the grouped items will
         added to the created data set. Note that the "items" parameter has not impact on this one, either
         all the grouped items are included, or none are.
 
-    Note that the macro creates a tmp CSV file in the same folder as the target file; that file will be
-    automatically deleted by the macro when it's done executing (unless the 'cleanupcsv' parameter is set to 'no').
+    Note that the macro creates a temp fixed-column and input SAS format file in the same folder as the source file;
+    those files will be automatically deleted by the macro when its done executing (unless the 'cleanuptempfiles'
+    parameter is set to 'no').
 
     Changelog
     *********
@@ -61,6 +62,8 @@
     04/13/2021 - Fabian Depry - Added documentation for providing included items as a CSV file.
     10/08/2021 - Fabian Depry - Added new optional cleanupcsv parameter to allow better QC and problem investigation.
     04/04/2022 - Fabian Depry - Added new option groupeditems parameter to allow grouped items to be added to the data set.
+    06/04/2023 - Fabian Depry - Re-wrote the macro to use a temp fixed-column file instead of a temp CSV file.
+    06/22/2023 - Fabian Depry - Renamed cleanupcsv parameter to cleanuptempfiles
  ************************************************************************************************************/;
 
 /*
@@ -69,43 +72,36 @@
 options set=CLASSPATH &libpath;
 
 /*
-   Call the Java library to create a tmp CSV file from the input XML file.
-   The target CSV location can be provided as a parameter to the library but this code doesn't provide it; 
-   in that case the library will use the same location and name (with a CSV extension) 
+   Call the Java library to create a temp fixed-column file from the input XML file (in the same directory).
 */
 data _null_;
-    attrib csvpath length = $200;
-    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToCsv', &sourcefile, &naaccrversion, &recordtype);
+    attrib flatpath length = $200;
+	attrib formatpath length = $200;
+    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToFlat', &sourcefile, &naaccrversion, &recordtype);
     j1.callVoidMethod('setDictionary', &dictfile);
     j1.callVoidMethod('setIncludeGroupedItems', &groupeditems);
-    j1.callStringMethod('getCsvPath', csvpath);
-    call symput('csvfile', csvpath);
+    j1.callStringMethod('getFlatPath', flatpath);
+    call symput('flatfile', flatpath);
+	j1.callStringMethod('getFormatPath', formatpath);
+	call symput('formatfile', formatpath);
     j1.callVoidMethod('convert', &items);
     j1.delete();
 run;
 
 /*
-   Import the tmp CSV file.
-*/
-proc import datafile="&csvfile" out=&dataset dbms=csv replace;
-    getnames=yes;
-run;
-
-/*
-   To force SAS to recognize all variables as text (and stop dropping leading 0's), the library adds a line of dashes;
-   this code removes that fake line from the loaded dataset.
+   Import the temp fixed-column file.
 */
 data &dataset;
-    set &dataset;
-    if _n_ = 1 then delete;
+    infile "&flatfile" lrecl=100000;
+    %include "&formatfile";
 run;
 
 /*
-    Cleanup the tmp CSV file.
+    Cleanup the temp files.
 */
-data _null_;    
-    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToCsv', &sourcefile, &naaccrversion, &recordtype);
-    j1.callVoidMethod('cleanup', &cleanupcsv);
+data _null_;
+    declare JavaObj j1 ('com/imsweb/naaccrxml/sas/SasXmlToFlat', &sourcefile);
+    j1.callVoidMethod('cleanup', &cleanuptempfiles);
     j1.delete();
 run;
 
