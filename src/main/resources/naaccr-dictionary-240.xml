@@ -450,7 +450,7 @@
             dataType="digits"/>
         <ItemDef naaccrId="brainPrimaryTumorLocation"
             naaccrNum="3964"
-            naaccrName="brainPrimaryTumorLocation"
+            naaccrName="Brain Primary Tumor Location"
             length="1"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"

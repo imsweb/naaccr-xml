@@ -23,17 +23,8 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 public class XmlDictionaryComparator {
 
     public static void main(String[] args) throws IOException {
-        compareDictionaryVersions("220", "230");
+        compareDictionaryVersions("230", "240");
     }
-
-    //    public static void main(String[] args) {
-    //        int count = 0;
-    //        for (NaaccrDictionaryItem item : NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("230").getItems().stream().sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId)).collect(
-    //                Collectors.toList())) {
-    //            count += item.getLength();
-    //            System.out.println(item.getNaaccrId() + ": " + count);
-    //        }
-    //    }
 
     /**
      * Compares dictionary items between two versions - finds items added, items removed, items whose name changed, and items whose name AND Id changed
@@ -74,7 +65,7 @@ public class XmlDictionaryComparator {
                     modifiedItemsType.add(Pair.of(oldItem, newItem));
                 if (!Objects.equals(oldItem.getPadding(), newItem.getPadding()))
                     modifiedItemsPadding.add(Pair.of(oldItem, newItem));
-                if (!Objects.equals(oldItem.getTrim(), newItem.getTrim()))
+                if (!Objects.equals(oldItem.getTrim(), newItem.getTrim()) && newItem.getTrim() != null)
                     modifiedItemsTrimming.add(Pair.of(oldItem, newItem));
                 if (!Objects.equals(oldItem.getAllowUnlimitedText(), newItem.getAllowUnlimitedText()))
                     modifiedItemsUnlimitedText.add(Pair.of(oldItem, newItem));
@@ -91,7 +82,7 @@ public class XmlDictionaryComparator {
 
             // added
             if (!addedItems.isEmpty()) {
-                writer.write("\nThe following item(s) were added to version version " + newVersion + ":\n");
+                writer.write("\nThe following item(s) were added to version " + newVersion + ":\n");
                 for (NaaccrDictionaryItem item : addedItems)
                     writer.write(" - " + item.getNaaccrId() + " (#" + item.getNaaccrNum() + ") - " + item.getNaaccrName() + "\n");
             }
