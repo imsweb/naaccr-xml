@@ -2,6 +2,7 @@
 
 **Version 10.0**
 
+- Added support for NAACCR 24.
 - Re-wrote the SAS macro to use a temp fixed-column file instead of a temp CSV file to resolve a maxed-out line length issue.
 
 **Version 9.1**
