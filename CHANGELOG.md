@@ -1,6 +1,11 @@
 ## NAACCR XML Version History
 
+**Version 10.0**
+
+- Re-wrote the SAS macro to use a temp fixed-column file instead of a temp CSV file to resolve a maxed-out line length issue.
+
 **Version 9.1**
+ 
 - Fixed specification version not correctly used when provided in the options.
 - Updated XStream dependency from version 1.4.19 to version 1.4.20.
 
