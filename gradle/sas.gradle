@@ -26,10 +26,10 @@ compileSasJava {
 task jarSas(type: Jar) {
     dependsOn compileSasJava
     from sourceSets.sas.output
-    classifier = 'sas'
+    archiveClassifier = 'sas'
 }
 
 task sourcesSasJar(type: Jar, dependsOn: sasClasses) {
-    classifier = 'sas-sources'
     from sourceSets.sas.allSource
+    archiveClassifier = 'sas-sources'
 }
