@@ -256,6 +256,7 @@ public class SasFlatToXml {
             for (SasFieldInfo field : availableFields)
                 if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId()))
                     fieldsToWrite.put(field.getTruncatedNaaccrId(), field);
+
             int expectedLineLength = 0;
             for (SasFieldInfo field : fieldsToWrite.values())
                 expectedLineLength += field.getLength();

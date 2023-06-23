@@ -245,6 +245,10 @@ public class SasXmlToFlat {
                     allFields.put(field.getNaaccrId(), field);
             }
 
+            int expectedLineLength = 0;
+            for (SasFieldInfo field : fieldsToWrite.values())
+                expectedLineLength += field.getLength();
+
             SasUtils.logInfo("Generating input format file...");
             BufferedWriter writer = null;
             try {
@@ -256,7 +260,7 @@ public class SasXmlToFlat {
                     counter += entry.getValue().getLength();
                 }
                 writer.write(";");
-                SasUtils.logInfo("Successfully created input format file with " + fieldsToWrite.size() + " fields (variables)");
+                SasUtils.logInfo("Successfully created input format file with " + fieldsToWrite.size() + " fields (variables) with total line length of " + expectedLineLength);
             }
             finally {
                 if (writer != null)
