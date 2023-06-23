@@ -61,8 +61,7 @@ public class TestingUtils {
         item.setLength(2);
         item.setStartColumn(2340);
         item.setNaaccrName("My Variable");
-        item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
-        item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_NONE);
+        item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_NONE);
         if (SpecificationVersion.compareSpecifications(specifications, SpecificationVersion.SPEC_1_2) < 0)
             item.setRegexValidation("0[0-8]");
         dict.addItem(item);

@@ -3,6 +3,7 @@
 **Version 10.0**
 
 - Added support for NAACCR 24.
+- Added support for new specification version 1.7 (removed trim attribute and some padding options); only NAACCR 24 dictionary will use that version for now.
 - Removed standalone program (the removal was announced a year ago when support for NAACCR 23 was added).
 - Re-wrote the SAS macro to use a temp fixed-column file instead of a temp CSV file to resolve a maxed-out line length issue.
 

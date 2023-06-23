@@ -5,6 +5,7 @@ package com.imsweb.naaccrxml;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -47,7 +48,7 @@ public final class NaaccrFormat {
     }
 
     public static Set<String> getSupportedVersions() {
-        return new HashSet<>(_SUPPORTED_VERSIONS);
+        return new LinkedHashSet<>(_SUPPORTED_VERSIONS);
     }
 
     // format constants

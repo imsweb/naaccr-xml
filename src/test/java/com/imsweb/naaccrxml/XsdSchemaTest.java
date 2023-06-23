@@ -35,7 +35,7 @@ public class XsdSchemaTest {
     public static final boolean STRICT_NAMESPACE_MODE = true;
     public static final boolean RELAXED_NAMESPACE_MODE = false;
 
-    private static final String _XSD_FILE = "xsd/naaccr_data_1.6.xsd";
+    private static final String _XSD_FILE = "xsd/naaccr_data_1.7.xsd";
 
     @Test
     public void testXsdAgainstLibrary() throws IOException {

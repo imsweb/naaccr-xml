@@ -115,7 +115,7 @@ public class NaaccrXmlDictionaryUtilsTest {
             NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(reader);
             Assert.assertEquals(1, dictionary.getItems().size());
             Assert.assertEquals(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT, dictionary.getItems().get(0).getDataType());
-            Assert.assertEquals(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK, dictionary.getItems().get(0).getPadding());
+            Assert.assertEquals(NaaccrXmlDictionaryUtils.NAACCR_PADDING_NONE, dictionary.getItems().get(0).getPadding());
             Assert.assertEquals(NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL, dictionary.getItems().get(0).getTrim());
         }
 

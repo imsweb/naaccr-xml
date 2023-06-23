@@ -49,6 +49,13 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryGroupedItem;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 import com.imsweb.naaccrxml.runtime.NaaccrDictionaryConverter;
 
+import static com.imsweb.naaccrxml.SpecificationVersion.SPEC_1_0;
+import static com.imsweb.naaccrxml.SpecificationVersion.SPEC_1_1;
+import static com.imsweb.naaccrxml.SpecificationVersion.SPEC_1_2;
+import static com.imsweb.naaccrxml.SpecificationVersion.SPEC_1_3;
+import static com.imsweb.naaccrxml.SpecificationVersion.SPEC_1_6;
+import static com.imsweb.naaccrxml.SpecificationVersion.SPEC_1_7;
+
 /**
  * This utility class can be used to read/write dictionaries, whether they are internal to the library, or provided by the user...
  * <br/><br/>
@@ -348,7 +355,7 @@ public final class NaaccrXmlDictionaryUtils {
 
             // default value for specifications
             if (dictionary.getSpecificationVersion() == null)
-                dictionary.setSpecificationVersion(SpecificationVersion.SPEC_1_0);
+                dictionary.setSpecificationVersion(SPEC_1_0);
 
             // apply default values
             if (dictionary.getItems() != null) {
@@ -361,9 +368,9 @@ public final class NaaccrXmlDictionaryUtils {
                         item.setDataType(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT);
                     // padding (defaults to right-blank)
                     if (StringUtils.isBlank(item.getPadding()))
-                        item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK);
+                        item.setPadding(NaaccrXmlDictionaryUtils.NAACCR_PADDING_NONE);
                     // trimming (defaults to all)
-                    if (StringUtils.isBlank(item.getTrim()))
+                    if (StringUtils.isBlank(item.getTrim()) && SpecificationVersion.compareSpecifications(dictionary.getSpecificationVersion(), SPEC_1_7) < 0)
                         item.setTrim(NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL);
                 }
             }
@@ -500,14 +507,14 @@ public final class NaaccrXmlDictionaryUtils {
         List<String> errors = new ArrayList<>();
 
         // some of the validation is based on the specification version; assume 1.0 if it's not available (it's required as of 1.5)
-        String specVersion = dictionary.getSpecificationVersion() == null ? SpecificationVersion.SPEC_1_0 : dictionary.getSpecificationVersion();
+        String specVersion = dictionary.getSpecificationVersion() == null ? SPEC_1_0 : dictionary.getSpecificationVersion();
         if (!SpecificationVersion.isSpecificationSupported(specVersion))
             errors.add("'specificationVersion' attribute is not supported: " + specVersion);
 
         if (dictionary.getDictionaryUri() == null || dictionary.getDictionaryUri().trim().isEmpty())
             errors.add("'dictionaryUri' attribute is required");
 
-        boolean allowBlankNaaccrVersion = !isBaseDictionary && SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_1) >= 0;
+        boolean allowBlankNaaccrVersion = !isBaseDictionary && SpecificationVersion.compareSpecifications(specVersion, SPEC_1_1) >= 0;
         if (!allowBlankNaaccrVersion && (dictionary.getNaaccrVersion() == null || dictionary.getNaaccrVersion().trim().isEmpty()))
             errors.add("'naaccrVersion' attribute is required");
         if (dictionary.getNaaccrVersion() != null && !NaaccrFormat.isVersionSupported(dictionary.getNaaccrVersion()))
@@ -555,7 +562,7 @@ public final class NaaccrXmlDictionaryUtils {
                 errors.add("'startColumn' attribute is not allowed");
             if (isBaseDictionary && versionSupportsStartColumns && item.getStartColumn() == null)
                 errors.add("'startColumn' attribute is required");
-            if (!isBaseDictionary && SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_1) < 0 && item.getStartColumn() == null)
+            if (!isBaseDictionary && SpecificationVersion.compareSpecifications(specVersion, SPEC_1_1) < 0 && item.getStartColumn() == null)
                 errors.add("'startColumn' attribute is required");
 
             // validate parent element
@@ -576,23 +583,31 @@ public final class NaaccrXmlDictionaryUtils {
                 errors.add("invalid value for 'dataType' attribute: " + item.getDataType());
 
             // validate unlimited text
-            if (item.getAllowUnlimitedText() != null && SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_6) >= 0)
+            if (item.getAllowUnlimitedText() != null && SpecificationVersion.compareSpecifications(specVersion, SPEC_1_6) >= 0)
                 errors.add("invalid attribute 'allowUnlimitedText'");
             else if (Boolean.TRUE.equals(item.getAllowUnlimitedText()) && !NAACCR_DATA_TYPE_TEXT.equals(type))
                 errors.add("allowUnlimitedText attribute can only be used with text data type");
 
             // validate padding
-            if (item.getPadding() != null && (!NAACCR_PADDING_LEFT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_LEFT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_RIGHT_BLANK.equals(
-                    item.getPadding()) && !NAACCR_PADDING_RIGHT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_NONE.equals(item.getPadding())))
-                errors.add("invalid value for 'padding' attribute: " + item.getPadding());
+            if (item.getPadding() != null) {
+                if (!NAACCR_PADDING_LEFT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_LEFT_ZERO.equals(item.getPadding())
+                        && !NAACCR_PADDING_RIGHT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_RIGHT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_NONE.equals(item.getPadding()))
+                    errors.add("invalid value for 'padding' attribute: " + item.getPadding());
+                if (SpecificationVersion.compareSpecifications(specVersion, SPEC_1_7) >= 0 && !NAACCR_PADDING_LEFT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_NONE.equals(item.getPadding()))
+                    errors.add("invalid value for 'padding' attribute: " + item.getPadding() + " (valid values are '" + NAACCR_PADDING_LEFT_ZERO + "' and '" + NAACCR_PADDING_NONE + "')");
+            }
 
             // validate trimming
-            if (item.getTrim() != null && (!NAACCR_TRIM_ALL.equals(item.getTrim()) && !NAACCR_TRIM_NONE.equals(item.getTrim())))
-                errors.add("invalid value for 'trim' attribute: " + item.getTrim());
+            if (item.getTrim() != null) {
+                if (!NAACCR_TRIM_ALL.equals(item.getTrim()) && !NAACCR_TRIM_NONE.equals(item.getTrim()))
+                    errors.add("invalid value for 'trim' attribute: " + item.getTrim());
+                if (SpecificationVersion.compareSpecifications(specVersion, SPEC_1_7) >= 0 && !NAACCR_PADDING_NONE.equals(item.getPadding()))
+                    errors.add("attribute 'trim' has been retired as of specifications 1.7");
+            }
 
             // validate regex
             if (item.getRegexValidation() != null) {
-                if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_2) >= 0)
+                if (SpecificationVersion.compareSpecifications(specVersion, SPEC_1_2) >= 0)
                     errors.add("invalid attribute 'regexValidation'");
                 else {
                     try {
@@ -608,7 +623,7 @@ public final class NaaccrXmlDictionaryUtils {
 
         // validate grouped items; since those can only appear in base dictionaries, the validation is going to be minimal
         if (isBaseDictionary) {
-            if (!dictionary.getGroupedItems().isEmpty() && SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_6) >= 0)
+            if (!dictionary.getGroupedItems().isEmpty() && SpecificationVersion.compareSpecifications(specVersion, SPEC_1_6) >= 0)
                 errors.add("grouped items are not supported anymore");
             else {
                 for (NaaccrDictionaryGroupedItem groupedItem : dictionary.getGroupedItems()) {
@@ -687,7 +702,7 @@ public final class NaaccrXmlDictionaryUtils {
                             errors.add("invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; number is already defined in corresponding base dictionary");
 
                         // range must be very specific for a user dictionary (deprecated)
-                        if (SpecificationVersion.compareSpecifications(specVersion, SpecificationVersion.SPEC_1_3) < 0)
+                        if (SpecificationVersion.compareSpecifications(specVersion, SPEC_1_3) < 0)
                             if (item.getNaaccrNum() < 9500 || item.getNaaccrNum() > 99999)
                                 errors.add("invalid value for 'naaccrNum' attribute: " + item.getNaaccrNum() + "; allowed range is 9500-99999");
 
