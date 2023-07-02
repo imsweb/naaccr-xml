@@ -67,7 +67,7 @@ birthplaceState,252,"Birthplace--State",,2,"A,M,C,I",Patient,alpha
 boneInvasion,3815,"Bone Invasion",,1,"A,M,C,I",Tumor,digits
 brafMutationalAnalysis,3940,"BRAF Mutational Analysis",,1,"A,M,C,I",Tumor,text
 brainMolecularMarkers,3816,"Brain Molecular Markers",,2,"A,M,C,I",Tumor,digits
-brainPrimaryTumorLocation,3964,"brainPrimaryTumorLocation",,1,"A,M,C,I",Tumor,numeric
+brainPrimaryTumorLocation,3964,"Brain Primary Tumor Location",,1,"A,M,C,I",Tumor,numeric
 breslowTumorThickness,3817,"Breslow Tumor Thickness",,4,"A,M,C,I",Tumor,text
 ca125PretreatmentInterpretation,3818,"CA-125 Pretreatment Interpretation",,1,"A,M,C,I",Tumor,digits
 ca199PretxLabValue,3942,"CA 19-9 PreTX Lab Value",,6,"A,M,C,I",Tumor,text
@@ -605,7 +605,7 @@ rxHospHormone,710,"RX Hosp--Hormone",,2,"A,M,C,I",Tumor,digits
 rxHospOther,730,"RX Hosp--Other",,1,"A,M,C,I",Tumor,digits
 rxHospPalliativeProc,3280,"RX Hosp--Palliative Proc",,1,"A,M,C,I",Tumor,digits
 rxHospRadiation,690,"RX Hosp--Radiation",,1,"A,M,C,I",Tumor,digits
-rxHospReconBreast,751,"Rx Hosp--Recon Breast",,4,"A,M,C,I",Tumor,mixed
+rxHospReconBreast,751,"RX Hosp--Recon Breast",,4,"A,M,C,I",Tumor,mixed
 rxHospRegLnRemoved,676,"RX Hosp--Reg LN Removed",,2,"A,M,C,I",Tumor,digits
 rxHospScopeReg9802,747,"RX Hosp--Scope Reg 98-02",,1,"A,M,C,I",Tumor,digits
 rxHospScopeRegLnSur,672,"RX Hosp--Scope Reg LN Sur",,1,"A,M,C,I",Tumor,digits
@@ -623,7 +623,7 @@ rxSummOther,1420,"RX Summ--Other",,1,"A,M,C,I",Tumor,digits
 rxSummPalliativeProc,3270,"RX Summ--Palliative Proc",,1,"A,M,C,I",Tumor,digits
 rxSummRadToCns,1370,"RX Summ--Rad to CNS",,1,"A,M,C,I",Tumor,digits
 rxSummRadiation,1360,"RX Summ--Radiation",,1,"A,M,C,I",Tumor,digits
-rxSummReconBreast,1335,"Rx Summ--Recon Breast",,4,"A,M,C,I",Tumor,mixed
+rxSummReconBreast,1335,"RX Summ--Recon Breast",,4,"A,M,C,I",Tumor,mixed
 rxSummReconstruct1st,1330,"RX Summ--Reconstruct 1st",,1,"A,M,C,I",Tumor,digits
 rxSummRegLnExamined,1296,"RX Summ--Reg LN Examined",,2,"A,M,C,I",Tumor,digits
 rxSummScopeReg9802,1647,"RX Summ--Scope Reg 98-02",,1,"A,M,C,I",Tumor,digits

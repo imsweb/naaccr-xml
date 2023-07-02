@@ -4173,7 +4173,7 @@
             dataType="digits"/>
         <ItemDef naaccrId="rxHospReconBreast"
             naaccrNum="751"
-            naaccrName="Rx Hosp--Recon Breast"
+            naaccrName="RX Hosp--Recon Breast"
             length="4"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
@@ -4306,7 +4306,7 @@
             dataType="digits"/>
         <ItemDef naaccrId="rxSummReconBreast"
             naaccrNum="1335"
-            naaccrName="Rx Summ--Recon Breast"
+            naaccrName="RX Summ--Recon Breast"
             length="4"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
