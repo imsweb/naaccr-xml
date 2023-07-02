@@ -270,7 +270,7 @@ followUpContactPostal,1846,"Follow-Up Contact--Postal",,9,"A,M,C,I",Tumor,text
 followUpContactState,1844,"Follow-Up Contact--State",,2,"A,M,C,I",Tumor,alpha
 followUpContactSuppl,2393,"Follow-Up Contact--Suppl",,60,"A,M,C",Tumor,text
 followUpSource,1790,"Follow-Up Source",,1,"A,M,C,I",Tumor,digits
-followUpSourceCentral,1791,"Follow-up Source Central",,2,"A,M,C,I",Tumor,digits
+followUpSourceCentral,1791,"Follow-up Source Central",,2,"A,M,C,I",Patient,digits
 followingRegistry,2440,"Following Registry",,10,"A,M,C",Tumor,digits
 followupContactCountry,1847,"FollowUp Contact--Country",,3,"A,M,C,I",Tumor,alpha
 geocodingQualityCode,86,"Geocoding Quality Code",,1,"A,M,C,I",Tumor,alpha

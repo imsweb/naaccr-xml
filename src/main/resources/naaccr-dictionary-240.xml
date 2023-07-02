@@ -1881,7 +1881,7 @@
             naaccrName="Follow-up Source Central"
             length="2"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"
+            parentXmlElement="Patient"
             dataType="digits"
             padding="leftZero"/>
         <ItemDef naaccrId="followingRegistry"
