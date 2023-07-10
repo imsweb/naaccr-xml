@@ -1,5 +1,7 @@
 # NAACCR XML
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=imsweb_naaccr-xml&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=imsweb_naaccr-xml)
+[![integration](https://github.com/imsweb/naaccr-xml/workflows/integration/badge.svg)](https://github.com/imsweb/naaccr-xml/actions)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.imsweb/naaccr-xml)
 
 This library provides support for the NAACCR XML format. It implements version 1.7 of [the specifications](https://www.naaccr.org/xml-data-exchange-standard/) but still supports prior versions.
