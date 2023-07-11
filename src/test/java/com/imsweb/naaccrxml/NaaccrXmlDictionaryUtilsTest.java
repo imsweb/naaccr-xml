@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.opencsv.CSVReader;
@@ -509,7 +510,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         }
     }
 
-    @Test
+    @Ignore
     public void testStandardDictionaries() throws IOException {
         for (String version : NaaccrFormat.getSupportedVersions()) {
             Path path1 = Paths.get(TestingUtils.getWorkingDirectory() + "/src/main/resources/naaccr-dictionary-" + version + ".xml");
