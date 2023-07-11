@@ -28,7 +28,7 @@ repositories {
 dependencies {
     api 'com.thoughtworks.xstream:xstream:1.4.20'
 
-    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'commons-io:commons-io:2.13.0'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
     testImplementation 'junit:junit:4.13.2'
