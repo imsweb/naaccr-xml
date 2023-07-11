@@ -510,7 +510,8 @@ public class NaaccrXmlDictionaryUtilsTest {
         }
     }
 
-    @Ignore
+    @Ignore("This test fails on Github Actions. I don't think its reading correctly from classpath. Fabian will need to look")
+    @Test
     public void testStandardDictionaries() throws IOException {
         for (String version : NaaccrFormat.getSupportedVersions()) {
             Path path1 = Paths.get(TestingUtils.getWorkingDirectory() + "/src/main/resources/naaccr-dictionary-" + version + ".xml");
