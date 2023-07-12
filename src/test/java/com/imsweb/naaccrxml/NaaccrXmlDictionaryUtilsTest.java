@@ -510,12 +510,11 @@ public class NaaccrXmlDictionaryUtilsTest {
         }
     }
 
-    @Ignore("This test fails on Github Actions. I don't think its reading correctly from classpath. Fabian will need to look")
     @Test
     public void testStandardDictionaries() throws IOException {
         for (String version : NaaccrFormat.getSupportedVersions()) {
             Path path1 = Paths.get(TestingUtils.getWorkingDirectory() + "/src/main/resources/naaccr-dictionary-" + version + ".xml");
-            Path path2 = Paths.get("build/tmp-dictionary-" + version + ".xml");
+            Path path2 = Paths.get(TestingUtils.getWorkingDirectory() + "/build/tmp-dictionary-" + version + ".xml");
             NaaccrXmlDictionaryUtils.writeDictionary(NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(version), path2.toFile());
             if (!TestingUtils.readFileAsOneString(path1.toFile()).replace("\r", "").equals(TestingUtils.readFileAsOneString(path2.toFile()).replace("\r", "")))
                 Assert.fail("Dictionary for version " + version + " needs to be re-created, it contains differences from what would be created by the library!");

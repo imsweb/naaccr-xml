@@ -248,11 +248,6 @@ public class SasFlatToXml {
         try {
             Set<String> requestedFieldIds = SasUtils.extractRequestedFields(fields, availableFields);
 
-            // TODO this was commented out because it failed Spotbugs; the map is not used anywhere but I left it for Fabian to see
-            // Map<String, String> itemNumbers = new HashMap<>();
-            // for (SasFieldInfo info : availableFields)
-            //    itemNumbers.put(info.getNaaccrId(), info.getNum().toString());
-
             Map<String, SasFieldInfo> fieldsToWrite = new HashMap<>();
             for (SasFieldInfo field : availableFields)
                 if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId()))
