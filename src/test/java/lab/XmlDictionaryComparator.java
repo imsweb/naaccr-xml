@@ -120,7 +120,7 @@ public class XmlDictionaryComparator {
 
             // level change
             if (!modifiedItemsLevel.isEmpty()) {
-                writer.write("\nFollowing item(s) got their data level changed in v" + newVersion + ":\n");
+                writer.write("\nThe following item(s) got their data level changed in v" + newVersion + ":\n");
                 for (Pair<NaaccrDictionaryItem, NaaccrDictionaryItem> pair : modifiedItemsLevel)
                     writer.write(" - " + pair.getLeft().getNaaccrId() + " (#" + pair.getLeft().getNaaccrNum() + ") - from \"" + pair.getLeft().getParentXmlElement()
                             + "\" to \"" + pair.getRight().getParentXmlElement() + "\"\n");
