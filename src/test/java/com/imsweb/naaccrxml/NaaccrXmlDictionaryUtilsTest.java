@@ -18,8 +18,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.opencsv.CSVReader;
@@ -512,6 +512,11 @@ public class NaaccrXmlDictionaryUtilsTest {
 
     @Test
     public void testStandardDictionaries() throws IOException {
+
+        // this test is more like a lab; a quick verification that is used when a base dictionary is added/modified; it doesn't need to run during the integration build...
+        if (!SystemUtils.IS_OS_WINDOWS)
+            return;
+
         for (String version : NaaccrFormat.getSupportedVersions()) {
             Path path1 = Paths.get(TestingUtils.getWorkingDirectory() + "/src/main/resources/naaccr-dictionary-" + version + ".xml");
             Path path2 = Paths.get(TestingUtils.getWorkingDirectory() + "/build/tmp-dictionary-" + version + ".xml");
