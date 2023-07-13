@@ -5,13 +5,13 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
- - 06/23/2023: Initial version.
+ - 07/13/2023: Initial version.
 -->
 
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-240.xml"
             naaccrVersion="240"
             specificationVersion="1.7"
-            dateLastModified="2023-06-23T12:00:00-04:00"
+            dateLastModified="2023-07-13T12:00:00-04:00"
             description="NAACCR 24 base dictionary"
             xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>
