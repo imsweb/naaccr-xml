@@ -4603,10 +4603,10 @@
         <ItemDef naaccrId="seerSiteSpecificFact1"
             naaccrNum="3700"
             naaccrName="SEER Site-Specific Fact 1"
-            length="1"
+            length="2"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"
-            dataType="digits"/>
+            dataType="numeric"/>
         <ItemDef naaccrId="seerSiteSpecificFact2"
             naaccrNum="3702"
             naaccrName="SEER Site-Specific Fact 2"

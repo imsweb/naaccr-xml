@@ -668,7 +668,7 @@ secondaryDiagnosis8,3794,"Secondary Diagnosis 8",,7,"A,M,C,I",Tumor,text
 secondaryDiagnosis9,3796,"Secondary Diagnosis 9",,7,"A,M,C,I",Tumor,text
 seerCauseSpecificCod,1914,"SEER Cause Specific COD",,1,"A,M,C,I",Tumor,digits
 seerOtherCod,1915,"SEER Other COD",,1,"A,M,C,I",Tumor,digits
-seerSiteSpecificFact1,3700,"SEER Site-Specific Fact 1",,1,"A,M,C,I",Tumor,digits
+seerSiteSpecificFact1,3700,"SEER Site-Specific Fact 1",,2,"A,M,C,I",Tumor,numeric
 seerSiteSpecificFact2,3702,"SEER Site-Specific Fact 2",,1,"A,M,C,I",Tumor,digits
 seerSiteSpecificFact3,3704,"SEER Site-Specific Fact 3",,1,"A,M,C,I",Tumor,digits
 seerSiteSpecificFact4,3706,"SEER Site-Specific Fact 4",,1,"A,M,C,I",Tumor,digits
