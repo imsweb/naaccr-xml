@@ -34,7 +34,7 @@ public class Iso8601DateConverter implements SingleValueConverter {
             return NaaccrXmlUtils.parseIso8601Date(str);
         }
         catch (IOException e) {
-            throw new RuntimeException("Invalid ISO 8601 value: " + str);
+            throw new IllegalStateException("Invalid ISO 8601 value: " + str);
         }
     }
 }

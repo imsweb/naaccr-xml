@@ -128,14 +128,14 @@ public class RuntimeNaaccrDictionaryTest {
             new RuntimeNaaccrDictionary(recordType, baseDictionary, userDictionaries);
         }
         catch (NaaccrIOException e) {
-            throw new RuntimeException("Runtime dictionary was invalid!", e);
+            throw new IllegalStateException("Runtime dictionary was invalid!", e);
         }
     }
 
     private void assertNotValid(String recordType, NaaccrDictionary baseDictionary, Collection<NaaccrDictionary> userDictionaries) {
         try {
             new RuntimeNaaccrDictionary(recordType, baseDictionary, userDictionaries);
-            throw new RuntimeException("Runtime dictionary was valid!");
+            throw new IllegalStateException("Runtime dictionary was valid!");
         }
         catch (NaaccrIOException e) {
             // expected

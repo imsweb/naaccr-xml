@@ -237,7 +237,7 @@ public class NaaccrStreamConfiguration {
      */
     public void registerNamespace(String namespacePrefix, String namespaceUri) {
         if (_namespaces.containsKey(namespacePrefix))
-            throw new RuntimeException("Namespace prefix '" + namespacePrefix + "' has already been registered");
+            throw new IllegalStateException("Namespace prefix '" + namespacePrefix + "' has already been registered");
         _namespaces.put(namespacePrefix, namespaceUri);
     }
 
@@ -257,7 +257,7 @@ public class NaaccrStreamConfiguration {
      */
     public void registerTag(String namespacePrefix, String tagName, Class<?> clazz) {
         if (!_namespaces.containsKey(namespacePrefix))
-            throw new RuntimeException("Namespace prefix '" + namespacePrefix + "' has not been registered yet");
+            throw new IllegalStateException("Namespace prefix '" + namespacePrefix + "' has not been registered yet");
         _xstream.alias(namespacePrefix + ":" + tagName, clazz);
         _xstream.addPermission(new WildcardTypePermission(new String[] {clazz.getName()}));
         _tags.computeIfAbsent(namespacePrefix, k -> new HashSet<>()).add(tagName);
@@ -273,7 +273,7 @@ public class NaaccrStreamConfiguration {
      */
     public void registerTag(String namespacePrefix, String tagName, Class<?> clazz, String fieldName, Class<?> fieldClass) {
         if (!_namespaces.containsKey(namespacePrefix))
-            throw new RuntimeException("Namespace prefix '" + namespacePrefix + "' has not been registered yet");
+            throw new IllegalStateException("Namespace prefix '" + namespacePrefix + "' has not been registered yet");
         _xstream.alias(namespacePrefix + ":" + tagName, fieldClass);
         _xstream.aliasField(namespacePrefix + ":" + tagName, clazz, fieldName);
         _tags.computeIfAbsent(namespacePrefix, k -> new HashSet<>()).add(tagName);
@@ -289,7 +289,7 @@ public class NaaccrStreamConfiguration {
      */
     public void registerAttribute(String namespacePrefix, String attributeName, Class<?> clazz, String fieldName, Class<?> fieldClass) {
         if (!_namespaces.containsKey(namespacePrefix))
-            throw new RuntimeException("Namespace prefix '" + namespacePrefix + "' has not been registered yet");
+            throw new IllegalStateException("Namespace prefix '" + namespacePrefix + "' has not been registered yet");
         _xstream.aliasAttribute(clazz, fieldName, namespacePrefix + ":" + attributeName);
         _xstream.useAttributeFor(fieldName, fieldClass);
     }

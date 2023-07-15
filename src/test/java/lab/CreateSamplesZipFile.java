@@ -5,7 +5,6 @@ package lab;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,10 +18,11 @@ import org.apache.commons.io.IOUtils;
 import com.imsweb.datagenerator.naaccr.NaaccrXmlDataGenerator;
 import com.imsweb.layout.LayoutFactory;
 
+@SuppressWarnings("resource")
 public class CreateSamplesZipFile {
 
     public static void main(String[] args) throws IOException {
-        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(Paths.get("docs/samples/naaccr-xml-samples-v220.zip").toFile()))) {
+        try (ZipOutputStream zos = new ZipOutputStream(Files.newOutputStream(Paths.get("docs/samples/naaccr-xml-samples-v220.zip").toFile().toPath()))) {
             Path dir = Paths.get("src/test/resources/data/validity");
             Files.newDirectoryStream(dir.resolve("valid")).forEach(path -> addToZip(path.toFile(), zos));
             Files.newDirectoryStream(dir.resolve("invalid")).forEach(path -> addToZip(path.toFile(), zos));
@@ -36,7 +36,7 @@ public class CreateSamplesZipFile {
                 absGenerator.generateFile(Paths.get("docs/samples/naaccr-xml-sample-v210-incidence-" + i + ".xml.gz").toFile(), i);
             }
             catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new IllegalStateException(e);
             }
         });
 
@@ -46,7 +46,7 @@ public class CreateSamplesZipFile {
                 incGenerator.generateFile(Paths.get("docs/samples/naaccr-xml-sample-v210-abstract-" + i + ".xml.gz").toFile(), i);
             }
             catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new IllegalStateException(e);
             }
         });
     }
@@ -60,7 +60,7 @@ public class CreateSamplesZipFile {
             }
         }
         catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 

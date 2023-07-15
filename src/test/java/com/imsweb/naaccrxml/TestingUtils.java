@@ -31,7 +31,7 @@ public class TestingUtils {
     public static File getBuildDirectory() {
         File file = new File(getWorkingDirectory() + "/build");
         if (!file.exists() && !file.mkdir())
-            throw new RuntimeException("Unable to create build folder");
+            throw new IllegalStateException("Unable to create build folder");
         return file;
     }
 
@@ -77,7 +77,7 @@ public class TestingUtils {
     public static File getDataFile(String name) {
         File file = new File(getWorkingDirectory() + "/src/test/resources/data/" + name);
         if (!file.exists())
-            throw new RuntimeException("Unable to find testing data file " + file.getPath());
+            throw new IllegalStateException("Unable to find testing data file " + file.getPath());
         return file;
     }
 

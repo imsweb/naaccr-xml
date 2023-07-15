@@ -4,14 +4,13 @@
 package com.imsweb.naaccrxml;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,26 +79,27 @@ public final class BatchProcessor {
     /**
      * Main method, entry point.
      */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void main(String[] args) throws IOException, InterruptedException {
 
         // read the options
         Properties opt = readOptions(args);
         if (opt == null)
-            throw new RuntimeException("Unable to find options file path, it must be provided as an argument to the call.");
+            throw new IllegalStateException("Unable to find options file path, it must be provided as an argument to the call.");
 
         // validate the options
         if (opt.getProperty(_OPTION_INPUT_FOLDER) == null || opt.getProperty(_OPTION_INPUT_FOLDER).isEmpty())
-            throw new RuntimeException("Option " + _OPTION_INPUT_FOLDER + " is required.");
+            throw new IllegalStateException("Option " + _OPTION_INPUT_FOLDER + " is required.");
         File inputDir = new File(opt.getProperty(_OPTION_INPUT_FOLDER));
         if (!inputDir.exists())
-            throw new RuntimeException("Invalid input folder.");
+            throw new IllegalStateException("Invalid input folder.");
         Pattern incRegex = opt.getProperty(_OPTION_INPUT_REGEX_INCLUDE) == null ? null : Pattern.compile(opt.getProperty(_OPTION_INPUT_REGEX_INCLUDE));
         Pattern excRegex = opt.getProperty(_OPTION_INPUT_REGEX_EXCLUDE) == null ? null : Pattern.compile(opt.getProperty(_OPTION_INPUT_REGEX_EXCLUDE));
         String mode = opt.getProperty(_OPTION_PROCESSING_MODE);
         if (mode == null)
-            throw new RuntimeException("Option " + _OPTION_PROCESSING_MODE + " is required.");
+            throw new IllegalStateException("Option " + _OPTION_PROCESSING_MODE + " is required.");
         if (!"flat-to-xml".equals(mode) && !"xml-to-flat".equals(mode))
-            throw new RuntimeException("Invalid mode (must be flat-to-xml or xml-to-flat).");
+            throw new IllegalStateException("Invalid mode (must be flat-to-xml or xml-to-flat).");
         String rawErrorCodes = opt.getProperty(_OPTION_PROCESSING_ERROR_CODES);
         List<String> errorCodes = null;
         if (rawErrorCodes != null && !rawErrorCodes.isEmpty()) {
@@ -111,17 +111,17 @@ public final class BatchProcessor {
         if (opt.getProperty(_OPTION_PROCESSING_NUM_THREADS) != null && !opt.getProperty(_OPTION_PROCESSING_NUM_THREADS).isEmpty())
             numThreads = Integer.parseInt(opt.getProperty(_OPTION_PROCESSING_NUM_THREADS));
         if (opt.getProperty(_OPTION_OUTPUT_FOLDER) == null || opt.getProperty(_OPTION_OUTPUT_FOLDER).isEmpty())
-            throw new RuntimeException("Option " + _OPTION_OUTPUT_FOLDER + " is required.");
+            throw new IllegalStateException("Option " + _OPTION_OUTPUT_FOLDER + " is required.");
         String compression = opt.getProperty(_OPTION_PROCESSING_COMPRESSION);
         if (compression != null && !compression.equals("gz") && !compression.equals("xz") && !compression.equals("none") && !compression.equals("as-input"))
-            throw new RuntimeException("Invalid compression (must be gz, xz, none, or as-input).");
+            throw new IllegalStateException("Invalid compression (must be gz, xz, none, or as-input).");
         File outputDir = new File(opt.getProperty(_OPTION_OUTPUT_FOLDER));
         if (!outputDir.exists())
-            throw new RuntimeException("Invalid outupt folder.");
-        boolean cleanCreatedFiles = opt.getProperty(_OPTION_OUTPUT_CLEAN_CREATED_FILES) == null ? false : Boolean.valueOf(opt.getProperty(_OPTION_OUTPUT_CLEAN_CREATED_FILES));
-        boolean createReport = opt.getProperty(_OPTION_OUTPUT_CREATE_REPORT) == null ? false : Boolean.valueOf(opt.getProperty(_OPTION_OUTPUT_CREATE_REPORT));
+            throw new IllegalStateException("Invalid outupt folder.");
+        boolean cleanCreatedFiles = opt.getProperty(_OPTION_OUTPUT_CLEAN_CREATED_FILES) != null && Boolean.parseBoolean(opt.getProperty(_OPTION_OUTPUT_CLEAN_CREATED_FILES));
+        boolean createReport = opt.getProperty(_OPTION_OUTPUT_CREATE_REPORT) != null && Boolean.parseBoolean(opt.getProperty(_OPTION_OUTPUT_CREATE_REPORT));
         String reportName = opt.getProperty(_OPTION_OUTPUT_REPORT_NAME) == null ? "report.txt" : opt.getProperty(_OPTION_OUTPUT_REPORT_NAME);
-        boolean deidentify = opt.getProperty(_OPTION_OUTPUT_DEIDENTIFY_FILES) == null ? false : Boolean.valueOf(opt.getProperty(_OPTION_OUTPUT_DEIDENTIFY_FILES));
+        boolean deidentify = opt.getProperty(_OPTION_OUTPUT_DEIDENTIFY_FILES) != null && Boolean.parseBoolean(opt.getProperty(_OPTION_OUTPUT_DEIDENTIFY_FILES));
 
         // gather the files to process
         List<File> toProcess = new ArrayList<>();
@@ -156,7 +156,7 @@ public final class BatchProcessor {
             @SuppressWarnings("ConstantConditions")
             File outputFile = new File(outputDir, outputFilename);
             if (inputFile.equals(outputFile))
-                throw new RuntimeException("Was about to write output file into the input file, this can't be good!");
+                throw new IllegalStateException("Was about to write output file into the input file, this can't be good!");
             if (cleanCreatedFiles)
                 outputFile.deleteOnExit();
             List<String> data = new ArrayList<>();
@@ -170,42 +170,42 @@ public final class BatchProcessor {
 
         // write the report
         if (createReport) {
-            Writer reportWriter = new OutputStreamWriter(new FileOutputStream(new File(outputDir, reportName)), StandardCharsets.UTF_8);
+            try (Writer reportWriter = new OutputStreamWriter(Files.newOutputStream(new File(outputDir, reportName).toPath()), StandardCharsets.UTF_8);) {
 
-            reportWriter.write("Report created on " + new Date() + "\n\n");
-            reportWriter.write("total number of files: " + formatNumber(toProcess.size()) + "\n");
-            reportWriter.write("total processing time: " + formatTime(System.currentTimeMillis() - start) + "\n");
-            reportWriter.write("total number of processed tumors: " + formatNumber(globalTumorCount.get()) + "\n");
-            reportWriter.write("combined warnings:\n");
+                reportWriter.write("Report created on " + new Date() + "\n\n");
+                reportWriter.write("total number of files: " + formatNumber(toProcess.size()) + "\n");
+                reportWriter.write("total processing time: " + formatTime(System.currentTimeMillis() - start) + "\n");
+                reportWriter.write("total number of processed tumors: " + formatNumber(globalTumorCount.get()) + "\n");
+                reportWriter.write("combined warnings:\n");
 
-            int globalCount = 0;
-            for (String code : NaaccrErrorUtils.getAllValidationErrors().keySet()) {
-                if (errorCodes != null && !errorCodes.contains(code))
-                    continue;
-                int count = globalCounts.containsKey(code) ? globalCounts.get(code).get() : 0;
-                if (count > 0) {
-                    reportWriter.write("      " + code + ": " + formatNumber(count) + " cases\n");
-                    if (globalDetails.containsKey(code)) {
-                        List<String> list = new ArrayList<>(globalDetails.get(code));
-                        Collections.sort(list);
-                        reportWriter.write("         involved item(s): " + list.size() + " " + list + "\n");
+                int globalCount = 0;
+                for (String code : NaaccrErrorUtils.getAllValidationErrors().keySet()) {
+                    if (errorCodes != null && !errorCodes.contains(code))
+                        continue;
+                    int count = globalCounts.containsKey(code) ? globalCounts.get(code).get() : 0;
+                    if (count > 0) {
+                        reportWriter.write("      " + code + ": " + formatNumber(count) + " cases\n");
+                        if (globalDetails.containsKey(code)) {
+                            List<String> list = new ArrayList<>(globalDetails.get(code));
+                            Collections.sort(list);
+                            reportWriter.write("         involved item(s): " + list.size() + " " + list + "\n");
+                        }
+                    }
+                    globalCount += count;
+                }
+                if (globalCount == 0)
+                    reportWriter.write("      no warning found\n");
+
+                for (Entry<String, List<String>> entry : reportData.entrySet()) {
+                    reportWriter.write("\n\n");
+                    reportWriter.write(deidentify ? "<de-identified file name>" : entry.getKey());
+                    reportWriter.write("\n");
+                    for (String line : entry.getValue()) {
+                        reportWriter.write(line);
+                        reportWriter.write("\n");
                     }
                 }
-                globalCount += count;
             }
-            if (globalCount == 0)
-                reportWriter.write("      no warning found\n");
-
-            for (Entry<String, List<String>> entry : reportData.entrySet()) {
-                reportWriter.write("\n\n");
-                reportWriter.write(deidentify ? "<de-identified file name>" : entry.getKey());
-                reportWriter.write("\n");
-                for (String line : entry.getValue()) {
-                    reportWriter.write(line);
-                    reportWriter.write("\n");
-                }
-            }
-            reportWriter.close();
         }
     }
 
@@ -214,7 +214,7 @@ public final class BatchProcessor {
         if (args.length != 0) {
             File file = new File(args[0]);
             if (file.exists()) {
-                try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+                try (Reader reader = new InputStreamReader(Files.newInputStream(file.toPath()), StandardCharsets.UTF_8)) {
                     opt = new Properties();
                     opt.load(reader);
                 }
@@ -268,16 +268,18 @@ public final class BatchProcessor {
         return new File(file.getParentFile(), newName).getName();
     }
 
+    @SuppressWarnings("java:S4042")
     private static final class FileProcessor implements Runnable {
 
-        private File _inputFile;
-        private File _outputFile;
-        private List<String> _reportData;
-        private boolean _deleteOutputFiles, _flatToXml;
-        private Map<String, AtomicInteger> _globalCounts;
-        private Map<String, Set<String>> _globalDetails;
-        private AtomicInteger _globalTumorCount;
-        private List<String> _errorCodes;
+        private final File _inputFile;
+        private final File _outputFile;
+        private final List<String> _reportData;
+        private final boolean _deleteOutputFiles;
+        private final boolean _flatToXml;
+        private final Map<String, AtomicInteger> _globalCounts;
+        private final Map<String, Set<String>> _globalDetails;
+        private final AtomicInteger _globalTumorCount;
+        private final List<String> _errorCodes;
 
         public FileProcessor(File inputFile, File outputFile, List<String> reportData, boolean deleteOutputFiles, boolean flatToXml, Map<String, AtomicInteger> globalCounts, Map<String, Set<String>> globalDetails, AtomicInteger globalTumorCount, List<String> errorCodes) {
             _inputFile = inputFile;
@@ -292,7 +294,6 @@ public final class BatchProcessor {
         }
 
         @Override
-        @SuppressWarnings("ResultOfMethodCallIgnored")
         public void run() {
 
             Map<String, AtomicInteger> warningCounts = new HashMap<>();
@@ -341,15 +342,18 @@ public final class BatchProcessor {
 
             if (_deleteOutputFiles)
                 if (!_outputFile.delete())
-                    System.err.println("Unable to delete " + _outputFile.getPath());
+                    _reportData.add("Unable to delete " + _outputFile.getPath());
         }
     }
 
     private static final class FileObserver implements NaaccrObserver {
 
-        private Map<String, AtomicInteger> _warningCounts, _globalCounts;
-        private Map<String, Set<String>> _warningDetails, _globalDetails;
-        private AtomicInteger _tumorCount, _globalTumorCount;
+        private final Map<String, AtomicInteger> _warningCounts;
+        private final Map<String, AtomicInteger> _globalCounts;
+        private final Map<String, Set<String>> _warningDetails;
+        private final Map<String, Set<String>> _globalDetails;
+        private final AtomicInteger _tumorCount;
+        private final AtomicInteger _globalTumorCount;
 
         public FileObserver(Map<String, AtomicInteger> warningCounts, Map<String, Set<String>> warningDetails, AtomicInteger tumorCount, Map<String, AtomicInteger> globalCounts, Map<String, Set<String>> globalDetails, AtomicInteger globalTumorCount) {
             _warningCounts = warningCounts;

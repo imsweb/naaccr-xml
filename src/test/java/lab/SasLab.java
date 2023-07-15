@@ -249,7 +249,7 @@ public class SasLab {
             case NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR:
                 return "/NaaccrData/Patient/Tumor/Item[@naaccrId=\"" + item.getNaaccrId() + "\"]";
             default:
-                throw new RuntimeException("Unsupported parent XML element: " + item.getParentXmlElement());
+                throw new IllegalStateException("Unsupported parent XML element: " + item.getParentXmlElement());
         }
     }
 

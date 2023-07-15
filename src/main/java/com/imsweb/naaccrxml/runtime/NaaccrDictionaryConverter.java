@@ -168,7 +168,7 @@ public class NaaccrDictionaryConverter implements Converter {
                     reader.moveDown();
 
                     if (!"GroupedItemDef".equals(reader.getNodeName()))
-                        throw new RuntimeException("Expected 'GroupedItemDef' element, got " + reader.getNodeName());
+                        throw new IllegalStateException("Expected 'GroupedItemDef' element, got " + reader.getNodeName());
 
                     NaaccrDictionaryGroupedItem item = new NaaccrDictionaryGroupedItem();
                     readItem(reader, item);

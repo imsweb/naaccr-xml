@@ -55,7 +55,7 @@ public class NaaccrContext {
      */
     public NaaccrContext(String format, List<NaaccrDictionary> userDictionaries, NaaccrOptions options) {
         if (format == null)
-            throw new RuntimeException("Format cannot be null; see constants in NaaccrFormat class");
+            throw new IllegalStateException("Format cannot be null; see constants in NaaccrFormat class");
         _format = format;
         _userDictionaries = userDictionaries;
         _options = options;
@@ -69,7 +69,7 @@ public class NaaccrContext {
             _streamConfiguration.setCachedDictionary(new RuntimeNaaccrDictionary(nf.getRecordType(), baseDictionary, userDictionaries));
         }
         catch (NaaccrIOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 

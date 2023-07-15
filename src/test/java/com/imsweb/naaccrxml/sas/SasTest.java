@@ -259,7 +259,7 @@ public class SasTest {
                     return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"), csvDictionaryFiles);
                 }
                 catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
+                    throw new IllegalStateException(e);
                 }
             }
 
@@ -269,7 +269,7 @@ public class SasTest {
                     return SasUtils.getGroupedFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/grouped-items/naaccr-xml-grouped-items-" + naaccrVersion + ".csv"));
                 }
                 catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
+                    throw new IllegalStateException(e);
                 }
             }
         };
@@ -288,7 +288,7 @@ public class SasTest {
                     return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"), csvDictionaryFiles);
                 }
                 catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
+                    throw new IllegalStateException(e);
                 }
             }
 

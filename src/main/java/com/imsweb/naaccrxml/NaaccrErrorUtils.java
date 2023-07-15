@@ -50,7 +50,7 @@ public class NaaccrErrorUtils {
      */
     public static String getValidationError(String code, Object... msgValues) {
         if (!_MESSAGES.containsKey(code))
-            throw new RuntimeException("Unknown code: " + code);
+            throw new IllegalStateException("Unknown code: " + code);
         return fillMessage(_MESSAGES.get(code), msgValues);
     }
 
