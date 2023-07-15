@@ -27,14 +27,18 @@ import java.util.zip.ZipInputStream;
  * <br/><br/>
  * THIS CLASS IS IMPLEMENTED TO BE COMPATIBLE WITH JAVA 7; BE CAREFUL WHEN MODIFYING IT.
  */
-@SuppressWarnings("ALL")
+@SuppressWarnings({"ALL", "java:S2093", "java:S2095", "java:S4042"})
 public class SasXmlToCsv {
 
-    private File _xmlFile, _csvFile;
+    private File _xmlFile;
+
+    private File _csvFile;
 
     private List<File> _dictionaryFiles;
 
-    private String _naaccrVersion, _recordType;
+    private String _naaccrVersion;
+
+    private String _recordType;
 
     private boolean _includeGroupedItems;
 
@@ -210,7 +214,7 @@ public class SasXmlToCsv {
                         ZipEntry entry = zipIs.getNextEntry();
                         while (entry != null) {
                             SasXmlReader reader = new SasXmlReader(SasUtils.createReader(zipFile.getInputStream(entry), entry.getName()));
-                            convertSingleFile(reader, writer, addExtraCharFields, fieldsToWrite, allFields);
+                            convertSingleFile(reader, writer, fieldsToWrite, allFields);
                             entry = zipIs.getNextEntry();
                         }
                     }
@@ -225,7 +229,7 @@ public class SasXmlToCsv {
                     SasXmlReader reader = null;
                     try {
                         reader = new SasXmlReader(SasUtils.createReader(_xmlFile));
-                        convertSingleFile(reader, writer, addExtraCharFields, fieldsToWrite, allFields);
+                        convertSingleFile(reader, writer, fieldsToWrite, allFields);
                     }
                     finally {
                         if (reader != null)
@@ -250,7 +254,7 @@ public class SasXmlToCsv {
         SasUtils.logInfo("Successfully created target CSV with " + numCsvFields + " column" + (numCsvFields > 1 ? "s" : ""));
     }
 
-    private void convertSingleFile(SasXmlReader reader, BufferedWriter writer, boolean addExtraCharFields, Map<String, SasFieldInfo> fieldsToWrite, Map<String, SasFieldInfo> allFields) throws IOException {
+    private void convertSingleFile(SasXmlReader reader, BufferedWriter writer, Map<String, SasFieldInfo> fieldsToWrite, Map<String, SasFieldInfo> allFields) throws IOException {
         Pattern quotePattern = Pattern.compile("\"", Pattern.LITERAL);
         StringBuilder buf = new StringBuilder();
         while (reader.nextRecord() > 0) {

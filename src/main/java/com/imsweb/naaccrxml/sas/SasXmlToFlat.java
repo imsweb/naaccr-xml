@@ -26,7 +26,7 @@ import java.util.zip.ZipInputStream;
  * <br/><br/>
  * THIS CLASS IS IMPLEMENTED TO BE COMPATIBLE WITH JAVA 7; BE CAREFUL WHEN MODIFYING IT.
  */
-@SuppressWarnings("ALL")
+@SuppressWarnings({"ALL", "java:S2093", "java:S2095", "java:S4042"})
 public class SasXmlToFlat {
 
     // the source XML file

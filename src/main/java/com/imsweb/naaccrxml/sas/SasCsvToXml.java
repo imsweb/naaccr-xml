@@ -23,14 +23,18 @@ import java.util.Set;
  * <br/><br/>
  * THIS CLASS IS IMPLEMENTED TO BE COMPATIBLE WITH JAVA 7; BE CAREFUL WHEN MODIFYING IT.
  */
-@SuppressWarnings("ALL")
+@SuppressWarnings({"ALL", "java:S2093", "java:S2095", "java:S4042"})
 public class SasCsvToXml {
 
-    private File _csvFile, _xmlFile;
+    private File _csvFile;
+
+    private File _xmlFile;
 
     private List<File> _dictionaryFiles;
 
-    private String _naaccrVersion, _recordType;
+    private String _naaccrVersion;
+
+    private String _recordType;
 
     private String _dictionaryUris;
 
@@ -158,7 +162,8 @@ public class SasCsvToXml {
 
     public void convert(String fields, List<SasFieldInfo> availableFields) throws IOException {
         SasUtils.logInfo("Starting converting CSV to XML" + (!_groupTumors ? " (tumor grouping disabled) " : "") + "...");
-        int numXmlFields = -1, numCsvFields = -1;
+        int numXmlFields = -1;
+        int numCsvFields = -1;
         List<String> unusedCsvField = null;
         try {
             Set<String> requestedFieldIds = SasUtils.extractRequestedFields(fields, availableFields);
@@ -167,7 +172,9 @@ public class SasCsvToXml {
             for (SasFieldInfo info : availableFields)
                 itemNumbers.put(info.getNaaccrId(), info.getNum().toString());
 
-            Map<String, String> rootFields = new HashMap<>(), patientFields = new HashMap<>(), tumorFields = new HashMap<>();
+            Map<String, String> rootFields = new HashMap<>();
+            Map<String, String> patientFields = new HashMap<>();
+            Map<String, String> tumorFields = new HashMap<>();
             for (SasFieldInfo field : availableFields) {
                 if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId())) {
                     if ("NaaccrData".equals(field.getParentTag()))

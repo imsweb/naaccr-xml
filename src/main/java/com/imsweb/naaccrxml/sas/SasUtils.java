@@ -32,8 +32,12 @@ import java.util.zip.GZIPOutputStream;
  * <br/><br/>
  * THIS CLASS IS IMPLEMENTED TO BE COMPATIBLE WITH JAVA 7; BE CAREFUL WHEN MODIFYING IT.
  */
-@SuppressWarnings("ALL")
-public class SasUtils {
+@SuppressWarnings({"ALL", "java:S106", "java:S2093", "java:S2095", "java:S2677"})
+public final class SasUtils {
+
+    private SasUtils() {
+        // empty
+    }
 
     private static final Map<String, String> _TO_ESCAPE = new LinkedHashMap<>();
 
@@ -58,7 +62,7 @@ public class SasUtils {
      * Prints the given message to the standard error output.
      */
     public static void logError(String msg) {
-        System.err.println("[JAVA SAS LIBRARY] - ERROR - " + msg);
+        System.err.println("[JAVA SAS LIBRARY] !!! ERROR !!! " + msg);
     }
 
     /**
@@ -141,7 +145,7 @@ public class SasUtils {
     public static List<SasFieldInfo> getFields(String version, String recordType, List<File> dictionaries) {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-xml-items-" + version + ".csv");
         if (is == null)
-            throw new RuntimeException("Unable to get standard CSV dictionary for version " + version);
+            throw new IllegalStateException("Unable to get standard CSV dictionary for version " + version);
         return getFields(recordType, is, dictionaries);
     }
 
@@ -167,7 +171,7 @@ public class SasUtils {
                     result.addAll(readCsvDictionary(recordType, dictIs, counters));
                 }
                 catch (IOException e) {
-                    throw new RuntimeException(e);
+                    throw new IllegalStateException(e);
                 }
                 finally {
                     if (dictIs != null) {
@@ -197,7 +201,7 @@ public class SasUtils {
             return new ArrayList<>();
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-xml-grouped-items-" + version + ".csv");
         if (is == null)
-            throw new RuntimeException("Unable to get grouped items CSV file for version " + version);
+            throw new IllegalStateException("Unable to get grouped items CSV file for version " + version);
         return getGroupedFields(recordType, is);
     }
 
@@ -271,7 +275,7 @@ public class SasUtils {
             }
         }
         catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
         finally {
             if (reader != null) {
@@ -314,16 +318,14 @@ public class SasUtils {
             }
         }
         catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
         finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                }
-                catch (IOException e) {
-                    // ignored
-                }
+            try {
+                reader.close();
+            }
+            catch (IOException e) {
+                // ignored
             }
         }
 
@@ -333,8 +335,11 @@ public class SasUtils {
     public static List<String> parseCsvLine(int lineNumber, String line) throws IOException {
         List<String> result = new ArrayList<>();
 
-        char cQuote = '"', cDelimiter = ',';
-        int curIndex = 0, nextQuote, nextDelimiter;
+        char cQuote = '"';
+        char cDelimiter = ',';
+        int curIndex = 0;
+        int nextQuote;
+        int nextDelimiter;
 
         StringBuilder buf = new StringBuilder();
         buf.append(cQuote);
@@ -474,7 +479,7 @@ public class SasUtils {
                 }
             }
             catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new IllegalStateException(e);
             }
             finally {
                 if (reader != null) {
