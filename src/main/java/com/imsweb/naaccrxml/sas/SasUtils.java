@@ -32,7 +32,7 @@ import java.util.zip.GZIPOutputStream;
  * <br/><br/>
  * THIS CLASS IS IMPLEMENTED TO BE COMPATIBLE WITH JAVA 7; BE CAREFUL WHEN MODIFYING IT.
  */
-@SuppressWarnings({"ALL", "java:S106", "java:S2093", "java:S2095", "java:S2677"})
+@SuppressWarnings({"ALL", "java:S106", "java:S2093", "java:S2095", "java:S2589", "java:S2677"})
 public final class SasUtils {
 
     private SasUtils() {
@@ -321,11 +321,13 @@ public final class SasUtils {
             throw new IllegalStateException(e);
         }
         finally {
-            try {
-                reader.close();
-            }
-            catch (IOException e) {
-                // ignored
+            if (reader != null) {
+                try {
+                    reader.close();
+                }
+                catch (IOException e) {
+                    // ignored
+                }
             }
         }
 
