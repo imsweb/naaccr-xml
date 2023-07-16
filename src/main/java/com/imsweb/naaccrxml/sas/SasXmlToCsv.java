@@ -209,12 +209,15 @@ public class SasXmlToCsv {
                     ZipFile zipFile = null;
                     ZipInputStream zipIs = null;
                     try {
+                        int zipCount = 0;
                         zipFile = new ZipFile(_xmlFile);
                         zipIs = new ZipInputStream(new FileInputStream(_xmlFile));
                         ZipEntry entry = zipIs.getNextEntry();
                         while (entry != null) {
                             SasXmlReader reader = new SasXmlReader(SasUtils.createReader(zipFile.getInputStream(entry), entry.getName()));
                             convertSingleFile(reader, writer, fieldsToWrite, allFields);
+                            if (++zipCount > 10000)
+                                throw new IllegalStateException("Too many entries in ZIP file!");
                             entry = zipIs.getNextEntry();
                         }
                     }

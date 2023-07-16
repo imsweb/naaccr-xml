@@ -176,6 +176,7 @@ public class NaaccrXmlUtilsTest {
         // write the entire file at once
         File file = new File(TestingUtils.getWorkingDirectory() + "/build/test-writing-1.xml");
         NaaccrXmlUtils.writeXmlFile(data, file, null, null, null);
+        Assert.assertTrue(file.exists());
 
         // write the file using a steam
         file = new File(TestingUtils.getWorkingDirectory() + "/build/test-writing-2.xml");
@@ -183,6 +184,7 @@ public class NaaccrXmlUtilsTest {
             for (Patient patient : data.getPatients())
                 writer.writePatient(patient);
         }
+        Assert.assertTrue(file.exists());
     }
 
     @Test

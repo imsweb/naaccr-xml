@@ -440,6 +440,7 @@ public class PatientXmlWriterTest {
                 }
             }
         }
+        Assert.assertTrue(file.exists());
     }
 
     @Test
