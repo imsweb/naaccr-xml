@@ -152,6 +152,7 @@ public class SasXmlToCsv {
         convert(fields, addExtraCharFields, getFields());
     }
 
+    @SuppressWarnings("java:S5042") // expanding ZIP
     public void convert(String fields, boolean addExtraCharFields, List<SasFieldInfo> availableFields) throws IOException {
         SasUtils.logInfo("Starting converting XML to CSV...");
         int numCsvFields = -1;

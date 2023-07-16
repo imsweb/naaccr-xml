@@ -222,6 +222,7 @@ public class SasXmlToFlat {
     /**
      * Creates the target temp flat file from the source XML file based on the parmaters set on the object.
      */
+    @SuppressWarnings("java:S5042") // expanding ZIP
     public void convert(String fields, List<SasFieldInfo> availableFields) throws IOException {
         try {
             Set<String> requestedFieldIds = SasUtils.extractRequestedFields(fields, availableFields);
