@@ -37,6 +37,7 @@ import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 
+@SuppressWarnings("unused")
 public class NaaccrStreamConfiguration {
 
     // the parser used for reading operations
@@ -101,7 +102,7 @@ public class NaaccrStreamConfiguration {
             return XmlPullParserFactory.newInstance().newPullParser();
         }
         catch (XmlPullParserException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 

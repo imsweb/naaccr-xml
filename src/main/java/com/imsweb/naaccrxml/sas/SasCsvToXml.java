@@ -279,11 +279,9 @@ public class SasCsvToXml {
             }
         }
         catch (IOException e) {
-            e.printStackTrace();
             throw e;
         }
         catch (RuntimeException e) {
-            e.printStackTrace();
             throw new IOException(e);
         }
 

@@ -42,8 +42,11 @@ public class PatientFlatWriter implements PatientWriter {
     // the runtime dictionary (combination of base and user-defined dictionaries)
     protected RuntimeNaaccrDictionary _dictionary;
 
-    // cached special data items
-    protected RuntimeNaaccrDictionaryItem _naaccrVersionItem, _recordTypeItem;
+    // cached special data item
+    protected RuntimeNaaccrDictionaryItem _naaccrVersionItem;
+
+    // cached special data item
+    protected RuntimeNaaccrDictionaryItem _recordTypeItem;
 
     // cached value for new line character(s)
     protected String _newLine;
@@ -122,7 +125,12 @@ public class PatientFlatWriter implements PatientWriter {
         _writer = new BufferedWriter(writer);
         _rootData = data;
         _options = options == null ? new NaaccrOptions() : options;
-        _newLine = NEW_LINE_LF.equals(_options.getNewLine()) ? "\n" : NEW_LINE_CRLF.equals(_options.getNewLine()) ? "\r\n" : System.getProperty("line.separator");
+        if (NEW_LINE_LF.equals(_options.getNewLine()))
+            _newLine = "\n";
+        else if (NEW_LINE_CRLF.equals(_options.getNewLine()))
+            _newLine = "\r\n";
+        else
+            _newLine = System.getProperty("line.separator");
 
         // there should be better validation here...
 

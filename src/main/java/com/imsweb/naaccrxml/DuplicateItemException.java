@@ -8,11 +8,7 @@ package com.imsweb.naaccrxml;
  */
 public class DuplicateItemException extends RuntimeException {
 
-    // the duplicate item ID
-    private String _itemId;
-
-    // the full exception message
-    private String _message;
+    private final String _itemId;
 
     /**
      * Constructor.

@@ -30,14 +30,23 @@ public class SasXmlReader {
 
     private final BufferedReader _reader;
 
-    private boolean _inPatient, _inTumor, _inCdata;
+    private boolean _inPatient;
 
-    private final Map<String, String> _naaccrDataValues = new HashMap<>(), _patientValues = new HashMap<>(), _tumorValues = new HashMap<>();
+    private boolean _inTumor;
+
+    private boolean _inCdata;
+
+    private final Map<String, String> _naaccrDataValues = new HashMap<>();
+
+    private final Map<String, String> _patientValues = new HashMap<>();
+
+    private final Map<String, String> _tumorValues = new HashMap<>();
 
     public SasXmlReader(BufferedReader reader) {
         _reader = reader;
     }
 
+    @SuppressWarnings("java:S3776") // code too complex
     public int nextRecord() throws IOException {
         _tumorValues.clear();
 

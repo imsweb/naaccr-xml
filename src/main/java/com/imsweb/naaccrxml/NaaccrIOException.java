@@ -5,6 +5,7 @@ package com.imsweb.naaccrxml;
 
 import java.io.IOException;
 
+@SuppressWarnings("java:S1165")
 public class NaaccrIOException extends IOException {
 
     protected Integer _lineNumber;

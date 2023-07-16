@@ -6,8 +6,6 @@ package com.imsweb.naaccrxml;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,6 +13,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -338,7 +337,7 @@ public final class NaaccrXmlDictionaryUtils {
             throw new IOException("File is required to load dictionary.");
         if (!file.exists())
             throw new IOException("File must exist to load dictionary.");
-        try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+        try (Reader reader = new InputStreamReader(Files.newInputStream(file.toPath()), StandardCharsets.UTF_8)) {
             return readDictionary(reader);
         }
     }
@@ -410,7 +409,7 @@ public final class NaaccrXmlDictionaryUtils {
      * @throws IOException if the dictionary could not be written
      */
     public static void writeDictionary(NaaccrDictionary dictionary, File file, List<String> comment) throws IOException {
-        try (Writer writer = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
+        try (Writer writer = new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8)) {
             writeDictionary(dictionary, writer, comment);
         }
     }
@@ -503,6 +502,7 @@ public final class NaaccrXmlDictionaryUtils {
      * @param isBaseDictionary true if the dictionary is a base dictionary, false otherwise
      * @return list of errors, empty if valid
      */
+    @SuppressWarnings("java:S3776") // code too complex
     private static List<String> validateDictionary(NaaccrDictionary dictionary, boolean isBaseDictionary, String naaccrVersion) {
         List<String> errors = new ArrayList<>();
 
@@ -950,7 +950,7 @@ public final class NaaccrXmlDictionaryUtils {
      * @param file target CSV file
      */
     public static void writeDictionaryToCsv(NaaccrDictionary dictionary, File file) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.US_ASCII))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.US_ASCII))) {
             writeDictionaryToCsv(dictionary, writer);
         }
     }

@@ -253,7 +253,7 @@ public class PatientFlatReader implements PatientReader {
             tumor.setEndLineNumber(lineNumber); // for flat, start and end are the same
             for (RuntimeNaaccrDictionaryItem def : _dictionary.getItems()) {
                 if (NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(def.getParentXmlElement())) {
-                    if (_options.getReportLevelMismatch()) {
+                    if (Boolean.TRUE.equals(_options.getReportLevelMismatch()) ){
                         Item currentTumorItem = createItemFromLine(null, line, lineNumber, def);
                         String rootValue = _rootData.getItemValue(def.getNaaccrId());
                         String tumorValue = currentTumorItem == null ? null : currentTumorItem.getValue();
@@ -265,7 +265,7 @@ public class PatientFlatReader implements PatientReader {
                 else if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(def.getParentXmlElement())) {
                     if (i == 0)
                         addItemFromLine(patient, line, lineNumber, def);
-                    else if (_options.getReportLevelMismatch()) {
+                    else if (Boolean.TRUE.equals(_options.getReportLevelMismatch())) {
                         Item currentTumorItem = createItemFromLine(null, line, lineNumber, def);
                         String patValue = patient.getItemValue(def.getNaaccrId());
                         String tumorValue = currentTumorItem == null ? null : currentTumorItem.getValue();
@@ -316,7 +316,7 @@ public class PatientFlatReader implements PatientReader {
                 if (entity != null) {
                     if (item.getValue().length() > def.getLength())
                         reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_LONG, def.getLength(), item.getValue().length());
-                    if (_options.getValidateReadValues()) {
+                    if (Boolean.TRUE.equals(_options.getValidateReadValues())) {
                         if (NaaccrXmlDictionaryUtils.isFullLengthRequiredForType(def.getDataType()) && item.getValue().length() < def.getLength())
                             reportError(entity, lineNumber, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_SHORT, def.getLength(), item.getValue().length());
                         else if (def.getDataType() != null) {

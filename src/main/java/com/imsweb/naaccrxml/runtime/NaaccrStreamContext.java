@@ -59,7 +59,8 @@ public class NaaccrStreamContext {
             throw new NaaccrIOException("missing tag");
         int idx = tag.indexOf(':');
         if (idx != -1) {
-            String namespace = tag.substring(0, idx), cleanTag = tag.substring(idx + 1);
+            String namespace = tag.substring(0, idx);
+            String cleanTag = tag.substring(idx + 1);
             // check for the namespace only if the tag is a default one (Patient, Tumor, etc...) or if extensions are enabled
             if (_configuration.getAllowedTagsForNamespacePrefix(null).contains(cleanTag) || !Boolean.TRUE.equals(_options.getIgnoreExtensions())) {
                 Set<String> allowedTags = _configuration.getAllowedTagsForNamespacePrefix(namespace);

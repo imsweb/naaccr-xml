@@ -116,6 +116,7 @@ public class PatientXmlWriter implements PatientWriter {
      * @param conf optional stream configuration
      * @throws NaaccrIOException if anything goes wrong
      */
+    @SuppressWarnings("java:S1141") // embedded try block
     public PatientXmlWriter(Writer writer, NaaccrData rootData, NaaccrOptions options, List<NaaccrDictionary> userDictionaries, NaaccrStreamConfiguration conf) throws NaaccrIOException {
 
         try {
@@ -128,7 +129,12 @@ public class PatientXmlWriter implements PatientWriter {
                 conf = NaaccrStreamConfiguration.getDefault();
 
             // compute the end-of-line character(s)
-            _newLine = NEW_LINE_LF.equals(options.getNewLine()) ? "\n" : NEW_LINE_CRLF.equals(options.getNewLine()) ? "\r\n" : System.lineSeparator();
+            if (NEW_LINE_LF.equals(options.getNewLine()))
+                _newLine = "\n";
+            else if (NEW_LINE_CRLF.equals(options.getNewLine()))
+                _newLine = "\r\n";
+            else
+                _newLine = System.getProperty("line.separator");
 
             // need to expose xstream so the other methods can use it...
             _xstream = conf.getXstream();

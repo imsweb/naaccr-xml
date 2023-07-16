@@ -10,7 +10,11 @@ import java.util.Map;
 /**
  * The purpose of this class is to centralize the error messages.
  */
-public class NaaccrErrorUtils {
+public final class NaaccrErrorUtils {
+
+    private NaaccrErrorUtils() {
+        // utility class
+    }
 
     // the possible validation errors
     public static final String CODE_BAD_LINE_LENGTH = "Invalid line length";

@@ -101,7 +101,8 @@ public class NaaccrPatientConverter implements Converter {
 
             Patient patient = new Patient();
             patient.setStartLineNumber(_context.getLineNumber());
-            int patItemCount = 0, tumorCount = 0;
+            int patItemCount = 0;
+            int tumorCount = 0;
             boolean seenPatientExtension = false;
             Set<String> itemsAlreadySeen = new HashSet<>();
             List<Item> itemsToMoveFromPatToTumor = new ArrayList<>();
@@ -216,7 +217,7 @@ public class NaaccrPatientConverter implements Converter {
         // write the item
         writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_ITEM);
         writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_ID, itemDef != null ? itemDef.getNaaccrId() : item.getNaaccrId());
-        if (itemDef != null && itemDef.getNaaccrNum() != null && _context.getOptions().getWriteItemNumber())
+        if (itemDef != null && itemDef.getNaaccrNum() != null && Boolean.TRUE.equals(_context.getOptions().getWriteItemNumber()))
             writer.addAttribute(NaaccrXmlUtils.NAACCR_XML_ITEM_ATT_NUM, itemDef.getNaaccrNum().toString());
 
         // first, let's remove any CR, we only want to use LF for new lines (because this library generates "&#xd;" for CR, which is technically correct but causes a lot of confusion)
@@ -249,7 +250,7 @@ public class NaaccrPatientConverter implements Converter {
 
         // do we need to truncate the value?
         if (itemDef != null && itemDef.getLength() != null && value.length() > itemDef.getLength() && !Boolean.TRUE.equals(itemDef.getAllowUnlimitedText())) {
-            if (_context.getOptions().getReportValuesTooLong())
+            if (Boolean.TRUE.equals(_context.getOptions().getReportValuesTooLong()))
                 reportError(item, null, null, itemDef, value, NaaccrErrorUtils.CODE_VAL_TOO_LONG, itemDef.getLength(), value.length());
             value = value.substring(0, itemDef.getLength());
         }
@@ -330,7 +331,7 @@ public class NaaccrPatientConverter implements Converter {
             if (item.getValue() != null) {
                 if (item.getValue().length() > def.getLength() && (!Boolean.TRUE.equals(def.getAllowUnlimitedText())))
                     reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_LONG, def.getLength(), item.getValue().length());
-                if (_context.getOptions().getValidateReadValues()) {
+                if (Boolean.TRUE.equals(_context.getOptions().getValidateReadValues())) {
                     if (NaaccrXmlDictionaryUtils.isFullLengthRequiredForType(def.getDataType()) && item.getValue().length() < def.getLength())
                         reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_VAL_TOO_SHORT, def.getLength(), item.getValue().length());
                     else if (def.getDataType() != null) {

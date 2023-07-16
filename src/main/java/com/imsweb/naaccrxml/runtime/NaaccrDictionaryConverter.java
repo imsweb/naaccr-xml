@@ -265,6 +265,6 @@ public class NaaccrDictionaryConverter implements Converter {
         if (!StringUtils.isBlank(value))
             throw new IllegalStateException("Invalid value for '" + attribute + "': " + value);
 
-        return null;
+        return Boolean.FALSE;
     }
 }

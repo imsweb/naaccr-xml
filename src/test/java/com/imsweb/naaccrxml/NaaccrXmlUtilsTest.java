@@ -248,6 +248,7 @@ public class NaaccrXmlUtilsTest {
     }
 
     @Test
+    @SuppressWarnings("resource")
     public void testGetFormatFromXmlFile() throws IOException {
 
         // regular file
@@ -339,6 +340,7 @@ public class NaaccrXmlUtilsTest {
         assertInvalidDateValue("2001-10-26T21:32:52+2:00");
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void assertValidDateValue(String dateValue) {
         try {
             ZonedDateTime.parse(dateValue, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
@@ -353,6 +355,7 @@ public class NaaccrXmlUtilsTest {
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void assertInvalidDateValue(String dateValue) {
         try {
             ZonedDateTime.parse(dateValue, DateTimeFormatter.ISO_OFFSET_DATE_TIME);

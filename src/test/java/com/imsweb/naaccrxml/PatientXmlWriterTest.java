@@ -27,6 +27,7 @@ import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
 
 public class PatientXmlWriterTest {
 
+    @SuppressWarnings("UnnecessaryUnicodeEscape")
     @Test
     public void testWriter() throws IOException {
 

@@ -123,6 +123,7 @@ public class PatientXmlReader implements PatientReader {
      * @param conf optional stream configuration
      * @throws NaaccrIOException if anything goes wrong
      */
+    @SuppressWarnings("java:S1141") // embedded try block
     public PatientXmlReader(Reader reader, NaaccrOptions options, List<NaaccrDictionary> userDictionaries, NaaccrStreamConfiguration conf) throws NaaccrIOException {
 
         try {
@@ -228,7 +229,8 @@ public class PatientXmlReader implements PatientReader {
             standardAttributes.add(NAACCR_XML_ROOT_ATT_REC_TYPE);
             standardAttributes.add(NAACCR_XML_ROOT_ATT_TIME_GENERATED);
             standardAttributes.add(NAACCR_XML_ROOT_ATT_SPEC_VERSION);
-            Map<String, String> attributeValues = new HashMap<>(), namespaces = new HashMap<>();
+            Map<String, String> attributeValues = new HashMap<>();
+            Map<String, String> namespaces = new HashMap<>();
             for (int i = 0; i < _reader.getAttributeCount(); i++) {
                 String attrName = _reader.getAttributeName(i);
                 if (standardAttributes.contains(attrName))
@@ -237,7 +239,7 @@ public class PatientXmlReader implements PatientReader {
                     int idx = attrName.indexOf(':');
                     if (idx != -1) {
                         String namespacePrefix = attrName.substring(idx + 1);
-                        if (options.getUseStrictNamespaces() && !conf.getRegisterNamespaces().containsKey(namespacePrefix))
+                        if (Boolean.TRUE.equals(options.getUseStrictNamespaces()) && !conf.getRegisterNamespaces().containsKey(namespacePrefix))
                             throw new NaaccrIOException("namespace " + _reader.getAttribute(i) + " (prefix=" + namespacePrefix + ") has not been defined in the configuration");
                         namespaces.put(namespacePrefix, _reader.getAttribute(i));
                     }
@@ -254,12 +256,13 @@ public class PatientXmlReader implements PatientReader {
             }
 
             // in strict namespace mode, the NAACCR namespace must be defined (either as the default namespace or as a prefixed namespace, that doesn't matter)
-            if (options.getUseStrictNamespaces() && !namespaces.containsValue(NAACCR_XML_NAMESPACE))
+            if (Boolean.TRUE.equals(options.getUseStrictNamespaces()) && !namespaces.containsValue(NAACCR_XML_NAMESPACE))
                 throw new NaaccrIOException("namespace " + NAACCR_XML_NAMESPACE + " must be defined in the root attributes");
 
             // in strict namespace mode, any non-standard attribute must be prefixed by a defined namespace
             for (Map.Entry<String, String> entry : attributeValues.entrySet()) {
-                String prefix = null, attrName;
+                String prefix = null;
+                String attrName;
                 int idx = entry.getKey().indexOf(':');
                 if (idx != -1) {
                     prefix = entry.getKey().substring(0, idx);
@@ -268,7 +271,7 @@ public class PatientXmlReader implements PatientReader {
                 else
                     attrName = entry.getKey();
 
-                if (options.getUseStrictNamespaces()) {
+                if (Boolean.TRUE.equals(options.getUseStrictNamespaces())) {
                     if (prefix == null)
                         throw new NaaccrIOException("attribute " + attrName + " must use a namespace prefix");
                     if (!namespaces.containsKey(prefix))
@@ -332,10 +335,10 @@ public class PatientXmlReader implements PatientReader {
         catch (StreamException ex) {
             throw new NaaccrIOException("invalid XML syntax, unable to find root tag", ex);
         }
+        catch (CannotResolveClassException ex) {
+            throw new NaaccrIOException("invalid tag: " + ex.getMessage());
+        }
         catch (RuntimeException ex) {
-            // an unknown tag in the extension is a common mistake, so let's make sure we report that nicely
-            if (ex instanceof CannotResolveClassException)
-                throw new NaaccrIOException("invalid tag: " + ex.getMessage());
             throw new NaaccrIOException("invalid XML syntax", ex);
         }
     }
@@ -344,6 +347,7 @@ public class PatientXmlReader implements PatientReader {
         return _context.extractTag(tag).equals(NAACCR_XML_TAG_ROOT);
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isPatientTag(String tag) throws NaaccrIOException {
         return _context.extractTag(tag).equals(NAACCR_XML_TAG_PATIENT);
     }
@@ -370,13 +374,10 @@ public class PatientXmlReader implements PatientReader {
         catch (ConversionException ex) {
             throw convertSyntaxException(ex);
         }
-        catch (StreamException ex) {
-            throw new NaaccrIOException("invalid XML syntax", ex);
+        catch (CannotResolveClassException ex) {
+            throw new NaaccrIOException("invalid tag: " + ex.getMessage());
         }
         catch (RuntimeException ex) {
-            // an unknown tag in the extension is a common mistake, so let's make sure we report that nicely
-            if (ex instanceof CannotResolveClassException)
-                throw new NaaccrIOException("invalid tag: " + ex.getMessage());
             throw new NaaccrIOException("invalid XML syntax", ex);
         }
 
