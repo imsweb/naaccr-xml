@@ -2,4 +2,4 @@
 
 <!-- valid file providing no items at all -->
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-220.xml" recordType="I" specificationVersion="1.5" xmlns="http://naaccr.org/naaccrxml"/>
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-260.xml" recordType="I" specificationVersion="1.6" xmlns="http://naaccr.org/naaccrxml"/>
