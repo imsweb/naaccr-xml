@@ -2,7 +2,7 @@
 
 <!-- user-define root attribute, properly defined within its own namespace -->
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-230.xml" userDictionaryUri="whatever" recordType="I" specificationVersion="1.6" other:otherAttribute="XXX" xmlns="http://naaccr.org/naaccrxml" xmlns:other="http://other">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-240.xml" userDictionaryUri="whatever" recordType="I" specificationVersion="1.7" other:otherAttribute="XXX" xmlns="http://naaccr.org/naaccrxml" xmlns:other="http://other">
     <Item naaccrId="registryId">0000000001</Item>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>

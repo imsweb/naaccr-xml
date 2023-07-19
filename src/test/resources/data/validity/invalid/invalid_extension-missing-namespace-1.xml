@@ -2,7 +2,7 @@
 
 <!-- invalid because user-defined root attribute and extensions are not defined in their own namespace -->
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-230.xml" recordType="I" specificationVersion="1.6" xmlns="http://naaccr.org/naaccrxml">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-240.xml" recordType="I" specificationVersion="1.7" xmlns="http://naaccr.org/naaccrxml">
     <Item naaccrId="registryId">0000000001</Item>
     <MySpecialData>
         <MyItem naaccrId="myDataItem">VALUE</MyItem>

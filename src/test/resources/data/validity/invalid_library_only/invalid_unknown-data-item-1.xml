@@ -2,7 +2,7 @@
 
 <!-- invalid because the tumor contains an unknown data item -->
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-230.xml" userDictionaryUri="whatever" recordType="A" specificationVersion="1.6" timeGenerated="2015-03-13T12:09:19.0Z" xmlns="http://naaccr.org/naaccrxml">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-240.xml" userDictionaryUri="whatever" recordType="A" specificationVersion="1.7" timeGenerated="2015-03-13T12:09:19.0Z" xmlns="http://naaccr.org/naaccrxml">
     <Item naaccrId="registryId">0000000001</Item>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>

@@ -22,7 +22,7 @@ import com.imsweb.layout.LayoutFactory;
 public class CreateSamplesZipFile {
 
     public static void main(String[] args) throws IOException {
-        try (ZipOutputStream zos = new ZipOutputStream(Files.newOutputStream(Paths.get("docs/samples/naaccr-xml-samples-v220.zip").toFile().toPath()))) {
+        try (ZipOutputStream zos = new ZipOutputStream(Files.newOutputStream(Paths.get("docs/samples/naaccr-xml-samples-v240.zip").toFile().toPath()))) {
             Path dir = Paths.get("src/test/resources/data/validity");
             Files.newDirectoryStream(dir.resolve("valid")).forEach(path -> addToZip(path.toFile(), zos));
             Files.newDirectoryStream(dir.resolve("invalid")).forEach(path -> addToZip(path.toFile(), zos));
@@ -30,20 +30,20 @@ public class CreateSamplesZipFile {
             Files.newDirectoryStream(dir.resolve("invalid_library_only")).forEach(path -> addToZip(path.toFile(), zos));
         }
 
-        NaaccrXmlDataGenerator absGenerator = new NaaccrXmlDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_XML_21_INCIDENCE);
+        NaaccrXmlDataGenerator absGenerator = new NaaccrXmlDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_XML_24_INCIDENCE);
         IntStream.of(10, 100, 1000).forEach(i -> {
             try {
-                absGenerator.generateFile(Paths.get("docs/samples/naaccr-xml-sample-v210-incidence-" + i + ".xml.gz").toFile(), i);
+                absGenerator.generateFile(Paths.get("docs/samples/naaccr-xml-sample-v240-incidence-" + i + ".xml.gz").toFile(), i);
             }
             catch (IOException e) {
                 throw new IllegalStateException(e);
             }
         });
 
-        NaaccrXmlDataGenerator incGenerator = new NaaccrXmlDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_XML_21_ABSTRACT);
+        NaaccrXmlDataGenerator incGenerator = new NaaccrXmlDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_XML_24_ABSTRACT);
         IntStream.of(10, 100, 1000).forEach(i -> {
             try {
-                incGenerator.generateFile(Paths.get("docs/samples/naaccr-xml-sample-v210-abstract-" + i + ".xml.gz").toFile(), i);
+                incGenerator.generateFile(Paths.get("docs/samples/naaccr-xml-sample-v240-abstract-" + i + ".xml.gz").toFile(), i);
             }
             catch (IOException e) {
                 throw new IllegalStateException(e);

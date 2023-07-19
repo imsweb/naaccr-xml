@@ -32,7 +32,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'com.imsweb:data-generator:1.28'
+    testImplementation 'com.imsweb:data-generator:1.29'
     testImplementation 'com.opencsv:opencsv:5.7.1'
 }
 
