@@ -373,4 +373,10 @@ public class NaaccrXmlUtilsTest {
     public void testWriteIso8601Date() {
         Assert.assertNotNull(NaaccrXmlUtils.formatIso8601Date(new Date()));
     }
+
+    @Test
+    public void testParseDateTimeValue() {
+        //System.out.println(NaaccrXmlUtils.parseDateTimeValue("20232207181601.0001-0005"));
+        System.out.println(NaaccrXmlUtils.parseDateTimeValue("20230722181601"));
+    }
 }
