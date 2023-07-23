@@ -17,6 +17,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -44,6 +45,7 @@ import static java.time.temporal.ChronoField.DAY_OF_MONTH;
 import static java.time.temporal.ChronoField.HOUR_OF_DAY;
 import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
 import static java.time.temporal.ChronoField.MONTH_OF_YEAR;
+import static java.time.temporal.ChronoField.NANO_OF_SECOND;
 import static java.time.temporal.ChronoField.SECOND_OF_MINUTE;
 import static java.time.temporal.ChronoField.YEAR;
 
@@ -621,7 +623,7 @@ public final class NaaccrXmlUtils {
     }
 
     // TODO FD doc
-    public static Date parseDateTimeValue(String value) {
+    public static Object parseDateTimeValue(String value) {
         if (StringUtils.isBlank(value))
             return null;
 
@@ -637,15 +639,16 @@ public final class NaaccrXmlUtils {
                 .appendValue(MINUTE_OF_HOUR, 2)
                 .optionalStart()
                 .appendValue(SECOND_OF_MINUTE, 2)
-                //.optionalStart()
-                //.appendFraction(NANO_OF_SECOND, 0, 4, false)
+                .optionalStart()
+                .appendFraction(NANO_OF_SECOND, 0, 4, true)
                 //.parseLenient()
                 //.optionalStart()
                 //.appendOffsetId()
                 //.parseStrict()
                 .toFormatter();
 
-        return Date.from(LocalDateTime.parse(value, dateFormatter).toInstant(ZoneOffset.UTC));
+        //return Date.from(LocalDateTime.parse(value, dateFormatter).toInstant(ZoneOffset.UTC));
+        return LocalDate.parse(value, dateFormatter);
 
         //rn Date.from(ZonedDateTime.parse(value, dateFormatter).toInstant());
 
