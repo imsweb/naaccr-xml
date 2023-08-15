@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,6 +21,8 @@ import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Use this class to convert a given NAACCR XML file into a (temp) fixed-columns file that SAS can easily import.
@@ -47,6 +50,9 @@ public class SasXmlToFlat {
     // the (required) record type
     private String _recordType;
 
+    // whether the temp flat file should be compressed
+    private boolean _compressTempFile;
+
     // whether grouped items should be included (only applicable pre-N23)
     private boolean _includeGroupedItems;
 
@@ -54,14 +60,28 @@ public class SasXmlToFlat {
      * Constructor.
      */
     public SasXmlToFlat(String xmlPath) {
-        initFiles(xmlPath, false);
+        this(xmlPath, "no");
+    }
+
+    /**
+     * Constructor.
+     */
+    public SasXmlToFlat(String xmlPath, String gzipOption) {
+        initFiles(xmlPath, "yes".equalsIgnoreCase(gzipOption), false);
     }
 
     /**
      * Constructor.
      */
     public SasXmlToFlat(String xmlPath, String naaccrVersion, String recordType) {
-        initFiles(xmlPath, true);
+        this(xmlPath, naaccrVersion, recordType, "no");
+    }
+
+    /**
+     * Constructor.
+     */
+    public SasXmlToFlat(String xmlPath, String naaccrVersion, String recordType, String gzipOption) {
+        initFiles(xmlPath, "yes".equalsIgnoreCase(gzipOption), true);
 
         _dictionaryFiles = new ArrayList<>();
 
@@ -81,7 +101,9 @@ public class SasXmlToFlat {
         _includeGroupedItems = false;
     }
 
-    private void initFiles(String xmlPath, boolean logInfo) {
+    private void initFiles(String xmlPath, boolean compress, boolean logInfo) {
+        _compressTempFile = compress;
+
         if (xmlPath == null || xmlPath.trim().isEmpty())
             SasUtils.logError("No source XML path was provided");
         else {
@@ -91,7 +113,7 @@ public class SasXmlToFlat {
             else if (logInfo)
                 SasUtils.logInfo("Source XML: " + _xmlFile.getAbsolutePath());
 
-            _flatFile = new File(SasUtils.computeFlatPathFromXmlPath(xmlPath));
+            _flatFile = new File(SasUtils.computeFlatPathFromXmlPath(xmlPath, compress));
             if (!new File(_flatFile.getAbsolutePath()).getParentFile().exists())
                 SasUtils.logError("Parent directory for target XML file doesn't exist: " + _flatFile.getParentFile().getAbsolutePath());
             else if (logInfo)
@@ -271,7 +293,10 @@ public class SasXmlToFlat {
             SasUtils.logInfo("Starting converting XML to flat...");
             writer = null;
             try {
-                writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_flatFile), StandardCharsets.UTF_8));
+                if (_compressTempFile)
+                    writer = new BufferedWriter(new OutputStreamWriter(new SasGzipOutputStream(new FileOutputStream(_flatFile)), UTF_8));
+                else
+                    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(_flatFile), UTF_8));
 
                 int count = 0;
                 if (_xmlFile.getName().toLowerCase().endsWith(".zip")) {
@@ -327,7 +352,21 @@ public class SasXmlToFlat {
     private int convertSingleFile(SasXmlReader reader, BufferedWriter writer, Map<String, SasFieldInfo> fieldsToWrite, Map<String, SasFieldInfo> allFields) throws IOException {
         int count = 0;
 
-        StringBuilder buf = new StringBuilder();
+        // cache blank values for all the possible requested items
+        Map<Integer, String> cache1 = new HashMap<>();
+        for (SasFieldInfo field : fieldsToWrite.values())
+            if (!cache1.containsKey(field.getLength()))
+                cache1.put(field.getLength(), SasUtils.rightPadWithSpaces("", field.getLength()));
+
+        // cache blank values dyanmically as they are needed (keep 1,000 of them in memory at most)
+        Map<Integer, String> cache2 = new LinkedHashMap<Integer, String>(1001, 1.0f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<Integer, String> eldest) {
+                return size() > 1000;
+            }
+        };
+
+        StringBuilder buf = new StringBuilder(4000);
         while (reader.nextRecord() > 0) {
             for (Entry<String, SasFieldInfo> entry : fieldsToWrite.entrySet()) {
                 String val = null;
@@ -348,7 +387,26 @@ public class SasXmlToFlat {
                     }
                     val = childrenValue.toString();
                 }
-                buf.append(SasUtils.rightPadWithSpaces(val, entry.getValue().getLength()));
+
+                if (val == null || val.isEmpty()) {
+                    String paddedValue = cache1.get(entry.getValue().getLength());
+                    if (paddedValue == null) // this is just a safety net, it should never happen
+                        paddedValue = SasUtils.rightPadWithSpaces("", entry.getValue().getLength());
+                    buf.append(paddedValue);
+                }
+                else {
+                    int remainingLength = entry.getValue().getLength() - val.length();
+                    if (remainingLength > 0) {
+                        String remainingValue = cache2.get(remainingLength);
+                        if (remainingValue == null) {
+                            remainingValue = SasUtils.rightPadWithSpaces("", remainingLength);
+                            cache2.put(remainingLength, remainingValue);
+                        }
+                        buf.append(val).append(remainingValue);
+                    }
+                    else
+                        buf.append(val);
+                }
             }
             writer.write(buf.toString());
             writer.write("\n");
@@ -372,9 +430,13 @@ public class SasXmlToFlat {
     public void cleanup(String option) {
         if ("no".equalsIgnoreCase(option))
             SasUtils.logInfo("Skipping temp files cleanup...");
-        else if (!_flatFile.delete() || !_formatFile.delete())
-            SasUtils.logError("Unable to cleanup temp files, they will have to be manually deleted...");
-        else
-            SasUtils.logInfo("Successfully deleted temp files...");
+        else {
+            if (!_flatFile.delete())
+                SasUtils.logError("Unable to cleanup " + _flatFile.getPath() + ", ity will have to be manually deleted...");
+            else if (!_formatFile.delete())
+                SasUtils.logError("Unable to cleanup " + _formatFile.getPath() + ", ity will have to be manually deleted...");
+            else
+                SasUtils.logInfo("Successfully deleted temp files...");
+        }
     }
 }

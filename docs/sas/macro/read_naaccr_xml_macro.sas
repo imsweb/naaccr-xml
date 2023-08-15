@@ -62,7 +62,8 @@
     10/08/2021 - Fabian Depry - Added new optional cleanupcsv parameter to allow better QC and problem investigation.
     04/04/2022 - Fabian Depry - Added new option groupeditems parameter to allow grouped items to be added to the data set.
     06/04/2023 - Fabian Depry - Re-wrote the macro to use a temp fixed-column file instead of a temp CSV file.
-    06/22/2023 - Fabian Depry - Renamed cleanupcsv parameter to cleanuptempfiles
+    06/22/2023 - Fabian Depry - Renamed cleanupcsv parameter to cleanuptempfiles.
+    07/28/2023 - Fabian Depry - Now using a filename command to make the logs look a bit better.
  ************************************************************************************************************/;
 
 /*
@@ -80,7 +81,7 @@ data _null_;
     j1.callVoidMethod('setDictionary', &dictfile);
     j1.callVoidMethod('setIncludeGroupedItems', &groupeditems);
     j1.callStringMethod('getFlatPath', flatpath);
-    call symput('flatfile', flatpath);
+    call symput('flatref', flatpath);
 	j1.callStringMethod('getFormatPath', formatpath);
 	call symput('formatfile', formatpath);
     j1.callVoidMethod('convert', &items);
@@ -91,7 +92,8 @@ run;
    Import the temp fixed-column file.
 */
 data &dataset;
-    infile "&flatfile" lrecl=100000;
+    filename flatfile "&flatref";
+    infile flatfile lrecl=100000;
     %include "&formatfile";
 run;
 

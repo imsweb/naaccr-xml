@@ -185,6 +185,9 @@ public class SasXmlReader {
     }
 
     private String cleanUpValue(StringBuilder buf) {
+        if (buf.length() == 0 || buf.indexOf("&") == -1)
+            return buf.toString();
+
         for (Map.Entry<String, String> entry : _TO_ESCAPE.entrySet()) {
             int idx = buf.indexOf(entry.getKey());
             while (idx != -1) {

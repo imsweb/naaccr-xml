@@ -8,6 +8,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -58,7 +60,7 @@ public class SasTest {
     @Test
     public void testGetFields() throws IOException {
         Map<String, String> fields = new HashMap<>();
-        for (SasFieldInfo field : SasUtils.getFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-180.csv"), null))
+        for (SasFieldInfo field : SasUtils.getFields("I", Files.newInputStream(Paths.get(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-180.csv")), null))
             fields.put(field.getNaaccrId(), field.getParentTag());
         Assert.assertTrue(fields.containsKey("primarySite"));
         Assert.assertEquals("Tumor", fields.get("primarySite"));
@@ -66,7 +68,7 @@ public class SasTest {
 
         fields.clear();
         List<File> csvDictionaries = Collections.singletonList(TestingUtils.getDataFile("sas/user-dictionary.csv"));
-        for (SasFieldInfo field : SasUtils.getFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-180.csv"), csvDictionaries))
+        for (SasFieldInfo field : SasUtils.getFields("I", Files.newInputStream(Paths.get(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-180.csv")), csvDictionaries))
             fields.put(field.getNaaccrId(), field.getParentTag());
         Assert.assertTrue(fields.containsKey("myVariable"));
         Assert.assertEquals("Tumor", fields.get("myVariable"));
@@ -76,14 +78,14 @@ public class SasTest {
     @Test
     public void testGetGroupedFields() throws IOException {
         Map<String, List<String>> fields = new HashMap<>();
-        for (SasFieldInfo field : SasUtils.getGroupedFields("I", new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/grouped-items/naaccr-xml-grouped-items-180.csv")))
+        for (SasFieldInfo field : SasUtils.getGroupedFields("I", Files.newInputStream(Paths.get(TestingUtils.getWorkingDirectory() + "/docs/grouped-items/naaccr-xml-grouped-items-180.csv"))))
             fields.put(field.getNaaccrId(), field.getContains());
         Assert.assertTrue(fields.containsKey("morphTypebehavIcdO3"));
         Assert.assertEquals(Arrays.asList("histologicTypeIcdO3", "behaviorCodeIcdO3"), fields.get("morphTypebehavIcdO3"));
     }
 
     @Test
-    public void testConvert() throws IOException {
+    public void testConvertUsingCsv() throws IOException {
         File xmlFile = TestingUtils.getDataFile("sas/test.xml");
         File csvFile = new File(TestingUtils.getBuildDirectory(), "test.csv");
         File xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-copy.xml");
@@ -130,6 +132,56 @@ public class SasTest {
         createXmlToCsvConverter(xmlFile, csvFile, "180", "A").convert(null, false);
         createCsvToXmlConverter(csvFile, xmlCopyFile, "180", "A").convert(null);
         Patient secondPatient = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(1);
+        Assert.assertEquals("00000002", secondPatient.getItemValue("patientIdNumber"));
+        Assert.assertEquals(2, secondPatient.getTumors().size());
+        Assert.assertEquals("9-9/9-9-16 HOSPITAL, DR DOCTOR: XXX BRAIN (9999 CGY), 99 FX’S, XXXX & 9MV tumor #1", secondPatient.getTumors().get(0).getItemValue("rxTextRadiation"));
+        Assert.assertEquals("9-9/9-9-16 HOSPITAL, DR DOCTOR: XXX BRAIN (9999 CGY), 99 FX’S, XXXX & 9MV tumor #2", secondPatient.getTumors().get(1).getItemValue("rxTextRadiation"));
+    }
+
+    @Test
+    public void testConvertUsingFlat() throws IOException {
+        File xmlFile = new File(TestingUtils.getBuildDirectory(), "test.xml");
+        FileUtils.copyFile(TestingUtils.getDataFile("sas/test.xml"), xmlFile);
+
+        // make sure we start as expected
+        assertXmlData(xmlFile, false);
+
+        // translate XML to flat
+        SasXmlToFlat xmlToFlat = createXmlToFlatConverter(xmlFile, "230", "I");
+        Assert.assertNotNull(xmlToFlat.getXmlPath());
+        Assert.assertNotNull(xmlToFlat.getFlatPath());
+        xmlToFlat.convert(null);
+        File createdFlatFile = new File(xmlToFlat.getFlatPath());
+        Assert.assertTrue(createdFlatFile.exists());
+
+        // translate flat to XML, make sure we get back to the same data
+        File createdXmlFile = new File(TestingUtils.getBuildDirectory(), "test.xml");
+        SasFlatToXml flatToXml = createFlatToXmlConverter(createdXmlFile, "230", "I");
+        Assert.assertNotNull(flatToXml.getXmlPath());
+        Assert.assertNotNull(flatToXml.getFlatPath());
+        flatToXml.convert();
+        Assert.assertTrue(createdXmlFile.exists());
+        assertXmlData(createdXmlFile, false);
+
+        // test cleaning up the flat file
+        Assert.assertTrue(createdFlatFile.exists());
+        xmlToFlat.cleanup("no");
+        Assert.assertTrue(createdFlatFile.exists());
+        xmlToFlat.cleanup("yes");
+        Assert.assertFalse(createdFlatFile.exists());
+
+        // redo a double-conversion but ignore some fields
+        xmlToFlat.convert("patientIdNumber,primarySite");
+        flatToXml.convert("patientIdNumber,primarySite");
+        assertXmlData(createdXmlFile, true);
+
+        // another (more complex) file
+        xmlFile = new File(TestingUtils.getBuildDirectory(), "test2.xml");
+        FileUtils.copyFile(TestingUtils.getDataFile("sas/test2.xml"), xmlFile);
+        createXmlToFlatConverter(xmlFile, "230", "A").convert(null);
+        createdXmlFile = new File(TestingUtils.getBuildDirectory(), "test2.xml");
+        createFlatToXmlConverter(createdXmlFile, "230", "A").convert(null);
+        Patient secondPatient = NaaccrXmlUtils.readXmlFile(createdXmlFile, null, null, null).getPatients().get(1);
         Assert.assertEquals("00000002", secondPatient.getItemValue("patientIdNumber"));
         Assert.assertEquals(2, secondPatient.getTumors().size());
         Assert.assertEquals("9-9/9-9-16 HOSPITAL, DR DOCTOR: XXX BRAIN (9999 CGY), 99 FX’S, XXXX & 9MV tumor #1", secondPatient.getTumors().get(0).getItemValue("rxTextRadiation"));
@@ -276,6 +328,65 @@ public class SasTest {
     }
 
     @SuppressWarnings("SameParameterValue")
+    private SasFlatToXml createFlatToXmlConverter(File flatFile, String naaccrVersion, String recordType) {
+        return createFlatToXmlConverter(flatFile, naaccrVersion, recordType, null, null);
+    }
+
+    private SasFlatToXml createFlatToXmlConverter(File flatFile, String naaccrVersion, String recordType, List<File> csvDictionaryFiles, List<NaaccrDictionary> xmlDictionaries) {
+        SasFlatToXml converter = new SasFlatToXml(flatFile.getPath(), naaccrVersion, recordType, "no") {
+            @Override
+            public List<SasFieldInfo> getFields() {
+                try {
+                    return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"), csvDictionaryFiles);
+                }
+                catch (FileNotFoundException e) {
+                    throw new IllegalStateException(e);
+                }
+            }
+
+        };
+
+        if (csvDictionaryFiles != null && xmlDictionaries != null) {
+            converter.setDictionary(
+                    csvDictionaryFiles.stream().map(File::getPath).collect(Collectors.joining(" ")),
+                    xmlDictionaries.stream().map(NaaccrDictionary::getDictionaryUri).collect(Collectors.joining(" ")));
+        }
+
+        converter.setWriteNumbers("true");
+
+        return converter;
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private SasXmlToFlat createXmlToFlatConverter(File xmlFile, String naaccrVersion, String recordType) {
+        return createXmlToFlatConverter(xmlFile, naaccrVersion, recordType, null);
+    }
+
+    private SasXmlToFlat createXmlToFlatConverter(File xmlFile, String naaccrVersion, String recordType, List<File> csvDictionaryFiles) {
+        return new SasXmlToFlat(xmlFile.getPath(), naaccrVersion, recordType) {
+            @Override
+            public List<SasFieldInfo> getFields() {
+                try {
+                    return SasUtils.getFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/naaccr-xml-items-" + naaccrVersion + ".csv"), csvDictionaryFiles);
+                }
+                catch (FileNotFoundException e) {
+                    throw new IllegalStateException(e);
+                }
+            }
+
+            @Override
+            public List<SasFieldInfo> getGroupedFields() {
+                try {
+                    return SasUtils.getGroupedFields(recordType, new FileInputStream(TestingUtils.getWorkingDirectory() + "/docs/grouped-items/naaccr-xml-grouped-items-" + naaccrVersion + ".csv"));
+                }
+                catch (FileNotFoundException e) {
+                    throw new IllegalStateException(e);
+                }
+            }
+        };
+    }
+
+    @SuppressWarnings("SameParameterValue")
     private SasCsvToXml createCsvToXmlConverter(File csvFile, File xmlFile, String naaccrVersion, String recordType) {
         return createCsvToXmlConverter(csvFile, xmlFile, naaccrVersion, recordType, null, null);
     }
@@ -325,7 +436,7 @@ public class SasTest {
         Assert.assertEquals("C456", data.getPatients().get(1).getTumors().get(0).getItemValue("primarySite"));
         Assert.assertEquals("C789", data.getPatients().get(1).getTumors().get(1).getItemValue("primarySite"));
         if (!ignoreFields)
-            Assert.assertEquals("  2.0", data.getPatients().get(1).getTumors().get(1).getItemValue("ki67"));
+            Assert.assertEquals("2.0", data.getPatients().get(1).getTumors().get(1).getItemValue("ki67"));
     }
 
     @Test
