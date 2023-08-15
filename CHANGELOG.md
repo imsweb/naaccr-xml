@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+**Version 10.1**
+
+- Optimized read SAS macro.
+- Fixed a major issue with the write SAS macro.
+
 **Version 10.0**
 
 - Added support for NAACCR 24.
