@@ -269,7 +269,7 @@ public class SasFlatToXml {
         try {
             Set<String> requestedFieldIds = SasUtils.extractRequestedFields(fields, availableFields);
 
-            Map<String, SasFieldInfo> fieldsToWrite = new HashMap<>();
+            Map<String, SasFieldInfo> fieldsToWrite = new TreeMap<>();
             for (SasFieldInfo field : availableFields)
                 if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId()))
                     fieldsToWrite.put(field.getTruncatedNaaccrId(), field);
@@ -348,9 +348,9 @@ public class SasFlatToXml {
             for (SasFieldInfo info : availableFields)
                 itemNumbers.put(info.getNaaccrId(), info.getNum().toString());
 
-            Map<String, SasFieldInfo> rootFields = new HashMap<>();
-            Map<String, SasFieldInfo> patientFields = new HashMap<>();
-            Map<String, SasFieldInfo> tumorFields = new HashMap<>();
+            Map<String, SasFieldInfo> rootFields = new TreeMap<>();
+            Map<String, SasFieldInfo> patientFields = new TreeMap<>();
+            Map<String, SasFieldInfo> tumorFields = new TreeMap<>();
             Map<String, SasFieldInfo> fieldsToWrite = new TreeMap<>();
             for (SasFieldInfo field : availableFields) {
                 if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId())) {
