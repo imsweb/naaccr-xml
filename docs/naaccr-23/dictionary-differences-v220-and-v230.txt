@@ -1,0 +1,84 @@
+Comparison summary of base 220 and 230 dictionaries.
+
+The following item(s) were added to version 230:
+ - clinicalMarginWidth (#3961) - Clinical Margin Width
+ - histologicSubtype (#3960) - Histologic Subtype
+ - noPatientContactFlag (#1854) - No Patient Contact Flag
+ - reportingFacilityRestrictionFlag (#1856) - Reporting Facility Restriction Flag
+ - rxHospSurgPrimSite2023 (#671) - RX Hosp--Surg Prim Site 2023
+ - rxSummSurgPrimSite2023 (#1291) - RX Summ--Surg Prim Site 2023
+
+The following item(s) were removed from version 230:
+ - date1stCrsRxCocFlag (#1271) - Date 1st Crs RX CoC Flag
+ - dateConclusiveDxFlag (#448) - Date Conclusive DX Flag
+ - dateInitialRxSeerFlag (#1261) - Date Initial RX SEER Flag
+ - dateOf1stContactFlag (#581) - Date of 1st Contact Flag
+ - dateOfBirthFlag (#241) - Date of Birth Flag
+ - dateOfDeathCanadaFlag (#1756) - Date of Death--CanadaFlag
+ - dateOfDiagnosisFlag (#391) - Date of Diagnosis Flag
+ - dateOfInptAdmFlag (#591) - Date of Inpt Adm Flag
+ - dateOfInptDischFlag (#601) - Date of Inpt Disch Flag
+ - dateOfLastCancerStatusFlag (#1773) - Date of Last Cancer (tumor) Status Flag
+ - dateOfLastContactFlag (#1751) - Date of Last Contact Flag
+ - dateOfMultTumorsFlag (#439) - Date of Mult Tumors Flag
+ - dateRegionalLNDissectionFlag (#683) - Date Regional Lymph Node Dissection Flag
+ - dateSentinelLymphNodeBiopsyFlag (#833) - Date of Sentinel Lymph Node Biopsy Flag
+ - icdO2ConversionFlag (#1980) - ICD-O-2 Conversion Flag
+ - recurrenceDate1stFlag (#1861) - Recurrence Date--1st Flag
+ - rxDateBrmFlag (#1241) - RX Date BRM Flag
+ - rxDateChemoFlag (#1221) - RX Date Chemo Flag
+ - rxDateDxStgProcFlag (#1281) - RX Date DX/Stg Proc Flag
+ - rxDateHormoneFlag (#1231) - RX Date Hormone Flag
+ - rxDateMostDefinSurgFlag (#3171) - RX Date Mst Defn Srg Flag
+ - rxDateOtherFlag (#1251) - RX Date Other Flag
+ - rxDateRadiationEndedFlag (#3221) - RX Date Rad Ended Flag
+ - rxDateRadiationFlag (#1211) - RX Date Radiation Flag
+ - rxDateSurgeryFlag (#1201) - RX Date Surgery Flag
+ - rxDateSurgicalDischFlag (#3181) - RX Date Surg Disch Flag
+ - rxDateSystemicFlag (#3231) - RX Date Systemic Flag
+ - seerCodingSysCurrent (#2120) - SEER Coding Sys--Current
+ - seerCodingSysOriginal (#2130) - SEER Coding Sys--Original
+ - seerRecordNumber (#2190) - SEER Record Number
+ - seerTypeOfFollowUp (#2180) - SEER Type of Follow-Up
+ - subsqRx2ndcrsDateFlag (#1661) - Subsq RX 2ndCrs Date Flag
+ - subsqRx3rdcrsDateFlag (#1681) - Subsq RX 3rdCrs Date Flag
+ - subsqRx4thcrsDateFlag (#1701) - Subsq RX 4thCrs Date Flag
+
+The following item(s) got their name changed in version 230:
+ - rxHospSurgPrimSite (#670) - from "RX Hosp--Surg Prim Site" to "RX Hosp--Surg Prim Site 03-2022"
+ - rxSummSurgPrimSite (#1290) - from "RX Summ--Surg Prim Site" to "RX Summ--Surg Prim Site 03-2022"
+
+The following item(s) got their length changed in version 230:
+ - ehrReporting (#2508) - from "1000" to "4000"
+ - rxTextBrm (#2660) - from "1000" to "4000"
+ - rxTextChemo (#2640) - from "1000" to "4000"
+ - rxTextHormone (#2650) - from "1000" to "4000"
+ - rxTextOther (#2670) - from "1000" to "4000"
+ - rxTextRadiation (#2620) - from "1000" to "4000"
+ - rxTextRadiationOther (#2630) - from "1000" to "4000"
+ - rxTextSurgery (#2610) - from "1000" to "4000"
+ - textDxProcLabTests (#2550) - from "1000" to "4000"
+ - textDxProcOp (#2560) - from "1000" to "4000"
+ - textDxProcPath (#2570) - from "1000" to "4000"
+ - textDxProcPe (#2520) - from "1000" to "4000"
+ - textDxProcScopes (#2540) - from "1000" to "4000"
+ - textDxProcXRayScan (#2530) - from "1000" to "4000"
+ - textRemarks (#2680) - from "1000" to "4000"
+ - textStaging (#2600) - from "1000" to "4000"
+
+The following item(s) got their allow-unlimited attribute removed in version 230:
+ - rxTextBrm (#2660)
+ - rxTextChemo (#2640)
+ - rxTextHormone (#2650)
+ - rxTextOther (#2670)
+ - rxTextRadiation (#2620)
+ - rxTextRadiationOther (#2630)
+ - rxTextSurgery (#2610)
+ - textDxProcLabTests (#2550)
+ - textDxProcOp (#2560)
+ - textDxProcPath (#2570)
+ - textDxProcPe (#2520)
+ - textDxProcScopes (#2540)
+ - textDxProcXRayScan (#2530)
+ - textRemarks (#2680)
+ - textStaging (#2600)
