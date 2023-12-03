@@ -1,5 +1,13 @@
 import java.time.Duration
 
+/**
+ * In addition to releasing the library on Maven Central, we also release a SAS library along with some macros.
+ * Since the release is triggered on GitHub via the creation of a release, the SAS zip distribution has to be 
+ * manually created before and added to the release:
+ * 
+ *     gradlew clean createDistribution
+ */
+
 plugins {
     id 'java-library'
     id 'checkstyle'
@@ -54,6 +62,12 @@ java {
     withSourcesJar()
 }
 
+// I have absolutely no idea why I need to do this; it appears the test task depends on the created JAR file; I know it depends 
+// on the source code, but I can't figure out why it depends on the created archive itself. I found this workaround online...
+tasks.named("test") {
+    dependsOn(tasks.named("jar"))
+}
+
 // customize the manifest
 jar {
     manifest {
@@ -81,6 +95,8 @@ sonarqube {
         property "sonar.host.url", "https://sonarcloud.io"
         property 'sonar.exclusions', '**/lab/*'
         property 'sonar.coverage.exclusions', '**/lab/*'
+        property 'sonar.exclusions', '**/sas/*'
+        property 'sonar.coverage.exclusions', '**/sas/*'
     }
 }
 

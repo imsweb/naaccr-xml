@@ -17,7 +17,7 @@ public class SasGzipOutputStream extends DeflaterOutputStream {
     /**
      * CRC-32 of uncompressed data.
      */
-    protected CRC32 crc = new CRC32();
+    protected CRC32 _crc = new CRC32();
 
     /**
      * GZIP header magic number.
@@ -43,7 +43,7 @@ public class SasGzipOutputStream extends DeflaterOutputStream {
     public SasGzipOutputStream(OutputStream out) throws IOException {
         super(out, new Deflater(Deflater.BEST_SPEED, true), 65536, false);
         writeHeader();
-        crc.reset();
+        _crc.reset();
     }
 
     /**
@@ -57,7 +57,7 @@ public class SasGzipOutputStream extends DeflaterOutputStream {
     @Override
     public synchronized void write(byte[] buf, int off, int len) throws IOException {
         super.write(buf, off, len);
-        crc.update(buf, off, len);
+        _crc.update(buf, off, len);
     }
 
     /**
@@ -119,7 +119,7 @@ public class SasGzipOutputStream extends DeflaterOutputStream {
      * offset.
      */
     private void writeTrailer(byte[] buf, int offset) {
-        writeInt((int)crc.getValue(), buf, offset); // CRC-32 of uncompr. data
+        writeInt((int)_crc.getValue(), buf, offset); // CRC-32 of uncompr. data
         writeInt(def.getTotalIn(), buf, offset + 4); // Number of uncompr. bytes
     }
 
