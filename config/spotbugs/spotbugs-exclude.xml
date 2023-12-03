@@ -26,4 +26,8 @@
         <Bug code="NP"/>
         <Class name="com.imsweb.naaccrxml.runtime.NaaccrDictionaryConverter"/>
     </Match>
+    <Match>
+        <!-- Be wary of letting constructors throw exceptions, not easy to fix, and I don't think that can create a problem -->
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+    </Match>
 </FindBugsFilter>

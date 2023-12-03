@@ -23,13 +23,37 @@ compileSasJava {
     targetCompatibility = JavaVersion.VERSION_1_7
 }
 
-task jarSas(type: Jar) {
-    dependsOn compileSasJava
+tasks.register('jarSas', Jar) {
     from sourceSets.sas.output
     archiveClassifier = 'sas'
+    dependsOn compileSasJava
 }
 
-task sourcesSasJar(type: Jar, dependsOn: sasClasses) {
+tasks.register('sourcesSasJar', Jar) {
     from sourceSets.sas.allSource
     archiveClassifier = 'sas-sources'
+    dependsOn 'sasClasses'
+}
+
+tasks.register('assembleDistribution') {
+    group = 'distribution'
+    doLast {
+        // SAS stuff
+        copy {
+            from "build/libs/${project.name}-${project.version}-sas.jar"
+            from 'docs/sas/macro/read_naaccr_xml_macro.sas'
+            from 'docs/sas/macro/write_naaccr_xml_macro.sas'
+            into 'build/dist/sas'
+        }
+    }
+    dependsOn 'assemble', 'jarSas', 'sourcesSasJar'
+}
+
+tasks.register('createDistribution', Zip) {
+    group = 'distribution'
+    archiveFileName = "naaccr-xml-utility-${project.version}.zip"
+    destinationDirectory = file('build')
+    from 'build/dist'
+    into "naaccr-xml-utility-${project.version}"
+    dependsOn 'assembleDistribution'
 }
