@@ -4,7 +4,7 @@
 
 - Changed data level errors from an exception to a validation error reported on the item.
 - Fixed behavior of the reading SAS macro when it deals with fields that have a value too long in the XML file.
-- Added nw 'specs' parameter to allow writing a provided specifications version instead of the default library one.
+- Added new 'specs' parameter to allow writing a provided specifications version instead of the default library one.
 
 **Version 10.1**
 
