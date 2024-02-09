@@ -3,6 +3,7 @@
 **Version 10.2**
 
 - Changed data level errors from an exception to a validation error reported on the item.
+- Fixed behavior of the reading SAS macro when it deals with fields that have a value too long in the XML file.
 
 **Version 10.1**
 
