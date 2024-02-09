@@ -38,6 +38,7 @@ public class XsdSchemaTest {
     private static final String _XSD_FILE = "xsd/naaccr_data_1.7.xsd";
 
     @Test
+    @SuppressWarnings("resource")
     public void testXsdAgainstLibrary() throws IOException {
         Path dir = Paths.get(TestingUtils.getWorkingDirectory() + "/src/test/resources/data/validity");
 

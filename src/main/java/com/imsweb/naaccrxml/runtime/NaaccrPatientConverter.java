@@ -244,7 +244,7 @@ public class NaaccrPatientConverter implements Converter {
                     value = StringUtils.rightPad(value, itemDef.getLength(), '0');
             }
             else if (!NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(itemDef.getPadding()) && !NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(itemDef.getPadding())
-                    && !NaaccrXmlDictionaryUtils.NAACCR_PADDING_NONE.equals(itemDef.getPadding()))
+                     && !NaaccrXmlDictionaryUtils.NAACCR_PADDING_NONE.equals(itemDef.getPadding()))
                 throw new IllegalStateException("Unknown padding option: " + itemDef.getPadding());
         }
 
@@ -356,7 +356,7 @@ public class NaaccrPatientConverter implements Converter {
                         if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(parentTag) && NaaccrXmlDictionaryUtils.getPatToTumorChangedNaaccr18And21Ids().contains(rawId))
                             return item;
 
-                reportSyntaxError("invalid parent XML tag for '" + def.getNaaccrId() + "'; was expecting '" + def.getParentXmlElement() + "' but got '" + parentTag + "'");
+                reportError(item, lineNumber, currentPath, def, item.getValue(), NaaccrErrorUtils.CODE_BAD_DATA_LEVEL, def.getParentXmlElement(), parentTag);
             }
         }
 

@@ -20,6 +20,7 @@ public final class NaaccrErrorUtils {
     public static final String CODE_BAD_LINE_LENGTH = "Invalid line length";
     public static final String CODE_BAD_NAACCR_ID = "Unknown NAACCR ID";
     public static final String CODE_BAD_NAACCR_NUM = "Wrong NAACCR Number";
+    public static final String CODE_BAD_DATA_LEVEL = "Invalid data level";
     public static final String CODE_VAL_TOO_LONG = "Value too long";
     public static final String CODE_VAL_TOO_SHORT = "Value too short";
     public static final String CODE_VAL_DATA_TYPE = "Value invalid for data type";
@@ -36,6 +37,7 @@ public final class NaaccrErrorUtils {
         _MESSAGES.put(CODE_BAD_LINE_LENGTH, "invalid line length, expected ${0} but got ${1}");
         _MESSAGES.put(CODE_BAD_NAACCR_ID, "unknown NAACCR ID: ${0}");
         _MESSAGES.put(CODE_BAD_NAACCR_NUM, "NAACCR Number '${0}' does not correspond to NAACCR ID '${1}'");
+        _MESSAGES.put(CODE_BAD_DATA_LEVEL, "invalid data level, expected ${0} but got ${1}");
         _MESSAGES.put(CODE_VAL_TOO_LONG, "value too long, expected at most ${0} character(s) but got ${1}");
         _MESSAGES.put(CODE_VAL_TOO_SHORT, "value too short, expected exactly ${0} character(s) but got ${1}");
         _MESSAGES.put(CODE_VAL_DATA_TYPE, "invalid value according to data type '${0}'");
