@@ -395,17 +395,23 @@ public class SasXmlToFlat {
                     buf.append(paddedValue);
                 }
                 else {
-                    int remainingLength = entry.getValue().getLength() - val.length();
-                    if (remainingLength > 0) {
-                        String remainingValue = cache2.get(remainingLength);
-                        if (remainingValue == null) {
-                            remainingValue = SasUtils.rightPadWithSpaces("", remainingLength);
-                            cache2.put(remainingLength, remainingValue);
+                    int defLength = entry.getValue().getLength();
+                    
+                    if (val.length() > defLength)
+                        buf.append(val.substring(0, defLength));
+                    else {
+                        int remainingLength = defLength - val.length();
+                        if (remainingLength > 0) {
+                            String remainingValue = cache2.get(remainingLength);
+                            if (remainingValue == null) {
+                                remainingValue = SasUtils.rightPadWithSpaces("", remainingLength);
+                                cache2.put(remainingLength, remainingValue);
+                            }
+                            buf.append(val).append(remainingValue);
                         }
-                        buf.append(val).append(remainingValue);
+                        else
+                            buf.append(val);
                     }
-                    else
-                        buf.append(val);
                 }
             }
             writer.write(buf.toString());
