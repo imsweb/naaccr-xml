@@ -63,6 +63,9 @@ public class SasFlatToXml {
     // the CSV list of fields contained in the data set
     private String _dataSetFields;
 
+    // the (optional) specifications verison to use (uses the default library one if not provided)
+    private String _specificationsVersion;
+
     /**
      * Constructor.
      */
@@ -162,6 +165,14 @@ public class SasFlatToXml {
             }
             _dictionaryUris = buf.toString();
         }
+    }
+
+    /**
+     * The specificatoins version to use when writting the XML data.
+     */
+    public void setSpecificationsVersion(String specificationsVersion) {
+        if (specificationsVersion != null && !specificationsVersion.trim().isEmpty())
+            _specificationsVersion = specificationsVersion;
     }
 
     /**
@@ -415,7 +426,10 @@ public class SasFlatToXml {
                         if (!_dictionaryFiles.isEmpty() && _dictionaryUris != null && !_dictionaryUris.trim().isEmpty())
                             writer.write("\n            userDictionaryUri=\"" + _dictionaryUris + "\"");
                         writer.write("\n            recordType=\"" + _recordType + "\"");
-                        writer.write("\n            specificationVersion=\"1.7\"");
+                        if (_specificationsVersion != null)
+                            writer.write("\n            specificationVersion=\"" + _specificationsVersion + "\"");
+                        else
+                            writer.write("\n            specificationVersion=\"1.7\"");
                         writer.write("\n            xmlns=\"http://naaccr.org/naaccrxml\"");
                         writer.write(">\n");
                         for (Entry<String, SasFieldInfo> entry : rootFields.entrySet()) {
