@@ -478,6 +478,25 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertFalse(pattern.matcher("17000615").matches());
         Assert.assertFalse(pattern.matcher("20101315").matches());
         Assert.assertFalse(pattern.matcher("20100632").matches());
+
+        // "dateTime": HL7 FHIR date with optional timestamp portion
+        pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DATE_TIME);
+        Assert.assertFalse(pattern.matcher("20100615").matches()); // dateTime uses dashes...
+        Assert.assertTrue(pattern.matcher("2010-06").matches());
+        Assert.assertTrue(pattern.matcher("2010").matches());
+        Assert.assertTrue(pattern.matcher("2010-06-15T14:10:00-04:00").matches());
+        Assert.assertTrue(pattern.matcher("2010-06-15T14:10:00+05:00").matches());
+        Assert.assertTrue(pattern.matcher("2010-06-15T00:00:00.000Z").matches());
+        Assert.assertFalse(pattern.matcher("2010-06-15T14:10").matches()); // timezone is required if time is provided
+        Assert.assertFalse(pattern.matcher("2010-06-  ").matches());
+        Assert.assertFalse(pattern.matcher("2010-  -15").matches());
+        Assert.assertFalse(pattern.matcher("    -06-15").matches());
+        Assert.assertFalse(pattern.matcher("06-15").matches());
+        Assert.assertFalse(pattern.matcher("15").matches());
+        Assert.assertFalse(pattern.matcher("A").matches());
+        Assert.assertFalse(pattern.matcher("2010-06-15!").matches());
+        Assert.assertFalse(pattern.matcher("2010-13-15").matches());
+        Assert.assertFalse(pattern.matcher("2010-06-32").matches());
     }
 
     @Test
@@ -503,7 +522,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         File file = new File(TestingUtils.getBuildDirectory(), "dictionary.csv");
         NaaccrXmlDictionaryUtils.writeDictionaryToCsv(dictionary, file);
         try (FileReader reader = new FileReader(file)) {
-            Assert.assertTrue(new CSVReader(reader).readAll().size() > 0);
+            Assert.assertFalse(new CSVReader(reader).readAll().isEmpty());
         }
         finally {
             file.delete();

@@ -72,6 +72,7 @@ public final class NaaccrXmlDictionaryUtils {
     public static final String NAACCR_DATA_TYPE_NUMERIC = "numeric"; // digits, 0-9 with optional period, no spaces but value can be smaller than the length
     public static final String NAACCR_DATA_TYPE_TEXT = "text"; // no checking on this value
     public static final String NAACCR_DATA_TYPE_DATE = "date"; // digits, YYYY or YYYYMM or YYYYMMDD
+    public static final String NAACCR_DATA_TYPE_DATE_TIME = "dateTime"; // HL7 FHIR date with optional timestamp portion
 
     // regular expression for each data type
     private static final Map<String, Pattern> _NAACCR_DATA_TYPES_REGEX = new HashMap<>();
@@ -82,6 +83,8 @@ public final class NaaccrXmlDictionaryUtils {
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_MIXED, Pattern.compile("^[A-Z\\d]+$"));
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_NUMERIC, Pattern.compile("^\\d+(\\.\\d+)?$"));
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)\\d\\d((0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])?)?$"));
+        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE_TIME, Pattern.compile("([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]{1,9})?)?)?(Z|([+-])((0[0-9]|1[0-3]):[0-5][0-9]|14:00)?)?)?"));
+
     }
 
     // trimming rules (default is all)
@@ -579,7 +582,7 @@ public final class NaaccrXmlDictionaryUtils {
             // validate data type
             String type = item.getDataType();
             if (type != null && (!NAACCR_DATA_TYPE_ALPHA.equals(type) && !NAACCR_DATA_TYPE_DIGITS.equals(type) && !NAACCR_DATA_TYPE_MIXED.equals(type)) && !NAACCR_DATA_TYPE_NUMERIC.equals(type)
-                    && !NAACCR_DATA_TYPE_TEXT.equals(type) && !NAACCR_DATA_TYPE_DATE.equals(type))
+                    && !NAACCR_DATA_TYPE_TEXT.equals(type) && !NAACCR_DATA_TYPE_DATE.equals(type) && !NAACCR_DATA_TYPE_DATE_TIME.equals(type))
                 errors.add("invalid value for 'dataType' attribute: " + item.getDataType());
 
             // validate unlimited text

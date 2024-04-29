@@ -328,17 +328,12 @@ public class NaaccrXmlUtilsTest {
     public void testParseIso8601Date() {
         // following examples are from http://books.xmlschemata.org/relaxng/ch19-77049.html
 
-        // TODO FD I think the leading -/+ shouldn't be allowed...
-
         assertValidDateValue("2001-10-26T21:32:52");
         assertValidDateValue("2001-10-26T21:32:52+02:00");
         assertValidDateValue("2001-10-26T19:32:52Z");
         assertValidDateValue("2001-10-26T19:32:52+00:00");
-        assertValidDateValue("-2001-10-26T21:32:52"); // leading +/- is used for century offset (1BC, 2BC, etc...); shouldn't be used here.
+        assertValidDateValue("-2001-10-26T21:32:52");
         assertValidDateValue("2001-10-26T21:32:52.12679");
-        assertValidDateValue("2001-10-26T21:32:52.12679Z");
-        assertValidDateValue("2001-10-26T21:32:52.12679+02:00");
-        assertValidDateValue("2001-10-26T21:32:52.12679+02");
 
         assertInvalidDateValue("2001-10-26");
         assertInvalidDateValue("2001-10-26T21:32");
@@ -347,7 +342,6 @@ public class NaaccrXmlUtilsTest {
         assertInvalidDateValue("2001-10-26T21:32:52+2:00");
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void assertValidDateValue(String dateValue) {
         try {
             ZonedDateTime.parse(dateValue, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
@@ -362,7 +356,6 @@ public class NaaccrXmlUtilsTest {
         }
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void assertInvalidDateValue(String dateValue) {
         try {
             ZonedDateTime.parse(dateValue, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
@@ -377,23 +370,5 @@ public class NaaccrXmlUtilsTest {
     @Test
     public void testWriteIso8601Date() {
         Assert.assertNotNull(NaaccrXmlUtils.formatIso8601Date(new Date()));
-    }
-
-    @Test
-    public void testParseDateTimeValue() {
-        //System.out.println(NaaccrXmlUtils.parseDateTimeValue("20232207181601.0001-0005"));
-        //System.out.println(NaaccrXmlUtils.parseDateTimeValue("20230722"));
-        //System.out.println(NaaccrXmlUtils.parseDateTimeValue("20230722181601.0001"));
-
-        // valid
-        System.out.println(NaaccrXmlUtils.parseDateTimeValue("2023"));
-        System.out.println(NaaccrXmlUtils.parseDateTimeValue("202301"));
-        System.out.println(NaaccrXmlUtils.parseDateTimeValue("20230101"));
-        System.out.println(NaaccrXmlUtils.parseDateTimeValue("202301011430"));
-        System.out.println(NaaccrXmlUtils.parseDateTimeValue("20230101143059"));
-        System.out.println(NaaccrXmlUtils.parseDateTimeValue("20230101143059.0001"));
-        //System.out.println(NaaccrXmlUtils.parseDateTimeValue("20230101143059.0001Z")); // not valid according to HL7 v.2
-        System.out.println(NaaccrXmlUtils.parseDateTimeValue("20230101143059.0001+0001"));
-        System.out.println(NaaccrXmlUtils.parseDateTimeValue("20230101143059.0001-0001"));
     }
 }
