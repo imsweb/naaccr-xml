@@ -63,6 +63,7 @@ import static com.imsweb.naaccrxml.SpecificationVersion.SPEC_1_7;
  * <br/><br/>
  * There is no caching done in this class; dictionaries are loaded from XML as requested.
  */
+@SuppressWarnings("java:S5843") // complex regex (date time regex was copied as-is from somewhere else)
 public final class NaaccrXmlDictionaryUtils {
 
     // the different data types
@@ -83,8 +84,8 @@ public final class NaaccrXmlDictionaryUtils {
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_MIXED, Pattern.compile("^[A-Z\\d]+$"));
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_NUMERIC, Pattern.compile("^\\d+(\\.\\d+)?$"));
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)\\d\\d((0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])?)?$"));
-        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE_TIME, Pattern.compile("([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]{1,9})?)?)?(Z|([+-])((0[0-9]|1[0-3]):[0-5][0-9]|14:00)?)?)?"));
-
+        _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE_TIME, Pattern.compile(
+                "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]{1,9})?)?)?(Z|([+-])((0[0-9]|1[0-3]):[0-5][0-9]|14:00)?)?)?"));
     }
 
     // trimming rules (default is all)
@@ -572,7 +573,7 @@ public final class NaaccrXmlDictionaryUtils {
             if (item.getParentXmlElement() == null || item.getParentXmlElement().trim().isEmpty())
                 errors.add("'parentXmlElement' attribute is required");
             else if (!NaaccrXmlUtils.NAACCR_XML_TAG_ROOT.equals(item.getParentXmlElement()) && !NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(item.getParentXmlElement())
-                    && !NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(item.getParentXmlElement()))
+                     && !NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(item.getParentXmlElement()))
                 errors.add("invalid value for 'parentXmlElement' attribute: " + item.getParentXmlElement());
 
             // validate record type (null means all types, so that's OK)
@@ -582,7 +583,7 @@ public final class NaaccrXmlDictionaryUtils {
             // validate data type
             String type = item.getDataType();
             if (type != null && (!NAACCR_DATA_TYPE_ALPHA.equals(type) && !NAACCR_DATA_TYPE_DIGITS.equals(type) && !NAACCR_DATA_TYPE_MIXED.equals(type)) && !NAACCR_DATA_TYPE_NUMERIC.equals(type)
-                    && !NAACCR_DATA_TYPE_TEXT.equals(type) && !NAACCR_DATA_TYPE_DATE.equals(type) && !NAACCR_DATA_TYPE_DATE_TIME.equals(type))
+                && !NAACCR_DATA_TYPE_TEXT.equals(type) && !NAACCR_DATA_TYPE_DATE.equals(type) && !NAACCR_DATA_TYPE_DATE_TIME.equals(type))
                 errors.add("invalid value for 'dataType' attribute: " + item.getDataType());
 
             // validate unlimited text
@@ -594,7 +595,7 @@ public final class NaaccrXmlDictionaryUtils {
             // validate padding
             if (item.getPadding() != null) {
                 if (!NAACCR_PADDING_LEFT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_LEFT_ZERO.equals(item.getPadding())
-                        && !NAACCR_PADDING_RIGHT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_RIGHT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_NONE.equals(item.getPadding()))
+                    && !NAACCR_PADDING_RIGHT_BLANK.equals(item.getPadding()) && !NAACCR_PADDING_RIGHT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_NONE.equals(item.getPadding()))
                     errors.add("invalid value for 'padding' attribute: " + item.getPadding());
                 if (SpecificationVersion.compareSpecifications(specVersion, SPEC_1_7) >= 0 && !NAACCR_PADDING_LEFT_ZERO.equals(item.getPadding()) && !NAACCR_PADDING_NONE.equals(item.getPadding()))
                     errors.add("invalid value for 'padding' attribute: " + item.getPadding() + " (valid values are '" + NAACCR_PADDING_LEFT_ZERO + "' and '" + NAACCR_PADDING_NONE + "')");
