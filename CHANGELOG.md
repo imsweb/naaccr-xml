@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 10.3 (not released yet)**
+
+- Added support for new dateTime type.
+
 **Version 10.2**
 
 - Changed data level errors from an exception to a validation error reported on the item.
