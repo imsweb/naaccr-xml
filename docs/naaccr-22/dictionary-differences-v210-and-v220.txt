@@ -1,0 +1,22 @@
+Comparison summary of base 210 and 220 dictionaries.
+
+The following item(s) were added to version 220:
+ - derivedRaiStage (#3955) - Derived Rai Stage
+ - edpMdeLink (#531) - EDP MDE Link
+ - edpMdeLinkDate (#530) - EDP MDE Link Date
+ - ihsPurchRefCareDeliveryArea (#194) - IHS Purchased/Referred Care Delivery Area
+ - lnStatusFemoralInguinal (#3959) - LN Status Femoral-Inguinal
+ - lnStatusParaAortic (#3958) - LN Status Para-Aortic
+ - lnStatusPelvic (#3957) - LN Status Pelvic
+ - macroscopicEvalOfTheMesorectum (#3950) - Macroscopic Evaluation of Mesorectum
+ - p16 (#3956) - p16
+ - tobaccoUseSmokingStatus (#344) - Tobacco Use Smoking Status
+ - uihoFacility (#285) - UIHO City
+ - urbanIndianHealthOrganization (#284) - Urban Indian Health Organization (UIHO)
+
+The following item(s) got their name changed in version 220:
+ - ajccCancerSurvApiVersionCurrent (#2158) - from "AJCC Cancer Surveillance API Version Current" to "AJCC Cancer Surveillance DLL Version Current"
+ - ajccCancerSurvApiVersionOriginal (#2159) - from "AJCC Cancer Surveillance API Version Original" to "AJCC Cancer Surveillance DLL Version Original"
+
+The following item(s) got their length changed in version 220:
+ - dcStateFileNumber (#2380) - from "6" to "12"

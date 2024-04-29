@@ -1,5 +1,16 @@
 ## NAACCR XML Version History
 
+**Version 10.2**
+
+- Changed data level errors from an exception to a validation error reported on the item.
+- Fixed behavior of the reading SAS macro when it deals with fields that have a value too long in the XML file.
+- Added new 'specs' parameter to allow writing a provided specifications version instead of the default library one.
+
+**Version 10.1**
+
+- Optimized read SAS macro.
+- Fixed a major issue with the write SAS macro.
+
 **Version 10.0**
 
 - Added support for NAACCR 24.

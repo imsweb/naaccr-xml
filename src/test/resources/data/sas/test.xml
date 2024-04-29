@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-180.xml" recordType="I" specificationVersion="1.3" xmlns="http://naaccr.org/naaccrxml">
+<NaaccrData baseDictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-230.xml" recordType="I" specificationVersion="1.7" xmlns="http://naaccr.org/naaccrxml">
     <Item naaccrId="registryId">0000000001</Item>
     <Patient>
         <Item naaccrId="patientIdNumber">00000001</Item>
         <Item naaccrId="sex">1</Item>
+
         <Tumor>
             <Item naaccrId="primarySite">C123</Item>
+            <Item naaccrId="abstractedBy">xyz</Item>
+            <Item naaccrId="accessionNumberHosp">1</Item>
         </Tumor>
     </Patient>
     <Patient>
@@ -16,7 +19,7 @@
         </Tumor>
         <Tumor>
             <Item naaccrId="primarySite">C789</Item>
-            <Item naaccrId="ki67">  2.0</Item>
+            <Item naaccrId="ki67">2.0</Item>
         </Tumor>
     </Patient>
 </NaaccrData>

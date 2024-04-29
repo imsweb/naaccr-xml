@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Use this class to convert a given (temp) NAACCR fixed-column file into a NAACCR XML file.
@@ -43,6 +45,9 @@ public class SasFlatToXml {
     // the (required) record type
     private String _recordType;
 
+    // whether the temp flat file should be compressed
+    private boolean _compressTempFile;
+
     // the user-provided dictionary URIs
     private String _dictionaryUris;
 
@@ -58,18 +63,35 @@ public class SasFlatToXml {
     // the CSV list of fields contained in the data set
     private String _dataSetFields;
 
+    // the (optional) specifications verison to use (uses the default library one if not provided)
+    private String _specificationsVersion;
+
     /**
      * Constructor.
      */
     public SasFlatToXml(String xmlPath) {
-        initFiles(xmlPath, false);
+        this(xmlPath, "no");
+    }
+
+    /**
+     * Constructor.
+     */
+    public SasFlatToXml(String xmlPath, String gzipOption) {
+        initFiles(xmlPath, "yes".equalsIgnoreCase(gzipOption), false);
     }
 
     /**
      * Constructor.
      */
     public SasFlatToXml(String xmlPath, String naaccrVersion, String recordType, String logOption) {
-        initFiles(xmlPath, "yes".equalsIgnoreCase(logOption));
+        this(xmlPath, naaccrVersion, recordType, logOption, "no");
+    }
+
+    /**
+     * Constructor.
+     */
+    public SasFlatToXml(String xmlPath, String naaccrVersion, String recordType, String logOption, String gzipOption) {
+        initFiles(xmlPath, "yes".equalsIgnoreCase(gzipOption), "yes".equalsIgnoreCase(logOption));
 
         _dictionaryFiles = new ArrayList<>();
 
@@ -90,11 +112,13 @@ public class SasFlatToXml {
         _groupTumors = true;
     }
 
-    private void initFiles(String xmlPath, boolean logInfo) {
+    private void initFiles(String xmlPath, boolean compress, boolean logInfo) {
+        _compressTempFile = compress;
+
         if (xmlPath == null || xmlPath.trim().isEmpty())
             SasUtils.logError("No target XML path was provided");
         else {
-            _flatFile = new File(SasUtils.computeFlatPathFromXmlPath(xmlPath));
+            _flatFile = new File(SasUtils.computeFlatPathFromXmlPath(xmlPath, compress));
             if (logInfo)
                 SasUtils.logInfo("Source flat: " + _flatFile.getAbsolutePath());
 
@@ -141,6 +165,14 @@ public class SasFlatToXml {
             }
             _dictionaryUris = buf.toString();
         }
+    }
+
+    /**
+     * The specificatoins version to use when writting the XML data.
+     */
+    public void setSpecificationsVersion(String specificationsVersion) {
+        if (specificationsVersion != null && !specificationsVersion.trim().isEmpty())
+            _specificationsVersion = specificationsVersion;
     }
 
     /**
@@ -248,7 +280,7 @@ public class SasFlatToXml {
         try {
             Set<String> requestedFieldIds = SasUtils.extractRequestedFields(fields, availableFields);
 
-            Map<String, SasFieldInfo> fieldsToWrite = new HashMap<>();
+            Map<String, SasFieldInfo> fieldsToWrite = new TreeMap<>();
             for (SasFieldInfo field : availableFields)
                 if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId()))
                     fieldsToWrite.put(field.getTruncatedNaaccrId(), field);
@@ -327,10 +359,10 @@ public class SasFlatToXml {
             for (SasFieldInfo info : availableFields)
                 itemNumbers.put(info.getNaaccrId(), info.getNum().toString());
 
-            Map<String, SasFieldInfo> rootFields = new HashMap<>();
-            Map<String, SasFieldInfo> patientFields = new HashMap<>();
-            Map<String, SasFieldInfo> tumorFields = new HashMap<>();
-            Map<String, SasFieldInfo> fieldsToWrite = new HashMap<>();
+            Map<String, SasFieldInfo> rootFields = new TreeMap<>();
+            Map<String, SasFieldInfo> patientFields = new TreeMap<>();
+            Map<String, SasFieldInfo> tumorFields = new TreeMap<>();
+            Map<String, SasFieldInfo> fieldsToWrite = new TreeMap<>();
             for (SasFieldInfo field : availableFields) {
                 if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId())) {
                     fieldsToWrite.put(field.getTruncatedNaaccrId(), field);
@@ -350,7 +382,10 @@ public class SasFlatToXml {
             LineNumberReader reader = null;
             BufferedWriter writer = null;
             try {
-                reader = new LineNumberReader(new InputStreamReader(new FileInputStream(_flatFile), StandardCharsets.UTF_8));
+                if (_compressTempFile)
+                    reader = new LineNumberReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(_flatFile)), StandardCharsets.UTF_8));
+                else
+                    reader = new LineNumberReader(new InputStreamReader(new FileInputStream(_flatFile), StandardCharsets.UTF_8));
                 writer = SasUtils.createWriter(_xmlFile);
 
                 int numPat = 0;
@@ -372,7 +407,7 @@ public class SasFlatToXml {
                     Map<String, String> values = new HashMap<>();
                     int start = 0;
                     for (SasFieldInfo field : fieldsToWrite.values()) {
-                        String value = new String(line.substring(start, start + field.getLength() - 1).trim());
+                        String value = new String(line.substring(start, start + field.getLength()).trim());
                         if (!value.isEmpty())
                             values.put(field.getTruncatedNaaccrId(), value);
                         start += field.getLength();
@@ -391,7 +426,10 @@ public class SasFlatToXml {
                         if (!_dictionaryFiles.isEmpty() && _dictionaryUris != null && !_dictionaryUris.trim().isEmpty())
                             writer.write("\n            userDictionaryUri=\"" + _dictionaryUris + "\"");
                         writer.write("\n            recordType=\"" + _recordType + "\"");
-                        writer.write("\n            specificationVersion=\"1.7\"");
+                        if (_specificationsVersion != null)
+                            writer.write("\n            specificationVersion=\"" + _specificationsVersion + "\"");
+                        else
+                            writer.write("\n            specificationVersion=\"1.7\"");
                         writer.write("\n            xmlns=\"http://naaccr.org/naaccrxml\"");
                         writer.write(">\n");
                         for (Entry<String, SasFieldInfo> entry : rootFields.entrySet()) {
@@ -472,9 +510,13 @@ public class SasFlatToXml {
     public void cleanup(String option) {
         if ("no".equalsIgnoreCase(option))
             SasUtils.logInfo("Skipping temp files cleanup...");
-        else if (!_flatFile.delete() || !_formatFile.delete())
-            SasUtils.logError("Unable to cleanup temp files, they will have to be manually deleted...");
-        else
-            SasUtils.logInfo("Successfully deleted temp files...");
+        else {
+            if (!_flatFile.delete())
+                SasUtils.logError("Unable to cleanup " + _flatFile.getPath() + ", ity will have to be manually deleted...");
+            else if (!_formatFile.delete())
+                SasUtils.logError("Unable to cleanup " + _formatFile.getPath() + ", ity will have to be manually deleted...");
+            else
+                SasUtils.logInfo("Successfully deleted temp files...");
+        }
     }
 }

@@ -1,0 +1,68 @@
+Comparison summary of base 230 and 240 dictionaries.
+
+The following item(s) were added to version 240:
+ - brainPrimaryTumorLocation (#3964) - Brain Primary Tumor Location
+ - derivedSummaryGrade2018 (#1975) - Derived Summary Grade 2018
+ - geocodingQualityCode (#86) - Geocoding Quality Code
+ - geocodingQualityCodeDetail (#87) - Geocoding Quality Code Detail
+ - rxHospReconBreast (#751) - RX Hosp--Recon Breast
+ - rxSummReconBreast (#1335) - RX Summ--Recon Breast
+
+The following item(s) were removed from version 240:
+ - birthplace (#250) - Birthplace
+ - crcChecksum (#2081) - CRC CHECKSUM
+ - lnStatusFemorInguinParaaortPelv (#3884) - LN Status Femoral-Inguinal, Para-Aortic, Pelvic
+ - nameMaiden (#2390) - Name--Maiden
+ - placeOfDeath (#1940) - Place of Death
+
+The following item(s) got their name changed in version 240:
+ - uihoFacility (#285) - from "UIHO City" to "Urban Indian Organization (UIO) Service Area"
+ - urbanIndianHealthOrganization (#284) - from "Urban Indian Health Organization (UIHO)" to "Urban Indian Organization (UIO)"
+
+The following item(s) got their length changed in version 240:
+ - seerSiteSpecificFact1 (#3700) - from "1" to "2"
+
+The following item(s) got their data level changed in v240:
+ - followUpSourceCentral (#1791) - from "Tumor" to "Patient"
+
+The following item(s) got their data type changed in version 240:
+ - seerSiteSpecificFact1 (#3700) - from "digits" to "numeric"
+
+The following item(s) got their padding changed in version 240:
+ - adenoidCysticBasaloidPattern (#3803) - from "leftBlank" to "none"
+ - afpPostOrchiectomyLabValue (#3805) - from "leftBlank" to "none"
+ - afpPreOrchiectomyLabValue (#3807) - from "leftBlank" to "none"
+ - afpPretreatmentLabValue (#3810) - from "leftBlank" to "none"
+ - bilirubinPretxTotalLabValue (#3813) - from "leftBlank" to "none"
+ - breslowTumorThickness (#3817) - from "leftBlank" to "none"
+ - ca199PretxLabValue (#3942) - from "leftBlank" to "none"
+ - ceaPretreatmentLabValue (#3820) - from "leftBlank" to "none"
+ - circumferentialResectionMargin (#3823) - from "leftBlank" to "none"
+ - clinicalMarginWidth (#3961) - from "leftBlank" to "none"
+ - comorbidComplication1 (#3110) - from "rightZero" to "none"
+ - comorbidComplication10 (#3164) - from "rightZero" to "none"
+ - comorbidComplication2 (#3120) - from "rightZero" to "none"
+ - comorbidComplication3 (#3130) - from "rightZero" to "none"
+ - comorbidComplication4 (#3140) - from "rightZero" to "none"
+ - comorbidComplication5 (#3150) - from "rightZero" to "none"
+ - comorbidComplication6 (#3160) - from "rightZero" to "none"
+ - comorbidComplication7 (#3161) - from "rightZero" to "none"
+ - comorbidComplication8 (#3162) - from "rightZero" to "none"
+ - comorbidComplication9 (#3163) - from "rightZero" to "none"
+ - creatininePretreatmentLabValue (#3824) - from "leftBlank" to "none"
+ - hcgPostOrchiectomyLabValue (#3846) - from "leftBlank" to "none"
+ - hcgPreOrchiectomyLabValue (#3848) - from "leftBlank" to "none"
+ - her2IshDualProbeCopyNumber (#3851) - from "leftBlank" to "none"
+ - her2IshDualProbeRatio (#3852) - from "leftBlank" to "none"
+ - her2IshSingleProbeCopyNumber (#3853) - from "leftBlank" to "none"
+ - ki67 (#3863) - from "leftBlank" to "none"
+ - latitude (#2352) - from "leftBlank" to "none"
+ - ldhPretreatmentLabValue (#3932) - from "leftBlank" to "none"
+ - lnSize (#3883) - from "leftBlank" to "none"
+ - longitude (#2354) - from "leftBlank" to "none"
+ - measuredBasalDiameter (#3887) - from "leftBlank" to "none"
+ - measuredThickness (#3888) - from "leftBlank" to "none"
+ - medicalRecordNumber (#2300) - from "leftBlank" to "none"
+ - mitoticCountUvealMelanoma (#3892) - from "leftBlank" to "none"
+ - percentNecrosisPostNeoadjuvant (#3908) - from "leftBlank" to "none"
+ - psaLabValue (#3920) - from "leftBlank" to "none"

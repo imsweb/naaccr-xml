@@ -1,4 +1,4 @@
-%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", dictUri="", writenum="no", cleanuptempfiles="yes", grouptumors="yes");
+%MACRO writeNaaccrXml(libpath, targetfile, naaccrversion="", recordtype="", dataset=alldata, items="", dictfile="", dictUri="", writenum="no", cleanuptempfiles="yes", grouptumors="yes", specs="");
 
 /************************************************************************************************************;
     This macro writes a given data fileset into a NAACCR XML data file.
@@ -43,6 +43,8 @@
     - grouptumors should be "yes" or "no" (defaults to "yes"); if "yes" then the tumors that have the same
         patient ID number (and appearing together in the observations) will be grouped under one Patient tag;
         if "no", each tumor will appear under its own Patient tag (and every Patient will contain exactly one Tumor).
+    - specs is the specifications version to write to the data file (typically something like X.X); it's optional 
+        and the library default value is used if not provided.
 
 
     Note that the macro creates a temp fixed-column and input SAS format file in the same folder as the target file;
@@ -75,6 +77,7 @@
     12/14/2021 - Fabian Depry - Added new optional grouptumors parameter to allow not grouping the tumors.
     06/04/2023 - Fabian Depry - Re-wrote the macro to use a temp fixed-column file instead of a temp CSV file.
     06/22/2023 - Fabian Depry - Renamed cleanupcsv parameter to cleanuptempfiles
+    08/09/2024 - Fabian Depry - Added new optional specs parameter to allow forcing a specific version to be written.
  ************************************************************************************************************/;
 
 /*
@@ -131,6 +134,7 @@ data _null_;
     j1.callVoidMethod('setDictionary', &dictfile, &dicturi);
     j1.callVoidMethod('setWriteNumbers', &writenum);
     j1.callVoidMethod('setGroupTumors', &grouptumors);
+    j1.callVoidMethod('setSpecificationsVersion', &specs);
     j1.callVoidMethod('convert', &items);
     j1.callVoidMethod('cleanup', &cleanuptempfiles);
     j1.delete();

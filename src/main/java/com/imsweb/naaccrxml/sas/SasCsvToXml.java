@@ -42,6 +42,8 @@ public class SasCsvToXml {
 
     private boolean _groupTumors;
 
+    private String _specificationsVersion;
+
     public SasCsvToXml(String xmlPath, String naaccrVersion, String recordType) {
         this(SasUtils.computeCsvPathFromXmlPath(xmlPath), xmlPath, naaccrVersion, recordType);
     }
@@ -114,6 +116,14 @@ public class SasCsvToXml {
             }
             _dictionaryUris = buf.toString();
         }
+    }
+
+    /**
+     * The specificatoins version to use when writting the XML data.
+     */
+    public void setSpecificationsVersion(String specificationsVersion) {
+        if (specificationsVersion != null && !specificationsVersion.trim().isEmpty())
+            _specificationsVersion = specificationsVersion;
     }
 
     public String getCsvPath() {
@@ -231,7 +241,10 @@ public class SasCsvToXml {
                         if (!_dictionaryFiles.isEmpty() && _dictionaryUris != null && !_dictionaryUris.trim().isEmpty())
                             writer.write("\n            userDictionaryUri=\"" + _dictionaryUris + "\"");
                         writer.write("\n            recordType=\"" + _recordType + "\"");
-                        writer.write("\n            specificationVersion=\"1.7\"");
+                        if (_specificationsVersion != null)
+                            writer.write("\n            specificationVersion=\"" + _specificationsVersion + "\"");
+                        else
+                            writer.write("\n            specificationVersion=\"1.7\"");
                         writer.write("\n            xmlns=\"http://naaccr.org/naaccrxml\"");
                         writer.write(">\n");
                         for (Entry<String, String> entry : rootFields.entrySet()) {

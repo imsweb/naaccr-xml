@@ -75,8 +75,8 @@ public final class SasUtils {
     /**
      * Convert the given XML path to a temp fixed-column path.
      */
-    public static String computeFlatPathFromXmlPath(String xmlPath) {
-        return computePathFromXmlPath(xmlPath, ".tmp.txt");
+    public static String computeFlatPathFromXmlPath(String xmlPath, boolean compress) {
+        return computePathFromXmlPath(xmlPath, compress ? ".tmp.txt.gz" : ".tmp.txt");
     }
 
     public static String computeInputPathFromXmlPath(String xmlPath) {
@@ -120,7 +120,7 @@ public final class SasUtils {
     public static BufferedReader createReader(InputStream is, String name) throws IOException {
         if (name.toLowerCase().endsWith(".gz"))
             is = new GZIPInputStream(is);
-        return new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+        return new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8), 65536);
     }
 
     /**
@@ -132,7 +132,7 @@ public final class SasUtils {
         OutputStream os = new FileOutputStream(file);
         if (file.getName().toLowerCase().endsWith(".gz"))
             os = new GZIPOutputStream(os);
-        return new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
+        return new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), 65536);
     }
 
     /**

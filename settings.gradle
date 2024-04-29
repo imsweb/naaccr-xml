@@ -1,1 +1,4 @@
 rootProject.name = 'naaccr-xml'
+
+// following can be removed when sonarQube plugin is upgraded to 5.x
+System.setProperty('sonar.gradle.skipCompile', 'true')
