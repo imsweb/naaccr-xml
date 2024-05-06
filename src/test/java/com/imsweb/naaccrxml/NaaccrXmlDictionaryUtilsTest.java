@@ -481,22 +481,37 @@ public class NaaccrXmlDictionaryUtilsTest {
 
         // "dateTime": HL7 FHIR date with optional timestamp portion
         pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DATE_TIME);
-        Assert.assertFalse(pattern.matcher("20100615").matches()); // dateTime uses dashes...
+
         Assert.assertTrue(pattern.matcher("2010-06").matches());
         Assert.assertTrue(pattern.matcher("2010").matches());
         Assert.assertTrue(pattern.matcher("2010-06-15T14:10:00-04:00").matches());
         Assert.assertTrue(pattern.matcher("2010-06-15T14:10:00+05:00").matches());
         Assert.assertTrue(pattern.matcher("2010-06-15T00:00:00.000Z").matches());
+        Assert.assertTrue(pattern.matcher("2024-05-17T13:45:30-05:00").matches());
+        Assert.assertTrue(pattern.matcher("2024-05-17T13:45:30.001-05:00").matches());
+        Assert.assertTrue(pattern.matcher("2024-05-17T13:45:30Z").matches());
+        Assert.assertTrue(pattern.matcher("2024-05-17T13:45:30.001Z").matches());
+        Assert.assertTrue(pattern.matcher("2024-05-17T13:45:30.0-05:00").matches());
+        Assert.assertTrue(pattern.matcher("2024-05-17T13:45:30.000000001-05:00").matches());
+
+        Assert.assertFalse(pattern.matcher("20100615").matches()); // dateTime uses dashes...
         Assert.assertFalse(pattern.matcher("2010-06-15T14:10").matches()); // timezone is required if time is provided
-        Assert.assertFalse(pattern.matcher("2010-06-  ").matches());
-        Assert.assertFalse(pattern.matcher("2010-  -15").matches());
-        Assert.assertFalse(pattern.matcher("    -06-15").matches());
-        Assert.assertFalse(pattern.matcher("06-15").matches());
-        Assert.assertFalse(pattern.matcher("15").matches());
-        Assert.assertFalse(pattern.matcher("A").matches());
-        Assert.assertFalse(pattern.matcher("2010-06-15!").matches());
-        Assert.assertFalse(pattern.matcher("2010-13-15").matches());
-        Assert.assertFalse(pattern.matcher("2010-06-32").matches());
+        Assert.assertFalse(pattern.matcher("2010-06-  ").matches()); // no missing parts allowed
+        Assert.assertFalse(pattern.matcher("2010-  -15").matches()); // no missing parts allowed
+        Assert.assertFalse(pattern.matcher("    -06-15").matches()); // no missing parts allowed
+        Assert.assertFalse(pattern.matcher("06-15").matches()); // no missing parts allowed
+        Assert.assertFalse(pattern.matcher("15").matches()); // no missing parts allowed
+        Assert.assertFalse(pattern.matcher("A").matches()); // garbage
+        Assert.assertFalse(pattern.matcher("2010-06-15!").matches()); // garbage
+        Assert.assertFalse(pattern.matcher("2010-13-15").matches()); // invalid month
+        Assert.assertFalse(pattern.matcher("2010-06-32").matches()); // invalid day
+        Assert.assertFalse(pattern.matcher("2001-10-26T21:32").matches()); // missing seconds
+        Assert.assertFalse(pattern.matcher("2001-10-26T25:32:52+02:00").matches()); // wrong hour
+        Assert.assertFalse(pattern.matcher("2024-05-17T1:45:30.001Z").matches()); // hours need to be 2 digits
+        Assert.assertFalse(pattern.matcher("01-10-26T21:32").matches()); // wrong year and missing seconds
+        Assert.assertFalse(pattern.matcher("2001-10-26T21:32:52+2:00").matches()); // timezone requires 2 digits
+        Assert.assertFalse(pattern.matcher("2024-05-17T13:45:30.-05:00").matches()); // if millisecond period is there, there must be at least one digit
+        Assert.assertFalse(pattern.matcher("2024-05-17T13:45:30.0000000001-05:00").matches()); // only 9 digits are allowed for millisecond
     }
 
     @Test

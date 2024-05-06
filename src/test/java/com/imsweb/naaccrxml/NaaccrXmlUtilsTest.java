@@ -340,12 +340,18 @@ public class NaaccrXmlUtilsTest {
         assertValidDateValue("2024-05-17T13:45:30Z");
         assertValidDateValue("2024-05-17T13:45:30.001Z");
 
+        assertValidDateValue("2024-05-17T13:45:30.0-05:00");
+        assertValidDateValue("2024-05-17T13:45:30.000000001-05:00");
+        
+
         assertInvalidDateValue("2001-10-26");
         assertInvalidDateValue("2001-10-26T21:32"); // missing seconds
         assertInvalidDateValue("2001-10-26T25:32:52+02:00"); // wrong hour
         assertInvalidDateValue("2024-05-17T1:45:30.001Z"); // hours need to be 2 digits
         assertInvalidDateValue("01-10-26T21:32"); // wrong year and missing seconds
         assertInvalidDateValue("2001-10-26T21:32:52+2:00"); // timezone requires 2 digits
+        assertInvalidDateValue("2024-05-17T13:45:30.-05:00"); // if millisecond period is there, there must be at least one digit
+        assertInvalidDateValue("2024-05-17T13:45:30.0000000001-05:00"); // only 9 digits are allowed for millisecond
     }
 
     private void assertValidDateValue(String dateValue) {
