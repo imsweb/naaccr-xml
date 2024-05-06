@@ -334,12 +334,10 @@ public class NaaccrXmlUtilsTest {
         assertValidDateValue("2001-10-26T19:32:52+00:00");
         assertValidDateValue("-2001-10-26T21:32:52");
         assertValidDateValue("2001-10-26T21:32:52.12679");
-
         assertValidDateValue("2024-05-17T13:45:30-05:00");
         assertValidDateValue("2024-05-17T13:45:30.001-05:00");
         assertValidDateValue("2024-05-17T13:45:30Z");
         assertValidDateValue("2024-05-17T13:45:30.001Z");
-
         assertValidDateValue("2024-05-17T13:45:30.0-05:00");
         assertValidDateValue("2024-05-17T13:45:30.000000001-05:00");
         

@@ -482,17 +482,17 @@ public class NaaccrXmlDictionaryUtilsTest {
         // "dateTime": HL7 FHIR date with optional timestamp portion
         pattern = NaaccrXmlDictionaryUtils.getDataTypePattern(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_DATE_TIME);
 
-        Assert.assertTrue(pattern.matcher("2010-06").matches());
-        Assert.assertTrue(pattern.matcher("2010").matches());
-        Assert.assertTrue(pattern.matcher("2010-06-15T14:10:00-04:00").matches());
-        Assert.assertTrue(pattern.matcher("2010-06-15T14:10:00+05:00").matches());
-        Assert.assertTrue(pattern.matcher("2010-06-15T00:00:00.000Z").matches());
-        Assert.assertTrue(pattern.matcher("2024-05-17T13:45:30-05:00").matches());
-        Assert.assertTrue(pattern.matcher("2024-05-17T13:45:30.001-05:00").matches());
-        Assert.assertTrue(pattern.matcher("2024-05-17T13:45:30Z").matches());
-        Assert.assertTrue(pattern.matcher("2024-05-17T13:45:30.001Z").matches());
-        Assert.assertTrue(pattern.matcher("2024-05-17T13:45:30.0-05:00").matches());
-        Assert.assertTrue(pattern.matcher("2024-05-17T13:45:30.000000001-05:00").matches());
+        Assert.assertTrue(pattern.matcher("2010").matches()); // year only
+        Assert.assertTrue(pattern.matcher("2010-06").matches()); // year and month
+        Assert.assertTrue(pattern.matcher("2010-06-15").matches()); // year, month and day (but not time)
+        Assert.assertTrue(pattern.matcher("2010-06-15T13:45:30-04:00").matches()); // UTC minus 4 hours
+        Assert.assertTrue(pattern.matcher("2010-06-15T13:45:30+05:30").matches()); // UTC plus 5 1/2 hours
+        Assert.assertTrue(pattern.matcher("2010-06-15T13:45:30Z").matches()); // UTC
+        
+        Assert.assertFalse(pattern.matcher("2010-06-15T00:00:30.000Z").matches()); // UTC with milliseconds - second fractions not allowed anymore
+        Assert.assertFalse(pattern.matcher("2010-06-15T13:45:30.001-05:00").matches()); // UTC minus 5 hours, with 1/1000 of seconds (milliseconds) - second fractions not allowed anymore
+        Assert.assertFalse(pattern.matcher("2010-06-15T13:45:30.0-05:00").matches()); // UTC minus 5 hours, with 1/10 of seconds - second fractions not allowed anymore
+        Assert.assertFalse(pattern.matcher("2010-06-15T13:45:30.000000001-05:00").matches()); // UTC minus 5 hours, with 1/10000000000 of seconds - second fractions not allowed anymore
 
         Assert.assertFalse(pattern.matcher("20100615").matches()); // dateTime uses dashes...
         Assert.assertFalse(pattern.matcher("2010-06-15T14:10").matches()); // timezone is required if time is provided

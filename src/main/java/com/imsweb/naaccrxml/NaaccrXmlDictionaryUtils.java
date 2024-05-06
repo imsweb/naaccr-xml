@@ -85,7 +85,7 @@ public final class NaaccrXmlDictionaryUtils {
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_NUMERIC, Pattern.compile("^\\d+(\\.\\d+)?$"));
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE, Pattern.compile("^(18|19|20)\\d\\d((0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])?)?$"));
         _NAACCR_DATA_TYPES_REGEX.put(NAACCR_DATA_TYPE_DATE_TIME, Pattern.compile(
-                "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]{1,9})?)?)?(Z|([+-])((0[0-9]|1[0-3]):[0-5][0-9]|14:00)?)?)?"));
+                "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60))?)?(Z|([+-])((0[0-9]|1[0-3]):[0-5][0-9]|14:00)?)?)?"));
     }
 
     // trimming rules (default is all)
