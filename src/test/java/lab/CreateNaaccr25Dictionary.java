@@ -126,7 +126,7 @@ public class CreateNaaccr25Dictionary {
         NaaccrDictionary dictionary = new NaaccrDictionary();
         dictionary.setDictionaryUri("http://naaccr.org/naaccrxml/naaccr-dictionary-250.xml");
         dictionary.setNaaccrVersion("250");
-        dictionary.setSpecificationVersion("1.7");
+        dictionary.setSpecificationVersion("1.8");
         Date lastModifiedValue = Date.from(LocalDateTime.now().withHour(12).withMinute(0).withSecond(0).withNano(0).atZone(ZoneId.systemDefault()).toInstant());
         dictionary.setDateLastModified(lastModifiedValue);
         dictionary.setDescription("NAACCR 24 base dictionary");

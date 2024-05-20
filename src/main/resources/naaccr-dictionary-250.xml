@@ -10,7 +10,7 @@
 
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-250.xml"
             naaccrVersion="250"
-            specificationVersion="1.7"
+            specificationVersion="1.8"
             dateLastModified="2024-05-20T12:00:00-04:00"
             description="NAACCR 24 base dictionary"
             xmlns="http://naaccr.org/naaccrxml">
