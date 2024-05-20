@@ -33,6 +33,7 @@ import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 
+@SuppressWarnings("SameParameterValue")
 public class SasTest {
 
     @Test
@@ -49,6 +50,7 @@ public class SasTest {
         formats.remove("220");
         formats.remove("230");
         formats.remove("240");
+        formats.remove("250");
         if (!formats.isEmpty())
             Assert.fail("Looks like a new format was added, please handle it in the SasXmlToCsv and SasCsvToXml constructors, and adjust this test: " + formats);
 
@@ -73,7 +75,6 @@ public class SasTest {
         Assert.assertTrue(fields.containsKey("myVariable"));
         Assert.assertEquals("Tumor", fields.get("myVariable"));
     }
-
 
     @Test
     public void testGetGroupedFields() throws IOException {

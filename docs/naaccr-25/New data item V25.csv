@@ -1,0 +1,28 @@
+Data Item Number,Data Item Name,Length,Record Type,XML NAACCR ID,Parent XML Element,Data Type
+1132,Pediatric ID,5,"A,C,I,M",pediatricId,Tumor,mixed
+1133,Pediatric ID Version Current,5,"A,C,I,M",pediatricIdVersionCurrent,Tumor,digits
+1134,Pediatric ID Version Original,5,"A,C,I,M",pediatricIdVersionOriginal,Tumor,digits
+1135,Toronto Version Number,1,"A,C,I,M",torontoVersionNumber,Tumor,numeric
+1136,Pediatric Primary Tumor,3,"A,C,I,M",pediatricPrimaryTumor,Tumor,numeric
+1137,Pediatric Regional Nodes,3,"A,C,I,M",pediatricRegionalNodes,Tumor,numeric
+1138,Pediatric Mets,2,"A,C,I,M",pediatricMets,Tumor,numeric
+1142,Derived Pediatric T,3,"A,C,I,M",derivedPediatricT,Tumor,
+1143,Derived Pediatric N,3,"A,C,I,M",derivedPediatricTN,Tumor,
+1144,Derived Pediatric M,3,"A,C,I,M",derivedPediatricM,Tumor,
+1145,Derived Pediatric Stage Group,3,"A,C,I,M",derivedPediatricStageGroup,Tumor,
+1146,Toronto T,3,"A,C,I,M",torontoT,Tumor,
+1147,Toronto N,3,"A,C,I,M",torontoN,Tumor,
+1148,Toronto M,3,"A,C,I,M",torontoM,Tumor,
+1149,Toronto Stage Group,3,"A,C,I,M",torontoStageGroup,Tumor,
+1172,Post Transplant Lymphoproliferative Disorder-PTLD,1,"A,C,I,M",ptld,Tumor,numeric
+1174,PD-L1,1,"A,C,I,M",pdl1,Tumor,numeric
+1184,White Blood Cell Count,7,"A,C,I,M",whiteBloodCellCount,Tumor,digits
+1185,Intl Neuroblastoma Risk Grp Stag Sys (INRGSS),1,"A,C,I,M",inrgss,Tumor,numeric
+1186,n-MYC Amplification,1,"A,C,I,M",nMycAmplification,Tumor,numeric
+1187,Intl Neuroblastoma Path Prog Class (INPC),1,"A,C,I,M",inpc,Tumor,digits
+1188,IRSS Stage for Eye-2,1,"A,C,I,M",irssStageForEye2,Tumor,numeric
+1189,Chromosome 16q: Loss of Heterozygosity,1,"A,C,I,M",chromosome16qLossHeterozygosity,Tumor,numeric
+1190,Chromosome 1q Status,3,"A,C,I,M",chromosome1qStatus,Tumor,numeric
+1191,EWSR1-FLI1 fusion,1,"A,C,I,M",ewsr1Fli1Fusion,Tumor,numeric
+1192,Pretext Clinical Staging,1,"A,C,I,M",pretextClinicalStaging,Tumor,numeric
+1193,FOXO1 Gene Rearrangements,1,"A,C,I,M",foxo1GeneRearrangements,Tumor,numeric

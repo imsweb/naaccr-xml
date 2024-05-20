@@ -1,0 +1,83 @@
+Comparison summary of base 240 and 250 dictionaries.
+
+The following item(s) were added to version 250:
+ - chromosome16qLossHeterozygosity (#1189) - Chromosome 16q: Loss of Heterozygosity
+ - chromosome1qStatus (#1190) - Chromosome 1q Status
+ - derivedPediatricM (#1144) - Derived Pediatric M
+ - derivedPediatricStageGroup (#1145) - Derived Pediatric Stage Group
+ - derivedPediatricT (#1142) - Derived Pediatric T
+ - derivedPediatricTN (#1143) - Derived Pediatric N
+ - ewsr1Fli1Fusion (#1191) - EWSR1-FLI1 fusion
+ - foxo1GeneRearrangements (#1193) - FOXO1 Gene Rearrangements
+ - inpc (#1187) - Intl Neuroblastoma Path Prog Class (INPC)
+ - inrgss (#1185) - Intl Neuroblastoma Risk Grp Stag Sys (INRGSS)
+ - irssStageForEye2 (#1188) - IRSS Stage for Eye-2
+ - nMycAmplification (#1186) - n-MYC Amplification
+ - pdl1 (#1174) - PD-L1
+ - pediatricId (#1132) - Pediatric ID
+ - pediatricIdVersionCurrent (#1133) - Pediatric ID Version Current
+ - pediatricIdVersionOriginal (#1134) - Pediatric ID Version Original
+ - pediatricMets (#1138) - Pediatric Mets
+ - pediatricPrimaryTumor (#1136) - Pediatric Primary Tumor
+ - pediatricRegionalNodes (#1137) - Pediatric Regional Nodes
+ - pretextClinicalStaging (#1192) - Pretext Clinical Staging
+ - ptld (#1172) - Post Transplant Lymphoproliferative Disorder-PTLD
+ - torontoM (#1148) - Toronto M
+ - torontoN (#1147) - Toronto N
+ - torontoStageGroup (#1149) - Toronto Stage Group
+ - torontoT (#1146) - Toronto T
+ - torontoVersionNumber (#1135) - Toronto Version Number
+ - whiteBloodCellCount (#1184) - White Blood Cell Count
+
+The following item(s) were removed from version 240:
+ - censusIndCode19702000 (#280) - Census Ind Code 1970-2000
+ - censusOccCode19702000 (#270) - Census Occ Code 1970-2000
+ - censusOccIndSys7000 (#330) - Census Occ/Ind Sys 70-00
+ - derivedNeoadjuvRxFlag (#3600) - Derived Neoadjuv Rx Flag
+ - derivedPostrx7M (#3490) - Derived PostRx-7 M
+ - derivedPostrx7N (#3482) - Derived PostRx-7 N
+ - derivedPostrx7StgeGrp (#3492) - Derived PostRx-7 Stge Grp
+ - derivedPostrx7T (#3480) - Derived PostRx-7 T
+ - derivedPrerx7M (#3460) - Derived PreRx-7 M
+ - derivedPrerx7MDescrip (#3462) - Derived PreRx-7 M Descrip
+ - derivedPrerx7N (#3450) - Derived PreRx-7 N
+ - derivedPrerx7NDescrip (#3452) - Derived PreRx-7 N Descrip
+ - derivedPrerx7StageGrp (#3470) - Derived PreRx-7 Stage Grp
+ - derivedPrerx7T (#3440) - Derived PreRx-7 T
+ - derivedPrerx7TDescrip (#3442) - Derived PreRx-7 T Descrip
+ - diagnosticProc7387 (#2200) - Diagnostic Proc 73-87
+ - inpatientStatus (#605) - Inpatient Status
+ - militaryRecordNoSuffix (#2310) - Military Record No Suffix
+ - npcrDerivedClinStgGrp (#3650) - NPCR Derived Clin Stg Grp
+ - npcrDerivedPathStgGrp (#3655) - NPCR Derived Path Stg Grp
+ - qualityOfSurvival (#1780) - Quality of Survival
+ - raceCodingSysCurrent (#170) - Race Coding Sys--Current
+ - raceCodingSysOriginal (#180) - Race Coding Sys--Original
+ - radBoostDoseCgy (#3210) - Rad--Boost Dose cGy
+ - radBoostRxModality (#3200) - Rad--Boost RX Modality
+ - radNoOfTreatmentVol (#1520) - Rad--No of Treatment Vol
+ - radRegionalDoseCgy (#1510) - Rad--Regional Dose: cGy
+ - radTreatmentVolume (#1540) - Rad--Treatment Volume
+ - rqrsNcdbSubmissionFlag (#2155) - RQRS NCDB Submission Flag
+ - subsqRxReconstructDel (#1741) - Subsq RX--Reconstruct Del
+
+The following item(s) got their name changed in version 250:
+ - censusIndCode2010 (#272) - from "Census Ind Code 2010 CDC" to "Census Ind Code CDC"
+ - censusOccCode2010 (#282) - from "Census Occ Code 2010 CDC" to "Census Occ Code CDC"
+
+The following item(s) got their length changed in version 250:
+ - pathDateSpecCollect1 (#7320) - from "14" to "25"
+ - pathDateSpecCollect2 (#7321) - from "14" to "25"
+ - pathDateSpecCollect3 (#7322) - from "14" to "25"
+ - pathDateSpecCollect4 (#7323) - from "14" to "25"
+ - pathDateSpecCollect5 (#7324) - from "14" to "25"
+
+The following item(s) got their data type changed in version 250:
+ - geocodingQualityCodeDetail (#87) - from "alpha" to "mixed"
+ - pathDateSpecCollect1 (#7320) - from "date" to "dateTime"
+ - pathDateSpecCollect2 (#7321) - from "date" to "dateTime"
+ - pathDateSpecCollect3 (#7322) - from "date" to "dateTime"
+ - pathDateSpecCollect4 (#7323) - from "date" to "dateTime"
+ - pathDateSpecCollect5 (#7324) - from "date" to "dateTime"
+ - schemaIdVersionCurrent (#2117) - from "text" to "numeric"
+ - schemaIdVersionOriginal (#2118) - from "text" to "numeric"

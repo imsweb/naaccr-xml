@@ -1,0 +1,83 @@
+Data Item Number,Data Item Name,Length,Source of Standard,Record Type,Section Name,XML NAACCR ID,Parent XML Element,Year Implemented,Version Implemented,Year Retired,Version Retired,NPCR Collect,CoC Collect,SEER Collect,CCCR Collect,Description,Rationale,Clarification,General Notes,Instructions for Coding,Allowable Values,Format,Data Type,Code Notes,Record Layout Table Note,Required Status Table Note,Data Descriptor Table Note,Record Layout Note,Required Status Note,Data Descriptor Note,Data Dictionary Description Note,Data Dictionary Rationale Note,Data Dictionary Code Note
+170,Race Coding Sys--Current,,,"A,C,I,M",,,,,,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+180,Race Coding Sys--Original,1,,"A,C,I,M",,,,,,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+270,Census Occ Code 1970-2000,1,,"A,C,I,M",,,,,,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+280,Census Ind Code 1970-2000,1,,"A,C,I,M",,,,,,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+330,Census Occ/Ind Sys 70-00,1,,"A,C,I,M",,,,,,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+605,Inpatient Status,1,,"A,C,I,M",,,,2010,12,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+1520,Rad--No of Treatment Vol,1,,"A,C,I,M",,,,,,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+1540,Rad--Treatment Volume,1,,"A,C,I,M",,,,,,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+1741,Subsq RX--Reconstruct Del,1,,"A,C,I,M",,,,1997,5.1,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+1780,Quality of Survival,1,,"A,C,I,M",,,,,,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+2200,Diagnostic Proc 73-87,2,,"A,C,I,M",,,,1995,5,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,text,,Revised,Revised,,Retired,Retired,Retired,Retired,Retired,Retired
+2310,Military Record No Suffix,1,,"A,C,M",,,,,,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3200,Rad--Boost RX Modality,1,,"A,C,I,M",,,,2003,10,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3210,Rad--Boost Dose cGy,1,,"A,C,I,M",,,,2003,10,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3440,Derived PreRx-7 T,3,,"A,C,I,M",,,,2010,12,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3442,Derived PreRx-7 T Descrip,1,,"A,C,I,M",,,,2010,12,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3450,Derived PreRx-7 N,3,,"A,C,I,M",,,,2010,12,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3452,Derived PreRx-7 N Descrip,1,,"A,C,I,M",,,,2010,12,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3462,Derived PreRx-7 M Descrip,1,,"A,C,I,M",,,,2010,12,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3470,Derived PreRx-7 Stage Grp,1,,"A,C,I,M",,,,2010,12,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3480,Derived PostRx-7 T,1,,"A,C,I,M",,,,2010,12,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3482,Derived PostRx-7 N,1,,"A,C,I,M",,,,2010,12,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3490,Derived PostRx-7 M,1,,"A,C,I,M",,,,2010,12,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3492,Derived PostRx-7 Stge Grp,1,,"A,C,I,M",,,,2010,12,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3600,Derived Neoadjuv Rx Flag,1,,"A,C,I,M",,,,2010,12,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3650,NPCR Derived Clin Stg Grp,1,,"A,C,I,M",,,,2016,16,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3655,NPCR Derived Path Stg Grp,1,,"A,C,I,M",,,,2016,16,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+2155,RQRS NCDB Submission Flag,1,,"A,C,I,M",,,,2018,18,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+3460,Derived PreRx-7 M,1,,"A,C,I,M",,,,2010,12,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+1510,Rad--Regional Dose: cGy,1,,"A,C,I,M",,,,,,2025,25,,,,,"The NAACCR UDSC retired this data item in Version 25, as of January 1, 2025.",,,,,,,,,Revised,Revised,Revised,Retired,Retired,Retired,Retired,Retired,Retired
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

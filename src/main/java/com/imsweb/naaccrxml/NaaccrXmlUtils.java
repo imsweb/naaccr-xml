@@ -17,13 +17,11 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,14 +38,6 @@ import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.runtime.NaaccrStreamConfiguration;
-
-import static java.time.temporal.ChronoField.DAY_OF_MONTH;
-import static java.time.temporal.ChronoField.HOUR_OF_DAY;
-import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
-import static java.time.temporal.ChronoField.MONTH_OF_YEAR;
-import static java.time.temporal.ChronoField.NANO_OF_SECOND;
-import static java.time.temporal.ChronoField.SECOND_OF_MINUTE;
-import static java.time.temporal.ChronoField.YEAR;
 
 /**
  * This utility class provides static methods for reading, writing and translating to/from XML and flat file NAACCR files.
@@ -620,37 +610,5 @@ public final class NaaccrXmlUtils {
             throw new NullPointerException("Date to write cannot be null!");
 
         return ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-    }
-
-    // TODO FD doc
-    public static Object parseDateTimeValue(String value) {
-        if (StringUtils.isBlank(value))
-            return null;
-
-        DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder()
-                .parseCaseInsensitive()
-                .appendValue(YEAR, 4)
-                .optionalStart()
-                .appendValue(MONTH_OF_YEAR, 2)
-                .optionalStart()
-                .appendValue(DAY_OF_MONTH, 2)
-                .optionalStart()
-                .appendValue(HOUR_OF_DAY, 2)
-                .appendValue(MINUTE_OF_HOUR, 2)
-                .optionalStart()
-                .appendValue(SECOND_OF_MINUTE, 2)
-                .optionalStart()
-                .appendFraction(NANO_OF_SECOND, 0, 4, true)
-                //.parseLenient()
-                //.optionalStart()
-                //.appendOffsetId()
-                //.parseStrict()
-                .toFormatter();
-
-        //return Date.from(LocalDateTime.parse(value, dateFormatter).toInstant(ZoneOffset.UTC));
-        return LocalDate.parse(value, dateFormatter);
-
-        //rn Date.from(ZonedDateTime.parse(value, dateFormatter).toInstant());
-
     }
 }

@@ -23,7 +23,7 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 public class XmlDictionaryComparator {
 
     public static void main(String[] args) throws IOException {
-        compareDictionaryVersions("230", "240");
+        compareDictionaryVersions("240", "250");
     }
 
     /**
@@ -89,7 +89,7 @@ public class XmlDictionaryComparator {
 
             // removed
             if (!removedItems.isEmpty()) {
-                writer.write("\nThe following item(s) were removed from version " + newVersion + ":\n");
+                writer.write("\nThe following item(s) were removed from version " + oldVersion + ":\n");
                 for (NaaccrDictionaryItem item : removedItems)
                     writer.write(" - " + item.getNaaccrId() + " (#" + item.getNaaccrNum() + ") - " + item.getNaaccrName() + "\n");
             }

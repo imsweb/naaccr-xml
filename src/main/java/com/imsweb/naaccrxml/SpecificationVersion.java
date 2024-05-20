@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public final class SpecificationVersion {
 
+    public static final String SPEC_1_8 = "1.8";
     public static final String SPEC_1_7 = "1.7";
     public static final String SPEC_1_6 = "1.6";
     public static final String SPEC_1_5 = "1.5";
@@ -27,8 +28,15 @@ public final class SpecificationVersion {
      * Returns true if the provided spec is supported by this library, false otherwise.
      */
     public static boolean isSpecificationSupported(String spec) {
-        return SPEC_1_0.equals(spec) || SPEC_1_1.equals(spec) || SPEC_1_2.equals(spec) || SPEC_1_3.equals(spec) || SPEC_1_4.equals(spec) || SPEC_1_5.equals(spec) || SPEC_1_6.equals(spec)
-                || SPEC_1_7.equals(spec);
+        return SPEC_1_0.equals(spec)
+               || SPEC_1_1.equals(spec)
+               || SPEC_1_2.equals(spec)
+               || SPEC_1_3.equals(spec)
+               || SPEC_1_4.equals(spec)
+               || SPEC_1_5.equals(spec)
+               || SPEC_1_6.equals(spec)
+               || SPEC_1_7.equals(spec)
+               || SPEC_1_8.equals(spec);
     }
 
     /**

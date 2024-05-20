@@ -54,6 +54,7 @@ import static com.imsweb.naaccrxml.SpecificationVersion.SPEC_1_2;
 import static com.imsweb.naaccrxml.SpecificationVersion.SPEC_1_3;
 import static com.imsweb.naaccrxml.SpecificationVersion.SPEC_1_6;
 import static com.imsweb.naaccrxml.SpecificationVersion.SPEC_1_7;
+import static com.imsweb.naaccrxml.SpecificationVersion.SPEC_1_8;
 
 /**
  * This utility class can be used to read/write dictionaries, whether they are internal to the library, or provided by the user...
@@ -585,6 +586,10 @@ public final class NaaccrXmlDictionaryUtils {
             if (type != null && (!NAACCR_DATA_TYPE_ALPHA.equals(type) && !NAACCR_DATA_TYPE_DIGITS.equals(type) && !NAACCR_DATA_TYPE_MIXED.equals(type)) && !NAACCR_DATA_TYPE_NUMERIC.equals(type)
                 && !NAACCR_DATA_TYPE_TEXT.equals(type) && !NAACCR_DATA_TYPE_DATE.equals(type) && !NAACCR_DATA_TYPE_DATE_TIME.equals(type))
                 errors.add("invalid value for 'dataType' attribute: " + item.getDataType());
+            
+            // validate dateTime
+            if (NAACCR_DATA_TYPE_DATE_TIME.equals(type) && SpecificationVersion.compareSpecifications(specVersion, SPEC_1_8) < 0)
+                errors.add("data type 'dataType' was introduced with specifications 1.8 can cannot be used with prior specifications");
 
             // validate unlimited text
             if (item.getAllowUnlimitedText() != null && SpecificationVersion.compareSpecifications(specVersion, SPEC_1_6) >= 0)
