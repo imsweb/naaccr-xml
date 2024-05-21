@@ -12,7 +12,7 @@
             naaccrVersion="250"
             specificationVersion="1.8"
             dateLastModified="2024-05-20T12:00:00-04:00"
-            description="NAACCR 24 base dictionary"
+            description="NAACCR 25 base dictionary"
             xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>
         <ItemDef naaccrId="abstractedBy"

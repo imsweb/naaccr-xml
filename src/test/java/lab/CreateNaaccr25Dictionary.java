@@ -129,7 +129,7 @@ public class CreateNaaccr25Dictionary {
         dictionary.setSpecificationVersion("1.8");
         Date lastModifiedValue = Date.from(LocalDateTime.now().withHour(12).withMinute(0).withSecond(0).withNano(0).atZone(ZoneId.systemDefault()).toInstant());
         dictionary.setDateLastModified(lastModifiedValue);
-        dictionary.setDescription("NAACCR 24 base dictionary");
+        dictionary.setDescription("NAACCR 25 base dictionary");
         dictionary.setItems(items);
         
         NaaccrXmlDictionaryUtils.validateBaseDictionary(dictionary);
