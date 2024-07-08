@@ -3,7 +3,7 @@
 **Version 11.0 (not released yet)**
 
 - Added support for NAACCR 25.
-- Added support for new specification version 1.7 (added support for new dateTime type).
+- Added support for new specification version 1.8 (added support for new dateTime type).
 
 **Version 10.2**
 
