@@ -3,6 +3,8 @@
  */
 package com.imsweb.naaccrxml;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.StringUtils;
 
 public final class SpecificationVersion {
@@ -46,6 +48,9 @@ public final class SpecificationVersion {
      * @return negative integer if first version is smaller, 0 if they are the same, positive integer otherwise
      */
     public static int compareSpecifications(String spec1, String spec2) {
+        if (StringUtils.isBlank(spec1) || !isSpecificationSupported(spec1) || StringUtils.isBlank(spec2) || !isSpecificationSupported(spec2))
+            return Objects.compare(spec1, spec2, String::compareTo);
+        
         String[] parts1 = StringUtils.split(spec1, '.');
         Integer major1 = Integer.valueOf(parts1[0]);
         Integer minor1 = Integer.valueOf(parts1[1]);

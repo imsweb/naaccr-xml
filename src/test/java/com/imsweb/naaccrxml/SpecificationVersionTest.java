@@ -44,6 +44,10 @@ public class SpecificationVersionTest {
         Assert.assertEquals(1, SpecificationVersion.compareSpecifications("2.1", "1.0"));
         Assert.assertEquals(-1, SpecificationVersion.compareSpecifications("1.2", "2.1"));
         Assert.assertEquals(1, SpecificationVersion.compareSpecifications("2.1", "1.2"));
+
+        Assert.assertEquals(2, SpecificationVersion.compareSpecifications("1.0", "1"));
+        Assert.assertEquals(-2, SpecificationVersion.compareSpecifications("1", "1.0"));
+        Assert.assertEquals(0, SpecificationVersion.compareSpecifications("1", "1"));
     }
 
     @Test
