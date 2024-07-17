@@ -13,6 +13,7 @@ import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_REC_TYPE_MODIFIED;
 import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_VERSION_160;
 import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_VERSION_180;
 import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_VERSION_210;
+import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_VERSION_LATEST;
 
 public class NaaccrFormatTest {
 
@@ -40,5 +41,10 @@ public class NaaccrFormatTest {
         Assert.assertEquals(22824, NaaccrFormat.getInstance(NAACCR_VERSION_160, NAACCR_REC_TYPE_MODIFIED).getLineLength());
         Assert.assertEquals(5564, NaaccrFormat.getInstance(NAACCR_VERSION_160, NAACCR_REC_TYPE_CONFIDENTIAL).getLineLength());
         Assert.assertEquals(3339, NaaccrFormat.getInstance(NAACCR_VERSION_160, NAACCR_REC_TYPE_INCIDENCE).getLineLength());
+    }
+    
+    @Test
+    public void testGetDisplayName() {
+        Assert.assertNotNull(NaaccrFormat.getInstance(NAACCR_VERSION_LATEST, NAACCR_REC_TYPE_ABSTRACT).getDisplayName());
     }
 }

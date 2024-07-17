@@ -43,7 +43,7 @@ public final class NaaccrFormat {
     }
 
     // "latest" version
-    public static final String NAACCR_VERSION_LATEST = NAACCR_VERSION_240;
+    public static final String NAACCR_VERSION_LATEST = NAACCR_VERSION_250;
 
     public static boolean isVersionSupported(String version) {
         return _SUPPORTED_VERSIONS.contains(version);
