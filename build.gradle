@@ -95,10 +95,10 @@ sonarqube {
         property "sonar.projectKey", "imsweb_naaccr-xml"
         property "sonar.organization", "imsweb"
         property "sonar.host.url", "https://sonarcloud.io"
-        property 'sonar.exclusions', '**/lab/*'
-        property 'sonar.coverage.exclusions', '**/lab/*'
-        property 'sonar.exclusions', '**/sas/*'
-        property 'sonar.coverage.exclusions', '**/sas/*'
+        property "sonar.exclusions", "**/lab/**"
+        property "sonar.coverage.exclusions", "**/lab/**"
+        property "sonar.exclusions", "**/sas/**"
+        property "sonar.coverage.exclusions", "**/sas/**"
     }
 }
 
