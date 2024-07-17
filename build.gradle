@@ -6,6 +6,8 @@ import java.time.Duration
  * manually created before and added to the release:
  * 
  *     gradlew clean createDistribution
+ * 
+ * Note that creating a release doesn't seem to trigger the publish job, I am not sure why. I have been doing it manually so far...
  */
 
 plugins {
