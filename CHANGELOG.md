@@ -1,6 +1,6 @@
 ## NAACCR XML Version History
 
-**Version 11.0 (not released yet)**
+**Version 11.0**
 
 - Added support for NAACCR 25.
 - Added support for new specification version 1.8 (added support for new dateTime type).
