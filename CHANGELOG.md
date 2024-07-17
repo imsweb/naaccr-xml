@@ -4,6 +4,7 @@
 
 - Added support for NAACCR 25.
 - Added support for new specification version 1.8 (added support for new dateTime type).
+- Re-compiled SAS library under Java 8; it is no longer compatible with Java 7.
 
 **Version 10.2**
 

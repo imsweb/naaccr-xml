@@ -1,4 +1,4 @@
-// this gradle file is used to create Java-7 compliant code to be used with SAS.
+// this gradle file is used to create Java-8 compliant code to be used with SAS.
 
 sourceSets {
     sas {
@@ -19,8 +19,8 @@ sourceSets {
 }
 
 compileSasJava {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 tasks.register('jarSas', Jar) {
