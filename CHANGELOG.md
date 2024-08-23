@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 11.1**
+
+- Fixed two minor mistakes in the NAACCR 25 base dictionary.
+
 **Version 11.0**
 
 - Added support for NAACCR 25.
