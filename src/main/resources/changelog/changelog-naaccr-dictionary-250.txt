@@ -1,4 +1,5 @@
 <!-- Changelog
+ - 08/23/2024: changed length of chromosome1qStatus from 3 to 1 and changed derivedPediatricTN to derivedPediatricN
  - 05/28/2024: changed length and type of pdl1.
  - 05/20/2024: Initial version.
 -->

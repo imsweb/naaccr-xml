@@ -95,7 +95,7 @@ censusTractCertainty2020,369,"Census Tract Certainty 2020",,1,"A,M,C,I",Tumor,di
 chromosome16qLossHeterozygosity,1189,"Chromosome 16q: Loss of Heterozygosity",,1,"A,M,C,I",Tumor,numeric
 chromosome19qLossHeterozygosity,3802,"Chromosome 19q: Loss of Heterozygosity (LOH)",,1,"A,M,C,I",Tumor,digits
 chromosome1pLossHeterozygosity,3801,"Chromosome 1p: Loss of Heterozygosity (LOH)",,1,"A,M,C,I",Tumor,digits
-chromosome1qStatus,1190,"Chromosome 1q Status",,3,"A,M,C,I",Tumor,numeric
+chromosome1qStatus,1190,"Chromosome 1q Status",,1,"A,M,C,I",Tumor,numeric
 chromosome3Status,3821,"Chromosome 3 Status",,1,"A,M,C,I",Tumor,digits
 chromosome8qStatus,3822,"Chromosome 8q Status",,1,"A,M,C,I",Tumor,text
 circumferentialResectionMargin,3823,"Circumferential Resection Margin (CRM)",,4,"A,M,C,I",Tumor,text
@@ -208,9 +208,9 @@ derivedEod2018N,815,"Derived EOD 2018 N",,15,"A,M,C,I",Tumor,text
 derivedEod2018StageGroup,818,"Derived EOD 2018 Stage Group",,15,"A,M,C,I",Tumor,text
 derivedEod2018T,785,"Derived EOD 2018 T",,15,"A,M,C,I",Tumor,text
 derivedPediatricM,1144,"Derived Pediatric M",,3,"A,M,C,I",Tumor,text
+derivedPediatricN,1143,"Derived Pediatric N",,3,"A,M,C,I",Tumor,text
 derivedPediatricStageGroup,1145,"Derived Pediatric Stage Group",,3,"A,M,C,I",Tumor,text
 derivedPediatricT,1142,"Derived Pediatric T",,3,"A,M,C,I",Tumor,text
-derivedPediatricTN,1143,"Derived Pediatric N",,3,"A,M,C,I",Tumor,text
 derivedRaiStage,3955,"Derived Rai Stage",,1,"A,M,C,I",Tumor,text
 derivedSeerClinStgGrp,3610,"Derived SEER Clin Stg Grp",,5,"A,M,C,I",Tumor,text
 derivedSeerCmbMSrc,3626,"Derived SEER Cmb M Src",,1,"A,M,C,I",Tumor,digits
