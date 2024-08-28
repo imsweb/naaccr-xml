@@ -6,7 +6,7 @@ The following item(s) were added to version 250:
  - derivedPediatricM (#1144) - Derived Pediatric M
  - derivedPediatricStageGroup (#1145) - Derived Pediatric Stage Group
  - derivedPediatricT (#1142) - Derived Pediatric T
- - derivedPediatricTN (#1143) - Derived Pediatric N
+ - derivedPediatricN (#1143) - Derived Pediatric N
  - ewsr1Fli1Fusion (#1191) - EWSR1-FLI1 fusion
  - foxo1GeneRearrangements (#1193) - FOXO1 Gene Rearrangements
  - inpc (#1187) - Intl Neuroblastoma Path Prog Class (INPC)
