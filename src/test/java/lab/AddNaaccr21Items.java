@@ -4,13 +4,13 @@
 package lab;
 
 import java.io.File;
-import java.io.FileReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
-import com.opencsv.CSVReader;
+import de.siegmar.fastcsv.reader.CsvReader;
+import de.siegmar.fastcsv.reader.NamedCsvRecord;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
@@ -30,18 +30,16 @@ public class AddNaaccr21Items {
             NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(path.toFile());
             dictionary.getItemByNaaccrId("force-caching");
 
-            try (CSVReader reader = new CSVReader(new FileReader(new File(TestingUtils.getWorkingDirectory() + "/docs/naaccr-21/Vol2 v21 New and Revised select fields DRAFT.csv")))) {
-                String[] line = reader.readNext(); // ignore headers
+            File file = new File(TestingUtils.getWorkingDirectory() + "/docs/naaccr-21/Vol2 v21 New and Revised select fields DRAFT.csv");
+            try (CsvReader<NamedCsvRecord> reader = CsvReader.builder().ofNamedCsvRecord(file.toPath())) {
+                reader.stream().forEach(line -> {
 
-                line = reader.readNext();
-                while (line != null) {
-
-                    Integer num = Integer.parseInt(line[0]);
-                    Integer length = Integer.parseInt(line[1]);
-                    String name = line[2];
-                    String id = line[3];
-                    String level = line[4];
-                    boolean isNew = "New".equals(line[7]);
+                    Integer num = Integer.parseInt(line.getField(0));
+                    Integer length = Integer.parseInt(line.getField(1));
+                    String name = line.getField(2);
+                    String id = line.getField(3);
+                    String level = line.getField(4);
+                    boolean isNew = "New".equals(line.getField(7));
 
                     if (isNew) {
                         NaaccrDictionaryItem item = new NaaccrDictionaryItem();
@@ -60,9 +58,7 @@ public class AddNaaccr21Items {
                         else
                             System.out.println("Need to review " + id);
                     }
-
-                    line = reader.readNext();
-                }
+                });
             }
 
             dictionary.getItems().forEach(i -> i.setStartColumn(null));

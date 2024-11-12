@@ -4,7 +4,6 @@
 package lab;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -19,8 +18,8 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvException;
+import de.siegmar.fastcsv.reader.CsvReader;
+import de.siegmar.fastcsv.reader.NamedCsvRecord;
 
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.TestingUtils;
@@ -29,54 +28,48 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 public class CreateNaaccr25Dictionary {
 
-    public static void main(String[] args) throws IOException, CsvException {
-        
+    public static void main(String[] args) throws IOException {
+
         List<NaaccrDictionaryItem> itemsToAdd = new ArrayList<>();
-        try (CSVReader reader = new CSVReader(new FileReader(TestingUtils.getWorkingDirectory() + "/docs/naaccr-25/New data item V25.csv"))) {
-            String[] line = reader.readNext();
-            while (line != null) {
-                if ("Data Item Number".equals(line[0]) || line[0].isEmpty()) {
-                    line = reader.readNext();
-                    continue;
-                }
-                
+        File file = new File(TestingUtils.getWorkingDirectory() + "/docs/naaccr-25/New data item V25.csv");
+        try (CsvReader<NamedCsvRecord> reader = CsvReader.builder().ofNamedCsvRecord(file.toPath())) {
+            reader.stream().forEach(line -> {
+                if ("Data Item Number".equals(line.getField(0)) || line.getField(0).isEmpty())
+                    return;
+
                 NaaccrDictionaryItem item = new NaaccrDictionaryItem();
-                item.setNaaccrNum(Integer.valueOf(line[0]));
-                item.setNaaccrName(line[1]);
-                item.setLength(Integer.valueOf(line[2]));
-                item.setRecordTypes(line[3]);
+                item.setNaaccrNum(Integer.valueOf(line.getField(0)));
+                item.setNaaccrName(line.getField(1));
+                item.setLength(Integer.valueOf(line.getField(2)));
+                item.setRecordTypes(line.getField(3));
                 if ("A,C,I,M".equals(item.getRecordTypes()))
                     item.setRecordTypes("A,M,C,I");
-                item.setNaaccrId(line[4]);
-                item.setParentXmlElement(line[5]);
-                item.setDataType(line[6]);
+                item.setNaaccrId(line.getField(4));
+                item.setParentXmlElement(line.getField(5));
+                item.setDataType(line.getField(6));
                 if (StringUtils.isBlank(item.getDataType()))
                     item.setDataType("text");
                 itemsToAdd.add(item);
-                
-                line = reader.readNext();
-            }
+            });
         }
 
         Map<String, NaaccrDictionaryItem> itemsToModified = new HashMap<>();
-        try (CSVReader reader = new CSVReader(new FileReader(TestingUtils.getWorkingDirectory() + "/docs/naaccr-25/Changed data items V25.csv"))) {
-            String[] line = reader.readNext();
-            while (line != null) {
-                if ("Data Item Number".equals(line[0]) || line[0].isEmpty()) {
-                    line = reader.readNext();
-                    continue;
-                }
+        file = new File(TestingUtils.getWorkingDirectory() + "/docs/naaccr-25/Changed data items V25.csv");
+        try (CsvReader<NamedCsvRecord> reader = CsvReader.builder().ofNamedCsvRecord(file.toPath())) {
+            reader.stream().forEach(line -> {
+                if ("Data Item Number".equals(line.getField(0)) || line.getField(0).isEmpty())
+                    return;
 
                 NaaccrDictionaryItem item = new NaaccrDictionaryItem();
-                item.setNaaccrNum(Integer.valueOf(line[0]));
-                item.setNaaccrName(line[1]);
-                item.setLength(Integer.valueOf(line[2]));
-                item.setRecordTypes(line[4]);
+                item.setNaaccrNum(Integer.valueOf(line.getField(0)));
+                item.setNaaccrName(line.getField(1));
+                item.setLength(Integer.valueOf(line.getField(2)));
+                item.setRecordTypes(line.getField(4));
                 if ("A,C,I,M".equals(item.getRecordTypes()))
                     item.setRecordTypes("A,M,C,I");
-                item.setNaaccrId(line[6]);
-                item.setParentXmlElement(line[7]);
-                item.setDataType(line[23]);
+                item.setNaaccrId(line.getField(6));
+                item.setParentXmlElement(line.getField(7));
+                item.setDataType(line.getField(23));
                 if (item.getNaaccrId().startsWith("pathDateSpecCollect"))
                     item.setDataType("dateTime");
                 else if (item.getNaaccrId().equals("tumorRecordNumber") || item.getNaaccrId().equals("censusIndCode2010"))
@@ -84,31 +77,25 @@ public class CreateNaaccr25Dictionary {
                 else if (StringUtils.isBlank(item.getDataType()))
                     item.setDataType("text");
                 itemsToModified.put(item.getNaaccrId(), item);
-
-                line = reader.readNext();
-            }
+            });
         }
 
         Set<Integer> itemsToRemove = new HashSet<>();
-        try (CSVReader reader = new CSVReader(new FileReader(TestingUtils.getWorkingDirectory() + "/docs/naaccr-25/Retired Data Items in V25.csv"))) {
-            String[] line = reader.readNext();
-            while (line != null) {
-                if ("Data Item Number".equals(line[0]) || line[0].isEmpty()) {
-                    line = reader.readNext();
-                    continue;
-                }
+        file = new File(TestingUtils.getWorkingDirectory() + "/docs/naaccr-25/Retired Data Items in V25.csv");
+        try (CsvReader<NamedCsvRecord> reader = CsvReader.builder().ofNamedCsvRecord(file.toPath())) {
+            reader.stream().forEach(line -> {
+                if ("Data Item Number".equals(line.getField(0)) || line.getField(0).isEmpty())
+                    return;
 
-                itemsToRemove.add(Integer.valueOf(line[0]));
-
-                line = reader.readNext();
-            }
+                itemsToRemove.add(Integer.valueOf(line.getField(0)));
+            });
         }
 
         List<NaaccrDictionaryItem> items = new ArrayList<>(NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion("240").getItems());
         items.removeIf(i -> itemsToRemove.contains(i.getNaaccrNum()));
-        
+
         items.addAll(itemsToAdd);
-        
+
         for (NaaccrDictionaryItem item : items) {
             NaaccrDictionaryItem updatedItem = itemsToModified.get(item.getNaaccrId());
             if (updatedItem != null) {
@@ -122,7 +109,7 @@ public class CreateNaaccr25Dictionary {
         }
 
         items.sort(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId));
-        
+
         NaaccrDictionary dictionary = new NaaccrDictionary();
         dictionary.setDictionaryUri("http://naaccr.org/naaccrxml/naaccr-dictionary-250.xml");
         dictionary.setNaaccrVersion("250");
@@ -131,11 +118,11 @@ public class CreateNaaccr25Dictionary {
         dictionary.setDateLastModified(lastModifiedValue);
         dictionary.setDescription("NAACCR 25 base dictionary");
         dictionary.setItems(items);
-        
+
         NaaccrXmlDictionaryUtils.validateBaseDictionary(dictionary);
 
         File targetFile = new File(TestingUtils.getWorkingDirectory() + "/src/main/resources/naaccr-dictionary-250.xml");
         NaaccrXmlDictionaryUtils.writeDictionary(dictionary, targetFile);
     }
-    
+
 }

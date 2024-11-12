@@ -4,7 +4,6 @@
 package com.imsweb.naaccrxml;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,8 +21,8 @@ import org.apache.commons.lang3.SystemUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvException;
+import de.siegmar.fastcsv.reader.CsvReader;
+import de.siegmar.fastcsv.reader.NamedCsvRecord;
 
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
@@ -488,7 +487,7 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertTrue(pattern.matcher("2010-06-15T13:45:30-04:00").matches()); // UTC minus 4 hours
         Assert.assertTrue(pattern.matcher("2010-06-15T13:45:30+05:30").matches()); // UTC plus 5 1/2 hours
         Assert.assertTrue(pattern.matcher("2010-06-15T13:45:30Z").matches()); // UTC
-        
+
         Assert.assertFalse(pattern.matcher("2010-06-15T00:00:30.000Z").matches()); // UTC with milliseconds - second fractions not allowed anymore
         Assert.assertFalse(pattern.matcher("2010-06-15T13:45:30.001-05:00").matches()); // UTC minus 5 hours, with 1/1000 of seconds (milliseconds) - second fractions not allowed anymore
         Assert.assertFalse(pattern.matcher("2010-06-15T13:45:30.0-05:00").matches()); // UTC minus 5 hours, with 1/10 of seconds - second fractions not allowed anymore
@@ -532,12 +531,13 @@ public class NaaccrXmlDictionaryUtilsTest {
 
     @Test
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void testWriteDictionaryToCsv() throws IOException, CsvException {
+    public void testWriteDictionaryToCsv() throws IOException {
         NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(NaaccrFormat.NAACCR_VERSION_LATEST);
         File file = new File(TestingUtils.getBuildDirectory(), "dictionary.csv");
         NaaccrXmlDictionaryUtils.writeDictionaryToCsv(dictionary, file);
-        try (FileReader reader = new FileReader(file)) {
-            Assert.assertFalse(new CSVReader(reader).readAll().isEmpty());
+
+        try (CsvReader<NamedCsvRecord> reader = CsvReader.builder().ofNamedCsvRecord(file.toPath())) {
+            Assert.assertFalse(reader.stream().toString().isEmpty());
         }
         finally {
             file.delete();

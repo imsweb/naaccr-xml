@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -38,11 +39,11 @@ public class UserDefinedDictionariesBackup {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd", Locale.US);
         File outputFile = new File(dir, "user-defined-dictionaries-backup-" + dateTimeFormatter.format(LocalDate.now()) + ".zip");
 
-        URL url = new URL("https://www.naaccr.org/xml-user-dictionary/#1595253894728-6781cbdf-8c50");
+        URL url = new URI("https://www.naaccr.org/xml-user-dictionary/#1595253894728-6781cbdf-8c50").toURL();
 
         String fullContent;
         try (InputStream is = url.openStream()) {
-            fullContent = new Scanner(is, StandardCharsets.UTF_8.name()).useDelimiter("\\A").next();
+            fullContent = new Scanner(is, StandardCharsets.UTF_8).useDelimiter("\\A").next();
         }
 
         //System.out.println(fullContent);
@@ -58,8 +59,8 @@ public class UserDefinedDictionariesBackup {
                 String filename = dictionaryUrl.substring(dictionaryUrl.lastIndexOf("/") + 1);
 
                 String dictionaryContent;
-                try (InputStream is = new URL(dictionaryUrl).openStream()) {
-                    dictionaryContent = new Scanner(is, StandardCharsets.UTF_8.name()).useDelimiter("\\A").next();
+                try (InputStream is = new URI(dictionaryUrl).toURL().openStream()) {
+                    dictionaryContent = new Scanner(is, StandardCharsets.UTF_8).useDelimiter("\\A").next();
                 }
 
                 ZipEntry entry = new ZipEntry(outputFile.getName().replace(".zip", "") + "/" + registry + "_" + filename);

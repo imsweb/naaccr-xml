@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 11.2**
+
+- Updated XStream dependency from version 1.4.20 to version 1.4.21.
+
 **Version 11.1**
 
 - Fixed two minor mistakes in the NAACCR 25 base dictionary.

@@ -3,13 +3,14 @@
  */
 package lab;
 
-import java.io.FileReader;
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
-import com.opencsv.CSVReader;
+import de.siegmar.fastcsv.reader.CsvReader;
+import de.siegmar.fastcsv.reader.NamedCsvRecord;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
@@ -29,19 +30,17 @@ public class AddNaaccr22Items {
             NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(path.toFile());
             dictionary.getItemByNaaccrId("force-caching");
 
-            try (CSVReader reader = new CSVReader(new FileReader(TestingUtils.getWorkingDirectory() + "/docs/naaccr-22/Vol II v22 Layout for N22 Base dictionary.csv"))) {
-                String[] line = reader.readNext(); // ignore headers
+            File file = new File(TestingUtils.getWorkingDirectory() + "/docs/naaccr-22/Vol II v22 Layout for N22 Base dictionary.csv");
+            try (CsvReader<NamedCsvRecord> reader = CsvReader.builder().ofNamedCsvRecord(file.toPath())) {
+                reader.stream().forEach(line -> {
 
-                line = reader.readNext();
-                while (line != null) {
-
-                    Integer length = Integer.parseInt(line[0]);
-                    Integer num = Integer.parseInt(line[1]);
-                    String name = line[2];
-                    String id = line[3];
-                    String level = line[6];
-                    String type = line[7];
-                    boolean isNew = "New".equals(line[8]);
+                    Integer length = Integer.parseInt(line.getField(0));
+                    Integer num = Integer.parseInt(line.getField(1));
+                    String name = line.getField(2);
+                    String id = line.getField(3);
+                    String level = line.getField(6);
+                    String type = line.getField(7);
+                    boolean isNew = "New".equals(line.getField(8));
 
                     if (isNew) {
                         NaaccrDictionaryItem item = new NaaccrDictionaryItem();
@@ -60,9 +59,7 @@ public class AddNaaccr22Items {
                         if (item == null)
                             System.out.println("!!! Unable to find " + id);
                     }
-
-                    line = reader.readNext();
-                }
+                });
             }
 
             dictionary.setItems(dictionary.getItems().stream().sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId)).collect(Collectors.toList()));

@@ -14,7 +14,7 @@ plugins {
     id 'java-library'
     id 'checkstyle'
     id 'jacoco'
-    id 'com.github.spotbugs' version '6.0.20'
+    id 'com.github.spotbugs' version '6.0.26'
     id 'maven-publish'
     id 'signing'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0' // publish to Maven Central
@@ -34,15 +34,15 @@ repositories {
 }
 
 dependencies {
-    api 'com.thoughtworks.xstream:xstream:1.4.20'
+    api 'com.thoughtworks.xstream:xstream:1.4.21'
 
-    implementation 'commons-io:commons-io:2.16.1'
-    implementation 'org.apache.commons:commons-lang3:3.16.0'
+    implementation 'commons-io:commons-io:2.17.0'
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'com.imsweb:data-generator:1.32'
-    testImplementation 'com.imsweb:layout:5.6'
-    testImplementation 'com.opencsv:opencsv:5.9'
+    testImplementation 'com.imsweb:data-generator:1.34'
+    testImplementation 'com.imsweb:layout:5.7'
+    testImplementation 'de.siegmar:fastcsv:3.4.0'
 }
 
 // enforce UTF-8, display the compilation warnings
@@ -58,8 +58,8 @@ tasks.withType(Javadoc).configureEach {
 
 // generate javadoc and sources (required by Nexus)
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     withJavadocJar()
     withSourcesJar()
@@ -222,10 +222,10 @@ nexusPublishing {
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '8.9'
+    gradleVersion = '8.11'
     distributionType = Wrapper.DistributionType.ALL
 }
 
-// the SAS library is compiled under Java 7 code-compatibility; Intellij can't handle that (only because I didn't properly set it up as a module)
+// the SAS library is compiled under Java 8 code-compatibility; Intellij can't handle that (only because I didn't properly set it up as a module)
 if (System.getProperty("idea.active") != 'true')
     apply from: 'gradle/sas.gradle'
