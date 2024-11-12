@@ -2,6 +2,7 @@
 
 **Version 11.2**
 
+- The minimum Java version of the library is no Java 11; Java 8 is no longer supported (this doesn't apply to the SAS macros).
 - Updated XStream dependency from version 1.4.20 to version 1.4.21.
 
 **Version 11.1**
