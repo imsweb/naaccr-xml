@@ -1,8 +1,12 @@
 ## NAACCR XML Version History
 
+**Version 11.3** (not released yet)
+
+- Changed type of pdl1 from mixed to text and whiteBloodCellCount from digits to text in NAACCR 25 dictionary.
+
 **Version 11.2**
 
-- The minimum Java version of the library is no Java 11; Java 8 is no longer supported (this doesn't apply to the SAS macros).
+- The minimum Java version of the library is now Java 11; Java 8 is no longer supported (this doesn't apply to the SAS macros).
 - Updated XStream dependency from version 1.4.20 to version 1.4.21.
 
 **Version 11.1**

@@ -495,7 +495,7 @@ pathReportingFacId4,7013,"Path Reporting Fac ID 4",,25,"A,M",Tumor,text
 pathReportingFacId5,7014,"Path Reporting Fac ID 5",,25,"A,M",Tumor,text
 patientIdNumber,20,"Patient ID Number",,8,"A,M,C,I",Patient,digits
 patientSystemIdHosp,21,"Patient System ID-Hosp",,8,"A,M,C,I",Tumor,digits
-pdl1,1174,"PD-L1",,5,"A,M,C,I",Tumor,mixed
+pdl1,1174,"PD-L1",,5,"A,M,C,I",Tumor,text
 pediatricId,1132,"Pediatric ID",,5,"A,M,C,I",Tumor,mixed
 pediatricIdVersionCurrent,1133,"Pediatric ID Version Current",,5,"A,M,C,I",Tumor,digits
 pediatricIdVersionOriginal,1134,"Pediatric ID Version Original",,5,"A,M,C,I",Tumor,digits
@@ -778,4 +778,4 @@ vendorName,2170,"Vendor Name",,10,"A,M,C,I",Tumor,text
 visceralParietalPleuralInvasion,3937,"Visceral and Parietal Pleural Invasion",,1,"A,M,C,I",Tumor,digits
 vitalStatus,1760,"Vital Status",,1,"A,M,C,I",Patient,digits
 vitalStatusRecode,1762,"Vital Status Recode",,1,"A,M,C,I",Patient,digits
-whiteBloodCellCount,1184,"White Blood Cell Count",,7,"A,M,C,I",Tumor,digits
+whiteBloodCellCount,1184,"White Blood Cell Count",,7,"A,M,C,I",Tumor,text

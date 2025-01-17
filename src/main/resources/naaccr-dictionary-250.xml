@@ -5,15 +5,16 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
- - 08/23/2024: changed length of chromosome1qStatus from 3 to 1 and changed derivedPediatricTN to derivedPediatricN
- - 05/28/2024: changed length and type of pdl1.
+ - 01/17/2025: Changed type of pdl1 from mixed to text and whiteBloodCellCount from digits to text.
+ - 08/23/2024: Changed length of chromosome1qStatus from 3 to 1 and changed derivedPediatricTN to derivedPediatricN.
+ - 05/28/2024: Changed length and type of pdl1.
  - 05/20/2024: Initial version.
 -->
 
 <NaaccrDictionary dictionaryUri="http://naaccr.org/naaccrxml/naaccr-dictionary-250.xml"
             naaccrVersion="250"
             specificationVersion="1.8"
-            dateLastModified="2024-08-23T12:00:00-04:00"
+            dateLastModified="2025-01-17T12:00:00-04:00"
             description="NAACCR 25 base dictionary"
             xmlns="http://naaccr.org/naaccrxml">
     <ItemDefs>
@@ -3381,8 +3382,7 @@
             naaccrName="PD-L1"
             length="5"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"
-            dataType="mixed"/>
+            parentXmlElement="Tumor"/>
         <ItemDef naaccrId="pediatricId"
             naaccrNum="1132"
             naaccrName="Pediatric ID"
@@ -5345,7 +5345,6 @@
             naaccrName="White Blood Cell Count"
             length="7"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"
-            dataType="digits"/>
+            parentXmlElement="Tumor"/>
     </ItemDefs>
 </NaaccrDictionary>
