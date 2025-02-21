@@ -3,6 +3,7 @@
  */
 package lab;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
@@ -18,6 +19,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
@@ -49,26 +51,48 @@ public class UserDefinedDictionariesBackup {
         //System.out.println(fullContent);
 
         //<td class="column-1">Alaska</td><td class="column-2"><a href="https://www.naaccr.org/wp-content/uploads/ninja-forms/21/alaska-naaccr-dictionary-220-v1.xml" rel="noopener noreferrer" target="_blank"> XML User Dictionary</a><br />
-        Pattern pattern = Pattern.compile("<td class=\"column-1\">(.+?)</td><td class=\"column-2\"><a href=\"(.+?)\".+XML User Dictionary</a>", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
-
-        Matcher mather = pattern.matcher(fullContent);
+        Pattern pattern = Pattern.compile("<td class=\"column-2 regcol\">([^<]+?)</td>.+?<td class=\"column-3\"><a target=\"_blank\" href=\"([^ ]+?)\" .+?</a>", Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+        
+        Matcher mather = pattern.matcher(fullContent.replace("\r\n", ""));
         try (ZipOutputStream zos = new ZipOutputStream(Files.newOutputStream(outputFile.toPath()))) {
             while (mather.find()) {
                 String registry = mather.group(1);
                 String dictionaryUrl = mather.group(2);
+                
                 String filename = dictionaryUrl.substring(dictionaryUrl.lastIndexOf("/") + 1);
+                
+                if (filename.toLowerCase().endsWith(".xml")) {
 
-                String dictionaryContent;
-                try (InputStream is = new URI(dictionaryUrl).toURL().openStream()) {
-                    dictionaryContent = new Scanner(is, StandardCharsets.UTF_8).useDelimiter("\\A").next();
+                    String dictionaryContent;
+                    try (InputStream is = new URI(dictionaryUrl).toURL().openStream()) {
+                        dictionaryContent = new Scanner(is, StandardCharsets.UTF_8).useDelimiter("\\A").next();
+                    }
+                    
+                    ZipEntry entry = new ZipEntry(registry + "/" + filename);
+                    zos.putNextEntry(entry);
+                    try (Reader reader = new StringReader(dictionaryContent)) {
+                        IOUtils.copy(reader, zos, StandardCharsets.UTF_8);
+                        zos.flush();
+                    }
+                    System.out.println(registry + " -> " + filename);
                 }
-
-                ZipEntry entry = new ZipEntry(outputFile.getName().replace(".zip", "") + "/" + registry + "_" + filename);
-                entry.setComment(registry);
-                zos.putNextEntry(entry);
-                try (Reader reader = new StringReader(dictionaryContent)) {
-                    IOUtils.copy(reader, zos, StandardCharsets.UTF_8);
-                    zos.flush();
+                else if (filename.toLowerCase().endsWith(".zip")) {
+                    try (ZipInputStream is = new ZipInputStream(new URI(dictionaryUrl).toURL().openStream())) {
+                        ZipEntry entry = is.getNextEntry();
+                        while (entry != null) {
+                            if (entry.getName().toLowerCase().endsWith(".xml")) {
+                                ZipEntry newEntry = new ZipEntry(registry + "/" + entry.getName());
+                                zos.putNextEntry(newEntry);
+                                try (ByteArrayInputStream bais = new ByteArrayInputStream(is.readAllBytes())) {
+                                    IOUtils.copy(bais, zos);
+                                    zos.flush();
+                                }
+                                System.out.println(registry + " -> " + entry.getName());
+                            }
+                            is.closeEntry();
+                            entry = is.getNextEntry();
+                        }
+                    }
                 }
             }
         }
