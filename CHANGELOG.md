@@ -1,8 +1,12 @@
 ## NAACCR XML Version History
 
-**Version 11.3** (not released yet)
+**Version 11.3**
 
-- Changed type of pdl1 from mixed to text and whiteBloodCellCount from digits to text in NAACCR 25 dictionary.
+- Changed type of pediatricId from mixed to text in NAACCR 25 dictionary.
+- Changed type of pediatricIdVersionCurrent from digits to numeric in NAACCR 25 dictionary.
+- Changed type of pediatricIdVersionOriginal from digits to numeric in NAACCR 25 dictionary.
+- Changed type of pdl1 from mixed to text in NAACCR 25 dictionary.
+- Changed type of whiteBloodCellCount from digits to text in NAACCR 25 dictionary.
 
 **Version 11.2**
 
