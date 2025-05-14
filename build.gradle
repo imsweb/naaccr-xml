@@ -40,6 +40,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'com.imsweb:data-generator:2.1'
     testImplementation 'com.imsweb:layout:6.2'
+    testImplementation 'com.imsweb:naaccr-api-client:1.2'
     testImplementation 'de.siegmar:fastcsv:3.7.0'
 }
 

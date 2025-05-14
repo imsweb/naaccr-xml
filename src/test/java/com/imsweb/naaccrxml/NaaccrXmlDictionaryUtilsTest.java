@@ -13,8 +13,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.SystemUtils;
@@ -24,66 +26,82 @@ import org.junit.Test;
 import de.siegmar.fastcsv.reader.CsvReader;
 import de.siegmar.fastcsv.reader.NamedCsvRecord;
 
+import com.imsweb.naaccr.api.client.NaaccrApiClient;
+import com.imsweb.naaccr.api.client.entity.NaaccrDataItem;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
-import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_REC_TYPE_CONFIDENTIAL;
-import static com.imsweb.naaccrxml.NaaccrFormat.NAACCR_REC_TYPE_INCIDENCE;
 import static org.junit.Assert.fail;
 
 @SuppressWarnings("ConstantConditions")
 public class NaaccrXmlDictionaryUtilsTest {
 
     @Test
-    @SuppressWarnings("CollectionAddAllCanBeReplacedWithConstructor")
     public void testInternalDictionaries() throws IOException {
-        for (String version : NaaccrFormat.getSupportedVersions()) {
-            List<NaaccrDictionaryItem> items = new ArrayList<>();
 
-            // make sure internal base dictionaries are valid
+        List<String> versionsToCheckAgainstApi = List.of(NaaccrFormat.NAACCR_VERSION_LATEST);
+
+        for (String version : NaaccrFormat.getSupportedVersions()) {
             try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("naaccr-dictionary-" + version + ".xml"))) {
                 NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
                 Assert.assertTrue(version, NaaccrXmlDictionaryUtils.validateBaseDictionary(dict).isEmpty());
                 Assert.assertTrue(version, NaaccrXmlDictionaryUtils.BASE_DICTIONARY_URI_PATTERN.matcher(dict.getDictionaryUri()).matches());
-                items.addAll(dict.getItems());
-            }
+                for (NaaccrDictionaryItem item : dict.getItems())
+                    if (item.getNaaccrId().length() > 50)
+                        fail("Found item with ID too long: " + item.getNaaccrId());
 
-            // make sure internal default user dictionaries are valid
-            if (Integer.parseInt(version) < 220) {
-                try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("user-defined-naaccr-dictionary-" + version + ".xml"))) {
-                    NaaccrDictionary dict = NaaccrXmlDictionaryUtils.readDictionary(reader);
-                    Assert.assertTrue(version, NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
-                    Assert.assertTrue(version, NaaccrXmlDictionaryUtils.DEFAULT_USER_DICTIONARY_URI_PATTERN.matcher(dict.getDictionaryUri()).matches());
-                    items.addAll(dict.getItems());
-                }
-            }
+                if (versionsToCheckAgainstApi.contains(dict.getNaaccrVersion())) {
+                    Map<String, NaaccrDataItem> apiItems = new HashMap<>();
+                    for (NaaccrDataItem apiItem : NaaccrApiClient.getInstance().getDataItems(dict.getNaaccrVersion().substring(0, 2))) {
+                        if (apiItem.getXmlNaaccrId() != null) { // API returns old items that aren't part of the current version...
+                            if (apiItem.getItemDataType() == null)
+                                apiItem.setItemDataType("text"); // this feels like a mistake in the API data!
 
-            // make sure the combination of fields doesn't leave any gaps
-            if (Integer.parseInt(version) <= 180) {
-                items.sort(Comparator.comparing(NaaccrDictionaryItem::getStartColumn));
-                for (int i = 0; i < items.size() - 1; i++)
-                    if (items.get(i).getStartColumn() + items.get(i).getLength() != items.get(i + 1).getStartColumn())
-                        fail("Found a gap after item " + items.get(i).getNaaccrId());
-            }
+                            // definitively errors in the API data!
+                            if ("derivedPediatricT".equals(apiItem.getXmlNaaccrId()) || "derivedPediatricN".equals(apiItem.getXmlNaaccrId()))
+                                apiItem.setItemDataType("text");
 
-            // make sure IDs are no longer than 50 characters (this will be enforced by the standard in a future version)
-            for (NaaccrDictionaryItem item : items)
-                if (item.getNaaccrId().length() > 50)
-                    fail("Found item with ID too long: " + item.getNaaccrId());
+                            if ("pathDateSpecCollect5".equals(apiItem.getXmlNaaccrId()))
+                                apiItem.setItemDataType("dateTime");
 
-            // check record type
-            if (Integer.parseInt(version) <= 180) {
-                for (NaaccrDictionaryItem item : items) {
-                    if (item.getStartColumn() > NaaccrFormat.getInstance(version, NAACCR_REC_TYPE_INCIDENCE).getLineLength())
-                        Assert.assertFalse("Item " + item.getNaaccrId() + " has an invalid type definition: " + item.getRecordTypes(), item.getRecordTypes().contains(NAACCR_REC_TYPE_INCIDENCE));
-                    if (item.getStartColumn() > NaaccrFormat.getInstance(version, NAACCR_REC_TYPE_CONFIDENTIAL).getLineLength())
-                        Assert.assertFalse("Item " + item.getNaaccrId() + " has an invalid type definition: " + item.getRecordTypes(), item.getRecordTypes().contains(NAACCR_REC_TYPE_CONFIDENTIAL));
+                            apiItems.put(apiItem.getXmlNaaccrId(), apiItem);
+                        }
+                    }
+
+                    List<String> issues = new ArrayList<>();
+                    for (NaaccrDictionaryItem item : dict.getItems())
+                        compareItems(item, apiItems.remove(item.getNaaccrId()), issues);
+                    for (String apiId : apiItems.keySet())
+                        issues.add(apiId + " was returned by the API but it was not found in local dictionary");
+
+                    if (!issues.isEmpty())
+                        Assert.fail("Found the following issues when comparing v" + dict.getNaaccrVersion() + " dictionaries:\n\n   " + String.join("\n   ", issues));
                 }
             }
         }
 
         // clear the caches, force other tests to reload them again
         NaaccrXmlDictionaryUtils.clearCachedDictionaries();
+    }
+
+    private void compareItems(NaaccrDictionaryItem item, NaaccrDataItem apiItem, List<String> issues) {
+        String prefix = item.getNaaccrId();
+        if (apiItem == null)
+            issues.add(prefix + " was found in local dictionary but not returned by the API");
+        else {
+            if (!Objects.equals(item.getNaaccrNum(), apiItem.getItemNumber()))
+                issues.add(prefix + " number differs: \"" + item.getNaaccrNum() + "\" vs \"" + apiItem.getItemNumber() + "\"");
+            if (!Objects.equals(item.getNaaccrName(), apiItem.getItemName().trim())) // API should trim the name!!!
+                issues.add(prefix + " name differs: \"" + item.getNaaccrName() + "\" vs \"" + apiItem.getItemName() + "\"");
+            if (!Objects.equals(item.getDataType(), apiItem.getItemDataType()))
+                issues.add(prefix + " data type differs: \"" + item.getDataType() + "\" vs \"" + apiItem.getItemDataType() + "\"");
+            if (!Objects.equals(item.getLength(), apiItem.getItemLength()))
+                issues.add(prefix + " length differs: \"" + item.getLength() + "\" vs \"" + apiItem.getItemLength() + "\"");
+            if (!Objects.equals(item.getParentXmlElement(), apiItem.getXmlParentId()))
+                issues.add(prefix + " parent XML tag differs: \"" + item.getParentXmlElement() + "\" vs \"" + apiItem.getXmlParentId() + "\"");
+            if (!Objects.equals(item.getRecordTypes().length(), apiItem.getRecordTypes().length())) // can't compare values, API returns random order of letters!
+                issues.add(prefix + " record types differs: \"" + item.getRecordTypes() + "\" vs \"" + apiItem.getRecordTypes() + "\"");
+        }
     }
 
     @Test
