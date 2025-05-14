@@ -427,16 +427,10 @@ public class PatientXmlWriterTest {
                 zos.putNextEntry(new ZipEntry("test-file-" + i + ".xml"));
 
                 // we can't use a try-with-resource since it would call close, but we have to call closeAndKeepAlive!
-                PatientXmlWriter writer = null;
-                try {
-                    writer = new PatientXmlWriter(new OutputStreamWriter(zos), new NaaccrData(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT));
+                try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(zos), new NaaccrData(NaaccrFormat.NAACCR_FORMAT_16_ABSTRACT))) {
                     Patient patient = new Patient();
                     patient.addItem(new Item("patientIdNumber", "0000000" + i));
                     writer.writePatient(patient);
-                }
-                finally {
-                    if (writer != null)
-                        writer.closeAndKeepAlive();
                 }
             }
         }

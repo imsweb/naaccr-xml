@@ -150,27 +150,28 @@ public final class BatchProcessor {
 
         // create the work
         long start = System.currentTimeMillis();
-        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-        for (File inputFile : toProcess) {
-            String outputFilename = invertFilename(inputFile, compression);
-            @SuppressWarnings("ConstantConditions")
-            File outputFile = new File(outputDir, outputFilename);
-            if (inputFile.equals(outputFile))
-                throw new IllegalStateException("Was about to write output file into the input file, this can't be good!");
-            if (cleanCreatedFiles)
-                outputFile.deleteOnExit();
-            List<String> data = new ArrayList<>();
-            reportData.put(inputFile.getName(), data);
-            executor.execute(new FileProcessor(inputFile, outputFile, data, cleanCreatedFiles, "flat-to-xml".equals(mode), globalCounts, globalDetails, globalTumorCount, errorCodes));
-        }
-        executor.shutdown();
+        try (ExecutorService executor = Executors.newFixedThreadPool(numThreads)) {
+            for (File inputFile : toProcess) {
+                String outputFilename = invertFilename(inputFile, compression);
+                @SuppressWarnings("ConstantConditions")
+                File outputFile = new File(outputDir, outputFilename);
+                if (inputFile.equals(outputFile))
+                    throw new IllegalStateException("Was about to write output file into the input file, this can't be good!");
+                if (cleanCreatedFiles)
+                    outputFile.deleteOnExit();
+                List<String> data = new ArrayList<>();
+                reportData.put(inputFile.getName(), data);
+                executor.execute(new FileProcessor(inputFile, outputFile, data, cleanCreatedFiles, "flat-to-xml".equals(mode), globalCounts, globalDetails, globalTumorCount, errorCodes));
+            }
+            executor.shutdown();
 
-        // wait for the work to be completed
-        executor.awaitTermination(1, TimeUnit.DAYS);
+            // wait for the work to be completed
+            executor.awaitTermination(1, TimeUnit.DAYS);
+        }
 
         // write the report
         if (createReport) {
-            try (Writer reportWriter = new OutputStreamWriter(Files.newOutputStream(new File(outputDir, reportName).toPath()), StandardCharsets.UTF_8);) {
+            try (Writer reportWriter = new OutputStreamWriter(Files.newOutputStream(new File(outputDir, reportName).toPath()), StandardCharsets.UTF_8)) {
 
                 reportWriter.write("Report created on " + new Date() + "\n\n");
                 reportWriter.write("total number of files: " + formatNumber(toProcess.size()) + "\n");
