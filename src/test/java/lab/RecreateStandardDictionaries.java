@@ -8,11 +8,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
 public class RecreateStandardDictionaries {
 
@@ -27,11 +31,12 @@ public class RecreateStandardDictionaries {
         // the only reason to ever change that is the dictionary to be changed twice in the same day...
         Date lastModifiedValue = Date.from(LocalDateTime.now().withHour(12).withMinute(0).withSecond(0).withNano(0).atZone(ZoneId.systemDefault()).toInstant());
 
-        for (String version : NaaccrFormat.getSupportedVersions()) {
+        for (String version : Collections.singletonList("260")) { // NaaccrFormat.getSupportedVersions()) {
             Path path = Paths.get("src/main/resources/naaccr-dictionary-" + version + ".xml");
             NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(path.toFile());
             if (updateLastModified)
                 dictionary.setDateLastModified(lastModifiedValue);
+            dictionary.setItems(dictionary.getItems().stream().sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrId)).collect(Collectors.toList()));
             NaaccrXmlDictionaryUtils.writeDictionary(dictionary, path.toFile());
 
             if (version.compareTo(NaaccrFormat.NAACCR_VERSION_210) <= 0) {

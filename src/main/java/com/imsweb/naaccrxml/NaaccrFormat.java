@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 public final class NaaccrFormat {
 
     // version constants
+    public static final String NAACCR_VERSION_260 = "260";
     public static final String NAACCR_VERSION_250 = "250";
     public static final String NAACCR_VERSION_240 = "240";
     public static final String NAACCR_VERSION_230 = "230";
@@ -31,6 +32,7 @@ public final class NaaccrFormat {
     private static final List<String> _SUPPORTED_VERSIONS = new ArrayList<>();
 
     static {
+        _SUPPORTED_VERSIONS.add(NAACCR_VERSION_260);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_250);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_240);
         _SUPPORTED_VERSIONS.add(NAACCR_VERSION_230);
@@ -54,6 +56,10 @@ public final class NaaccrFormat {
     }
 
     // format constants
+    public static final String NAACCR_FORMAT_26_ABSTRACT = "naaccr-260-abstract";
+    public static final String NAACCR_FORMAT_26_MODIFIED = "naaccr-260-modified";
+    public static final String NAACCR_FORMAT_26_CONFIDENTIAL = "naaccr-260-confidential";
+    public static final String NAACCR_FORMAT_26_INCIDENCE = "naaccr-260-incidence";
     public static final String NAACCR_FORMAT_25_ABSTRACT = "naaccr-250-abstract";
     public static final String NAACCR_FORMAT_25_MODIFIED = "naaccr-250-modified";
     public static final String NAACCR_FORMAT_25_CONFIDENTIAL = "naaccr-250-confidential";
@@ -95,6 +101,10 @@ public final class NaaccrFormat {
     private static final List<String> _SUPPORTED_FORMATS = new ArrayList<>();
 
     static {
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_26_ABSTRACT);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_26_MODIFIED);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_26_CONFIDENTIAL);
+        _SUPPORTED_FORMATS.add(NAACCR_FORMAT_26_INCIDENCE);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_25_ABSTRACT);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_25_MODIFIED);
         _SUPPORTED_FORMATS.add(NAACCR_FORMAT_25_CONFIDENTIAL);

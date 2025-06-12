@@ -1,0 +1,36 @@
+Comparing version 25 and 26 from API on Jun 12, 2025, 12:43:23?PM
+> Got 946 items for 25
+> Got 954 items for 26
+
+Items removed from version 26
+> Comorbid/Complication 1 (#3110)
+> Comorbid/Complication 10 (#3164)
+> Comorbid/Complication 2 (#3120)
+> Comorbid/Complication 3 (#3130)
+> Comorbid/Complication 4 (#3140)
+> Comorbid/Complication 5 (#3150)
+> Comorbid/Complication 6 (#3160)
+> Comorbid/Complication 7 (#3161)
+> Comorbid/Complication 8 (#3162)
+> Comorbid/Complication 9 (#3163)
+> NPCR Derived AJCC 8 TNM Clin Stg Grp (#3645)
+> NPCR Derived AJCC 8 TNM Path Stg Grp (#3646)
+> NPCR Derived AJCC 8 TNM Post Therapy Stg Grp (#3647)
+> Pediatric Stage (#1120)
+> Pediatric Staged By (#1140)
+> Pediatric Staging System (#1130)
+> Sex (#220)
+
+Items added in version 26
+> Geocoding Accuracy Score (#331)
+> Geocoding Accuracy Type (#332)
+> RUCA 2020 (#342)
+> Residual Cancer Burden (RCB) (#1178)
+> Residual Cancer Burden Class (#1179)
+> Sex Assigned at Birth (#225)
+> Spread Through Air Spaces (STAS) (#1176)
+> URIC 2020 (#347)
+
+Items updated in version 26
+> Over-ride Name/Sex Assigned at Birth (#2078):
+  >> name changed from Over-ride Name/Sex to Over-ride Name/Sex Assigned at Birth
