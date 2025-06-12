@@ -6,6 +6,7 @@ package lab;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,7 @@ import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 
-public class RemoveUserDictionaryLab {
+public class RemoveUserDictionaryFromDataFileLab {
 
     public static void main(String[] args) throws IOException {
         File oldDir = new File("<replaced-me>");
@@ -27,7 +28,7 @@ public class RemoveUserDictionaryLab {
         NaaccrOptions options = new NaaccrOptions();
         options.setAllowMissingDictionary(true);
 
-        for (File file : oldDir.listFiles()) {
+        for (File file : Objects.requireNonNull(oldDir.listFiles())) {
             System.out.println("Processing " + file.getPath());
 
             NaaccrData data = NaaccrXmlUtils.readXmlFile(file, options, null, null);

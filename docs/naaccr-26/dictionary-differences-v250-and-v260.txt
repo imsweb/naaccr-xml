@@ -1,0 +1,33 @@
+Comparison summary of base 250 and 260 dictionaries.
+
+The following item(s) were added to version 260:
+ - geocodingAccuracyScore (#331) - Geocoding Accuracy Score
+ - geocodingAccuracyType (#332) - Geocoding Accuracy Type
+ - residualCancerBurdenClass (#1179) - Residual Cancer Burden Class
+ - residualCancerBurdenRCB (#1178) - Residual Cancer Burden (RCB)
+ - ruca2020 (#342) - RUCA 2020
+ - sexAssignedAtBirth (#225) - Sex Assigned at Birth
+ - spreadThrougAirSpacesStas (#1176) - Spread Through Air Spaces (STAS)
+ - uric2020 (#347) - URIC 2020
+
+The following item(s) were removed from version 250:
+ - comorbidComplication1 (#3110) - Comorbid/Complication 1
+ - comorbidComplication10 (#3164) - Comorbid/Complication 10
+ - comorbidComplication2 (#3120) - Comorbid/Complication 2
+ - comorbidComplication3 (#3130) - Comorbid/Complication 3
+ - comorbidComplication4 (#3140) - Comorbid/Complication 4
+ - comorbidComplication5 (#3150) - Comorbid/Complication 5
+ - comorbidComplication6 (#3160) - Comorbid/Complication 6
+ - comorbidComplication7 (#3161) - Comorbid/Complication 7
+ - comorbidComplication8 (#3162) - Comorbid/Complication 8
+ - comorbidComplication9 (#3163) - Comorbid/Complication 9
+ - npcrDerivedAjcc8TnmClinStgGrp (#3645) - NPCR Derived AJCC 8 TNM Clin Stg Grp
+ - npcrDerivedAjcc8TnmPathStgGrp (#3646) - NPCR Derived AJCC 8 TNM Path Stg Grp
+ - npcrDerivedAjcc8TnmPostStgGrp (#3647) - NPCR Derived AJCC 8 TNM Post Therapy Stg Grp
+ - pediatricStage (#1120) - Pediatric Stage
+ - pediatricStagedBy (#1140) - Pediatric Staged By
+ - pediatricStagingSystem (#1130) - Pediatric Staging System
+ - sex (#220) - Sex
+
+The following item(s) got their name changed in version 260:
+ - overRideNameSex (#2078) - from "Over-ride Name/Sex" to "Over-ride Name/Sex Assigned at Birth"

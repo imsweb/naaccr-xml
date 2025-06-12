@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 12.0**
+
+- Added support for NAACCR 26.
+
 **Version 11.3**
 
 - Changed type of pediatricId from mixed to text in NAACCR 25 dictionary.
