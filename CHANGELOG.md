@@ -3,6 +3,7 @@
 **Version 12.0**
 
 - Added support for NAACCR 26.
+- Updated library dependencies.
 
 **Version 11.3**
 
