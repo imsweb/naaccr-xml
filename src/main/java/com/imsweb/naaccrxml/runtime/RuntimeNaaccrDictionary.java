@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.NaaccrIOException;
@@ -71,12 +72,12 @@ public class RuntimeNaaccrDictionary {
         _format = NaaccrFormat.getInstance(baseDictionary.getNaaccrVersion(), recordType);
         _items = new ArrayList<>();
         for (NaaccrDictionaryItem item : baseDictionary.getItems())
-            if (item.getRecordTypes() == null || StringUtils.contains(item.getRecordTypes(), recordType))
+            if (item.getRecordTypes() == null || Strings.CS.contains(item.getRecordTypes(), recordType))
                 _items.add(new RuntimeNaaccrDictionaryItem(item));
         Set<String> processedIds = new HashSet<>();
         for (NaaccrDictionary userDictionary : dictionaries) {
             for (NaaccrDictionaryItem item : userDictionary.getItems()) {
-                if ((item.getRecordTypes() == null || StringUtils.contains(item.getRecordTypes(), recordType) && !processedIds.contains(item.getNaaccrId()))) {
+                if ((item.getRecordTypes() == null || Strings.CS.contains(item.getRecordTypes(), recordType) && !processedIds.contains(item.getNaaccrId()))) {
                     _items.add(new RuntimeNaaccrDictionaryItem(item));
                     processedIds.add(item.getNaaccrId());
                 }
