@@ -255,8 +255,8 @@ followUpSourceCentral,1791,"Follow-up Source Central",,2,"A,M,C,I",Patient,digit
 followingRegistry,2440,"Following Registry",,10,"A,M,C",Tumor,digits
 followupContactCountry,1847,"FollowUp Contact--Country",,3,"A,M,C,I",Tumor,alpha
 foxo1GeneRearrangements,1193,"FOXO1 Gene Rearrangements",,1,"A,M,C,I",Tumor,numeric
-geocodingAccuracyScore,331,"Geocoding Accuracy Score",,4,"A,M,C,I",Tumor,text
-geocodingAccuracyType,332,"Geocoding Accuracy Type",,4,"A,M,C,I",Tumor,text
+geocodingAccuracyScore,331,"Geocoding Accuracy Score",,4,"A,M,C,I",Tumor,numeric
+geocodingAccuracyType,332,"Geocoding Accuracy Type",,21,"A,M,C,I",Tumor,text
 geocodingQualityCode,86,"Geocoding Quality Code",,1,"A,M,C,I",Tumor,alpha
 geocodingQualityCodeDetail,87,"Geocoding Quality Code Detail",,14,"A,M,C,I",Tumor,mixed
 gestationalTrophoblasticPxIndex,3837,"Gestational Trophoblastic Prognostic Scoring Index",,2,"A,M,C,I",Tumor,text
@@ -670,7 +670,7 @@ siteCodingSysOriginal,460,"Site Coding Sys--Original",,1,"A,M,C,I",Tumor,digits
 siteIcdO1,1960,"Site (73-91) ICD-O-1",,4,"A,M,C,I",Tumor,digits
 socialSecurityNumber,2320,"Social Security Number",,9,"A,M,C",Patient,digits
 spanishHispanicOrigin,190,"Spanish/Hispanic Origin",,1,"A,M,C,I",Patient,digits
-spreadThrougAirSpacesStas,1176,"Spread Through Air Spaces (STAS)",,1,"A,M,C,I",Tumor,numeric
+spreadThroughAirSpacesStas,1176,"Spread Through Air Spaces (STAS)",,1,"A,M,C,I",Tumor,numeric
 stateAtDxGeocode19708090,81,"State at DX Geocode 1970/80/90",,2,"A,M,C,I",Tumor,text
 stateAtDxGeocode2000,82,"State at DX Geocode 2000",,2,"A,M,C,I",Tumor,text
 stateAtDxGeocode2010,83,"State at DX Geocode 2010",,2,"A,M,C,I",Tumor,text

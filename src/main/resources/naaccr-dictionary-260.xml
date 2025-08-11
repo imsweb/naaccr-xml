@@ -5,6 +5,9 @@
      Visit https://www.naaccr.org/ for more information about the NAACCR XML Data Exchange Standard. -->
 
 <!-- Changelog
+ - 08/11/2025: Changed length of "Geocoding Accuracy Type" from 4 to 21
+ - 08/11/2025: Changed data type of "Geocoding Accuracy Score" from "text" to "numeric"
+ - 08/11/2025: Changed ID of "Spread Through Air Spaces (STAS)" from "spreadThrougAirSpacesStas" to "spreadThroughAirSpacesStas"
  - 06/12/2025: Initial version.
 -->
 
@@ -1768,11 +1771,12 @@
             naaccrName="Geocoding Accuracy Score"
             length="4"
             recordTypes="A,M,C,I"
-            parentXmlElement="Tumor"/>
+            parentXmlElement="Tumor"
+            dataType="numeric"/>
         <ItemDef naaccrId="geocodingAccuracyType"
             naaccrNum="332"
             naaccrName="Geocoding Accuracy Type"
-            length="4"
+            length="21"
             recordTypes="A,M,C,I"
             parentXmlElement="Tumor"/>
         <ItemDef naaccrId="geocodingQualityCode"
@@ -4603,7 +4607,7 @@
             recordTypes="A,M,C,I"
             parentXmlElement="Patient"
             dataType="digits"/>
-        <ItemDef naaccrId="spreadThrougAirSpacesStas"
+        <ItemDef naaccrId="spreadThroughAirSpacesStas"
             naaccrNum="1176"
             naaccrName="Spread Through Air Spaces (STAS)"
             length="1"

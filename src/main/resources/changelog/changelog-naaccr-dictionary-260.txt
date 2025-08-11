@@ -1,3 +1,6 @@
 <!-- Changelog
+ - 08/11/2025: Changed length of "Geocoding Accuracy Type" from 4 to 21
+ - 08/11/2025: Changed data type of "Geocoding Accuracy Score" from "text" to "numeric"
+ - 08/11/2025: Changed ID of "Spread Through Air Spaces (STAS)" from "spreadThrougAirSpacesStas" to "spreadThroughAirSpacesStas"
  - 06/12/2025: Initial version.
 -->

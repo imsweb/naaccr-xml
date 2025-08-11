@@ -22,6 +22,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imsweb.naaccr.api.client.NaaccrApiClient;
 import com.imsweb.naaccr.api.client.entity.NaaccrDataItem;
 
+/**
+ * Use this class to
+ */
 @SuppressWarnings("ConstantValue")
 public class EvaluateNewVersion {
 

@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 12.1**
+
+- Fixed length, type and ID of a few new N26 items in base dictionary.
+
 **Version 12.0**
 
 - Added support for NAACCR 26.
