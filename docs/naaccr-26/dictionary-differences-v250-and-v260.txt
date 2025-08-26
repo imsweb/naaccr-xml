@@ -7,7 +7,7 @@ The following item(s) were added to version 260:
  - residualCancerBurdenRCB (#1178) - Residual Cancer Burden (RCB)
  - ruca2020 (#342) - RUCA 2020
  - sexAssignedAtBirth (#225) - Sex Assigned at Birth
- - spreadThrougAirSpacesStas (#1176) - Spread Through Air Spaces (STAS)
+ - spreadhThrougAirSpacesStas (#1176) - Spread Through Air Spaces (STAS)
  - uric2020 (#347) - URIC 2020
 
 The following item(s) were removed from version 250:
