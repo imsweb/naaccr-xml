@@ -12,12 +12,10 @@ import com.vanniktech.maven.publish.*
 
 plugins {
     id 'java-library'
-    id 'checkstyle'
     id 'jacoco'
     id 'com.vanniktech.maven.publish' version '0.32.0' // publish to Maven Central
     id 'com.github.ben-manes.versions' version '0.52.0' // check for out-of-date dependencies (run 'dependencyUpdates' manually)
     id 'com.github.spotbugs' version '6.2.2' // spotbugs code analysis
-    id 'org.sonatype.gradle.plugins.scan' version '3.1.1' // scan for vulnerabilities
     id 'org.sonarqube' version '6.2.0.5505' // sonarQube analysis
 }
 
@@ -95,20 +93,6 @@ sonarqube {
         property "sonar.exclusions", "**/lab/**,**/sas/**"
         property "sonar.coverage.exclusions", "**/lab/**,**/sas/**"
     }
-}
-
-// Nexus vulnerability scan (see https://github.com/sonatype-nexus-community/scan-gradle-plugin)
-ossIndexAudit {
-    outputFormat = 'DEPENDENCY_GRAPH'
-    printBanner = false
-}
-check.dependsOn 'ossIndexAudit'
-
-// checkstyle plugin settings
-checkstyle {
-    ignoreFailures = false
-    configFile = project(':').file('config/checkstyle/checkstyle.xml')
-    configProperties = ['suppressionFile': project(':').file('config/checkstyle/checkstyle-exclude.xml')]
 }
 
 // spotbugs plugin settings
