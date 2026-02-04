@@ -6,6 +6,7 @@ package com.imsweb.naaccrxml.sas;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -58,12 +59,22 @@ public class SasUtilsTest {
     @Test
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void testExtractRequestedFields() throws IOException {
-        File file = new File(TestingUtils.getBuildDirectory(), "included-items.csv");
 
         List<SasFieldInfo> availableFields = new ArrayList<>();
         availableFields.add(new SasFieldInfo("field1", "field1", "Tumor", 1, 1, "Field 1", null));
         availableFields.add(new SasFieldInfo("field2", "field2", "Tumor", 1, 1, "Field 2", null));
 
+        Assert.assertNull(SasUtils.extractRequestedFields(null, availableFields));
+        Assert.assertNull(SasUtils.extractRequestedFields(" ", availableFields));
+        Assert.assertNull(SasUtils.extractRequestedFields("", availableFields));
+        Assert.assertTrue(SasUtils.extractRequestedFields("field", availableFields).isEmpty());
+        Assert.assertEquals(1, SasUtils.extractRequestedFields("field1", availableFields).size());
+        Assert.assertEquals(1, SasUtils.extractRequestedFields("field2", availableFields).size());
+        Assert.assertEquals(2, SasUtils.extractRequestedFields("field1,field2", availableFields).size());
+        Assert.assertEquals(1, SasUtils.extractRequestedFields("-field1", availableFields).size());
+        Assert.assertEquals(2, SasUtils.extractRequestedFields("-field1,field2", availableFields).size());
+
+        File file = new File(TestingUtils.getBuildDirectory(), "included-items.csv");
         try {
             TestingUtils.writeFile(file, "HEADER\nfield1\nfield2");
             Set<String> result = SasUtils.extractRequestedFields(file.getPath(), availableFields);
@@ -98,6 +109,16 @@ public class SasUtilsTest {
         finally {
             file.delete();
         }
+    }
+
+    @Test
+    public void testIncludeField() {
+        SasFieldInfo field = new SasFieldInfo("field", "field", "Tumor", 1, 1, "Field", null);
+        Assert.assertTrue(SasUtils.includeField(field, null, null));
+        Assert.assertTrue(SasUtils.includeField(field, Collections.singleton("field"), "field"));
+        Assert.assertFalse(SasUtils.includeField(field, Collections.singleton("other"), "other"));
+        Assert.assertFalse(SasUtils.includeField(field, Collections.singleton("field"), "-field"));
+        Assert.assertTrue(SasUtils.includeField(field, Collections.singleton("other"), "-other"));
     }
 
     @Test

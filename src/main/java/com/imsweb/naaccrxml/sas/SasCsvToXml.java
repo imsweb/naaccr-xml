@@ -194,7 +194,7 @@ public class SasCsvToXml {
             Map<String, String> patientFields = new HashMap<>();
             Map<String, String> tumorFields = new HashMap<>();
             for (SasFieldInfo field : availableFields) {
-                if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId())) {
+                if (SasUtils.includeField(field, requestedFieldIds, fields)) {
                     if ("NaaccrData".equals(field.getParentTag()))
                         rootFields.put(field.getTruncatedNaaccrId(), field.getNaaccrId());
                     else if ("Patient".equals(field.getParentTag()))

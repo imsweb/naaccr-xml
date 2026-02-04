@@ -251,7 +251,7 @@ public class SasXmlToFlat {
 
             Map<String, SasFieldInfo> fieldsToWrite = new TreeMap<>();
             for (SasFieldInfo field : availableFields) {
-                if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId())) {
+                if (SasUtils.includeField(field, requestedFieldIds, fields)) {
                     fieldsToWrite.put(field.getNaaccrId(), field);
                     if (!field.getNaaccrId().equals(field.getTruncatedNaaccrId()))
                         SasUtils.logInfo("Truncated '" + field.getNaaccrId() + "' into '" + field.getTruncatedNaaccrId() + "'...");

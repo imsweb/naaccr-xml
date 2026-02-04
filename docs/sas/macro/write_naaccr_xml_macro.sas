@@ -14,12 +14,14 @@
 	- recordtype should be "A", "M", "C" or "I" (required, no default);
 	     make sure to provide the proper type or some items might be dropped during the writing process
     - dataset should be the name of the dataset from which the data should be taken (defaults to alldata)
-    - items is an optional list of items to write (any items not in the list will be ignored);
-        if not provided, the all items in the data set will be written.
-        There are two ways to provide the list:
-            1. Hard code the XML IDs in the SAS code, separate them with a comma:
+    - items is an optional list of items to include (only those will be processed) or exclude
+        (those won't be processed). If not provided, all items in the data set will be written.
+        There are three ways to provide the list:
+            1. Hard code the XML IDs to include in the SAS code, separate them with a comma:
                    items="patientIdNumber,tumorRecordNumber,primarySite"
-            2. Provide the path (relative or absolute) to a CSV file:
+            2. Hard code the XML IDs to exclude in the SAS code by starting the list with a dash:
+                   items="-patientIdNumber,tumorRecordNumber,primarySite"
+            3. Provide the path (relative or absolute) to a CSV file of items to include:
                    items="included-items.csv"
                The first line of the file must be headers; the XML IDs to include are expected to be found
                in the first column (the file can contain other columns); a simple file would look like this:

@@ -282,7 +282,7 @@ public class SasFlatToXml {
 
             Map<String, SasFieldInfo> fieldsToWrite = new TreeMap<>();
             for (SasFieldInfo field : availableFields)
-                if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId()))
+                if (SasUtils.includeField(field, requestedFieldIds, fields))
                     fieldsToWrite.put(field.getTruncatedNaaccrId(), field);
 
             int expectedLineLength = 0;
@@ -364,7 +364,7 @@ public class SasFlatToXml {
             Map<String, SasFieldInfo> tumorFields = new TreeMap<>();
             Map<String, SasFieldInfo> fieldsToWrite = new TreeMap<>();
             for (SasFieldInfo field : availableFields) {
-                if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId())) {
+                if (SasUtils.includeField(field, requestedFieldIds, fields)){
                     fieldsToWrite.put(field.getTruncatedNaaccrId(), field);
                     if ("NaaccrData".equals(field.getParentTag()))
                         rootFields.put(field.getTruncatedNaaccrId(), field);

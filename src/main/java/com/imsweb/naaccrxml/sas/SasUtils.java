@@ -495,7 +495,7 @@ public final class SasUtils {
             }
         }
         else {
-            for (String xmlId : fields.replace(" ", "").replace("\t", "").split(",", -1)) {
+            for (String xmlId : fields.replace(" ", "").replace("\t", "").replace("-", "").split(",", -1)) {
                 if (allowedIds.contains(xmlId))
                     requestedFields.add(xmlId);
                 else
@@ -504,6 +504,16 @@ public final class SasUtils {
         }
 
         return requestedFields;
+    }
+
+    public static boolean includeField(SasFieldInfo field, Set<String> requestedFieldIds, String rawRequestedFields) {
+        if (requestedFieldIds == null)
+            return true;
+
+        if (rawRequestedFields != null && rawRequestedFields.startsWith("-"))
+            return !requestedFieldIds.contains(field.getNaaccrId());
+        else
+            return requestedFieldIds.contains(field.getNaaccrId());
     }
 
     public static String rightPadWithSpaces(String value, int length) {

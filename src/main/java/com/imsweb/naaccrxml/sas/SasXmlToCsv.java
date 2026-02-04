@@ -169,7 +169,7 @@ public class SasXmlToCsv {
 
             Map<String, SasFieldInfo> fieldsToWrite = new LinkedHashMap<>();
             for (SasFieldInfo field : availableFields) {
-                if (requestedFieldIds == null || requestedFieldIds.contains(field.getNaaccrId())) {
+                if (SasUtils.includeField(field, requestedFieldIds, fields)) {
                     fieldsToWrite.put(field.getTruncatedNaaccrId(), field);
                     if (!field.getNaaccrId().equals(field.getTruncatedNaaccrId()))
                         SasUtils.logInfo("Truncated '" + field.getNaaccrId() + "' into '" + field.getTruncatedNaaccrId() + "'...");
