@@ -45,7 +45,7 @@ public final class NaaccrFormat {
     }
 
     // "latest" version
-    public static final String NAACCR_VERSION_LATEST = NAACCR_VERSION_250;
+    public static final String NAACCR_VERSION_LATEST = NAACCR_VERSION_260;
 
     public static boolean isVersionSupported(String version) {
         return _SUPPORTED_VERSIONS.contains(version);
@@ -231,22 +231,13 @@ public final class NaaccrFormat {
     private static String getFormatFromVersionAndType(String version, String type) {
         String format;
         String prefix = "naaccr-" + version;
-        switch (type) {
-            case "A":
-                format = prefix + "-abstract";
-                break;
-            case "M":
-                format = prefix + "-modified";
-                break;
-            case "C":
-                format = prefix + "-confidential";
-                break;
-            case "I":
-                format = prefix + "-incidence";
-                break;
-            default:
-                format = null;
-        }
+        format = switch (type) {
+            case "A" -> prefix + "-abstract";
+            case "M" -> prefix + "-modified";
+            case "C" -> prefix + "-confidential";
+            case "I" -> prefix + "-incidence";
+            default -> null;
+        };
         return format;
     }
 
@@ -268,23 +259,13 @@ public final class NaaccrFormat {
     }
 
     public String getDisplayName() {
-        String formattedType;
-        switch (_recordType) {
-            case "A":
-                formattedType = "Abstract";
-                break;
-            case "M":
-                formattedType = "Modified";
-                break;
-            case "C":
-                formattedType = "Confidential";
-                break;
-            case "I":
-                formattedType = "Incidence";
-                break;
-            default:
-                formattedType = "?";
-        }
+        String formattedType = switch (_recordType) {
+            case "A" -> "Abstract";
+            case "M" -> "Modified";
+            case "C" -> "Confidential";
+            case "I" -> "Incidence";
+            default -> "?";
+        };
 
         if ("0".equals(_naaccrVersion.substring(2)))
             return "NAACCR " + _naaccrVersion.substring(0, 2) + " " + formattedType;
@@ -296,15 +277,13 @@ public final class NaaccrFormat {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof NaaccrFormat))
+        if (!(o instanceof NaaccrFormat that))
             return false;
-
-        NaaccrFormat that = (NaaccrFormat)o;
 
         if (!_naaccrVersion.equals(that._naaccrVersion))
             return false;
-        return _recordType.equals(that._recordType);
 
+        return _recordType.equals(that._recordType);
     }
 
     @Override

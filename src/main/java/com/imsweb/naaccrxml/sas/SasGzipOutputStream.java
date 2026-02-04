@@ -55,6 +55,7 @@ public class SasGzipOutputStream extends DeflaterOutputStream {
      * @throws IOException If an I/O error has occurred.
      */
     @Override
+    @SuppressWarnings("NullableProblems")
     public synchronized void write(byte[] buf, int off, int len) throws IOException {
         super.write(buf, off, len);
         _crc.update(buf, off, len);
@@ -120,7 +121,7 @@ public class SasGzipOutputStream extends DeflaterOutputStream {
      */
     private void writeTrailer(byte[] buf, int offset) {
         writeInt((int)_crc.getValue(), buf, offset); // CRC-32 of uncompr. data
-        writeInt(def.getTotalIn(), buf, offset + 4); // Number of uncompr. bytes
+        writeInt((int)def.getBytesRead(), buf, offset + 4); // Number of uncompr. bytes
     }
 
     /*

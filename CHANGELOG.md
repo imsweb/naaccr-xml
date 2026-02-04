@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+**Version 12.2 (not released yet)**
+
+- Changed the minimum Java language for this library from Java 11 to Java 21.
+- Updated library dependencies.
+
 **Version 12.1**
 
 - Fixed length, type and ID of a few new N26 items in base dictionary.
