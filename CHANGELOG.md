@@ -2,6 +2,8 @@
 
 **Version 12.2 (not released yet)**
 
+- Fixed encoding issue with read SAS macro.
+- Added support for exclusion list of items for both read and write SAS macros.
 - Changed the minimum Java language for this library from Java 11 to Java 21.
 - Updated library dependencies.
 
