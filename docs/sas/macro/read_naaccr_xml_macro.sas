@@ -67,6 +67,7 @@
     06/22/2023 - Fabian Depry - Renamed cleanupcsv parameter to cleanuptempfiles.
     07/28/2023 - Fabian Depry - Now using a filename command to make the logs look a bit better.
     02/04/2026 - Fabian Depry - Added proper UTF-8 encoding to the SAS call that reads the temp fixed-column file.
+    02/04/2026 - Fabian Depry - Added support for list of excluded items
  ************************************************************************************************************/;
 
 /*

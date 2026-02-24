@@ -80,6 +80,7 @@
     06/04/2023 - Fabian Depry - Re-wrote the macro to use a temp fixed-column file instead of a temp CSV file.
     06/22/2023 - Fabian Depry - Renamed cleanupcsv parameter to cleanuptempfiles
     08/09/2024 - Fabian Depry - Added new optional specs parameter to allow forcing a specific version to be written.
+    02/04/2026 - Fabian Depry - Added support for list of excluded items
  ************************************************************************************************************/;
 
 /*
