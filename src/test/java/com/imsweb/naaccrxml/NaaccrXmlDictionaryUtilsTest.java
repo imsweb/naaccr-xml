@@ -132,9 +132,9 @@ public class NaaccrXmlDictionaryUtilsTest {
         try (Reader reader = new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("data/dictionary/testing-user-dictionary-blank-attributes.xml"))) {
             NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(reader);
             Assert.assertEquals(1, dictionary.getItems().size());
-            Assert.assertEquals(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT, dictionary.getItems().get(0).getDataType());
-            Assert.assertEquals(NaaccrXmlDictionaryUtils.NAACCR_PADDING_NONE, dictionary.getItems().get(0).getPadding());
-            Assert.assertEquals(NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL, dictionary.getItems().get(0).getTrim());
+            Assert.assertEquals(NaaccrXmlDictionaryUtils.NAACCR_DATA_TYPE_TEXT, dictionary.getItems().getFirst().getDataType());
+            Assert.assertEquals(NaaccrXmlDictionaryUtils.NAACCR_PADDING_NONE, dictionary.getItems().getFirst().getPadding());
+            Assert.assertEquals(NaaccrXmlDictionaryUtils.NAACCR_TRIM_ALL, dictionary.getItems().getFirst().getTrim());
         }
 
         // read a provided user dictionary
@@ -335,6 +335,20 @@ public class NaaccrXmlDictionaryUtilsTest {
         Assert.assertNotNull(NaaccrXmlDictionaryUtils.validateUserDictionary(dict));
         item.setAllowUnlimitedText(false);
         Assert.assertTrue(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
+
+        // dictionary that re-defined a standard variable
+        dict = new NaaccrDictionary();
+        dict.setNaaccrVersion("260");
+        dict.setDictionaryUri("whatever");
+        dict.setSpecificationVersion(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION);
+        item = new NaaccrDictionaryItem();
+        item.setNaaccrId("primarySite");
+        item.setNaaccrName("Primary Site");
+        item.setParentXmlElement(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
+        item.setNaaccrNum(400);
+        item.setLength(4);
+        dict.setItems(Collections.singletonList(item));
+        Assert.assertFalse(NaaccrXmlDictionaryUtils.validateUserDictionary(dict).isEmpty());
     }
 
     @Test

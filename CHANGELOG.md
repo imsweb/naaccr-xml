@@ -1,7 +1,9 @@
 ## NAACCR XML Version History
 
-**Version 12.2 (not released yet)**
+**Version 12.2**
 
+- Changed default NAACCR version to NAACCR 26.
+- Fixed an issue with the validation of user-defined dictionaries.
 - Fixed encoding issue with read SAS macro.
 - Added support for exclusion list of items for both read and write SAS macros.
 - Changed the minimum Java language for this library from Java 11 to Java 21.
