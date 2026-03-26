@@ -43,7 +43,7 @@ public class PatientXmlWriterTest {
             patient.addItem(new Item("nameLast", "Smith < Wilson"));
             writer.writePatient(patient);
         }
-        Patient patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().get(0);
+        Patient patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().getFirst();
         Assert.assertEquals("00000001", patient.getItemValue("patientIdNumber"));
         Assert.assertEquals("Smith < Wilson", patient.getItemValue("nameLast"));
         String xmlAsString = TestingUtils.readFileAsOneString(file);
@@ -51,7 +51,7 @@ public class PatientXmlWriterTest {
         Assert.assertTrue(xmlAsString.contains("timeGenerated="));
 
         // a patient with one tumor
-        file = TestingUtils.createFile("test-flat-writer-one-tumor.txt");
+        file = TestingUtils.createFile("test-xml-writer-one-tumor.txt");
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
             patient = new Patient();
             patient.addItem(new Item("patientIdNumber", "00000001"));
@@ -60,12 +60,32 @@ public class PatientXmlWriterTest {
             patient.addTumor(tumor1);
             writer.writePatient(patient);
         }
-        patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().get(0);
+        patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().getFirst();
         Assert.assertEquals("00000001", patient.getItemValue("patientIdNumber"));
-        Assert.assertEquals("C123", patient.getTumors().get(0).getItemValue("primarySite"));
+        Assert.assertEquals("C123", patient.getTumors().getFirst().getItemValue("primarySite"));
+
+        // a patient with one tumor, with two items (to test the item order)
+        NaaccrOptions options = new NaaccrOptions();
+        options.setWriteItemsInAlphabeticalOrder(true);
+        file = TestingUtils.createFile("test-xml-writer-one-tumor-2.txt");
+        try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
+            patient = new Patient();
+            patient.addItem(new Item("vitalStatus", "1")); // out of order
+            patient.addItem(new Item("patientIdNumber", "00000001"));
+            Tumor tumor1 = new Tumor();
+            tumor1.addItem(new Item("tumorRecordNumber", "01")); // out of order
+            tumor1.addItem(new Item("primarySite", "C123"));
+            patient.addTumor(tumor1);
+            writer.writePatient(patient);
+        }
+        patient = NaaccrXmlUtils.readXmlFile(file, options, null, null).getPatients().getFirst();
+        Assert.assertEquals("00000001", patient.getItemValue("patientIdNumber"));
+        Assert.assertEquals("1", patient.getItemValue("vitalStatus"));
+        Assert.assertEquals("C123", patient.getTumors().getFirst().getItemValue("primarySite"));
+        Assert.assertEquals("01", patient.getTumors().getFirst().getItemValue("tumorRecordNumber"));
 
         // a patient with two tumors
-        file = TestingUtils.createFile("test-flat-writer-two-tumors.txt");
+        file = TestingUtils.createFile("test-xml-writer-two-tumors.txt");
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
             patient = new Patient();
             patient.addItem(new Item("patientIdNumber", "00000001"));
@@ -76,13 +96,13 @@ public class PatientXmlWriterTest {
             patient.setTumors(Arrays.asList(tumor1, tumor2));
             writer.writePatient(patient);
         }
-        patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().get(0);
+        patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().getFirst();
         Assert.assertEquals("00000001", patient.getItemValue("patientIdNumber"));
         Assert.assertEquals("C123", patient.getTumors().get(0).getItemValue("primarySite"));
         Assert.assertEquals("C456", patient.getTumors().get(1).getItemValue("primarySite"));
 
         // two patients with one tumor each
-        file = TestingUtils.createFile("test-flat-writer-two-patients.txt");
+        file = TestingUtils.createFile("test-xml-writer-two-patients.txt");
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data)) {
             Patient patient1 = new Patient();
             patient1.addItem(new Item("patientIdNumber", "00000001"));
@@ -97,12 +117,12 @@ public class PatientXmlWriterTest {
             patient2.addTumor(tumor2);
             writer.writePatient(patient2);
         }
-        patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().get(0);
+        patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().getFirst();
         Assert.assertEquals("00000001", patient.getItemValue("patientIdNumber"));
-        Assert.assertEquals("C123", patient.getTumors().get(0).getItemValue("primarySite"));
+        Assert.assertEquals("C123", patient.getTumors().getFirst().getItemValue("primarySite"));
         patient = NaaccrXmlUtils.readXmlFile(file, null, null, null).getPatients().get(1);
         Assert.assertEquals("00000002", patient.getItemValue("patientIdNumber"));
-        Assert.assertEquals("C456", patient.getTumors().get(0).getItemValue("primarySite"));
+        Assert.assertEquals("C456", patient.getTumors().getFirst().getItemValue("primarySite"));
 
         // test some special characters
         file = TestingUtils.createFile("test-xml-writer-special-chars.xml");
@@ -128,7 +148,7 @@ public class PatientXmlWriterTest {
 
         // same test, but fail on bad characters
         file = TestingUtils.createFile("test-xml-writer-special-chars-error.xml");
-        NaaccrOptions options = new NaaccrOptions();
+        options = new NaaccrOptions();
         options.setIgnoreControlCharacters(false);
         try (PatientXmlWriter writer = new PatientXmlWriter(new FileWriter(file), data, options)) {
             patient = new Patient();
@@ -234,7 +254,7 @@ public class PatientXmlWriterTest {
         Assert.assertFalse(TestingUtils.readFileAsOneString(file).contains("XX"));
         Assert.assertTrue(TestingUtils.readFileAsOneString(file).contains("X"));
         Assert.assertFalse(patient.getAllValidationErrors().isEmpty());
-        Assert.assertEquals(NaaccrErrorUtils.CODE_VAL_TOO_LONG, patient.getAllValidationErrors().get(0).getCode());
+        Assert.assertEquals(NaaccrErrorUtils.CODE_VAL_TOO_LONG, patient.getAllValidationErrors().getFirst().getCode());
         patient.getAllValidationErrors().clear();
 
         // value is too long, options says to ignore the error (it should still be truncated)

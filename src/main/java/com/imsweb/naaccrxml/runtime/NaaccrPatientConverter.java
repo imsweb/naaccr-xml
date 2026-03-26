@@ -4,6 +4,7 @@
 package com.imsweb.naaccrxml.runtime;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -62,12 +63,10 @@ public class NaaccrPatientConverter implements Converter {
 
     @Override
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-        if (!(source instanceof Patient))
+        if (!(source instanceof Patient patient))
             reportSyntaxError("Unexpected object type: " + source.getClass().getName());
         else {
-            Patient patient = (Patient)source;
-            for (Item item : patient.getItems())
-                writeItem(item, writer);
+            writeItems(patient.getItems(), writer);
 
             // handle extension
             if (!Boolean.TRUE.equals(_context.getOptions().getIgnoreExtensions()) && patient.getExtensions() != null)
@@ -76,8 +75,7 @@ public class NaaccrPatientConverter implements Converter {
 
             for (Tumor tumor : patient.getTumors()) {
                 writer.startNode(NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR);
-                for (Item item : tumor.getItems())
-                    writeItem(item, writer);
+                writeItems(tumor.getItems(), writer);
 
                 // handle extension
                 if (!Boolean.TRUE.equals(_context.getOptions().getIgnoreExtensions()) && tumor.getExtensions() != null)
@@ -190,7 +188,18 @@ public class NaaccrPatientConverter implements Converter {
         }
     }
 
-    public void writeItem(Item item, HierarchicalStreamWriter writer) {
+    public void writeItems(List<Item> items, HierarchicalStreamWriter writer) {
+        if (Boolean.TRUE.equals(_context.getOptions().getWriteItemsInAlphabeticalOrder())) {
+            for (Item item : items.stream().sorted(Comparator.comparing(Item::getNaaccrId)).toList())
+                writeItem(item, writer);
+        }
+        else {
+            for (Item item : items)
+                writeItem(item, writer);
+        }
+    }
+
+    private void writeItem(Item item, HierarchicalStreamWriter writer) {
 
         // don't bother if the item has no value!
         if (item.getValue() == null || item.getValue().isEmpty())
@@ -244,7 +253,7 @@ public class NaaccrPatientConverter implements Converter {
                     value = StringUtils.rightPad(value, itemDef.getLength(), '0');
             }
             else if (!NaaccrXmlDictionaryUtils.NAACCR_PADDING_LEFT_BLANK.equals(itemDef.getPadding()) && !NaaccrXmlDictionaryUtils.NAACCR_PADDING_RIGHT_BLANK.equals(itemDef.getPadding())
-                     && !NaaccrXmlDictionaryUtils.NAACCR_PADDING_NONE.equals(itemDef.getPadding()))
+                    && !NaaccrXmlDictionaryUtils.NAACCR_PADDING_NONE.equals(itemDef.getPadding()))
                 throw new IllegalStateException("Unknown padding option: " + itemDef.getPadding());
         }
 
@@ -292,20 +301,21 @@ public class NaaccrPatientConverter implements Converter {
             item.setNaaccrNum(def.getNaaccrNum());
         }
         else {
-            if (NaaccrOptions.ITEM_HANDLING_PROCESS.equals(_context.getOptions().getUnknownItemHandling()))
-                item.setNaaccrId(rawId);
-            else if (NaaccrOptions.ITEM_HANDLING_ERROR.equals(_context.getOptions().getUnknownItemHandling())) {
-                NaaccrDictionaryItem badItem = new NaaccrDictionaryItem();
-                badItem.setNaaccrId(rawId);
-                if (StringUtils.isNumeric(rawNum))
-                    badItem.setNaaccrNum(Integer.parseInt(rawNum));
-                reportError(entity, lineNumber, currentPath, new RuntimeNaaccrDictionaryItem(badItem), value, NaaccrErrorUtils.CODE_BAD_NAACCR_ID, rawId);
-                return null;
+            switch (_context.getOptions().getUnknownItemHandling()) {
+                case NaaccrOptions.ITEM_HANDLING_PROCESS -> item.setNaaccrId(rawId);
+                case NaaccrOptions.ITEM_HANDLING_ERROR -> {
+                    NaaccrDictionaryItem badItem = new NaaccrDictionaryItem();
+                    badItem.setNaaccrId(rawId);
+                    if (StringUtils.isNumeric(rawNum))
+                        badItem.setNaaccrNum(Integer.parseInt(rawNum));
+                    reportError(entity, lineNumber, currentPath, new RuntimeNaaccrDictionaryItem(badItem), value, NaaccrErrorUtils.CODE_BAD_NAACCR_ID, rawId);
+                    return null;
+                }
+                case NaaccrOptions.ITEM_HANDLING_IGNORE -> {
+                    return null;
+                }
+                case null, default -> throw new IllegalStateException("Unknown option: " + _context.getOptions().getUnknownItemHandling());
             }
-            else if (NaaccrOptions.ITEM_HANDLING_IGNORE.equals(_context.getOptions().getUnknownItemHandling()))
-                return null;
-            else
-                throw new IllegalStateException("Unknown option: " + _context.getOptions().getUnknownItemHandling());
         }
 
         // validate the NAACCR Number if provided

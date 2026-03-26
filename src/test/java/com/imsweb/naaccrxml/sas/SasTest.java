@@ -56,7 +56,7 @@ public class SasTest {
             Assert.fail("Looks like a new format was added, please handle it in the SasXmlToCsv and SasCsvToXml constructors, and adjust this test: " + formats);
 
         //noinspection ConstantConditions
-        if (!"1.7".equals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION))
+        if (!"1.8".equals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION))
             Assert.fail("Current implementation changed, please adjust it in the SasFlatToXml and SasCsvToXml code, then change this test!");
     }
 
@@ -125,7 +125,7 @@ public class SasTest {
         xmlToCsv.setIncludeGroupedItems("yes");
         xmlToCsv.convert(null, false);
         Assert.assertTrue(csvFile.exists());
-        Assert.assertTrue(FileUtils.readLines(csvFile, StandardCharsets.US_ASCII).get(0).contains("morphTypebehavIcdO3"));
+        Assert.assertTrue(FileUtils.readLines(csvFile, StandardCharsets.US_ASCII).getFirst().contains("morphTypebehavIcdO3"));
 
         // another (more complex) file
         xmlFile = TestingUtils.getDataFile("sas/test2.xml");
@@ -197,7 +197,7 @@ public class SasTest {
         File xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-cdata-copy.xml");
         createXmlToCsvConverter(xmlFile, csvFile, "180", "I").convert(null, false);
         createCsvToXmlConverter(csvFile, xmlCopyFile, "180", "I").convert();
-        Tumor tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(0).getTumors().get(0);
+        Tumor tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().getFirst().getTumors().getFirst();
         Assert.assertEquals("C123", tumor.getItemValue("primarySite"));
 
         xmlFile = TestingUtils.getDataFile("sas/test-cdata2.xml");
@@ -205,7 +205,7 @@ public class SasTest {
         xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-cdata2-copy.xml");
         createXmlToCsvConverter(xmlFile, csvFile, "180", "A").convert(null, false);
         createCsvToXmlConverter(csvFile, xmlCopyFile, "180", "A").convert();
-        tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(0).getTumors().get(0);
+        tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().getFirst().getTumors().getFirst();
         Assert.assertEquals("1/10/2016 DrugB (Part1, Part2, & Part3) @ Facility w/ Dr. Name. [DrugA started in 1/2015 & DrugB regimen planned] 1/15/2017 Drugc @ Facility w/ Dr Name2",
                 tumor.getItemValue("rxTextChemo"));
         Assert.assertEquals("1/10/2016 DrugB (Part1, Part2, & Part3) @ Facility w/ Dr. Name. [DrugA started in 1/2015 & DrugB regimen planned] 1/15/2017 Drugc @ Facility w/ Dr Name2",
@@ -219,7 +219,7 @@ public class SasTest {
         File xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-multi-line-copy.xml");
         createXmlToCsvConverter(xmlFile, csvFile, "180", "A").convert(null, false);
         createCsvToXmlConverter(csvFile, xmlCopyFile, "180", "A").convert();
-        Tumor tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(0).getTumors().get(0);
+        Tumor tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().getFirst().getTumors().getFirst();
         Assert.assertEquals("Some\ntext", tumor.getItemValue("textRemarks"));
 
         // same test but this file uses a CDATA section
@@ -228,7 +228,7 @@ public class SasTest {
         xmlCopyFile = new File(TestingUtils.getBuildDirectory(), "test-multi-line-cdata-copy.xml");
         createXmlToCsvConverter(xmlFile, csvFile, "180", "A").convert(null, false);
         createCsvToXmlConverter(csvFile, xmlCopyFile, "180", "A").convert();
-        tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().get(0).getTumors().get(0);
+        tumor = NaaccrXmlUtils.readXmlFile(xmlCopyFile, null, null, null).getPatients().getFirst().getTumors().getFirst();
         Assert.assertEquals("Some\ntext", tumor.getItemValue("textRemarks"));
     }
 
@@ -288,7 +288,7 @@ public class SasTest {
     }
 
     private Tumor convertForEpathSingleTumor(String naaccrVersion, String recordType, String input, List<File> csvDictionaryFiles, List<NaaccrDictionary> xmlDictionaries) throws IOException {
-        return convertForEpath(naaccrVersion, recordType, input, csvDictionaryFiles, xmlDictionaries).getPatients().get(0).getTumors().get(0);
+        return convertForEpath(naaccrVersion, recordType, input, csvDictionaryFiles, xmlDictionaries).getPatients().getFirst().getTumors().getFirst();
     }
 
     private NaaccrData convertForEpath(String naaccrVersion, String recordType, String input, List<File> csvDictionaryFiles, List<NaaccrDictionary> xmlDictionaries) throws IOException {
@@ -425,13 +425,13 @@ public class SasTest {
         else
             Assert.assertNull(data.getItemValue("registryId"));
         Assert.assertEquals(2, data.getPatients().size());
-        Assert.assertEquals("00000001", data.getPatients().get(0).getItemValue("patientIdNumber"));
+        Assert.assertEquals("00000001", data.getPatients().getFirst().getItemValue("patientIdNumber"));
         if (!ignoreFields)
-            Assert.assertEquals("1", data.getPatients().get(0).getItemValue("sex"));
+            Assert.assertEquals("1", data.getPatients().getFirst().getItemValue("sex"));
         else
-            Assert.assertNull(data.getPatients().get(0).getItemValue("sex"));
+            Assert.assertNull(data.getPatients().getFirst().getItemValue("sex"));
         Assert.assertEquals(1, data.getPatients().get(0).getTumors().size());
-        Assert.assertEquals("C123", data.getPatients().get(0).getTumors().get(0).getItemValue("primarySite"));
+        Assert.assertEquals("C123", data.getPatients().get(0).getTumors().getFirst().getItemValue("primarySite"));
         Assert.assertEquals("00000002", data.getPatients().get(1).getItemValue("patientIdNumber"));
         Assert.assertNull(data.getPatients().get(1).getItemValue("sex"));
         Assert.assertEquals(2, data.getPatients().get(1).getTumors().size());

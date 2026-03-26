@@ -1,5 +1,10 @@
 ## NAACCR XML Version History
 
+**Version 12.3 (not released yet)**
+
+- Changed default specifications to 1.8 when writing XML data files.
+- Added new option to write the items in alphabetical order (by their XML ID) when writing to XML data files.
+
 **Version 12.2**
 
 - Changed default NAACCR version to NAACCR 26.

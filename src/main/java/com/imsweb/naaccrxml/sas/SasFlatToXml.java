@@ -429,7 +429,7 @@ public class SasFlatToXml {
                         if (_specificationsVersion != null)
                             writer.write("\n            specificationVersion=\"" + _specificationsVersion + "\"");
                         else
-                            writer.write("\n            specificationVersion=\"1.7\"");
+                            writer.write("\n            specificationVersion=\"1.8\"");
                         writer.write("\n            xmlns=\"http://naaccr.org/naaccrxml\"");
                         writer.write(">\n");
                         for (Entry<String, SasFieldInfo> entry : rootFields.entrySet()) {

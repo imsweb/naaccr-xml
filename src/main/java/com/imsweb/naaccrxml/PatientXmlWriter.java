@@ -20,7 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 
-import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
@@ -134,7 +133,7 @@ public class PatientXmlWriter implements PatientWriter {
             else if (NEW_LINE_CRLF.equals(options.getNewLine()))
                 _newLine = "\r\n";
             else
-                _newLine = System.getProperty("line.separator");
+                _newLine = System.lineSeparator();
 
             // need to expose xstream so the other methods can use it...
             _xstream = conf.getXstream();
@@ -147,7 +146,7 @@ public class PatientXmlWriter implements PatientWriter {
             // get the base dictionary we need
             NaaccrDictionary baseDictionary = NaaccrXmlDictionaryUtils.getBaseDictionaryByUri(rootData.getBaseDictionaryUri());
 
-            // clean-up the dictionaries
+            // clean up the dictionaries
             Map<String, NaaccrDictionary> dictionaries = new HashMap<>();
             if (userDictionaries != null)
                 for (NaaccrDictionary userDictionary : userDictionaries)
@@ -211,8 +210,7 @@ public class PatientXmlWriter implements PatientWriter {
             conf.getPatientConverter().setContext(context);
 
             // write the root items
-            for (Item item : rootData.getItems())
-                conf.getPatientConverter().writeItem(item, _writer);
+            conf.getPatientConverter().writeItems(rootData.getItems(), _writer);
 
             // write extensions
             if (!Boolean.TRUE.equals(options.getIgnoreExtensions()) && rootData.getExtensions() != null)

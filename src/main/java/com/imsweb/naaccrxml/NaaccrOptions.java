@@ -62,6 +62,12 @@ public class NaaccrOptions {
     private Boolean _writeItemNumber;
 
     /**
+     * When writing data (to XML format), if set to true, the items will be written in alphabetical order (by their ID) in each data level.
+     * If false, they will be written in the order they are presented to the writer. Defaults to false.
+     */
+    private Boolean _writeItemsInAlphabeticalOrder;
+
+    /**
      * When writing data (to XML or flat file format), whether or not the zero-padding rules should be applied. Defaults to false.
      */
     private Boolean _applyZeroPaddingRules;
@@ -135,6 +141,7 @@ public class NaaccrOptions {
         _tumorGroupingItems.add(NaaccrXmlUtils.DEFAULT_TUMOR_GROUPING_ITEM);
         _reportLevelMismatch = false;
         _writeItemNumber = false;
+        _writeItemsInAlphabeticalOrder = false;
         _applyZeroPaddingRules = false;
         _reportValuesTooLong = false;
         _useStrictNamespaces = true;
@@ -184,6 +191,7 @@ public class NaaccrOptions {
         return _tumorGroupingItems;
     }
 
+    @SuppressWarnings("unused")
     public void setTumorGroupingItems(List<String> tumorGroupingItems) {
         _tumorGroupingItems = tumorGroupingItems;
     }
@@ -202,6 +210,14 @@ public class NaaccrOptions {
 
     public void setWriteItemNumber(Boolean writeItemNumber) {
         _writeItemNumber = writeItemNumber;
+    }
+
+    public Boolean getWriteItemsInAlphabeticalOrder() {
+        return _writeItemsInAlphabeticalOrder;
+    }
+
+    public void setWriteItemsInAlphabeticalOrder(Boolean writeItemsInAlphabeticalOrder) {
+        _writeItemsInAlphabeticalOrder = writeItemsInAlphabeticalOrder;
     }
 
     public Boolean getApplyZeroPaddingRules() {
@@ -248,6 +264,7 @@ public class NaaccrOptions {
         return _ignoreExtensions;
     }
 
+    @SuppressWarnings("unused")
     public void setIgnoreExtensions(Boolean ignoreExtensions) {
         _ignoreExtensions = ignoreExtensions;
     }
