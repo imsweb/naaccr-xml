@@ -4,7 +4,7 @@
 [![integration](https://github.com/imsweb/naaccr-xml/workflows/integration/badge.svg)](https://github.com/imsweb/naaccr-xml/actions)
 [![Maven Central](https://img.shields.io/maven-central/v/com.imsweb/naaccr-xml.svg)](https://central.sonatype.com/artifact/com.imsweb/naaccr-xml)
 
-This library provides support for the NAACCR XML format. It implements version 1.7 of [the specifications](https://www.naaccr.org/xml-data-exchange-standard/) but still supports prior versions.
+This library provides support for the NAACCR XML format. It implements version 1.8 of [the specifications](https://www.naaccr.org/xml-data-exchange-standard/) but still supports prior versions.
 
 Information about the format and its specifications can be found in [the project wiki](https://github.com/imsweb/naaccr-xml/wiki).
 
@@ -16,7 +16,7 @@ To include it to your Maven or Gradle project, use the group ID `com.imsweb` and
 
 You can check out the [releases page](https://github.com/imsweb/naaccr-xml/releases) for a list of the releases and their changes.
 
-This library requires Java 8 or a more recent version.
+This library requires Java 21 or a more recent version.
 
 ## Usage
 
