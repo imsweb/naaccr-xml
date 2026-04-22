@@ -53,11 +53,11 @@ public class SasTest {
         formats.remove("250");
         formats.remove("260");
         if (!formats.isEmpty())
-            Assert.fail("Looks like a new format was added, please handle it in the SasXmlToCsv and SasCsvToXml constructors, and adjust this test: " + formats);
+            Assert.fail("Looks like a new format was added, please handle it in the SasUtils::validateNaaccrVersion, and adjust this test: " + formats);
 
         //noinspection ConstantConditions
         if (!"1.8".equals(NaaccrXmlUtils.CURRENT_SPECIFICATION_VERSION))
-            Assert.fail("Current implementation changed, please adjust it in the SasFlatToXml and SasCsvToXml code, then change this test!");
+            Assert.fail("Current implementation changed, please adjust it in SasUtils::getDefaultSpecifications, then change this test");
     }
 
     @Test

@@ -71,25 +71,14 @@ public class SasXmlToCsv {
         _dictionaryFiles = new ArrayList<>();
 
         _naaccrVersion = naaccrVersion;
-        if (_naaccrVersion == null || _naaccrVersion.trim().isEmpty())
-            SasUtils.logError("NAACCR version needs to be provided");
-        if (!"140".equals(naaccrVersion)
-                && !"150".equals(naaccrVersion)
-                && !"160".equals(naaccrVersion)
-                && !"180".equals(naaccrVersion)
-                && !"210".equals(naaccrVersion)
-                && !"220".equals(naaccrVersion)
-                && !"230".equals(naaccrVersion)
-                && !"240".equals(naaccrVersion)
-                && !"250".equals(naaccrVersion)
-                && !"260".equals(naaccrVersion))
-            SasUtils.logError("NAACCR version must be 140, 150, 160, 180, 210, 220, 230, 240, 250 or 260; got " + _naaccrVersion);
+        String naaccrVersionError = SasUtils.validateNaaccrVersion(_naaccrVersion);
+        if (naaccrVersionError != null)
+            SasUtils.logError(naaccrVersionError);
 
         _recordType = recordType;
-        if (_recordType == null || _recordType.trim().isEmpty())
-            SasUtils.logError("Record type needs to be provided");
-        if (!"A".equals(_recordType) && !"M".equals(_recordType) && !"C".equals(_recordType) && !"I".equals(_recordType))
-            SasUtils.logError("Record type must be A, M, C or I; got " + _recordType);
+        String recordTypeError = SasUtils.validateRecordType(_recordType);
+        if (recordTypeError != null)
+            SasUtils.logError(recordTypeError);
 
         _includeGroupedItems = false;
     }

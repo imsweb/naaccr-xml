@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 12.4**
+
+- Fixed SAS macros not properly supporting NAACCR 26.
+
 **Version 12.3**
 
 - Changed default specifications to 1.8 when writing XML data files.

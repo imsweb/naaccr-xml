@@ -51,6 +51,39 @@ public final class SasUtils {
         _TO_ESCAPE.put("::", "\n");
     }
 
+    public static String validateNaaccrVersion(String naaccrVersion) {
+        if (naaccrVersion == null || naaccrVersion.trim().isEmpty())
+            return "NAACCR version needs to be provided";
+
+        if (!"140".equals(naaccrVersion)
+                && !"150".equals(naaccrVersion)
+                && !"160".equals(naaccrVersion)
+                && !"180".equals(naaccrVersion)
+                && !"210".equals(naaccrVersion)
+                && !"220".equals(naaccrVersion)
+                && !"230".equals(naaccrVersion)
+                && !"240".equals(naaccrVersion)
+                && !"250".equals(naaccrVersion)
+                && !"260".equals(naaccrVersion))
+            return "NAACCR version must be 140, 150, 160, 180, 210, 220, 230, 240, 250 or 206; got " + naaccrVersion;
+
+        return null;
+    }
+
+    public static String validateRecordType(String recordType) {
+        if (recordType == null || recordType.trim().isEmpty())
+            return "Record type needs to be provided";
+
+        if (!"A".equals(recordType) && !"M".equals(recordType) && !"C".equals(recordType) && !"I".equals(recordType))
+            return "Record type must be A, M, C or I; got " + recordType;
+
+        return null;
+    }
+
+    public static String getDefaultSpecifications() {
+        return "1.8";
+    }
+
     /**
      * Prints the given message to the standard output.
      */
