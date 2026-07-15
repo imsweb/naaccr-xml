@@ -25,13 +25,13 @@ public class RecreateStandardDictionaries {
 
         // I think this will need to change to a list of included versions (or excluded ones if it's easier); at the end,
         // the date should be updated only if there were actual changes in the dictionary...
-        boolean updateLastModified = false;
+        boolean updateLastModified = true;
 
         // I don't want random-looking timestamps, and so I am setting the time portion to noon;
         // the only reason to ever change that is the dictionary to be changed twice in the same day...
         Date lastModifiedValue = Date.from(LocalDateTime.now().withHour(12).withMinute(0).withSecond(0).withNano(0).atZone(ZoneId.systemDefault()).toInstant());
 
-        for (String version : Collections.singletonList("260")) { // NaaccrFormat.getSupportedVersions()) {
+        for (String version : Collections.singletonList("270")) { // NaaccrFormat.getSupportedVersions()) {
             Path path = Paths.get("src/main/resources/naaccr-dictionary-" + version + ".xml");
             NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.readDictionary(path.toFile());
             if (updateLastModified)

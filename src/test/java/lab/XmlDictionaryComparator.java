@@ -23,7 +23,7 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 public class XmlDictionaryComparator {
 
     public static void main(String[] args) throws IOException {
-        compareDictionaryVersions("250", "260");
+        compareDictionaryVersions("260", "270");
     }
 
     /**

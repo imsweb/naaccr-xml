@@ -64,8 +64,9 @@ public final class SasUtils {
                 && !"230".equals(naaccrVersion)
                 && !"240".equals(naaccrVersion)
                 && !"250".equals(naaccrVersion)
-                && !"260".equals(naaccrVersion))
-            return "NAACCR version must be 140, 150, 160, 180, 210, 220, 230, 240, 250 or 206; got " + naaccrVersion;
+                && !"260".equals(naaccrVersion)
+                && !"270".equals(naaccrVersion))
+            return "NAACCR version must be 140, 150, 160, 180, 210, 220, 230, 240, 250, 260 or 270; got " + naaccrVersion;
 
         return null;
     }

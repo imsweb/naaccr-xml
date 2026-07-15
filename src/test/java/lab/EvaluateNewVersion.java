@@ -29,8 +29,8 @@ import com.imsweb.naaccr.api.client.entity.NaaccrDataItem;
 public class EvaluateNewVersion {
 
     public static void main(String[] args) throws IOException {
-        String version1 = "25";
-        String version2 = "26";
+        String version1 = "26";
+        String version2 = "27";
 
         boolean allowCaching = false; // this should only be true when fixing the comparison logic...
 
@@ -107,7 +107,7 @@ public class EvaluateNewVersion {
         if (removedItems.isEmpty())
             System.out.println("> none");
         else {
-            for (NaaccrDataItem item : removedItems.stream().sorted(Comparator.comparing(NaaccrDataItem::getItemName)).collect(Collectors.toList()))
+            for (NaaccrDataItem item : removedItems.stream().sorted(Comparator.comparing(NaaccrDataItem::getItemName)).toList())
                 System.out.println("> " + item.getItemName() + " (#" + item.getItemNumber() + ")");
 
         }
@@ -117,7 +117,7 @@ public class EvaluateNewVersion {
         if (addedItems.isEmpty())
             System.out.println("> none");
         else {
-            for (NaaccrDataItem item : addedItems.stream().sorted(Comparator.comparing(NaaccrDataItem::getItemName)).collect(Collectors.toList()))
+            for (NaaccrDataItem item : addedItems.stream().sorted(Comparator.comparing(NaaccrDataItem::getItemName)).toList())
                 System.out.println("> " + item.getItemName() + " (#" + item.getItemNumber() + ")");
 
         }
@@ -127,7 +127,7 @@ public class EvaluateNewVersion {
         if (differences.isEmpty())
             System.out.println("> none");
         else {
-            for (NaaccrDataItem item : differences.keySet().stream().sorted(Comparator.comparing(NaaccrDataItem::getItemName)).collect(Collectors.toList())) {
+            for (NaaccrDataItem item : differences.keySet().stream().sorted(Comparator.comparing(NaaccrDataItem::getItemName)).toList()) {
                 System.out.println("> " + item.getItemName() + " (#" + item.getItemNumber() + "):");
                 for (String diff : differences.get(item))
                     System.out.println("  >> " + diff);
@@ -151,7 +151,7 @@ public class EvaluateNewVersion {
             else
                 System.out.println("            parentXmlElement=\"" + item.getXmlParentId() + "\"/>");
             if (item.getFormat() != null)
-                throw new IllegalStateException("Got a format, need to figure out if zero-padding needs to be applied!");
+                System.out.println("!!!!!  > got format '" + item.getFormat() + "', need to figure out if zero-padding needs to be applied...");
         }
 
         System.out.println();
@@ -165,9 +165,9 @@ public class EvaluateNewVersion {
     }
 
     private static String formatRecordTypes(String value) {
-        if (value.length() == 2)
-            return "A,M";
         if (value.length() == 3)
+            return "A,M";
+        if (value.length() == 5)
             return "A,M,C";
         return "A,M,C,I";
     }

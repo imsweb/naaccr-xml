@@ -1,5 +1,9 @@
 ## NAACCR XML Version History
 
+**Version 13.0**
+
+- Added support for NAACCR 27.
+
 **Version 12.4**
 
 - Fixed SAS macros not properly supporting NAACCR 26.

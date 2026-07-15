@@ -30,7 +30,7 @@ import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
 public class EvaluateUpdatedVersion {
 
     public static void main(String[] args) throws IOException {
-        String version = "26";
+        String version = "27";
 
         boolean allowCaching = false; // this should only be true when fixing the comparison logic...
 
@@ -92,7 +92,7 @@ public class EvaluateUpdatedVersion {
         if (removedItems.isEmpty())
             System.out.println("> none");
         else {
-            for (NaaccrDictionaryItem item : removedItems.stream().sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrName)).collect(Collectors.toList()))
+            for (NaaccrDictionaryItem item : removedItems.stream().sorted(Comparator.comparing(NaaccrDictionaryItem::getNaaccrName)).toList())
                 System.out.println("> " + item.getNaaccrName() + " (#" + item.getNaaccrNum() + ")");
 
         }
@@ -102,7 +102,7 @@ public class EvaluateUpdatedVersion {
         if (addedItems.isEmpty())
             System.out.println("> none");
         else {
-            for (NaaccrDataItem item : addedItems.stream().sorted(Comparator.comparing(NaaccrDataItem::getItemName)).collect(Collectors.toList()))
+            for (NaaccrDataItem item : addedItems.stream().sorted(Comparator.comparing(NaaccrDataItem::getItemName)).toList())
                 System.out.println("> " + item.getItemName() + " (#" + item.getItemNumber() + ")");
 
         }
@@ -112,7 +112,7 @@ public class EvaluateUpdatedVersion {
         if (differences.isEmpty())
             System.out.println("> none");
         else {
-            for (NaaccrDataItem item : differences.keySet().stream().sorted(Comparator.comparing(NaaccrDataItem::getItemName)).collect(Collectors.toList())) {
+            for (NaaccrDataItem item : differences.keySet().stream().sorted(Comparator.comparing(NaaccrDataItem::getItemName)).toList()) {
                 System.out.println("> " + item.getItemName() + " (#" + item.getItemNumber() + "):");
                 for (String diff : differences.get(item))
                     System.out.println("  >> " + diff);

@@ -52,6 +52,7 @@ public class SasTest {
         formats.remove("240");
         formats.remove("250");
         formats.remove("260");
+        formats.remove("270");
         if (!formats.isEmpty())
             Assert.fail("Looks like a new format was added, please handle it in the SasUtils::validateNaaccrVersion, and adjust this test: " + formats);
 

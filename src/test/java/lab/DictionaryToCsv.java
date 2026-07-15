@@ -15,7 +15,7 @@ public class DictionaryToCsv {
     public static void main(String[] args) throws IOException {
 
         // re-create the csv standard dictionaries in the docs folder...
-        for (String version : Collections.singletonList("260")) { //NaaccrFormat.getSupportedVersions()) {
+        for (String version : Collections.singletonList("270")) { //NaaccrFormat.getSupportedVersions()) {
             NaaccrDictionary dictionary = NaaccrXmlDictionaryUtils.getMergedDictionaries(version);
             NaaccrXmlDictionaryUtils.writeDictionaryToCsv(dictionary, Paths.get("docs/naaccr-xml-items-" + version + ".csv").toFile());
         }

@@ -57,12 +57,11 @@ public class NaaccrXmlDictionaryUtilsTest {
                             if (apiItem.getItemDataType() == null)
                                 apiItem.setItemDataType("text"); // this feels like a mistake in the API data!
 
-                            // definitively errors in the API data!
-                            if ("derivedPediatricT".equals(apiItem.getXmlNaaccrId()) || "derivedPediatricN".equals(apiItem.getXmlNaaccrId()))
-                                apiItem.setItemDataType("text");
-
-                            if ("pathDateSpecCollect5".equals(apiItem.getXmlNaaccrId()))
-                                apiItem.setItemDataType("dateTime");
+                            // for some reason, the API doens't return the correct record types for those!
+                            if ("geoAddrAtDxCity".equals(apiItem.getXmlNaaccrId()) || "geoAddrAtDxState".equals(apiItem.getXmlNaaccrId()) || "geoAddrAtDxPostalCode".equals(apiItem.getXmlNaaccrId()))
+                                apiItem.setRecordTypes("A,M,C,I");
+                            if ("geoAddrAtDxNoStreet".equals(apiItem.getXmlNaaccrId()))
+                                apiItem.setRecordTypes("A,M,C");
 
                             apiItems.put(apiItem.getXmlNaaccrId(), apiItem);
                         }

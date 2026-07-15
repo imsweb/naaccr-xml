@@ -1,0 +1,99 @@
+Comparing version 26 and 27 from API on Jul 13, 2026, 8:05:21?AM
+> Got 954 items for 26
+> Got 1005 items for 27
+
+Items removed from version 27
+> none
+
+Items added in version 27
+> Cancer Status Following First Course of TX (#1769)
+> Date of Cancer Status Following First Course of TX (#1768)
+> Geo Addr at DX--City (#106)
+> Geo Addr at DX--No Street (#105)
+> Geo Addr at DX--Postal Code (#108)
+> Geo Addr at DX--State (#107)
+> Minor Salivary Tumor Location (#3966)
+> Over-ride Sex Assigned at Birth (#2079)
+> Rectal Tumor Location (#3965)
+> Thoracic Nodal Station 10L Examined (#3997)
+> Thoracic Nodal Station 10L Positive (#3998)
+> Thoracic Nodal Station 10R Examined (#3999)
+> Thoracic Nodal Station 10R Positive (#4000)
+> Thoracic Nodal Station 11L Examined (#4001)
+> Thoracic Nodal Station 11L Positive (#4002)
+> Thoracic Nodal Station 11R Examined (#4003)
+> Thoracic Nodal Station 11R Positive (#4004)
+> Thoracic Nodal Station 12L-14L Examined (#4005)
+> Thoracic Nodal Station 12L-14L Positive (#4006)
+> Thoracic Nodal Station 12R-14R Examined (#4007)
+> Thoracic Nodal Station 12R-14R Positive (#4008)
+> Thoracic Nodal Station 1L Examined (#3967)
+> Thoracic Nodal Station 1L Positive (#3968)
+> Thoracic Nodal Station 1R Examined (#3969)
+> Thoracic Nodal Station 1R Positive (#3970)
+> Thoracic Nodal Station 2L Examined (#3971)
+> Thoracic Nodal Station 2L Positive (#3972)
+> Thoracic Nodal Station 2R Examined (#3973)
+> Thoracic Nodal Station 2R Positive (#3974)
+> Thoracic Nodal Station 3a Examined (#3975)
+> Thoracic Nodal Station 3a Positive (#3976)
+> Thoracic Nodal Station 3p Examined (#3977)
+> Thoracic Nodal Station 3p Positive (#3978)
+> Thoracic Nodal Station 4L Examined (#3979)
+> Thoracic Nodal Station 4L Positive (#3980)
+> Thoracic Nodal Station 4R Examined (#3981)
+> Thoracic Nodal Station 4R Positive (#3982)
+> Thoracic Nodal Station 5 Examined (#3983)
+> Thoracic Nodal Station 5 Positive (#3984)
+> Thoracic Nodal Station 6 Examined (#3985)
+> Thoracic Nodal Station 6 Positive (#3986)
+> Thoracic Nodal Station 7 Examined (#3987)
+> Thoracic Nodal Station 7 Positive (#3988)
+> Thoracic Nodal Station 8L Examined (#3989)
+> Thoracic Nodal Station 8L Positive (#3990)
+> Thoracic Nodal Station 8R Examined (#3991)
+> Thoracic Nodal Station 8R Positive (#3992)
+> Thoracic Nodal Station 9L Examined (#3993)
+> Thoracic Nodal Station 9L Positive (#3994)
+> Thoracic Nodal Station 9R Examined (#3995)
+> Thoracic Nodal Station 9R Positive (#3996)
+
+Items updated in version 27
+> AJCC TNM Clin T (#1001):
+  >> length changed from 15 to 18
+> AJCC TNM Path T (#1011):
+  >> length changed from 15 to 18
+> AJCC TNM Post Therapy Clin (yc) T (#1062):
+  >> length changed from 15 to 18
+> AJCC TNM Post Therapy Path (yp) T (#1021):
+  >> length changed from 15 to 18
+> Class of Case (#610):
+  >> format changed from A,M,C,I to <blank>
+> Date Disease follow up/1st Recurrence/Progression (#1860):
+  >> name changed from Recurrence Date--1st to Date Disease follow up/1st Recurrence/Progression
+> Date of Last Cancer (tumor) Status (#1772):
+  >> name changed from Date of Last Cancer (tumor) Status  to Date of Last Cancer (tumor) Status
+> Derived Pediatric N (#1143):
+  >> data type changed from digits to text
+> Derived Pediatric T (#1142):
+  >> data type changed from digits to text
+> Disease Follow-up or 1st Recurrence/Progression (#1880):
+  >> name changed from Recurrence Type--1st to Disease Follow-up or 1st Recurrence/Progression
+> HER2 IHC Summary (#3850):
+  >> name changed from HER2 IHC Summary  to HER2 IHC Summary
+> High Risk Cytogenetics (#3857):
+  >> data type changed from text to digits
+> LN Positive Axillary (#3882):
+  >> name changed from LN Positive Axillary Level I-II to LN Positive Axillary
+> Neoadjuvant Therapy (#1632):
+  >> data type changed from text to digits
+> Neoadjuvant Therapy-Clinical Response (#1633):
+  >> length changed from 1 to 2
+  >> data type changed from text to digits
+> PD-L1 (#1174):
+  >> length changed from 5 to 1
+  >> data type changed from text to digits
+> Path Date Spec Collect 5 (#7324):
+  >> data type changed from mixed to dateTime
+> Schema Discriminator 1 (#3926):
+  >> data type changed from text to digits

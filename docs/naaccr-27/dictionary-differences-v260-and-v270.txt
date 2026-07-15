@@ -1,0 +1,74 @@
+Comparison summary of base 260 and 270 dictionaries.
+
+The following item(s) were added to version 270:
+ - cancerStatusFollowing1stCrsTx (#1769) - Cancer Status Following First Course of TX
+ - dateOfCaStatusFollowing1stCrsTx (#1768) - Date of Cancer Status Following First Course of TX
+ - geoAddrAtDxCity (#106) - Geo Addr at DX--City
+ - geoAddrAtDxNoStreet (#105) - Geo Addr at DX--No Street
+ - geoAddrAtDxPostalCode (#108) - Geo Addr at DX--Postal Code
+ - geoAddrAtDxState (#107) - Geo Addr at DX--State
+ - minorSalivaryTumorLocation (#3966) - Minor Salivary Tumor Location
+ - overRideSexAssignedAtBirth (#2079) - Over-ride Sex Assigned at Birth
+ - rectalTumorLocation (#3965) - Rectal Tumor Location
+ - thoracicNodalStation10lEx (#3997) - Thoracic Nodal Station 10L Examined
+ - thoracicNodalStation10lPos (#3998) - Thoracic Nodal Station 10L Positive
+ - thoracicNodalStation10rEx (#3999) - Thoracic Nodal Station 10R Examined
+ - thoracicNodalStation10rPos (#4000) - Thoracic Nodal Station 10R Positive
+ - thoracicNodalStation11lEx (#4001) - Thoracic Nodal Station 11L Examined
+ - thoracicNodalStation11lPos (#4002) - Thoracic Nodal Station 11L Positive
+ - thoracicNodalStation11rEx (#4003) - Thoracic Nodal Station 11R Examined
+ - thoracicNodalStation11rPos (#4004) - Thoracic Nodal Station 11R Positive
+ - thoracicNodalStation12l14lEx (#4005) - Thoracic Nodal Station 12L-14L Examined
+ - thoracicNodalStation12l14lPos (#4006) - Thoracic Nodal Station 12L-14L Positive
+ - thoracicNodalStation12r14rEx (#4007) - Thoracic Nodal Station 12R-14R Examined
+ - thoracicNodalStation12r14rPos (#4008) - Thoracic Nodal Station 12R-14R Positive
+ - thoracicNodalStation1lEx (#3967) - Thoracic Nodal Station 1L Examined
+ - thoracicNodalStation1lPos (#3968) - Thoracic Nodal Station 1L Positive
+ - thoracicNodalStation1rEx (#3969) - Thoracic Nodal Station 1R Examined
+ - thoracicNodalStation1rPos (#3970) - Thoracic Nodal Station 1R Positive
+ - thoracicNodalStation2lEx (#3971) - Thoracic Nodal Station 2L Examined
+ - thoracicNodalStation2lPos (#3972) - Thoracic Nodal Station 2L Positive
+ - thoracicNodalStation2rEx (#3973) - Thoracic Nodal Station 2R Examined
+ - thoracicNodalStation2rPos (#3974) - Thoracic Nodal Station 2R Positive
+ - thoracicNodalStation3aEx (#3975) - Thoracic Nodal Station 3a Examined
+ - thoracicNodalStation3aPos (#3976) - Thoracic Nodal Station 3a Positive
+ - thoracicNodalStation3pEx (#3977) - Thoracic Nodal Station 3p Examined
+ - thoracicNodalStation3pPos (#3978) - Thoracic Nodal Station 3p Positive
+ - thoracicNodalStation4lEx (#3979) - Thoracic Nodal Station 4L Examined
+ - thoracicNodalStation4lPos (#3980) - Thoracic Nodal Station 4L Positive
+ - thoracicNodalStation4rEx (#3981) - Thoracic Nodal Station 4R Examined
+ - thoracicNodalStation4rPos (#3982) - Thoracic Nodal Station 4R Positive
+ - thoracicNodalStation5Ex (#3983) - Thoracic Nodal Station 5 Examined
+ - thoracicNodalStation5Pos (#3984) - Thoracic Nodal Station 5 Positive
+ - thoracicNodalStation6Ex (#3985) - Thoracic Nodal Station 6 Examined
+ - thoracicNodalStation6Pos (#3986) - Thoracic Nodal Station 6 Positive
+ - thoracicNodalStation7Ex (#3987) - Thoracic Nodal Station 7 Examined
+ - thoracicNodalStation7Pos (#3988) - Thoracic Nodal Station 7 Positive
+ - thoracicNodalStation8lEx (#3989) - Thoracic Nodal Station 8L Examined
+ - thoracicNodalStation8lPos (#3990) - Thoracic Nodal Station 8L Positive
+ - thoracicNodalStation8rEx (#3991) - Thoracic Nodal Station 8R Examined
+ - thoracicNodalStation8rPos (#3992) - Thoracic Nodal Station 8R Positive
+ - thoracicNodalStation9lEx (#3993) - Thoracic Nodal Station 9L Examined
+ - thoracicNodalStation9lPos (#3994) - Thoracic Nodal Station 9L Positive
+ - thoracicNodalStation9rEx (#3995) - Thoracic Nodal Station 9R Examined
+ - thoracicNodalStation9rPos (#3996) - Thoracic Nodal Station 9R Positive
+
+The following item(s) got their name changed in version 270:
+ - lnPositiveAxillaryLevel1To2 (#3882) - from "LN Positive Axillary Level I-II" to "LN Positive Axillary"
+ - recurrenceDate1st (#1860) - from "Recurrence Date--1st" to "Date Disease follow up/1st Recurrence/Progression"
+ - recurrenceType1st (#1880) - from "Recurrence Type--1st" to "Disease Follow-up or 1st Recurrence/Progression"
+
+The following item(s) got their length changed in version 270:
+ - ajccTnmClinT (#1001) - from "15" to "18"
+ - ajccTnmPathT (#1011) - from "15" to "18"
+ - ajccTnmPostTherapyClinT (#1062) - from "15" to "18"
+ - ajccTnmPostTherapyT (#1021) - from "15" to "18"
+ - neoadjuvTherapyClinicalResponse (#1633) - from "1" to "2"
+ - pdl1 (#1174) - from "5" to "1"
+
+The following item(s) got their data type changed in version 270:
+ - highRiskCytogenetics (#3857) - from "text" to "digits"
+ - neoadjuvTherapyClinicalResponse (#1633) - from "text" to "digits"
+ - neoadjuvantTherapy (#1632) - from "text" to "digits"
+ - pdl1 (#1174) - from "text" to "digits"
+ - schemaDiscriminator1 (#3926) - from "text" to "digits"
