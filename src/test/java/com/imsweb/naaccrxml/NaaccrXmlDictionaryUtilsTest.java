@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 
 import de.siegmar.fastcsv.reader.CsvReader;
@@ -39,6 +40,9 @@ public class NaaccrXmlDictionaryUtilsTest {
     @Test
     public void testInternalDictionaries() throws IOException {
 
+        // can't run this test on GitHub because it sometimes runs on unpublished (unreleased) API version...
+        Assume.assumeFalse("Disabled on GitHub Actions", Boolean.parseBoolean(System.getenv("GITHUB_ACTIONS")));
+
         List<String> versionsToCheckAgainstApi = List.of(NaaccrFormat.NAACCR_VERSION_LATEST);
 
         for (String version : NaaccrFormat.getSupportedVersions()) {
@@ -51,8 +55,10 @@ public class NaaccrXmlDictionaryUtilsTest {
                         fail("Found item with ID too long: " + item.getNaaccrId());
 
                 if (versionsToCheckAgainstApi.contains(dict.getNaaccrVersion())) {
+                    String apiVersion = dict.getNaaccrVersion().substring(0, 2);
+
                     Map<String, NaaccrDataItem> apiItems = new HashMap<>();
-                    for (NaaccrDataItem apiItem : NaaccrApiClient.getInstance().getDataItems(dict.getNaaccrVersion().substring(0, 2))) {
+                    for (NaaccrDataItem apiItem : NaaccrApiClient.getInstance().getDataItems(apiVersion)) {
                         if (apiItem.getXmlNaaccrId() != null) { // API returns old items that aren't part of the current version...
                             if (apiItem.getItemDataType() == null)
                                 apiItem.setItemDataType("text"); // this feels like a mistake in the API data!
