@@ -13,10 +13,10 @@ import com.vanniktech.maven.publish.*
 plugins {
     id 'java-library'
     id 'jacoco'
-    id 'com.vanniktech.maven.publish' version '0.36.0' // publish to Maven Central
-    id 'com.github.ben-manes.versions' version '0.53.0' // check for out-of-date dependencies (run 'dependencyUpdates' manually)
-    id 'com.github.spotbugs' version '6.4.8' // spotbugs code analysis
-    id 'org.sonarqube' version '7.2.3.7755' // sonarQube analysis
+    id 'com.vanniktech.maven.publish' version '0.37.0' // publish to Maven Central
+    id 'com.github.ben-manes.versions' version '0.65.0' // check for out-of-date dependencies (run 'dependencyUpdates' manually)
+    id 'com.github.spotbugs' version '6.5.12' // spotbugs code analysis
+    id 'org.sonarqube' version '7.5.0.8588' // sonarQube analysis
 }
 
 group = 'com.imsweb'
@@ -32,14 +32,14 @@ repositories {
 dependencies {
     api 'com.thoughtworks.xstream:xstream:1.4.21'
 
-    implementation 'commons-io:commons-io:2.21.0'
-    implementation 'org.apache.commons:commons-lang3:3.20.0'
+    implementation 'commons-io:commons-io:2.22.0'
+    implementation 'org.apache.commons:commons-lang3:3.21.0'
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'com.imsweb:data-generator:2.5'
+    testImplementation 'com.imsweb:data-generator:2.7'
     testImplementation 'com.imsweb:layout:7.1'
     testImplementation 'com.imsweb:naaccr-api-client:1.4'
-    testImplementation 'de.siegmar:fastcsv:4.1.1'
+    testImplementation 'de.siegmar:fastcsv:4.4.0'
 }
 
 java {
@@ -160,7 +160,7 @@ mavenPublishing {
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '9.4'
+    gradleVersion = '9.8.1'
     distributionType = Wrapper.DistributionType.ALL
 }
 
